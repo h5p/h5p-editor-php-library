@@ -53,7 +53,8 @@ ns.Number.prototype.appendTo = function ($wrapper) {
         that.$input.val(that.$range.val()).change();
       });
     
-      if (ns.$.browser.msie) {
+      // Add some styles for IE.
+      if (H5PEditor.isIE) {
         this.$range.css('margin-top', 0);
         this.$input.css('margin-top', '7px');
       }
