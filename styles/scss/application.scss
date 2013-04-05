@@ -239,7 +239,7 @@
       vertical-align: bottom;  
     }
   }
-  .video .file {
+  .video .file, .audio .file {
     overflow: hidden;
     .thumbnail, .add {
       float: left;

@@ -19,7 +19,7 @@ class H5peditorFile {
     $this->temporary_directory = $files_directory . '/h5peditor';
     
     // Create the temporary directory if it doesn't exist.
-    $dirs = array ('', '/files', '/images', '/videos');
+    $dirs = array ('', '/files', '/images', '/videos', '/audios');
     foreach ($dirs as $dir) {
       $dir = $this->temporary_directory . $dir;
       if (!is_dir($dir)) {
@@ -72,10 +72,19 @@ class H5peditorFile {
         $this->result->height = $image[1];
         break;
 
+      case 'audio':
+        if (substr($this->type, 0, 5) != 'audio') {
+          $this->result->error = t('File is not a audio.');
+        }
+        $this->result->mime = $this->type;
+        break;
+        
       case 'video':
         if (substr($this->type, 0, 5) != 'video') {
           $this->result->error = t('File is not a video.');
         }
+        $this->result->mime = $this->type;
+        break;
         
       case 'file':
         $this->result->mime = $this->type;

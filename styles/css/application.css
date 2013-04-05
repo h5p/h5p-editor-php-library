@@ -307,30 +307,30 @@
   vertical-align: bottom;
 }
 /* line 242, ../scss/application.scss */
-.h5peditor .video .file {
+.h5peditor .video .file, .h5peditor .audio .file {
   overflow: hidden;
 }
 /* line 244, ../scss/application.scss */
-.h5peditor .video .file .thumbnail, .h5peditor .video .file .add {
+.h5peditor .video .file .thumbnail, .h5peditor .video .file .add, .h5peditor .audio .file .thumbnail, .h5peditor .audio .file .add {
   float: left;
 }
 /* line 247, ../scss/application.scss */
-.h5peditor .video .file .add {
+.h5peditor .video .file .add, .h5peditor .audio .file .add {
   margin-top: 8px;
 }
 /* line 250, ../scss/application.scss */
-.h5peditor .video .file .thumbnail {
+.h5peditor .video .file .thumbnail, .h5peditor .audio .file .thumbnail {
   overflow: hidden;
   position: relative;
   cursor: auto;
 }
 /* line 255, ../scss/application.scss */
-.h5peditor .video .file .remove {
+.h5peditor .video .file .remove, .h5peditor .audio .file .remove {
   top: -1px;
   left: -1px;
 }
 /* line 259, ../scss/application.scss */
-.h5peditor .video .file .type {
+.h5peditor .video .file .type, .h5peditor .audio .file .type {
   padding: 16px 8px 4px;
   background: #000;
   color: #fff;

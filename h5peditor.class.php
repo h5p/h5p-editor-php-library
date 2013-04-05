@@ -15,7 +15,7 @@ class H5peditor {
     'scripts/h5peditor-number.js',
     'scripts/h5peditor-textarea.js',
     'scripts/h5peditor-file.js',
-    'scripts/h5peditor-video.js',
+    'scripts/h5peditor-av.js',
     'scripts/h5peditor-group.js',
     'scripts/h5peditor-boolean.js',
     'scripts/h5peditor-list.js',
@@ -46,7 +46,7 @@ class H5peditor {
   public function createDirectories($id) {
     $this->content_directory = $this->files_directory . '/h5p/content/' . $id . '/';
 
-    $sub_directories = array('', 'files', 'images', 'videos');
+    $sub_directories = array('', 'files', 'images', 'videos', 'audios');
     foreach ($sub_directories AS $sub_directory) {
       $sub_directory = $this->content_directory . $sub_directory;
       if (!is_dir($sub_directory) && !@mkdir($sub_directory)) {
@@ -152,7 +152,8 @@ class H5peditor {
         }
         break;
         
-      case 'video': 
+      case 'video':
+      case 'audio':
         if (is_array($params)) {
           for ($i = 0, $s = count($params); $i < $s; $i++) {
             $temp_file = $h5peditor_path . $params[$i]->path;

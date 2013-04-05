@@ -10,7 +10,7 @@ var ns = H5PEditor;
  * @param {function} setValue
  * @returns {ns.File}
  */
-ns.Video = function (parent, field, params, setValue) {
+ns.AV = function (parent, field, params, setValue) {
   this.field = field;
   this.params = params;
   this.setValue = setValue;
@@ -23,7 +23,7 @@ ns.Video = function (parent, field, params, setValue) {
  * @param {jQuery} $wrapper
  * @returns {undefined}
  */
-ns.Video.prototype.appendTo = function ($wrapper) {
+ns.AV.prototype.appendTo = function ($wrapper) {
   var that = this;
   
   ns.File.addIframe();
@@ -55,7 +55,7 @@ ns.Video.prototype.appendTo = function ($wrapper) {
  * @param {object} file
  * @returns {undefined}
  */
-ns.Video.prototype.addFile = function (file) {
+ns.AV.prototype.addFile = function (file) {
   var that = this;
 
   var mimeParts = file.mime.split('/');
@@ -88,7 +88,7 @@ ns.Video.prototype.addFile = function (file) {
 /**
  * Start a new upload.
  */
-ns.Video.prototype.uploadFile = function () {
+ns.AV.prototype.uploadFile = function () {
   var that = this;
   
   if (ns.File.$file === 0) {
@@ -129,10 +129,11 @@ ns.Video.prototype.uploadFile = function () {
 /**
  * Remove this item.
  */
-ns.Video.prototype.remove = function () {
+ns.AV.prototype.remove = function () {
   // TODO: Check what happens when removed during upload.
   this.$errors.parent().remove();
 };
 
 // Tell the editor what widget we are.
-ns.widgets.video = ns.Video;
+ns.widgets.video = ns.AV;
+ns.widgets.audio = ns.AV;
