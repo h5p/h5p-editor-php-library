@@ -23,7 +23,7 @@ ns.semanticsLoaded = {};
 /**
  * Indiciates if the user is using Internet Explorer.
  */
-ns.isIE = navigator.userAgent.match(/; MSIE \d+.\d+;/);
+ns.isIE = navigator.userAgent.match(/; MSIE \d+.\d+;/) !== null;
 
 /**
  * The current localization mapping. To be translated by your framework.
