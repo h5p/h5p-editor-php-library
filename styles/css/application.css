@@ -365,6 +365,11 @@
   -webkit-transform: translateZ(0);
 }
 
+.h5peditor .h5p-description {
+  font-size: 10px;
+  color: #555555;
+}
+
 /* line 287, ../scss/application.scss */
 .h5peditor-form {
   position: relative;

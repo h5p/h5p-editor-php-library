@@ -54,7 +54,7 @@ ns.Textarea.prototype.createHtml = function () {
   }
   input += '</textarea>';
   
-  ns.createText(this.field.description, this.value, this.field.maxLength);
+  ns.createText(this.field.hint, this.value, this.field.maxLength, this.field.description);
   
   var label = ns.createLabel(this.field, input);
   

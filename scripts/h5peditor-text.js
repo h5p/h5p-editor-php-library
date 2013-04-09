@@ -45,7 +45,7 @@ ns.Text.prototype.appendTo = function ($wrapper) {
  * Create HTML for the text field.
  */
 ns.Text.prototype.createHtml = function () {
-  var input = ns.createText(this.field.description, this.value, this.field.maxLength);
+  var input = ns.createText(this.field.hint, this.value, this.field.maxLength, this.field.description);
   var label = ns.createLabel(this.field, input);
   
   return ns.createItem(this.field.type, label);

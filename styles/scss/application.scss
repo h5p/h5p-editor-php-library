@@ -282,6 +282,10 @@
     @include opacity(0.8);
     -webkit-transform: translateZ(0);
   }
+  .h5p-description {
+    font-size: 10px;
+    color: #555555;
+  }
 }
 
 .h5peditor-form {

@@ -314,18 +314,24 @@ ns.createOption = function (value, text, selected) {
  * @param {Integer} maxLength
  * @returns {String}
  */
-ns.createText = function (description, value, maxLength) {
+ns.createText = function (hint, value, maxLength, description) {
   var html = '<input type="text"';
-  
-  if (description !== undefined) {
-    html += ' title="' + description + '" placeholder="' + description + '"';
-  }
   
   if (value !== undefined) {
     html += ' value="' + value + '"';
   }
   
-  return html + ' maxlength="' + (maxLength === undefined ? 255 : maxLength) + '"/>';
+  if (hint !== undefined) {
+    html += ' placeholder="' + hint + '"';
+  }
+
+  html += ' maxlength="' + (maxLength === undefined ? 255 : maxLength) + '"/>';
+  
+  if (description !== undefined) {
+    html += '<div class="h5p-description">' + description + '</div>';
+  }
+
+  return html;
 };
 
 /**
