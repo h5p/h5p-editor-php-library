@@ -21,21 +21,21 @@ ns.Boolean = function (parent, field, params, setValue) {
  */
 ns.Boolean.prototype.createHtml = function () {
   var input = '<input type="checkbox"';
-  if (this.field.description !== undefined) {
-    input += ' title="' + this.field.description + '"';
-  }
   if (this.value !== undefined && this.value) {
     input += ' checked="checked"';
   }
   input += '/>';
   
-  var label = '<label>' + input;
+  var html = '<label>' + input;
   if (this.field.label !== 0) {
-    label += this.field.label === undefined ? this.field.name : this.field.label;
+    html += this.field.label === undefined ? this.field.name : this.field.label;
   }
-  label += '</label>';
+  html += '</label>';
+  if (this.field.description !== undefined) {
+    html += '<div class="h5p-description">' + this.field.description + '</div>';
+  }
   
-  return ns.createItem(this.field.type, label);
+  return ns.createItem(this.field.type, html);
 };
 
 /**
