@@ -73,7 +73,7 @@ class H5peditor {
 
     // Find new libraries and files.  
     $this->processSemantics($newFiles, $newLibraries, json_decode($this->storage->getSemantics($newLibrary['machineName'], $newLibrary['majorVersion'], $newLibrary['minorVersion'])), $newParameters);
-    
+
     $h5pStorage = _h5p_get_instance('storage');
     
     $librariesUsed = $newLibraries; // Copy
@@ -118,8 +118,11 @@ class H5peditor {
       if (!isset($params->{$field->name})) {
         continue;
       }
-      
-      $this->processField($field, $params->{$field->name}, $files, $libraries);
+      $libraryParams = $params->{$field->name};
+      if ($field->type === 'library') {
+        $libraryParams = $params;
+      }
+      $this->processField($field, $libraryParams, $files, $libraries);
     }
   }
 
@@ -137,7 +140,6 @@ class H5peditor {
     if (!$h5peditor_path) {
       $h5peditor_path = $this->files_directory . '/h5peditor/';
     }
-    
     switch ($field->type) {
       case 'file':
       case 'image':
