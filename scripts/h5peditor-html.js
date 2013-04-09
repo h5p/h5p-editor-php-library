@@ -248,4 +248,11 @@ ns.Html.prototype.validate = function () {
   return value;
 };
 
+/**
+ * Remove this item.
+ */
+ns.Html.prototype.remove = function () {
+  this.$item.remove();
+};
+
 ns.widgets.html = ns.Html;
