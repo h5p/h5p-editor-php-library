@@ -122,6 +122,23 @@ ns.AV.prototype.uploadFile = function () {
     }
   };
   
+  if (this.field.mimes !== undefined) {
+    var mimes = '';
+    for (var i = 0; i < this.field.mimes.length; i++) {
+      if (mimes !== '') {
+        mimes += ',';
+      }
+      mimes += this.field.mimes[i];
+    }
+    ns.File.$file.attr('accept', mimes);
+  }
+  else if (this.field.type === 'audio') {
+    ns.File.$file.attr('accept', 'audio/mpeg,audio/x-wav');
+  }
+  else if (this.field.type === 'video') {
+    ns.File.$file.attr('accept', 'video/mp4,video/webm');
+  }
+  
   ns.File.$field.val(JSON.stringify(this.field));
   ns.File.$file.click();
 };

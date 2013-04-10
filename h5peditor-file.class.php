@@ -44,11 +44,28 @@ class H5peditorFile {
       $this->type = mime_content_type($_FILES['file']['tmp_name']);
     }
     
+    $this->extension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+    
     $this->size = $_FILES['file']['size'];
   }
   
   public function isLoaded() {
     return is_object($this->result);
+  }
+  
+  /**
+   * Check current file up agains mime types and extensions in the given list.
+   * 
+   * @param array $mimes List to check against.
+   * @return boolean
+   */
+  public function check($mimes) {
+    foreach ($mimes as $mime => $extension) {
+      if ($this->type === $mime && $this->extension === $extension) {
+        return TRUE;
+      }
+    }
+    return FALSE;
   }
   
   public function validate() {
@@ -59,7 +76,7 @@ class H5peditorFile {
     }
     
     // Check if mime type is allowed.
-    if (isset($this->field->mimes) && !in_array($this->type, $this->field->mimes)) {
+    if ((isset($this->field->mimes) && !in_array($this->type, $this->field->mimes)) || substr($this->extension, 0, 3) === 'php') {
       $this->result->error = t("File type isn't allowed.");
       return FALSE;
     }
@@ -71,6 +88,16 @@ class H5peditorFile {
         return FALSE;
         
       case 'image':
+        $allowed = array(
+          'image/png' => 'png',
+          'image/jpeg' => 'jpg',
+          'image/gif' => 'gif',
+        );
+        if (!$this->check($allowed)) {
+          $this->result->error = t('Invalid image file format. Use jpg, png or gif.');
+          return FALSE;
+        }
+        
         $image = @getimagesize($_FILES['file']['tmp_name']);
         if (!$image) {
           $this->result->error = t('File is not an image.');
@@ -82,20 +109,33 @@ class H5peditorFile {
         break;
 
       case 'audio':
-        if ($this->type !== 'audio/mpeg' && $this->type !== 'audio/x-wav'/* && $this->type !== 'application/ogg'*/) {
+        $allowed = array(
+          'audio/mpeg' => 'mp3',
+          'audio/x-wav' => 'wav',
+        );
+        if (!$this->check($allowed)) {
           $this->result->error = t('Invalid audio file format. Use mp3 or wav.');
+          return FALSE;
         }
+        
         $this->result->mime = $this->type;
         break;
         
       case 'video':
-        if ($this->type !== 'video/mp4' && $this->type !== 'video/webm'/* && $this->type !== 'application/ogg'*/) {
+        $allowed = array(
+          'video/mp4' => 'mp4',
+          'video/webm' => 'webm',
+        );
+        if (!$this->check($allowed)) {
           $this->result->error = t('Invalid video file format. Use mp4 or webm.');
+          return FALSE;
         }
+        
         $this->result->mime = $this->type;
         break;
         
       case 'file':
+        // TODO: Try to get file extension for type and check that it matches the current extension.
         $this->result->mime = $this->type;
     }
     

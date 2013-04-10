@@ -95,6 +95,8 @@ ns.File.prototype.uploadFile = function () {
     return; // Wait for our turn :)
   }
   
+  this.$errors.html('');
+  
   ns.File.callback = function (json) {
     try {
       var result = JSON.parse(json);
@@ -114,6 +116,20 @@ ns.File.prototype.uploadFile = function () {
       that.$errors.append(ns.createError(error));
     }
   };
+  
+  if (this.field.mimes !== undefined) {
+    var mimes = '';
+    for (var i = 0; i < this.field.mimes.length; i++) {
+      if (mimes !== '') {
+        mimes += ',';
+      }
+      mimes += this.field.mimes[i];
+    }
+    ns.File.$file.attr('accept', mimes);
+  }
+  else if (this.field.type === 'image') {
+    ns.File.$file.attr('accept', 'image/jpeg,image/png,image/gif');
+  }
   
   ns.File.$field.val(JSON.stringify(this.field));
   ns.File.$file.click();
