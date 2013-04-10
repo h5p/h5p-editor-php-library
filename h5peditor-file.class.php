@@ -34,7 +34,16 @@ class H5peditorFile {
     // Get the field.
     $this->field = json_decode($_POST['field']);
     
-    $this->type = $_FILES['file']['type'];
+    if (function_exists('finfo_file')) {
+      $finfo = finfo_open(FILEINFO_MIME_TYPE);
+      $this->type = finfo_file($finfo, $_FILES['file']['tmp_name']);
+      finfo_close($finfo);
+    }
+    else {
+      // Deprecated, only used for < php-5.3
+      $this->type = mime_content_type($_FILES['file']['tmp_name']);
+    }
+    
     $this->size = $_FILES['file']['size'];
   }
   
@@ -73,15 +82,15 @@ class H5peditorFile {
         break;
 
       case 'audio':
-        if (substr($this->type, 0, 5) != 'audio') {
-          $this->result->error = t('File is not a audio.');
+        if ($this->type !== 'audio/mpeg' && $this->type !== 'audio/x-wav'/* && $this->type !== 'application/ogg'*/) {
+          $this->result->error = t('Invalid audio file format. Use mp3 or wav.');
         }
         $this->result->mime = $this->type;
         break;
         
       case 'video':
-        if (substr($this->type, 0, 5) != 'video') {
-          $this->result->error = t('File is not a video.');
+        if ($this->type !== 'video/mp4' && $this->type !== 'video/webm'/* && $this->type !== 'application/ogg'*/) {
+          $this->result->error = t('Invalid video file format. Use mp4 or webm.');
         }
         $this->result->mime = $this->type;
         break;
