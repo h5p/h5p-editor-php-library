@@ -34,6 +34,7 @@ class H5peditorFile {
     // Get the field.
     $this->field = json_decode($_POST['field']);
     
+
     if (function_exists('finfo_file')) {
       $finfo = finfo_open(FILEINFO_MIME_TYPE);
       $this->type = finfo_file($finfo, $_FILES['file']['tmp_name']);
@@ -121,6 +122,7 @@ class H5peditorFile {
         if (!$this->check($allowed)) {
           $this->result->error = t('Invalid audio file format. Use mp3 or wav.');
           return FALSE;
+
         }
         
         $this->result->mime = $this->type;
