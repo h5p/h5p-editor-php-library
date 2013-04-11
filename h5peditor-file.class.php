@@ -39,9 +39,12 @@ class H5peditorFile {
       $this->type = finfo_file($finfo, $_FILES['file']['tmp_name']);
       finfo_close($finfo);
     }
-    else {
-      // Deprecated, only used for < php-5.3
+    elseif (function_exists('mime_content_type')) {
+      // Deprecated, only when finfo isn't available.
       $this->type = mime_content_type($_FILES['file']['tmp_name']);
+    }
+    else {
+      $this->type = $_FILES['file']['type'];
     }
     
     $this->extension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
@@ -111,7 +114,9 @@ class H5peditorFile {
       case 'audio':
         $allowed = array(
           'audio/mpeg' => 'mp3',
+          'audio/mp3' => 'mp3',
           'audio/x-wav' => 'wav',
+          'audio/wav' => 'wav',
         );
         if (!$this->check($allowed)) {
           $this->result->error = t('Invalid audio file format. Use mp3 or wav.');
