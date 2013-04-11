@@ -14,6 +14,7 @@ ns.Text = function (parent, field, params, setValue) {
   this.field = field;
   this.value = params;
   this.setValue = setValue;
+  this.changeCallbacks = [];
 };
 
 /**
@@ -37,8 +38,25 @@ ns.Text.prototype.appendTo = function ($wrapper) {
       // Set param
       that.value = value;
       that.setValue(that.field, value);
+      
+      for (var i = 0; i < that.changeCallbacks.length; i++) {
+        that.changeCallbacks[i](value);
+      }
     }
   });
+};
+
+/**
+ * Run callback when value changes.
+ * 
+ * @param {function} callback
+ * @returns {Number|@pro;length@this.changeCallbacks}
+ */
+ns.Text.prototype.change = function (callback) {
+  this.changeCallbacks.push(callback);
+  callback();
+  
+  return this.changeCallbacks.length - 1;
 };
 
 /**
