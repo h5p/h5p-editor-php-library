@@ -118,6 +118,8 @@ class H5peditorFile {
           'audio/mp3' => 'mp3',
           'audio/x-wav' => 'wav',
           'audio/wav' => 'wav',
+          'application/ogg' => 'ogg',
+          'audio/ogg' => 'ogg',
         );
         if (!$this->check($allowed)) {
           $this->result->error = t('Invalid audio file format. Use mp3 or wav.');
@@ -132,6 +134,8 @@ class H5peditorFile {
         $allowed = array(
           'video/mp4' => 'mp4',
           'video/webm' => 'webm',
+          'application/ogg' => 'ogv',
+          'video/ogg' => 'ogv',
         );
         if (!$this->check($allowed)) {
           $this->result->error = t('Invalid video file format. Use mp4 or webm.');

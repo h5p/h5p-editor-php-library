@@ -133,10 +133,10 @@ ns.AV.prototype.uploadFile = function () {
     ns.File.$file.attr('accept', mimes);
   }
   else if (this.field.type === 'audio') {
-    ns.File.$file.attr('accept', 'audio/mpeg,audio/x-wav');
+    ns.File.$file.attr('accept', 'audio/mpeg,audio/x-wav,audio/ogg');
   }
   else if (this.field.type === 'video') {
-    ns.File.$file.attr('accept', 'video/mp4,video/webm');
+    ns.File.$file.attr('accept', 'video/mp4,video/webm,video/ogg');
   }
   
   ns.File.$field.val(JSON.stringify(this.field));
