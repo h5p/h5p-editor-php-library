@@ -84,7 +84,7 @@ class H5peditor {
       $librariesUsed[$library['machineName']]['preloaded'] = 1;
       $h5pStorage->getLibraryUsage($librariesUsed, $libraryFull);
     }
-    
+
     $h5pStorage->h5pF->deleteLibraryUsage($contentId);
     $h5pStorage->h5pF->saveLibraryUsage($contentId, $librariesUsed);
     
@@ -120,7 +120,7 @@ class H5peditor {
       }
       $libraryParams = $params->{$field->name};
       if ($field->type === 'library') {
-        $libraryParams = $params;
+        $libraryParams = $params->action;
       }
       $this->processField($field, $libraryParams, $files, $libraries);
     }
