@@ -10,7 +10,7 @@ var ns = H5PEditor;
  * @param {function} setValue
  * @returns {ns.Library}
  */
-ns.Library = function (parent, field, params, setValue) {
+ns.Library = function (parent, field, params, setValue, alertNotEditable) {
   var that = this;
 
   if (params === undefined) {
@@ -22,6 +22,7 @@ ns.Library = function (parent, field, params, setValue) {
   
   this.field = field;
   this.parent = parent;
+  this.alertNotEditable = alertNotEditable;
   
   this.passReadies = true;
   parent.ready(function () {
@@ -67,6 +68,9 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   if (this.$select.val() !== '-') {
     this.$select.change();
   }
+  else if (this.alertNotEditable) {
+    $wrapper.html('This library is not editable');
+  }
 };
 
 /**
@@ -80,14 +84,18 @@ ns.Library.prototype.loadLibrary = function (libraryName) {
   var that = this;
   
   this.removeChildren();
-  
+
   if (libraryName === '-') {
     return;
   }
   
   this.$libraryWrapper.html(ns.t('loading', {':type': 'semantics'}));
-  
+
   ns.loadLibrary(libraryName, function (semantics) {
+    if (semantics === undefined) {
+      that.libraryNotEditable();
+      return;
+    }
     that.library = libraryName;
     that.params.library = libraryName;
     if (!that.passReadies) {
