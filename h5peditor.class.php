@@ -22,6 +22,7 @@ class H5peditor {
     'scripts/h5peditor-library.js',
     'scripts/h5peditor-dimensions.js',
     'scripts/h5peditor-coordinates.js',
+    'scripts/h5peditor-none.js',
     'ckeditor/ckeditor.js',
   );
   private $storage, $files_directory;
