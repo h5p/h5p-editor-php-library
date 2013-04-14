@@ -47,7 +47,7 @@ ns.Form.prototype.processSemantics = function (semantics, defaultParams) {
     for (var i = 0; i < this.readies.length; i++) {
       this.readies[i]();
     }
-    delete this.readies;
+    this.readies = [];
     // TODO: Validate fields on submit
   }
   catch (error) {

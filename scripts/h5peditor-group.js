@@ -34,7 +34,8 @@ ns.Group = function (parent, field, params, setValue) {
 ns.Group.prototype.appendTo = function ($wrapper) {
   var that = this;
 
-  this.$group = ns.$('<fieldset class="field group"><div class="title"><a href="#" class="expand" title="' + ns.t('expandCollapse') + '"></a><span class="text"></span></div><div class="content"></div></fieldset>').appendTo($wrapper).find('.expand').click(function () {
+  this.$group = ns.$('<fieldset class="field group"><div class="title"><a href="#" class="expand" title="' + ns.t('expandCollapse') + '"></a><span class="text"></span></div><div class="content"></div></fieldset>')
+  .appendTo($wrapper).find('.expand').click(function () {
     that.expand();
     return false;
   }).end();
