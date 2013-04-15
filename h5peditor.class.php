@@ -119,11 +119,7 @@ class H5peditor {
       if (!isset($params->{$field->name})) {
         continue;
       }
-      $libraryParams = $params->{$field->name};
-      if ($field->type === 'library') {
-        $libraryParams = $params->action;
-      }
-      $this->processField($field, $libraryParams, $files, $libraries);
+      $this->processField($field, $params->{$field->name}, $files, $libraries);
     }
   }
 
