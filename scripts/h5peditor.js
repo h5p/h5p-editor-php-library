@@ -49,7 +49,8 @@ ns.l10n = {
   expandCollapse: 'Expand/Collapse',
   addEntity: 'Add :entity',
   tooLong: 'Field value is too long, should contain :max letters or less.',
-  invalidFormat: 'Field value contains an invalid format or characters that are forbidden.'
+  invalidFormat: 'Field value contains an invalid format or characters that are forbidden.',
+  confirmChangeLibrary: 'Are you sure you wish to change library?'
 };
 
 /**

@@ -10,7 +10,7 @@ var ns = H5PEditor;
  * @param {function} setValue
  * @returns {ns.Library}
  */
-ns.Library = function (parent, field, params, setValue, alertNotEditable) {
+ns.Library = function (parent, field, params, setValue) {
   var that = this;
 
   if (params === undefined) {
@@ -22,7 +22,6 @@ ns.Library = function (parent, field, params, setValue, alertNotEditable) {
   
   this.field = field;
   this.parent = parent;
-  this.alertNotEditable = alertNotEditable;
   
   this.passReadies = true;
   parent.ready(function () {
@@ -38,38 +37,34 @@ ns.Library = function (parent, field, params, setValue, alertNotEditable) {
  */
 ns.Library.prototype.appendTo = function ($wrapper) {
   var that = this;
-
-  var options = ns.createOption('-', '-');
-  // TODO: Fix this. We can't be sure that all libraries are to be found in this select(also feels like a hack)
-  ns.$('select[name="h5peditor-library"]').children('option').each(function () {
-    var $option = $(this);
-    for (var i = 0; i < that.field.options.length; i++) {
-      var library = $option.val();
-      if (library === that.field.options[i]) {
-        options += ns.createOption(that.field.options[i], $option.text(), library === that.params.library);
-      }
-    }
-  });
   
-  var label = '';
+  var html = '';
   if (this.field.label !== 0) {
-    label = '<label>' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
+    html = '<label>' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
   }
   
-  var html = ns.createItem(this.field.type, label + '<select>' + options + '</select><div class="libwrap"></div>');
+  html = ns.createItem(this.field.type, html + '<select>' + ns.createOption('-', 'Loading...') + '</select><div class="libwrap"></div>');
   
-  this.$select = ns.$(html).appendTo($wrapper).children('select').change(function () {
-    that.loadLibrary(ns.$(this).val());
+  this.$select = ns.$(html).appendTo($wrapper).children('select');
+  this.$libraryWrapper = this.$select.next('.libwrap');
+  
+  ns.$.post(ns.basePath + 'libraries', {libraries: that.field.options}, function (data) {
+    var options = ns.createOption('-', '-');
+    for (var i = 0; i < data.length; i++) {
+      var library = data[i];
+      options += ns.createOption(library.uberName, library.title, library.uberName === that.params.library);
+    }
+    
+    that.$select.html(options).change(function () {
+      if (confirm(H5PEditor.t('confirmChangeLibrary'))) {
+        that.loadLibrary(ns.$(this).val());
+      }
+    });
   });
   
-  this.$libraryWrapper = this.$select.nextAll(".libwrap");
-  
-  // Load default selected library.
-  if (this.$select.val() !== '-') {
-    this.$select.change();
-  }
-  else if (this.alertNotEditable) {
-    $wrapper.html('This library is not editable');
+  // Load default library.
+  if (this.params.library !== undefined) {
+    that.loadLibrary(this.params.library, true);
   }
 };
 
@@ -80,7 +75,7 @@ ns.Library.prototype.appendTo = function ($wrapper) {
  *  On the form machineName.majorVersion.minorVersion
  * @returns {unresolved}
  */
-ns.Library.prototype.loadLibrary = function (libraryName) {
+ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
   var that = this;
   
   this.removeChildren();
@@ -92,12 +87,14 @@ ns.Library.prototype.loadLibrary = function (libraryName) {
   this.$libraryWrapper.html(ns.t('loading', {':type': 'semantics'}));
 
   ns.loadLibrary(libraryName, function (semantics) {
-    if (semantics === undefined) {
-      that.libraryNotEditable();
-      return;
-    }
     that.library = libraryName;
     that.params.library = libraryName;
+    
+    if (preserveParams === undefined || !preserveParams) {
+      // Reset params
+      that.params.params = {};
+    }
+    
     if (!that.passReadies) {
       that.readies = [];
     }
