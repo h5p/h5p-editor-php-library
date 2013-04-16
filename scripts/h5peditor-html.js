@@ -139,7 +139,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
   var that = this;
 
   this.$item = ns.$(ns.createItem(this.field.type, this.createHtml())).appendTo($wrapper);
-  this.$input = this.$item.children('label').children('input');
+  this.$input = this.$item.children('.ckeditor');
   this.$errors = this.$item.children('.errors');
 
   var ckConfig = {
@@ -169,7 +169,6 @@ ns.Html.prototype.appendTo = function ($wrapper) {
         var value = that.validate();
         if (value !== false) {
           that.setValue(that.field, value);
-          // console.log(value);
         }
       });
       that.ckeditor.on('blur', function () {
@@ -200,7 +199,7 @@ ns.Html.prototype.createHtml = function () {
   if (this.value !== undefined) {
     html += this.value;
   }
-  html += '</textarea>';
+  html += '</div>';
 
   return html;
 };
@@ -215,7 +214,8 @@ ns.Html.prototype.validate = function () {
   }
 
   // Get contents from editor
-  var value = this.ckeditor.getData();
+  var value = this.ckeditor !== undefined ? this.ckeditor.getData() : this.$input.html();
+
   var $value = ns.$('<div/>');
   if (value) { // Appending an empty object fails..
     $value.append($(value));
@@ -223,7 +223,7 @@ ns.Html.prototype.validate = function () {
   var textValue = $value.text();
 
   // Check if we have any text at all.
-  if (this.field.required && !textValue.length) {
+  if (!this.field.optional && !textValue.length) {
     // We can accept empty text, if there's an image instead.
     if (! (this.inTags("img") && $value.find('img').length > 0)) {
       this.$errors.append(ns.createError(this.field.label + ' is required and must have some text or at least an image in it.'));
