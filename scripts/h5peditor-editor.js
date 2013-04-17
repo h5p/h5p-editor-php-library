@@ -55,6 +55,30 @@ ns.Editor.prototype.getLibrary = function () {
  */
 ns.Editor.prototype.getParams = function () {
   if (this.selector !== undefined) {
-    return this.selector.getParams();
+    var params = this.selector.getParams();
+    ns.Editor.cleanParams(params);
+    return params;
+  }
+};
+
+/**
+ * Clean params.
+ * 
+ * @param {type} params
+ * @returns {undefined}
+ */
+ns.Editor.cleanParams = function (params) {
+  for (var name in params) {
+    var param = params[name];
+    if (param instanceof Object || param instanceof Array) {
+      if (param.path !== undefined && param.mime !== undefined) {
+        // This can be a file
+        if (param.tmp !== undefined) {
+          delete param.tmp; // Remove tmp tag from file.
+        }
+        continue;
+      }
+      ns.Editor.cleanParams(param);
+    }
   }
 };

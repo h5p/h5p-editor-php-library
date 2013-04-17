@@ -144,10 +144,6 @@ ns.File.prototype.uploadFile = function () {
  * Validate this item
  */
 ns.File.prototype.validate = function () {
-  if (this.params !== undefined && this.params.tmp !== undefined) {
-    delete this.params.tmp;
-  }
-  
   return true;
 };
 

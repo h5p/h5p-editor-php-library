@@ -152,16 +152,7 @@ ns.AV.prototype.uploadFile = function () {
 /**
  * Validate this item
  */
-ns.AV.prototype.validate = function () {
-  if (this.params !== undefined) {
-    // Remove temporary flags.
-    for (var i = 0; i < this.params.length; i++) {
-      if (this.params[i].tmp !== undefined) {
-        delete this.params[i].tmp;
-      }
-    }
-  }
-  
+ns.AV.prototype.validate = function () {  
   return true;
 };
 
