@@ -63,7 +63,12 @@ ns.Editor.prototype.getParams = function () {
 
 /**
  * Clean params.
- * 
+ *
+ * TODO: Reconsider this so that libraries don't have to worry about this tmp stuff.
+ *
+ * TODO: Also document it better if this stays this way. It is a strange thing to do.
+ * Feels like a hack
+ *
  * @param {type} params
  * @returns {undefined}
  */
