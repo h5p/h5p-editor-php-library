@@ -71,7 +71,7 @@ class H5peditor {
     $oldFiles = array();
     $newLibraries = array($newLibrary['machineName'] => $newLibrary);
     $oldLibraries = array($oldLibrary);
-
+    
     // Find new libraries and files.  
     $this->processSemantics($newFiles, $newLibraries, json_decode($this->storage->getSemantics($newLibrary['machineName'], $newLibrary['majorVersion'], $newLibrary['minorVersion'])), $newParameters);
 

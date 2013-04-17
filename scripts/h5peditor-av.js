@@ -15,6 +15,7 @@ ns.AV = function (parent, field, params, setValue) {
   this.params = params;
   this.setValue = setValue;
   this.$files = [];
+  this.changes = [];
 };
 
 /**
@@ -104,18 +105,23 @@ ns.AV.prototype.uploadFile = function () {
         throw(result['error']);
       }
       
-      
       if (that.params === undefined) {
         that.params = [];
         that.setValue(that.field, that.params);
       }
-  
-      that.params.push({
-        path: result.path,
-        mime: result.mime
-      });
       
-      that.addFile(result);
+      var file = {
+        path: result.path,
+        mime: result.mime,
+        tmp: true
+      };
+      that.params.push(file);
+      
+      that.addFile(file);
+      
+      for (var i = 0; i < that.changes.length; i++) {
+        that.changes[i](file);
+      }
     }
     catch (error) {
       that.$errors.append(ns.createError(error));
@@ -141,6 +147,22 @@ ns.AV.prototype.uploadFile = function () {
   
   ns.File.$field.val(JSON.stringify(this.field));
   ns.File.$file.click();
+};
+
+/**
+ * Validate this item
+ */
+ns.AV.prototype.validate = function () {
+  if (this.params !== undefined) {
+    // Remove temporary flags.
+    for (var i = 0; i < this.params.length; i++) {
+      if (this.params[i].tmp !== undefined) {
+        delete this.params[i].tmp;
+      }
+    }
+  }
+  
+  return true;
 };
 
 /**

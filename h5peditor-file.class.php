@@ -110,6 +110,7 @@ class H5peditorFile {
         
         $this->result->width = $image[0];
         $this->result->height = $image[1];
+        $this->result->mime = $this->type;
         break;
 
       case 'audio':

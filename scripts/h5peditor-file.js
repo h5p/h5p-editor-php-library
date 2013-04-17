@@ -104,12 +104,17 @@ ns.File.prototype.uploadFile = function () {
         throw(result['error']);
       }
       
-      that.params = result;
+      that.params = {
+        path: result.path,
+        mime: result.mime,
+        tmp: true
+      };
+      
       that.setValue(that.field, that.params);
       that.addFile();
       
       for (var i = 0; i < that.changes.length; i++) {
-        that.changes[i](result);
+        that.changes[i](that.params);
       }
     }
     catch (error) {
@@ -133,6 +138,17 @@ ns.File.prototype.uploadFile = function () {
   
   ns.File.$field.val(JSON.stringify(this.field));
   ns.File.$file.click();
+};
+
+/**
+ * Validate this item
+ */
+ns.File.prototype.validate = function () {
+  if (this.params !== undefined && this.params.tmp !== undefined) {
+    delete this.params.tmp;
+  }
+  
+  return true;
 };
 
 /**

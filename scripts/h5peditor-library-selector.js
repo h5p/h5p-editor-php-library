@@ -82,8 +82,18 @@ ns.LibrarySelector.prototype.loadSemantics = function (library) {
  * Return params needed to start library.
  */
 ns.LibrarySelector.prototype.getParams = function () {
-  // TODO: Only return if all fields has validated.
-  if (this.form !== undefined) {
-    return this.form.params;
+  if (this.form === undefined) {
+    return;
   }
+  
+  // Only return if all fields has validated.
+  if (this.children !== undefined) {
+    for (var i = 0; i < this.children.length; i++) {
+      if (!this.children[i].validate()) {
+        return false;
+      }
+    }
+  }
+ 
+  return this.form.params;
 };
