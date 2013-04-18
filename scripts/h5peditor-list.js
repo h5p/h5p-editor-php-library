@@ -134,7 +134,7 @@ ns.List.prototype.addItem = function (i) {
   var $item, $placeholder;
   
   if (i === undefined) {
-    i = this.params.length;
+    i = this.$items.length;
   }
   
   var move = function (event) {
@@ -189,7 +189,6 @@ ns.List.prototype.addItem = function (i) {
     }
     delete this.readies;
   }
-  
   this.$items[i] = $item;
 
   return this.children[i];
