@@ -65,7 +65,7 @@ class H5peditorFile {
    */
   public function check($mimes) {
     foreach ($mimes as $mime => $extension) {
-      if ($this->type === $mime && $this->extension === $extension) {
+      if ($this->type === $mime && strtolower($this->extension) === $extension) {
         return TRUE;
       }
     }
