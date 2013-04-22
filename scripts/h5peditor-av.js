@@ -123,17 +123,17 @@ ns.AV.prototype.uploadFile = function () {
       
       that.addFile(file);
       
-      if (that.$uploading !== undefined || that.$uploading.length !== 0) {
-        that.$uploading.remove();
-        that.$add.show();
-      }
-      
       for (var i = 0; i < that.changes.length; i++) {
         that.changes[i](file);
       }
     }
     catch (error) {
       that.$errors.append(ns.createError(error));
+    }
+
+    if (that.$uploading !== undefined && that.$uploading.length !== 0) {
+      that.$uploading.remove();
+      that.$add.show();
     }
   };
   
