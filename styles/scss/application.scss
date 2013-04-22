@@ -262,6 +262,9 @@
       color: #fff;
       font-size: 10px;
     }
+    .h5peditor-uploading {
+      float: left;
+    }
   }
   .libwrap {
     margin-top: 16px;  
@@ -285,6 +288,12 @@
   .h5p-description {
     font-size: 10px;
     color: #555555;
+  }
+  
+  .h5peditor-uploading {
+    background: inline-image("uploading.gif") no-repeat 10px 7px;
+    padding-top: 40px;
+    font-size: 14px;
   }
 }
 

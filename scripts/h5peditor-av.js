@@ -98,6 +98,10 @@ ns.AV.prototype.uploadFile = function () {
   
   this.$errors.html('');
   
+  ns.File.changeCallback = function () {
+    that.$uploading = ns.$('<div class="h5peditor-uploading">Uploading, please wait...</div>').insertAfter(that.$add.hide());
+  };
+  
   ns.File.callback = function (json) {
     try {
       var result = JSON.parse(json);
@@ -118,6 +122,11 @@ ns.AV.prototype.uploadFile = function () {
       that.params.push(file);
       
       that.addFile(file);
+      
+      if (that.$uploading !== undefined && that.$uploading.length !== 0) {
+        that.$uploading.remove();
+        that.$add.show();
+      }
       
       for (var i = 0; i < that.changes.length; i++) {
         that.changes[i](file);

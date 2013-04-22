@@ -97,6 +97,10 @@ ns.File.prototype.uploadFile = function () {
   
   this.$errors.html('');
   
+  ns.File.changeCallback = function () {
+    that.$file.html('<div class="h5peditor-uploading">Uploading, please wait...</div>');
+  };
+  
   ns.File.callback = function (json) {
     try {
       var result = JSON.parse(json);
@@ -111,7 +115,6 @@ ns.File.prototype.uploadFile = function () {
       };
       
       that.setValue(that.field, that.params);
-      that.addFile();
       
       for (var i = 0; i < that.changes.length; i++) {
         that.changes[i](that.params);
@@ -120,6 +123,8 @@ ns.File.prototype.uploadFile = function () {
     catch (error) {
       that.$errors.append(ns.createError(error));
     }
+    
+    that.addFile();
   };
   
   if (this.field.mimes !== undefined) {
@@ -178,6 +183,9 @@ ns.File.addIframe = function () {
     ns.File.$file = $form.children('input[type="file"]');
     
     ns.File.$file.change(function () {
+      if (ns.File.changeCallback !== undefined) {
+        ns.File.changeCallback();
+      }
       ns.File.$field = 0;
       ns.File.$file = 0;
       $form.submit();
