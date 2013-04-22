@@ -123,7 +123,7 @@ ns.AV.prototype.uploadFile = function () {
       
       that.addFile(file);
       
-      if (that.$uploading !== undefined && that.$uploading.length !== 0) {
+      if (that.$uploading !== undefined || that.$uploading.length !== 0) {
         that.$uploading.remove();
         that.$add.show();
       }
