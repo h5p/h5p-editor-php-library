@@ -65,7 +65,10 @@ class H5peditorFile {
    */
   public function check($mimes) {
     foreach ($mimes as $mime => $extension) {
-      if ($this->type === $mime && strtolower($this->extension) === $extension) {
+      // TODO: Either remove everything that has to do with mime types, or make it work
+      // Currently we're experiencing trouble with mime types on different servers...
+      if (/*$this->type === $mime && */strtolower($this->extension) === $extension) {
+        $this->type = $mime;
         return TRUE;
       }
     }
