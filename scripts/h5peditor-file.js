@@ -113,6 +113,10 @@ ns.File.prototype.uploadFile = function () {
         mime: result.mime,
         tmp: true
       };
+      if (that.field.type === 'image') {
+        that.params.width = result.width;
+        that.params.height = result.height;
+      }
       
       that.setValue(that.field, that.params);
       
