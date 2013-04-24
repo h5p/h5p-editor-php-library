@@ -233,7 +233,17 @@ ns.findAncestor = function (parent) {
   return parent;
 };
 
+/**
+ * Call remove on the given children.
+ * 
+ * @param {Array} children
+ * @returns {unresolved}
+ */
 ns.removeChildren = function (children) {
+  if (children === undefined) {
+    return;
+  }
+  
   for (var i = 0; i < children.length; i++) {
     // Common fields will be removed by library.
     if (children[i].field.common === undefined || !children[i].field.common) {

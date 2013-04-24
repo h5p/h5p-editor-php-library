@@ -17,7 +17,7 @@ ns.Html = function (parent, field, params, setValue) {
   this.tags = ns.$.merge(['br'], (this.field.tags || this.defaultTags));
 };
 
-ns.Html.prototype.defaultTags = ['strong', 'em', 'del', 'h1', 'h2', 'a', 'ul', 'ol', 'img', 'table'];
+ns.Html.prototype.defaultTags = ['strong', 'em', 'del', 'h2', 'h3', 'a', 'ul', 'ol', 'img', 'table'];
 
 ns.Html.prototype.inTags = function (value) {
   return (ns.$.inArray(value.toLowerCase(), this.tags) >= 0);
@@ -121,7 +121,7 @@ ns.Html.prototype.createToolbar = function () {
 
   var ret = {
     toolbar: toolbar
-  }
+  };
   // Set format_tags if not empty. CKeditor does not like empty format_tags.
   if (formats.length > 0) {
     ret['format_tags'] = formats.join(';');
@@ -161,22 +161,34 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     }
   }
 
-  this.$item.children('.ckeditor').click(function () {
-    if (! ns.$(this).hasClass('cke_editable')) {
-      that.ckeditor = CKEDITOR.inline(this, ckConfig);
-      that.ckeditor.on('change', function () {
-        // Validate before submit.
-        var value = that.validate();
-        if (value !== false) {
-          that.setValue(that.field, value);
-        }
-      });
-      that.ckeditor.on('blur', function () {
-        // When blurred, remove completely.
-        this.destroy();
-      });
-    }
-  });
+  
+  var $textarea = this.$item.children('.ckeditor:not(.cke_editable)');
+  if ($textarea.length !== 0) {
+    that.ckeditor = CKEDITOR.inline($textarea[0], ckConfig);
+    that.ckeditor.on('change', function () {
+      // Validate before submit.
+      var value = that.validate();
+      if (value !== false) {
+        that.setValue(that.field, value);
+      }
+    });
+  }
+  
+// Alternative if the above code makes the page very slow. 
+// (should not be necessary, the above code has been tested with >30 ckeditor on one page.)
+// 
+//  this.$item.children('.ckeditor:not(.cke_editable)').focus(function () {
+//    that.ckeditor = CKEDITOR.inline(this, ckConfig);
+//    that.ckeditor.on('change', function () {
+//      // Validate before submit.
+//      var value = that.validate();
+//      if (value !== false) {
+//        that.setValue(that.field, value);
+//      }
+//    });
+//  }).blur(function () {
+//    that.ckeditor.destroy();
+//  });
 };
 
 /**
@@ -190,7 +202,7 @@ ns.Html.prototype.createHtml = function () {
   }
   html += '</label>';
 
-  html += '<div class="ckeditor" contenteditable="true"';
+  html += '<div class="ckeditor" tabindex="0" contenteditable="true"';
   if (this.field.description !== undefined) {
     html += ' title="' + this.field.description + '" placeholder="' + this.field.description + '"';
   }
@@ -252,6 +264,10 @@ ns.Html.prototype.validate = function () {
  * Remove this item.
  */
 ns.Html.prototype.remove = function () {
+  if (this.ckeditor !== undefined) {
+    this.ckeditor.destroy();
+  }
+  
   this.$item.remove();
 };
 
