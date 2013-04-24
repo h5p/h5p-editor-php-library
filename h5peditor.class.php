@@ -210,7 +210,8 @@ class H5peditor {
           $libraryData->javascript = '';
         }
         foreach ($filePaths['js'] as $jsFilePath) {
-          $libraryData->javascript .= file_get_contents($jsFilePath);
+          // TODO: rtrim and check substr(-1) === '}'? jsmin?
+          $libraryData->javascript .= "\n" . file_get_contents($jsFilePath);
         }
       }
       if (!empty($filePaths['css'])) {

@@ -112,7 +112,14 @@ ns.loadLibrary = function (libraryName, callback) {
         
         // Add JS.
         if (libraryData.javascript !== undefined) {
-          eval.apply(window, [libraryData.javascript]);
+          try {
+            eval.apply(window, [libraryData.javascript]);
+          }
+          catch (error) {
+            if (window['console'] !== undefined && typeof console.error === 'function') {
+              console.error(error.stack);
+            }
+          }
         }
         
         callback(libraryData.semantics);
