@@ -212,7 +212,9 @@ ns.Html.prototype.createHtml = function () {
     html += this.value;
   }
   html += '</div>';
-
+  if (this.field.description !== undefined) {
+    html += '<div class="h5p-description">' + this.field.description + '</div>';
+  }
   return html;
 };
 
