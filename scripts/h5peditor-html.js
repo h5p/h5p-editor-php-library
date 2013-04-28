@@ -16,6 +16,7 @@ ns.Html = function (parent, field, params, setValue) {
   this.setValue = setValue;
   this.tags = ns.$.merge(['br'], (this.field.tags || this.defaultTags));
 };
+ns.Html.first = true;
 
 ns.Html.prototype.defaultTags = ['strong', 'em', 'del', 'h2', 'h3', 'a', 'ul', 'ol', 'img', 'table'];
 
@@ -172,6 +173,25 @@ ns.Html.prototype.appendTo = function ($wrapper) {
         that.setValue(that.field, value);
       }
     });
+    // Add events to ckeditor. It is beeing done here since we know it exists at this point...
+    if (ns.Html.first) {
+      CKEDITOR.on('dialogDefinition', function(e) {
+        // Take the dialog name and its definition from the event data.
+        var dialogName = e.data.name;
+        var dialogDefinition = e.data.definition;
+
+        // Check if the definition is from the dialog window you are interested in (the "Link" dialog window).
+        if (dialogName == 'link') {
+          // Get a reference to the "Link Info" tab.
+          var targetTab = dialogDefinition.getContents('target');
+
+          // Set the default value for the URL field.
+          var urlField = targetTab.get('linkTargetType');
+          urlField['default'] = '_blank';
+        }
+      });
+      ns.Html.first = false;
+    }
   }
   
 // Alternative if the above code makes the page very slow. 
