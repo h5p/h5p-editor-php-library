@@ -3,7 +3,7 @@ var ns = H5PEditor;
 
 /**
  * Create a group of fields.
- * 
+ *
  * @param {mixed} parent
  * @param {object} field
  * @param {mixed} params
@@ -17,8 +17,9 @@ ns.Group = function (parent, field, params, setValue) {
   else if (field.label === 0) {
     field.label = '';
   }
-  
+
   this.parent = parent;
+  this.passReadies = true;
   this.field = field;
   this.params = params;
   this.setValue = setValue;
@@ -27,7 +28,7 @@ ns.Group = function (parent, field, params, setValue) {
 
 /**
  * Append group to its wrapper.
- * 
+ *
  * @param {jQuery} $wrapper
  * @returns {undefined}
  */
@@ -39,7 +40,7 @@ ns.Group.prototype.appendTo = function ($wrapper) {
     that.expand();
     return false;
   }).end();
-  
+
   if (this.field.fields.length === 1) {
     this.children = [];
     var field = this.field.fields[0];
@@ -48,7 +49,7 @@ ns.Group.prototype.appendTo = function ($wrapper) {
       that.setValue(that.field, value);
     });
     this.children[0].appendTo(this.$group.children('.content'));
-  } 
+  }
   else {
     if (this.params === undefined) {
       this.params = {};
@@ -56,7 +57,7 @@ ns.Group.prototype.appendTo = function ($wrapper) {
     }
     ns.processSemanticsChunk(this.field.fields, this.params, this.$group.children('.content'), this);
   }
-  
+
   // Set summary
   this.findSummary();
 };
@@ -66,7 +67,7 @@ ns.Group.prototype.appendTo = function ($wrapper) {
  */
 ns.Group.prototype.expand = function () {
   var expandedClass = 'expanded';
-  
+
   if (this.$group.hasClass(expandedClass)) {
     this.$group.removeClass(expandedClass);
   }
@@ -81,11 +82,11 @@ ns.Group.prototype.expand = function () {
 ns.Group.prototype.findSummary = function () {
   var that = this;
   var summary;
-  
+
   for (var j = 0; j < this.children.length; j++) {
     var child = this.children[j];
     var params = this.field.fields.length === 1 ? this.params : this.params[child.field.name];
-    
+
     if (child instanceof ns.Text) {
       if (params !== undefined && params !== '') {
         summary = this.field.label + ': ' + params;
@@ -113,7 +114,7 @@ ns.Group.prototype.findSummary = function () {
 
 /**
  * Set the given group summary.
- * 
+ *
  * @param {string} summary
  * @returns {undefined}
  */
@@ -130,13 +131,13 @@ ns.Group.prototype.validate = function () {
       return false;
     }
   }
-  
+
   return true;
 };
 
 /**
  * Collect functions to execute once the tree is complete.
- * 
+ *
  * @param {function} ready
  * @returns {undefined}
  */

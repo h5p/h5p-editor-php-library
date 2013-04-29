@@ -6,7 +6,7 @@ var ns = H5PEditor;
  */
 ns.Form = function () {
   this.params = {};
-  this.readies = [];
+  this.passReadies = false;
   this.commonFields = {};
   this.$form = ns.$('<div class="h5peditor-form"><div class="tree"></div><div class="common"></div></div>');
   this.$common = this.$form.children('.common');
@@ -15,7 +15,7 @@ ns.Form = function () {
 
 /**
  * Replace the given element with our form.
- * 
+ *
  * @param {jQuery} $element
  * @returns {undefined}
  */
@@ -33,7 +33,7 @@ ns.Form.prototype.remove = function () {
 
 /**
  * Wrapper for processing the semantics.
- * 
+ *
  * @param {Array} semantics
  * @param {Object} defaultParams
  * @returns {undefined}
@@ -42,13 +42,6 @@ ns.Form.prototype.processSemantics = function (semantics, defaultParams) {
   try {
     this.params = defaultParams;
     ns.processSemanticsChunk(semantics, this.params, this.$form.children('.tree'), this);
-    
-    // Run ready callbacks.
-    for (var i = 0; i < this.readies.length; i++) {
-      this.readies[i]();
-    }
-    delete this.readies; // Makes sure no one passes readies after form is ready!
-    // TODO: Validate fields on submit
   }
   catch (error) {
     if (window['console'] !== undefined && typeof console.error === 'function') {
@@ -63,7 +56,7 @@ ns.Form.prototype.processSemantics = function (semantics, defaultParams) {
 
 /**
  * Collect functions to execute once the tree is complete.
- * 
+ *
  * @param {function} ready
  * @returns {undefined}
  */
