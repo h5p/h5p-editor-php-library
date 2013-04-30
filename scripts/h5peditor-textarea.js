@@ -3,7 +3,7 @@ var ns = H5PEditor;
 
 /**
  * Create a text field for the form.
- * 
+ *
  * @param {mixed} parent
  * @param {Object} field
  * @param {mixed} params
@@ -18,21 +18,21 @@ ns.Textarea = function (parent, field, params, setValue) {
 
 /**
  * Append field to wrapper.
- * 
+ *
  * @param {jQuery} $wrapper
  * @returns {undefined}
  */
 ns.Textarea.prototype.appendTo = function ($wrapper) {
   var that = this;
-  
+
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$input = this.$item.children('label').children('textarea');
   this.$errors = this.$item.children('.errors');
-  
+
   this.$input.change(function () {
     // Validate
     var value = that.validate();
-    
+
     if (value) {
       // Set param
       that.setValue(that.field, value);
@@ -45,20 +45,18 @@ ns.Textarea.prototype.appendTo = function ($wrapper) {
  */
 ns.Textarea.prototype.createHtml = function () {
   var input = '<textarea cols="30" rows="4"';
-  if (this.field.description !== undefined) {
-    input += ' title="' + this.field.description + '" placeholder="' + this.field.description + '"';
-  }  
+  if (this.field.placeholder !== undefined) {
+    input += ' placeholder="' + this.field.placeholder + '"';
+  }
   input += '>';
   if (this.value !== undefined) {
     input += this.value;
   }
   input += '</textarea>';
-  
-  ns.createText(this.field.hint, this.value, this.field.maxLength, this.field.description);
-  
+
   var label = ns.createLabel(this.field, input);
-  
-  return ns.createItem(this.field.type, label);
+
+  return ns.createItem(this.field.type, label, this.field.description);
 };
 
 /**
@@ -66,9 +64,9 @@ ns.Textarea.prototype.createHtml = function () {
  */
 ns.Textarea.prototype.validate = function () {
   var that = this;
-  
-  var value = ns.trim(this.$input.val());
-    
+
+  var value = H5P.trim(this.$input.val());
+
   if ((that.field.optional === undefined || !that.field.optional) && !value.length) {
     this.$errors.append(ns.createError(ns.t('requiredProperty', {':property': 'text field'})));
   }

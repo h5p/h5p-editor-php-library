@@ -3,7 +3,7 @@ var ns = H5PEditor;
 
 /**
  * Creates a coordinates picker for the form.
- * 
+ *
  * @param {mixed} parent
  * @param {object} field
  * @param {mixed} params
@@ -46,7 +46,7 @@ ns.Coordinates = function (parent, field, params, setValue) {
 
 /**
  * Set max coordinates.
- * 
+ *
  * @param {string} x
  * @param {string} y
  * @returns {undefined}
@@ -64,7 +64,7 @@ ns.Coordinates.prototype.setMax = function (x, y) {
 
 /**
  * Find the image field for the given property and then run the callback.
- * 
+ *
  * @param {string} property
  * @param {function} callback
  * @returns {unresolved}
@@ -72,11 +72,11 @@ ns.Coordinates.prototype.setMax = function (x, y) {
 ns.Coordinates.prototype.findImageField = function (property, callback) {
   var that = this;
   var str = 'string';
-  
+
   if (typeof this.field[property] !== str) {
     return;
   }
-  
+
   // Find field when tree is ready.
   this.parent.ready(function () {
     if (typeof that.field[property] !== str) {
@@ -86,7 +86,7 @@ ns.Coordinates.prototype.findImageField = function (property, callback) {
       return; // We've already found this field before.
     }
     var path = that.field[property];
-      
+
     that.field[property] = ns.findField(that.field[property], that.parent);
     if (!that.field[property]) {
       throw ns.t('unknownFieldPath', {':path': path});
@@ -94,20 +94,20 @@ ns.Coordinates.prototype.findImageField = function (property, callback) {
     if (that.field[property].field.type !== 'image' && that.field[property].field.widget !== 'dimensions') {
       throw ns.t('notImageOrDimensionsField', {':path': path});
     }
-    
+
     callback(that.field[property]);
   });
 };
 
 /**
  * Append the field to the wrapper.
- * 
+ *
  * @param {jQuery} $wrapper
  * @returns {undefined}
  */
 ns.Coordinates.prototype.appendTo = function ($wrapper) {
   var that = this;
-  
+
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$inputs = this.$item.find('input');
   this.$errors = this.$item.children('.errors');
@@ -115,7 +115,7 @@ ns.Coordinates.prototype.appendTo = function ($wrapper) {
   this.$inputs.change(function () {
     // Validate
     var value = that.validate();
-    
+
     if (value) {
       // Set param
       that.params = value;
@@ -130,10 +130,10 @@ ns.Coordinates.prototype.appendTo = function ($wrapper) {
  * Create HTML for the coordinates picker.
  */
 ns.Coordinates.prototype.createHtml = function () {
-  var input = ns.createText('X', this.params !== undefined ? this.params.x : undefined, 15) + ' , ' + ns.createText('Y', this.params !== undefined ? this.params.y : undefined, 15);
+  var input = ns.createText(this.params !== undefined ? this.params.x : undefined, 15, 'X') + ' , ' + ns.createText(this.params !== undefined ? this.params.y : undefined, 15, 'Y');
   var label = ns.createLabel(this.field, input);
-  
-  return ns.createItem(this.field.widget, label);
+
+  return ns.createItem(this.field.widget, label, this.field.description);
 };
 
 /**
@@ -145,9 +145,9 @@ ns.Coordinates.prototype.validate = function () {
 
   this.$inputs.each(function (i) {
     var $input = ns.$(this);
-    var value = ns.trim($input.val());
+    var value = H5P.trim($input.val());
     var property = i ? 'y' : 'x';
-    
+
     if ((that.field.optional === undefined || !that.field.optional) && !value.length) {
       that.$errors.append(ns.createError(ns.t('requiredProperty', {':property': property})));
       return false;
@@ -156,13 +156,13 @@ ns.Coordinates.prototype.validate = function () {
       that.$errors.append(ns.createError(ns.t('onlyNumbers', {':property': property})));
       return false;
     }
-    
+
     value = parseInt(value);
     if (that.field.max !== undefined && value > that.field.max[property]) {
       that.$errors.append(ns.createError(ns.t('exceedsMax', {':property': property, ':max': that.field.max[property]})));
       return false;
     }
-    
+
     coordinates[property] = value;
   });
 

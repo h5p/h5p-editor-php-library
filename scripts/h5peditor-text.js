@@ -3,7 +3,7 @@ var ns = H5PEditor;
 
 /**
  * Create a text field for the form.
- * 
+ *
  * @param {mixed} parent
  * @param {Object} field
  * @param {mixed} params
@@ -19,26 +19,26 @@ ns.Text = function (parent, field, params, setValue) {
 
 /**
  * Append field to wrapper.
- * 
+ *
  * @param {type} $wrapper
  * @returns {undefined}
  */
 ns.Text.prototype.appendTo = function ($wrapper) {
   var that = this;
-  
+
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$input = this.$item.children('label').children('input');
   this.$errors = this.$item.children('.errors');
-  
+
   this.$input.change(function () {
     // Validate
     var value = that.validate();
-    
+
     if (value !== false) {
       // Set param
       that.value = value;
       that.setValue(that.field, value);
-      
+
       for (var i = 0; i < that.changeCallbacks.length; i++) {
         that.changeCallbacks[i](value);
       }
@@ -48,14 +48,14 @@ ns.Text.prototype.appendTo = function ($wrapper) {
 
 /**
  * Run callback when value changes.
- * 
+ *
  * @param {function} callback
  * @returns {Number|@pro;length@this.changeCallbacks}
  */
 ns.Text.prototype.change = function (callback) {
   this.changeCallbacks.push(callback);
   callback();
-  
+
   return this.changeCallbacks.length - 1;
 };
 
@@ -63,10 +63,10 @@ ns.Text.prototype.change = function (callback) {
  * Create HTML for the text field.
  */
 ns.Text.prototype.createHtml = function () {
-  var input = ns.createText(this.field.hint, this.value, this.field.maxLength, this.field.description);
+  var input = ns.createText(this.value, this.field.maxLength, this.field.placeholder);
   var label = ns.createLabel(this.field, input);
-  
-  return ns.createItem(this.field.type, label);
+
+  return ns.createItem(this.field.type, label, this.field.description);
 };
 
 /**
@@ -74,9 +74,9 @@ ns.Text.prototype.createHtml = function () {
  */
 ns.Text.prototype.validate = function () {
   var that = this;
-  
-  var value = ns.trim(this.$input.val());
-    
+
+  var value = H5P.trim(this.$input.val());
+
   if ((that.field.optional === undefined || !that.field.optional) && !value.length) {
     this.$errors.append(ns.createError(ns.t('requiredProperty', {':property': 'text field'})));
   }

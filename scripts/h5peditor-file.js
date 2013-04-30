@@ -3,7 +3,7 @@ var ns = H5PEditor;
 
 /**
  * Adds a file upload field to the form.
- * 
+ *
  * @param {mixed} parent
  * @param {object} field
  * @param {mixed} params
@@ -14,26 +14,26 @@ ns.File = function (parent, field, params, setValue) {
   this.field = field;
   this.params = params;
   this.setValue = setValue;
-  
+
   this.changes = [];
 };
 
 /**
  * Append field to the given wrapper.
- * 
+ *
  * @param {jQuery} $wrapper
  * @returns {undefined}
  */
 ns.File.prototype.appendTo = function ($wrapper) {
   ns.File.addIframe();
-  
+
   var label = '';
   if (this.field.label !== 0) {
     label = '<label>' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
   }
-  
-  var html = ns.createItem(this.field.type, label + '<div class="file"></div>');
-  
+
+  var html = ns.createItem(this.field.type, label + '<div class="file"></div>', this.field.description);
+
   this.$file = ns.$(html).appendTo($wrapper).children('.file');
   this.addFile(true);
   this.$errors = this.$file.next();
@@ -44,7 +44,7 @@ ns.File.prototype.appendTo = function ($wrapper) {
  */
 ns.File.prototype.addFile = function (init) {
   var that = this;
-  
+
   if (this.params === undefined) {
     this.$file.html('<a href="#" class="add" title="' + ns.t('addFile') + '"></a>').children('.add').click(function () {
       that.uploadFile();
@@ -63,7 +63,7 @@ ns.File.prototype.addFile = function (init) {
   else {
     thumbnail = ns.fileIcon;
   }
-  
+
   this.$file.html('<a href="#" title="' + ns.t('changeFile') + '" class="thumbnail"><img width="' + thumbnail.width + '" height="' + thumbnail.height + '" alt="' + (this.field.label === undefined ? '' : this.field.label) + '"/><a href="#" class="remove" title="' + ns.t('removeFile') + '"></a></a>').children(':eq(0)').click(function () {
     that.uploadFile();
     return false;
@@ -90,24 +90,24 @@ ns.File.prototype.addFile = function (init) {
  */
 ns.File.prototype.uploadFile = function () {
   var that = this;
-  
+
   if (ns.File.$file === 0) {
     return; // Wait for our turn :)
   }
-  
+
   this.$errors.html('');
-  
+
   ns.File.changeCallback = function () {
     that.$file.html('<div class="h5peditor-uploading">Uploading, please wait...</div>');
   };
-  
+
   ns.File.callback = function (json) {
     try {
       var result = JSON.parse(json);
       if (result['error'] !== undefined) {
         throw(result['error']);
       }
-      
+
       that.params = {
         path: result.path,
         mime: result.mime,
@@ -117,9 +117,9 @@ ns.File.prototype.uploadFile = function () {
         that.params.width = result.width;
         that.params.height = result.height;
       }
-      
+
       that.setValue(that.field, that.params);
-      
+
       for (var i = 0; i < that.changes.length; i++) {
         that.changes[i](that.params);
       }
@@ -127,10 +127,10 @@ ns.File.prototype.uploadFile = function () {
     catch (error) {
       that.$errors.append(ns.createError(error));
     }
-    
+
     that.addFile();
   };
-  
+
   if (this.field.mimes !== undefined) {
     var mimes = '';
     for (var i = 0; i < this.field.mimes.length; i++) {
@@ -144,7 +144,7 @@ ns.File.prototype.uploadFile = function () {
   else if (this.field.type === 'image') {
     ns.File.$file.attr('accept', 'image/jpeg,image/png,image/gif');
   }
-  
+
   ns.File.$field.val(JSON.stringify(this.field));
   ns.File.$file.click();
 };
@@ -171,7 +171,7 @@ ns.File.addIframe = function () {
   if (ns.File.$field !== undefined) {
     return;
   }
-  
+
   // All editor uploads share this iframe to conserve valuable resources.
   ns.$('<iframe id="h5peditor-uploader"></iframe>').load(function () {
     var $body = $(this).contents().find('body');
@@ -179,13 +179,13 @@ ns.File.addIframe = function () {
     if (ns.File.callback !== undefined) {
       ns.File.callback(json);
     }
-    
+
     $body.html('');
     var $form = ns.$('<form method="post" enctype="multipart/form-data" action="' + ns.basePath + 'files"><input name="file" type="file"/><input name="field" type="hidden"/></form>').appendTo($body);
-    
+
     ns.File.$field = $form.children('input[type="hidden"]');
     ns.File.$file = $form.children('input[type="file"]');
-    
+
     ns.File.$file.change(function () {
       if (ns.File.changeCallback !== undefined) {
         ns.File.changeCallback();
@@ -194,7 +194,7 @@ ns.File.addIframe = function () {
       ns.File.$file = 0;
       $form.submit();
     });
-    
+
   }).appendTo('body');
 };
 

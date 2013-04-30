@@ -353,8 +353,12 @@ ns.createError = function (message) {
  * @param {String} content
  * @returns {String}
  */
-ns.createItem = function (type, content) {
-  return '<div class="field ' + type + '">' + content + '<div class="errors"></div></div>';
+ns.createItem = function (type, content, description) {
+  var html = '<div class="field ' + type + '">' + content + '<div class="errors"></div>';
+  if (description !== undefined) {
+    html += '<div class="h5peditor-field-description">' + description + '</div>';
+  }
+  return html + '</div>';
 };
 
 /**
@@ -377,22 +381,18 @@ ns.createOption = function (value, text, selected) {
  * @param {Integer} maxLength
  * @returns {String}
  */
-ns.createText = function (hint, value, maxLength, description) {
+ns.createText = function (value, maxLength, placeholder) {
   var html = '<input type="text"';
 
   if (value !== undefined) {
     html += ' value="' + value + '"';
   }
 
-  if (hint !== undefined) {
-    html += ' placeholder="' + hint + '"';
+  if (placeholder !== undefined) {
+    html += ' placeholder="' + placeholder + '"';
   }
 
   html += ' maxlength="' + (maxLength === undefined ? 255 : maxLength) + '"/>';
-
-  if (description !== undefined) {
-    html += '<div class="h5p-description">' + description + '</div>';
-  }
 
   return html;
 };
@@ -412,16 +412,6 @@ ns.createLabel = function (field, content) {
   }
 
   return html + content + '</label>';
-};
-
-/**
- * Remove all empty spaces before and after the value.
- *
- * @param {String} value
- * @returns {@exp;value@call;replace}
- */
-ns.trim = function (value) {
-  return value.replace(/^\s+|\s+$/g, '');
 };
 
 /**

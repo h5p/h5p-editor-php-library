@@ -55,7 +55,7 @@ ns.List.prototype.appendTo = function ($wrapper) {
     label = '<label>' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
   }
 
-  var html = ns.createItem(this.field.type, label + '<ul class="h5p-ul"></ul><input type="button" value="' + ns.t('addEntity', {':entity': this.field.entity}) + '"/>');
+  var html = ns.createItem(this.field.type, label + '<ul class="h5p-ul"></ul><input type="button" value="' + ns.t('addEntity', {':entity': this.field.entity}) + '"/>', this.field.description);
 
   this.$list = ns.$(html).appendTo($wrapper).children('ul');
   this.$add = this.$list.next().click(function () {

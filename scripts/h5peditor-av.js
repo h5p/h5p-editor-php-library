@@ -3,7 +3,7 @@ var ns = H5PEditor;
 
 /**
  * Adds a file upload field to the form.
- * 
+ *
  * @param {mixed} parent
  * @param {object} field
  * @param {mixed} params
@@ -20,29 +20,29 @@ ns.AV = function (parent, field, params, setValue) {
 
 /**
  * Append field to the given wrapper.
- * 
+ *
  * @param {jQuery} $wrapper
  * @returns {undefined}
  */
 ns.AV.prototype.appendTo = function ($wrapper) {
   var that = this;
-  
+
   ns.File.addIframe();
-  
+
   var label = '';
   if (this.field.label !== 0) {
     label = '<label>' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
   }
-  
-  var html = ns.createItem(this.field.type, label + '<div class="file"><a href="#" class="add" title="' + ns.t('addFile') + '"></a></div>');
-  
+
+  var html = ns.createItem(this.field.type, label + '<div class="file"><a href="#" class="add" title="' + ns.t('addFile') + '"></a></div>', this.field.description);
+
   var $file = ns.$(html).appendTo($wrapper).children('.file');
   this.$add = $file.children('.add').click(function () {
     that.uploadFile();
     return false;
   });
   this.$errors = $file.next();
-  
+
   if (this.params !== undefined) {
     for (var i = 0; i < this.params.length; i++) {
       this.addFile(this.params[i]);
@@ -52,7 +52,7 @@ ns.AV.prototype.appendTo = function ($wrapper) {
 
 /**
  * Creates thumbnail HTML and actions.
- * 
+ *
  * @param {object} file
  * @returns {undefined}
  */
@@ -64,7 +64,7 @@ ns.AV.prototype.addFile = function (file) {
     if (!confirm(ns.t('confirmRemoval', {':type': 'file'}))) {
       return false;
     }
-    
+
     // Remove from params.
     for (var i = 0; i < that.$files.length; i++) {
       if (that.$files[i] === $file) {
@@ -72,17 +72,17 @@ ns.AV.prototype.addFile = function (file) {
         that.params.splice(i, 1);
       }
     }
-    
+
     if (!that.params.length) {
       delete that.params;
       that.setValue(that.field);
     }
-    
+
     $file.remove();
 
     return false;
   }).end();
-  
+
   this.$files.push($file);
 };
 
@@ -91,38 +91,38 @@ ns.AV.prototype.addFile = function (file) {
  */
 ns.AV.prototype.uploadFile = function () {
   var that = this;
-  
+
   if (ns.File.$file === 0) {
     return; // Wait for our turn :)
   }
-  
+
   this.$errors.html('');
-  
+
   ns.File.changeCallback = function () {
     that.$uploading = ns.$('<div class="h5peditor-uploading">Uploading, please wait...</div>').insertAfter(that.$add.hide());
   };
-  
+
   ns.File.callback = function (json) {
     try {
       var result = JSON.parse(json);
       if (result['error'] !== undefined) {
         throw(result['error']);
       }
-      
+
       if (that.params === undefined) {
         that.params = [];
         that.setValue(that.field, that.params);
       }
-      
+
       var file = {
         path: result.path,
         mime: result.mime,
         tmp: true
       };
       that.params.push(file);
-      
+
       that.addFile(file);
-      
+
       for (var i = 0; i < that.changes.length; i++) {
         that.changes[i](file);
       }
@@ -136,7 +136,7 @@ ns.AV.prototype.uploadFile = function () {
       that.$add.show();
     }
   };
-  
+
   if (this.field.mimes !== undefined) {
     var mimes = '';
     for (var i = 0; i < this.field.mimes.length; i++) {
@@ -153,7 +153,7 @@ ns.AV.prototype.uploadFile = function () {
   else if (this.field.type === 'video') {
     ns.File.$file.attr('accept', 'video/mp4,video/webm,video/ogg');
   }
-  
+
   ns.File.$field.val(JSON.stringify(this.field));
   ns.File.$file.click();
 };
@@ -161,7 +161,7 @@ ns.AV.prototype.uploadFile = function () {
 /**
  * Validate this item
  */
-ns.AV.prototype.validate = function () {  
+ns.AV.prototype.validate = function () {
   return true;
 };
 

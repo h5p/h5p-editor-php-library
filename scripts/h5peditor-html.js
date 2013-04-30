@@ -3,7 +3,7 @@ var ns = H5PEditor;
 
 /**
  * Adds a html text field to the form.
- * 
+ *
  * @param {type} parent
  * @param {type} field
  * @param {type} params
@@ -132,14 +132,14 @@ ns.Html.prototype.createToolbar = function () {
 
 /**
  * Append field to wrapper.
- * 
+ *
  * @param {type} $wrapper
  * @returns {undefined}
  */
 ns.Html.prototype.appendTo = function ($wrapper) {
   var that = this;
 
-  this.$item = ns.$(ns.createItem(this.field.type, this.createHtml())).appendTo($wrapper);
+  this.$item = ns.$(ns.createItem(this.field.type, this.createHtml(), this.field.description)).appendTo($wrapper);
   this.$input = this.$item.children('.ckeditor');
   this.$errors = this.$item.children('.errors');
 
@@ -162,7 +162,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     }
   }
 
-  
+
   var $textarea = this.$item.children('.ckeditor:not(.cke_editable)');
   if ($textarea.length !== 0) {
     that.ckeditor = CKEDITOR.inline($textarea[0], ckConfig);
@@ -193,10 +193,10 @@ ns.Html.prototype.appendTo = function ($wrapper) {
       ns.Html.first = false;
     }
   }
-  
-// Alternative if the above code makes the page very slow. 
+
+// Alternative if the above code makes the page very slow.
 // (should not be necessary, the above code has been tested with >30 ckeditor on one page.)
-// 
+//
 //  this.$item.children('.ckeditor:not(.cke_editable)').focus(function () {
 //    that.ckeditor = CKEDITOR.inline(this, ckConfig);
 //    that.ckeditor.on('change', function () {
@@ -222,19 +222,13 @@ ns.Html.prototype.createHtml = function () {
   }
   html += '</label>';
 
-  html += '<div class="ckeditor" tabindex="0" contenteditable="true"';
-  if (this.field.description !== undefined) {
-    html += ' title="' + this.field.description + '" placeholder="' + this.field.description + '"';
-  }
-  html += '>';
+  html += '<div class="ckeditor" tabindex="0" contenteditable="true">';
 
   if (this.value !== undefined) {
     html += this.value;
   }
   html += '</div>';
-  if (this.field.description !== undefined) {
-    html += '<div class="h5p-description">' + this.field.description + '</div>';
-  }
+
   return html;
 };
 
@@ -289,7 +283,7 @@ ns.Html.prototype.remove = function () {
   if (this.ckeditor !== undefined) {
     this.ckeditor.destroy();
   }
-  
+
   this.$item.remove();
 };
 

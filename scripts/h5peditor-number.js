@@ -3,7 +3,7 @@ var ns = H5PEditor;
 
 /**
  * Create a number picker field for the form.
- * 
+ *
  * @param {mixed} parent
  * @param {Object} field
  * @param {mixed} params
@@ -18,13 +18,13 @@ ns.Number = function (parent, field, params, setValue) {
 
 /**
  * Append field to wrapper.
- * 
+ *
  * @param {jQuery} $wrapper
  * @returns {undefined}
  */
 ns.Number.prototype.appendTo = function ($wrapper) {
   var that = this;
-  
+
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$errors = this.$item.children('.errors');
   var $inputs = this.$item.children('label').children('input');
@@ -35,24 +35,24 @@ ns.Number.prototype.appendTo = function ($wrapper) {
     this.$range = $inputs.filter(':first');
     this.$input = this.$range.next();
   }
-  
+
   this.$input.change(function () {
     // Validate
     var value = that.validate();
-    
+
     if (value) {
       // Set param
       that.setValue(that.field, value);
       that.$range.val(value);
     }
   });
-  
+
   if (this.$range !== undefined) {
     if (this.$range.attr('type') === 'range') {
       this.$range.change(function () {
         that.$input.val(that.$range.val()).change();
       });
-    
+
       // Add some styles for IE.
       if (H5PEditor.isIE) {
         this.$range.css('margin-top', 0);
@@ -71,12 +71,12 @@ ns.Number.prototype.appendTo = function ($wrapper) {
 ns.Number.prototype.createHtml = function () {
   var input = ns.createText(undefined, this.value, 15, this.field.description);
   if (this.field.min !== undefined && this.field.max !== undefined && this.field.step !== undefined) {
-    input = '<input type="range" min="' + this.field.min + '" max="' + this.field.max + '" step="' + this.field.step + '"' + (this.value === undefined ? '' : ' value="' + this.value + '"') + '/>' + input;  
+    input = '<input type="range" min="' + this.field.min + '" max="' + this.field.max + '" step="' + this.field.step + '"' + (this.value === undefined ? '' : ' value="' + this.value + '"') + '/>' + input;
   }
-  
+
   var label = ns.createLabel(this.field, input);
-  
-  return ns.createItem(this.field.type, label);
+
+  return ns.createItem(this.field.type, label, this.field.description);
 };
 
 /**
@@ -84,10 +84,10 @@ ns.Number.prototype.createHtml = function () {
  */
 ns.Number.prototype.validate = function () {
   var that = this;
-  
-  var value = ns.trim(this.$input.val());
+
+  var value = H5P.trim(this.$input.val());
   var decimals = this.field.decimals !== undefined && this.field.decimals;
-    
+
   if ((that.field.optional === undefined || !that.field.optional) && !value.length) {
     this.$errors.append(ns.createError(ns.t('requiredProperty', {':property': 'number field'})));
   }
@@ -104,7 +104,7 @@ ns.Number.prototype.validate = function () {
     else {
       value = parseInt(value);
     }
-    
+
     if (this.field.max !== undefined && value > this.field.max) {
       this.$errors.append(ns.createError(ns.t('exceedsMax', {':property': 'number field', ':max': this.field.max})));
     }

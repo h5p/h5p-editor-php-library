@@ -6,7 +6,7 @@
 .h5peditor {
   font-size: 16px;
   @include transition(all 0.2s ease-in);
-  
+
   .field {
     margin: 16px 0;
     padding: 0;
@@ -14,7 +14,7 @@
       margin-top: 0;
     }
     &:last-child {
-      margin-bottom: 0;  
+      margin-bottom: 0;
     }
   }
   .errors p {
@@ -23,11 +23,11 @@
   }
   label {
     display: block;
-    font-weight: bold; 
+    font-weight: bold;
     font-size: 14px;
     overflow: hidden;
     .label {
-      display: block;  
+      display: block;
     }
   }
   textarea {
@@ -66,7 +66,7 @@
     padding: 0;
     margin: 0;
     list-style: none;
-    
+
     .h5p-li {
       padding: 0 8px;
       margin: 8px 0;
@@ -74,7 +74,7 @@
       background: #d5e9ff;
       overflow: hidden;
       @include border-radius(8px);
-      
+
       & > .content {
         margin: 0 24px;
       }
@@ -87,18 +87,18 @@
         background: inline-image("remove.png") no-repeat;
         border: 1px solid #fff;
         @include opacity(0.8);
-          
+
         &:hover {
-          opacity: 1;  
+          opacity: 1;
         }
         &:focus {
           @include box-shadow(0 0 8px 2px #cb3535);
         }
       }
       & > .order {
-        float: left;  
+        float: left;
         background: inline-image("order.png") no-repeat;
-        
+
         &:focus {
           @include box-shadow(0 0 8px 2px #7ca8de);
         }
@@ -115,14 +115,14 @@
     margin: 16px 0;
     border: 1px solid #676767;
     background: #d5e9ff;
-      
+
     @include border-radius(8px);
     @include box-shadow(0 0 4px #a7a7a7);
-    
+
     & > .title {
       padding: 4px 8px;
       overflow: hidden;
-        
+
       &:first-letter {
         text-transform: uppercase;
       }
@@ -135,9 +135,9 @@
         background: inline-image("expand.png") no-repeat;
         opacity: 0.8;
         @include transition(all 0.2s ease-in);
-          
+
         &:hover {
-          opacity: 1;  
+          opacity: 1;
         }
       }
       .text {
@@ -176,7 +176,7 @@
   .expanded {
     & > .title {
       border-bottom: 1px solid #676767;
-      
+
       .expand {
         background-image: inline-image("collapse.png");
       }
@@ -192,7 +192,7 @@
     padding: 4px 8px;
   }
   .dimensions input, .coordinates input, .number input {
-    width: 75px;  
+    width: 75px;
   }
   .number input[type="range"] {
     width: 300px;
@@ -201,14 +201,14 @@
   }
   .file {
     position: relative;
-    
+
     .thumbnail {
       display: inline-block;
       margin: 10px;
       @include box-shadow(0 0 16px 0 #666666);
       border: 1px solid #fff;
       cursor: pointer;
-      
+
       &:focus {
         @include box-shadow(0 0 16px 2px #7fb8ff);
       }
@@ -218,7 +218,7 @@
       cursor: pointer;
       width: 44px;
       height: 44px;
-      background: inline-image("add.png");  
+      background: inline-image("add.png");
     }
     .remove {
       display: block;
@@ -229,14 +229,14 @@
       left: 10px;
       cursor: pointer;
       border: 1px solid #fff;
-      background: inline-image("remove.png");  
-      
+      background: inline-image("remove.png");
+
       &:focus {
         @include box-shadow(0 0 8px 2px #cb3535);
       }
     }
     img {
-      vertical-align: bottom;  
+      vertical-align: bottom;
     }
   }
   .video .file, .audio .file {
@@ -245,12 +245,12 @@
       float: left;
     }
     .add {
-      margin-top: 8px;  
+      margin-top: 8px;
     }
     .thumbnail {
       overflow: hidden;
       position: relative;
-      cursor: auto;  
+      cursor: auto;
     }
     .remove {
       top: -1px;
@@ -267,14 +267,14 @@
     }
   }
   .libwrap {
-    margin-top: 16px;  
+    margin-top: 16px;
   }
   input[type="checkbox"] {
     margin: 4px 4px 4px 0;
     vertical-align: bottom;
   }
   .common {
-    margin-top: 16px;  
+    margin-top: 16px;
     background: #fae5ff;
     padding: 8px;
     @include border-radius(8px);
@@ -285,16 +285,17 @@
     @include opacity(0.8);
     -webkit-transform: translateZ(0);
   }
-  .h5p-description {
-    font-size: 10px;
-    color: #555555;
-  }
-  
+
   .h5peditor-uploading {
     background: inline-image("uploading.gif") no-repeat 10px 7px;
     padding-top: 40px;
     font-size: 14px;
   }
+}
+
+.h5peditor-field-description {
+  font-size: 10px;
+  color: #555555;
 }
 
 .h5peditor-form {

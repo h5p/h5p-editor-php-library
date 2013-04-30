@@ -3,7 +3,7 @@ var ns = H5PEditor;
 
 /**
  * Creates a boolean field for the editor.
- * 
+ *
  * @param {mixed} parent
  * @param {object} field
  * @param {mixed} params
@@ -25,7 +25,7 @@ ns.Boolean.prototype.createHtml = function () {
     input += ' checked="checked"';
   }
   input += '/>';
-  
+
   var html = '<label>' + input;
   if (this.field.label !== 0) {
     html += this.field.label === undefined ? this.field.name : this.field.label;
@@ -34,8 +34,8 @@ ns.Boolean.prototype.createHtml = function () {
   if (this.field.description !== undefined) {
     html += '<div class="h5p-description">' + this.field.description + '</div>';
   }
-  
-  return ns.createItem(this.field.type, html);
+
+  return ns.createItem(this.field.type, html, this.field.description);
 };
 
 /**
@@ -47,7 +47,7 @@ ns.Boolean.prototype.validate = function () {
 
 /**
  * Append the boolean field to the given wrapper.
- * 
+ *
  * @param {jQuery} $wrapper
  * @returns {undefined}
  */

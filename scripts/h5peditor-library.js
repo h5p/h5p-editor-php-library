@@ -43,7 +43,7 @@ ns.Library.prototype.appendTo = function ($wrapper) {
     html = '<label>' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
   }
 
-  html = ns.createItem(this.field.type, html + '<select>' + ns.createOption('-', 'Loading...') + '</select><div class="libwrap"></div>');
+  html = ns.createItem(this.field.type, html + '<select>' + ns.createOption('-', 'Loading...') + '</select><div class="libwrap"></div>', this.field.description);
 
   this.$select = ns.$(html).appendTo($wrapper).children('select');
   this.$libraryWrapper = this.$select.next('.libwrap');
