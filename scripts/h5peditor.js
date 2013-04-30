@@ -209,6 +209,15 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
   }
 };
 
+/**
+ * Add a field to the common container.
+ *
+ * @param {object} field
+ * @param {object} parent
+ * @param {object} params
+ * @param {object} ancestor
+ * @returns {undefined}
+ */
 ns.addCommonField = function (field, parent, params, ancestor) {
   var commonField;
   if (ancestor.commonFields[parent.library] === undefined) {
@@ -229,7 +238,7 @@ ns.addCommonField = function (field, parent, params, ancestor) {
   }
 
   commonField = ancestor.commonFields[parent.library][field.name];
-  commonField.parents.push(parent);
+  commonField.parents.push(ns.findLibraryAncestor(parent));
   commonField.setValues.push(function (field, value) {
     if (value === undefined) {
       delete params[field.name];
@@ -250,6 +259,25 @@ ns.addCommonField = function (field, parent, params, ancestor) {
   parent.children.push(commonField.instance);
 };
 
+/**
+ * Find the nearest library ancestor. Used when adding commonfields.
+ *
+ * @param {object} parent
+ * @returns {ns.findLibraryAncestor.parent|@exp;ns@call;findLibraryAncestor}
+ */
+ns.findLibraryAncestor = function (parent) {
+  if (parent.parent === undefined || parent.field.type === 'library') {
+    return parent;
+  }
+  return ns.findLibraryAncestor(parent.parent);
+};
+
+/**
+ * Find the nearest ancestor which handles commonFields.
+ *
+ * @param {type} parent
+ * @returns {@exp;ns@call;findAncestor|ns.findAncestor.parent}
+ */
 ns.findAncestor = function (parent) {
   if (parent.commonFields === undefined) {
     return ns.findAncestor(parent.parent);

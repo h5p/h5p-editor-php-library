@@ -56,7 +56,7 @@ ns.Library.prototype.appendTo = function ($wrapper) {
     }
 
     that.$select.html(options).change(function () {
-      if (confirm(H5PEditor.t('confirmChangeLibrary'))) {
+      if (that.params.library === undefined || confirm(H5PEditor.t('confirmChangeLibrary'))) {
         that.loadLibrary(ns.$(this).val());
       }
     });
@@ -71,8 +71,8 @@ ns.Library.prototype.appendTo = function ($wrapper) {
 /**
  * Load the selected library.
  *
- * @param {String} libraryName
- *  On the form machineName.majorVersion.minorVersion
+ * @param {String} libraryName On the form machineName.majorVersion.minorVersion
+ * @param {Boolean} preserveParams
  * @returns {unresolved}
  */
 ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
@@ -81,6 +81,8 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
   this.removeChildren();
 
   if (libraryName === '-') {
+    delete this.params.library;
+    delete this.params.params;
     return;
   }
 
@@ -131,6 +133,11 @@ ns.Library.prototype.ready = function (ready) {
   }
 };
 
+/**
+ * Custom remove children that supports common fields.
+ *
+ * @returns {unresolved}
+ */
 ns.Library.prototype.removeChildren = function () {
   if (this.library === '-' || this.children === undefined) {
     return;
@@ -144,9 +151,8 @@ ns.Library.prototype.removeChildren = function () {
     if (library === this.library) {
       var remove = false;
 
-      for (var fieldName in ancestor.commonFields[library]) {
-        var field = ancestor.commonFields[library][fieldName];
-
+      for (var fieldName in ancestor.commonFields[libraryPath]) {
+        var field = ancestor.commonFields[libraryPath][fieldName];
         if (field.parents.length === 1) {
           field.instance.remove();
           remove = true;
@@ -161,7 +167,7 @@ ns.Library.prototype.removeChildren = function () {
       }
 
       if (remove) {
-        delete ancestor.commonFields[library];
+        delete ancestor.commonFields[libraryPath];
       }
     }
   }
