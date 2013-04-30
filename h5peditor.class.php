@@ -20,6 +20,7 @@ class H5peditor {
     'scripts/h5peditor-boolean.js',
     'scripts/h5peditor-list.js',
     'scripts/h5peditor-library.js',
+    'scripts/h5peditor-select.js',
     'scripts/h5peditor-dimensions.js',
     'scripts/h5peditor-coordinates.js',
     'scripts/h5peditor-none.js',
@@ -71,14 +72,14 @@ class H5peditor {
     $oldFiles = array();
     $newLibraries = array($newLibrary['machineName'] => $newLibrary);
     $oldLibraries = array($oldLibrary);
-    
-    // Find new libraries and files.  
+
+    // Find new libraries and files.
     $this->processSemantics($newFiles, $newLibraries, json_decode($this->storage->getSemantics($newLibrary['machineName'], $newLibrary['majorVersion'], $newLibrary['minorVersion'])), $newParameters);
 
     $h5pStorage = _h5p_get_instance('storage');
-    
+
     $librariesUsed = $newLibraries; // Copy
-    
+
     foreach ($newLibraries as $library) {
       $libraryFull = $h5pStorage->h5pF->loadLibrary($library['machineName'], $library['majorVersion'], $library['minorVersion']);
       $librariesUsed[$library['machineName']]['library'] = $libraryFull;
@@ -88,7 +89,7 @@ class H5peditor {
 
     $h5pStorage->h5pF->deleteLibraryUsage($contentId);
     $h5pStorage->h5pF->saveLibraryUsage($contentId, $librariesUsed);
-    
+
     if ($oldLibrary) {
       // Find old files and libraries.
       $this->processSemantics($oldFiles, $oldLibraries, json_decode($this->storage->getSemantics($oldLibrary['machineName'], $oldLibrary['majorVersion'], $oldLibrary['minorVersion'])), $oldParameters);
@@ -107,7 +108,7 @@ class H5peditor {
   /**
    * Recursive function that moves the new files in to the h5p content folder and generates a list over the old files.
    * Also locates all the librares.
-   * 
+   *
    * @param array $files
    * @param array $libraries
    * @param array $schema
@@ -125,7 +126,7 @@ class H5peditor {
 
   /**
    * Process a single field.
-   * 
+   *
    * @staticvar string $h5peditor_path
    * @param object $field
    * @param mixed $params
@@ -150,7 +151,7 @@ class H5peditor {
           $files[] = $params->path;
         }
         break;
-        
+
       case 'video':
       case 'audio':
         if (is_array($params)) {
@@ -179,7 +180,7 @@ class H5peditor {
           $this->processSemantics($files, $libraries, $field->fields, $params);
         }
         break;
-        
+
       case 'list':
         if (is_array($params)) {
           for ($j = 0, $t = count($params); $j < $t; $j++) {
@@ -201,10 +202,10 @@ class H5peditor {
     $libraryData->semantics = $this->storage->getSemantics($machineName, $majorVersion, $minorVersion);
 
     $editorLibraryIds = $this->storage->getEditorLibraries($machineName, $majorVersion, $minorVersion);
-    
+
     foreach ($editorLibraryIds as $editorLibraryId) {
       $filePaths = $this->storage->getFilePaths($editorLibraryId);
-      
+
       if (!empty($filePaths['js'])) {
         if (!isset($libraryData->javascript)) {
           $libraryData->javascript = '';
@@ -223,7 +224,7 @@ class H5peditor {
         }
       }
     }
-    
+
     return json_encode($libraryData);
   }
 
