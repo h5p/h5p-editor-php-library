@@ -102,7 +102,12 @@ ns.loadLibrary = function (libraryName, callback) {
       ns.semanticsLoaded[libraryName] = []; // Other callbacks to run once loaded.
       var library = ns.libraryFromString(libraryName);
       ns.$.get(ns.basePath + 'libraries/' + library.machineName + '/' + library.majorVersion + '/' + library.minorVersion, function (libraryData) {
-        libraryData.semantics = JSON.parse(libraryData.semantics);
+        var semantics = JSON.parse(libraryData.semantics);
+        if (libraryData.language !== undefined) {
+          var language = JSON.parse(libraryData.language);
+          semantics = ns.$,extend(true, {}, semantics, language.semantics);
+        }
+        libraryData.semantics = semantics;
         ns.loadedSemantics[libraryName] = libraryData.semantics;
 
         // Add CSS.
