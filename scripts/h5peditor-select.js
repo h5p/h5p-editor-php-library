@@ -23,10 +23,19 @@ H5PEditor.widgets.select = H5PEditor.Select = (function (E) {
    * @returns {undefined}
    */
   C.prototype.appendTo = function ($wrapper) {
+    var that = this;
+
     this.$item = E.$(this.createHtml()).appendTo($wrapper);
+    this.$select = this.$item.find('select');
     this.$errors = this.$item.children('.errors');
 
-    // TODO: Support changes callbacks?
+    this.$select.change(function () {
+      var val = that.validate();
+      if (val !== false) {
+        that.value = val;
+        that.setValue(that.field, val);
+      }
+    });
   };
 
   /**
@@ -53,7 +62,7 @@ H5PEditor.widgets.select = H5PEditor.Select = (function (E) {
    * @returns {Boolean}
    */
   C.prototype.validate = function () {
-    return true;
+    return this.$select.val();
   };
 
 
