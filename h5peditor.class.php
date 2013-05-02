@@ -177,6 +177,9 @@ class H5peditor {
 
       case 'group':
         if (isset($params)) {
+          if (count($field->fields) == 1) {
+            $params = (object) array($field->fields[0]->name => $params);
+          }
           $this->processSemantics($files, $libraries, $field->fields, $params);
         }
         break;
