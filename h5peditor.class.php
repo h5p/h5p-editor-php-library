@@ -201,9 +201,22 @@ class H5peditor {
     $libraryData = new stdClass();
     $libraryData->semantics = $this->storage->getSemantics($machineName, $majorVersion, $minorVersion);
 
+    $language = $this->storage->getLanguage($machineName, $majorVersion, $minorVersion);
+    if ($language) {
+      $libraryData->language = $language;
+    }
+
     $editorLibraryIds = $this->storage->getEditorLibraries($machineName, $majorVersion, $minorVersion);
 
-    foreach ($editorLibraryIds as $editorLibraryId) {
+    foreach ($editorLibraryIds as $editorLibraryId => $editorLibrary) {
+      $language = $this->storage->getLanguage($editorLibrary['machineName'], $editorLibrary['majorVersion'], $editorLibrary['minorVersion']);
+      if ($language) {
+        if (!isset($libraryData->javascript)) {
+          $libraryData->javascript = '';
+        }
+        $libraryData->javascript .= ' H5P.language.' + $editorLibrary['machineName'] + '=' + $language + ';';
+      }
+
       $filePaths = $this->storage->getFilePaths($editorLibraryId);
 
       if (!empty($filePaths['js'])) {
