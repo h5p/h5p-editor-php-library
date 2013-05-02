@@ -69,7 +69,7 @@ ns.Number.prototype.appendTo = function ($wrapper) {
  * Create HTML for the field.
  */
 ns.Number.prototype.createHtml = function () {
-  var input = ns.createText(undefined, this.value, 15, this.field.description);
+  var input = ns.createText(this.value, 15);
   if (this.field.min !== undefined && this.field.max !== undefined && this.field.step !== undefined) {
     input = '<input type="range" min="' + this.field.min + '" max="' + this.field.max + '" step="' + this.field.step + '"' + (this.value === undefined ? '' : ' value="' + this.value + '"') + '/>' + input;
   }

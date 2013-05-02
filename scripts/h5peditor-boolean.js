@@ -31,9 +31,6 @@ ns.Boolean.prototype.createHtml = function () {
     html += this.field.label === undefined ? this.field.name : this.field.label;
   }
   html += '</label>';
-  if (this.field.description !== undefined) {
-    html += '<div class="h5p-description">' + this.field.description + '</div>';
-  }
 
   return ns.createItem(this.field.type, html, this.field.description);
 };

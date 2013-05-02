@@ -43,10 +43,15 @@ ns.Library.prototype.appendTo = function ($wrapper) {
     html = '<label>' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
   }
 
-  html = ns.createItem(this.field.type, html + '<select>' + ns.createOption('-', 'Loading...') + '</select><div class="libwrap"></div>', this.field.description);
+  html = '<div class="field ' + this.field.type + '">' + html + '<select>' + ns.createOption('-', 'Loading...') + '</select>';
+  if (this.field.description !== undefined) {
+    html += '<div class="h5peditor-field-description">' + this.field.description + '</div>';
+  }
+  html += '<div class="errors"></div><div class="libwrap"></div></div>';
 
-  this.$select = ns.$(html).appendTo($wrapper).children('select');
-  this.$libraryWrapper = this.$select.next('.libwrap');
+  var $field = ns.$(html).appendTo($wrapper);
+  this.$select = $field.children('select');
+  this.$libraryWrapper = $field.children('.libwrap');
 
   ns.$.post(ns.basePath + 'libraries', {libraries: that.field.options}, function (data) {
     var options = ns.createOption('-', '-');
@@ -55,7 +60,7 @@ ns.Library.prototype.appendTo = function ($wrapper) {
       options += ns.createOption(library.uberName, library.title, library.uberName === that.params.library);
     }
 
-    that.$select.html(options).change(function () {
+    that.$select.html(options).change().change(function () {
       if (that.params.library === undefined || confirm(H5PEditor.t('confirmChangeLibrary'))) {
         that.loadLibrary(ns.$(this).val());
       }

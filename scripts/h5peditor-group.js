@@ -87,24 +87,24 @@ ns.Group.prototype.findSummary = function () {
     var child = this.children[j];
     var params = this.field.fields.length === 1 ? this.params : this.params[child.field.name];
 
-    if (child instanceof ns.Text) {
+    if (child.field.type === 'text') {
       if (params !== undefined && params !== '') {
-        summary = this.field.label + ': ' + params;
+        summary = params;
       }
       child.$input.change(function () {
         var params = that.field.fields.length === 1 ? that.params : that.params[child.field.name];
         if (params !== undefined && params !== '') {
-          that.setSummary(that.field.label + ': ' + params);
+          that.setSummary(params);
         }
       });
       break;
     }
-    else if (child instanceof ns.Library) {
+    else if (child.field.type === 'library') {
       if (params !== undefined) {
-        summary = this.field.label + ': ' + child.$select.children(':selected').text();
+        summary = child.$select.children(':selected').text();
       }
       child.$select.change(function () {
-        that.setSummary(that.field.label + ': ' + child.$select.children(':selected').text());
+        that.setSummary(child.$select.children(':selected').text());
       });
       break;
     }
@@ -119,7 +119,14 @@ ns.Group.prototype.findSummary = function () {
  * @returns {undefined}
  */
 ns.Group.prototype.setSummary = function (summary) {
-  this.$group.children('.title').children('.text').text(summary === undefined ? this.field.label : summary);
+  if (summary !== undefined) {
+    summary = this.field.label + ': ' + (summary.length > 48 ? summary.substr(0, 45) + '...' : summary);
+  }
+  else {
+    summary = this.field.label;
+  }
+
+  this.$group.children('.title').children('.text').text(summary);
 };
 
 /**

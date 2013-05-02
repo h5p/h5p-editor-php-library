@@ -33,7 +33,7 @@ ns.Textarea.prototype.appendTo = function ($wrapper) {
     // Validate
     var value = that.validate();
 
-    if (value) {
+    if (value !== false) {
       // Set param
       that.setValue(that.field, value);
     }
@@ -63,11 +63,9 @@ ns.Textarea.prototype.createHtml = function () {
  * Validate the current text field.
  */
 ns.Textarea.prototype.validate = function () {
-  var that = this;
-
   var value = H5P.trim(this.$input.val());
 
-  if ((that.field.optional === undefined || !that.field.optional) && !value.length) {
+  if ((this.field.optional === undefined || !this.field.optional) && !value.length) {
     this.$errors.append(ns.createError(ns.t('requiredProperty', {':property': 'text field'})));
   }
   else if (value.length > this.field.maxLength) {
