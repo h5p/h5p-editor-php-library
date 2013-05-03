@@ -26,34 +26,6 @@ ns.semanticsLoaded = {};
 ns.isIE = navigator.userAgent.match(/; MSIE \d+.\d+;/) !== null;
 
 /**
- * The current localization mapping. To be translated by your framework.
- */
-ns.l10n = {
-  missingTranslation: '[Missing translation :key]',
-  loading: 'Loading :type...',
-  selectLibrary: 'Select the library you wish to use for your content.',
-  unknownFieldPath: 'Unable to find ":path".',
-  notImageField: '":path" is not an image.',
-  notImageOrDimensionsField: '":path" is not an image or dimensions field.',
-  requiredProperty: 'The :property is required and must have a value.',
-  onlyNumbers: 'The :property value can only contain numbers.',
-  exceedsMax: 'The :property value exceeds the maximum of :max.',
-  exceedsMin: 'The :property value exceeds the minimum of :min.',
-  outOfStep: 'The :property value can only be changed in steps of :step.',
-  addFile: 'Add file',
-  removeFile: 'Remove file',
-  confirmRemoval: 'Are you sure you wish to remove this :type?',
-  changeFile: 'Change file',
-  semanticsError: 'Semantics error: :error',
-  missingProperty: 'Field :index is missing its :property property.',
-  expandCollapse: 'Expand/Collapse',
-  addEntity: 'Add :entity',
-  tooLong: 'Field value is too long, should contain :max letters or less.',
-  invalidFormat: 'Field value contains an invalid format or characters that are forbidden.',
-  confirmChangeLibrary: 'Are you sure you wish to change library?'
-};
-
-/**
  * Translate text strings.
  *
  * @param {String} key
@@ -61,11 +33,11 @@ ns.l10n = {
  * @returns {String|@exp;H5peditor@call;t}
  */
 ns.t = function (key, vars) {
-  if (ns.l10n[key] === undefined) {
+  if (ns.language[key] === undefined) {
     return key === 'missingTranslation' ? '[Missing translation "' + key + '"]' : ns.t('missingTranslation', {':key': key});
   }
 
-  var translation = ns.l10n[key];
+  var translation = ns.language[key];
 
   // Replace placeholder with variables.
   for (var placeholder in vars) {
