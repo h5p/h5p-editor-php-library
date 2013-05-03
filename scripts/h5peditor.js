@@ -40,14 +40,17 @@ ns.t = function (library, key, vars) {
   if (ns.language[library] === undefined) {
     return 'Missing translations for library ' + library;
   }
-  if ((library === 'core' &&  ns.language[library][key] === undefined) || ns.language[library]['libraryStrings'] === undefined || ns.language[library]['libraryStrings'][key] === undefined) {
-    return key === 'missingTranslation' ? '[Missing translation "' + key + '"]' : ns.t('core', 'missingTranslation', {':key': key});
-  }
 
   if (library == 'core') {
+    if (ns.language[library][key] === undefined) {
+      return 'Missing translation for ' + key;
+    }
     var translation = ns.language[library][key];
   }
   else {
+    if (ns.language[library]['libraryStrings'] === undefined || ns.language[library]['libraryStrings'][key] === undefined) {
+      return ns.t('core', 'missingTranslation', {':key': key});
+    }
     var translation = ns.language[library]['libraryStrings'][key];
   }
 
