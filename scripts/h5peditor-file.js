@@ -168,9 +168,10 @@ ns.File.prototype.remove = function () {
  * Add the iframe we use for uploads.
  */
 ns.File.addIframe = function () {
-  if (ns.File.$field !== undefined) {
+  if (ns.File.iframeLoaded !== undefined) {
     return;
   }
+  ns.File.iframeLoaded = true;
 
   // All editor uploads share this iframe to conserve valuable resources.
   ns.$('<iframe id="h5peditor-uploader"></iframe>').load(function () {
