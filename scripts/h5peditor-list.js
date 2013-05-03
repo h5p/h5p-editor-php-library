@@ -55,7 +55,7 @@ ns.List.prototype.appendTo = function ($wrapper) {
     label = '<label>' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
   }
 
-  var html = ns.createItem(this.field.type, label + '<ul class="h5p-ul"></ul><input type="button" value="' + ns.t('addEntity', {':entity': this.field.entity}) + '"/>', this.field.description);
+  var html = ns.createItem(this.field.type, label + '<ul class="h5p-ul"></ul><input type="button" value="' + ns.t('core', 'addEntity', {':entity': this.field.entity}) + '"/>', this.field.description);
 
   this.$list = ns.$(html).appendTo($wrapper).children('ul');
   this.$add = this.$list.next().click(function () {
@@ -201,7 +201,7 @@ ns.List.prototype.addItem = function (i) {
  * @returns {unresolved}
  */
 ns.List.prototype.removeItem = function (i) {
-  if (!confirm(ns.t('confirmRemoval', {':type': this.field.entity}))) {
+  if (!confirm(ns.t('core', 'confirmRemoval', {':type': this.field.entity}))) {
     return;
   }
 

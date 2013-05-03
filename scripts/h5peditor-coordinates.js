@@ -89,10 +89,10 @@ ns.Coordinates.prototype.findImageField = function (property, callback) {
 
     that.field[property] = ns.findField(that.field[property], that.parent);
     if (!that.field[property]) {
-      throw ns.t('unknownFieldPath', {':path': path});
+      throw ns.t('core', 'unknownFieldPath', {':path': path});
     }
     if (that.field[property].field.type !== 'image' && that.field[property].field.widget !== 'dimensions') {
-      throw ns.t('notImageOrDimensionsField', {':path': path});
+      throw ns.t('core', 'notImageOrDimensionsField', {':path': path});
     }
 
     callback(that.field[property]);
@@ -149,17 +149,17 @@ ns.Coordinates.prototype.validate = function () {
     var property = i ? 'y' : 'x';
 
     if ((that.field.optional === undefined || !that.field.optional) && !value.length) {
-      that.$errors.append(ns.createError(ns.t('requiredProperty', {':property': property})));
+      that.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': property})));
       return false;
     }
     else if (!value.match(new RegExp('^[0-9]+$'))) {
-      that.$errors.append(ns.createError(ns.t('onlyNumbers', {':property': property})));
+      that.$errors.append(ns.createError(ns.t('core', 'onlyNumbers', {':property': property})));
       return false;
     }
 
     value = parseInt(value);
     if (that.field.max !== undefined && value > that.field.max[property]) {
-      that.$errors.append(ns.createError(ns.t('exceedsMax', {':property': property, ':max': that.field.max[property]})));
+      that.$errors.append(ns.createError(ns.t('core', 'exceedsMax', {':property': property, ':max': that.field.max[property]})));
       return false;
     }
 

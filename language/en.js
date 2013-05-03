@@ -1,4 +1,4 @@
-H5PEditor.language = {
+H5PEditor.language.core = {
   missingTranslation: '[Missing translation :key]',
   loading: 'Loading :type...',
   selectLibrary: 'Select the library you wish to use for your content.',

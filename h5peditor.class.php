@@ -212,14 +212,6 @@ class H5peditor {
     $editorLibraryIds = $this->storage->getEditorLibraries($machineName, $majorVersion, $minorVersion);
 
     foreach ($editorLibraryIds as $editorLibraryId => $editorLibrary) {
-      $language = $this->storage->getLanguage($editorLibrary['machineName'], $editorLibrary['majorVersion'], $editorLibrary['minorVersion']);
-      if ($language) {
-        if (!isset($libraryData->javascript)) {
-          $libraryData->javascript = '';
-        }
-        $libraryData->javascript .= ' H5P.language.' + $editorLibrary['machineName'] + '=' + $language + ';';
-      }
-
       $filePaths = $this->storage->getFilePaths($editorLibraryId);
 
       if (!empty($filePaths['js'])) {
@@ -230,6 +222,13 @@ class H5peditor {
           // TODO: rtrim and check substr(-1) === '}'? jsmin?
           $libraryData->javascript .= "\n" . file_get_contents($jsFilePath);
         }
+      }
+      $language = $this->storage->getLanguage($editorLibrary['machineName'], $editorLibrary['majorVersion'], $editorLibrary['minorVersion']);
+      if ($language) {
+        if (!isset($libraryData->javascript)) {
+          $libraryData->javascript = '';
+        }
+        $libraryData->javascript .= '; H5PEditor.language["' . $editorLibrary['machineName'] . '"] = ' . $language . ';';
       }
       if (!empty($filePaths['css'])) {
         if (!isset($libraryData->css)) {

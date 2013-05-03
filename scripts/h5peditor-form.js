@@ -48,7 +48,7 @@ ns.Form.prototype.processSemantics = function (semantics, defaultParams) {
       console.error(error.stack);
     }
 
-    var $error = ns.$('<div class="h5peditor-error">' + ns.t('semanticsError', {':error': error}) + '</div>');
+    var $error = ns.$('<div class="h5peditor-error">' + ns.t('core', 'semanticsError', {':error': error}) + '</div>');
     this.$form.replaceWith($error);
     this.$form = $error;
   }

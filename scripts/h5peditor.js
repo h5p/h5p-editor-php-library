@@ -10,6 +10,8 @@ var ns = H5PEditor;
  */
 ns.widgets = {};
 
+ns.language = {};
+
 /**
  * Keeps track of which semantics are loaded.
  */
@@ -28,16 +30,26 @@ ns.isIE = navigator.userAgent.match(/; MSIE \d+.\d+;/) !== null;
 /**
  * Translate text strings.
  *
+ * @param {String} library
+ *  library machineName, or "core"
  * @param {String} key
  * @param {Object} vars
  * @returns {String|@exp;H5peditor@call;t}
  */
-ns.t = function (key, vars) {
-  if (ns.language[key] === undefined) {
-    return key === 'missingTranslation' ? '[Missing translation "' + key + '"]' : ns.t('missingTranslation', {':key': key});
+ns.t = function (library, key, vars) {
+  if (ns.language[library] === undefined) {
+    return 'Missing translations for library ' + library;
+  }
+  if ((library === 'core' &&  ns.language[library][key] === undefined) || ns.language[library]['libraryStrings'] === undefined || ns.language[library]['libraryStrings'][key] === undefined) {
+    return key === 'missingTranslation' ? '[Missing translation "' + key + '"]' : ns.t('core', 'missingTranslation', {':key': key});
   }
 
-  var translation = ns.language[key];
+  if (library == 'core') {
+    var translation = ns.language[library][key];
+  }
+  else {
+    var translation = ns.language[library]['libraryStrings'][key];
+  }
 
   // Replace placeholder with variables.
   for (var placeholder in vars) {
@@ -89,14 +101,7 @@ ns.loadLibrary = function (libraryName, callback) {
 
         // Add JS.
         if (libraryData.javascript !== undefined) {
-          try {
-            eval.apply(window, [libraryData.javascript]);
-          }
-          catch (error) {
-            if (window['console'] !== undefined && typeof console.error === 'function') {
-              console.error(error.stack);
-            }
-          }
+          eval.apply(window, [libraryData.javascript]);
         }
 
         callback(libraryData.semantics);
@@ -136,10 +141,10 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
 
     // Check generic field properties.
     if (field.name === undefined) {
-      throw ns.t('missingProperty', {':index': i, ':property': 'name'});
+      throw ns.t('core', 'missingProperty', {':index': i, ':property': 'name'});
     }
     if (field.type === undefined) {
-      throw ns.t('missingProperty', {':index': i, ':property': 'type'});
+      throw ns.t('core', 'missingProperty', {':index': i, ':property': 'type'});
     }
 
     // Set default value.

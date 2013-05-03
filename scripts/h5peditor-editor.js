@@ -19,7 +19,7 @@ ns.Editor = function (library, defaultParams) {
   }
   
   // Create a wrapper
-  this.$wrapper = ns.$('<div class="h5peditor">' + ns.t('loading', {':type': 'libraries'}) + '</div>');
+  this.$wrapper = ns.$('<div class="h5peditor">' + ns.t('core', 'loading', {':type': 'libraries'}) + '</div>');
 
   // Load libraries.
   ns.$.get(ns.basePath + 'libraries', function (data) {

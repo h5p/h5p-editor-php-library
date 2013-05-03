@@ -34,7 +34,7 @@ ns.AV.prototype.appendTo = function ($wrapper) {
     label = '<label>' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
   }
 
-  var html = ns.createItem(this.field.type, label + '<div class="file"><a href="#" class="add" title="' + ns.t('addFile') + '"></a></div>', this.field.description);
+  var html = ns.createItem(this.field.type, label + '<div class="file"><a href="#" class="add" title="' + ns.t('core', 'addFile') + '"></a></div>', this.field.description);
 
   var $file = ns.$(html).appendTo($wrapper).children('.file');
   this.$add = $file.children('.add').click(function () {
@@ -60,8 +60,8 @@ ns.AV.prototype.addFile = function (file) {
   var that = this;
 
   var mimeParts = file.mime.split('/');
-  var $file = ns.$('<div class="thumbnail"><div class="type" title="' + file.mime + '">' + mimeParts[1] + '</div><a href="#" class="remove" title="' + ns.t('removeFile') + '"></a></div>').insertBefore(this.$add).children('.remove').click(function (e) {
-    if (!confirm(ns.t('confirmRemoval', {':type': 'file'}))) {
+  var $file = ns.$('<div class="thumbnail"><div class="type" title="' + file.mime + '">' + mimeParts[1] + '</div><a href="#" class="remove" title="' + ns.t('core', 'removeFile') + '"></a></div>').insertBefore(this.$add).children('.remove').click(function (e) {
+    if (!confirm(ns.t('core', 'confirmRemoval', {':type': 'file'}))) {
       return false;
     }
 

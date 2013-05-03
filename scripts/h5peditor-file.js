@@ -46,7 +46,7 @@ ns.File.prototype.addFile = function (init) {
   var that = this;
 
   if (this.params === undefined) {
-    this.$file.html('<a href="#" class="add" title="' + ns.t('addFile') + '"></a>').children('.add').click(function () {
+    this.$file.html('<a href="#" class="add" title="' + ns.t('core', 'addFile') + '"></a>').children('.add').click(function () {
       that.uploadFile();
       return false;
     });
@@ -64,7 +64,7 @@ ns.File.prototype.addFile = function (init) {
     thumbnail = ns.fileIcon;
   }
 
-  this.$file.html('<a href="#" title="' + ns.t('changeFile') + '" class="thumbnail"><img width="' + thumbnail.width + '" height="' + thumbnail.height + '" alt="' + (this.field.label === undefined ? '' : this.field.label) + '"/><a href="#" class="remove" title="' + ns.t('removeFile') + '"></a></a>').children(':eq(0)').click(function () {
+  this.$file.html('<a href="#" title="' + ns.t('core', 'changeFile') + '" class="thumbnail"><img width="' + thumbnail.width + '" height="' + thumbnail.height + '" alt="' + (this.field.label === undefined ? '' : this.field.label) + '"/><a href="#" class="remove" title="' + ns.t('core', 'removeFile') + '"></a></a>').children(':eq(0)').click(function () {
     that.uploadFile();
     return false;
   }).children('img').error(function () {
@@ -75,7 +75,7 @@ ns.File.prototype.addFile = function (init) {
       ns.$(this).unbind('error').attr('src', path);
     }
   }).attr('src', thumbnail.path).end().next().click(function (e) {
-    if (!confirm(ns.t('confirmRemoval', {':type': 'file'}))) {
+    if (!confirm(ns.t('core', 'confirmRemoval', {':type': 'file'}))) {
       return false;
     }
     delete that.params;

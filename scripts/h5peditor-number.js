@@ -89,13 +89,13 @@ ns.Number.prototype.validate = function () {
   var decimals = this.field.decimals !== undefined && this.field.decimals;
 
   if ((that.field.optional === undefined || !that.field.optional) && !value.length) {
-    this.$errors.append(ns.createError(ns.t('requiredProperty', {':property': 'number field'})));
+    this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': 'number field'})));
   }
   else if (decimals && !value.match(new RegExp('^-?[0-9]+(.|,)[0-9]{1,}$'))) {
-    this.$errors.append(ns.createError(ns.t('onlyNumbers', {':property': 'number field'})));
+    this.$errors.append(ns.createError(ns.t('core', 'onlyNumbers', {':property': 'number field'})));
   }
   else if (!decimals && !value.match(new RegExp('^-?[0-9]+$'))) {
-    this.$errors.append(ns.createError(ns.t('onlyNumbers', {':property': 'number field'})));
+    this.$errors.append(ns.createError(ns.t('core', 'onlyNumbers', {':property': 'number field'})));
   }
   else {
     if (decimals) {
@@ -106,13 +106,13 @@ ns.Number.prototype.validate = function () {
     }
 
     if (this.field.max !== undefined && value > this.field.max) {
-      this.$errors.append(ns.createError(ns.t('exceedsMax', {':property': 'number field', ':max': this.field.max})));
+      this.$errors.append(ns.createError(ns.t('core', 'exceedsMax', {':property': 'number field', ':max': this.field.max})));
     }
     else if (this.field.min !== undefined && value < this.field.min) {
-      this.$errors.append(ns.createError(ns.t('exceedsMin', {':property': 'number field', ':min': this.field.min})));
+      this.$errors.append(ns.createError(ns.t('core', 'exceedsMin', {':property': 'number field', ':min': this.field.min})));
     }
     else if (this.field.step !== undefined && value % this.field.step)  {
-      this.$errors.append(ns.createError(ns.t('outOfStep', {':property': 'number field', ':step': this.field.step})));
+      this.$errors.append(ns.createError(ns.t('core', 'outOfStep', {':property': 'number field', ':step': this.field.step})));
     }
   }
 

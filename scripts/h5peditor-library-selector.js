@@ -27,7 +27,7 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
     options += '>' + library.title + '</option>';
   }
   
-  this.$selector = ns.$('<select name="h5peditor-library" title="' + ns.t('selectLibrary') + '">' + options + '</select>').change(function () {
+  this.$selector = ns.$('<select name="h5peditor-library" title="' + ns.t('core', 'selectLibrary') + '">' + options + '</select>').change(function () {
     var library = that.$selector.val();
     that.loadSemantics(library);
   });
@@ -63,7 +63,7 @@ ns.LibrarySelector.prototype.loadSemantics = function (library) {
   }
 
   // Display loading message
-  var $loading = $('<div>' + ns.t('loading', {':type': 'semantics'}) + '</div>').insertAfter(this.$selector);
+  var $loading = $('<div>' + ns.t('core', 'loading', {':type': 'semantics'}) + '</div>').insertAfter(this.$selector);
   
   this.$selector.attr('disabled', true);
   
