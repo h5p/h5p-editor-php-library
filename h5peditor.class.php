@@ -96,7 +96,7 @@ class H5peditor {
 
       // Remove old files.
       for ($i = 0, $s = count($oldFiles); $i < $s; $i++) {
-        if (!in_array($oldFiles[$i], $newFiles)) {
+        if (!in_array($oldFiles[$i], $newFiles) && substr($oldFiles[$i], 0, 7) != 'http://') {
           $removeFile = $this->content_directory . $oldFiles[$i];
           unlink($removeFile);
           $this->storage->removeFile($removeFile);
