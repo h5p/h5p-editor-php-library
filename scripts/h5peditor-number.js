@@ -40,10 +40,13 @@ ns.Number.prototype.appendTo = function ($wrapper) {
     // Validate
     var value = that.validate();
 
-    if (value) {
+    if (value !== false) {
       // Set param
+      that.value = value;
       that.setValue(that.field, value);
-      that.$range.val(value);
+      if (that.$range !== undefined) {
+        that.$range.val(value);
+      }
     }
   });
 
