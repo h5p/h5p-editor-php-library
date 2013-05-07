@@ -175,6 +175,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
       return;
     }
 
+    var $editor = $(this);
     that.ckeditor = CKEDITOR.inline(this, ckConfig);
 
     that.ckeditor.on('instanceReady', function () {
@@ -184,6 +185,8 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     that.ckeditor.on('blur', function () {
       delete that.ckeditor;
       this.destroy();
+      H5P.$body.unbind('click', manualBlur);
+      $editor.unbind('click', clickStopper);
     });
 
     that.ckeditor.on('change', function () {
@@ -218,10 +221,10 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     // Simulate blur since ckeditor doesn't fire blur when it's supposed to. See http://ckeditor.com/forums/CKEditor/Registered-blur-event-doesnt-fire-the-first-time-it-seems-that-it-should-see-details
     var manualBlur = function () {
       that.ckeditor.fire('blur');
-      H5P.$body.unbind('click', manualBlur);
     };
     H5P.$body.click(manualBlur);
-  }).click(clickStopper);
+    $editor.click(clickStopper);
+  });
 };
 
 /**
