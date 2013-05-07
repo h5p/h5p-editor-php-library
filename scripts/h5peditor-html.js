@@ -79,9 +79,13 @@ ns.Html.prototype.createToolbar = function () {
 
   // Links.
   if (this.inTags("a")) {
+    var items = ["Link", "Unlink"];
+    if (this.inTags("anchor")) {
+      items.push("Anchor");
+    }
     toolbar.push({
       name: "links",
-      items: ["Link", "Unlink", "Anchor"]
+      items: items
     });
   }
 
@@ -162,33 +166,26 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     }
   }
 
-//  var $textarea = this.$item.children('.ckeditor:not(.cke_editable)');
-//  if ($textarea.length !== 0) {
-//    that.ckeditor = CKEDITOR.inline($textarea[0], ckConfig);
-//    that.ckeditor.on('change', function () {
-//      // Validate before submit.
-//      var value = that.validate();
-//      if (value !== false) {
-//        that.setValue(that.field, value);
-//      }
-//      that.$input.change(); // Small hack to update summary
-//    });
-//    that.ckeditor.on('instanceReady', function() {
-//      that.ckeditor.setReadOnly(false);
-//      if (that.ckeditor.keystrokeHandler.blockedKeystrokes[8] !== undefined) {
-//        // Enable backspace hack (See bug: http://dev.ckeditor.com/ticket/9761).
-//        delete that.ckeditor.keystrokeHandler.blockedKeystrokes[8];
-//      }
-//    });
-//
-//
-//  }
+  var clickStopper = function (clickEvent) {
+    clickEvent.stopPropagation();
+  };
 
-// Alternative if the above code makes the page very slow.
-// (should not be necessary, the above code has been tested with >30 ckeditor on one page.)
-//
   this.$item.children('.ckeditor:not(.cke_editable)').focus(function () {
+    if (that.ckeditor !== undefined) {
+      return;
+    }
+
     that.ckeditor = CKEDITOR.inline(this, ckConfig);
+
+    that.ckeditor.on('instanceReady', function () {
+      H5P.$body.children('.cke').click(clickStopper);
+    });
+
+    that.ckeditor.on('blur', function () {
+      delete that.ckeditor;
+      this.destroy();
+    });
+
     that.ckeditor.on('change', function () {
       // Validate before submit.
       var value = that.validate();
@@ -197,6 +194,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
       }
       that.$input.change(); // Small hack to update summary
     });
+
     // Add events to ckeditor. It is beeing done here since we know it exists at this point...
     if (ns.Html.first) {
       CKEDITOR.on('dialogDefinition', function(e) {
@@ -216,9 +214,14 @@ ns.Html.prototype.appendTo = function ($wrapper) {
       });
       ns.Html.first = false;
     }
-  }).blur(function () {
-    that.ckeditor.destroy();
-  });
+
+    // Simulate blur since ckeditor doesn't fire blur when it's supposed to. See http://ckeditor.com/forums/CKEditor/Registered-blur-event-doesnt-fire-the-first-time-it-seems-that-it-should-see-details
+    var manualBlur = function () {
+      that.ckeditor.fire('blur');
+      H5P.$body.unbind('click', manualBlur);
+    };
+    H5P.$body.click(manualBlur);
+  }).click(clickStopper);
 };
 
 /**
