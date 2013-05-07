@@ -29,7 +29,7 @@ ns.File.prototype.appendTo = function ($wrapper) {
 
   var label = '';
   if (this.field.label !== 0) {
-    label = '<label>' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
+    label = '<label class="h5peditor-label">' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
   }
 
   var html = ns.createItem(this.field.type, label + '<div class="file"></div>', this.field.description);

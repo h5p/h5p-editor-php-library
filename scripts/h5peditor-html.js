@@ -231,10 +231,10 @@ ns.Html.prototype.appendTo = function ($wrapper) {
  * Create HTML for the HTML field.
  */
 ns.Html.prototype.createHtml = function () {
-  var html = '<label>';
+  var html = '<label class="h5peditor-label">';
 
   if (this.field.label !== undefined) {
-    html += '<span class="label">' + this.field.label + '</span>';
+    html += '<span class="h5peditor-label">' + this.field.label + '</span>';
   }
   html += '</label>';
 

@@ -21,15 +21,6 @@
     margin: 0 0 4px 0;
     color: #f00;
   }
-  label {
-    display: block;
-    font-weight: bold;
-    font-size: 14px;
-    overflow: hidden;
-    .label {
-      display: block;
-    }
-  }
   textarea {
     resize: vertical;
   }
@@ -304,6 +295,13 @@
   background: #e5f1ff;
   padding: 8px;
   @include border-radius(8px);
+}
+
+.h5peditor-label {
+  display: block;
+  font-weight: bold;
+  font-size: 14px;
+  overflow: hidden;
 }
 
 #h5peditor-uploader {

@@ -40,7 +40,7 @@ ns.Library.prototype.appendTo = function ($wrapper) {
 
   var html = '';
   if (this.field.label !== 0) {
-    html = '<label>' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
+    html = '<label class="h5peditor-label">' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
   }
 
   html = '<div class="field ' + this.field.type + '">' + html + '<select>' + ns.createOption('-', 'Loading...') + '</select>';

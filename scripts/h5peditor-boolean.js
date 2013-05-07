@@ -26,7 +26,7 @@ ns.Boolean.prototype.createHtml = function () {
   }
   input += '/>';
 
-  var html = '<label>' + input;
+  var html = '<label class="h5peditor-label">' + input;
   if (this.field.label !== 0) {
     html += this.field.label === undefined ? this.field.name : this.field.label;
   }

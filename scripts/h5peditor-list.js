@@ -52,7 +52,7 @@ ns.List.prototype.appendTo = function ($wrapper) {
 
   var label = '';
   if (this.field.label !== 0) {
-    label = '<label>' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
+    label = '<label class="h5peditor-label">' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
   }
 
   var html = ns.createItem(this.field.type, label + '<ul class="h5p-ul"></ul><input type="button" value="' + ns.t('core', 'addEntity', {':entity': this.field.entity}) + '"/>', this.field.description);
