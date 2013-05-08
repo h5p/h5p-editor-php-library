@@ -240,10 +240,7 @@ ns.Html.prototype.validate = function () {
   // Get contents from editor
   var value = this.ckeditor !== undefined ? this.ckeditor.getData() : this.$input.html();
 
-  var $value = ns.$('<div/>');
-  if (value) { // Appending an empty object fails..
-    $value.append($(value));
-  }
+  var $value = ns.$('<div>' + value + '</div>');
   var textValue = $value.text();
 
   // Check if we have any text at all.

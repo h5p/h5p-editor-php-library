@@ -89,9 +89,9 @@ ns.LibrarySelector.prototype.getParams = function () {
   // Only return if all fields has validated.
   var valid = true;
 
-  if (this.children !== undefined) {
-    for (var i = 0; i < this.children.length; i++) {
-      if (!this.children[i].validate()) {
+  if (this.form.children !== undefined) {
+    for (var i = 0; i < this.form.children.length; i++) {
+      if (this.form.children[i].validate() === false) {
         valid = false;
       }
     }

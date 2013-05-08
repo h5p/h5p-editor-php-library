@@ -39,7 +39,7 @@ ns.Boolean.prototype.createHtml = function () {
  * "Validate" the current boolean field.
  */
 ns.Boolean.prototype.validate = function () {
-  return this.$input.is(':checked') ? true : false;
+  return true;
 };
 
 /**

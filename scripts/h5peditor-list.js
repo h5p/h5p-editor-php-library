@@ -236,7 +236,7 @@ ns.List.prototype.validate = function () {
   var valid = true;
 
   for (var i = 0; i < this.children.length; i++) {
-    if (!this.children[i].validate()) {
+    if (this.children[i].validate() === false) {
       valid = false;
     }
   }
