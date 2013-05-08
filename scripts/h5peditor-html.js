@@ -166,36 +166,24 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     }
   }
 
-  var clickStopper = function (clickEvent) {
-    clickEvent.stopPropagation();
-  };
-
   this.$item.children('.ckeditor:not(.cke_editable)').focus(function () {
     if (that.ckeditor !== undefined) {
       return;
     }
 
-    var $editor = $(this);
     that.ckeditor = CKEDITOR.inline(this, ckConfig);
 
-    that.ckeditor.on('instanceReady', function () {
-      H5P.$body.children('.cke').click(clickStopper);
-    });
-
     that.ckeditor.on('blur', function () {
-      delete that.ckeditor;
-      this.destroy();
-      H5P.$body.unbind('click', manualBlur);
-      $editor.unbind('click', clickStopper);
-    });
-
-    that.ckeditor.on('change', function () {
-      // Validate before submit.
+      // Update value
       var value = that.validate();
       if (value !== false) {
+        that.value = value;
         that.setValue(that.field, value);
       }
-      that.$input.change(); // Small hack to update summary
+      that.$input.change(); // Trigger change event.
+
+      this.destroy();
+      delete that.ckeditor;
     });
 
     // Add events to ckeditor. It is beeing done here since we know it exists at this point...
@@ -218,12 +206,13 @@ ns.Html.prototype.appendTo = function ($wrapper) {
       ns.Html.first = false;
     }
 
-    // Simulate blur since ckeditor doesn't fire blur when it's supposed to. See http://ckeditor.com/forums/CKEditor/Registered-blur-event-doesnt-fire-the-first-time-it-seems-that-it-should-see-details
-    var manualBlur = function () {
+    // Fix that runs blur the first time. See http://ckeditor.com/forums/CKEditor/Registered-blur-event-doesnt-fire-the-first-time-it-seems-that-it-should-see-details
+    var $editor = H5P.jQuery(this);
+    var blurFix = function () {
+      $editor.unbind('blur', blurFix);
       that.ckeditor.fire('blur');
     };
-    H5P.$body.click(manualBlur);
-    $editor.click(clickStopper);
+    $editor.bind('blur', blurFix);
   });
 };
 
