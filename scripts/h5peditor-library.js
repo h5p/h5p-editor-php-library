@@ -114,13 +114,15 @@ ns.Library.prototype.validate = function () {
     return false;
   }
 
+  var valid = true;
+
   for (var i = 0; i < this.children.length; i++) {
     if (!this.children[i].validate()) {
-      return false;
+      valid = false;
     }
   }
 
-  return true;
+  return valid;
 };
 
 /**

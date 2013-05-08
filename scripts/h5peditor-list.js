@@ -233,13 +233,15 @@ ns.List.prototype.getIndex = function ($item) {
  * Validate all fields in the list.
  */
 ns.List.prototype.validate = function () {
+  var valid = true;
+
   for (var i = 0; i < this.children.length; i++) {
     if (!this.children[i].validate()) {
-      return false;
+      valid = false;
     }
   }
 
-  return true;
+  return valid;
 };
 
 /**

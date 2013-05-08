@@ -133,13 +133,15 @@ ns.Group.prototype.setSummary = function (summary) {
  * Validate all children.
  */
 ns.Group.prototype.validate = function () {
+  var valid = true;
+
   for (var i = 0; i < this.children.length; i++) {
     if (!this.children[i].validate()) {
-      return false;
+      valid = false;
     }
   }
 
-  return true;
+  return valid;
 };
 
 /**
