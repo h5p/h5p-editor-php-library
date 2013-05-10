@@ -57,8 +57,8 @@ ns.Boolean.prototype.appendTo = function ($wrapper) {
 
   this.$input.change(function () {
     // Validate
-    var value = that.validate();
-    that.setValue(that.field, value);
+    that.value = that.$input.is(':checked') ? true : false;
+    that.setValue(that.field, that.value);
   });
 };
 
