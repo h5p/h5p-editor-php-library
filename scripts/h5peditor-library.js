@@ -22,6 +22,7 @@ ns.Library = function (parent, field, params, setValue) {
 
   this.field = field;
   this.parent = parent;
+  this.changes = [];
 
   this.passReadies = true;
   parent.ready(function () {
@@ -103,6 +104,10 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     }
 
     ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper.html(''), that);
+
+    for (var i = 0; i < that.changes.length; i++) {
+      that.changes[i]();
+    }
   });
 };
 
