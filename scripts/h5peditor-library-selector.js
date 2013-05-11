@@ -41,6 +41,7 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
  */
 ns.LibrarySelector.prototype.appendTo = function ($element) {
   this.$selector.appendTo($element);
+  $element.append('<div class="h5p-more-libraries">' + ns.t('core', 'moreLibraries') + '</div>');
 };
 
 /**

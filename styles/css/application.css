@@ -6,6 +6,9 @@
   -o-transition: all 0.2s ease-in;
   transition: all 0.2s ease-in;
 }
+.h5peditor .h5p-more-libraries {
+  font-size: 10px;
+}
 /* line 10, ../scss/application.scss */
 .h5peditor .field {
   margin: 16px 0;
