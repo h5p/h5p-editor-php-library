@@ -33,8 +33,6 @@ ns.List = function (parent, field, params, setValue) {
   this.children = [];
   this.library = parent.library + '/' + field.name;
 
-  this.formOffset = ns.findAncestor(parent).offset;
-
   this.passReadies = true;
   parent.ready(function () {
     that.passReadies = false;
@@ -157,6 +155,7 @@ ns.List.prototype.addItem = function (i) {
     that.adjustX = event.pageX - offset.left;
     that.adjustY = event.pageY - offset.top;
     that.marginTop = parseInt($item.css('marginTop'));
+    that.formOffset = that.$list.offsetParent().offset();
 
     var width = $item.width();
     var height = $item.height();
