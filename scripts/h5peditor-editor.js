@@ -3,26 +3,26 @@ var ns = H5PEditor;
 
 /**
  * Construct the editor.
- * 
+ *
  * @param {String} library
  * @param {Object} defaultParams
  * @returns {H5peditor}
  */
 ns.Editor = function (library, defaultParams) {
   var that = this;
-  
+
   if (ns.$document === undefined) {
     ns.$document = ns.$(document);
   }
   if (ns.$body === undefined) {
     ns.$body = ns.$('body');
   }
-  
+
   // Create a wrapper
   this.$wrapper = ns.$('<div class="h5peditor">' + ns.t('core', 'loading', {':type': 'libraries'}) + '</div>');
 
   // Load libraries.
-  ns.$.get(ns.basePath + 'libraries', function (data) {
+  ns.$.get(ns.ajaxPath + 'libraries', function (data) {
     that.selector = new ns.LibrarySelector(data, library, defaultParams);
     that.selector.appendTo(that.$wrapper.html(''));
     if (library) {
@@ -33,7 +33,7 @@ ns.Editor = function (library, defaultParams) {
 
 /**
  * Replace $element with our editor element.
- * 
+ *
  * @param {jQuery} $element
  * @returns {undefined}
  */

@@ -167,6 +167,10 @@ ns.Html.prototype.appendTo = function ($wrapper) {
   }
 
   this.$item.children('.ckeditor').focus(function () {
+    if (ns.Html.first) {
+      CKEDITOR.basePath = ns.basePath + '/ckeditor/';
+    }
+
     if (ns.Html.current === that) {
       return;
     }
