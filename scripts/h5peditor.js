@@ -131,7 +131,7 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
   parent.children = [];
 
   if (parent.passReadies === undefined) {
-    throw 'Widget tried to run processSemanticsChunk without handling ready callbacks.' + parent.field.name;
+    throw 'Widget tried to run processSemanticsChunk without handling ready callbacks. [field:' + parent.field.type + ':' + parent.field.name + ']';
   }
 
   if (!parent.passReadies) {

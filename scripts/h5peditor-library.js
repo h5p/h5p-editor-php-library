@@ -66,6 +66,12 @@ ns.Library.prototype.appendTo = function ($wrapper) {
         that.loadLibrary(ns.$(this).val());
       }
     });
+
+    if (data.length === 1) {
+      that.$select.hide();
+      $field.children('.h5peditor-label').hide();
+      that.loadLibrary(that.$select.children(':last').val());
+    }
   });
 
   // Load default library.
