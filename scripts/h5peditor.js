@@ -41,7 +41,7 @@ ns.t = function (library, key, vars) {
     return 'Missing translations for library ' + library;
   }
 
-  if (library == 'core') {
+  if (library === 'core') {
     if (ns.language[library][key] === undefined) {
       return 'Missing translation for ' + key;
     }
