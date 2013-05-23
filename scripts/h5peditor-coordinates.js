@@ -24,7 +24,10 @@ ns.Coordinates = function (parent, field, params, setValue) {
       }
 
       field.changes.push(function (file) {
-        // TODO: This should be removed once this item is removed.
+        if (file === undefined) {
+          return;
+        }
+        // TODO: This callback should be removed when this item is removed.
         that.setMax(file.params.width, file.params.height);
       });
     }
@@ -34,7 +37,7 @@ ns.Coordinates = function (parent, field, params, setValue) {
       }
 
       field.changes.push(function (width, height) {
-        // TODO: This should be removed once this item is removed.
+        // TODO: This callback should be removed when this item is removed.
         that.setMax(width, height);
       });
     }

@@ -80,6 +80,10 @@ ns.AV.prototype.addFile = function (file) {
 
     $file.remove();
 
+    for (var i = 0; i < that.changes.length; i++) {
+      that.changes[i]();
+    }
+
     return false;
   }).end();
 

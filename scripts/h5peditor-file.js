@@ -81,6 +81,11 @@ ns.File.prototype.addFile = function (init) {
     delete that.params;
     that.setValue(that.field);
     that.addFile();
+
+    for (var i = 0; i < that.changes.length; i++) {
+      that.changes[i]();
+    }
+
     return false;
   });
 };

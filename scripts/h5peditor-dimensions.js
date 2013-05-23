@@ -27,7 +27,10 @@ ns.Dimensions = function (parent, field, params, setValue) {
       }
 
       field.changes.push(function (file) {
-        // TODO: Callback should be removed when this item is removed.
+        if (file === undefined) {
+          return;
+        }
+        // TODO: This callback should be removed when this item is removed.
         that.setMax(file.width, file.height);
 
       });
@@ -44,7 +47,10 @@ ns.Dimensions = function (parent, field, params, setValue) {
       }
 
       field.changes.push(function (file) {
-        // TODO: Callback should be removed when this item is removed.
+        if (file === undefined) {
+          return;
+        }
+        // TODO: This callback should be removed when this item is removed.
         that.setSize(file.width, file.height);
         // TODO: Figure out if we should keep same ratio when image changes.
         //that.setSize(Math.round(file.width / (width / that.params.width)), Math.round(file.height / (height / that.params.height)));
