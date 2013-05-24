@@ -26,7 +26,7 @@ class H5peditor {
     'scripts/h5peditor-none.js',
     'ckeditor/ckeditor.js',
   );
-  private $storage, $files_directory;
+  private $storage, $files_directory, $basePath;
 
   /**
    * Constructor.
@@ -34,9 +34,10 @@ class H5peditor {
    * @param object $storage
    * @param string $files_directory
    */
-  function __construct($storage, $files_directory) {
+  function __construct($storage, $files_directory, $basePath) {
     $this->storage = $storage;
     $this->files_directory = $files_directory;
+    $this->basePath = $basePath;
   }
 
   /**
@@ -215,27 +216,21 @@ class H5peditor {
       $filePaths = $this->storage->getFilePaths($editorLibraryId);
 
       if (!empty($filePaths['js'])) {
-        if (!isset($libraryData->javascript)) {
-          $libraryData->javascript = '';
-        }
         foreach ($filePaths['js'] as $jsFilePath) {
           // TODO: rtrim and check substr(-1) === '}'? jsmin?
-          $libraryData->javascript .= "\n" . file_get_contents($jsFilePath);
+          $libraryData->javascript[$jsFilePath] .= "\n" . file_get_contents($jsFilePath);
         }
       }
       $language = $this->storage->getLanguage($editorLibrary['machineName'], $editorLibrary['majorVersion'], $editorLibrary['minorVersion']);
       if ($language) {
-        if (!isset($libraryData->javascript)) {
-          $libraryData->javascript = '';
-        }
-        $libraryData->javascript .= '; H5PEditor.language["' . $editorLibrary['machineName'] . '"] = ' . $language . ';';
+        $lang = '; H5PEditor.language["' . $editorLibrary['machineName'] . '"] = ' . $language . ';';
+        $libraryData->javascript[md5($lang)] = $lang;
       }
       if (!empty($filePaths['css'])) {
-        if (!isset($libraryData->css)) {
-          $libraryData->css = '';
-        }
         foreach ($filePaths['css'] as $cssFilePath) {
-          $libraryData->css .= file_get_contents($cssFilePath);
+          H5peditor::buildCssPath(NULL, $this->basePath . dirname($cssFilePath) . '/');
+          $css = preg_replace_callback('/url\([\'"]?(?![a-z]+:|\/+)([^\'")]+)[\'"]?\)/i', 'H5peditor::buildCssPath', file_get_contents($cssFilePath));
+          $libraryData->css[$cssFilePath] = $css;
         }
       }
     }
@@ -243,4 +238,29 @@ class H5peditor {
     return json_encode($libraryData);
   }
 
+  /**
+   * This function will prefix all paths within a CSS file.
+   * Copied from Drupal 6.
+   *
+   * @staticvar type $_base
+   * @param type $matches
+   * @param type $base
+   * @return type
+   */
+  public static function buildCssPath($matches, $base = NULL) {
+    static $_base;
+    // Store base path for preg_replace_callback.
+    if (isset($base)) {
+      $_base = $base;
+    }
+
+    // Prefix with base and remove '../' segments where possible.
+    $path = $_base . $matches[1];
+    $last = '';
+    while ($path != $last) {
+      $last = $path;
+      $path = preg_replace('`(^|/)(?!\.\./)([^/]+)/\.\./`', '$1', $path);
+    }
+    return 'url('. $path .')';
+  }
 }
