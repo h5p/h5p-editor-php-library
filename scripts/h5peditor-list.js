@@ -181,7 +181,6 @@ ns.List.prototype.addItem = function (i) {
     that.params[that.getIndex($item)] = value;
   });
   this.children[i].appendTo($item.children('.content'));
-
   if (!this.passReadies) {
     for (var j = 0; j < this.readies.length; j++) {
       this.readies[j]();

@@ -70,7 +70,7 @@ ns.Library.prototype.appendTo = function ($wrapper) {
     if (data.length === 1) {
       that.$select.hide();
       $field.children('.h5peditor-label').hide();
-      that.loadLibrary(that.$select.children(':last').val());
+      that.loadLibrary(that.$select.children(':last').val(), true);
     }
   });
 
