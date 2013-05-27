@@ -121,7 +121,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
  * Validate this field and its children.
  */
 ns.Library.prototype.validate = function () {
-  if (this.$select.val() === '-') {
+  if (this.params.library === undefined) {
     return false;
   }
 
@@ -132,7 +132,7 @@ ns.Library.prototype.validate = function () {
       valid = false;
     }
   }
-
+  
   return valid;
 };
 
