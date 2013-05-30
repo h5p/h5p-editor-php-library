@@ -327,7 +327,7 @@ ns.findField = function (path, parent) {
   for (var i = 0; i < parent.children.length; i++) {
     if (parent.children[i].field.name === path[0]) {
       path.splice(0, 1);
-      if (path.length > 1) {
+      if (path.length) {
         return ns.findField(path, parent.children[i]);
       }
       else {
