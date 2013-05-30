@@ -18,7 +18,7 @@ ns.Html = function (parent, field, params, setValue) {
 };
 ns.Html.first = true;
 
-ns.Html.prototype.defaultTags = ['strong', 'em', 'del', 'h2', 'h3', 'a', 'ul', 'ol', 'table', 'hr', 'word'];
+ns.Html.prototype.defaultTags = ['strong', 'em', 'del', 'h2', 'h3', 'a', 'ul', 'ol', 'table', 'hr'];
 
 ns.Html.prototype.inTags = function (value) {
   return (ns.$.inArray(value.toLowerCase(), this.tags) >= 0);
@@ -96,7 +96,6 @@ ns.Html.prototype.createToolbar = function () {
     ns.$.merge(this.tags, ["tr", "td", "th", "colgroup", "thead", "tbody", "tfoot"]);
   }
   if (this.inTags("hr")) inserts.push("HorizontalRule");
-  if (this.inTags("word")) inserts.push("PasteFromWord");
   if (inserts.length > 0) {
     toolbar.push({
       name: "insert",
