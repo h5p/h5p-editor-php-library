@@ -83,7 +83,7 @@ ns.Text.prototype.validate = function () {
   else if (value.length > this.field.maxLength) {
     this.$errors.append(ns.createError(ns.t('core', 'tooLong', {':max': this.field.maxLength})));
   }
-  else if (this.field.regexp !== undefined && !value.match(new RegExp(this.field.regexp.pattern, this.field.regexp.modifiers))) {
+  else if (this.field.regexp !== undefined && value.length && !value.match(new RegExp(this.field.regexp.pattern, this.field.regexp.modifiers))) {
     this.$errors.append(ns.createError(ns.t('core', 'invalidFormat')));
   }
 
