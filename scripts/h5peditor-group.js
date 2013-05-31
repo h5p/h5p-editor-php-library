@@ -20,10 +20,30 @@ ns.Group = function (parent, field, params, setValue) {
 
   this.parent = parent;
   this.passReadies = true;
-  this.field = field;
   this.params = params;
   this.setValue = setValue;
   this.library = parent.library + '/' + field.name;
+
+  if (field.deprecated !== undefined && field.deprecated) {
+    this.field = H5P.cloneObject(field, true);
+    var empties = 0;
+    for (var i = 0; i < this.field.fields.length; i++) {
+      var f = this.field.fields[i];
+      if (params !== undefined && params[f.name] === '') {
+        delete params[f.name];
+      }
+      if (params === undefined || params[f.name] === undefined) {
+        f.widget = 'none';
+        empties++;
+      }
+    }
+    if (i === empties) {
+      this.field.fields = [];
+    }
+  }
+  else {
+    this.field = field;
+  }
 };
 
 /**
@@ -34,6 +54,12 @@ ns.Group = function (parent, field, params, setValue) {
  */
 ns.Group.prototype.appendTo = function ($wrapper) {
   var that = this;
+
+  if (this.field.fields.length === 0) {
+    // No fields or all are deprecated
+    this.setValue(this.field);
+    return;
+  }
 
   this.$group = ns.$('<fieldset class="field group"><div class="title"><a href="#" class="expand" title="' + ns.t('core', 'expandCollapse') + '"></a><span class="text"></span></div><div class="content"></div></fieldset>')
   .appendTo($wrapper).find('.expand').click(function () {
@@ -87,7 +113,7 @@ ns.Group.prototype.findSummary = function () {
     var child = this.children[j];
     var params = this.field.fields.length === 1 ? this.params : this.params[child.field.name];
 
-    if (child.field.type === 'text') {
+    if (child.field.widget === 'text') {
       if (params !== undefined && params !== '') {
         summary = params;
       }
@@ -135,9 +161,11 @@ ns.Group.prototype.setSummary = function (summary) {
 ns.Group.prototype.validate = function () {
   var valid = true;
 
-  for (var i = 0; i < this.children.length; i++) {
-    if (this.children[i].validate() === false) {
-      valid = false;
+  if (this.children !== undefined) {
+    for (var i = 0; i < this.children.length; i++) {
+      if (this.children[i].validate() === false) {
+        valid = false;
+      }
     }
   }
 
@@ -158,8 +186,10 @@ ns.Group.prototype.ready = function (ready) {
  * Remove this item.
  */
 ns.Group.prototype.remove = function () {
-  ns.removeChildren(this.children);
-  this.$group.remove();
+  if (this.$group !== undefined) {
+    ns.removeChildren(this.children);
+    this.$group.remove();
+  }
 };
 
 // Tell the editor what widget we are.
