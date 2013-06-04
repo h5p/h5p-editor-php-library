@@ -31,7 +31,7 @@ ns.AV.prototype.appendTo = function ($wrapper) {
 
   var label = '';
   if (this.field.label !== 0) {
-    label = '<label class="h5peditor-label">' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
+    label = '<span class="h5peditor-label">' + (this.field.label === undefined ? this.field.name : this.field.label) + '</span>';
   }
 
   var html = ns.createItem(this.field.type, label + '<div class="file"><a href="#" class="add" title="' + ns.t('core', 'addFile') + '"></a></div>', this.field.description);
