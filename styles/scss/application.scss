@@ -269,10 +269,22 @@
     vertical-align: bottom;
   }
   .common {
-    margin-top: 16px;
+    margin-top: 1em;
     background: #fae5ff;
-    padding: 8px;
+    padding-bottom: 0.25em;
+    min-height: 2em;
     @include border-radius(8px);
+
+    & > .h5peditor-label {
+      font-size: 1em;
+      font-weight: normal;
+      padding: 0.5em 1em 0.4em;
+      background: #efdbf4;
+      @include border-radius(8px 8px 0 0);
+    }
+    & > .field {
+      margin: 1em 0.5em;
+    }
   }
   .moving {
     position: absolute;
@@ -295,7 +307,7 @@
 
 .h5peditor-form {
   position: relative;
-  margin: 8px 0;
+  margin: 0.5em 0 1em;
   background: #e5f1ff;
   padding: 8px;
   @include border-radius(8px);

@@ -8,7 +8,7 @@ ns.Form = function () {
   this.params = {};
   this.passReadies = false;
   this.commonFields = {};
-  this.$form = ns.$('<div class="h5peditor-form"><div class="tree"></div><div class="common"></div></div>');
+  this.$form = ns.$('<div class="h5peditor-form"><div class="tree"></div><div class="common"><div class="h5peditor-label">' + ns.t('core', 'commonFields') + '</div></div></div>');
   this.$common = this.$form.children('.common');
   this.library = '';
 };
