@@ -40,6 +40,8 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
  * @returns {undefined}
  */
 ns.LibrarySelector.prototype.appendTo = function ($element) {
+  this.$parent = $element;
+
   this.$selector.appendTo($element);
   $element.append('<div class="h5p-more-libraries">' + ns.t('core', 'moreLibraries') + '</div>');
 };
@@ -60,11 +62,13 @@ ns.LibrarySelector.prototype.loadSemantics = function (library) {
 
   if (library === '-') {
     // No library chosen.
+    this.$parent.attr('class', 'h5peditor');
     return;
   }
+  this.$parent.attr('class', 'h5peditor ' + library.split(' ')[0].toLowerCase().replace('.', '-') + '-editor');
 
   // Display loading message
-  var $loading = $('<div>' + ns.t('core', 'loading', {':type': 'semantics'}) + '</div>').insertAfter(this.$selector);
+  var $loading = $('<div>' + ns.t('core', 'loading', {':type': 'semantics'}) + '</div>').appendTo(this.$parent);
 
   this.$selector.attr('disabled', true);
 

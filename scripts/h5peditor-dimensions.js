@@ -16,7 +16,7 @@ ns.Dimensions = function (parent, field, params, setValue) {
   var that = this;
 
   this.parent = parent;
-  this.field = field;
+  this.field = H5P.cloneObject(field, true); // TODO: Cloning is a quick fix, make sure this field doesn't change semantics!
   this.changes = [];
 
   // Find image filed to get max size from.
