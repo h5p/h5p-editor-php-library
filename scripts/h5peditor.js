@@ -340,6 +340,34 @@ ns.findField = function (path, parent) {
 };
 
 /**
+ * Follow a field and get all changes to its params.
+ *
+ * @param {Object} parent The parent object of the field.
+ * @param {String} path Relative to parent object.
+ * @param {Function} callback Gets called for params changes.
+ * @returns {undefined}
+ */
+ns.followField = function (parent, path, callback) {
+  // Find field when tree is ready.
+  parent.ready(function () {
+    var field = ns.findField(path, parent);
+
+    if (!field) {
+      throw ns.t('core', 'unknownFieldPath', {':path': path});
+    }
+    if (field.changes === undefined) {
+      throw ns.t('core', 'noFollow', {':path': path});
+    }
+
+    callback(field.params, field.changes.length);
+
+    field.changes.push(function () {
+      callback(field.params);
+    });
+  });
+};
+
+/**
  * Create HTML wrapper for error messages.
  *
  * @param {String} message

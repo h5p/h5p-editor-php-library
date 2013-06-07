@@ -20,6 +20,7 @@ ns.Dimensions = function (parent, field, params, setValue) {
   this.changes = [];
 
   // Find image filed to get max size from.
+  // TODO: Use followField?
   this.findImageField('max', function (field) {
     if (field instanceof ns.File) {
       if (field.params !== undefined) {
