@@ -20,6 +20,8 @@ ns.Html.first = true;
 
 ns.Html.prototype.defaultTags = ['strong', 'em', 'del', 'h2', 'h3', 'a', 'ul', 'ol', 'table', 'hr'];
 
+// This should probably be named "hasTag()" instead...
+// And might be more efficient if this.tags.contains() were used?
 ns.Html.prototype.inTags = function (value) {
   return (ns.$.inArray(value.toLowerCase(), this.tags) >= 0);
 };
@@ -131,6 +133,17 @@ ns.Html.prototype.createToolbar = function () {
   if (formats.length > 0) {
     ret['format_tags'] = formats.join(';');
   }
+
+  // Enable selection of enterMode in module semantics.
+  if (this.field.enterMode == 'p') {
+    this.tags.push('p');
+    ret.enterMode = CKEDITOR.ENTER_P;
+  } else {
+    // Default to DIV, not allowing BR at all.
+    this.tags.push('div');
+    ret.enterMode = CKEDITOR.ENTER_DIV;
+  }
+
   return ret;
 };
 
