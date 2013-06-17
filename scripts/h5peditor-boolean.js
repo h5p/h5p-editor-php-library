@@ -11,8 +11,15 @@ var ns = H5PEditor;
  * @returns {ns.Boolean}
  */
 ns.Boolean = function (parent, field, params, setValue) {
+  if (params === undefined) {
+    this.value = false;
+    setValue(field, this.value);
+  }
+  else {
+    this.value = params;
+  }
+
   this.field = field;
-  this.value = params;
   this.setValue = setValue;
 };
 
