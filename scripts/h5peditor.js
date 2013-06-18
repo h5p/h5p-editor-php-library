@@ -348,6 +348,13 @@ ns.findField = function (path, parent) {
  * @returns {undefined}
  */
 ns.followField = function (parent, path, callback) {
+  switch (typeof path) {
+    case 'object':
+      callback(path);
+    case 'undefined':
+      return;
+  }
+
   // Find field when tree is ready.
   parent.ready(function () {
     var field = ns.findField(path, parent);

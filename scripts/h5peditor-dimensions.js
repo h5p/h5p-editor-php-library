@@ -16,48 +16,18 @@ ns.Dimensions = function (parent, field, params, setValue) {
   var that = this;
 
   this.parent = parent;
-  this.field = H5P.cloneObject(field, true); // TODO: Cloning is a quick fix, make sure this field doesn't change semantics!
+  this.field = field;
   this.changes = [];
 
-  // Find image filed to get max size from.
-  // TODO: Use followField?
-  this.findImageField('max', function (field) {
-    if (field instanceof ns.File) {
-      if (field.params !== undefined) {
-        that.setMax(field.params.width, field.params.height);
-      }
-
-      field.changes.push(function (file) {
-        if (file === undefined) {
-          return;
-        }
-        // TODO: This callback should be removed when this item is removed.
-        that.setMax(file.width, file.height);
-
-      });
-    }
+  // Find image field to get max size from.
+  H5PEditor.followField(parent, field.max, function (file) {
+    that.setMax(file);
   });
 
-  if (typeof params === 'string') {
-    params = undefined;
-
-    // Find image filed to get default size from.
-    this.findImageField('default', function (field) {
-      if (field.params !== undefined) {
-        that.setSize(field.params.width, field.params.height);
-      }
-
-      field.changes.push(function (file) {
-        if (file === undefined) {
-          return;
-        }
-        // TODO: This callback should be removed when this item is removed.
-        that.setSize(file.width, file.height);
-        // TODO: Figure out if we should keep same ratio when image changes.
-        //that.setSize(Math.round(file.width / (width / that.params.width)), Math.round(file.height / (height / that.params.height)));
-      });
-    });
-  }
+  // Find image field to get default size from.
+  H5PEditor.followField(parent, field['default'], function (file) {
+    that.setSize(file);
+  });
 
   this.params = params;
   this.setValue = setValue;
@@ -66,14 +36,17 @@ ns.Dimensions = function (parent, field, params, setValue) {
 /**
  * Set max dimensions.
  *
- * @param {string} width
- * @param {string} height
- * @returns {undefined}
+ * @param {Object} file
+ * @returns {unresolved}
  */
-ns.Dimensions.prototype.setMax = function (width, height) {
-  this.field.max = {
-    width: parseInt(width),
-    height: parseInt(height)
+ns.Dimensions.prototype.setMax = function (file) {
+  if (file === undefined) {
+    return;
+  }
+
+  this.max = {
+    width: parseInt(file.width),
+    height: parseInt(file.height)
   };
 };
 
@@ -84,55 +57,22 @@ ns.Dimensions.prototype.setMax = function (width, height) {
  * @param {string} height
  * @returns {undefined}
  */
-ns.Dimensions.prototype.setSize = function (width, height) {
-  this.params = {
-    width: parseInt(width),
-    height: parseInt(height)
-  };
-  this.setValue(this.field, this.params);
-
-  this.$inputs.filter(':eq(0)').val(width).next().val(height);
-
-  for (var i = 0; i < this.changes.length; i++) {
-    this.changes[i](width, height);
-  }
-};
-
-/**
- * Find the image field for the given property and then run the callback.
- *
- * @param {string} property
- * @param {function} callback
- * @returns {unresolved}
- */
-ns.Dimensions.prototype.findImageField = function (property, callback) {
-  var that = this;
-  var str = 'string';
-
-  if (typeof this.field[property] !== str) {
+ns.Dimensions.prototype.setSize = function (file) {
+  if (file === undefined) {
     return;
   }
 
-  // Find field when tree is ready.
-  this.parent.ready(function () {
-    if (typeof that.field[property] !== str) {
-      if (that.field[property] !== undefined) {
-        callback(that.field[property]);
-      }
-      return; // We've already found this field before.
-    }
-    var path = that.field[property];
+  this.params = {
+    width: parseInt(file.width),
+    height: parseInt(file.height)
+  };
+  this.setValue(this.field, this.params);
 
-    that.field[property] = ns.findField(that.field[property], that.parent);
-    if (!that.field[property]) {
-      throw ns.t('core', 'unknownFieldPath', {':path': path});
-    }
-    if (that.field[property].field.type !== 'image') {
-      throw ns.t('core', 'notImageField', {':path': path});
-    }
+  this.$inputs.filter(':eq(0)').val(file.width).next().val(file.height);
 
-    callback(that.field[property]);
-  });
+  for (var i = 0; i < this.changes.length; i++) {
+    this.changes[i](file.width, file.height);
+  }
 };
 
 /**
@@ -200,8 +140,8 @@ ns.Dimensions.prototype.validate = function () {
     }
 
     value = parseInt(value);
-    if (that.field.max !== undefined && value > that.field.max[property]) {
-      that.$errors.append(ns.createError(ns.t('core', 'exceedsMax', {':property': property, ':max': that.field.max[property]})));
+    if (that.max !== undefined && value > that.max[property]) {
+      that.$errors.append(ns.createError(ns.t('core', 'exceedsMax', {':property': property, ':max': that.max[property]})));
       return false;
     }
 
