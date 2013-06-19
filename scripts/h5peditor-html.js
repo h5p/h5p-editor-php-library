@@ -135,7 +135,7 @@ ns.Html.prototype.createToolbar = function () {
   }
 
   // Enable selection of enterMode in module semantics.
-  if (this.field.enterMode == 'p') {
+  if (this.field.enterMode === 'p') {
     this.tags.push('p');
     ret.enterMode = CKEDITOR.ENTER_P;
   } else {
@@ -200,7 +200,10 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     that.ckeditor = CKEDITOR.inline(this, ckConfig);
 
     that.ckeditor.on('blur', function () {
-      that.validate();
+      // Do not validate if the field has been hidden.
+      if (that.$item.is(':visible')) {
+        that.validate();
+      }
     });
 
     // Add events to ckeditor. It is beeing done here since we know it exists at this point...
