@@ -348,15 +348,27 @@ ns.findField = function (path, parent) {
  * @returns {undefined}
  */
 ns.followField = function (parent, path, callback) {
-  switch (typeof path) {
-    case 'object':
-      callback(path);
-    case 'undefined':
-      return;
+  if (path === undefined) {
+    return;
   }
 
   // Find field when tree is ready.
   parent.ready(function () {
+    var def;
+
+    if (path instanceof Object) {
+      // We have an object with default values
+      def = path;
+
+      if (path.field === undefined) {
+        callback(path);
+        return; // Exit if we have no field to follow.
+      }
+
+      path = def.field;
+      delete def.field;
+    }
+
     var field = ns.findField(path, parent);
 
     if (!field) {
@@ -366,10 +378,12 @@ ns.followField = function (parent, path, callback) {
       throw ns.t('core', 'noFollow', {':path': path});
     }
 
-    callback(field.params, field.changes.length);
+    var params = (field.params === undefined ? def : field.params);
+    callback(params, field.changes.length + 1);
 
     field.changes.push(function () {
-      callback(field.params);
+      var params = (field.params === undefined ? def : field.params);
+      callback(params);
     });
   });
 };
