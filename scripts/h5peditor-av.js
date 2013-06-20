@@ -103,7 +103,7 @@ ns.AV.prototype.uploadFile = function () {
   this.$errors.html('');
 
   ns.File.changeCallback = function () {
-    that.$uploading = ns.$('<div class="h5peditor-uploading">Uploading, please wait...</div>').insertAfter(that.$add.hide());
+    that.$uploading = ns.$('<div class="h5peditor-uploading">' + ns.t('core', 'uploading') + '</div>').insertAfter(that.$add.hide());
   };
 
   ns.File.callback = function (json) {
@@ -120,8 +120,7 @@ ns.AV.prototype.uploadFile = function () {
 
       var file = {
         path: result.path,
-        mime: result.mime,
-        tmp: true
+        mime: result.mime
       };
       that.params.push(file);
 

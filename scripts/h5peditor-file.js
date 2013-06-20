@@ -35,14 +35,16 @@ ns.File.prototype.appendTo = function ($wrapper) {
   var html = ns.createItem(this.field.type, label + '<div class="file"></div>', this.field.description);
 
   this.$file = ns.$(html).appendTo($wrapper).children('.file');
-  this.addFile(true);
+  this.addFile();
   this.$errors = this.$file.next();
 };
 
 /**
  * Creates thumbnail HTML and actions.
+ *
+ * @returns {Boolean}
  */
-ns.File.prototype.addFile = function (init) {
+ns.File.prototype.addFile = function () {
   var that = this;
 
   if (this.params === undefined) {
@@ -56,7 +58,7 @@ ns.File.prototype.addFile = function (init) {
   var thumbnail;
   if (this.field.type === 'image') {
     thumbnail = {};
-    thumbnail.path = (init === undefined || !ns.contentId ? ns.filesPath + '/h5peditor/' : ns.filesPath + '/h5p/content/' + ns.contentId + '/') + this.params.path,
+    thumbnail.path = ns.filesPath + this.params.path,
     thumbnail.height = 100;
     thumbnail.width = thumbnail.height * (this.params.width / this.params.height);
   }
@@ -67,14 +69,7 @@ ns.File.prototype.addFile = function (init) {
   this.$file.html('<a href="#" title="' + ns.t('core', 'changeFile') + '" class="thumbnail"><img width="' + thumbnail.width + '" height="' + thumbnail.height + '" alt="' + (this.field.label === undefined ? '' : this.field.label) + '"/><a href="#" class="remove" title="' + ns.t('core', 'removeFile') + '"></a></a>').children(':eq(0)').click(function () {
     that.uploadFile();
     return false;
-  }).children('img').error(function () {
-    var $img = ns.$(this);
-    var path = ns.filesPath + '/h5peditor/' + that.params.path;
-
-    if ($img.attr('src') !== path) {
-      ns.$(this).unbind('error').attr('src', path);
-    }
-  }).attr('src', thumbnail.path).end().next().click(function (e) {
+  }).children('img').attr('src', thumbnail.path).end().next().click(function (e) {
     if (!confirm(ns.t('core', 'confirmRemoval', {':type': 'file'}))) {
       return false;
     }
@@ -115,8 +110,7 @@ ns.File.prototype.uploadFile = function () {
 
       that.params = {
         path: result.path,
-        mime: result.mime,
-        tmp: true
+        mime: result.mime
       };
       if (that.field.type === 'image') {
         that.params.width = result.width;
@@ -187,10 +181,10 @@ ns.File.addIframe = function () {
     }
 
     $body.html('');
-    var $form = ns.$('<form method="post" enctype="multipart/form-data" action="' + ns.ajaxPath + 'files"><input name="file" type="file"/><input name="field" type="hidden"/></form>').appendTo($body);
+    var $form = ns.$('<form method="post" enctype="multipart/form-data" action="' + ns.ajaxPath + 'files"><input name="file" type="file"/><input name="field" type="hidden"/><input name="contentId" type="hidden" value="' + ns.contentId + '"/></form>').appendTo($body);
 
-    ns.File.$field = $form.children('input[type="hidden"]');
-    ns.File.$file = $form.children('input[type="file"]');
+    ns.File.$field = $form.children('input[name="field"]');
+    ns.File.$file = $form.children('input[name="file"]');
 
     ns.File.$file.change(function () {
       if (ns.File.changeCallback !== undefined) {

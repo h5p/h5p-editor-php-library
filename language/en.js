@@ -1,6 +1,6 @@
 H5PEditor.language.core = {
   missingTranslation: '[Missing translation :key]',
-  loading: 'Loading :type...',
+  loading: 'Loading :type, please wait...',
   selectLibrary: 'Select the library you wish to use for your content.',
   unknownFieldPath: 'Unable to find ":path".',
   notImageField: '":path" is not an image.',
@@ -22,5 +22,6 @@ H5PEditor.language.core = {
   invalidFormat: 'Field value contains an invalid format or characters that are forbidden.',
   confirmChangeLibrary: 'Are you sure you wish to change library?',
   moreLibraries: 'Look for <a href="http://h5p.org/content-types-and-applications" target="_blank">more content types</a> on h5p.org',
-  commonFields: 'Common fields'
+  commonFields: 'Common fields',
+  uploading: 'Uploading, please wait...'
 };

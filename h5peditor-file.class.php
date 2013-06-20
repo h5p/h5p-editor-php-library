@@ -1,39 +1,38 @@
 <?php
 
 class H5peditorFile {
-  
-  private $result, $field, $temporary_directory;
-  
+
+  private $result, $field, $files_directory;
+
   public $type, $name, $path, $mime, $size;
-  
+
   function __construct($files_directory) {
     // Check for file upload.
     if (empty($_POST) || !isset($_POST['field']) || empty($_FILES) || !isset($_FILES['file'])) {
       return;
     }
-    
+
     // Create a new result object.
     $this->result = new stdClass();
-    
-    // Set temporary directory.
-    $this->temporary_directory = $files_directory . '/h5peditor';
-    
+
+    // Set directory.
+    $this->files_directory = $files_directory;
+
     // Create the temporary directory if it doesn't exist.
     $dirs = array ('', '/files', '/images', '/videos', '/audios');
     foreach ($dirs as $dir) {
-      $dir = $this->temporary_directory . $dir;
+      $dir = $this->files_directory . $dir;
       if (!is_dir($dir)) {
         if (!mkdir($dir)) {
           // TODO: Move all t-s out of here.
-          $this->result->error = t('Unable to create temporary directory.');
+          $this->result->error = t('Unable to create directory.');
           return;
         }
       }
     }
-    
+
     // Get the field.
     $this->field = json_decode($_POST['field']);
-    
 
     if (function_exists('finfo_file')) {
       $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -47,19 +46,23 @@ class H5peditorFile {
     else {
       $this->type = $_FILES['file']['type'];
     }
-    
+
     $this->extension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
-    
+
     $this->size = $_FILES['file']['size'];
   }
-  
+
+  /**
+   *
+   * @return boolean
+   */
   public function isLoaded() {
     return is_object($this->result);
   }
-  
+
   /**
    * Check current file up agains mime types and extensions in the given list.
-   * 
+   *
    * @param array $mimes List to check against.
    * @return boolean
    */
@@ -74,26 +77,35 @@ class H5peditorFile {
     }
     return FALSE;
   }
-  
+
+  /**
+   * Validate the file.
+   *
+   * @return boolean
+   */
   public function validate() {
+    if (isset($this->result->error)) {
+      return FALSE;
+    }
+
     // Check for field type.
     if (!isset($this->field->type)) {
       $this->result->error = t('Unable to get field type.');
       return FALSE;
     }
-    
+
     // Check if mime type is allowed.
     if ((isset($this->field->mimes) && !in_array($this->type, $this->field->mimes)) || substr($this->extension, 0, 3) === 'php') {
       $this->result->error = t("File type isn't allowed.");
       return FALSE;
     }
-    
+
     // Type specific validations.
     switch ($this->field->type) {
       default:
         $this->result->error = t('Invalid field type.');
         return FALSE;
-        
+
       case 'image':
         $allowed = array(
           'image/png' => 'png',
@@ -104,13 +116,13 @@ class H5peditorFile {
           $this->result->error = t('Invalid image file format. Use jpg, png or gif.');
           return FALSE;
         }
-        
+
         $image = @getimagesize($_FILES['file']['tmp_name']);
         if (!$image) {
           $this->result->error = t('File is not an image.');
           return FALSE;
         }
-        
+
         $this->result->width = $image[0];
         $this->result->height = $image[1];
         $this->result->mime = $this->type;
@@ -131,10 +143,10 @@ class H5peditorFile {
           return FALSE;
 
         }
-        
+
         $this->result->mime = $this->type;
         break;
-        
+
       case 'video':
         $allowed = array(
           'video/mp4' => 'mp4',
@@ -146,19 +158,19 @@ class H5peditorFile {
           $this->result->error = t('Invalid video file format. Use mp4 or webm.');
           return FALSE;
         }
-        
+
         $this->result->mime = $this->type;
         break;
-        
+
       case 'file':
         // TODO: Try to get file extension for type and check that it matches the current extension.
         $this->result->mime = $this->type;
     }
-    
+
     return TRUE;
   }
-  
- public function copy() {    
+
+ public function copy() {
     $matches = array();
     preg_match('/([a-z0-9]{1,})$/i', $_FILES['file']['name'], $matches);
 
@@ -167,17 +179,17 @@ class H5peditorFile {
       $this->name .= '.' . $matches[0];
     }
     $this->name = $this->field->type . 's/' . $this->name;
-    
-    $this->path = $this->temporary_directory . '/' . $this->name;
+
+    $this->path = $this->files_directory . '/' . $this->name;
     if (!copy($_FILES['file']['tmp_name'], $this->path)) {
       $this->result->error = t('Could not copy file.');
       return FALSE;
     }
-    
+
     $this->result->path = $this->name;
     return TRUE;
   }
-  
+
   public function getResult() {
     return json_encode($this->result);
   }

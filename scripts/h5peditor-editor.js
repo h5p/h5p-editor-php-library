@@ -55,35 +55,6 @@ ns.Editor.prototype.getLibrary = function () {
  */
 ns.Editor.prototype.getParams = function () {
   if (this.selector !== undefined) {
-    var params = this.selector.getParams();
-    ns.Editor.cleanParams(params);
-    return params;
-  }
-};
-
-/**
- * Clean params.
- *
- * TODO: Reconsider this so that libraries don't have to worry about this tmp stuff.
- *
- * TODO: Also document it better if this stays this way. It is a strange thing to do.
- * Feels like a hack
- *
- * @param {type} params
- * @returns {undefined}
- */
-ns.Editor.cleanParams = function (params) {
-  for (var name in params) {
-    var param = params[name];
-    if (param instanceof Object || param instanceof Array) {
-      if (param.path !== undefined && param.mime !== undefined) {
-        // This can be a file
-        if (param.tmp !== undefined) {
-          delete param.tmp; // Remove tmp tag from file.
-        }
-        continue;
-      }
-      ns.Editor.cleanParams(param);
-    }
+    return this.selector.getParams();
   }
 };

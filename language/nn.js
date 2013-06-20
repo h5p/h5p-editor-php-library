@@ -1,6 +1,6 @@
 H5PEditor.language.core = {
   missingTranslation: '[Manglar oversettelse :key]',
-  loading: 'Lastar :type...',
+  loading: 'Lastar :type, ver venleg og vent...',
   selectLibrary: 'Vel biblioteket du ønskjer å bruke for innhaldet ditt.',
   unknownFieldPath: 'Kan ikkje finne ":path".',
   notImageField: '":path" er ikkje eit bilete.',
@@ -22,5 +22,6 @@ H5PEditor.language.core = {
   invalidFormat: 'Feltets verdi er på eit ugyldig format eller bruker ulovlege tegn.',
   confirmChangeLibrary: 'Er du sikker på at du ønskjer å byte bibliotek?',
   moreLibraries: 'Sjå etter <a href="http://h5p.org/content-types-and-applications" target="_blank">fleir innhaldstypar</a> på h5p.org',
-  commonFields: 'Felles felter'
+  commonFields: 'Felles felter',
+  uploading: 'Lastar opp fil, ver venleg og vent...'
 };
