@@ -358,10 +358,10 @@ ns.followField = function (parent, path, callback) {
 
     if (path instanceof Object) {
       // We have an object with default values
-      def = path;
+      def = H5P.cloneObject(path);
 
       if (path.field === undefined) {
-        callback(path);
+        callback(path, null);
         return; // Exit if we have no field to follow.
       }
 
