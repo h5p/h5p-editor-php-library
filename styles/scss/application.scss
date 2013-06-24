@@ -293,10 +293,14 @@
     -webkit-transform: translateZ(0);
   }
 
-  .h5peditor-uploading {
+  .h5peditor-uploading, .h5peditor-loading {
     background: inline-image("uploading.gif") no-repeat 10px 7px;
     padding-top: 40px;
     font-size: 14px;
+  }
+  .h5peditor-loading {
+    padding: 0.875em 0 1em 3.25em;
+    font-style: italic;
   }
 }
 

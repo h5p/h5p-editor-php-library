@@ -132,7 +132,7 @@ ns.Library.prototype.validate = function () {
       valid = false;
     }
   }
-  
+
   return valid;
 };
 
