@@ -23,5 +23,6 @@ H5PEditor.language.core = {
   confirmChangeLibrary: 'Er du sikker på at du ønskjer å byte bibliotek?',
   moreLibraries: 'Sjå etter <a href="http://h5p.org/content-types-and-applications" target="_blank">fleir innhaldstypar</a> på h5p.org',
   commonFields: 'Felles felter',
-  uploading: 'Lastar opp fil, ver venleg og vent...'
+  uploading: 'Lastar opp fil, ver venleg og vent...',
+  noFollow: 'Kunne ikkje følge feltet ":path".'
 };
