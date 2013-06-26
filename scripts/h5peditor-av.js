@@ -14,7 +14,6 @@ ns.AV = function (parent, field, params, setValue) {
   this.field = field;
   this.params = params;
   this.setValue = setValue;
-  this.$files = [];
   this.changes = [];
 };
 
@@ -34,10 +33,10 @@ ns.AV.prototype.appendTo = function ($wrapper) {
     label = '<span class="h5peditor-label">' + (this.field.label === undefined ? this.field.name : this.field.label) + '</span>';
   }
 
-  var html = ns.createItem(this.field.type, label + '<div class="file"><a href="#" class="add" title="' + ns.t('core', 'addFile') + '"></a></div>', this.field.description);
+  var html = ns.createItem(this.field.type, label + '<div class="file">' + ns.AV.createAdd() + '</div>', this.field.description);
 
   var $file = ns.$(html).appendTo($wrapper).children('.file');
-  this.$add = $file.children('.add').click(function () {
+  this.$add = $file.children('.add').click(function (e) {
     that.uploadFile();
     return false;
   });
@@ -45,9 +44,18 @@ ns.AV.prototype.appendTo = function ($wrapper) {
 
   if (this.params !== undefined) {
     for (var i = 0; i < this.params.length; i++) {
-      this.addFile(this.params[i]);
+      this.addFile(i);
     }
   }
+};
+
+/**
+ * Create html for the add button.
+ *
+ * @returns {String} HTML
+ */
+ns.AV.createAdd = function () {
+  return '<a href="#" class="add" title="' + ns.t('core', 'addFile') + '"></a>';
 };
 
 /**
@@ -56,9 +64,10 @@ ns.AV.prototype.appendTo = function ($wrapper) {
  * @param {object} file
  * @returns {undefined}
  */
-ns.AV.prototype.addFile = function (file) {
+ns.AV.prototype.addFile = function (index) {
   var that = this;
 
+  var file = this.params[index];
   var mimeParts = file.mime.split('/');
   var $file = ns.$('<div class="thumbnail"><div class="type" title="' + file.mime + '">' + mimeParts[1] + '</div><a href="#" class="remove" title="' + ns.t('core', 'removeFile') + '"></a></div>').insertBefore(this.$add).children('.remove').click(function (e) {
     if (!confirm(ns.t('core', 'confirmRemoval', {':type': 'file'}))) {
@@ -66,16 +75,12 @@ ns.AV.prototype.addFile = function (file) {
     }
 
     // Remove from params.
-    for (var i = 0; i < that.$files.length; i++) {
-      if (that.$files[i] === $file) {
-        that.$files.splice(i, 1);
-        that.params.splice(i, 1);
-      }
-    }
-
-    if (!that.params.length) {
+    if (that.params.length === 1) {
       delete that.params;
       that.setValue(that.field);
+    }
+    else {
+      that.params.splice(index, 1);
     }
 
     $file.remove();
@@ -86,8 +91,6 @@ ns.AV.prototype.addFile = function (file) {
 
     return false;
   }).end();
-
-  this.$files.push($file);
 };
 
 /**
@@ -124,7 +127,7 @@ ns.AV.prototype.uploadFile = function () {
       };
       that.params.push(file);
 
-      that.addFile(file);
+      that.addFile(that.params.length - 1);
 
       for (var i = 0; i < that.changes.length; i++) {
         that.changes[i](file);
