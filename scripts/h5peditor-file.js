@@ -58,7 +58,7 @@ ns.File.prototype.addFile = function () {
   var thumbnail;
   if (this.field.type === 'image') {
     thumbnail = {};
-    thumbnail.path = (this.params.path.substr(0, 7) === 'http://' ? '' : ns.filesPath) + this.params.path,
+    thumbnail.path = H5P.getPath(this.params.path),
     thumbnail.height = 100;
     if (this.params.width !== undefined) {
       thumbnail.width = thumbnail.height * (this.params.width / this.params.height);
