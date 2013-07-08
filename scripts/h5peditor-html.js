@@ -118,8 +118,6 @@ ns.Html.prototype.createToolbar = function () {
   if (formats.length > 0 || this.inTags('p') || this.inTags('div')) {
     formats.push("p");   // If the formats are shown, always have a paragraph..
     this.tags.push("p");
-    formats.push("div"); // ..and a plain old div.
-    this.tags.push("div");
     toolbar.push({
       name: "styles",
       items: ['Format']
@@ -135,7 +133,7 @@ ns.Html.prototype.createToolbar = function () {
   }
 
   // Enable selection of enterMode in module semantics.
-  if (this.field.enterMode === 'p') {
+  if (this.field.enterMode === 'p' || formats.length > 0) {
     this.tags.push('p');
     ret.enterMode = CKEDITOR.ENTER_P;
   } else {
