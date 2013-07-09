@@ -95,7 +95,16 @@ ns.Group.prototype.expand = function () {
   var expandedClass = 'expanded';
 
   if (this.$group.hasClass(expandedClass)) {
-    this.$group.removeClass(expandedClass);
+    // Do not collapse before valid!
+    var valid = true;
+    for (var i = 0; i < this.children.length; i++) {
+      if (this.children[i].validate() === false) {
+        valid = false;
+      }
+    }
+    if (valid) {
+      this.$group.removeClass(expandedClass);
+    }
   }
   else {
     this.$group.addClass(expandedClass);
