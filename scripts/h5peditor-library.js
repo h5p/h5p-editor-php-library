@@ -23,6 +23,7 @@ ns.Library = function (parent, field, params, setValue) {
   this.field = field;
   this.parent = parent;
   this.changes = [];
+  this.optionsLoaded = false;
 
   this.passReadies = true;
   parent.ready(function () {
@@ -55,13 +56,15 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   this.$libraryWrapper = $field.children('.libwrap');
 
   ns.$.post(ns.ajaxPath + 'libraries', {libraries: that.field.options}, function (data) {
+    that.libraries = data;
+
     var options = ns.createOption('-', '-');
     for (var i = 0; i < data.length; i++) {
       var library = data[i];
       options += ns.createOption(library.uberName, library.title, library.uberName === that.params.library);
     }
 
-    that.$select.html(options).change().change(function () {
+    that.$select.html(options).change(function () {
       if (that.params.library === undefined || confirm(H5PEditor.t('confirmChangeLibrary'))) {
         that.loadLibrary(ns.$(this).val());
       }
@@ -71,6 +74,12 @@ ns.Library.prototype.appendTo = function ($wrapper) {
       that.$select.hide();
       $field.children('.h5peditor-label').hide();
       that.loadLibrary(that.$select.children(':last').val(), true);
+    }
+
+    if (that.runChangeCallback === true) {
+      // In case a library has been selected programmatically trigger change events, e.g. a default library.
+      that.change();
+      that.runChangeCallback = false;
     }
   });
 
@@ -111,10 +120,40 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 
     ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper.html(''), that);
 
-    for (var i = 0; i < that.changes.length; i++) {
-      that.changes[i]();
+    if (that.libraries !== undefined) {
+      that.change();
+    }
+    else {
+      that.runChangeCallback = true;
     }
   });
+};
+
+/**
+ * Add the given callback or run
+ * @param {type} callback
+ * @returns {Number|@pro;length@this.changes}
+ */
+ns.Library.prototype.change = function (callback) {
+  if (callback !== undefined) {
+    // Add callback
+    this.changes.push(callback);
+  }
+  else {
+    // Find library
+    var library;
+    for (var i = 0; i < this.libraries.length; i++) {
+      if (this.libraries[i].uberName === this.library) {
+        library = this.libraries[i];
+        break;
+      }
+    }
+
+    // Run callbacks
+    for (var i = 0; i < this.changes.length; i++) {
+      this.changes[i](library);
+    }
+  }
 };
 
 /**
