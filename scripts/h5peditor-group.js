@@ -122,14 +122,14 @@ ns.Group.prototype.findSummary = function () {
     var child = this.children[j];
     var params = this.field.fields.length === 1 ? this.params : this.params[child.field.name];
 
-    if (child.field.widget === 'text') {
+    if (child.field.type === 'text') {
       if (params !== undefined && params !== '') {
-        summary = params;
+        summary = params.replace(/(<([^>]+)>)/ig, "");
       }
       child.$input.change(function () {
         var params = that.field.fields.length === 1 ? that.params : that.params[child.field.name];
         if (params !== undefined && params !== '') {
-          that.setSummary(params);
+          that.setSummary(params.replace(/(<([^>]+)>)/ig, ""));
         }
       });
       break;
@@ -138,8 +138,8 @@ ns.Group.prototype.findSummary = function () {
       if (params !== undefined) {
         summary = child.$select.children(':selected').text();
       }
-      child.$select.change(function () {
-        that.setSummary(child.$select.children(':selected').text());
+      child.change(function (library) {
+        that.setSummary(library.title);
       });
       break;
     }
