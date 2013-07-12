@@ -106,6 +106,11 @@ ns.Dimensions.prototype.appendTo = function ($wrapper) {
     }
   }).click(function () {
     return false;
+  }).keydown(function (event) {
+    if (event.keyCode === 13) {
+      // Prevent enter key from submitting form.
+      return false;
+    }
   });
 };
 
