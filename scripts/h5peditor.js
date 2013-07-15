@@ -88,49 +88,61 @@ ns.loadLibrary = function (libraryName, callback) {
       ns.loadedSemantics[libraryName] = 0; // Indicates that others should queue.
       ns.semanticsLoaded[libraryName] = []; // Other callbacks to run once loaded.
       var library = ns.libraryFromString(libraryName);
-      ns.$.get(ns.ajaxPath + 'libraries/' + library.machineName + '/' + library.majorVersion + '/' + library.minorVersion, function (libraryData) {
-        var semantics = JSON.parse(libraryData.semantics);
-        if (libraryData.language !== undefined) {
-          var language = JSON.parse(libraryData.language);
-          semantics = ns.$.extend(true, [], semantics, language.semantics);
-        }
-        libraryData.semantics = semantics;
-        ns.loadedSemantics[libraryName] = libraryData.semantics;
+      ns.$.ajax({
+        url: ns.ajaxPath + 'libraries/' + library.machineName + '/' + library.majorVersion + '/' + library.minorVersion,
+        success: function (libraryData) {
+          var semantics = JSON.parse(libraryData.semantics);
+          if (libraryData.language !== undefined) {
+            var language = JSON.parse(libraryData.language);
+            semantics = ns.$.extend(true, [], semantics, language.semantics);
+          }
+          libraryData.semantics = semantics;
+          ns.loadedSemantics[libraryName] = libraryData.semantics;
 
-        // Add CSS.
-        if (libraryData.css !== undefined) {
-          var css = '';
-          for (var path in libraryData.css) {
-            if (!H5P.cssLoaded(path)) {
-              css += libraryData.css[path];
-              H5P.loadedCss.push(path);
+          // Add CSS.
+          if (libraryData.css !== undefined) {
+            var css = '';
+            for (var path in libraryData.css) {
+              if (!H5P.cssLoaded(path)) {
+                css += libraryData.css[path];
+                H5P.loadedCss.push(path);
+              }
+            }
+            if (css) {
+              ns.$('head').append('<style type="text/css">' + css + '</style>');
             }
           }
-          if (css) {
-            ns.$('head').append('<style type="text/css">' + css + '</style>');
-          }
-        }
 
-        // Add JS.
-        if (libraryData.javascript !== undefined) {
-          var js = '';
-          for (var path in libraryData.javascript) {
-            if (!H5P.jsLoaded(path)) {
-              js += libraryData.javascript[path];
-              H5P.loadedJs.push(path);
+          // Add JS.
+          if (libraryData.javascript !== undefined) {
+            var js = '';
+            for (var path in libraryData.javascript) {
+              if (!H5P.jsLoaded(path)) {
+                js += libraryData.javascript[path];
+                H5P.loadedJs.push(path);
+              }
+            }
+            if (js) {
+              eval.apply(window, [js]);
             }
           }
-          if (js) {
-            eval.apply(window, [js]);
+
+          callback(libraryData.semantics);
+
+          // Run queue.
+          for (var i = 0; i < ns.semanticsLoaded[libraryName].length; i++) {
+            ns.semanticsLoaded[libraryName][i](libraryData.semantics);
           }
-        }
-
-        callback(libraryData.semantics);
-
-        // Run queue.
-        for (var i = 0; i < ns.semanticsLoaded[libraryName].length; i++) {
-          ns.semanticsLoaded[libraryName][i](libraryData.semantics);
-        }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          if (window['console'] !== undefined) {
+            console.log('Ajax request failed');
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
+          }
+        },
+        dataType: 'json'
       });
   }
 };
