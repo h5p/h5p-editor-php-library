@@ -34,6 +34,11 @@ ns.Dimensions = function (parent, field, params, setValue) {
 
   this.params = params;
   this.setValue = setValue;
+
+  // Remove default field from params to avoid saving it.
+  if (this.params.field) {
+    this.params.field = undefined;
+  }
 };
 
 /**
