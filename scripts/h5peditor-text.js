@@ -43,11 +43,6 @@ ns.Text.prototype.appendTo = function ($wrapper) {
         that.changeCallbacks[i](value);
       }
     }
-  }).keydown(function (event) {
-    if (event.keyCode === 13) {
-      // Prevent enter key from submitting form.
-      return false;
-    }
   });
 };
 

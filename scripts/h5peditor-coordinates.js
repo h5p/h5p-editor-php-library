@@ -129,11 +129,6 @@ ns.Coordinates.prototype.appendTo = function ($wrapper) {
     return false;
   }).click(function () {
     return false;
-  }).keydown(function (event) {
-    if (event.keyCode === 13) {
-      // Prevent enter key from submitting form.
-      return false;
-    }
   });
 };
 

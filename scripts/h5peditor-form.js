@@ -22,6 +22,15 @@ ns.Form = function () {
 ns.Form.prototype.replace = function ($element) {
   $element.replaceWith(this.$form);
   this.offset = this.$form.offset();
+  // Prevent inputs and selects in an h5peditor form from submitting the main
+  // framework form.
+  this.$form.on('keydown', 'input,select', function (event) {
+    if (event.keyCode === 13) {
+      // Prevent enter key from submitting form.
+      console.log("Enter prevented?");
+      return false;
+    }
+  });
 };
 
 /**
