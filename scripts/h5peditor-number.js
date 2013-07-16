@@ -73,9 +73,11 @@ ns.Number.prototype.appendTo = function ($wrapper) {
  */
 ns.Number.prototype.createHtml = function () {
   var input = ns.createText(this.value, 15);
-  if (this.field.min !== undefined && this.field.max !== undefined && this.field.step !== undefined) {
+  /* TODO: Add back in when FF gets support for input:range....
+   *if (this.field.min !== undefined && this.field.max !== undefined && this.field.step !== undefined) {
     input = '<input type="range" min="' + this.field.min + '" max="' + this.field.max + '" step="' + this.field.step + '"' + (this.value === undefined ? '' : ' value="' + this.value + '"') + '/>' + input;
   }
+   */
 
   var label = ns.createLabel(this.field, input);
 
