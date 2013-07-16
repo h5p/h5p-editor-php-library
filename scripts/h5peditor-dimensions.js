@@ -26,8 +26,8 @@ ns.Dimensions = function (parent, field, params, setValue) {
 
   // Find image field to get default size from.
   H5PEditor.followField(parent, field['default'], function (file, index) {
-    // Make sure we don't set size if we have one in params.
-    if (index === undefined || params === undefined) {
+    // Make sure we don't set size if we have one in the default params.
+    if (params.width === undefined) {
       that.setSize(file);
     }
   });
