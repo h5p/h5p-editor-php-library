@@ -27,7 +27,6 @@ ns.Form.prototype.replace = function ($element) {
   this.$form.on('keydown', 'input,select', function (event) {
     if (event.keyCode === 13) {
       // Prevent enter key from submitting form.
-      console.log("Enter prevented?");
       return false;
     }
   });
