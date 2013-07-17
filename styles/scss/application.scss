@@ -1,11 +1,9 @@
 @import "compass/css3/border-radius";
 @import "compass/css3/box-shadow";
-@import "compass/css3/transition";
 @import "compass/css3/opacity";
 
 .h5peditor {
   font-size: 16px;
-  @include transition(all 0.2s ease-in);
 
   .h5p-more-libraries {
     font-size: 0.875em;
@@ -129,7 +127,6 @@
         margin: 3px 0 0;
         background: inline-image("expand.png") no-repeat;
         opacity: 0.8;
-        @include transition(all 0.2s ease-in);
 
         &:hover {
           opacity: 1;
