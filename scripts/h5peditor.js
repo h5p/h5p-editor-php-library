@@ -418,7 +418,8 @@ ns.createError = function (message) {
  * @returns {String}
  */
 ns.createItem = function (type, content, description) {
-  var html = '<div class="field ' + type + '">' + content + '<div class="errors"></div>';
+  // TODO: Remove the errors class, it is deprecated
+  var html = '<div class="field ' + type + '">' + content + '<div class="h5p-errors errors"></div>';
   if (description !== undefined) {
     html += '<div class="h5peditor-field-description">' + description + '</div>';
   }

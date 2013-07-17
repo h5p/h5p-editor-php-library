@@ -156,7 +156,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
 
   this.$item = ns.$(ns.createItem(this.field.type, this.createHtml(), this.field.description)).appendTo($wrapper);
   this.$input = this.$item.children('.ckeditor');
-  this.$errors = this.$item.children('.errors');
+  this.$errors = this.$item.children('.h5p-errors');
 
   var ckConfig = {
     extraPlugins: "",

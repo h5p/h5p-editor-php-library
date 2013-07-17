@@ -28,7 +28,7 @@ ns.Textarea.prototype.appendTo = function ($wrapper) {
 
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$input = this.$item.children('label').children('textarea');
-  this.$errors = this.$item.children('.errors');
+  this.$errors = this.$item.children('.h5p-errors');
 
   this.$input.change(function () {
     // Validate

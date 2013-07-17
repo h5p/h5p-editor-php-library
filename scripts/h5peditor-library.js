@@ -49,7 +49,8 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   if (this.field.description !== undefined) {
     html += '<div class="h5peditor-field-description">' + this.field.description + '</div>';
   }
-  html += '<div class="errors"></div><div class="libwrap"></div></div>';
+  // TODO: Remove errors, it is deprecated
+  html += '<div class="errors h5p-errors"></div><div class="libwrap"></div></div>';
 
   var $field = ns.$(html).appendTo($wrapper);
   this.$select = $field.children('select');

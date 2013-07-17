@@ -27,7 +27,7 @@ H5PEditor.widgets.select = H5PEditor.Select = (function (E) {
 
     this.$item = E.$(this.createHtml()).appendTo($wrapper);
     this.$select = this.$item.find('select');
-    this.$errors = this.$item.children('.errors');
+    this.$errors = this.$item.children('.h5p-errors');
 
     this.$select.change(function () {
       var val = that.validate();
