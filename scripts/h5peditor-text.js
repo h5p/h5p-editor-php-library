@@ -37,7 +37,7 @@ ns.Text.prototype.appendTo = function ($wrapper) {
     if (value !== false) {
       // Set param
       that.value = value;
-      that.setValue(that.field, value);
+      that.setValue(that.field, ns.htmlspecialchars(value));
 
       for (var i = 0; i < that.changeCallbacks.length; i++) {
         that.changeCallbacks[i](value);

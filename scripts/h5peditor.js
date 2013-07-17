@@ -534,3 +534,10 @@ ns.libraryFromString = function (library) {
     return false;
   }
 };
+
+/**
+ * Mimics how php's htmlspecialchars works (the way we uses it)
+ */
+ns.htmlspecialchars = function(string) {
+  return string.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#039;').replace(/"/g, '&quot;');
+}
