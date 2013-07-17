@@ -33,7 +33,7 @@
   resize: vertical;
 }
 /* line 31, ../scss/application.scss */
-.h5peditor textarea, .h5peditor input[type="text"], .h5peditor .ckeditor {
+.h5peditor textarea, .h5peditor .h5peditor-text, .h5peditor .ckeditor {
   width: 90%;
   padding: 4px 8px;
   font-size: 16px;
@@ -59,7 +59,7 @@
   box-shadow: 0 0 8px 2px #7fb8ff;
 }
 /* line 48, ../scss/application.scss */
-.h5peditor textarea:focus, .h5peditor input[type="text"]:focus {
+.h5peditor textarea:focus, .h5peditor .h5peditor-text:focus {
   outline: none;
   background: #fff;
   border-color: #53a0ff;

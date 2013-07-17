@@ -28,7 +28,7 @@
   textarea {
     resize: vertical;
   }
-  textarea, input[type="text"], .ckeditor {
+  textarea, .h5peditor-text, .ckeditor {
     width: 90%;
     padding: 4px 8px;
     font-size: 16px;
@@ -45,7 +45,7 @@
     outline: none;
     @include box-shadow(0 0 8px 2px #7fb8ff);
   }
-  textarea:focus, input[type="text"]:focus {
+  textarea:focus, .h5peditor-text:focus {
     outline: none;
     background: #fff;
     border-color: #53a0ff;

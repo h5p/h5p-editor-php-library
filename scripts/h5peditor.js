@@ -446,7 +446,7 @@ ns.createOption = function (value, text, selected) {
  * @returns {String}
  */
 ns.createText = function (value, maxLength, placeholder) {
-  var html = '<input type="text"';
+  var html = '<input class="h5peditor-text" type="text"';
 
   if (value !== undefined) {
     html += ' value="' + value + '"';
