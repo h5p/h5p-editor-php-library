@@ -35,7 +35,6 @@ var CKBUILDER_CONFIG = {
 		'elementspath' : 1,
 		'enterkey' : 1,
 		'entities' : 1,
-		'filebrowser' : 1,
 		'floatingspace' : 1,
 		'format' : 1,
 		'htmlwriter' : 1,
@@ -65,11 +64,11 @@ var CKBUILDER_CONFIG = {
 		'floatpanel' : 1,
 		'panel' : 1,
 		'button' : 1,
-		'popup' : 1,
 		'richcombo' : 1,
 		'listblock' : 1,
 		'fakeobjects' : 1,
-		'menubutton' : 1
+		'menubutton' : 1,
+		'autogrow' : 1
 	},
 	languages : {
 		'af' : 1,
@@ -105,6 +104,7 @@ var CKBUILDER_CONFIG = {
 		'hi' : 1,
 		'hu' : 1,
 		'is' : 1,
+		'id' : 1,
 		'it' : 1,
 		'ja' : 1,
 		'km' : 1,
@@ -125,6 +125,7 @@ var CKBUILDER_CONFIG = {
 		'ru' : 1,
 		'sr' : 1,
 		'sr-latn' : 1,
+		'si' : 1,
 		'sk' : 1,
 		'sl' : 1,
 		'es' : 1,

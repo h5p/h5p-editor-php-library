@@ -237,12 +237,12 @@ ns.Html.prototype.createHtml = function () {
   }
   html += '</label>';
 
-  html += '<div class="ckeditor" tabindex="0" contenteditable="true">';
+  html += '<textarea class="ckeditor" tabindex="0" contenteditable="true">';
 
   if (this.value !== undefined) {
     html += this.value;
   }
-  html += '</div>';
+  html += '</textarea>';
 
   return html;
 };
