@@ -66,7 +66,7 @@ ns.Library.prototype.appendTo = function ($wrapper) {
     }
 
     that.$select.html(options).change(function () {
-      if (that.params.library === undefined || confirm(H5PEditor.t('confirmChangeLibrary'))) {
+      if (that.params.library === undefined || confirm(H5PEditor.t('core', 'confirmChangeLibrary'))) {
         that.loadLibrary(ns.$(this).val());
       }
     });
@@ -108,7 +108,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     return;
   }
 
-  this.$libraryWrapper.html(ns.t('loading', {':type': 'semantics'}));
+  this.$libraryWrapper.html(ns.t('core', 'loading', {':type': 'semantics'}));
 
   ns.loadLibrary(libraryName, function (semantics) {
     that.library = libraryName;

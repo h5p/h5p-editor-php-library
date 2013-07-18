@@ -11,6 +11,7 @@ var ns = H5PEditor;
  */
 ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   var that = this;
+  var firstTime = true;
   var options = '<option value="-">-</option>';
 
   this.defaultParams = defaultParams;
@@ -28,8 +29,13 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   }
 
   this.$selector = ns.$('<select name="h5peditor-library" title="' + ns.t('core', 'selectLibrary') + '">' + options + '</select>').change(function () {
-    var library = that.$selector.val();
-    that.loadSemantics(library);
+    if (firstTime || confirm(H5PEditor.t('core', 'confirmChangeLibrary'))) {
+      var library = that.$selector.val();
+      if (library !== '-') {
+        firstTime = false;
+      }
+      that.loadSemantics(library);
+    }
   });
 };
 
