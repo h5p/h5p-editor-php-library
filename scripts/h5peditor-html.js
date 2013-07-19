@@ -195,7 +195,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     ns.Html.current = that;
 
     ckConfig.startupFocus = true;
-    that.ckeditor = CKEDITOR.replace(this, ckConfig);
+    that.ckeditor = CKEDITOR.inline(this, ckConfig);
 
     that.ckeditor.on('blur', function () {
       // Do not validate if the field has been hidden.
