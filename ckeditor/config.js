@@ -38,5 +38,5 @@ CKEDITOR.editorConfig = function( config ) {
   config.autoGrow_minHeight = 80;
   config.height = 80;
   config.autoGrow_onStartup = true;
-  
+  config.autoGrow_maxHeight = 500;
 };
