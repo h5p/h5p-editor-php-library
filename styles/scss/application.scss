@@ -54,9 +54,9 @@
     height: 0;
     border: 0;
     overflow: hidden;
-  }
-  .ckeditor iframe {
-    overflow: auto;
+    &.cke_wysiwyg_frame {
+      overflow: auto;
+    }
   }
   .h5p-ul {
     padding: 0;

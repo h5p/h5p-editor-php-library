@@ -73,8 +73,8 @@
   border: 0;
   overflow: hidden;
 }
-/* line 58, ../scss/application.scss */
-.h5peditor .ckeditor iframe {
+/* line 57, ../scss/application.scss */
+.h5peditor iframe.cke_wysiwyg_frame {
   overflow: auto;
 }
 /* line 61, ../scss/application.scss */
