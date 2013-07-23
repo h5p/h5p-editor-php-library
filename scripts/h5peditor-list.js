@@ -54,7 +54,7 @@ ns.List.prototype.appendTo = function ($wrapper) {
 
   this.$list = ns.$(html).appendTo($wrapper).children('ul');
   this.$add = this.$list.next().click(function () {
-    if (that.field.max !== undefined && that.params.length === that.field.max) {
+    if (that.field.max !== undefined && that.params.length >= that.field.max) {
       return;
     }
     var item = that.addItem();
