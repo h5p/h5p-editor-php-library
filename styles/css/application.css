@@ -242,6 +242,7 @@
   width: auto;
   margin: 0;
   padding: 4px 8px;
+  font-size: 0.8em;
 }
 /* line 189, ../scss/application.scss */
 .h5peditor .dimensions input, .h5peditor .coordinates input, .h5peditor .number input {
