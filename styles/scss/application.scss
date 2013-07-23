@@ -55,6 +55,9 @@
     border: 0;
     overflow: hidden;
   }
+  .ckeditor iframe {
+    overflow: auto;
+  }
   .h5p-ul {
     padding: 0;
     margin: 0;
