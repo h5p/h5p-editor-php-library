@@ -161,6 +161,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
   var ckConfig = {
     extraPlugins: "",
     forcePasteAsPlainText: true,
+    startupFocus: true,
     enterMode: CKEDITOR.ENTER_DIV,
     allowedContent: true, // Disables the ckeditor content filter, might consider using it later... Must make sure it doesn't remove math...
     protectedSource: []
@@ -186,25 +187,25 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     if (ns.Html.current === that) {
       return;
     }
-    else if (ns.Html.current !== undefined) {
-      ns.Html.current.ckeditor.destroy();
-      delete ns.Html.current.ckeditor;
-    }
 
-    H5P.jQuery(this).trigger('blur');
+    H5P.jQuery(this).trigger('blur'); // Why do we do this? - FRL, 20120723.
+
     ns.Html.current = that;
-
-    ckConfig.startupFocus = true;
-    that.ckeditor = CKEDITOR.inline(this, ckConfig);
+    that.ckeditor = CKEDITOR.replace(this, ckConfig);
 
     that.ckeditor.on('blur', function () {
       // Do not validate if the field has been hidden.
       if (that.$item.is(':visible')) {
         that.validate();
       }
+      // Remove CK instance when blurred.
+      that.ckeditor.destroy();
+      ns.Html.current = undefined;
     });
 
-    // Add events to ckeditor. It is beeing done here since we know it exists at this point...
+    // Add events to ckeditor. It is beeing done here since we know it exists
+    // at this point... Use case from commit message: "Make the default
+    // linkTargetType blank for ckeditor" - STGW
     if (ns.Html.first) {
       CKEDITOR.on('dialogDefinition', function(e) {
         // Take the dialog name and its definition from the event data.
