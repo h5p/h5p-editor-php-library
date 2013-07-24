@@ -187,6 +187,8 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     if (ns.Html.current === that) {
       return;
     }
+    // Remove existing CK instance.
+    ns.Html.removeWysiwyg();
 
     H5P.jQuery(this).trigger('blur'); // Why do we do this? - FRL, 20120723.
 
@@ -198,9 +200,6 @@ ns.Html.prototype.appendTo = function ($wrapper) {
       if (that.$item.is(':visible')) {
         that.validate();
       }
-      // Remove CK instance when blurred.
-      that.ckeditor.destroy();
-      ns.Html.current = undefined;
     });
 
     // Add events to ckeditor. It is beeing done here since we know it exists
@@ -291,6 +290,16 @@ ns.Html.prototype.validate = function () {
   this.$input.change(); // Trigger change event.
 
   return value;
+};
+
+/**
+ * Destroy H5PEditor existing CK instance. If it exists.
+ */
+ns.Html.removeWysiwyg = function () {
+  if (ns.Html.current !== undefined) {
+    ns.Html.current.ckeditor.destroy();
+    ns.Html.current = undefined;
+  }
 };
 
 /**
