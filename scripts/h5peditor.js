@@ -335,15 +335,16 @@ ns.findField = function (path, parent) {
     path.splice(0, 1);
     return ns.findField(path, parent.parent);
   }
-
-  for (var i = 0; i < parent.children.length; i++) {
-    if (parent.children[i].field.name === path[0]) {
-      path.splice(0, 1);
-      if (path.length) {
-        return ns.findField(path, parent.children[i]);
-      }
-      else {
-        return parent.children[i];
+  if (parent.children) {
+    for (var i = 0; i < parent.children.length; i++) {
+      if (parent.children[i].field.name === path[0]) {
+        path.splice(0, 1);
+        if (path.length) {
+          return ns.findField(path, parent.children[i]);
+        }
+        else {
+          return parent.children[i];
+        }
       }
     }
   }
