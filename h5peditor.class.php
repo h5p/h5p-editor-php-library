@@ -143,10 +143,14 @@ class H5peditor {
       case 'file':
       case 'image':
         if (isset($params->path)) {
-          $temp_file = $h5peditor_path . $params->path;
-          if (file_exists($temp_file)) {
-            rename($temp_file, $this->content_directory . $params->path);
-            $this->storage->removeFile($temp_file);
+          $oldPath = $h5peditor_path . $params->path;
+          $newPath = $this->content_directory . $params->path;
+          if (file_exists($oldPath)) {
+            rename($oldPath, $newPath);
+            $this->storage->keepFile($oldPath, $newPath);
+          }
+          elseif (file_exists($newPath)) {
+            $this->storage->keepFile($newPath, $newPath);
           }
 
           $files[] = $params->path;
@@ -157,12 +161,15 @@ class H5peditor {
       case 'audio':
         if (is_array($params)) {
           for ($i = 0, $s = count($params); $i < $s; $i++) {
-            $temp_file = $h5peditor_path . $params[$i]->path;
-            if (file_exists($temp_file)) {
-              rename($temp_file, $this->content_directory . $params[$i]->path);
-              $this->storage->removeFile($temp_file);
+            $oldPath = $h5peditor_path . $params[$i]->path;
+            $newPath = $this->content_directory . $params[$i]->path;
+            if (file_exists($oldPath)) {
+              rename($oldPath, $newPath);
+              $this->storage->keepFile($oldPath, $newPath);
             }
-
+            elseif (file_exists($newPath)) {
+              $this->storage->keepFile($newPath, $newPath);
+            }
             $files[] = $params[$i]->path;
           }
         }
