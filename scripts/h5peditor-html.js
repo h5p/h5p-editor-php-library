@@ -160,7 +160,6 @@ ns.Html.prototype.appendTo = function ($wrapper) {
 
   var ckConfig = {
     extraPlugins: "",
-    forcePasteAsPlainText: true,
     startupFocus: true,
     enterMode: CKEDITOR.ENTER_DIV,
     allowedContent: true, // Disables the ckeditor content filter, might consider using it later... Must make sure it doesn't remove math...
