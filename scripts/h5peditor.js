@@ -91,7 +91,7 @@ ns.loadLibrary = function (libraryName, callback) {
       ns.$.ajax({
         url: ns.ajaxPath + 'libraries/' + library.machineName + '/' + library.majorVersion + '/' + library.minorVersion,
         success: function (libraryData) {
-          var semantics = JSON.parse(libraryData.semantics);
+          var semantics = libraryData.semantics;
           if (libraryData.language !== undefined) {
             var language = JSON.parse(libraryData.language);
             semantics = ns.$.extend(true, [], semantics, language.semantics);
