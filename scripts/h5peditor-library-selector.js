@@ -16,7 +16,7 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
 
   this.defaultParams = defaultParams;
   this.defaultLibrary = defaultLibrary;
-  this.defaultLibraryParameterized = defaultLibrary.replace('.', '-').toLowerCase();
+  this.defaultLibraryParameterized = defaultLibrary ? defaultLibrary.replace('.', '-').toLowerCase() : undefined;
 
   for (var i = 0; i < libraries.length; i++) {
     var library = libraries[i];
@@ -74,7 +74,7 @@ ns.LibrarySelector.prototype.loadSemantics = function (library) {
   this.$parent.attr('class', 'h5peditor ' + library.split(' ')[0].toLowerCase().replace('.', '-') + '-editor');
 
   // Display loading message
-  var $loading = $('<div class="h5peditor-loading">' + ns.t('core', 'loading', {':type': 'semantics'}) + '</div>').appendTo(this.$parent);
+  var $loading = ns.$('<div class="h5peditor-loading">' + ns.t('core', 'loading', {':type': 'semantics'}) + '</div>').appendTo(this.$parent);
 
   this.$selector.attr('disabled', true);
 

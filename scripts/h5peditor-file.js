@@ -176,7 +176,7 @@ ns.File.addIframe = function () {
 
   // All editor uploads share this iframe to conserve valuable resources.
   ns.$('<iframe id="h5peditor-uploader"></iframe>').load(function () {
-    var $body = $(this).contents().find('body');
+    var $body = ns.$(this).contents().find('body');
     var json = $body.text();
     if (ns.File.callback !== undefined) {
       ns.File.callback(json);
