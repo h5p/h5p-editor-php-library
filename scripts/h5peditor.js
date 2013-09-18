@@ -542,4 +542,4 @@ ns.libraryFromString = function (library) {
  */
 ns.htmlspecialchars = function(string) {
   return string.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#039;').replace(/"/g, '&quot;');
-}
+};

@@ -66,6 +66,13 @@ ns.List.prototype.appendTo = function ($wrapper) {
   for (var i = 0; i < this.params.length; i++) {
     this.addItem(i);
   }
+
+  // Add min. fields.
+  var missing = this.field.min - this.params.length;
+  while (missing > 0) {
+    that.$add.click();
+    missing--;
+  }
 };
 
 /**

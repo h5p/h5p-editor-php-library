@@ -75,7 +75,7 @@ class H5peditor {
     $oldLibraries = array($oldLibrary);
 
     // Find new libraries and files.
-    $this->processSemantics($newFiles, $newLibraries, json_decode($this->storage->getSemantics($newLibrary['machineName'], $newLibrary['majorVersion'], $newLibrary['minorVersion'])), $newParameters);
+    $this->processSemantics($newFiles, $newLibraries, $this->storage->getSemantics($newLibrary['machineName'], $newLibrary['majorVersion'], $newLibrary['minorVersion']), $newParameters);
 
     $h5pStorage = _h5p_get_instance('storage');
 
@@ -93,7 +93,7 @@ class H5peditor {
 
     if ($oldLibrary) {
       // Find old files and libraries.
-      $this->processSemantics($oldFiles, $oldLibraries, json_decode($this->storage->getSemantics($oldLibrary['machineName'], $oldLibrary['majorVersion'], $oldLibrary['minorVersion'])), $oldParameters);
+      $this->processSemantics($oldFiles, $oldLibraries, $this->storage->getSemantics($oldLibrary['machineName'], $oldLibrary['majorVersion'], $oldLibrary['minorVersion']), $oldParameters);
 
       // Remove old files.
       for ($i = 0, $s = count($oldFiles); $i < $s; $i++) {
@@ -179,7 +179,7 @@ class H5peditor {
         if (isset($params->library) && isset($params->params)) {
           $libraryData = h5peditor_get_library_property($params->library);
           $libraries[$libraryData['machineName']] = $libraryData;
-          $this->processSemantics($files, $libraries, json_decode($this->storage->getSemantics($libraryData['machineName'], $libraryData['majorVersion'], $libraryData['minorVersion'])), $params->params);
+          $this->processSemantics($files, $libraries, $this->storage->getSemantics($libraryData['machineName'], $libraryData['majorVersion'], $libraryData['minorVersion']), $params->params);
         }
         break;
 
