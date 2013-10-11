@@ -224,6 +224,9 @@ class H5peditor {
 
       if (!empty($filePaths['js'])) {
         foreach ($filePaths['js'] as $jsFilePath) {
+          if (!isset($libraryData->javascript[$jsFilePath])) {
+            $libraryData->javascript[$jsFilePath] = '';
+          }
           // TODO: rtrim and check substr(-1) === '}'? jsmin?
           $libraryData->javascript[$jsFilePath] .= "\n" . file_get_contents($jsFilePath);
         }
