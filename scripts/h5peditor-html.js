@@ -47,12 +47,13 @@ ns.Html.prototype.createToolbar = function () {
     this.tags.push("em");
   }
   if (this.inTags("u")) basicstyles.push('Underline');
-  if (this.inTags("strike") || this.inTags("del")) {
+  if (this.inTags("strike") || this.inTags("del") || this.inTags("s")) {
     basicstyles.push('Strike');
     // Might make "strike" or "del" or both duplicated in the tag lists. Which
     // again doesn't really matter.
     this.tags.push("strike");
     this.tags.push("del");
+    this.tags.push("s");
   }
   if (this.inTags("sub")) basicstyles.push("Subscript");
   if (this.inTags("sup")) basicstyles.push("Superscript");
