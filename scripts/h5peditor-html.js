@@ -297,7 +297,13 @@ ns.Html.prototype.validate = function () {
  */
 ns.Html.removeWysiwyg = function () {
   if (ns.Html.current !== undefined) {
-    ns.Html.current.ckeditor.destroy();
+    try {
+      ns.Html.current.ckeditor.destroy();
+    }
+    catch (e) {
+      // No-op, just stop error from propagating. This usually occurs if
+      // the CKEditor DOM has been removed together with other DOM data.
+    }
     ns.Html.current = undefined;
   }
 };
