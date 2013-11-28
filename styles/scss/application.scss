@@ -19,6 +19,10 @@
       margin-bottom: 0;
     }
   }
+  .field .library {
+    border: 1px solid #666;
+    padding: 8px;
+  }
   .errors p {
     margin: 0 0 4px 0;
     color: #f00;
@@ -34,20 +38,19 @@
     background: #f9f9f9;
     outline: none;
     min-height: 20px;
-    @include border-radius(8px);
+    @include border-radius(3px);
   }
   select {
     padding: 2px;
   }
   a:focus {
     outline: none;
-    @include box-shadow(0 0 8px 2px #7fb8ff);
   }
-  textarea:focus, .h5peditor-text:focus {
+  textarea:focus, 
+  .h5peditor-text:focus {
     outline: none;
-    background: #fff;
+    background-color: #fff;
     border-color: #53a0ff;
-    @include box-shadow(0 0 8px 0 #7fb8ff);
   }
   iframe {
     width: 100%;
@@ -67,9 +70,9 @@
       padding: 0 8px;
       margin: 8px 0;
       list-style: none;
-      background: #d5e9ff;
+      background: #fff;
       overflow: hidden;
-      @include border-radius(8px);
+      border: 1px solid #ccc;
 
       & > .content {
         margin: 0 24px;
@@ -78,46 +81,58 @@
         cursor: pointer;
         width: 14px;
         height: 14px;
-        margin: 8px 0 0;
+        margin: 13px 3px 0 1px;
         float: right;
-        background: inline-image("remove.png") no-repeat;
-        border: 1px solid #fff;
-        @include opacity(0.8);
 
         &:hover {
           opacity: 1;
-        }
-        &:focus {
-          @include box-shadow(0 0 8px 2px #cb3535);
+          text-decoration: none;
         }
       }
+      
+      & > .remove:after {
+          font-family: FontAwesome;
+          content: "\f057";
+          color: #666;
+        }
+        
+      & > .remove:hover:after {
+          color: #c33f62;
+        }
+      
       & > .order {
         float: left;
-        background: inline-image("order.png") no-repeat;
-
-        &:focus {
-          @include box-shadow(0 0 8px 2px #7ca8de);
+          
+        &:after {
+          font-family: FontAwesome;
+          content: "\f0dc";
+          color: #666;
+        }
+        
+        &:hover:after {
+          color: #027AC6;
         }
       }
       &:hover {
-        background: #c0deff;
+        background: #e9edf4;
+        text-decoration: none;
       }
     }
   }
   .content > .field {
-    margin: 8px 0;
+    margin: 8px 0 20px 0;
   }
   .group {
     margin: 16px 0;
     border: 1px solid #676767;
     background: #d5e9ff;
 
-    @include border-radius(8px);
     @include box-shadow(0 0 4px #a7a7a7);
 
     & > .title {
       padding: 4px 8px;
       overflow: hidden;
+      background: #f4f4f4;
 
       &:first-letter {
         text-transform: uppercase;
@@ -144,16 +159,16 @@
       display: none;
     }
     .h5p-li {
-      background: #ebfffa;
+      background: #fff;
       &:hover {
-        background: #ccfff2;
+        background: #e9edf4;
       }
       .group {
-        background: #ebfffa;
+        background: #fff;
         .h5p-li {
-          background: #feedff;
+          background: #fff;
           &:hover {
-            background: #fbd1ff;
+            background: #e9edf4;
           }
           .group {
             background: #feedff;
@@ -179,13 +194,13 @@
     & > .content {
       padding: 4px 8px;
       display: block;
+      background: #fff;
     }
   }
   input[type="button"] {
     width: auto;
     margin: 0;
     padding: 4px 8px;
-    font-size: 0.8em;
   }
   .dimensions input, .coordinates input, .number input {
     width: 75px;
@@ -204,10 +219,6 @@
       @include box-shadow(0 0 16px 0 #666666);
       border: 1px solid #fff;
       cursor: pointer;
-
-      &:focus {
-        @include box-shadow(0 0 16px 2px #7fb8ff);
-      }
     }
     .add {
       display: block;
@@ -226,10 +237,6 @@
       cursor: pointer;
       border: 1px solid #fff;
       background: inline-image("remove.png");
-
-      &:focus {
-        @include box-shadow(0 0 8px 2px #cb3535);
-      }
     }
     img {
       vertical-align: bottom;
@@ -271,17 +278,16 @@
   }
   .common {
     margin-top: 1em;
-    background: #fae5ff;
+    background: #fff;
     padding-bottom: 0.25em;
     min-height: 2em;
-    @include border-radius(8px);
+    border: 1px solid #ccc;
 
     & > .h5peditor-label {
       font-size: 1em;
       font-weight: normal;
       padding: 0.5em 1em 0.4em;
-      background: #efdbf4;
-      @include border-radius(8px 8px 0 0);
+      background: #ddd;
     }
     & > .field {
       margin: 1em 0.5em;
@@ -313,16 +319,17 @@
 .h5peditor-form {
   position: relative;
   margin: 0.5em 0 1em;
-  background: #e5f1ff;
+  background: #fff;
   padding: 8px;
-  @include border-radius(8px);
+  border: 1px solid #ccc;
 }
 
 .h5peditor-label {
   display: block;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 16px;
   overflow: hidden;
+  padding-top: 4px;
 }
 
 #h5peditor-uploader {
