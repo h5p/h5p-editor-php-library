@@ -144,7 +144,7 @@ ns.List.prototype.addItem = function (i) {
   };
   var up = function () {
     // Stop tracking mouse
-    ns.$body.unbind('mousemove', move).unbind('mouseup', up);
+    ns.$body.unbind('mousemove', move).unbind('mouseup', up).unbind('mouseleave', up).attr('unselectable', 'off').css({'-moz-user-select': '', '-webkit-user-select': '', 'user-select': '', '-ms-user-select': ''})[0].onselectstart = ns.$body[0].ondragstart = null;    
     $item.removeClass('moving').css({width: 'auto', height: 'auto'});
     $placeholder.remove();
   };
