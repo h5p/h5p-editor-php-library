@@ -151,7 +151,7 @@ ns.List.prototype.addItem = function (i) {
 
   $item = ns.$('<li class="h5p-li"><a href="#" class="order"></a><a href="#" class="remove"></a><div class="content"></div></li>').appendTo(this.$list).children('.order').mousedown(function (event) {
     // Start tracking mouse
-    ns.$body.attr('unselectable', 'on').mouseup(up).bind('mouseleave', up).css({'-moz-user-select': 'none', '-webkit-user-select': 'none', 'user-select': 'none', '-ms-user-select': 'none'}).mousemove(move)[0].onselectstart = function () {
+    ns.$body.attr('unselectable', 'on').mouseup(up).bind('mouseleave', up).css({'-moz-user-select': 'none', '-webkit-user-select': 'none', 'user-select': 'none', '-ms-user-select': 'none'}).mousemove(move)[0].onselectstart = ns.$body[0].ondragstart = function () {
       return false;
     };
 
