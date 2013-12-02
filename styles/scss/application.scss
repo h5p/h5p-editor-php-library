@@ -2,6 +2,8 @@
 @import "compass/css3/box-shadow";
 @import "compass/css3/opacity";
 
+$fa: H5PFontAwesome4;
+
 .h5peditor {
   font-size: 16px;
 
@@ -91,7 +93,7 @@
       }
       
       & > .remove:after {
-          font-family: FontAwesome;
+          font-family: $fa;
           content: "\f057";
           color: #666;
         }
@@ -104,7 +106,7 @@
         float: left;
           
         &:after {
-          font-family: FontAwesome;
+          font-family: $fa;
           content: "\f0dc";
           color: #666;
         }
