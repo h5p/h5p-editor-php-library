@@ -2,6 +2,8 @@
 @import "compass/css3/box-shadow";
 @import "compass/css3/opacity";
 
+$fa: H5PFontAwesome4;
+
 .h5peditor {
   font-size: 16px;
 
@@ -91,7 +93,7 @@
       }
       
       & > .remove:after {
-          font-family: FontAwesome;
+          font-family: $fa;
           content: "\f057";
           color: #666;
         }
@@ -104,7 +106,7 @@
         float: left;
           
         &:after {
-          font-family: FontAwesome;
+          font-family: $fa;
           content: "\f0dc";
           color: #666;
         }
@@ -210,8 +212,12 @@
     float: left;
     margin: 7px 8px 0 0;
   }
+  .h5p-errors {
+    clear: both;
+  }
   .file {
     position: relative;
+    float: left;
 
     .thumbnail {
       display: inline-block;
@@ -232,11 +238,23 @@
       width: 14px;
       height: 14px;
       position: absolute;
-      top: 10px;
-      left: 10px;
+      top: 13px;
+      right: 16px;
       cursor: pointer;
-      border: 1px solid #fff;
-      background: inline-image("remove.png");
+    }
+    .remove:before {
+      font-family: $fa;
+      font-size: 1.2em;
+      color: #fff;
+      content: "\f057";
+      @include opacity(0.8);
+    }
+    .remove:hover {
+      text-decoration: none;
+    }
+    .remove:hover:before {
+      @include opacity(1); 
+      color: #c33f62;
     }
     img {
       vertical-align: bottom;
@@ -256,8 +274,8 @@
       cursor: auto;
     }
     .remove {
-      top: -1px;
-      left: -1px;
+      top: 2px;
+      right: 5px;
     }
     .type {
       padding: 16px 8px 4px;
