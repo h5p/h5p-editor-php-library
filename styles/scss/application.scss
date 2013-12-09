@@ -1,6 +1,7 @@
 @import "compass/css3/border-radius";
 @import "compass/css3/box-shadow";
 @import "compass/css3/opacity";
+@import "compass/css3/text-shadow";
 
 $fa: H5PFontAwesome4;
 
@@ -96,6 +97,8 @@ $fa: H5PFontAwesome4;
           font-family: $fa;
           content: "\f057";
           color: #666;
+          
+          
         }
         
       & > .remove:hover:after {
@@ -109,6 +112,7 @@ $fa: H5PFontAwesome4;
           font-family: $fa;
           content: "\f0dc";
           color: #666;
+          
         }
         
         &:hover:after {
@@ -248,6 +252,7 @@ $fa: H5PFontAwesome4;
       color: #fff;
       content: "\f057";
       @include opacity(0.8);
+      @include text-shadow(rgba(black, 0.4) 0 0 4px, rgba(black, 0.4) 0 0 4px, rgba(black, 0.4) 0 0 4px);
     }
     .remove:hover {
       text-decoration: none;
