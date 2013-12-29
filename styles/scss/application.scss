@@ -77,7 +77,7 @@ $fa: H5PFontAwesome4;
       overflow: hidden;
       border: 1px solid #ccc;
 
-      & > .content {
+      & > .h5p-content {
         margin: 0 24px;
       }
       & > .remove, & > .order {
@@ -125,7 +125,7 @@ $fa: H5PFontAwesome4;
       }
     }
   }
-  .content > .field {
+  .h5p-content > .field {
     margin: 8px 0 20px 0;
   }
   .group {
@@ -161,7 +161,7 @@ $fa: H5PFontAwesome4;
         padding: 0 8px;
       }
     }
-    & > .content {
+    & > .h5p-content {
       display: none;
     }
     .h5p-li {
@@ -197,7 +197,7 @@ $fa: H5PFontAwesome4;
         background-image: inline-image("collapse.png");
       }
     }
-    & > .content {
+    & > .h5p-content {
       padding: 4px 8px;
       display: block;
       background: #fff;
