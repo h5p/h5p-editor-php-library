@@ -61,7 +61,7 @@ ns.Group.prototype.appendTo = function ($wrapper) {
     return;
   }
 
-  this.$group = ns.$('<fieldset class="field group"><div class="title"><a href="#" class="expand" title="' + ns.t('core', 'expandCollapse') + '"></a><span class="text"></span></div><div class="h5p-content"></div></fieldset>')
+  this.$group = ns.$('<fieldset class="field group"><div class="title"><a href="#" class="expand" title="' + ns.t('core', 'expandCollapse') + '"></a><span class="text"></span></div><div class="content"></div></fieldset>')
   .appendTo($wrapper).find('.expand').click(function () {
     that.expand();
     return false;
@@ -74,14 +74,14 @@ ns.Group.prototype.appendTo = function ($wrapper) {
     this.children[0] = new ns.widgets[widget](this, field, this.params, function (field, value) {
       that.setValue(that.field, value);
     });
-    this.children[0].appendTo(this.$group.children('.h5p-content'));
+    this.children[0].appendTo(this.$group.children('.content'));
   }
   else {
     if (this.params === undefined) {
       this.params = {};
       this.setValue(this.field, this.params);
     }
-    ns.processSemanticsChunk(this.field.fields, this.params, this.$group.children('.h5p-content'), this);
+    ns.processSemanticsChunk(this.field.fields, this.params, this.$group.children('.content'), this);
   }
 
   // Set summary
