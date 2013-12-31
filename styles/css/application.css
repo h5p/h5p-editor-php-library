@@ -227,6 +227,7 @@
   padding: 4px 8px;
   display: block;
   background: #fff;
+  margin: 0;
 }
 /* line 206, ../scss/application.scss */
 .h5peditor input[type="button"] {
