@@ -90,7 +90,7 @@
   border: 1px solid #ccc;
 }
 /* line 80, ../scss/application.scss */
-.h5peditor .h5p-ul .h5p-li > .h5p-editor-content {
+.h5peditor .h5p-ul .h5p-li > .h5p-content {
   margin: 0 24px;
 }
 /* line 83, ../scss/application.scss */
@@ -136,7 +136,7 @@
   text-decoration: none;
 }
 /* line 128, ../scss/application.scss */
-.h5peditor .h5p-editor-content > .field {
+.h5peditor .h5p-content > .field {
   margin: 8px 0 20px 0;
 }
 /* line 131, ../scss/application.scss */
@@ -179,7 +179,7 @@
   padding: 0 8px;
 }
 /* line 164, ../scss/application.scss */
-.h5peditor .group > .h5p-editor-content {
+.h5peditor .group > .h5p-content {
   display: none;
 }
 /* line 167, ../scss/application.scss */
@@ -223,7 +223,7 @@
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QIGDAIpREGqZwAAAFhJREFUKM/N0tEKgDAIheF/o2edPtJpL2t3wdpGq4tI8Eo/UDFFBE8j8yK+QxuAuxdgX+g3STUDSKqArYBmvBt4gm6nCWzA8BAX2AEAImKYZlZmtfTvjzgAmV5G0p8UwOwAAAAASUVORK5CYII=');
 }
 /* line 200, ../scss/application.scss */
-.h5peditor .expanded > .h5p-editor-content {
+.h5peditor .expanded > .h5p-content {
   padding: 4px 8px;
   display: block;
   background: #fff;
