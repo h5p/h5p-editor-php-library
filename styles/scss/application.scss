@@ -132,6 +132,7 @@ $fa: H5PFontAwesome4;
     margin: 16px 0;
     border: 1px solid #676767;
     background: #d5e9ff;
+    border-radius: 0;
 
     @include box-shadow(0 0 4px #a7a7a7);
 
@@ -201,6 +202,7 @@ $fa: H5PFontAwesome4;
       padding: 4px 8px;
       display: block;
       background: #fff;
+      margin: 0;
     }
   }
   input[type="button"] {
@@ -345,6 +347,7 @@ $fa: H5PFontAwesome4;
   background: #fff;
   padding: 8px;
   border: 1px solid #ccc;
+  max-width: 960px;
 }
 
 .h5peditor-label {
