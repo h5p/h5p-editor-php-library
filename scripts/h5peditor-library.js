@@ -24,6 +24,7 @@ ns.Library = function (parent, field, params, setValue) {
   this.parent = parent;
   this.changes = [];
   this.optionsLoaded = false;
+  this.library = parent.library + '/' + field.name;
 
   this.passReadies = true;
   parent.ready(function () {
@@ -111,7 +112,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
   this.$libraryWrapper.html(ns.t('core', 'loading', {':type': 'semantics'}));
 
   ns.loadLibrary(libraryName, function (semantics) {
-    that.library = libraryName;
+    that.currentLibrary = libraryName;
     that.params.library = libraryName;
 
     if (preserveParams === undefined || !preserveParams) {
@@ -144,7 +145,7 @@ ns.Library.prototype.change = function (callback) {
     // Find library
     var library;
     for (var i = 0; i < this.libraries.length; i++) {
-      if (this.libraries[i].uberName === this.library) {
+      if (this.libraries[i].uberName === this.currentLibrary) {
         library = this.libraries[i];
         break;
       }
@@ -197,7 +198,7 @@ ns.Library.prototype.ready = function (ready) {
  * @returns {unresolved}
  */
 ns.Library.prototype.removeChildren = function () {
-  if (this.library === '-' || this.children === undefined) {
+  if (this.currentLibrary === '-' || this.children === undefined) {
     return;
   }
 
@@ -206,7 +207,7 @@ ns.Library.prototype.removeChildren = function () {
   for (var libraryPath in ancestor.commonFields) {
     var library = libraryPath.split('/')[0];
 
-    if (library === this.library) {
+    if (library === this.currentLibrary) {
       var remove = false;
 
       for (var fieldName in ancestor.commonFields[libraryPath]) {
