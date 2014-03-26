@@ -143,7 +143,7 @@ $i: H5P;
     margin: 16px 0;
     border: 1px solid #676767;
     background: #d5e9ff;
-    border-radius: 0;
+    @include border-radius(0);
 
     @include box-shadow(0 0 4px #a7a7a7);
 

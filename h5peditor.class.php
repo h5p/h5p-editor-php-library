@@ -64,7 +64,7 @@ class H5peditor {
       }
     }
   
-    $libraries = $this->storage->getLibraries($libraries === NULL ? NULL : $libraries);
+    $libraries = $this->storage->getLibraries(!isset($libraries) ? NULL : $libraries);
     
     if ($this->h5p->development_mode & H5PDevelopment::MODE_LIBRARY) {
       $devLibs = $this->h5p->h5pD->getLibraries();
@@ -150,7 +150,7 @@ class H5peditor {
 
     if ($oldLibrary) {
       // Find old files and libraries.
-      $this->processSemantics($oldFiles, $oldLibraries, $this->h5p->loadLibrarySemantics($oldLibrary['machineName'], $oldLibrary['majorVersion'], $oldLibrary['minorVersion']), $oldParameters);
+      $this->processSemantics($oldFiles, $oldLibraries, $this->h5p->loadLibrarySemantics($oldLibrary['name'], $oldLibrary['majorVersion'], $oldLibrary['minorVersion']), $oldParameters);
 
       // Remove old files.
       for ($i = 0, $s = count($oldFiles); $i < $s; $i++) {

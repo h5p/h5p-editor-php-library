@@ -151,6 +151,10 @@
   margin: 16px 0;
   border: 1px solid #676767;
   background: #d5e9ff;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
   border-radius: 0;
   -webkit-box-shadow: 0 0 4px #a7a7a7;
   -moz-box-shadow: 0 0 4px #a7a7a7;
