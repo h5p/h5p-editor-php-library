@@ -22,7 +22,7 @@ ns.Editor = function (library, defaultParams) {
   this.$wrapper = ns.$('<div class="h5peditor">' + ns.t('core', 'loading', {':type': 'libraries'}) + '</div>');
 
   // Load libraries.
-  ns.$.getJSON(ns.ajaxPath + 'libraries', function (data) {
+  ns.$.getJSON(ns.getAjaxUrl('libraries'), function (data) {
     that.selector = new ns.LibrarySelector(data, library, defaultParams);
     that.selector.appendTo(that.$wrapper.html(''));
     if (library) {

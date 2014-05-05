@@ -89,7 +89,7 @@ ns.loadLibrary = function (libraryName, callback) {
       ns.semanticsLoaded[libraryName] = []; // Other callbacks to run once loaded.
       var library = ns.libraryFromString(libraryName);
       ns.$.ajax({
-        url: ns.ajaxPath + 'libraries/' + library.machineName + '/' + library.majorVersion + '/' + library.minorVersion,
+        url: ns.getAjaxUrl('libraries', library),
         success: function (libraryData) {
           var semantics = libraryData.semantics;
           if (libraryData.language !== null) {
