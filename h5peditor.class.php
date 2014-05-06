@@ -192,7 +192,7 @@ class H5peditor {
   private function processField(&$field, &$params, &$files, &$libraries) {
     static $h5peditor_path;
     if (!$h5peditor_path) {
-      $h5peditor_path = $this->files_directory . '/h5p/editor';
+      $h5peditor_path = $this->files_directory . '/h5p/editor/';
     }
     switch ($field->type) {
       case 'file':
