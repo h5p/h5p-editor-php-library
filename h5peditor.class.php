@@ -320,7 +320,7 @@ class H5peditor {
     $libraryData->semantics = $this->h5p->loadLibrarySemantics($machineName, $majorVersion, $minorVersion);
     $libraryData->language = $this->storage->getLanguage($machineName, $majorVersion, $minorVersion);
 
-    $files = $this->h5p->getDependenciesFiles($libraries);
+    $files = $this->h5p->getDependenciesFiles($libraries, FALSE);
     
     // Javascripts
     if (!empty($files['scripts'])) {
