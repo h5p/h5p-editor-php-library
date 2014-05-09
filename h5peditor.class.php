@@ -320,23 +320,20 @@ class H5peditor {
     $libraryData->semantics = $this->h5p->loadLibrarySemantics($machineName, $majorVersion, $minorVersion);
     $libraryData->language = $this->storage->getLanguage($machineName, $majorVersion, $minorVersion);
 
-    $files = $this->h5p->getDependenciesFiles($libraries, FALSE);
+    $files = $this->h5p->getDependenciesFiles($libraries);
     
     // Javascripts
     if (!empty($files['scripts'])) {
       foreach ($files['scripts'] as $script) {
-        if (!isset($libraryData->javascript[$script])) {
-          $libraryData->javascript[$script] = '';
-        }
-        $libraryData->javascript[$script] .= "\n" . file_get_contents($script);
+        $libraryData->javascript[$script->path . $script->version] = "\n" . file_get_contents($script->path);
       }
     }
     
     // Stylesheets
     if (!empty($files['styles'])) {
       foreach ($files['styles'] as $css) {
-        H5peditor::buildCssPath(NULL, $this->basePath . dirname($css) . '/');
-        $libraryData->css[$css] = preg_replace_callback('/url\([\'"]?(?![a-z]+:|\/+)([^\'")]+)[\'"]?\)/i', 'H5peditor::buildCssPath', file_get_contents($css));
+        H5peditor::buildCssPath(NULL, $this->basePath . dirname($css->path) . '/');
+        $libraryData->css[$css->path . $css->version] = preg_replace_callback('/url\([\'"]?(?![a-z]+:|\/+)([^\'")]+)[\'"]?\)/i', 'H5peditor::buildCssPath', file_get_contents($css->path));
       }
     }
 
