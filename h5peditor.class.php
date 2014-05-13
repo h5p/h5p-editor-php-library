@@ -29,16 +29,20 @@ class H5peditor {
   private $h5p, $storage, $files_directory, $basePath;
 
   /**
-   * Constructor.
-   *
-   * @param object $storage
-   * @param string $files_directory
+   * Constructor for the core editor library.
+   * 
+   * @param \H5PCore $h5p Instance of core.
+   * @param mixed $storage Instance of h5peditor storage.
+   * @param string $basePath Url path to prefix assets with.
+   * @param string $filesDir H5P files directory.
+   * @param string $editorFilesDir Optional custom editor files directory outside h5p files directory.
    */
-  function __construct($h5p, $storage, $filesDirectory, $basePath) {
+  function __construct($h5p, $storage, $basePath, $filesDir, $editorFilesDir = NULL) {
     $this->h5p = $h5p;
     $this->storage = $storage;
-    $this->files_directory = $filesDirectory;
     $this->basePath = $basePath;
+    $this->contentFilesDir = $filesDir . DIRECTORY_SEPARATOR . 'content';
+    $this->editorFilesDir = ($editorFilesDir === NULL ? $filesDir . DIRECTORY_SEPARATOR . 'editor' : $editorFilesDir);
   }
   
   /**
@@ -104,7 +108,7 @@ class H5peditor {
    * @return boolean
    */
   public function createDirectories($id) {
-    $this->content_directory = $this->files_directory . '/h5p/content/' . $id . '/';
+    $this->content_directory = $this->contentFilesDir . DIRECTORY_SEPARATOR . $id . DIRECTORY_SEPARATOR;
 
     $sub_directories = array('', 'files', 'images', 'videos', 'audios');
     foreach ($sub_directories AS $sub_directory) {
@@ -192,7 +196,7 @@ class H5peditor {
   private function processField(&$field, &$params, &$files, &$libraries) {
     static $h5peditor_path;
     if (!$h5peditor_path) {
-      $h5peditor_path = $this->files_directory . '/h5p/editor/';
+      $h5peditor_path = $this->editorFilesDir . DIRECTORY_SEPARATOR;
     }
     switch ($field->type) {
       case 'file':
