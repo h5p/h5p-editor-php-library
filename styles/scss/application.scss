@@ -5,8 +5,7 @@
 @import "compass/css3/transition";
 @import "compass/css3/transform";
 
-$fa: H5PFontAwesome4;
-$i: H5P;
+$i: 'H5P';
 
 .h5peditor {
   font-size: 16px;
@@ -61,7 +60,7 @@ $i: H5P;
   a:focus {
     outline: none;
   }
-  textarea:focus, 
+  textarea:focus,
   .h5peditor-text:focus {
     outline: none;
     background-color: #fff;
@@ -97,6 +96,9 @@ $i: H5P;
         height: 14px;
         margin: 13px 3px 0 1px;
         float: right;
+        font-size: 1.75em;
+        line-height: 1em;
+        text-indent: -0.35em;
 
         &:hover {
           opacity: 1;
@@ -105,11 +107,9 @@ $i: H5P;
       }
       
       & > .remove:after {
-          font-family: $fa;
-          content: "\f057";
+          font-family: $i;
+          content: "\e88e";
           color: #666;
-          
-          
         }
         
       & > .remove:hover:after {
@@ -120,8 +120,8 @@ $i: H5P;
         float: left;
           
         &:after {
-          font-family: $fa;
-          content: "\f0dc";
+          font-family: $i;
+          content: "\e88b";
           color: #666;
           
         }
@@ -260,10 +260,10 @@ $i: H5P;
       cursor: pointer;
     }
     .remove:before {
-      font-family: $fa;
+      font-family: $i;
       font-size: 1.2em;
       color: #fff;
-      content: "\f057";
+      content: "\e88e";
       @include opacity(0.8);
       @include text-shadow(rgba(black, 0.4) 0 0 4px, rgba(black, 0.4) 0 0 4px, rgba(black, 0.4) 0 0 4px);
     }
@@ -357,10 +357,11 @@ $i: H5P;
     
     &:before {
       font-family: $i;
-      content: "\e668";
+      content: "\e88d";
       padding-right: 0.25em;
       vertical-align: bottom;
       font-size: 1.5em;
+      line-height: 1em;
     }
     &:hover {
       color: #555;
@@ -399,10 +400,12 @@ $i: H5P;
     
       &:before {
         font-size: 2em;
-        right: 13px;
+        right: -0.125em;
+        top: 0;
         position: absolute;
-        font-family: H5PFontAwesome4;
-        content: "\f00d";
+        font-family: "H5P";
+        content: "\e892";
+        line-height: 1em;
         @include transition(scale 0.2s);
       }
       
