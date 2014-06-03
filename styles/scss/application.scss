@@ -337,8 +337,8 @@ $i: 'H5P';
   }
 
   .h5peditor-uploading, .h5peditor-loading {
-    background: inline-image("uploading.gif") no-repeat 10px 7px;
-    padding-top: 40px;
+    padding-top: 10px;
+    padding-bottom: 6px;
     font-size: 14px;
   }
   .h5peditor-loading {

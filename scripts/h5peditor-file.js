@@ -142,7 +142,7 @@ ns.File.prototype.uploadFile = function () {
   this.$errors.html('');
 
   ns.File.changeCallback = function () {
-    that.$file.html('<div class="h5peditor-uploading">' + ns.t('core', 'uploading') + '</div>');
+    that.$file.html('<div class="h5peditor-uploading h5p-throbber">' + ns.t('core', 'uploading') + '</div>');
   };
 
   ns.File.callback = function (json) {
