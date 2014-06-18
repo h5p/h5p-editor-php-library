@@ -108,7 +108,7 @@ $i: 'H5P';
       
       & > .remove:after {
           font-family: $i;
-          content: "\e88e";
+          content: "\e890";
           color: #666;
         }
         
@@ -121,7 +121,7 @@ $i: 'H5P';
           
         &:after {
           font-family: $i;
-          content: "\e88b";
+          content: "\e88d";
           color: #666;
           
         }
@@ -252,8 +252,6 @@ $i: 'H5P';
     }
     .remove {
       display: block;
-      width: 14px;
-      height: 14px;
       position: absolute;
       top: 13px;
       right: 16px;
@@ -261,9 +259,9 @@ $i: 'H5P';
     }
     .remove:before {
       font-family: $i;
-      font-size: 1.2em;
+      font-size: 1.4em;
       color: #fff;
-      content: "\e88e";
+      content: "\e890";
       @include opacity(0.8);
       @include text-shadow(rgba(black, 0.4) 0 0 4px, rgba(black, 0.4) 0 0 4px, rgba(black, 0.4) 0 0 4px);
     }
@@ -292,8 +290,8 @@ $i: 'H5P';
       cursor: auto;
     }
     .remove {
-      top: 2px;
-      right: 5px;
+      top: -7px;
+      right: -5px;
     }
     .type {
       padding: 16px 8px 4px;
@@ -357,7 +355,7 @@ $i: 'H5P';
     
     &:before {
       font-family: $i;
-      content: "\e88d";
+      content: "\e88f";
       padding-right: 0.25em;
       vertical-align: bottom;
       font-size: 1.5em;
@@ -404,7 +402,7 @@ $i: 'H5P';
         top: 0;
         position: absolute;
         font-family: "H5P";
-        content: "\e892";
+        content: "\e894";
         line-height: 1em;
         @include transition(scale 0.2s);
       }
