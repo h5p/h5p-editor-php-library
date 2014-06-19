@@ -14,7 +14,7 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   var firstTime = true;
   var options = '<option value="-">-</option>';
 
-  this.defaultParams = defaultParams;
+  this.defaultParams = JSON.parse(defaultParams);
   this.defaultLibrary = defaultLibrary;
   this.defaultLibraryParameterized = defaultLibrary ? defaultLibrary.replace('.', '-').toLowerCase() : undefined;
 

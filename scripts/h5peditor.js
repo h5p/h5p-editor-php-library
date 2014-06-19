@@ -2,15 +2,66 @@
  * This file contains helper functions for the editor.
  */
 
-var H5PEditor = H5PEditor || {};
-var ns = H5PEditor;
+// Use resources set in parent window
+var ns = H5PEditor = window.parent.H5PEditor;
+ns.$ = H5P.jQuery;
+
+// Load needed resources from parent. 
+// (This seems easier than to try and create a custom H5PIntegration)
+H5P.getPath = window.parent.H5P.getPath;
+H5P.classFromName = window.parent.H5P.classFromName;
+H5P.newRunnable = window.parent.H5P.newRunnable;
+H5P.error = window.parent.H5P.error;
+H5P.t = window.parent.H5P.t;
+H5P.libraryFromString = window.parent.H5P.libraryFromString;
+H5P.getLibraryPath = window.parent.H5P.getLibraryPath;
+H5P.cloneObject = window.parent.H5P.cloneObject;
+H5P.trim = window.parent.H5P.trim;
+H5P.shuffleArray = window.parent.H5P.shuffleArray;
+
+// TODO: Should we deprecate $window and $body? Don't think recreation of these has much to say performance wise.
+H5P.$window = H5P.jQuery(window);
+
+/**
+ * Check if javascript path/key is loaded.
+ *
+ * @param {String} path
+ * @returns {Boolean}
+ */
+H5P.jsLoaded = function (path) {
+  H5P.loadedJs = H5P.loadedJs || [];
+  return H5P.jQuery.inArray(path, H5P.loadedJs) !== -1;
+};
+
+/**
+ * Check if styles path/key is loaded.
+ *
+ * @param {String} path
+ * @returns {Boolean}
+ */
+H5P.cssLoaded = function (path) {
+  H5P.loadedCss = H5P.loadedCss || [];
+  return H5P.jQuery.inArray(path, H5P.loadedCss) !== -1;
+};
+
+/**
+ * Dummy function. Don't store results from editor
+ */
+H5P.setFinished = function () {
+  return;
+};
+
+if (Array.prototype.indexOf === undefined) {
+  Array.prototype.indexOf = window.parent.Array.prototype.indexOf;
+}
+if (String.prototype.trim === undefined) {
+  String.prototype.trim = window.parent.String.prototype.trim;
+}
 
 /**
  * Keep track of our widgets.
  */
 ns.widgets = {};
-
-ns.language = {};
 
 /**
  * Keeps track of which semantics are loaded.
@@ -26,41 +77,6 @@ ns.semanticsLoaded = {};
  * Indiciates if the user is using Internet Explorer.
  */
 ns.isIE = navigator.userAgent.match(/; MSIE \d+.\d+;/) !== null;
-
-/**
- * Translate text strings.
- *
- * @param {String} library
- *  library machineName, or "core"
- * @param {String} key
- * @param {Object} vars
- * @returns {String|@exp;H5peditor@call;t}
- */
-ns.t = function (library, key, vars) {
-  if (ns.language[library] === undefined) {
-    return 'Missing translations for library ' + library;
-  }
-
-  if (library === 'core') {
-    if (ns.language[library][key] === undefined) {
-      return 'Missing translation for ' + key;
-    }
-    var translation = ns.language[library][key];
-  }
-  else {
-    if (ns.language[library]['libraryStrings'] === undefined || ns.language[library]['libraryStrings'][key] === undefined) {
-      return ns.t('core', 'missingTranslation', {':key': key});
-    }
-    var translation = ns.language[library]['libraryStrings'][key];
-  }
-
-  // Replace placeholder with variables.
-  for (var placeholder in vars) {
-    translation = translation.replace(placeholder, vars[placeholder]);
-  }
-
-  return translation;
-};
 
 /**
  * Extremely advanced function that loads the given library, inserts any css and js and
