@@ -10,13 +10,28 @@ var ns = H5PEditor;
  */
 ns.Editor = function (library, defaultParams, replace) {
   var self = this;
-
-  ns.$body = ns.$(document.body);
   
-  // Create a callback we can call when the iframe is loaded
-  ns.Editor.instanceNum = (ns.Editor.instanceNum === undefined ? 0 : ns.Editor.instanceNum + 1);
-  ns.Editor.loaded = ns.Editor.loaded || {};
-  ns.Editor.loaded[ns.Editor.instanceNum] = function ($, LibrarySelector) {
+  ns.$body = ns.$(document.body);
+
+  // Create iframe and replace the given element with it
+  var height = 1;
+  var iframe = ns.$('<iframe/>', {
+    css: {
+      display: 'block',
+      width: '100%',
+      height: height + 'px',
+      border: 'none',
+      zIndex: 101,
+      top: 0,
+      left: 0
+    },
+    'class': 'h5p-editor-iframe',
+    frameBorder: '0'
+  }).replaceAll(replace).load(function () {
+    var $ = this.contentWindow.H5P.jQuery;
+    var LibrarySelector = this.contentWindow.H5PEditor.LibrarySelector;
+    this.contentWindow.H5P.$body = $(this.contentDocument.body);
+      
     var $container = $('body > .h5p-editor');
 
     // Load libraries list
@@ -63,9 +78,19 @@ ns.Editor = function (library, defaultParams, replace) {
         setTimeout(resizeInterval, 40); // No more than 25 times per second
       })();
     }
-  };
+  }).get(0);
   
-  var height = 1;
+  iframe.contentDocument.open();
+  iframe.contentDocument.write('\
+    <!doctype html><html>\
+    <head>\
+      ' + ns.wrap('<link rel="stylesheet" href="' + ns.baseUrl, ns.assets.css, '">') + '\
+      ' + ns.wrap('<script src="' + ns.baseUrl, ns.assets.js, '"></script>') + '\
+    </head><body>\
+      <div class="h5p-editor">' + ns.t('core', 'loading', {':type': 'libraries'}) + '</div>\
+    </body></html>');
+  iframe.contentDocument.close();
+  iframe.contentDocument.documentElement.style.overflow = 'hidden';
   
   /**
    * Private. Checks if iframe needs resizing, and then resize it.
@@ -91,39 +116,6 @@ ns.Editor = function (library, defaultParams, replace) {
     // Free parent
     iframe.parentElement.style.height = parentHeight;
   };
-
-  // Create iframe and replace the given element with it
-  var iframe = hm = document.createElement('iframe');
-  var parent = replace.parentNode;
-  parent.insertBefore(iframe, replace);
-  parent.removeChild(replace);
-
-  iframe.style.display = 'block';
-  iframe.style.width = '100%';
-  iframe.style.height = height + 'px';
-  iframe.style.border = 'none';
-  iframe.style.zIndex = 101;
-  iframe.style.top = 0;
-  iframe.style.left = 0;
-  iframe.className = 'h5p-editor-iframe';
-  iframe.setAttribute('frameBorder', '0');
-  iframe.contentDocument.open();
-  iframe.contentDocument.write('\
-    <!doctype html><html>\
-    <head>\
-      ' + ns.wrap('<link rel="stylesheet" href="' + ns.baseUrl, ns.assets.css, '">') + '\
-      ' + ns.wrap('<script src="' + ns.baseUrl, ns.assets.js, '"></script>') + '\
-      <script>\
-        H5P.jQuery(document).ready(function () {\
-          H5P.$body = H5P.jQuery(document.body);\
-          window.parent.H5PEditor.Editor.loaded[' + ns.Editor.instanceNum + '](H5P.jQuery, H5PEditor.LibrarySelector);\
-        })\
-      </script>\
-    </head><body>\
-      <div class="h5p-editor">' + ns.t('core', 'loading', {':type': 'libraries'}) + '</div>\
-    </body></html>');
-  iframe.contentDocument.close();
-  iframe.contentDocument.documentElement.style.overflow = 'hidden';
 };
 
 /**
