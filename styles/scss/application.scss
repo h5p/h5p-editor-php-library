@@ -10,6 +10,8 @@ $i: 'H5P';
 html, body {
   margin: 0;
   padding: 0;
+  font-family: 'Open Sans', sans-serif;  
+  max-width: 960px;
 }
 a {
   text-decoration: none;
@@ -433,7 +435,6 @@ a {
   background: #fff;
   padding: 8px;
   border: 1px solid #ccc;
-  max-width: 960px;
 }
 
 .h5peditor-label {
