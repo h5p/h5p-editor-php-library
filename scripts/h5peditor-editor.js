@@ -10,8 +10,6 @@ var ns = H5PEditor;
  */
 ns.Editor = function (library, defaultParams, replace) {
   var self = this;
-  
-  ns.$body = ns.$(document.body);
 
   // Create iframe and replace the given element with it
   var height = 1;
@@ -31,7 +29,7 @@ ns.Editor = function (library, defaultParams, replace) {
     var $ = this.contentWindow.H5P.jQuery;
     var LibrarySelector = this.contentWindow.H5PEditor.LibrarySelector;
     this.contentWindow.H5P.$body = $(this.contentDocument.body);
-      
+
     var $container = $('body > .h5p-editor');
 
     // Load libraries list
