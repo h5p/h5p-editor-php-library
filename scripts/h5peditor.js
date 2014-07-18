@@ -477,7 +477,7 @@ ns.checkErrors = function ($errors, $input, value) {
  *  Concatinated version of the library
  */
 ns.libraryToString = function (library) {
-  return library.machineName + ' ' + library.majorVersion + '.' + library.minorVersion;
+  return library.name + ' ' + library.majorVersion + '.' + library.minorVersion;
 };
 
 /**
