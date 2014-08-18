@@ -44,6 +44,7 @@ a {
     .library {
       border: 1px solid #666;
       padding: 8px;
+      overflow: hidden; // Create a new block formatting context to avoid float related issues with vertical tabs
     }
   }
   

@@ -230,7 +230,7 @@ class H5peditor {
 
       case 'library':
         if (isset($params->library) && isset($params->params)) {
-          $library = $this->h5p->libraryFromString($params->library);
+          $library = H5PCore::libraryFromString($params->library);
           $semantics = $this->h5p->loadLibrarySemantics($library['machineName'], $library['majorVersion'], $library['minorVersion']);
             
           // Process parameters for the library.

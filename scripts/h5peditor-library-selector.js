@@ -15,7 +15,7 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   var options = '<option value="-">-</option>';
 
   this.defaultParams = JSON.parse(defaultParams);
-  this.defaultLibrary = defaultLibrary;
+  this.defaultLibrary = this.currentLibrary = defaultLibrary;
   this.defaultLibraryParameterized = defaultLibrary ? defaultLibrary.replace('.', '-').toLowerCase() : undefined;
 
   for (var i = 0; i < libraries.length; i++) {
@@ -33,12 +33,20 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   }
 
   this.$selector = ns.$('<select name="h5peditor-library" title="' + ns.t('core', 'selectLibrary') + '">' + options + '</select>').change(function () {
-    if (firstTime || confirm(H5PEditor.t('core', 'confirmChangeLibrary'))) {
+    var changeLibrary = true;
+    if (!firstTime) {
+      changeLibrary = confirm(H5PEditor.t('core', 'confirmChangeLibrary'));
+    }
+    if (changeLibrary) {
       var library = that.$selector.val();
-      if (library !== '-') {
-        firstTime = false;
-      }
       that.loadSemantics(library);
+      that.currentLibrary = library;
+    }
+    else {
+      that.$selector.val(that.currentLibrary);
+    }
+    if (library !== '-') {
+      firstTime = false;
     }
   });
 };
