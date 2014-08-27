@@ -324,18 +324,47 @@ a {
   .common {
     margin-top: 1em;
     background: #fff;
-    padding-bottom: 0.25em;
-    min-height: 2em;
     border: 1px solid #ccc;
 
     & > .h5peditor-label {
       font-size: 1em;
       font-weight: normal;
-      padding: 0.5em 1em 0.4em;
+      padding: 0.5em 0.75em 0.4em;
       background: #ddd;
+      cursor: pointer;
+      
+      & > .icon {
+        display: inline-block;
+        width: 20px;
+        height: 13px;
+        background: inline-image("collapse.png") no-repeat left center;
+        opacity: 0.8;
+        vertical-align: top;
+        margin-top: 1px;
+      }
+      &:hover > .icon {
+        opacity: 1;
+      }
     }
-    & > .field {
-      margin: 1em 0.5em;
+    & > .fields {
+      margin: 0.3125em 0.5em 0.5em;
+      padding-bottom: 0.25em;
+      min-height: 2em;
+      
+      & > .desc {
+        margin: 0;
+        font-size: 0.875em;
+        color: #666;
+      }
+    }
+    
+    &.collapsed {
+      & > .h5peditor-label > .icon {
+        background-image: inline-image("expand.png");
+      }
+      & > .fields {
+        display: none;
+      }
     }
   }
   .moving {
