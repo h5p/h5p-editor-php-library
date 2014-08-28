@@ -10,7 +10,7 @@ ns.Form = function () {
   this.params = {};
   this.passReadies = false;
   this.commonFields = {};
-  this.$form = ns.$('<div class="h5peditor-form"><div class="tree"></div><div class="common collapsed"><div class="h5peditor-label"><span class="icon"></span>' + ns.t('core', 'commonFields') + '</div><div class="fields"><p class="desc">' + ns.t('core', 'commonFieldsDescription') + '</p></div></div></div>');
+  this.$form = ns.$('<div class="h5peditor-form"><div class="tree"></div><div class="common collapsed hidden"><div class="h5peditor-label"><span class="icon"></span>' + ns.t('core', 'commonFields') + '</div><div class="fields"><p class="desc">' + ns.t('core', 'commonFieldsDescription') + '</p></div></div></div>');
   this.$common = this.$form.find('.common > .fields');
   this.library = '';
   

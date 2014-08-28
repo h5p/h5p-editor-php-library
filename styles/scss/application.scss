@@ -366,6 +366,10 @@ a {
         display: none;
       }
     }
+    
+    &.hidden {
+      display: none;
+    }
   }
   .moving {
     position: absolute;
