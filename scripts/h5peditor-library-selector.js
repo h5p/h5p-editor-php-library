@@ -28,15 +28,22 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
       if (libraryName === defaultLibrary || library.name === this.defaultLibraryParameterized) {
         options += ' selected="selected"';
       }
+      if (library.metaData && library.metaData.tutorialURL !== undefined) {
+        options += ' data-tutorial-url="' + library.metaData.tutorialURL + '"';
+      }
       options += '>' + library.title + (library.isOld===true ? ' (deprecated)' : '') + '</option>';
     }
   }
 
+  //Add tutorial link:
+  this.$tutorialUrl = ns.$('<a class="h5p-tutorial-url" target="_blank">' + ns.t('core', 'tutorialAvailable') + '</a>').hide();
+  
   this.$selector = ns.$('<select name="h5peditor-library" title="' + ns.t('core', 'selectLibrary') + '">' + options + '</select>').change(function () {
     var changeLibrary = true;
     if (!firstTime) {
       changeLibrary = confirm(H5PEditor.t('core', 'confirmChangeLibrary'));
     }
+    
     if (changeLibrary) {
       var library = that.$selector.val();
       that.loadSemantics(library);
@@ -45,9 +52,13 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
     else {
       that.$selector.val(that.currentLibrary);
     }
+    
     if (library !== '-') {
       firstTime = false;
     }
+    
+    var tutorialUrl = ns.$(this).find(':selected').data('tutorial-url');
+    that.$tutorialUrl.attr('href', tutorialUrl).toggle(tutorialUrl !== undefined && tutorialUrl.length > 0);
   });
 };
 
@@ -61,6 +72,8 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
   this.$parent = $element;
 
   this.$selector.appendTo($element);
+  this.$tutorialUrl.appendTo($element);
+  
   $element.append('<div class="h5p-more-libraries">' + ns.t('core', 'moreLibraries') + '</div>');
 };
 
