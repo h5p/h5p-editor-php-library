@@ -110,6 +110,10 @@ class H5peditor {
   public function createDirectories($id) {
     $this->content_directory = $this->contentFilesDir . DIRECTORY_SEPARATOR . $id . DIRECTORY_SEPARATOR;
 
+    if (!is_dir($this->contentFilesDir)) {
+      mkdir($this->contentFilesDir, 0777, true);
+    }
+    
     $sub_directories = array('', 'files', 'images', 'videos', 'audios');
     foreach ($sub_directories AS $sub_directory) {
       $sub_directory = $this->content_directory . $sub_directory;
