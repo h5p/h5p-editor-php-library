@@ -14,14 +14,25 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   var firstTime = true;
   var options = '<option value="-">-</option>';
 
-  this.defaultParams = JSON.parse(defaultParams);
+  try {
+    this.defaultParams = JSON.parse(defaultParams);
+    if (!(this.defaultParams instanceof Object)) {
+      throw true;
+    }
+  }
+  catch (event) {
+    // Content parameters are broken. Reset. (This allows for broken content to be reused without deleting it)
+    this.defaultParams = {};
+    // TODO: Inform the user?
+  }
+  
   this.defaultLibrary = this.currentLibrary = defaultLibrary;
   this.defaultLibraryParameterized = defaultLibrary ? defaultLibrary.replace('.', '-').toLowerCase() : undefined;
 
   for (var i = 0; i < libraries.length; i++) {
     var library = libraries[i];
     var libraryName = ns.libraryToString(library);
-    
+
     // Allow old version of library only if used by existing content
     if (library.isOld !== true || (library.isOld === true && this.defaultLibrary === libraryName)) {
       options += '<option value="' + libraryName + '"';
@@ -33,18 +44,22 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   }
 
   this.$selector = ns.$('<select name="h5peditor-library" title="' + ns.t('core', 'selectLibrary') + '">' + options + '</select>').change(function () {
+    var library;
     var changeLibrary = true;
+
     if (!firstTime) {
       changeLibrary = confirm(H5PEditor.t('core', 'confirmChangeLibrary'));
     }
+
     if (changeLibrary) {
-      var library = that.$selector.val();
+      library = that.$selector.val();
       that.loadSemantics(library);
       that.currentLibrary = library;
     }
     else {
       that.$selector.val(that.currentLibrary);
     }
+
     if (library !== '-') {
       firstTime = false;
     }
