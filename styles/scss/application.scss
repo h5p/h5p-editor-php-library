@@ -301,7 +301,7 @@ a {
       cursor: auto;
     }
     .remove {
-      top: -7px;
+      top: -3px;
       right: -5px;
     }
     .type {
@@ -405,6 +405,8 @@ a {
       font-family: $i;
       content: "\e88f";
       color: #666;
+      padding-right: 0.25em;
+      vertical-align: middle;
       font-size: 1.5em;
       vertical-align: middle;
       padding-left: 0.25em;
