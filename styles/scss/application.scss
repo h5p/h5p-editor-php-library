@@ -249,8 +249,8 @@ a {
 
     .thumbnail {
       display: inline-block;
-      margin: 10px;
-      @include box-shadow(0 0 16px 0 #666666);
+      margin: 10px 10px 10px 0;
+      @include box-shadow(0 0 10px 0 #666666);
       border: 1px solid #fff;
       cursor: pointer;
     }
@@ -264,8 +264,8 @@ a {
     .remove {
       display: block;
       position: absolute;
-      top: 13px;
-      right: 16px;
+      top: 10px;
+      right: 8px;
       cursor: pointer;
     }
     .remove:before {
@@ -282,6 +282,7 @@ a {
     .remove:hover:before {
       @include opacity(1); 
       color: #c33f62;
+      @include text-shadow(rgba(white, 0.4) 0 0 4px, rgba(white, 0.4) 0 0 4px, rgba(white, 0.4) 0 0 4px);
     }
     img {
       vertical-align: bottom;
