@@ -231,6 +231,27 @@ a {
     width: auto;
     margin: 0;
     padding: 4px 8px;
+    background: linear-gradient(to bottom,#fff 0,#f2f2f2 100%);
+    border: 1px solid #ccc;
+    border-radius: 0.25em;
+    font-size: 0.875em;
+    color: #333;    
+    cursor: pointer;
+    
+    &:before {
+      font-family: $i;
+      content: "\e88f";
+      color: #666;
+      padding-right: 0.25em;
+      vertical-align: middle;
+      font-size: 1.5em;
+      vertical-align: middle;
+      padding-left: 0.25em;
+    }
+    &:hover {
+      text-decoration: none;
+      border-color: #999;
+    }
   }
   .dimensions input, .coordinates input, .number input {
     width: 75px;
@@ -392,15 +413,14 @@ a {
     background: linear-gradient(to bottom,#fff 0,#f2f2f2 100%);
     border: 1px solid #ccc;
     border-radius: 0.25em;
+    font-size: 0.875em;
+    color: #333;    
+    cursor: pointer;
     float: left;
     display: block;
     clear: both;
-    cursor: pointer;
-    font-size: 0.875em;
-    color: #333;
     line-height: 2em;
     padding-right: 1em;
-    transition: background 0.15s ease, color 0.15s ease;
     
     &:before {
       font-family: $i;
