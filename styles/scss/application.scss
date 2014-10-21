@@ -105,7 +105,7 @@ a {
         cursor: pointer;
         width: 14px;
         height: 14px;
-        margin: 13px 3px 0 1px;
+        margin: 10px 4px 0 0;
         float: right;
         font-size: 1.75em;
         line-height: 1em;
@@ -170,7 +170,7 @@ a {
         float: left;
         width: 13px;
         height: 13px;
-        margin: 3px 0 0;
+        margin: 4px 0 0;
         background: inline-image("expand.png") no-repeat;
         opacity: 0.8;
 
@@ -361,7 +361,7 @@ a {
         background: inline-image("collapse.png") no-repeat left center;
         opacity: 0.8;
         vertical-align: top;
-        margin-top: 1px;
+        margin-top: 4px;
       }
       &:hover > .icon {
         opacity: 1;
