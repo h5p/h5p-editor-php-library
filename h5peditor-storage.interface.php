@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 interface H5peditorStorage {
   /**
    * TODO
-   */  
-  public function getLanguage($machineName, $majorVersion, $minorVersion);
+   */
+  public function getLanguage($machineName, $majorVersion, $minorVersion, $language);
 
   /**
    * TODO
