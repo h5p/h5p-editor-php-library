@@ -156,15 +156,15 @@ ns.List.prototype.addItem = function (i) {
       .unbind('mouseleave', up)
       .attr('unselectable', 'off')
       .css({
-        '-moz-user-select': '', 
-        '-webkit-user-select': '', 
-        'user-select': '', 
+        '-moz-user-select': '',
+        '-webkit-user-select': '',
+        'user-select': '',
         '-ms-user-select': ''
       })
       [0].onselectstart = H5P.$body[0].ondragstart = null;
-      
+
     $item.removeClass('moving').css({
-      width: 'auto', 
+      width: 'auto',
       height: 'auto'
     });
     $placeholder.remove();
@@ -177,16 +177,16 @@ ns.List.prototype.addItem = function (i) {
         if (event.which !== 1) {
           return; // Only allow left mouse button
         }
-        
+
         // Start tracking mouse
         H5P.$body
           .attr('unselectable', 'on')
           .mouseup(up)
           .bind('mouseleave', up)
           .css({
-            '-moz-user-select': 'none', 
-            '-webkit-user-select': 'none', 
-            'user-select': 'none', 
+            '-moz-user-select': 'none',
+            '-webkit-user-select': 'none',
+            'user-select': 'none',
             '-ms-user-select': 'none'
           })
           .mousemove(move)
@@ -225,8 +225,15 @@ ns.List.prototype.addItem = function (i) {
     this.readies = [];
   }
 
-  var widget = this.field.field.widget === undefined ? this.field.field.type : this.field.field.widget;
-  this.children[i] = new ns.widgets[widget](this, this.field.field, this.params[i], function (field, value) {
+  var field = this.field.field;
+  var widget = field.widget === undefined ? field.type : field.widget;
+
+  // Set default value.
+  if (this.params[i] === undefined && field['default'] !== undefined) {
+    this.params[i] = field['default'];
+  }
+
+  this.children[i] = new ns.widgets[widget](this, field, this.params[i], function (field, value) {
     that.params[that.getIndex($item)] = value;
   });
   this.children[i].appendTo($item.children('.content'));
