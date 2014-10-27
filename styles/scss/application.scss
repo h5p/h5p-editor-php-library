@@ -309,7 +309,7 @@ a {
     }
   }
   .video .file, .audio .file {
-    overflow: hidden;
+    overflow: visible;
     .thumbnail, .add {
       float: left;
     }
@@ -317,7 +317,7 @@ a {
       margin-top: 8px;
     }
     .thumbnail {
-      overflow: hidden;
+      overflow: visible;
       position: relative;
       cursor: auto;
     }
