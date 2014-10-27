@@ -293,16 +293,16 @@ a {
       font-size: 1.4em;
       color: #fff;
       content: "\e890";
-      @include opacity(0.8);
+      @include opacity(0.6);
       @include text-shadow(rgba(black, 0.4) 0 0 4px, rgba(black, 0.4) 0 0 4px, rgba(black, 0.4) 0 0 4px);
     }
     .remove:hover {
       text-decoration: none;
     }
     .remove:hover:before {
-      @include opacity(1); 
-      color: #c33f62;
-      @include text-shadow(rgba(white, 0.4) 0 0 4px, rgba(white, 0.4) 0 0 4px, rgba(white, 0.4) 0 0 4px);
+      color: #fff;
+      @include opacity(1);
+      @include text-shadow(rgba(black, 0.4) 0 0 4px, rgba(black, 0.4) 0 0 4px, rgba(black, 0.4) 0 0 4px);
     }
     img {
       vertical-align: bottom;

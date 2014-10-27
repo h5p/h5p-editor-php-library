@@ -335,8 +335,8 @@ a {
   font-size: 1.4em;
   color: #fff;
   content: "\e890";
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
-  opacity: 0.8;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=60);
+  opacity: 0.6;
   text-shadow: rgba(0, 0, 0, 0.4) 0 0 4px, rgba(0, 0, 0, 0.4) 0 0 4px, rgba(0, 0, 0, 0.4) 0 0 4px;
 }
 /* line 299, ../scss/application.scss */
@@ -345,10 +345,10 @@ a {
 }
 /* line 302, ../scss/application.scss */
 .h5peditor .file .remove:hover:before {
+  color: #fff;
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
-  color: #c33f62;
-  text-shadow: rgba(255, 255, 255, 0.4) 0 0 4px, rgba(255, 255, 255, 0.4) 0 0 4px, rgba(255, 255, 255, 0.4) 0 0 4px;
+  text-shadow: rgba(0, 0, 0, 0.4) 0 0 4px, rgba(0, 0, 0, 0.4) 0 0 4px, rgba(0, 0, 0, 0.4) 0 0 4px;
 }
 /* line 307, ../scss/application.scss */
 .h5peditor .file img {
