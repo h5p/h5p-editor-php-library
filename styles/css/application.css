@@ -326,7 +326,7 @@ a {
 .h5peditor .file .remove {
   display: block;
   position: absolute;
-  top: 10px;
+  top: 7px;
   right: 7px;
   cursor: pointer;
 }
