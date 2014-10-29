@@ -10,7 +10,7 @@ $i: 'H5P';
 html, body {
   margin: 0;
   padding: 0;
-  font-family: 'Open Sans', sans-serif;  
+  font-family: 'Open Sans', sans-serif;
   max-width: 960px;
 }
 a {
@@ -26,6 +26,7 @@ a {
 
   .field {
     margin: 16px 0;
+    font-size: 16px;
     padding: 0;
     &:first-child {
       margin-top: 0;
@@ -33,21 +34,21 @@ a {
     &:last-child {
       margin-bottom: 0;
     }
-    
+
     &.boolean .h5peditor-label {
       display: inline;
     }
     &.video, &.image, &.file, &.audio {
       position: relative;
     }
-    
+
     .library {
       border: 1px solid #666;
       padding: 8px;
       overflow: hidden; // Create a new block formatting context to avoid float related issues with vertical tabs
     }
   }
-  
+
   .errors p {
     margin: 0 0 4px 0;
     color: #f00;
@@ -116,27 +117,27 @@ a {
           text-decoration: none;
         }
       }
-      
+
       & > .remove:after {
           font-family: $i;
           content: "\e890";
           color: #666;
         }
-        
+
       & > .remove:hover:after {
           color: #c33f62;
         }
-      
+
       & > .order {
         float: left;
-          
+
         &:after {
           font-family: $i;
           content: "\e88d";
           color: #666;
-          
+
         }
-        
+
         &:hover:after {
           color: #027AC6;
         }
@@ -234,9 +235,9 @@ a {
     border: 1px solid #ccc;
     border-radius: 0.25em;
     font-size: 0.875em;
-    color: #333;    
+    color: #333;
     cursor: pointer;
-    
+
     &:before {
       font-family: $i;
       content: "\e88f";
@@ -353,7 +354,7 @@ a {
       padding: 0.5em 0.75em 0.4em;
       background: #ddd;
       cursor: pointer;
-      
+
       & > .icon {
         display: inline-block;
         width: 20px;
@@ -371,14 +372,14 @@ a {
       margin: 0.3125em 0.5em 0.5em;
       padding-bottom: 0.25em;
       min-height: 2em;
-      
+
       & > .desc {
         margin: 0;
         font-size: 0.875em;
         color: #666;
       }
     }
-    
+
     &.collapsed {
       & > .h5peditor-label > .icon {
         background-image: inline-image("expand.png");
@@ -387,7 +388,7 @@ a {
         display: none;
       }
     }
-    
+
     &.hidden {
       display: none;
     }
@@ -413,14 +414,14 @@ a {
     border: 1px solid #ccc;
     border-radius: 0.25em;
     font-size: 0.875em;
-    color: #333;    
+    color: #333;
     cursor: pointer;
     float: left;
     display: block;
     clear: both;
     line-height: 2em;
     padding-right: 1em;
-    
+
     &:before {
       font-family: $i;
       content: "\e88f";
@@ -436,7 +437,7 @@ a {
       border-color: #999;
     }
   }
-  
+
   .h5p-editor-dialog {
     position: absolute;
     z-index: 1;
@@ -448,23 +449,23 @@ a {
     opacity: 0;
     @include box-shadow(0 0 8px #666);
     @include transition(visibility 0s 0.2s, opacity 0.2s, margin-top 0.2s);
-    
+
     &.h5p-open {
       margin-top: 3.5em;
       visibility: visible;
       opacity: 1;
       @include transition(visibility 0s 0s, opacity 0.2s, margin-top 0.2s);
     }
-    
+
     & > .field {
       margin: 0 0 10px;
       border: 0;
       box-shadow: none;
     }
-    
+
     .h5p-close {
       color: #494949;
-    
+
       &:before {
         font-size: 2em;
         right: -0.125em;
@@ -475,7 +476,7 @@ a {
         line-height: 1em;
         @include transition(scale 0.2s);
       }
-      
+
       &:hover:before {
         @include scale(1.1, 1.1);
       }
