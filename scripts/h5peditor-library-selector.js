@@ -33,14 +33,19 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
     var library = libraries[i];
     var libraryName = ns.libraryToString(library);
 
-    // Allow old version of library only if used by existing content
-    if (library.isOld !== true || (library.isOld === true && this.defaultLibrary === libraryName)) {
+    // Never deny editing existing content
+    // For new content deny old or restricted libs.
+    if (this.defaultLibrary === libraryName
+      || ((library.restricted === undefined || !library.restricted) 
+        && library.isOld !== true
+      )
+    ) {
       options += '<option value="' + libraryName + '"';
       if (libraryName === defaultLibrary || library.name === this.defaultLibraryParameterized) {
         options += ' selected="selected"';
       }
-      if (library.metaData && library.metaData.tutorialURL !== undefined) {
-        options += ' data-tutorial-url="' + library.metaData.tutorialURL + '"';
+      if (library.tutorialUrl !== undefined) {
+        options += ' data-tutorial-url="' + library.tutorialUrl + '"';
       }
       options += '>' + library.title + (library.isOld===true ? ' (deprecated)' : '') + '</option>';
     }
@@ -71,7 +76,7 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
     }
 
     var tutorialUrl = ns.$(this).find(':selected').data('tutorial-url');
-    that.$tutorialUrl.attr('href', tutorialUrl).toggle(tutorialUrl !== undefined && tutorialUrl.length > 0);
+    that.$tutorialUrl.attr('href', tutorialUrl).toggle(tutorialUrl !== undefined && tutorialUrl !== null && tutorialUrl.length !== 0);
   });
 };
 

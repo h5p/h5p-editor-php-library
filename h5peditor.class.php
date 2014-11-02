@@ -70,16 +70,6 @@ class H5peditor {
 
     $libraries = $this->storage->getLibraries(!isset($libraries) ? NULL : $libraries);
 
-    // Add metadata from h5p.org:
-    $libraries_metadata = $this->h5p->getLibrariesMetadata();
-    if (isset($libraries_metadata)) {
-      foreach($libraries as &$library) {
-        $name = $library->name;
-        $meta = $libraries_metadata->$name;
-        $library->metaData = isset($meta) ? $meta : NULL;
-      }
-    }
-
     if ($this->h5p->development_mode & H5PDevelopment::MODE_LIBRARY) {
       $devLibs = $this->h5p->h5pD->getLibraries();
 
@@ -298,15 +288,16 @@ class H5peditor {
     $library = $this->h5p->loadLibrary($machineName, $majorVersion, $minorVersion);
     $dependencies = array();
     $this->h5p->findLibraryDependencies($dependencies, $library);
-
+    
     $editorLibraries = array();
     foreach ($dependencies as $dependency) {
       if ($dependency['type'] !== 'editor') {
         continue; // Only load editor libraries.
       }
+      $dependency['library']['dropCss'] = $dependency['dropCss'];
       $editorLibraries[$dependency['library']['libraryId']] = $dependency['library'];
     }
-
+    
     return $editorLibraries;
   }
 
