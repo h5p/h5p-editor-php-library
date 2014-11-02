@@ -210,7 +210,6 @@ ns.List.prototype.addItem = function (i) {
         return false;
       })
       .click(function () {
-        console.log('click');
         return false;
       })
         .next()
