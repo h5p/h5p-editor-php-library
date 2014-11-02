@@ -33,8 +33,13 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
     var library = libraries[i];
     var libraryName = ns.libraryToString(library);
 
-    // Allow old version of library only if used by existing content
-    if (library.isOld !== true || (library.isOld === true && this.defaultLibrary === libraryName)) {
+    // Never deny editing existing content
+    // For new content deny old or restricted libs.
+    if (this.defaultLibrary === libraryName
+      || ((library.restricted === undefined || !library.restricted) 
+        && library.isOld !== true
+      )
+    ) {
       options += '<option value="' + libraryName + '"';
       if (libraryName === defaultLibrary || library.name === this.defaultLibraryParameterized) {
         options += ' selected="selected"';
