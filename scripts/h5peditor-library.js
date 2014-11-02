@@ -40,7 +40,6 @@ ns.Library = function (parent, field, params, setValue) {
  */
 ns.Library.prototype.appendTo = function ($wrapper) {
   var that = this;
-
   var html = '';
   if (this.field.label !== 0) {
     html = '<label class="h5peditor-label">' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
