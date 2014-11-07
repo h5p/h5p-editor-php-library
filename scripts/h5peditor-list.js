@@ -1,179 +1,669 @@
+/** @namespace H5P */
+var H5P = H5P || {};
+
+/** @namespace H5PEditor */
 var H5PEditor = H5PEditor || {};
-var ns = H5PEditor;
 
-/**
- * Create a ordered list of fields for the form.
- *
- * @param {mixed} parent
- * @param {Object} field
- * @param {mixed} params
- * @param {function} setValue
- * @returns {ns.List}
- */
-ns.List = function (parent, field, params, setValue) {
-  var that = this;
 
-  if (field.entity === undefined) {
-    field.entity = 'item';
+/* ---- FILE SEPARATOR ---- */
+
+
+H5P.EventDispatcher = (function () {
+
+  /**
+   * The base of the event system.
+   * Inherit this class if you wish for your H5P to dispatch events.
+   * @class
+   */
+  function EventDispatcher() {
+    var self = this;
+
+    /**
+     * Keep track of events and listeners for each event.
+     * @private
+     * @type {Object}
+     */
+    var events = {};
+
+    /**
+     * Add new event listener.
+     *
+     * @public
+     * @throws {TypeError} listener must be a function
+     * @param {String} type Event type
+     * @param {Function} listener Event listener
+     */
+    self.on = function (type, listener) {
+      if (!(listener instanceof Function)) {
+        throw TypeError('listener must be a function');
+      }
+
+      // Trigger event before adding to avoid recursion
+      self.trigger('newListener', type, listener);
+
+      if (!events[type]) {
+        // First
+        events[type] = [listener];
+      }
+      else {
+        // Append
+        events[type].push(listener);
+      }
+    };
+
+    /**
+     * Remove event listener.
+     * If no listener is specified, all listeners will be removed.
+     *
+     * @public
+     * @throws {TypeError} listener must be a function
+     * @param {String} type Event type
+     * @param {Function} [listener] Event listener
+     */
+    self.off = function (type, listener) {
+      if (listener !== undefined && !(listener instanceof Function)) {
+        throw TypeError('listener must be a function');
+      }
+
+      if (events[type] === undefined) {
+        return;
+      }
+
+      if (listener === undefined) {
+        // Remove all listeners
+        delete events[type];
+        self.trigger('removeListener', type);
+        return;
+      }
+
+      // Find specific listener
+      for (var i = 0; i < events[type].length; i++) {
+        if (events[type][i] === listener) {
+          events[type].unshift(i, 1);
+          self.trigger('removeListener', type, listener);
+          break;
+        }
+      }
+
+      // Clean up empty arrays
+      if (!events[type].length) {
+        delete events[type];
+      }
+    };
+
+    /**
+     * Dispatch event.
+     *
+     * @public
+     * @param {String} type Event type
+     * @param {...*} args
+     */
+    self.trigger = function (type, args) {
+      if (events[type] === undefined) {
+        return;
+      }
+
+      // Copy all arguments except the first
+      args = [];
+      var i;
+      for (i = 1; i < arguments.length; i++) {
+        args.push(arguments[i]);
+      }
+
+      // Call all listeners
+      for (i = 0; i < events[type].length; i++) {
+        events[type][i].apply(self, args);
+      }
+    };
+
+    // TODO: Add once!
   }
 
-  if (params === undefined) {
-    this.params = [];
-    setValue(field, this.params);
-  } else {
-    this.params = params;
+  return EventDispatcher;
+})();
+
+
+/* ---- FILE SEPARATOR ---- */
+
+
+H5PEditor.SemanticStructure = (function ($) {
+  var self = this;
+
+  /**
+   * The base of the semantic structure system.
+   * All semantic structure class types will inherit this class.
+   *
+   * @class
+   */
+  function SemanticStructure(field) {
+    var self = this;
+
+    // Initialize event inheritance
+    H5P.EventDispatcher.call(self);
+
+    var $widgetSelect, $wrapper, $errors, $description, widgets;
+
+    /**
+     * Initialize. Wrapped to avoid leaking variables
+     * @private
+     */
+    var init = function () {
+      widgets = getValidWidgets();
+
+      if (widgets.length > 1) {
+        // Create widget select box
+        $widgetSelect = $('<select/>').change(function () {
+          changeWidget($widgetSelect.val());
+        });
+        for (var i = 0; i < widgets.length; i++) {
+          var name = widgets[i];
+          $('<option/>', {
+            value: name,
+            text: name // TODO: get from translations?
+          }).appendTo($widgetSelect);
+        }
+      }
+
+      // Create field wrapper
+      $wrapper = $('<div/>', {
+        'class': 'field ' + field.type
+      });
+
+      /* TODO: Should we move this stuff to a default widget class, thus making it easier to override?
+      If so we should create functions for getting field semantic properties. That will
+      avoid getting custom non-semantic properties in the semantics.json. */
+
+      if (field.label !== 0) {
+        // Add label
+        $('<label/>', {
+          'class': 'h5peditor-label',
+          text: (field.label === undefined ? field.name : field.label)
+        });
+      }
+
+      // Create errors container
+      $errors = $('<div/>', {
+        'class': 'h5p-errors'
+      });
+
+      // Create description block
+      if (field.description !== undefined) {
+        $description = $('<div/>', {
+          'class': 'h5peditor-field-description',
+          text: field.description
+        });
+      }
+    };
+
+    /**
+     * Get a list of widgets that are valid and loaded.
+     *
+     * @private
+     * @throws {TypeError} widgets must be an array
+     * @returns {Array} List of valid widgets
+     */
+    var getValidWidgets = function () {
+      if (field.widgets === undefined) {
+        // No widgets specified use default
+        return ['List'];
+      }
+      if (!(field.widgets instanceof Array)) {
+        throw TypeError('widgets must be an array');
+      }
+
+      // Check if specified widgets are valid
+      var validWidgets = [];
+      for (var i = 0; i < field.widgets.length; i++) {
+        var name = field.widgets[i];
+        if (getWidget(name)) {
+          validWidgets.push(name);
+        }
+      }
+
+      if (!validWidgets.length) {
+        // There are no valid widgets, add default
+        validWidgets.push('List');
+      }
+
+      return validWidgets;
+    };
+
+    /**
+     * Finds the widget class with the given name.
+     *
+     * @private
+     * @param {String} name
+     * @returns {Class}
+     */
+    var getWidget = function (name) {
+      return H5PEditor[name + 'Widget'];
+    };
+
+    /**
+     * Change the UI widget.
+     *
+     * @private
+     * @param {String} name
+     */
+    var changeWidget = function (name) {
+      if (self.widget !== undefined) {
+        // Remove old widgets
+        self.widget.remove();
+      }
+
+      var widget = getWidget(name);
+      self.widget = new widget(self);
+      self.trigger('changeWidget');
+      self.widget.appendTo($wrapper);
+
+      // Add errors container and description.
+      $errors.appendTo($wrapper);
+      if ($description !== undefined) {
+        $description.appendTo($wrapper);
+      }
+    };
+
+    /**
+     * Appends the field widget to the given container.
+     *
+     * @public
+     * @param {jQuery} $container
+     */
+    self.appendTo = function ($container) {
+      if ($widgetSelect) {
+        // Add widget select box
+        $widgetSelect.appendTo($container);
+      }
+
+      // Use first widget by default
+      changeWidget(widgets[0]);
+
+      $wrapper.appendTo($container);
+    };
+
+    /**
+     * Remove this field and widget.
+     *
+     * @public
+     */
+    self.remove = function () {
+      self.widget.remove();
+    };
+
+    // Must be last
+    init();
   }
 
-  if (field.defaultNum === undefined && field.min !== undefined) {
-    // Use min as defaultNum if defaultNum isn't set.
-    field.defaultNum = field.min;
-  }
+  // Extends the event dispatcher
+  SemanticStructure.prototype = Object.create(H5P.EventDispatcher.prototype);
+  SemanticStructure.prototype.constructor = SemanticStructure;
 
-  this.field = field;
-  this.parent = parent;
-  this.$items = [];
-  this.children = [];
-  this.library = parent.library + '/' + field.name;
+  return SemanticStructure;
+})(H5P.jQuery);
 
-  this.passReadies = true;
-  parent.ready(function () {
-    that.passReadies = false;
-  });
-};
 
-/**
- * Append list to wrapper.
- *
- * @param {jQuery} $wrapper
- * @returns {undefined}
- */
-ns.List.prototype.appendTo = function ($wrapper) {
-  var that = this;
+/* ---- FILE SEPARATOR ---- */
 
-  var label = '';
-  if (this.field.label !== 0) {
-    label = '<label class="h5peditor-label">' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
-  }
 
-  var html = ns.createItem(this.field.type, label + '<ul class="h5p-ul"></ul><input type="button" value="' + ns.t('core', 'addEntity', {':entity': this.field.entity}) + '"/>', this.field.description);
+H5PEditor.List = (function ($) {
 
-  this.$list = ns.$(html).appendTo($wrapper).children('ul');
-  this.$add = this.$list.next().click(function () {
-    if (that.field.max !== undefined && that.params.length >= that.field.max) {
-      return;
-    }
-    var item = that.addItem();
-    if (item instanceof ns.Group) {
-      item.expand();
-    }
-  });
+  /**
+   * List structure.
+   *
+   * @class
+   * @param {*} parent structure
+   * @param {Object} field Semantic description of field
+   * @param {Array} [parameters] Default parameters for this field
+   * @param {Function} setValue Call to set our parameters
+   */
+  function List(parent, field, parameters, setValue) {
+    var self = this;
 
-  if (this.params.length) {
-    for (var i = 0; i < this.params.length; i++) {
-      this.addItem(i);
-    }
-  }
-  else {
-    // Add default number of fields.
-    for (var i = 0; i < this.field.defaultNum; i++) {
-      that.$add.click();
-    }
-  }
-};
+    // Initialize semantics structure inheritance
+    H5PEditor.SemanticStructure.call(self, field);
 
-/**
- * Move the item around.
- *
- * @param {jQuery} $item
- * @param {jQuery} $placeholder
- * @param {Integer} x
- * @param {Integer} y
- * @returns {unresolved}
- */
-ns.List.prototype.move = function ($item, $placeholder, x, y) {
-  var oldIndex, newIndex;
+    // Make it possible to travel up three.
+    self.parent = parent;
+    // TODO: Could this be done better? Perhaps through SemanticStructure?
 
-  // Adjust so the mouse is placed on top of the icon.
-  x = x - this.adjustX;
-  y = y - this.adjustY;
-  $item.css({top: y - this.marginTop - this.formOffset.top, left: x - this.formOffset.left});
+    /**
+     * Keep track of child fields. Should not be exposed directly,
+     * create functions for using or finding the children.
+     *
+     * @private
+     * @type {Array}
+     */
+    var children = [];
 
-  // Try to move up.
-  var $prev = $item.prev().prev();
-  if ($prev.length && y < $prev.offset().top + ($prev.height() / 2)) {
-    $prev.insertAfter($item);
-
-    oldIndex = this.getIndex($item);
-    newIndex = oldIndex - 1;
-    this.swap(this.$items, oldIndex, newIndex);
-    this.swap(this.params, oldIndex, newIndex);
-    this.swap(this.children, oldIndex, newIndex);
-
-    return;
-  }
-
-  // Try to move down.
-  var $next = $item.next();
-  if ($next.length && y + $item.height() > $next.offset().top + ($next.height() / 2)) {
-    $next.insertBefore($placeholder);
-
-    oldIndex = this.getIndex($item);
-    newIndex = oldIndex + 1;
-    this.swap(this.$items, oldIndex, newIndex);
-    this.swap(this.params, oldIndex, newIndex);
-    this.swap(this.children, oldIndex, newIndex);
-  }
-};
-
-ns.List.prototype.swap = function (list, oldIndex, newIndex) {
-  var oldItem = list[oldIndex];
-  list[oldIndex] = list[newIndex];
-  list[newIndex] = oldItem;
-};
-
-/**
- * Add an item to the list.
- *
- * @param {integer} i
- * @returns {unresolved}
- */
-ns.List.prototype.addItem = function (i) {
-  var that = this;
-  var $item, $placeholder;
-
-  if (i === undefined) {
-    i = this.$items.length;
-  }
-
-  var move = function (event) {
-    that.move($item, $placeholder, event.pageX, event.pageY);
-  };
-  var up = function () {
-    // Stop tracking mouse
-    H5P.$body
-      .unbind('mousemove', move)
-      .unbind('mouseup', up)
-      .unbind('mouseleave', up)
-      .attr('unselectable', 'off')
-      .css({
-        '-moz-user-select': '',
-        '-webkit-user-select': '',
-        'user-select': '',
-        '-ms-user-select': ''
-      })
-      [0].onselectstart = H5P.$body[0].ondragstart = null;
-
-    $item.removeClass('moving').css({
-      width: 'auto',
-      height: 'auto'
+    // Prepare the old ready callback system
+    var readyCallbacks = [];
+    var passReadyCallbacks = true;
+    parent.ready(function () {
+      passReadyCallbacks = false;
     });
-    $placeholder.remove();
-  };
+    // TODO: In the future we might listen for parents ready event? (through parent.once())
 
-  $item = ns.$('<li class="h5p-li"><a href="#" class="order"></a><a href="#" class="remove"></a><div class="content"></div></li>')
-    .appendTo(this.$list)
-    .children('.order')
-      .mousedown(function (event) {
+    // Listen for widget changes
+    self.on('changeWidget', function () {
+      // Append all items to new widget
+      for (var i = 0; i < children.length; i++) {
+        self.widget.addItem(children[i]);
+      }
+    });
+
+    /**
+     * Add all items to list without appending to DOM.
+     *
+     * @public
+     */
+    var init = function () {
+      var i;
+      if (parameters !== undefined && parameters.length) {
+        for (i = 0; i < parameters.length; i++) {
+          addItem(i);
+        }
+      }
+      else {
+        if (field.defaultNum === undefined) {
+          // Use min or 1 if no default item number is set.
+          field.defaultNum = (field.min !== undefined ? field.min : 1);
+        }
+        // Add default number of fields.
+        for (i = 0; i < field.defaultNum; i++) {
+          addItem(i);
+        }
+      }
+    };
+
+    /**
+     * @private
+     * @param {Number} index
+     */
+    var addItem = function (index) {
+      var childField = field.field;
+      var widget = H5PEditor.getWidgetName(childField);
+
+      if (parameters === undefined) {
+        // Create new parameters for list
+        parameters = [];
+        setValue(field, parameters);
+      }
+
+      // Set default value.
+      if (parameters[index] === undefined && childField['default'] !== undefined) {
+        parameters[index] = childField['default'];
+      }
+
+      var child = children[index] = new H5PEditor.widgets[widget](self, childField, parameters[index], function (childField, value) {
+        parameters[findIndex(child)] = value;
+      });
+
+      if (!passReadyCallbacks) {
+        // Run collected ready callbacks
+        for (var i = 0; i < readyCallbacks.length; i++) {
+          readyCallbacks[i]();
+        }
+        readyCallbacks = []; // Reset
+      }
+
+      return child;
+    };
+
+    /**
+     * Finds the index for the given child.
+     *
+     * @private
+     * @param {*} child field
+     * @returns {Number} index
+     */
+    var findIndex = function (child) {
+      for (var i = 0; i < children.length; i++) {
+        if (children[i] === child) {
+          return i;
+        }
+      }
+    };
+
+    /**
+     * Get the singular form of the items added in the list.
+     *
+     * @public
+     * @returns {String} The entity type
+     */
+    self.getEntity = function () {
+      return (field.entity === undefined ? 'item' : field.entity);
+    };
+
+    /**
+     * Adds a new list item and child field at the end of the list
+     *
+     * @public
+     */
+    self.addItem = function () {
+      var child = addItem(children.length);
+      self.widget.addItem(child);
+    };
+
+    /**
+     * Removes the list item at the given index.
+     *
+     * @public
+     * @param {Number} index
+     */
+    self.removeItem = function (index) {
+      // Remove child field
+      children[index].remove();
+      children.splice(index, 1);
+
+      // Clean up parameters
+      parameters.splice(index, 1);
+      if (!parameters.length) {
+        // Create new parameters for list
+        parameters = undefined;
+        setValue(field);
+      }
+    };
+
+    /**
+     * Change the order of the items in the list.
+     * Be aware that this may change the index of other existing items.
+     *
+     * @public
+     * @param {Number} currentIndex
+     * @param {Number} newIndex
+     */
+    self.moveItem = function (currentIndex, newIndex) {
+      // Update child fields
+      var child = children.splice(currentIndex, 1);
+      children.splice(newIndex, 0, child[0]);
+
+      // Update parameters
+      var params = parameters.splice(currentIndex, 1);
+      parameters.splice(newIndex, 0, params[0]);
+    };
+
+    /**
+     * Allows ancestors and widgets to do stuff with our children.
+     *
+     * @public
+     * @param {Function} task
+     */
+    self.forEachChild = function (task) {
+      for (var i = 0; i < children.length; i++) {
+        task(children[i]);
+      }
+    };
+
+    /**
+     * Collect callback to run when the editor is ready. If this item isn't
+     * ready yet, jusy pass them on to the parent item.
+     *
+     * @public
+     * @param {Function} ready
+     */
+    self.ready = function (ready) {
+      if (passReadyCallbacks) {
+        parent.ready(ready);
+      }
+      else {
+        readyCallbacks.push(ready);
+      }
+    };
+
+    /**
+     * Make sure that this field and all child fields are valid.
+     *
+     * @public
+     * @returns {Boolean}
+     */
+    self.validate = function () {
+      var valid = true;
+
+      for (var i = 0; i < children.length; i++) {
+        if (children[i].validate() === false) {
+          valid = false;
+        }
+      }
+
+      return valid;
+    };
+
+    // Start the party!
+    init();
+  }
+
+  // Extends the semantics structure
+  List.prototype = Object.create(H5PEditor.SemanticStructure.prototype);
+  List.prototype.constructor = List;
+
+  return List;
+})(H5P.jQuery);
+
+// Register widget
+H5PEditor.widgets.list = H5PEditor.List;
+
+
+/* ---- FILE SEPARATOR ---- */
+
+
+H5PEditor.ListWidget = (function ($) {
+
+  /**
+   * Draws the list.
+   *
+   * @class
+   * @param {List} list
+   */
+  function ListWidget(list) {
+    var self = this;
+
+    var entity = list.getEntity();
+
+    // Create list html
+    var $list = $('<ul/>', {
+      'class': 'h5p-ul'
+    });
+
+    // Create add button
+    var $button = $('<button/>', {
+      text: H5PEditor.t('core', 'addEntity', {':entity': entity})
+    }).click(function () {
+      list.addItem();
+    });
+
+    // Used when dragging items around
+    var adjustX, adjustY, marginTop, formOffset;
+
+    /**
+     * @private
+     * @param {jQuery} $item
+     * @param {jQuery} $placeholder
+     * @param {Number} x
+     * @param {Number} y
+     */
+    var moveItem = function ($item, $placeholder, x, y) {
+      var currentIndex;
+
+      // Adjust so the mouse is placed on top of the icon.
+      x = x - adjustX;
+      y = y - adjustY;
+      $item.css({
+        top: y - marginTop - formOffset.top,
+        left: x - formOffset.left
+      });
+
+      // Try to move up.
+      var $prev = $item.prev().prev();
+      if ($prev.length && y < $prev.offset().top + ($prev.height() / 2)) {
+        $prev.insertAfter($item);
+
+        currentIndex = $item.index();
+        list.moveItem(currentIndex, currentIndex - 1);
+
+        return;
+      }
+
+      // Try to move down.
+      var $next = $item.next();
+      if ($next.length && y + $item.height() > $next.offset().top + ($next.height() / 2)) {
+        $next.insertBefore($placeholder);
+
+        currentIndex = $item.index();
+        list.moveItem(currentIndex, currentIndex + 1);
+      }
+    };
+
+    /**
+     * @public
+     */
+    self.addItem = function (item) {
+      var $placeholder;
+      var $item = ns.$('<li/>', {
+        'class' : 'h5p-li',
+      });
+
+      /**
+       * Mouse move callback
+       *
+       * @private
+       * @param {Object} event
+       */
+      var move = function (event) {
+        moveItem($item, $placeholder, event.pageX, event.pageY);
+      };
+
+      /**
+       * Mouse button release callback
+       *
+       * @private
+       */
+      var up = function () {
+        H5P.$body
+          .unbind('mousemove', move)
+          .unbind('mouseup', up)
+          .unbind('mouseleave', up)
+          .attr('unselectable', 'off')
+          .css({
+            '-moz-user-select': '',
+            '-webkit-user-select': '',
+            'user-select': '',
+            '-ms-user-select': ''
+          })
+          [0].onselectstart = H5P.$body[0].ondragstart = null;
+
+        $item.removeClass('moving').css({
+          width: 'auto',
+          height: 'auto'
+        });
+        $placeholder.remove();
+      };
+
+      /**
+       * Mouse button down callback
+       *
+       * @private
+       */
+      var down = function () {
         if (event.which !== 1) {
           return; // Only allow left mouse button
         }
@@ -195,131 +685,176 @@ ns.List.prototype.addItem = function (i) {
           };
 
         var offset = $item.offset();
-        that.adjustX = event.pageX - offset.left;
-        that.adjustY = event.pageY - offset.top;
-        that.marginTop = parseInt($item.css('marginTop'));
-        that.formOffset = that.$list.offsetParent().offset();
+        adjustX = event.pageX - offset.left;
+        adjustY = event.pageY - offset.top;
+        marginTop = parseInt($item.css('marginTop'));
+        formOffset = $list.offsetParent().offset();
+        // TODO: Couldn't formOffset and margin be added?
 
         var width = $item.width();
         var height = $item.height();
 
-        $item.addClass('moving').css({width: width, height: height});
-        $placeholder = ns.$('<li class="placeholder h5p-li" style="width:' + width + 'px;height:' + height + 'px"></li>').insertBefore($item);
+        $item.addClass('moving').css({
+          width: width,
+          height: height
+        });
+        $placeholder = $('<li/>', {
+          'class': 'placeholder h5p-li',
+          css: {
+            width: width,
+            height: height
+          }
+        }).insertBefore($item);
 
         move(event);
         return false;
-      })
-      .click(function () {
-        return false;
-      })
-        .next()
-        .click(function () {
-          that.removeItem(that.getIndex($item));
-          return false;
-        })
-        .end()
-      .end();
+      };
 
-  if (!this.passReadies) {
-    this.readies = [];
+      // Append order button
+      $('<div/>', {
+        'class' : 'order',
+        role: 'button',
+        tabIndex: 1,
+        on: {
+          mousedown: down
+        }
+      }).appendTo($item);
+
+      // Append remove button
+      $('<div/>', {
+        'class' : 'remove',
+        role: 'button',
+        tabIndex: 1,
+        on: {
+          click: function () {
+            if (confirm(H5PEditor.t('core', 'confirmRemoval', {':type': list.entity}))) {
+              list.removeItem($item.index());
+              $item.remove();
+            }
+          }
+        }
+      }).appendTo($item);
+
+      // Append content wrapper
+      var $content = ns.$('<div/>', {
+        'class' : 'content'
+      }).appendTo($item);
+
+      // Append new field item to content wrapper
+      item.appendTo($content);
+
+      // Append item to list
+      $item.appendTo($list);
+
+      // Good UX: automatically expand groups
+      if (item instanceof H5PEditor.Group) {
+        item.expand();
+      }
+    };
+
+    /**
+     * Puts this widget at the end of the given container.
+     *
+     * @public
+     * @param {jQuery} $container
+     */
+    self.appendTo = function ($container) {
+      $list.appendTo($container);
+      $button.appendTo($container);
+    };
+
+    /**
+     * Remove this widget from the editor DOM.
+     *
+     * @public
+     */
+    self.remove = function () {
+      $list.remove();
+      $button.remove();
+    };
   }
 
-  var field = this.field.field;
-  var widget = field.widget === undefined ? field.type : field.widget;
+  return ListWidget;
+})(H5P.jQuery);
 
-  // Set default value.
-  if (this.params[i] === undefined && field['default'] !== undefined) {
-    this.params[i] = field['default'];
+
+/* ---- FILE SEPARATOR ---- */
+
+
+H5PEditor.SummariesTextWidget = (function ($) {
+
+  /**
+   * Creates a text input widget for editing summaries.
+   *
+   * @class
+   * @param {List}
+   */
+  function SummariesTextWidget(list) {
+    var self = this;
+    var entity = list.getEntity();
+
+    // Create list html
+    var $input = $('<textarea/>', {
+      rows: 10,
+      on: {
+        change: function () {
+          console.log('Ooh.. changes!');
+          // TODO: Reset list... add stuff
+        }
+      }
+    });
+
+    /**
+     * @public
+     */
+    self.addItem = function (item) {
+      if (!(item instanceof H5PEditor.Group)) {
+        return;
+      }
+
+      item.forEachChild(function (child) {
+        if (!(child instanceof H5PEditor.List)) {
+          return;
+        }
+
+        var text = '';
+        child.forEachChild(function (grandChild) {
+          var html = grandChild.validate();
+          if (html !== false) {
+            // Strip all html tags and remove line breaks.
+            text += html.replace(/(<[^>]*>|\r\n|\n|\r)/gm, '') + '\n';
+          }
+        });
+
+        if (text !== '') {
+          var current = $input.val();
+          if (current !== '') {
+            current += '\n';
+          }
+          $input.val(current + text);
+        }
+      });
+    };
+
+    /**
+     * Puts this widget at the end of the given container.
+     *
+     * @public
+     * @param {jQuery} $container
+     */
+    self.appendTo = function ($container) {
+      $input.appendTo($container);
+    };
+
+    /**
+     * Remove this widget from the editor DOM.
+     *
+     * @public
+     */
+    self.remove = function () {
+      $input.remove();
+    };
   }
 
-  this.children[i] = new ns.widgets[widget](this, field, this.params[i], function (field, value) {
-    that.params[that.getIndex($item)] = value;
-  });
-  this.children[i].appendTo($item.children('.content'));
-  if (!this.passReadies) {
-    for (var j = 0; j < this.readies.length; j++) {
-      this.readies[j]();
-    }
-    delete this.readies;
-  }
-  this.$items[i] = $item;
-
-  return this.children[i];
-};
-
-/**
- * Remove an item from the list.
- *
- * @param {int} i
- * @returns {unresolved}
- */
-ns.List.prototype.removeItem = function (i) {
-  if (!confirm(ns.t('core', 'confirmRemoval', {':type': this.field.entity}))) {
-    return;
-  }
-
-  this.children[i].remove();
-  this.$items[i].remove();
-
-  this.$items.splice(i, 1);
-  this.params.splice(i, 1);
-  this.children.splice(i, 1);
-};
-
-/**
- * Get the index for the given item.
- *
- * @param {jQuery} $item
- * @returns {Integer}
- */
-ns.List.prototype.getIndex = function ($item) {
-  for (var i = 0; i < this.$items.length; i++) {
-    if (this.$items[i] === $item) {
-      break;
-    }
-  }
-
-  return i;
-};
-
-/**
- * Validate all fields in the list.
- */
-ns.List.prototype.validate = function () {
-  var valid = true;
-
-  for (var i = 0; i < this.children.length; i++) {
-    if (this.children[i].validate() === false) {
-      valid = false;
-    }
-  }
-
-  return valid;
-};
-
-/**
- * Collect functions to execute once the tree is complete.
- *
- * @param {function} ready
- * @returns {undefined}
- */
-ns.List.prototype.ready = function (ready) {
-  if (this.passReadies) {
-    this.parent.ready(ready);
-  }
-  else {
-    this.readies.push(ready);
-  }
-};
-
-/**
- * Remove this item.
- */
-ns.List.prototype.remove = function () {
-  ns.removeChildren(this.children);
-  this.$list.parent().remove();
-};
-
-// Tell the editor what widget we are.
-ns.widgets.list = ns.List;
-// TODO: Type should be list, widget should be orderedList or unorderedList.
+  return SummariesTextWidget;
+})(H5P.jQuery);
