@@ -76,7 +76,7 @@ H5PEditor.ListWidget = (function ($) {
      */
     self.addItem = function (item) {
       var $placeholder;
-      var $item = ns.$('<li/>', {
+      var $item = $('<li/>', {
         'class' : 'h5p-li',
       });
 
@@ -185,7 +185,7 @@ H5PEditor.ListWidget = (function ($) {
         tabIndex: 1,
         on: {
           click: function () {
-            if (confirm(H5PEditor.t('core', 'confirmRemoval', {':type': list.entity}))) {
+            if (confirm(H5PEditor.t('core', 'confirmRemoval', {':type': entity}))) {
               list.removeItem($item.index());
               $item.remove();
             }
@@ -194,7 +194,7 @@ H5PEditor.ListWidget = (function ($) {
       }).appendTo($item);
 
       // Append content wrapper
-      var $content = ns.$('<div/>', {
+      var $content = $('<div/>', {
         'class' : 'content'
       }).appendTo($item);
 

@@ -142,10 +142,16 @@ H5PEditor.List = (function ($) {
      *
      * @public
      * @param {*} [paramsOverride] Override params using this value.
+     * @returns {Boolean}
      */
     self.addItem = function (paramsOverride) {
+      if (field.max === children.length) {
+        return false;
+      }
+
       var child = addItem(children.length, paramsOverride);
       self.widget.addItem(child);
+      return true;
     };
 
     /**
