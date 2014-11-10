@@ -28,7 +28,6 @@ H5PEditor.SemanticStructure = (function ($) {
      */
     var init = function () {
       widgets = getValidWidgets();
-      console.log(field, widgets);
 
       if (widgets.length > 1) {
         // Create widget select box
