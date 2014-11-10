@@ -115,11 +115,13 @@ ns.Group.prototype.expand = function () {
  * Find summary to display in group header.
  */
 ns.Group.prototype.findSummary = function () {
-  return;
   var that = this;
   var summary;
   for (var j = 0; j < this.children.length; j++) {
     var child = this.children[j];
+    if (child.field === undefined) {
+      continue;
+    }
     var params = this.field.fields.length === 1 ? this.params : this.params[child.field.name];
     var widget = ns.getWidgetName(child.field);
 

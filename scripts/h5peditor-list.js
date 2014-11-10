@@ -376,10 +376,13 @@ H5PEditor.List = (function ($) {
     };
 
     /**
+     * Add item to list.
+     *
      * @private
      * @param {Number} index
+     * @param {*} [paramsOverride] Override params using this value.
      */
-    var addItem = function (index) {
+    var addItem = function (index, paramsOverride) {
       var childField = field.field;
       var widget = H5PEditor.getWidgetName(childField);
 
@@ -389,9 +392,13 @@ H5PEditor.List = (function ($) {
         setValue(field, parameters);
       }
 
-      // Set default value.
       if (parameters[index] === undefined && childField['default'] !== undefined) {
+        // Use default value
         parameters[index] = childField['default'];
+      }
+      if (paramsOverride !== undefined) {
+        // Use override params
+        parameters[index] = paramsOverride;
       }
 
       var child = children[index] = new H5PEditor.widgets[widget](self, childField, parameters[index], function (childField, value) {
@@ -413,7 +420,7 @@ H5PEditor.List = (function ($) {
      * Finds the index for the given child.
      *
      * @private
-     * @param {*} child field
+     * @param {Object} child field instance
      * @returns {Number} index
      */
     var findIndex = function (child) {
@@ -438,9 +445,10 @@ H5PEditor.List = (function ($) {
      * Adds a new list item and child field at the end of the list
      *
      * @public
+     * @param {*} [paramsOverride] Override params using this value.
      */
-    self.addItem = function () {
-      var child = addItem(children.length);
+    self.addItem = function (paramsOverride) {
+      var child = addItem(children.length, paramsOverride);
       self.widget.addItem(child);
     };
 
@@ -462,6 +470,24 @@ H5PEditor.List = (function ($) {
         parameters = undefined;
         setValue(field);
       }
+    };
+
+    /**
+     * Removes all items.
+     * This is useful if a widget wants to reset the list.
+     *
+     * @public
+     */
+    self.removeAllItems = function () {
+      // Remove child fields
+      for (var i = 0; i < children.length; i++) {
+        children[i].remove();
+      }
+      children = [];
+
+      // Clean up parameters
+      parameters = undefined;
+      setValue(field);
     };
 
     /**
@@ -614,7 +640,10 @@ H5PEditor.ListWidget = (function ($) {
     };
 
     /**
+     * Adds UI items to the widget.
+     *
      * @public
+     * @param {Object} item
      */
     self.addItem = function (item) {
       var $placeholder;
@@ -792,22 +821,81 @@ H5PEditor.SummariesTextWidget = (function ($) {
   function SummariesTextWidget(list) {
     var self = this;
     var entity = list.getEntity();
+    var recreation = false;
 
     // Create list html
     var $input = $('<textarea/>', {
-      rows: 10,
+      rows: 20,
+      css: {
+        resize: 'none'
+      },
       on: {
         change: function () {
-          console.log('Ooh.. changes!');
-          // TODO: Reset list... add stuff
+          recreateList();
         }
       }
     });
 
+    // Used to convert HTML to text and vice versa
+    var $cleaner = $('<div/>');
+
     /**
+     * Clears all items from the list, processes the text and add the items
+     * from the text. This makes it possible to switch to another widget
+     * without losing datas.
+     *
+     * @private
+     */
+    var recreateList = function () {
+      // Get text input
+      var textLines = $input.val().split("\n");
+      textLines.push(''); // Add separator
+
+      // Reset list
+      list.removeAllItems();
+      //$input.val('');
+      recreation = true;
+      // TODO: recreation can be dropped when group structure can be created without being appended.
+      // Then the fields can be added back to the textarea like a validation.
+
+      // Go through text lines and add statements to list
+      var statements = [];
+      for (var i = 0; i < textLines.length; i++) {
+        var textLine = textLines[i].trim();
+        if (textLine === '') {
+          // Task seperator
+          if (statements.length) {
+            // Add statements to list
+            list.addItem({
+              summary: statements
+            });
+
+            // Start new list of statments
+            statements = [];
+          }
+          continue;
+        }
+
+        // Convert text to html
+        $cleaner.text(textLine);
+
+        // Add statement
+        statements.push($cleaner.html());
+      }
+
+      recreation = false;
+    };
+
+    /**
+     * Add items to the text input.
+     *
      * @public
+     * @param {Object} item instance
      */
     self.addItem = function (item) {
+      if (recreation) {
+        return;
+      }
       if (!(item instanceof H5PEditor.Group)) {
         return;
       }
@@ -827,6 +915,11 @@ H5PEditor.SummariesTextWidget = (function ($) {
         });
 
         if (text !== '') {
+          // Convert all escaped html to text
+          $cleaner.html(text);
+          text = $cleaner.text();
+
+          // Append text
           var current = $input.val();
           if (current !== '') {
             current += '\n';
