@@ -351,6 +351,32 @@ a {
     border: 1px solid #fff;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
+
+    .h5p-remove {
+      position: absolute;
+      top: 0;
+      right: 0;
+      cursor: pointer;
+      outline: none;
+      width: 1em;
+      height: 1em;
+      line-height: 1em;
+      overflow: hidden;
+      text-indent: -0.4em;
+      padding: 0.065em;
+      @include opacity(0.6);
+    }
+    .h5p-remove:hover,
+    .h5p-remove:focus {
+      @include opacity(1);
+    }
+    .h5p-remove:after {
+      font-family: $i;
+      font-size: 1.4em;
+      color: #fff;
+      content: "\e890";
+      @include opacity(0.6);
+    }
   }
   .h5p-type {
     position: absolute;
@@ -362,31 +388,6 @@ a {
     text-align: center;
     background: #000;
     color: #fff;
-  }
-  .h5p-remove {
-    position: absolute;
-    top: 0;
-    right: 0;
-    cursor: pointer;
-    outline: none;
-    width: 1em;
-    height: 1em;
-    line-height: 1em;
-    overflow: hidden;
-    text-indent: -0.4em;
-    padding: 0.065em;
-    @include opacity(0.6);
-  }
-  .h5p-remove:hover,
-  .h5p-remove:focus {
-    @include opacity(1);
-  }
-  .h5p-remove:after {
-    font-family: $i;
-    font-size: 1.4em;
-    color: #fff;
-    content: "\e890";
-    @include opacity(0.6);
   }
   .file {
     position: relative;
