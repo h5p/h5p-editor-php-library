@@ -205,7 +205,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       this.setValue(this.field, this.params);
     }
 
-    // TODO: Fetch mime from URL? Validate/check url?
     var matches = url.match(/\.(webm|mp4|ogv)/i);
     var file = {
       path: url,
