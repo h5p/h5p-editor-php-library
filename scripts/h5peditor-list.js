@@ -22,6 +22,9 @@ H5PEditor.List = (function ($) {
     self.parent = parent;
     // TODO: Could this be done better? Perhaps through SemanticStructure?
 
+    // Set default editor widget
+    self.default = 'ListEditor';
+
     /**
      * Keep track of child fields. Should not be exposed directly,
      * create functions for using or finding the children.

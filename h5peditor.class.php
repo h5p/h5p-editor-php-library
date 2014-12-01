@@ -20,7 +20,7 @@ class H5peditor {
     'scripts/h5peditor-group.js',
     'scripts/h5peditor-boolean.js',
     'scripts/h5peditor-list.js',
-    'scripts/h5peditor-list-widget.js',
+    'scripts/h5peditor-list-editor.js',
     'scripts/h5peditor-library.js',
     'scripts/h5peditor-select.js',
     'scripts/h5peditor-dimensions.js',

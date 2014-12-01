@@ -84,7 +84,7 @@ H5PEditor.SemanticStructure = (function ($) {
     var getValidWidgets = function () {
       if (field.widgets === undefined) {
         // No widgets specified use default
-        return ['List'];
+        return [self.default];
       }
       if (!(field.widgets instanceof Array)) {
         throw TypeError('widgets must be an array');
@@ -101,7 +101,7 @@ H5PEditor.SemanticStructure = (function ($) {
 
       if (!validWidgets.length) {
         // There are no valid widgets, add default
-        validWidgets.push('List');
+        validWidgets.push(self.default);
       }
 
       return validWidgets;
@@ -115,7 +115,7 @@ H5PEditor.SemanticStructure = (function ($) {
      * @returns {Class}
      */
     var getWidget = function (name) {
-      return H5PEditor[name + 'Widget'];
+      return H5PEditor[name];
     };
 
     /**
@@ -130,6 +130,7 @@ H5PEditor.SemanticStructure = (function ($) {
         self.widget.remove();
       }
 
+      // TODO: Handle/catch errors?
       var widget = getWidget(name);
       self.widget = new widget(self);
       self.trigger('changeWidget');
