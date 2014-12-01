@@ -20,7 +20,7 @@ H5PEditor.SemanticStructure = (function ($) {
      * Global instance variables.
      * @private
      */
-    var $widgetSelect, $wrapper, $errors, $description, widgets;
+    var $widgetSelect, $wrapper, $errors, $description, $helpText, widgets;
 
     /**
      * Initialize. Wrapped to avoid leaking variables
@@ -35,10 +35,10 @@ H5PEditor.SemanticStructure = (function ($) {
           changeWidget($widgetSelect.val());
         });
         for (var i = 0; i < widgets.length; i++) {
-          var name = widgets[i];
+          var widget = widgets[i];
           $('<option/>', {
-            value: name,
-            text: name // TODO: get from translations?
+            value: widget.name,
+            text: widget.label
           }).appendTo($widgetSelect);
         }
       }
@@ -48,10 +48,13 @@ H5PEditor.SemanticStructure = (function ($) {
         'class': 'field ' + field.type
       });
 
-      /* TODO: Should we move this stuff to a default widget class, thus making it easier to override?
-      If so we should create functions for getting field semantic properties. That will
-      avoid getting custom non-semantic properties in the semantics.json. */
+      /* We want to be in control of the label, description and errors
+      containers to give the editor some structure. Also we do not provide
+      direct access to the field object to avoid cluttering semantics.json with
+      non-semantic properties and options. Getters and setters will be
+      created for what is needed. */
 
+      // Create field label
       if (field.label !== 0) {
         // Add label
         $('<label/>', {
@@ -65,13 +68,18 @@ H5PEditor.SemanticStructure = (function ($) {
         'class': 'h5p-errors'
       });
 
-      // Create description block
+      // Create description
       if (field.description !== undefined) {
         $description = $('<div/>', {
           'class': 'h5peditor-field-description',
           text: field.description
         });
       }
+
+      // Create help text
+      $helpText = $('<div/>', {
+        'class': 'h5p-help-text'
+      });
     };
 
     /**
@@ -93,9 +101,9 @@ H5PEditor.SemanticStructure = (function ($) {
       // Check if specified widgets are valid
       var validWidgets = [];
       for (var i = 0; i < field.widgets.length; i++) {
-        var name = field.widgets[i];
-        if (getWidget(name)) {
-          validWidgets.push(name);
+        var widget = field.widgets[i];
+        if (getWidget(widget.name)) {
+          validWidgets.push(widget);
         }
       }
 
@@ -141,6 +149,9 @@ H5PEditor.SemanticStructure = (function ($) {
       if ($description !== undefined) {
         $description.appendTo($wrapper);
       }
+      if (self.widget.helpText !== undefined) {
+        $helpText.text(self.widget.helpText).appendTo($wrapper);
+      }
     };
 
     /**
@@ -156,7 +167,7 @@ H5PEditor.SemanticStructure = (function ($) {
       }
 
       // Use first widget by default
-      changeWidget(widgets[0]);
+      changeWidget(widgets[0].name);
 
       $wrapper.appendTo($container);
     };

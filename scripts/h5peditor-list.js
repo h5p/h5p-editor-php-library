@@ -15,15 +15,18 @@ H5PEditor.List = (function ($) {
   function List(parent, field, parameters, setValue) {
     var self = this;
 
+    // Set default editor widget
+    self.default = {
+      name: 'ListEditor',
+      label: 'List' // TODO: l10n
+    };
+
     // Initialize semantics structure inheritance
     H5PEditor.SemanticStructure.call(self, field);
 
     // Make it possible to travel up three.
     self.parent = parent;
     // TODO: Could this be done better? Perhaps through SemanticStructure?
-
-    // Set default editor widget
-    self.default = 'ListEditor';
 
     /**
      * Keep track of child fields. Should not be exposed directly,
