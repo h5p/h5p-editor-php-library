@@ -9,18 +9,26 @@ H5PEditor.SemanticStructure = (function ($) {
    * All semantic structure class types will inherit this class.
    *
    * @class
+   * @param {Object} field
+   * @param {Object} defaultWidget
    */
-  function SemanticStructure(field) {
+  function SemanticStructure(field, defaultWidget) {
     var self = this;
 
     // Initialize event inheritance
     H5P.EventDispatcher.call(self);
 
     /**
+     * Determine this fields label. Used in error messages.
+     * @public
+     */
+    self.label = (field.label === undefined ? field.name : field.label);
+
+    /**
      * Global instance variables.
      * @private
      */
-    var $widgetSelect, $wrapper, $errors, $description, $helpText, widgets;
+    var $widgetSelect, $widgetSelectLabel, $wrapper, $label, $errors, $description, $helpText, widgets;
 
     /**
      * Initialize. Wrapped to avoid leaking variables
@@ -30,6 +38,9 @@ H5PEditor.SemanticStructure = (function ($) {
       widgets = getValidWidgets();
 
       if (widgets.length > 1) {
+        // Create widget label
+        $widgetSelectLabel = createLabel(H5PEditor.t('core', 'editMode'));
+
         // Create widget select box
         $widgetSelect = $('<select/>').change(function () {
           changeWidget($widgetSelect.val());
@@ -57,10 +68,7 @@ H5PEditor.SemanticStructure = (function ($) {
       // Create field label
       if (field.label !== 0) {
         // Add label
-        $('<label/>', {
-          'class': 'h5peditor-label',
-          text: (field.label === undefined ? field.name : field.label)
-        });
+        createLabel(self.label).appendTo($wrapper);
       }
 
       // Create errors container
@@ -92,7 +100,7 @@ H5PEditor.SemanticStructure = (function ($) {
     var getValidWidgets = function () {
       if (field.widgets === undefined) {
         // No widgets specified use default
-        return [self.default];
+        return [defaultWidget];
       }
       if (!(field.widgets instanceof Array)) {
         throw TypeError('widgets must be an array');
@@ -138,7 +146,7 @@ H5PEditor.SemanticStructure = (function ($) {
         self.widget.remove();
       }
 
-      // TODO: Handle/catch errors?
+      // TODO: Improve error handling?
       var widget = getWidget(name);
       self.widget = new widget(self);
       self.trigger('changeWidget');
@@ -149,9 +157,7 @@ H5PEditor.SemanticStructure = (function ($) {
       if ($description !== undefined) {
         $description.appendTo($wrapper);
       }
-      if (self.widget.helpText !== undefined) {
-        $helpText.text(self.widget.helpText).appendTo($wrapper);
-      }
+      $helpText.text(self.widget.helpText !== undefined ? self.widget.helpText : '').appendTo($wrapper);
     };
 
     /**
@@ -163,7 +169,7 @@ H5PEditor.SemanticStructure = (function ($) {
     self.appendTo = function ($container) {
       if ($widgetSelect) {
         // Add widget select box
-        $widgetSelect.appendTo($container);
+        $widgetSelectLabel.add($widgetSelect).appendTo($container);
       }
 
       // Use first widget by default
@@ -207,6 +213,20 @@ H5PEditor.SemanticStructure = (function ($) {
   // Extends the event dispatcher
   SemanticStructure.prototype = Object.create(H5P.EventDispatcher.prototype);
   SemanticStructure.prototype.constructor = SemanticStructure;
+
+  /**
+   * Create generic editor label.
+   *
+   * @private
+   * @param {String} text
+   * @returns {jQuery}
+   */
+  var createLabel = function (text) {
+    return $('<label/>', {
+      'class': 'h5peditor-label',
+      text: text
+    });
+  };
 
   return SemanticStructure;
 })(H5P.jQuery);

@@ -15,16 +15,13 @@ H5PEditor.List = (function ($) {
   function List(parent, field, parameters, setValue) {
     var self = this;
 
-    // Set default editor widget
-    self.default = {
-      name: 'ListEditor',
-      label: H5PEditor.t('core', 'editorListLabel')
-    };
-
     // Initialize semantics structure inheritance
-    H5PEditor.SemanticStructure.call(self, field);
+    H5PEditor.SemanticStructure.call(self, field, {
+      name: 'ListEditor',
+      label: H5PEditor.t('core', 'listLabel')
+    });
 
-    // Make it possible to travel up three.
+    // Make it possible to travel up tree.
     self.parent = parent; // (Could this be done a better way in the future?)
 
     /**
@@ -35,9 +32,6 @@ H5PEditor.List = (function ($) {
      * @type {Array}
      */
     var children = [];
-
-    // This fields labels. Used in error messages.
-    var label = (field.label === undefined ? field.name : field.label);
 
     // Prepare the old ready callback system
     var readyCallbacks = [];
@@ -270,13 +264,13 @@ H5PEditor.List = (function ($) {
           parameters !== undefined && parameters.length > field.max) {
         // Invalid, more parameters than max allowed.
         valid = false;
-        self.setError(H5PEditor.t('core', 'exceedsMax', {':property': label, ':max': field.max}));
+        self.setError(H5PEditor.t('core', 'exceedsMax', {':property': self.label, ':max': field.max}));
       }
       if (field.min !== undefined && field.min > 0 &&
           (parameters === undefined || parameters.length < field.min)) {
         // Invalid, less parameters than min allowed.
         valid = false;
-        self.setError(H5PEditor.t('core', 'exceedsMin', {':property': label, ':min': field.min}));
+        self.setError(H5PEditor.t('core', 'exceedsMin', {':property': self.label, ':min': field.min}));
       }
 
       return valid;

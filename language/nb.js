@@ -29,5 +29,6 @@ H5PEditor.language.core = {
   editCopyright: 'Rediger opphavsrett',
   close: 'Lukk',
   tutorialAvailable: 'Veiledning tilgjengelig',
-  editorListLabel: 'Liste'
+  editMode: 'Redigeringsmodus',
+  listLabel: 'Liste'
 };

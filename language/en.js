@@ -29,5 +29,6 @@ H5PEditor.language.core = {
   editCopyright: 'Edit copyright',
   close: 'Close',
   tutorialAvailable: 'Tutorial available',
-  editorListLabel: 'List'
+  editMode: 'Redigeringsmodus',
+  listLabel: 'Liste'
 };
