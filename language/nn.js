@@ -28,5 +28,6 @@ H5PEditor.language.core = {
   noFollow: 'Kunne ikkje følge feltet ":path".',
   editCopyright: 'Rediger opphavsrett',
   close: 'Lukk',
-  tutorialAvailable: 'Veiledning tilgjengelig'
+  tutorialAvailable: 'Veiledning tilgjengelig',
+  editorListLabel: 'Liste'
 };

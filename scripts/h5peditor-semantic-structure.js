@@ -181,6 +181,25 @@ H5PEditor.SemanticStructure = (function ($) {
       self.widget.remove();
     };
 
+    /**
+     * Remove this field and widget.
+     *
+     * @public
+     * @param {String} message
+     */
+    self.setError = function (message) {
+      $errors.append(H5PEditor.createError(message));
+    };
+
+    /**
+     * Clear error messages.
+     *
+     * @public
+     */
+    self.clearErrors = function () {
+      $errors.html('');
+    };
+
     // Must be last
     init();
   }
