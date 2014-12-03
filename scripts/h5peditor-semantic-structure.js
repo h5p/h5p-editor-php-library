@@ -206,6 +206,16 @@ H5PEditor.SemanticStructure = (function ($) {
       $errors.html('');
     };
 
+    /**
+     * Get the name of this field.
+     *
+     * @public
+     * @returns {String} Name of the current field
+     */
+    self.getName = function () {
+      return field.name;
+    };
+
     // Must be last
     init();
   }
