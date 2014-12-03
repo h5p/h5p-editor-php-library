@@ -99,7 +99,8 @@ H5PEditor.List = (function ($) {
       }
 
       var child = children[index] = new H5PEditor.widgets[widget](self, childField, parameters[index], function (childField, value) {
-        parameters[findIndex(child)] = value;
+        var i = findIndex(child);
+        parameters[i === undefined ? index : i] = value;
       });
 
       if (!passReadyCallbacks) {
