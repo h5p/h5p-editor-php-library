@@ -121,7 +121,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
       // Reset params
       that.params.params = {};
     }
-    
+
     ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper.html(''), that);
 
     if (that.libraries !== undefined) {
@@ -233,6 +233,18 @@ ns.Library.prototype.removeChildren = function () {
     }
   }
   ns.removeChildren(this.children);
+};
+
+/**
+* Allows ancestors and widgets to do stuff with our children.
+*
+* @public
+* @param {Function} task
+*/
+ns.Library.prototype.forEachChild = function (task) {
+  for (var i = 0; i < this.children.length; i++) {
+    task(this.children[i]);
+  }
 };
 
 /**

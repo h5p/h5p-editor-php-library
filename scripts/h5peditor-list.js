@@ -16,11 +16,13 @@ H5PEditor.List = (function ($) {
     var self = this;
 
     // Initialize semantics structure inheritance
-    H5PEditor.SemanticStructure.call(self, field);
+    H5PEditor.SemanticStructure.call(self, field, {
+      name: 'ListEditor',
+      label: H5PEditor.t('core', 'listLabel')
+    });
 
-    // Make it possible to travel up three.
-    self.parent = parent;
-    // TODO: Could this be done better? Perhaps through SemanticStructure?
+    // Make it possible to travel up tree.
+    self.parent = parent; // (Could this be done a better way in the future?)
 
     /**
      * Keep track of child fields. Should not be exposed directly,
@@ -36,8 +38,7 @@ H5PEditor.List = (function ($) {
     var passReadyCallbacks = true;
     parent.ready(function () {
       passReadyCallbacks = false;
-    });
-    // TODO: In the future we might listen for parents ready event? (through parent.once())
+    }); // (In the future we should use the event system for this, i.e. self.once('ready'))
 
     // Listen for widget changes
     self.on('changeWidget', function () {
@@ -98,7 +99,8 @@ H5PEditor.List = (function ($) {
       }
 
       var child = children[index] = new H5PEditor.widgets[widget](self, childField, parameters[index], function (childField, value) {
-        parameters[findIndex(child)] = value;
+        var i = findIndex(child);
+        parameters[i === undefined ? index : i] = value;
       });
 
       if (!passReadyCallbacks) {
@@ -245,12 +247,31 @@ H5PEditor.List = (function ($) {
      * @returns {Boolean}
      */
     self.validate = function () {
+      var self = this;
       var valid = true;
 
+      // Remove old error messages
+      self.clearErrors();
+
+      // Make sure child fields are valid
       for (var i = 0; i < children.length; i++) {
         if (children[i].validate() === false) {
           valid = false;
         }
+      }
+
+      // Validate our self
+      if (field.max !== undefined && field.max > 0 &&
+          parameters !== undefined && parameters.length > field.max) {
+        // Invalid, more parameters than max allowed.
+        valid = false;
+        self.setError(H5PEditor.t('core', 'exceedsMax', {':property': self.label, ':max': field.max}));
+      }
+      if (field.min !== undefined && field.min > 0 &&
+          (parameters === undefined || parameters.length < field.min)) {
+        // Invalid, less parameters than min allowed.
+        valid = false;
+        self.setError(H5PEditor.t('core', 'exceedsMin', {':property': self.label, ':min': field.min}));
       }
 
       return valid;

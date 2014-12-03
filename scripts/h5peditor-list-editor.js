@@ -1,7 +1,7 @@
 /** @namespace H5PEditor */
 var H5PEditor = H5PEditor || {};
 
-H5PEditor.ListWidget = (function ($) {
+H5PEditor.ListEditor = (function ($) {
 
   /**
    * Draws the list.
@@ -9,7 +9,7 @@ H5PEditor.ListWidget = (function ($) {
    * @class
    * @param {List} list
    */
-  function ListWidget(list) {
+  function ListEditor(list) {
     var self = this;
 
     var entity = list.getEntity();
@@ -232,5 +232,5 @@ H5PEditor.ListWidget = (function ($) {
     };
   }
 
-  return ListWidget;
+  return ListEditor;
 })(H5P.jQuery);

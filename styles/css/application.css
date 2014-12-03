@@ -561,13 +561,14 @@ a {
   transform: scale(1.1, 1.1);
 }
 
-/* line 486, ../scss/application.scss */
-.h5peditor-field-description {
+/* line 487, ../scss/application.scss */
+.h5peditor-field-description,
+.h5p-help-text {
   font-size: 10px;
   color: #555555;
 }
 
-/* line 491, ../scss/application.scss */
+/* line 492, ../scss/application.scss */
 .h5peditor-form {
   position: relative;
   margin: 0.5em 0 1em;
@@ -576,7 +577,7 @@ a {
   border: 1px solid #ccc;
 }
 
-/* line 499, ../scss/application.scss */
+/* line 500, ../scss/application.scss */
 .h5peditor-label {
   display: block;
   font-weight: bold;
@@ -585,7 +586,7 @@ a {
   padding-top: 4px;
 }
 
-/* line 507, ../scss/application.scss */
+/* line 508, ../scss/application.scss */
 #h5peditor-uploader {
   position: absolute;
   width: 1px;
@@ -594,12 +595,12 @@ a {
   border: 0;
 }
 
-/* line 515, ../scss/application.scss */
+/* line 516, ../scss/application.scss */
 .h5p-tutorial-url {
   font-size: 0.875em;
 }
 
-/* line 519, ../scss/application.scss */
+/* line 520, ../scss/application.scss */
 .h5p-tutorial-url:before {
   font-family: "H5P";
   content: "\e889";
