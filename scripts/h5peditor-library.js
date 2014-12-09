@@ -236,14 +236,14 @@ ns.Library.prototype.removeChildren = function () {
 };
 
 /**
-* Allows ancestors and widgets to do stuff with our children.
-*
-* @public
-* @param {Function} task
-*/
+ * Allows ancestors and widgets to do stuff with our children.
+ *
+ * @public
+ * @param {Function} task
+ */
 ns.Library.prototype.forEachChild = function (task) {
   for (var i = 0; i < this.children.length; i++) {
-    task(this.children[i]);
+    task(this.children[i], i);
   }
 };
 
