@@ -278,6 +278,18 @@ H5PEditor.List = (function ($) {
       return valid;
     };
 
+    /**
+     * Creates a copy of the current valid value. A copy is created to avoid
+     * mistakes like directly editing the parameter values, which will cause
+     * inconsistencies between the parameters and the editor widgets.
+     *
+     * @public
+     * @returns {Array}
+     */
+    self.getValue = function () {
+      return (parameters === undefined ? parameters : $.extend(true, [], parameters));
+    };
+
     // Start the party!
     init();
   }
