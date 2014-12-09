@@ -252,7 +252,9 @@ ns.Library.prototype.forEachChild = function (task) {
  */
 ns.Library.prototype.remove = function () {
   this.removeChildren();
-  this.$select.parent().remove();
+  if (this.$select !== undefined) {
+    this.$select.parent().remove();
+  }
 };
 
 // Tell the editor what widget we are.
