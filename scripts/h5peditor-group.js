@@ -193,7 +193,7 @@ ns.Group.prototype.validate = function () {
  */
 ns.Group.prototype.forEachChild = function (task) {
   for (var i = 0; i < this.children.length; i++) {
-    task(this.children[i]);
+    task(this.children[i], i);
   }
 };
 

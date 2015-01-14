@@ -44,7 +44,7 @@ H5PEditor.List = (function ($) {
     self.on('changeWidget', function () {
       // Append all items to new widget
       for (var i = 0; i < children.length; i++) {
-        self.widget.addItem(children[i]);
+        self.widget.addItem(children[i], i);
       }
     });
 
@@ -147,12 +147,13 @@ H5PEditor.List = (function ($) {
      * @returns {Boolean}
      */
     self.addItem = function (paramsOverride) {
-      if (field.max === children.length) {
+      var id = children.length;
+      if (field.max === id) {
         return false;
       }
 
-      var child = addItem(children.length, paramsOverride);
-      self.widget.addItem(child);
+      var child = addItem(id, paramsOverride);
+      self.widget.addItem(child, id);
       return true;
     };
 
@@ -220,7 +221,7 @@ H5PEditor.List = (function ($) {
      */
     self.forEachChild = function (task) {
       for (var i = 0; i < children.length; i++) {
-        task(children[i]);
+        task(children[i], i);
       }
     };
 
@@ -275,6 +276,18 @@ H5PEditor.List = (function ($) {
       }
 
       return valid;
+    };
+
+    /**
+     * Creates a copy of the current valid value. A copy is created to avoid
+     * mistakes like directly editing the parameter values, which will cause
+     * inconsistencies between the parameters and the editor widgets.
+     *
+     * @public
+     * @returns {Array}
+     */
+    self.getValue = function () {
+      return (parameters === undefined ? parameters : $.extend(true, [], parameters));
     };
 
     // Start the party!
