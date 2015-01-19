@@ -170,9 +170,11 @@ ns.Library.prototype.validate = function () {
 
   var valid = true;
 
-  for (var i = 0; i < this.children.length; i++) {
-    if (this.children[i].validate() === false) {
-      valid = false;
+  if (this.children) {
+    for (var i = 0; i < this.children.length; i++) {
+      if (this.children[i].validate() === false) {
+        valid = false;
+      }
     }
   }
 
