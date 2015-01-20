@@ -44,6 +44,13 @@ ns.Group = function (parent, field, params, setValue) {
   else {
     this.field = field;
   }
+
+  if (this.field.optional === true) {
+    // If this field is optional, make sure child fields are aswell
+    for (var j = 0; j < this.field.fields.length; j++) {
+      this.field.fields[j].optional = true;
+    }
+  }
 };
 
 /**
