@@ -93,7 +93,13 @@ ns.Number.prototype.validate = function () {
   var value = H5P.trim(this.$input.val());
   var decimals = this.field.decimals !== undefined && this.field.decimals;
 
-  if ((that.field.optional === undefined || !that.field.optional) && !value.length) {
+  if (!value.length) {
+    if (that.field.optional === true) {
+      // Field is optional and does not have a value, nothing more to validate
+      return;
+    }
+
+    // Field must have a value
     this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': 'number field'})));
   }
   else if (decimals && !value.match(new RegExp('^-?[0-9]+(.|,)[0-9]{1,}$'))) {
