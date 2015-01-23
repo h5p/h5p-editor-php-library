@@ -48,7 +48,8 @@ a {
     }
   }
 
-  .errors p {
+  .errors p,
+  .h5p-errors {
     margin: 0 0 4px 0;
     color: #f00;
   }
