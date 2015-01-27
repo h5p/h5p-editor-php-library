@@ -145,9 +145,6 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
     parent.readies = [];
   }
 
-  //Get advanced mode cookie.
-  var isAdvancedMode = ns.getAdvancedModeCookie();
-
   for (var i = 0; i < semanticsChunk.length; i++) {
     var field = semanticsChunk[i];
 
@@ -191,12 +188,13 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
       }
     });
 
-    //Classify advanced fields
+    fieldInstance.appendTo($wrapper);
+
+    // Add advanced field to last element
     if (field.advanced !== undefined && field.advanced) {
-      field.type += ' h5p-advanced';
+      $wrapper.children(':last').addClass('h5p-advanced');
     }
 
-    fieldInstance.appendTo($wrapper);
     parent.children.push(fieldInstance);
   }
 
@@ -207,12 +205,6 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
     }
     delete parent.readies;
   }
-
-  // Create advanced mode checkbox.
-  ns.addAdvancedModeField($wrapper, isAdvancedMode);
-
-  // Toggle advanced fields on/off
-  ns.toggleAdvancedFields(isAdvancedMode);
 };
 
 /**
@@ -241,8 +233,8 @@ ns.getAdvancedModeCookie = function () {
  *
  * @param {boolean} isEnabled
  */
-ns.toggleAdvancedFields = function (isEnabled) {
-  ns.$('.h5p-advanced').each(function () {
+ns.toggleAdvancedFields = function ($wrapper, isEnabled) {
+  $wrapper.find('.h5p-advanced').each(function () {
     if (isEnabled) {
       ns.$(this).slideDown(300);
     }
@@ -268,46 +260,6 @@ ns.setAdvancedModeCookie = function(isEnabled) {
     //Expire/delete cookie.
     document.cookie = 'advanced_mode=; expires=Thu, 01 Jan 1970 00:00:00 UTC';
   }
-};
-
-/**
- * Adds the advanced mode checkbox to the editor.
- *
- * @param {object} parent
- */
-ns.addAdvancedModeField = function ($parent, isAdvancedMode) {
-
-  //Advanced mode wrapper
-  var $advancedModeWrapper = ns.$('<div/>', {
-    'class': 'h5peditor-advanced-mode-wrapper'
-  });
-
-  var $advancedModeText = ns.$('<span/>', {
-    'text': 'Advanced mode: '
-  }).appendTo($advancedModeWrapper);
-
-  //input box for advanced mode.
-  var $input = ns.$('<input/>', {
-    type: 'checkbox',
-    'class':'h5peditor-advanced-mode'
-  }).click(function () {
-    var isChecked = ns.$(this).prop('checked');
-
-    //Toggle advanced settings on/off
-    ns.toggleAdvancedFields(isChecked);
-
-    //Set new cookies
-    ns.setAdvancedModeCookie(isChecked);
-
-  }).appendTo($advancedModeWrapper);
-
-  // Set button state
-  if (isAdvancedMode !== undefined && isAdvancedMode) {
-    $input.prop('checked', isAdvancedMode);
-  }
-
-  //Prepend button at top of editor.
-  $parent.prepend($advancedModeWrapper);
 };
 
 /**
@@ -505,9 +457,13 @@ ns.createError = function (message) {
  * @param {String} content
  * @returns {String}
  */
-ns.createItem = function (type, content, description) {
+ns.createItem = function (type, content, description, advanced) {
+  var advancedClass = '';
+  if (advanced) {
+    advancedClass = ' h5p-advanced';
+  }
   // TODO: Remove the errors class, it is deprecated
-  var html = '<div class="field ' + type + '">' + content + '<div class="h5p-errors errors"></div>';
+  var html = '<div class="field ' + type + advancedClass +  '">' + content + '<div class="h5p-errors errors"></div>';
   if (description !== undefined) {
     html += '<div class="h5peditor-field-description">' + description + '</div>';
   }

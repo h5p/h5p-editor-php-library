@@ -10,7 +10,19 @@ ns.Form = function () {
   this.params = {};
   this.passReadies = false;
   this.commonFields = {};
-  this.$form = ns.$('<div class="h5peditor-form"><div class="tree"></div><div class="common collapsed hidden"><div class="h5peditor-label"><span class="icon"></span>' + ns.t('core', 'commonFields') + '</div><div class="fields"><p class="desc">' + ns.t('core', 'commonFieldsDescription') + '</p></div></div></div>');
+  this.$form = ns.$(
+    '<div class="h5peditor-form">' +
+    ' <div class="tree"></div>' +
+    ' <div class="common collapsed hidden">' +
+    '   <div class="h5peditor-label">' +
+    '     <span class="icon"></span>' + ns.t('core', 'commonFields') +
+    '   </div>' +
+    '   <div class="fields">' +
+    '     <p class="desc">' + ns.t('core', 'commonFieldsDescription') + '</p>' +
+    '   </div>' +
+    ' </div>' +
+    '</div>'
+  );
   this.$common = this.$form.find('.common > .fields');
   this.library = '';
   
@@ -66,6 +78,64 @@ ns.Form.prototype.processSemantics = function (semantics, defaultParams) {
     this.$form.replaceWith($error);
     this.$form = $error;
   }
+};
+
+/**
+ * Creates a header for the given library.
+ *
+ * @param library
+ */
+ns.Form.prototype.createHeader = function (library) {
+  var that = this;
+  var isAdvancedMode = ns.getAdvancedModeCookie();
+
+  (this.$form).prepend(ns.$(
+    '<div class="h5peditor-library-header">' +
+    ' <div class="h5peditor-library-title">' + library + '</div>' +
+    ' <div class="h5peditor-advanced-mode">' +
+    '   <span class="h5peditor-advanced-mode-text">Advanced Mode</span>' +
+    '   <div class="h5peditor-advanced-mode-checkbox">' +
+    '     <div class="h5peditor-advanced-div"></div>' +
+    '     <div class="h5peditor-advanced-div"></div>' +
+    '   </div>' +
+    ' </div>' +
+    '</div>'));
+
+  if (isAdvancedMode) {
+    ns.$('.h5peditor-advanced-mode-checkbox:first', this.$form.children('.h5peditor-library-header'))
+      .children(':first')
+      .addClass('h5peditor-advanced-mode-on');
+  } else {
+    ns.$('.h5peditor-advanced-mode-checkbox:last', this.$form.children('.h5peditor-library-header'))
+      .children(':last')
+      .addClass('h5peditor-advanced-mode-off');
+  }
+
+  ns.$('.h5peditor-advanced-mode-checkbox', this.$form.children('.h5peditor-library-header'))
+    .click(function () {
+      var advancedModeOn = ns.$(this).children(':first');
+      var advancedModeOff = ns.$(this).children(':last');
+      var isChecked = false;
+
+      if (advancedModeOn.hasClass('h5peditor-advanced-mode-on')) {
+        advancedModeOn.removeClass('h5peditor-advanced-mode-on');
+        advancedModeOff.addClass('h5peditor-advanced-mode-off');
+      } else {
+        advancedModeOn.addClass('h5peditor-advanced-mode-on');
+        advancedModeOff.removeClass('h5peditor-advanced-mode-off');
+        isChecked = true;
+      }
+
+      //Toggle advanced settings on/off
+      ns.toggleAdvancedFields(that.$form, isChecked);
+
+      //Set new cookies
+      ns.setAdvancedModeCookie(isChecked);
+
+    });
+
+  //Toggle advanced settings
+  ns.toggleAdvancedFields(this.$form, isAdvancedMode);
 };
 
 /**
