@@ -170,9 +170,11 @@ ns.Library.prototype.validate = function () {
 
   var valid = true;
 
-  for (var i = 0; i < this.children.length; i++) {
-    if (this.children[i].validate() === false) {
-      valid = false;
+  if (this.children) {
+    for (var i = 0; i < this.children.length; i++) {
+      if (this.children[i].validate() === false) {
+        valid = false;
+      }
     }
   }
 
@@ -243,7 +245,9 @@ ns.Library.prototype.removeChildren = function () {
  */
 ns.Library.prototype.forEachChild = function (task) {
   for (var i = 0; i < this.children.length; i++) {
-    task(this.children[i], i);
+    if (task(this.children[i], i)) {
+      return;
+    }
   }
 };
 
