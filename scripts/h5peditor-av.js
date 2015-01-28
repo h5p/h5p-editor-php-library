@@ -95,15 +95,27 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    */
   C.prototype.addFile = function (index) {
     var that = this;
-
     var file = this.params[index];
-    var mimeParts = file.mime.split('/');
-    var $file = $('<div class="h5p-thumbnail"><div class="h5p-type" title="' + file.mime + '">' + mimeParts[1] + '</div><div role="button" tabindex="1" class="h5p-remove" title="' + H5PEditor.t('core', 'removeFile') + '"></div></div>')
+
+    if (that.updateIndex !== undefined) {
+      this.$add.parent().children(':eq(' + index + ')').find('.h5p-type').attr('title', file.mime).text(file.mime.split('/')[1]);
+      self.updateIndex = undefined;
+      return;
+    }
+
+    var $file = $('<div class="h5p-thumbnail"><div class="h5p-type" title="' + file.mime + '">' + file.mime.split('/')[1] + '</div><div role="button" tabindex="1" class="h5p-remove" title="' + H5PEditor.t('core', 'removeFile') + '"></div></div>')
       .insertBefore(this.$add)
+      .click(function () {
+        if (!that.$add.is(':visible')) {
+          return; // Do not allow editing of file while uploading
+        }
+        that.$addDialog.addClass('h5p-open').find('.h5p-file-url').val(that.params[index].path);
+        that.updateIndex = index;
+      })
       .children('.h5p-remove')
         .click(function () {
-          if (!confirm(H5PEditor.t('core', 'confirmRemoval', {':type': 'file'}))) {
-            return;
+          if (!that.$add.is(':visible') || !confirm(H5PEditor.t('core', 'confirmRemoval', {':type': 'file'}))) {
+            return false;
           }
 
           // Remove from params.
@@ -120,6 +132,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           for (var i = 0; i < that.changes.length; i++) {
             that.changes[i]();
           }
+          return false;
         })
         .end();
   };
@@ -160,9 +173,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           mime: result.mime,
           copyright: that.copyright
         };
-        that.params.push(file);
-
-        that.addFile(that.params.length - 1);
+        var index = (that.updateIndex !== undefined ? that.updateIndex : that.params.length);
+        that.params[index] = file;
+        that.addFile(index);
 
         for (var i = 0; i < that.changes.length; i++) {
           that.changes[i](file);
@@ -205,15 +218,29 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       this.setValue(this.field, this.params);
     }
 
+    var mime;
     var matches = url.match(/\.(webm|mp4|ogv)/i);
+    if (matches !== null) {
+      mime = matches[matches.length - 1];
+    }
+    else {
+      // Try to find a provider
+      for (var i = 0; i < C.providers.length; i++) {
+        if (C.providers[i].regexp.test(url)) {
+          mime = C.providers[i].name;
+          break;
+        }
+      }
+    }
+
     var file = {
       path: url,
-      mime: 'video/' + (matches !== null ? matches[matches.length - 1] : 'unknown'),
+      mime: this.field.type + '/' + (mime ? mime : 'unknown'),
       copyright: this.copyright
     };
-    this.params.push(file);
-
-    this.addFile(this.params.length - 1);
+    var index = (this.updateIndex !== undefined ? this.updateIndex : this.params.length);
+    this.params[index] = file;
+    this.addFile(index);
 
     for (var i = 0; i < this.changes.length; i++) {
       this.changes[i](file);
@@ -274,6 +301,15 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   C.createAdd = function () {
     return '<div role="button" tabindex="1" class="h5p-add-file" title="' + H5PEditor.t('core', 'addFile') + '"></div><div class="h5p-add-dialog"><div class="h5p-dialog-box"><button class="h5p-file-upload">Select file to upload</button></div><div class="h5p-or"><span>or</span></div><div class="h5p-dialog-box"><input type="text" placeholder="type in file url" class="h5p-file-url h5peditor-text"/></div><div class="h5p-buttons"><button class="h5p-insert">Insert</button><button class="h5p-cancel">Cancel</button></div></div>';
   };
+
+  /**
+   * Providers incase mime type is unknown.
+   * @public
+   */
+  C.providers = [{
+    name: 'YouTube',
+    regexp: /^https?:\/\/(youtu.be|(www.)?youtube.com)\//i
+  }];
 
   return C;
 })(H5P.jQuery);
