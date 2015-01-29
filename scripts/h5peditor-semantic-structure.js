@@ -195,6 +195,10 @@ H5PEditor.SemanticStructure = (function ($) {
         // Add widget select box
         $widgetSelect.appendTo($container);
       }
+      else {
+        // Remove wrapper styling
+        $inner.removeClass('h5peditor-widget-wrapper');
+      }
 
       // Use first widget by default
       changeWidget(widgets[0].name);

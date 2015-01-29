@@ -320,6 +320,7 @@ class H5peditor {
     // Javascripts
     if (!empty($files['scripts'])) {
       foreach ($files['scripts'] as $script) {
+        $upload_dir = wp_upload_dir(); $script->path = str_replace($upload_dir['baseurl'], '../wp-content/uploads', $script->path);
         $libraryData->javascript[$script->path . $script->version] = "\n" . file_get_contents($script->path);
       }
     }
@@ -327,6 +328,7 @@ class H5peditor {
     // Stylesheets
     if (!empty($files['styles'])) {
       foreach ($files['styles'] as $css) {
+        $upload_dir = wp_upload_dir(); $css->path = str_replace($upload_dir['baseurl'], '../wp-content/uploads', $css->path);
         H5peditor::buildCssPath(NULL, $this->basePath . dirname($css->path) . '/');
         $libraryData->css[$css->path . $css->version] = preg_replace_callback('/url\([\'"]?(?![a-z]+:|\/+)([^\'")]+)[\'"]?\)/i', 'H5peditor::buildCssPath', file_get_contents($css->path));
       }
