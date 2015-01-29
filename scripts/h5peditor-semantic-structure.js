@@ -28,7 +28,7 @@ H5PEditor.SemanticStructure = (function ($) {
      * Global instance variables.
      * @private
      */
-    var $widgetSelect, $widgetSelectLabel, $wrapper, $label, $errors, $description, $helpText, widgets;
+    var $widgetSelect, $wrapper, $inner, $label, $errors, $description, $helpText, widgets;
 
     /**
      * Initialize. Wrapped to avoid leaking variables
@@ -38,19 +38,13 @@ H5PEditor.SemanticStructure = (function ($) {
       widgets = getValidWidgets();
 
       if (widgets.length > 1) {
-        // Create widget label
-        $widgetSelectLabel = createLabel(H5PEditor.t('core', 'editMode'));
-
         // Create widget select box
-        $widgetSelect = $('<select/>').change(function () {
-          changeWidget($widgetSelect.val());
+        $widgetSelect = $('<ul/>', {
+          'class': 'h5peditor-widget-select',
+          title: H5PEditor.t('core', 'editMode')
         });
         for (var i = 0; i < widgets.length; i++) {
-          var widget = widgets[i];
-          $('<option/>', {
-            value: widget.name,
-            text: widget.label
-          }).appendTo($widgetSelect);
+          addWidgetOption(widgets[i], i === 0);
         }
       }
 
@@ -71,6 +65,12 @@ H5PEditor.SemanticStructure = (function ($) {
         createLabel(self.label).appendTo($wrapper);
       }
 
+      // Create inner wrapper
+      $inner = $('<div/>', {
+        'class': 'h5peditor-widget-wrapper',
+        appendTo: $wrapper
+      });
+
       // Create errors container
       $errors = $('<div/>', {
         'class': 'h5p-errors'
@@ -88,6 +88,30 @@ H5PEditor.SemanticStructure = (function ($) {
       $helpText = $('<div/>', {
         'class': 'h5p-help-text'
       });
+    };
+
+    /**
+     * Add widget select option.
+     *
+     * @private
+     */
+    var addWidgetOption = function (widget, active) {
+      var $option = $('<li/>', {
+        'class': 'h5peditor-widget-option' + (active ? ' ' + CLASS_WIDGET_ACTIVE : ''),
+        text: widget.label,
+        role: 'button',
+        tabIndex: 1,
+        on: {
+          click: function () {
+            // Update UI
+            $widgetSelect.children('.' + CLASS_WIDGET_ACTIVE).removeClass(CLASS_WIDGET_ACTIVE);
+            $option.addClass(CLASS_WIDGET_ACTIVE);
+
+            // Change Widget
+            changeWidget(widget.name);
+          }
+        }
+      }).appendTo($widgetSelect);
     };
 
     /**
@@ -150,14 +174,14 @@ H5PEditor.SemanticStructure = (function ($) {
       var widget = getWidget(name);
       self.widget = new widget(self);
       self.trigger('changeWidget');
-      self.widget.appendTo($wrapper);
+      self.widget.appendTo($inner);
 
       // Add errors container and description.
-      $errors.appendTo($wrapper);
+      $errors.appendTo($inner);
       if ($description !== undefined) {
-        $description.appendTo($wrapper);
+        $description.appendTo($inner);
       }
-      $helpText.text(self.widget.helpText !== undefined ? self.widget.helpText : '').appendTo($wrapper);
+      $helpText.text(self.widget.helpText !== undefined ? self.widget.helpText : '').appendTo($inner);
     };
 
     /**
@@ -169,7 +193,7 @@ H5PEditor.SemanticStructure = (function ($) {
     self.appendTo = function ($container) {
       if ($widgetSelect) {
         // Add widget select box
-        $widgetSelectLabel.add($widgetSelect).appendTo($container);
+        $widgetSelect.appendTo($container);
       }
 
       // Use first widget by default
@@ -185,6 +209,7 @@ H5PEditor.SemanticStructure = (function ($) {
      */
     self.remove = function () {
       self.widget.remove();
+      $wrapper.remove();
     };
 
     /**
@@ -237,6 +262,11 @@ H5PEditor.SemanticStructure = (function ($) {
       text: text
     });
   };
+
+  /**
+   * @constant
+   */
+  var CLASS_WIDGET_ACTIVE = 'h5peditor-widget-active';
 
   return SemanticStructure;
 })(H5P.jQuery);
