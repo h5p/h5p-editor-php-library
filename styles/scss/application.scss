@@ -645,3 +645,40 @@ a {
   top: .2em;
   left: .2em;
 }
+
+.h5peditor-widget-select {
+  float: right;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.h5peditor-widget-option {
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-bottom: 0;
+  margin-left: 0.5em;
+  padding: 0.25em 0.5em;
+  color: #555;
+  font-size: 0.875em;
+  background: #f4f4f4;
+  line-height: 1.285714286em;
+  cursor: pointer;
+  outline: none;
+}
+.h5peditor-widget-option:hover {
+  color: #000;
+}
+.h5peditor-widget-option:active {
+  color: #8e636a; /* Pink chocolate */
+}
+.h5peditor-widget-active {
+  background: #fff;
+  line-height: 1.357142857em;
+}
+
+.h5peditor-widget-wrapper {
+  border: 1px solid #ccc;
+  background: #fff;
+  margin: 0.25em 0;
+  padding: 0.5em;
+}
