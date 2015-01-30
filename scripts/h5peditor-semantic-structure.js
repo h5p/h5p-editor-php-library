@@ -166,6 +166,9 @@ H5PEditor.SemanticStructure = (function ($) {
      */
     var changeWidget = function (name) {
       if (self.widget !== undefined) {
+        // Validate our fields first to makes sure all "stored" from their widgets
+        self.validate();
+
         // Remove old widgets
         self.widget.remove();
       }
