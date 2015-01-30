@@ -647,13 +647,13 @@ a {
 }
 
 .h5peditor-widget-select {
-  float: right;
-  margin: 0;
+  overflow: hidden;
+  margin: 0 0 -1px;
   padding: 0;
   list-style: none;
 }
 .h5peditor-widget-option {
-  display: inline-block;
+  float: right;
   border: 1px solid #ccc;
   border-bottom: 0;
   margin-left: 0.5em;
@@ -676,9 +676,12 @@ a {
   line-height: 1.357142857em;
 }
 
-.h5peditor-widget-wrapper {
+.h5peditor-widgets > .h5peditor-widget-wrapper {
   border: 1px solid #ccc;
   background: #fff;
-  margin: 0.25em 0;
+  margin: 0 0 0.25em;
   padding: 0.5em;
+}
+.h5peditor-widgets > .h5peditor-label {
+  float: left;
 }
