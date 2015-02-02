@@ -28,26 +28,13 @@ H5PEditor.SemanticStructure = (function ($) {
      * Global instance variables.
      * @private
      */
-    var $widgetSelect, $wrapper, $inner, $label, $errors, $description, $helpText, widgets;
+    var $widgetSelect, $wrapper, $inner, $errors, $description, $helpText, widgets;
 
     /**
      * Initialize. Wrapped to avoid leaking variables
      * @private
      */
     var init = function () {
-      widgets = getValidWidgets();
-
-      if (widgets.length > 1) {
-        // Create widget select box
-        $widgetSelect = $('<ul/>', {
-          'class': 'h5peditor-widget-select',
-          title: H5PEditor.t('core', 'editMode')
-        });
-        for (var i = 0; i < widgets.length; i++) {
-          addWidgetOption(widgets[i], i === 0);
-        }
-      }
-
       // Create field wrapper
       $wrapper = $('<div/>', {
         'class': 'field ' + field.type
@@ -60,9 +47,27 @@ H5PEditor.SemanticStructure = (function ($) {
       created for what is needed. */
 
       // Create field label
+      var $label;
       if (field.label !== 0) {
         // Add label
-        createLabel(self.label).appendTo($wrapper);
+        $label = createLabel(self.label).appendTo($wrapper);
+      }
+
+      var innerClass;
+      widgets = getValidWidgets();
+      if (widgets.length > 1) {
+        // Create widget select box
+        $widgetSelect = $('<ul/>', {
+          'class': 'h5peditor-widget-select',
+          title: H5PEditor.t('core', 'editMode'),
+          appendTo: $wrapper
+        });
+        for (var i = 0; i < widgets.length; i++) {
+          addWidgetOption(widgets[i], i === 0);
+        }
+
+        // Allow custom styling when selector is present
+        $wrapper.addClass('h5peditor-widgets');
       }
 
       // Create inner wrapper
@@ -166,6 +171,9 @@ H5PEditor.SemanticStructure = (function ($) {
      */
     var changeWidget = function (name) {
       if (self.widget !== undefined) {
+        // Validate our fields first to makes sure all "stored" from their widgets
+        self.validate();
+
         // Remove old widgets
         self.widget.remove();
       }
@@ -191,11 +199,6 @@ H5PEditor.SemanticStructure = (function ($) {
      * @param {jQuery} $container
      */
     self.appendTo = function ($container) {
-      if ($widgetSelect) {
-        // Add widget select box
-        $widgetSelect.appendTo($container);
-      }
-
       // Use first widget by default
       changeWidget(widgets[0].name);
 
