@@ -24,6 +24,9 @@ H5PEditor.SemanticStructure = (function ($) {
      */
     self.label = (field.label === undefined ? field.name : field.label);
 
+    // Support old editor libraries
+    self.field = {};
+
     /**
      * Global instance variables.
      * @private
