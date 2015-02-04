@@ -567,14 +567,17 @@ a {
     margin: 5.5em 0 1em;
     visibility: hidden;
     opacity: 0;
+    height: 0;
+    overflow: hidden;
     @include box-shadow(0 0 8px #666);
-    @include transition(visibility 0s 0.2s, opacity 0.2s, margin-top 0.2s);
+    @include transition(visibility 0s 0.2s, height 0s 0.2s, opacity 0.2s, margin-top 0.2s);
 
     &.h5p-open {
       margin-top: 3.5em;
       visibility: visible;
       opacity: 1;
-      @include transition(visibility 0s 0s, opacity 0.2s, margin-top 0.2s);
+      height: auto;
+      @include transition(visibility 0s 0s, height 0s 0s, opacity 0.2s, margin-top 0.2s);
     }
 
     & > .field {
