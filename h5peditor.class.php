@@ -7,6 +7,7 @@ class H5peditor {
   );
   public static $scripts = array(
     'scripts/h5peditor.js',
+    'scripts/h5peditor-semantic-structure.js',
     'scripts/h5peditor-editor.js',
     'scripts/h5peditor-library-selector.js',
     'scripts/h5peditor-form.js',
@@ -19,6 +20,7 @@ class H5peditor {
     'scripts/h5peditor-group.js',
     'scripts/h5peditor-boolean.js',
     'scripts/h5peditor-list.js',
+    'scripts/h5peditor-list-editor.js',
     'scripts/h5peditor-library.js',
     'scripts/h5peditor-select.js',
     'scripts/h5peditor-dimensions.js',

@@ -28,5 +28,7 @@ H5PEditor.language.core = {
   noFollow: 'Cannot follow field ":path".',
   editCopyright: 'Edit copyright',
   close: 'Close',
-  tutorialAvailable: 'Tutorial available'
+  tutorialAvailable: 'Tutorial available',
+  editMode: 'Redigeringsmodus',
+  listLabel: 'Liste'
 };

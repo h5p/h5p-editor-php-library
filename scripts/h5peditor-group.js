@@ -117,12 +117,14 @@ ns.Group.prototype.expand = function () {
 ns.Group.prototype.findSummary = function () {
   var that = this;
   var summary;
-
   for (var j = 0; j < this.children.length; j++) {
     var child = this.children[j];
+    if (child.field === undefined) {
+      continue;
+    }
     var params = this.field.fields.length === 1 ? this.params : this.params[child.field.name];
-    var widget = ns.getWidgetName(child.field); 
-    
+    var widget = ns.getWidgetName(child.field);
+
     if (widget === 'text') {
       if (params !== undefined && params !== '') {
         summary = params.replace(/(<([^>]+)>)/ig, "");
@@ -181,6 +183,18 @@ ns.Group.prototype.validate = function () {
   }
 
   return valid;
+};
+
+/**
+ * Allows ancestors and widgets to do stuff with our children.
+ *
+ * @public
+ * @param {Function} task
+ */
+ns.Group.prototype.forEachChild = function (task) {
+  for (var i = 0; i < this.children.length; i++) {
+    task(this.children[i], i);
+  }
 };
 
 /**

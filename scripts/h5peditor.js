@@ -290,7 +290,9 @@ ns.removeChildren = function (children) {
 
   for (var i = 0; i < children.length; i++) {
     // Common fields will be removed by library.
-    if (children[i].field.common === undefined || !children[i].field.common) {
+    if (children[i].field === undefined ||
+        children[i].field.common === undefined ||
+        !children[i].field.common) {
       children[i].remove();
     }
   }
@@ -396,8 +398,7 @@ ns.createError = function (message) {
  * @returns {String}
  */
 ns.createItem = function (type, content, description) {
-  // TODO: Remove the errors class, it is deprecated
-  var html = '<div class="field ' + type + '">' + content + '<div class="h5p-errors errors"></div>';
+  var html = '<div class="field ' + type + '">' + content + '<div class="h5p-errors"></div>';
   if (description !== undefined) {
     html += '<div class="h5peditor-field-description">' + description + '</div>';
   }
