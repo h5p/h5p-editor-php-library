@@ -1,319 +1,305 @@
+/** @namespace H5PEditor */
 var H5PEditor = H5PEditor || {};
-var ns = H5PEditor;
 
-/**
- * Create a ordered list of fields for the form.
- *
- * @param {mixed} parent
- * @param {Object} field
- * @param {mixed} params
- * @param {function} setValue
- * @returns {ns.List}
- */
-ns.List = function (parent, field, params, setValue) {
-  var that = this;
+H5PEditor.List = (function ($) {
 
-  if (field.entity === undefined) {
-    field.entity = 'item';
-  }
+  /**
+   * List structure.
+   *
+   * @class
+   * @param {*} parent structure
+   * @param {Object} field Semantic description of field
+   * @param {Array} [parameters] Default parameters for this field
+   * @param {Function} setValue Call to set our parameters
+   */
+  function List(parent, field, parameters, setValue) {
+    var self = this;
 
-  if (params === undefined) {
-    this.params = [];
-    setValue(field, this.params);
-  } else {
-    this.params = params;
-  }
-
-  if (field.defaultNum === undefined && field.min !== undefined) {
-    // Use min as defaultNum if defaultNum isn't set.
-    field.defaultNum = field.min;
-  }
-
-  this.field = field;
-  this.parent = parent;
-  this.$items = [];
-  this.children = [];
-  this.library = parent.library + '/' + field.name;
-
-  this.passReadies = true;
-  parent.ready(function () {
-    that.passReadies = false;
-  });
-};
-
-/**
- * Append list to wrapper.
- *
- * @param {jQuery} $wrapper
- * @returns {undefined}
- */
-ns.List.prototype.appendTo = function ($wrapper) {
-  var that = this;
-
-  var label = '';
-  if (this.field.label !== 0) {
-    label = '<label class="h5peditor-label">' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
-  }
-
-  var html = ns.createItem(this.field.type, label + '<ul class="h5p-ul"></ul><input type="button" value="' + ns.t('core', 'addEntity', {':entity': this.field.entity}) + '"/>', this.field.description);
-
-  this.$list = ns.$(html).appendTo($wrapper).children('ul');
-  this.$add = this.$list.next().click(function () {
-    if (that.field.max !== undefined && that.params.length >= that.field.max) {
-      return;
-    }
-    var item = that.addItem();
-    if (item instanceof ns.Group) {
-      item.expand();
-    }
-  });
-
-  if (this.params.length) {
-    for (var i = 0; i < this.params.length; i++) {
-      this.addItem(i);
-    }
-  }
-  else {
-    // Add default number of fields.
-    for (var i = 0; i < this.field.defaultNum; i++) {
-      that.$add.click();
-    }
-  }
-};
-
-/**
- * Move the item around.
- *
- * @param {jQuery} $item
- * @param {jQuery} $placeholder
- * @param {Integer} x
- * @param {Integer} y
- * @returns {unresolved}
- */
-ns.List.prototype.move = function ($item, $placeholder, x, y) {
-  var oldIndex, newIndex;
-
-  // Adjust so the mouse is placed on top of the icon.
-  x = x - this.adjustX;
-  y = y - this.adjustY;
-  $item.css({top: y - this.marginTop - this.formOffset.top, left: x - this.formOffset.left});
-
-  // Try to move up.
-  var $prev = $item.prev().prev();
-  if ($prev.length && y < $prev.offset().top + ($prev.height() / 2)) {
-    $prev.insertAfter($item);
-
-    oldIndex = this.getIndex($item);
-    newIndex = oldIndex - 1;
-    this.swap(this.$items, oldIndex, newIndex);
-    this.swap(this.params, oldIndex, newIndex);
-    this.swap(this.children, oldIndex, newIndex);
-
-    return;
-  }
-
-  // Try to move down.
-  var $next = $item.next();
-  if ($next.length && y + $item.height() > $next.offset().top + ($next.height() / 2)) {
-    $next.insertBefore($placeholder);
-
-    oldIndex = this.getIndex($item);
-    newIndex = oldIndex + 1;
-    this.swap(this.$items, oldIndex, newIndex);
-    this.swap(this.params, oldIndex, newIndex);
-    this.swap(this.children, oldIndex, newIndex);
-  }
-};
-
-ns.List.prototype.swap = function (list, oldIndex, newIndex) {
-  var oldItem = list[oldIndex];
-  list[oldIndex] = list[newIndex];
-  list[newIndex] = oldItem;
-};
-
-/**
- * Add an item to the list.
- *
- * @param {integer} i
- * @returns {unresolved}
- */
-ns.List.prototype.addItem = function (i) {
-  var that = this;
-  var $item, $placeholder;
-
-  if (i === undefined) {
-    i = this.$items.length;
-  }
-
-  var move = function (event) {
-    that.move($item, $placeholder, event.pageX, event.pageY);
-  };
-  var up = function () {
-    // Stop tracking mouse
-    H5P.$body
-      .unbind('mousemove', move)
-      .unbind('mouseup', up)
-      .unbind('mouseleave', up)
-      .attr('unselectable', 'off')
-      .css({
-        '-moz-user-select': '', 
-        '-webkit-user-select': '', 
-        'user-select': '', 
-        '-ms-user-select': ''
-      })
-      [0].onselectstart = H5P.$body[0].ondragstart = null;
-      
-    $item.removeClass('moving').css({
-      width: 'auto', 
-      height: 'auto'
+    // Initialize semantics structure inheritance
+    H5PEditor.SemanticStructure.call(self, field, {
+      name: 'ListEditor',
+      label: H5PEditor.t('core', 'listLabel')
     });
-    $placeholder.remove();
-  };
 
-  $item = ns.$('<li class="h5p-li"><a href="#" class="order"></a><a href="#" class="remove"></a><div class="content"></div></li>')
-    .appendTo(this.$list)
-    .children('.order')
-      .mousedown(function (event) {
-        if (event.which !== 1) {
-          return; // Only allow left mouse button
+    // Make it possible to travel up tree.
+    self.parent = parent; // (Could this be done a better way in the future?)
+
+    /**
+     * Keep track of child fields. Should not be exposed directly,
+     * create functions for using or finding the children.
+     *
+     * @private
+     * @type {Array}
+     */
+    var children = [];
+
+    // Prepare the old ready callback system
+    var readyCallbacks = [];
+    var passReadyCallbacks = true;
+    parent.ready(function () {
+      passReadyCallbacks = false;
+    }); // (In the future we should use the event system for this, i.e. self.once('ready'))
+
+    // Listen for widget changes
+    self.on('changeWidget', function () {
+      // Append all items to new widget
+      for (var i = 0; i < children.length; i++) {
+        self.widget.addItem(children[i], i);
+      }
+    });
+
+    /**
+     * Add all items to list without appending to DOM.
+     *
+     * @public
+     */
+    var init = function () {
+      var i;
+      if (parameters !== undefined && parameters.length) {
+        for (i = 0; i < parameters.length; i++) {
+          addItem(i);
         }
-        
-        // Start tracking mouse
-        H5P.$body
-          .attr('unselectable', 'on')
-          .mouseup(up)
-          .bind('mouseleave', up)
-          .css({
-            '-moz-user-select': 'none', 
-            '-webkit-user-select': 'none', 
-            'user-select': 'none', 
-            '-ms-user-select': 'none'
-          })
-          .mousemove(move)
-          [0].onselectstart = H5P.$body[0].ondragstart = function () {
-            return false;
-          };
+      }
+      else {
+        if (field.defaultNum === undefined) {
+          // Use min or 1 if no default item number is set.
+          field.defaultNum = (field.min !== undefined ? field.min : 1);
+        }
+        // Add default number of fields.
+        for (i = 0; i < field.defaultNum; i++) {
+          addItem(i);
+        }
+      }
+    };
 
-        var offset = $item.offset();
-        that.adjustX = event.pageX - offset.left;
-        that.adjustY = event.pageY - offset.top;
-        that.marginTop = parseInt($item.css('marginTop'));
-        that.formOffset = that.$list.offsetParent().offset();
+    /**
+     * Add item to list.
+     *
+     * @private
+     * @param {Number} index
+     * @param {*} [paramsOverride] Override params using this value.
+     */
+    var addItem = function (index, paramsOverride) {
+      var childField = field.field;
+      var widget = H5PEditor.getWidgetName(childField);
 
-        var width = $item.width();
-        var height = $item.height();
+      if (parameters === undefined) {
+        // Create new parameters for list
+        parameters = [];
+        setValue(field, parameters);
+      }
 
-        $item.addClass('moving').css({width: width, height: height});
-        $placeholder = ns.$('<li class="placeholder h5p-li" style="width:' + width + 'px;height:' + height + 'px"></li>').insertBefore($item);
+      if (parameters[index] === undefined && childField['default'] !== undefined) {
+        // Use default value
+        parameters[index] = childField['default'];
+      }
+      if (paramsOverride !== undefined) {
+        // Use override params
+        parameters[index] = paramsOverride;
+      }
 
-        move(event);
+      var child = children[index] = new H5PEditor.widgets[widget](self, childField, parameters[index], function (childField, value) {
+        var i = findIndex(child);
+        parameters[i === undefined ? index : i] = value;
+      });
+
+      if (!passReadyCallbacks) {
+        // Run collected ready callbacks
+        for (var i = 0; i < readyCallbacks.length; i++) {
+          readyCallbacks[i]();
+        }
+        readyCallbacks = []; // Reset
+      }
+
+      return child;
+    };
+
+    /**
+     * Finds the index for the given child.
+     *
+     * @private
+     * @param {Object} child field instance
+     * @returns {Number} index
+     */
+    var findIndex = function (child) {
+      for (var i = 0; i < children.length; i++) {
+        if (children[i] === child) {
+          return i;
+        }
+      }
+    };
+
+    /**
+     * Get the singular form of the items added in the list.
+     *
+     * @public
+     * @returns {String} The entity type
+     */
+    self.getEntity = function () {
+      return (field.entity === undefined ? 'item' : field.entity);
+    };
+
+    /**
+     * Adds a new list item and child field at the end of the list
+     *
+     * @public
+     * @param {*} [paramsOverride] Override params using this value.
+     * @returns {Boolean}
+     */
+    self.addItem = function (paramsOverride) {
+      var id = children.length;
+      if (field.max === id) {
         return false;
-      })
-      .click(function () {
-        console.log('click');
-        return false;
-      })
-        .next()
-        .click(function () {
-          that.removeItem(that.getIndex($item));
-          return false;
-        })
-        .end()
-      .end();
+      }
 
-  if (!this.passReadies) {
-    this.readies = [];
+      var child = addItem(id, paramsOverride);
+      self.widget.addItem(child, id);
+      return true;
+    };
+
+    /**
+     * Removes the list item at the given index.
+     *
+     * @public
+     * @param {Number} index
+     */
+    self.removeItem = function (index) {
+      // Remove child field
+      children[index].remove();
+      children.splice(index, 1);
+
+      // Clean up parameters
+      parameters.splice(index, 1);
+      if (!parameters.length) {
+        // Create new parameters for list
+        parameters = undefined;
+        setValue(field);
+      }
+    };
+
+    /**
+     * Removes all items.
+     * This is useful if a widget wants to reset the list.
+     *
+     * @public
+     */
+    self.removeAllItems = function () {
+      // Remove child fields
+      for (var i = 0; i < children.length; i++) {
+        children[i].remove();
+      }
+      children = [];
+
+      // Clean up parameters
+      parameters = undefined;
+      setValue(field);
+    };
+
+    /**
+     * Change the order of the items in the list.
+     * Be aware that this may change the index of other existing items.
+     *
+     * @public
+     * @param {Number} currentIndex
+     * @param {Number} newIndex
+     */
+    self.moveItem = function (currentIndex, newIndex) {
+      // Update child fields
+      var child = children.splice(currentIndex, 1);
+      children.splice(newIndex, 0, child[0]);
+
+      // Update parameters
+      var params = parameters.splice(currentIndex, 1);
+      parameters.splice(newIndex, 0, params[0]);
+    };
+
+    /**
+     * Allows ancestors and widgets to do stuff with our children.
+     *
+     * @public
+     * @param {Function} task
+     */
+    self.forEachChild = function (task) {
+      for (var i = 0; i < children.length; i++) {
+        task(children[i], i);
+      }
+    };
+
+    /**
+     * Collect callback to run when the editor is ready. If this item isn't
+     * ready yet, jusy pass them on to the parent item.
+     *
+     * @public
+     * @param {Function} ready
+     */
+    self.ready = function (ready) {
+      if (passReadyCallbacks) {
+        parent.ready(ready);
+      }
+      else {
+        readyCallbacks.push(ready);
+      }
+    };
+
+    /**
+     * Make sure that this field and all child fields are valid.
+     *
+     * @public
+     * @returns {Boolean}
+     */
+    self.validate = function () {
+      var self = this;
+      var valid = true;
+
+      // Remove old error messages
+      self.clearErrors();
+
+      // Make sure child fields are valid
+      for (var i = 0; i < children.length; i++) {
+        if (children[i].validate() === false) {
+          valid = false;
+        }
+      }
+
+      // Validate our self
+      if (field.max !== undefined && field.max > 0 &&
+          parameters !== undefined && parameters.length > field.max) {
+        // Invalid, more parameters than max allowed.
+        valid = false;
+        self.setError(H5PEditor.t('core', 'exceedsMax', {':property': self.label, ':max': field.max}));
+      }
+      if (field.min !== undefined && field.min > 0 &&
+          (parameters === undefined || parameters.length < field.min)) {
+        // Invalid, less parameters than min allowed.
+        valid = false;
+        self.setError(H5PEditor.t('core', 'exceedsMin', {':property': self.label, ':min': field.min}));
+      }
+
+      return valid;
+    };
+
+    /**
+     * Creates a copy of the current valid value. A copy is created to avoid
+     * mistakes like directly editing the parameter values, which will cause
+     * inconsistencies between the parameters and the editor widgets.
+     *
+     * @public
+     * @returns {Array}
+     */
+    self.getValue = function () {
+      return (parameters === undefined ? parameters : $.extend(true, [], parameters));
+    };
+
+    // Start the party!
+    init();
   }
 
-  var widget = this.field.field.widget === undefined ? this.field.field.type : this.field.field.widget;
-  this.children[i] = new ns.widgets[widget](this, this.field.field, this.params[i], function (field, value) {
-    that.params[that.getIndex($item)] = value;
-  });
-  this.children[i].appendTo($item.children('.content'));
-  if (!this.passReadies) {
-    for (var j = 0; j < this.readies.length; j++) {
-      this.readies[j]();
-    }
-    delete this.readies;
-  }
-  this.$items[i] = $item;
+  // Extends the semantics structure
+  List.prototype = Object.create(H5PEditor.SemanticStructure.prototype);
+  List.prototype.constructor = List;
 
-  return this.children[i];
-};
+  return List;
+})(H5P.jQuery);
 
-/**
- * Remove an item from the list.
- *
- * @param {int} i
- * @returns {unresolved}
- */
-ns.List.prototype.removeItem = function (i) {
-  if (!confirm(ns.t('core', 'confirmRemoval', {':type': this.field.entity}))) {
-    return;
-  }
-
-  this.children[i].remove();
-  this.$items[i].remove();
-
-  this.$items.splice(i, 1);
-  this.params.splice(i, 1);
-  this.children.splice(i, 1);
-};
-
-/**
- * Get the index for the given item.
- *
- * @param {jQuery} $item
- * @returns {Integer}
- */
-ns.List.prototype.getIndex = function ($item) {
-  for (var i = 0; i < this.$items.length; i++) {
-    if (this.$items[i] === $item) {
-      break;
-    }
-  }
-
-  return i;
-};
-
-/**
- * Validate all fields in the list.
- */
-ns.List.prototype.validate = function () {
-  var valid = true;
-
-  for (var i = 0; i < this.children.length; i++) {
-    if (this.children[i].validate() === false) {
-      valid = false;
-    }
-  }
-
-  return valid;
-};
-
-/**
- * Collect functions to execute once the tree is complete.
- *
- * @param {function} ready
- * @returns {undefined}
- */
-ns.List.prototype.ready = function (ready) {
-  if (this.passReadies) {
-    this.parent.ready(ready);
-  }
-  else {
-    this.readies.push(ready);
-  }
-};
-
-/**
- * Remove this item.
- */
-ns.List.prototype.remove = function () {
-  ns.removeChildren(this.children);
-  this.$list.parent().remove();
-};
-
-// Tell the editor what widget we are.
-ns.widgets.list = ns.List;
-// TODO: Type should be list, widget should be orderedList or unorderedList.
+// Register widget
+H5PEditor.widgets.list = H5PEditor.List;

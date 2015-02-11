@@ -14,7 +14,7 @@ H5PEditor.widgets.select = H5PEditor.Select = (function (E) {
     this.field = field;
     this.value = params;
     this.setValue = setValue;
-  };
+  }
 
   /**
    * Append widget to the DOM.
@@ -44,7 +44,7 @@ H5PEditor.widgets.select = H5PEditor.Select = (function (E) {
    * @returns {String} HTML.
    */
   C.prototype.createHtml = function () {
-    var options = '';
+    var options = E.createOption('-', '-');
     for (var i = 0; i < this.field.options.length; i++) {
       var option = this.field.options[i];
       options += E.createOption(option.value, option.label, option.value === this.value);
@@ -62,7 +62,25 @@ H5PEditor.widgets.select = H5PEditor.Select = (function (E) {
    * @returns {Boolean}
    */
   C.prototype.validate = function () {
-    return this.$select.val();
+    var value = this.$select.val();
+    if (value === '-') {
+      value = undefined; // No value selected
+    }
+
+    if (this.field.optional !== true && value === undefined) {
+      // Not optional and no value selected, print required error
+      this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': 'text field'})));
+
+      return false;
+    }
+
+    // All valid. Remove old errors
+    var $errors = this.$errors.children();
+    if ($errors.length) {
+      $errors.remove();
+    }
+
+    return value;
   };
 
 

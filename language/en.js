@@ -27,5 +27,8 @@ H5PEditor.language.core = {
   uploading: 'Uploading, please wait...',
   noFollow: 'Cannot follow field ":path".',
   editCopyright: 'Edit copyright',
-  close: 'Close'
+  close: 'Close',
+  tutorialAvailable: 'Tutorial available',
+  editMode: 'Redigeringsmodus',
+  listLabel: 'Liste'
 };

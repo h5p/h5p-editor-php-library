@@ -25,7 +25,7 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
     this.defaultParams = {};
     // TODO: Inform the user?
   }
-  
+
   this.defaultLibrary = this.currentLibrary = defaultLibrary;
   this.defaultLibraryParameterized = defaultLibrary ? defaultLibrary.replace('.', '-').toLowerCase() : undefined;
 
@@ -33,15 +33,26 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
     var library = libraries[i];
     var libraryName = ns.libraryToString(library);
 
-    // Allow old version of library only if used by existing content
-    if (library.isOld !== true || (library.isOld === true && this.defaultLibrary === libraryName)) {
+    // Never deny editing existing content
+    // For new content deny old or restricted libs.
+    if (this.defaultLibrary === libraryName
+      || ((library.restricted === undefined || !library.restricted)
+        && library.isOld !== true
+      )
+    ) {
       options += '<option value="' + libraryName + '"';
       if (libraryName === defaultLibrary || library.name === this.defaultLibraryParameterized) {
         options += ' selected="selected"';
       }
+      if (library.tutorialUrl !== undefined) {
+        options += ' data-tutorial-url="' + library.tutorialUrl + '"';
+      }
       options += '>' + library.title + (library.isOld===true ? ' (deprecated)' : '') + '</option>';
     }
   }
+
+  //Add tutorial link:
+  this.$tutorialUrl = ns.$('<a class="h5p-tutorial-url" target="_blank">' + ns.t('core', 'tutorialAvailable') + '</a>').hide();
 
   this.$selector = ns.$('<select name="h5peditor-library" title="' + ns.t('core', 'selectLibrary') + '">' + options + '</select>').change(function () {
     var library;
@@ -63,6 +74,9 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
     if (library !== '-') {
       firstTime = false;
     }
+
+    var tutorialUrl = ns.$(this).find(':selected').data('tutorial-url');
+    that.$tutorialUrl.attr('href', tutorialUrl).toggle(tutorialUrl !== undefined && tutorialUrl !== null && tutorialUrl.length !== 0);
   });
 };
 
@@ -76,6 +90,8 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
   this.$parent = $element;
 
   this.$selector.appendTo($element);
+  this.$tutorialUrl.appendTo($element);
+
   $element.append('<div class="h5p-more-libraries">' + ns.t('core', 'moreLibraries') + '</div>');
 };
 

@@ -40,7 +40,6 @@ ns.Library = function (parent, field, params, setValue) {
  */
 ns.Library.prototype.appendTo = function ($wrapper) {
   var that = this;
-
   var html = '';
   if (this.field.label !== 0) {
     html = '<label class="h5peditor-label">' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
@@ -59,11 +58,11 @@ ns.Library.prototype.appendTo = function ($wrapper) {
 
   ns.$.post(ns.getAjaxUrl('libraries'), {libraries: that.field.options}, function (data) {
     that.libraries = data;
-
     var options = ns.createOption('-', '-');
     for (var i = 0; i < data.length; i++) {
       var library = data[i];
-      if (library.title !== undefined) {
+      if (library.uberName === that.params.library
+        || (library.title !== undefined && (library.restricted === undefined || !library.restricted))) {
         options += ns.createOption(library.uberName, library.title, library.uberName === that.params.library);
       }
     }
@@ -122,7 +121,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
       // Reset params
       that.params.params = {};
     }
-    
+
     ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper.html(''), that);
 
     if (that.libraries !== undefined) {
@@ -171,9 +170,11 @@ ns.Library.prototype.validate = function () {
 
   var valid = true;
 
-  for (var i = 0; i < this.children.length; i++) {
-    if (this.children[i].validate() === false) {
-      valid = false;
+  if (this.children) {
+    for (var i = 0; i < this.children.length; i++) {
+      if (this.children[i].validate() === false) {
+        valid = false;
+      }
     }
   }
 
@@ -237,11 +238,27 @@ ns.Library.prototype.removeChildren = function () {
 };
 
 /**
+ * Allows ancestors and widgets to do stuff with our children.
+ *
+ * @public
+ * @param {Function} task
+ */
+ns.Library.prototype.forEachChild = function (task) {
+  for (var i = 0; i < this.children.length; i++) {
+    if (task(this.children[i], i)) {
+      return;
+    }
+  }
+};
+
+/**
  * Called when this item is being removed.
  */
 ns.Library.prototype.remove = function () {
   this.removeChildren();
-  this.$select.parent().remove();
+  if (this.$select !== undefined) {
+    this.$select.parent().remove();
+  }
 };
 
 // Tell the editor what widget we are.

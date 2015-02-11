@@ -12,12 +12,12 @@ ns.Editor = function (library, defaultParams, replace) {
   var self = this;
 
   // Create iframe and replace the given element with it
-  var height = 1;
+  var height = 1.5;
   var iframe = ns.$('<iframe/>', {
     css: {
       display: 'block',
       width: '100%',
-      height: height + 'px',
+      height: height + 'em',
       border: 'none',
       zIndex: 101,
       top: 0,
@@ -29,7 +29,6 @@ ns.Editor = function (library, defaultParams, replace) {
     var $ = this.contentWindow.H5P.jQuery;
     var LibrarySelector = this.contentWindow.H5PEditor.LibrarySelector;
     this.contentWindow.H5P.$body = $(this.contentDocument.body);
-
     var $container = $('body > .h5p-editor');
 
     // Load libraries list
@@ -77,7 +76,6 @@ ns.Editor = function (library, defaultParams, replace) {
       })();
     }
   }).get(0);
-  
   iframe.contentDocument.open();
   iframe.contentDocument.write('\
     <!doctype html><html>\
@@ -165,6 +163,9 @@ ns.t = function (library, key, vars) {
 
   // Replace placeholder with variables.
   for (var placeholder in vars) {
+    if (!vars[placeholder]) {
+      continue;
+    }
     translation = translation.replace(placeholder, vars[placeholder]);
   }
 

@@ -10,7 +10,7 @@ $i: 'H5P';
 html, body {
   margin: 0;
   padding: 0;
-  font-family: 'Open Sans', sans-serif;  
+  font-family: 'Open Sans', sans-serif;
   max-width: 960px;
 }
 a {
@@ -26,6 +26,7 @@ a {
 
   .field {
     margin: 16px 0;
+    font-size: 16px;
     padding: 0;
     &:first-child {
       margin-top: 0;
@@ -33,21 +34,20 @@ a {
     &:last-child {
       margin-bottom: 0;
     }
-    
+
     &.boolean .h5peditor-label {
       display: inline;
     }
     &.video, &.image, &.file, &.audio {
       position: relative;
     }
-    
+
     .library {
       border: 1px solid #666;
       padding: 8px;
-      overflow: hidden; // Create a new block formatting context to avoid float related issues with vertical tabs
     }
   }
-  
+
   .errors p {
     margin: 0 0 4px 0;
     color: #f00;
@@ -77,15 +77,6 @@ a {
     background-color: #fff;
     border-color: #53a0ff;
   }
-  iframe {
-    width: 100%;
-    height: 0;
-    border: 0;
-    overflow: hidden;
-    &.cke_wysiwyg_frame {
-      overflow: auto;
-    }
-  }
   .h5p-ul {
     padding: 0;
     margin: 0;
@@ -105,7 +96,7 @@ a {
         cursor: pointer;
         width: 14px;
         height: 14px;
-        margin: 13px 3px 0 1px;
+        margin: 10px 4px 0 0;
         float: right;
         font-size: 1.75em;
         line-height: 1em;
@@ -116,33 +107,32 @@ a {
           text-decoration: none;
         }
       }
-      
+
       & > .remove:after {
           font-family: $i;
           content: "\e890";
           color: #666;
         }
-        
+
       & > .remove:hover:after {
           color: #c33f62;
         }
-      
+
       & > .order {
         float: left;
-          
+
         &:after {
           font-family: $i;
           content: "\e88d";
           color: #666;
-          
+
         }
-        
+
         &:hover:after {
           color: #027AC6;
         }
       }
       &:hover {
-        background: #e9edf4;
         text-decoration: none;
       }
     }
@@ -171,7 +161,7 @@ a {
         float: left;
         width: 13px;
         height: 13px;
-        margin: 3px 0 0;
+        margin: 4px 0 0;
         background: inline-image("expand.png") no-repeat;
         opacity: 0.8;
 
@@ -190,14 +180,14 @@ a {
     .h5p-li {
       background: #fff;
       &:hover {
-        background: #e9edf4;
+        background: #fff;
       }
       .group {
         background: #fff;
         .h5p-li {
           background: #fff;
           &:hover {
-            background: #e9edf4;
+            background: #fff;
           }
           .group {
             background: #feedff;
@@ -231,6 +221,27 @@ a {
     width: auto;
     margin: 0;
     padding: 4px 8px;
+    background: linear-gradient(to bottom,#fff 0,#f2f2f2 100%);
+    border: 1px solid #ccc;
+    border-radius: 0.25em;
+    font-size: 0.875em;
+    color: #333;
+    cursor: pointer;
+
+    &:before {
+      font-family: $i;
+      content: "\e88f";
+      color: #666;
+      padding-right: 0.25em;
+      vertical-align: middle;
+      font-size: 1.5em;
+      vertical-align: middle;
+      padding-left: 0.25em;
+    }
+    &:hover {
+      text-decoration: none;
+      border-color: #999;
+    }
   }
   .dimensions input, .coordinates input, .number input {
     width: 75px;
@@ -249,8 +260,8 @@ a {
 
     .thumbnail {
       display: inline-block;
-      margin: 10px;
-      @include box-shadow(0 0 16px 0 #666666);
+      margin: 10px 10px 10px 0;
+      @include box-shadow(0 0 10px 0 #666666);
       border: 1px solid #fff;
       cursor: pointer;
     }
@@ -264,8 +275,8 @@ a {
     .remove {
       display: block;
       position: absolute;
-      top: 13px;
-      right: 16px;
+      top: 7px;
+      right: 7px;
       cursor: pointer;
     }
     .remove:before {
@@ -273,22 +284,23 @@ a {
       font-size: 1.4em;
       color: #fff;
       content: "\e890";
-      @include opacity(0.8);
+      @include opacity(0.6);
       @include text-shadow(rgba(black, 0.4) 0 0 4px, rgba(black, 0.4) 0 0 4px, rgba(black, 0.4) 0 0 4px);
     }
     .remove:hover {
       text-decoration: none;
     }
     .remove:hover:before {
-      @include opacity(1); 
-      color: #c33f62;
+      color: #fff;
+      @include opacity(1);
+      @include text-shadow(rgba(black, 0.4) 0 0 4px, rgba(black, 0.4) 0 0 4px, rgba(black, 0.4) 0 0 4px);
     }
     img {
       vertical-align: bottom;
     }
   }
   .video .file, .audio .file {
-    overflow: hidden;
+    overflow: visible;
     .thumbnail, .add {
       float: left;
     }
@@ -296,12 +308,12 @@ a {
       margin-top: 8px;
     }
     .thumbnail {
-      overflow: hidden;
+      overflow: visible;
       position: relative;
       cursor: auto;
     }
     .remove {
-      top: -7px;
+      top: -3px;
       right: -5px;
     }
     .type {
@@ -332,7 +344,7 @@ a {
       padding: 0.5em 0.75em 0.4em;
       background: #ddd;
       cursor: pointer;
-      
+
       & > .icon {
         display: inline-block;
         width: 20px;
@@ -340,7 +352,7 @@ a {
         background: inline-image("collapse.png") no-repeat left center;
         opacity: 0.8;
         vertical-align: top;
-        margin-top: 1px;
+        margin-top: 4px;
       }
       &:hover > .icon {
         opacity: 1;
@@ -350,14 +362,14 @@ a {
       margin: 0.3125em 0.5em 0.5em;
       padding-bottom: 0.25em;
       min-height: 2em;
-      
+
       & > .desc {
         margin: 0;
         font-size: 0.875em;
         color: #666;
       }
     }
-    
+
     &.collapsed {
       & > .h5peditor-label > .icon {
         background-image: inline-image("expand.png");
@@ -366,7 +378,7 @@ a {
         display: none;
       }
     }
-    
+
     &.hidden {
       display: none;
     }
@@ -388,30 +400,34 @@ a {
     font-style: italic;
   }
   .h5p-copyright-button {
+    background: linear-gradient(to bottom,#fff 0,#f2f2f2 100%);
+    border: 1px solid #ccc;
+    border-radius: 0.25em;
+    font-size: 0.875em;
+    color: #333;
+    cursor: pointer;
     float: left;
     display: block;
     clear: both;
-    cursor: pointer;
-    border: 1px solid #999;
-    color: #999;
-    font-size: 0.875em;
-    padding: 0.1875em 0.5625em 0.1875em 0.5em;
-    
+    line-height: 2em;
+    padding-right: 1em;
+
     &:before {
       font-family: $i;
       content: "\e88f";
+      color: #666;
       padding-right: 0.25em;
-      vertical-align: bottom;
+      vertical-align: middle;
       font-size: 1.5em;
-      line-height: 1em;
+      vertical-align: middle;
+      padding-left: 0.25em;
     }
     &:hover {
-      color: #555;
       text-decoration: none;
-      border-color: #555;
+      border-color: #999;
     }
   }
-  
+
   .h5p-editor-dialog {
     position: absolute;
     z-index: 1;
@@ -423,23 +439,23 @@ a {
     opacity: 0;
     @include box-shadow(0 0 8px #666);
     @include transition(visibility 0s 0.2s, opacity 0.2s, margin-top 0.2s);
-    
+
     &.h5p-open {
       margin-top: 3.5em;
       visibility: visible;
       opacity: 1;
       @include transition(visibility 0s 0s, opacity 0.2s, margin-top 0.2s);
     }
-    
+
     & > .field {
       margin: 0 0 10px;
       border: 0;
       box-shadow: none;
     }
-    
+
     .h5p-close {
       color: #494949;
-    
+
       &:before {
         font-size: 2em;
         right: -0.125em;
@@ -450,7 +466,7 @@ a {
         line-height: 1em;
         @include transition(scale 0.2s);
       }
-      
+
       &:hover:before {
         @include scale(1.1, 1.1);
       }
@@ -458,7 +474,8 @@ a {
   }
 }
 
-.h5peditor-field-description {
+.h5peditor-field-description,
+.h5p-help-text {
   font-size: 10px;
   color: #555555;
 }
@@ -485,4 +502,58 @@ a {
   height: 1px;
   top: -1px;
   border: 0;
+  overflow: hidden;
+}
+
+.h5p-tutorial-url {
+  font-size: 0.875em;
+}
+
+.h5p-tutorial-url:before {
+  font-family: $i;
+  content: "\e889";
+  font-size: 1.5em;
+  position: relative;
+  top: .2em;
+  left: .2em;
+}
+
+.h5peditor-widget-select {
+  overflow: hidden;
+  margin: 0 0 -1px;
+  padding: 0;
+  list-style: none;
+}
+.h5peditor-widget-option {
+  float: right;
+  border: 1px solid #ccc;
+  border-bottom: 0;
+  margin-left: 0.5em;
+  padding: 0.25em 0.5em;
+  color: #555;
+  font-size: 0.875em;
+  background: #f4f4f4;
+  line-height: 1.285714286em;
+  cursor: pointer;
+  outline: none;
+}
+.h5peditor-widget-option:hover {
+  color: #000;
+}
+.h5peditor-widget-option:active {
+  color: #8e636a; /* Pink chocolate */
+}
+.h5peditor-widget-active {
+  background: #fff;
+  line-height: 1.357142857em;
+}
+
+.h5peditor-widgets > .h5peditor-widget-wrapper {
+  border: 1px solid #ccc;
+  background: #fff;
+  margin: 0 0 0.25em;
+  padding: 0.5em;
+}
+.h5peditor-widgets > .h5peditor-label {
+  float: left;
 }
