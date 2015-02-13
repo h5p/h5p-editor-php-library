@@ -12,6 +12,7 @@ var ns = H5PEditor;
  */
 ns.Library = function (parent, field, params, setValue) {
   var that = this;
+  H5P.EventDispatcher.call(this);
 
   if (params === undefined) {
     this.params = {params: {}};
@@ -31,6 +32,18 @@ ns.Library = function (parent, field, params, setValue) {
     that.passReadies = false;
   });
 };
+
+ns.Library.prototype = Object.create(H5P.EventDispatcher.prototype);
+ns.Library.prototype.constructor = ns.Library;
+
+
+// Static variables
+
+// Reference to the first library instance that requests the library list
+ns.Library.requestedLibraryList = null;
+
+// Reference to the library list
+ns.Library.libraryList = null;
 
 /**
  * Append the library selector to the form.
@@ -55,42 +68,68 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   var $field = ns.$(html).appendTo($wrapper);
   this.$select = $field.children('select');
   this.$libraryWrapper = $field.children('.libwrap');
-
-  ns.$.post(ns.getAjaxUrl('libraries'), {libraries: that.field.options}, function (data) {
-    that.libraries = data;
-    var options = ns.createOption('-', '-');
-    for (var i = 0; i < data.length; i++) {
-      var library = data[i];
-      if (library.uberName === that.params.library
-        || (library.title !== undefined && (library.restricted === undefined || !library.restricted))) {
-        options += ns.createOption(library.uberName, library.title, library.uberName === that.params.library);
-      }
-    }
-
-    that.$select.html(options).change(function () {
-      if (that.params.library === undefined || confirm(H5PEditor.t('core', 'confirmChangeLibrary'))) {
-        that.loadLibrary(ns.$(this).val());
-      }
+  
+  // We are the first to need the library list, let's fetch it
+  if (ns.Library.requestedLibraryList === null) {
+    // Tell the world that we're fetching the list
+    ns.Library.requestedLibraryList = this;
+  
+    ns.$.post(ns.getAjaxUrl('libraries'), {libraries: that.field.options}, function (data) {
+      ns.Library.libraryList = data;
+      // Tell the world that the list has been fetched
+      that.trigger('libraryListLoaded');
     });
+    // And let's make sure that we to act when the list has been fetched
+    that.on('libraryListLoaded', that.libraryListLoaded, that);
+  }
+  // List already loaded, let's go ahead and use it
+  else if (ns.Library.libraryList !== null) {
+    that.libraryListLoaded();
+  }
+  // Someone else is loading the library list, we'll have to wait for it
+  else {
+    ns.Library.requestedLibraryList.on('libraryListLoaded', that.libraryListLoaded, that);
+  }
+};
 
-    if (data.length === 1) {
-      that.$select.hide();
-      $field.children('.h5peditor-label').hide();
-      that.loadLibrary(that.$select.children(':last').val(), true);
+/**
+ * Handler for when the library list has been loaded
+ * 
+ * @param {H5P.Event} event
+ */
+ns.Library.prototype.libraryListLoaded = function(event) {
+  var options = ns.createOption('-', '-');
+  var that = this;
+  for (var i = 0; i < ns.Library.libraryList.length; i++) {
+    var library = ns.Library.libraryList[i];
+    if (library.uberName === that.params.library
+      || (library.title !== undefined && (library.restricted === undefined || !library.restricted))) {
+      options += ns.createOption(library.uberName, library.title, library.uberName === that.params.library);
     }
+  }
 
-    if (that.runChangeCallback === true) {
-      // In case a library has been selected programmatically trigger change events, e.g. a default library.
-      that.change();
-      that.runChangeCallback = false;
+  that.$select.html(options).change(function () {
+    if (that.params.library === undefined || confirm(H5PEditor.t('core', 'confirmChangeLibrary'))) {
+      that.loadLibrary(ns.$(this).val());
     }
   });
 
+  if (ns.Library.libraryList.length === 1) {
+    that.$select.hide();
+    $field.children('.h5peditor-label').hide();
+    that.loadLibrary(that.$select.children(':last').val(), true);
+  }
+
+  if (that.runChangeCallback === true) {
+    // In case a library has been selected programmatically trigger change events, e.g. a default library.
+    that.change();
+    that.runChangeCallback = false;
+  }
   // Load default library.
   if (this.params.library !== undefined) {
     that.loadLibrary(this.params.library, true);
   }
-};
+}
 
 /**
  * Load the selected library.
