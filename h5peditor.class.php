@@ -22,6 +22,7 @@ class H5peditor {
     'scripts/h5peditor-list.js',
     'scripts/h5peditor-list-editor.js',
     'scripts/h5peditor-library.js',
+    'scripts/h5peditor-library-list-cache.js',
     'scripts/h5peditor-select.js',
     'scripts/h5peditor-dimensions.js',
     'scripts/h5peditor-coordinates.js',

@@ -11,39 +11,33 @@ var ns = H5PEditor;
  * @returns {ns.Library}
  */
 ns.Library = function (parent, field, params, setValue) {
-  var that = this;
+  var self = this;
   H5P.EventDispatcher.call(this);
-
+  
   if (params === undefined) {
     this.params = {params: {}};
+    // If you do a console log here it might show that this.params is
+    // something else than what we set it to. One of life's big mysteries...
     setValue(field, this.params);
   } else {
     this.params = params;
   }
-
   this.field = field;
+  this.$myField;
   this.parent = parent;
   this.changes = [];
   this.optionsLoaded = false;
   this.library = parent.library + '/' + field.name;
+  this.libraryList;
 
   this.passReadies = true;
   parent.ready(function () {
-    that.passReadies = false;
+    self.passReadies = false;
   });
 };
 
 ns.Library.prototype = Object.create(H5P.EventDispatcher.prototype);
 ns.Library.prototype.constructor = ns.Library;
-
-
-// Static variables
-
-// Reference to the first library instance that requests the library list
-ns.Library.requestedLibraryList = null;
-
-// Reference to the library list
-ns.Library.libraryList = null;
 
 /**
  * Append the library selector to the form.
@@ -65,69 +59,49 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   // TODO: Remove errors, it is deprecated
   html += '<div class="errors h5p-errors"></div><div class="libwrap"></div></div>';
 
-  var $field = ns.$(html).appendTo($wrapper);
-  this.$select = $field.children('select');
-  this.$libraryWrapper = $field.children('.libwrap');
-  
-  // We are the first to need the library list, let's fetch it
-  if (ns.Library.requestedLibraryList === null) {
-    // Tell the world that we're fetching the list
-    ns.Library.requestedLibraryList = this;
-  
-    ns.$.post(ns.getAjaxUrl('libraries'), {libraries: that.field.options}, function (data) {
-      ns.Library.libraryList = data;
-      // Tell the world that the list has been fetched
-      that.trigger('libraryListLoaded');
-    });
-    // And let's make sure that we to act when the list has been fetched
-    that.on('libraryListLoaded', that.libraryListLoaded, that);
-  }
-  // List already loaded, let's go ahead and use it
-  else if (ns.Library.libraryList !== null) {
-    that.libraryListLoaded();
-  }
-  // Someone else is loading the library list, we'll have to wait for it
-  else {
-    ns.Library.requestedLibraryList.on('libraryListLoaded', that.libraryListLoaded, that);
-  }
-};
+  this.$myField = ns.$(html).appendTo($wrapper);
+  this.$select = this.$myField.children('select');
+  this.$libraryWrapper = this.$myField.children('.libwrap');
+  ns.LibraryListCache.getLibraries(that.field.options, that.libraryListLoaded, that);
+}
 
 /**
  * Handler for when the library list has been loaded
  * 
  * @param {H5P.Event} event
  */
-ns.Library.prototype.libraryListLoaded = function(event) {
+ns.Library.prototype.libraryListLoaded = function(libList) {
+  this.libraryList = libList;
+  var self = this;
   var options = ns.createOption('-', '-');
-  var that = this;
-  for (var i = 0; i < ns.Library.libraryList.length; i++) {
-    var library = ns.Library.libraryList[i];
-    if (library.uberName === that.params.library
+  for (var i = 0; i < self.libraryList.length; i++) {
+    var library = self.libraryList[i];
+    if (library.uberName === self.params.library
       || (library.title !== undefined && (library.restricted === undefined || !library.restricted))) {
-      options += ns.createOption(library.uberName, library.title, library.uberName === that.params.library);
+      options += ns.createOption(library.uberName, library.title, library.uberName === self.params.library);
     }
   }
 
-  that.$select.html(options).change(function () {
-    if (that.params.library === undefined || confirm(H5PEditor.t('core', 'confirmChangeLibrary'))) {
-      that.loadLibrary(ns.$(this).val());
+  self.$select.html(options).change(function () {
+    if (self.params.library === undefined || confirm(H5PEditor.t('core', 'confirmChangeLibrary'))) {
+      self.loadLibrary(ns.$(this).val());
     }
   });
 
-  if (ns.Library.libraryList.length === 1) {
-    that.$select.hide();
-    $field.children('.h5peditor-label').hide();
-    that.loadLibrary(that.$select.children(':last').val(), true);
+  if (self.libraryList.length === 1) {
+    self.$select.hide();
+    self.$myField.children('.h5peditor-label').hide();
+    self.loadLibrary(self.$select.children(':last').val(), true);
   }
 
-  if (that.runChangeCallback === true) {
+  if (self.runChangeCallback === true) {
     // In case a library has been selected programmatically trigger change events, e.g. a default library.
-    that.change();
-    that.runChangeCallback = false;
+    self.change();
+    self.runChangeCallback = false;
   }
   // Load default library.
   if (this.params.library !== undefined) {
-    that.loadLibrary(this.params.library, true);
+    self.loadLibrary(this.params.library, true);
   }
 }
 

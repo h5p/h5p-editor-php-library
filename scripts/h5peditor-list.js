@@ -2,7 +2,6 @@
 var H5PEditor = H5PEditor || {};
 
 H5PEditor.List = (function ($) {
-
   /**
    * List structure.
    *
@@ -98,8 +97,8 @@ H5PEditor.List = (function ($) {
         parameters[index] = paramsOverride;
       }
 
-      var child = children[index] = new H5PEditor.widgets[widget](self, childField, parameters[index], function (childField, value) {
-        var i = findIndex(child);
+      var child = children[index] = new H5PEditor.widgets[widget](self, childField, parameters[index], function (myChildField, value) {
+        var i = findIndex(myChildField);
         parameters[i === undefined ? index : i] = value;
       });
 
