@@ -12,12 +12,11 @@ ns.Editor = function (library, defaultParams, replace) {
   var self = this;
 
   // Create iframe and replace the given element with it
-  var height = 1.5;
   var iframe = ns.$('<iframe/>', {
     css: {
       display: 'block',
       width: '100%',
-      height: height + 'em',
+      height: '3em',
       border: 'none',
       zIndex: 101,
       top: 0,
@@ -44,7 +43,7 @@ ns.Editor = function (library, defaultParams, replace) {
         self.selector.$selector.change();
       }
     });
-    
+
     // Start resizing the iframe
     if (iframe.contentWindow.MutationObserver !== undefined) {
       // If supported look for changes to DOM elements. This saves resources.
@@ -57,7 +56,7 @@ ns.Editor = function (library, defaultParams, replace) {
           }, 40); // 25 fps cap
         }
       };
-      
+
       new iframe.contentWindow.MutationObserver(limitedResize).observe(iframe.contentWindow.document.body, {
         childList: true,
         attributes: true,
@@ -87,27 +86,25 @@ ns.Editor = function (library, defaultParams, replace) {
     </body></html>');
   iframe.contentDocument.close();
   iframe.contentDocument.documentElement.style.overflow = 'hidden';
-  
+
   /**
    * Private. Checks if iframe needs resizing, and then resize it.
    */
   var resize = function () {
-    if (iframe.contentWindow.document.body.clientHeight === height) {
-      return; // Prevent resize if we're the same size
+    if (iframe.clientHeight === iframe.contentDocument.body.scrollHeight &&
+        iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight) {
+      return; // Do not resize unless page and scrolling differs
     }
-    
-    // Use clientHeight to keep track of the actual body height since scrollHeight doesn't decrease
-    height = iframe.contentWindow.document.body.clientHeight;
 
     // Retain parent size to avoid jumping/scrolling
     var parentHeight = iframe.parentElement.style.height;
-    iframe.parentElement.style.height = iframe.parentElement.clientHeight + 'px'; 
+    iframe.parentElement.style.height = iframe.parentElement.clientHeight + 'px';
 
     // Reset iframe height, in case content has shrinked.
-    iframe.style.height = '1px';
+    iframe.style.height = iframe.contentWindow.document.body.clientHeight + 'px';
 
     // Resize iframe so all content is visible. Use scrollHeight to make sure we get everything
-    iframe.style.height = (iframe.contentDocument.body.scrollHeight) + 'px';
+    iframe.style.height = iframe.contentDocument.body.scrollHeight + 'px';
 
     // Free parent
     iframe.parentElement.style.height = parentHeight;
