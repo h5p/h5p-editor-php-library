@@ -28,7 +28,7 @@ ns.Library = function (parent, field, params, setValue) {
   this.changes = [];
   this.optionsLoaded = false;
   this.library = parent.library + '/' + field.name;
-  this.libraryList;
+  this.libraries;
 
   this.passReadies = true;
   parent.ready(function () {
@@ -62,7 +62,7 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   this.$myField = ns.$(html).appendTo($wrapper);
   this.$select = this.$myField.children('select');
   this.$libraryWrapper = this.$myField.children('.libwrap');
-  ns.LibraryListCache.getLibraries(that.field.options, that.libraryListLoaded, that);
+  ns.LibraryListCache.getLibraries(that.field.options, that.librariesLoaded, that);
 }
 
 /**
@@ -70,12 +70,12 @@ ns.Library.prototype.appendTo = function ($wrapper) {
  * 
  * @param {H5P.Event} event
  */
-ns.Library.prototype.libraryListLoaded = function(libList) {
-  this.libraryList = libList;
+ns.Library.prototype.librariesLoaded = function(libList) {
+  this.libraries = libList;
   var self = this;
   var options = ns.createOption('-', '-');
-  for (var i = 0; i < self.libraryList.length; i++) {
-    var library = self.libraryList[i];
+  for (var i = 0; i < self.libraries.length; i++) {
+    var library = self.libraries[i];
     if (library.uberName === self.params.library
       || (library.title !== undefined && (library.restricted === undefined || !library.restricted))) {
       options += ns.createOption(library.uberName, library.title, library.uberName === self.params.library);
@@ -88,7 +88,7 @@ ns.Library.prototype.libraryListLoaded = function(libList) {
     }
   });
 
-  if (self.libraryList.length === 1) {
+  if (self.libraries.length === 1) {
     self.$select.hide();
     self.$myField.children('.h5peditor-label').hide();
     self.loadLibrary(self.$select.children(':last').val(), true);
