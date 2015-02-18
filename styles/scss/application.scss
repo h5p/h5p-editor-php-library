@@ -275,6 +275,7 @@ a {
   }
   .h5p-add-dialog {
     position: absolute;
+    z-index: 1;
     visibility: hidden;
     opacity: 0;
     background: #fff;
@@ -615,7 +616,7 @@ a {
 
 .h5peditor-form {
   position: relative;
-  margin: 0.5em 0 1em;
+  margin: 0.5em 0 0;
   background: #fff;
   padding: 8px;
   border: 1px solid #ccc;
@@ -689,4 +690,7 @@ a {
 }
 .h5peditor-widgets > .h5peditor-label {
   float: left;
+}
+.h5p-editor-iframe {
+  margin-bottom: 1em;
 }
