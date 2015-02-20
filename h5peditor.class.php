@@ -7,6 +7,7 @@ class H5peditor {
   );
   public static $scripts = array(
     'scripts/h5peditor.js',
+    'scripts/h5peditor-semantic-structure.js',
     'scripts/h5peditor-editor.js',
     'scripts/h5peditor-library-selector.js',
     'scripts/h5peditor-form.js',
@@ -19,7 +20,9 @@ class H5peditor {
     'scripts/h5peditor-group.js',
     'scripts/h5peditor-boolean.js',
     'scripts/h5peditor-list.js',
+    'scripts/h5peditor-list-editor.js',
     'scripts/h5peditor-library.js',
+    'scripts/h5peditor-library-list-cache.js',
     'scripts/h5peditor-select.js',
     'scripts/h5peditor-dimensions.js',
     'scripts/h5peditor-coordinates.js',
@@ -154,7 +157,8 @@ class H5peditor {
 
       // Remove old files.
       for ($i = 0, $s = count($oldFiles); $i < $s; $i++) {
-        if (!in_array($oldFiles[$i], $newFiles) && substr($oldFiles[$i], 0, 7) != 'http://') {
+        if (!in_array($oldFiles[$i], $newFiles) &&
+            preg_match('/^\w+:\/\//i', $oldFiles[$i]) === 0) {
           $removeFile = $this->content_directory . $oldFiles[$i];
           unlink($removeFile);
           $this->storage->removeFile($removeFile);
