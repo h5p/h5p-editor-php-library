@@ -275,7 +275,6 @@ a {
   }
   .h5p-add-dialog {
     position: absolute;
-    z-index: 1;
     visibility: hidden;
     opacity: 0;
     background: #fff;
@@ -616,10 +615,150 @@ a {
 
 .h5peditor-form {
   position: relative;
-  margin: 0.5em 0 0;
+  margin: 0.5em 0 1em;
   background: #fff;
-  padding: 8px;
   border: 1px solid #ccc;
+  .tree {
+    padding: 8px;
+  }
+
+  .h5peditor-library-header {
+    background: #f9f9f9;
+    display: block;
+    padding: 0.8em;
+
+    border-bottom: 1px solid #ccc;
+
+    .h5peditor-library-title {
+      display: -moz-inline-box;
+      display: -ms-inline-flexbox;
+      display: -webkit-inline-flex;
+      display: inline-flex;
+      font-size: 1.25em;
+    }
+
+    .h5peditor-advanced-mode {
+      display: -moz-inline-box;
+      display: -ms-inline-flexbox;
+      display: -webkit-inline-flex;
+      display: inline-flex;
+      float: right;
+
+      .h5peditor-advanced-mode-text {
+        font-size: 14px;
+
+        -webkit-align-self: center;
+        align-self: center;
+        padding: 0 6px;
+      }
+
+      .h5p-advanced-mode-container {
+        display: inline-block;
+        position: relative;
+        width: 50px;
+        top: -0.05em;
+
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+
+        .h5p-advanced-mode-label {
+          display: block;
+          overflow: hidden;
+          cursor: pointer;
+          border: 2px solid #9A9A9A;
+
+          &.h5p-advanced-mode-on {
+            border-color: #28A655;
+
+            .h5p-advanced-mode-inner {
+              margin-left: 0;
+            }
+            .h5p-advanced-mode-switch {
+              right: 0;
+              border-color: #28A655;
+            }
+          }
+
+          .h5p-advanced-mode-checkbox {
+            opacity: 0;
+            width: 100%;
+            cursor: pointer;
+            position: absolute;
+          }
+
+          .h5p-advanced-mode-inner {
+            display: block;
+            width: 200%;
+            margin-left: -100%;
+            -moz-transition: margin 0.3s ease-in 0s;
+            -webkit-transition: margin 0.3s ease-in 0s;
+            -o-transition: margin 0.3s ease-in 0s;
+            transition: margin 0.3s ease-in 0s;
+
+            &:before, &:after {
+              display: block;
+              float: left;
+              width: 50%;
+              height: 23px;
+              padding: 0;
+
+              font-family: "h5p";
+              line-height: 24px;
+              font-size: 26px;
+              color: white;
+              font-weight: bold;
+
+              -moz-box-sizing: border-box;
+              -webkit-box-sizing: border-box;
+              box-sizing: border-box;
+              color: #FFFFFF;
+            }
+
+            &:before {
+              content: "\e600";
+              position: relative;
+              left: -1px;
+              background-color: #42C86F;
+            }
+            &:after {
+              content: "\e894";
+              position: relative;
+              right: -5px;
+              background-color: #CCC;
+              text-align: right;
+            }
+          }
+
+          .h5p-advanced-mode-switch {
+            display: block;
+            width: 22px;
+            margin: 0px;
+
+            background: #FFFFFF;
+            border: 2px solid #9A9A9A;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 25px;
+
+            -moz-transition: all 0.3s ease-in 0s;
+            -webkit-transition: all 0.3s ease-in 0s;
+            -o-transition: all 0.3s ease-in 0s;
+            transition: all 0.3s ease-in 0s;
+          }
+        }
+      }
+    }
+  }
+
+  .h5p-advanced {
+    display: none;
+
+    &.h5p-advanced-enabled {
+      display: block;
+    }
+  }
 }
 
 .h5peditor-label {
@@ -691,6 +830,4 @@ a {
 .h5peditor-widgets > .h5peditor-label {
   float: left;
 }
-.h5p-editor-iframe {
-  margin-bottom: 1em;
-}
+

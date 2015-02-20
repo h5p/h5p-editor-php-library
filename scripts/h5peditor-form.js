@@ -6,7 +6,7 @@ var ns = H5PEditor;
  */
 ns.Form = function () {
   var self = this;
-  
+
   this.params = {};
   this.passReadies = false;
   this.commonFields = {};
@@ -25,7 +25,7 @@ ns.Form = function () {
   );
   this.$common = this.$form.find('.common > .fields');
   this.library = '';
-  
+
   this.$common.prev().click(function () {
     self.$common.parent().toggleClass('collapsed');
   });
@@ -94,45 +94,48 @@ ns.Form.prototype.createHeader = function (library) {
     ' <div class="h5peditor-library-title">' + library + '</div>' +
     ' <div class="h5peditor-advanced-mode">' +
     '   <span class="h5peditor-advanced-mode-text">Advanced Mode</span>' +
-    '   <div class="h5peditor-advanced-mode-checkbox">' +
-    '     <div class="h5peditor-advanced-div"></div>' +
-    '     <div class="h5peditor-advanced-div"></div>' +
+    '   <div class="h5p-advanced-mode-container">' +
+    '     <label class="h5p-advanced-mode-label">' +
+    '       <input type="checkbox" class="h5p-advanced-mode-checkbox" tabindex="1">' +
+    '         <span class="h5p-advanced-mode-inner"></span>' +
+    '         <span class="h5p-advanced-mode-switch"></span>' +
+    '       </input>' +
+    '     </label>' +
     '   </div>' +
     ' </div>' +
     '</div>'));
 
-  if (isAdvancedMode) {
-    ns.$('.h5peditor-advanced-mode-checkbox:first', this.$form.children('.h5peditor-library-header'))
-      .children(':first')
-      .addClass('h5peditor-advanced-mode-on');
-  } else {
-    ns.$('.h5peditor-advanced-mode-checkbox:last', this.$form.children('.h5peditor-library-header'))
-      .children(':last')
-      .addClass('h5peditor-advanced-mode-off');
-  }
-
-  ns.$('.h5peditor-advanced-mode-checkbox', this.$form.children('.h5peditor-library-header'))
-    .click(function () {
-      var advancedModeOn = ns.$(this).children(':first');
-      var advancedModeOff = ns.$(this).children(':last');
-      var isChecked = false;
-
-      if (advancedModeOn.hasClass('h5peditor-advanced-mode-on')) {
-        advancedModeOn.removeClass('h5peditor-advanced-mode-on');
-        advancedModeOff.addClass('h5peditor-advanced-mode-off');
+  var $advancedModeLabel = ns.$('.h5p-advanced-mode-label', this.$form.children('.h5peditor-library-header'));
+  var $advancedModeCheckbox = ns.$('.h5p-advanced-mode-checkbox', this.$form.children('.h5peditor-library-header'))
+    .change(function (e) {
+      e.stopImmediatePropagation();
+      if (ns.$(this).prop('checked')) {
+        $advancedModeLabel.addClass('h5p-advanced-mode-on');
+        isAdvancedMode = true;
       } else {
-        advancedModeOn.addClass('h5peditor-advanced-mode-on');
-        advancedModeOff.removeClass('h5peditor-advanced-mode-off');
-        isChecked = true;
+        $advancedModeLabel.removeClass('h5p-advanced-mode-on');
+        isAdvancedMode = false;
       }
 
       //Toggle advanced settings on/off
-      ns.toggleAdvancedFields(that.$form, isChecked);
+      ns.toggleAdvancedFields(that.$form, isAdvancedMode);
 
       //Set new cookies
-      ns.setAdvancedModeCookie(isChecked);
-
+      ns.setAdvancedModeCookie(isAdvancedMode);
+    }).keydown(function (e) { // Trigger the click event from the keyboard
+      var code = e.which;
+      // 32 = Space
+      if (code === 32) {
+        ns.$(this).click();
+        ns.$(this).focus();
+        e.preventDefault();
+      }
     });
+
+  if (isAdvancedMode) {
+    $advancedModeLabel.addClass('h5p-advanced-mode-on');
+    $advancedModeCheckbox.prop('checked', true);
+  }
 
   //Toggle advanced settings
   ns.toggleAdvancedFields(this.$form, isAdvancedMode);

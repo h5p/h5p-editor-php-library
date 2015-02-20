@@ -5,6 +5,7 @@
 // Use resources set in parent window
 var ns = H5PEditor = window.parent.H5PEditor;
 ns.$ = H5P.jQuery;
+ns.isAdvancedMode = false;
 
 // Load needed resources from parent.
 H5PIntegration = window.parent.H5PIntegration;
@@ -133,6 +134,7 @@ ns.loadLibrary = function (libraryName, callback) {
  * @returns {undefined}
  */
 ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
+  ns.isAdvancedMode = ns.getAdvancedModeCookie();
   var ancestor;
   parent.children = [];
 
@@ -162,7 +164,6 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
     }
 
     var widget = ns.getWidgetName(field);
-
     // TODO: Remove later, this is here for debugging purposes.
     if (ns.widgets[widget] === undefined) {
       $wrapper.append('<div>[field:' + field.type + ':' + widget + ':' + field.name + ']</div>');
@@ -187,13 +188,7 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
         params[field.name] = value;
       }
     });
-
     fieldInstance.appendTo($wrapper);
-
-    // Add advanced field to last element
-    if (field.advanced !== undefined && field.advanced) {
-      $wrapper.children(':last').addClass('h5p-advanced');
-    }
 
     parent.children.push(fieldInstance);
   }
@@ -236,10 +231,10 @@ ns.getAdvancedModeCookie = function () {
 ns.toggleAdvancedFields = function ($wrapper, isEnabled) {
   $wrapper.find('.h5p-advanced').each(function () {
     if (isEnabled) {
-      ns.$(this).slideDown(300);
+      ns.$(this).addClass('h5p-advanced-enabled');
     }
     else {
-      ns.$(this).slideUp(300);
+      ns.$(this).removeClass('h5p-advanced-enabled');
     }
   });
 };
@@ -250,6 +245,7 @@ ns.toggleAdvancedFields = function ($wrapper, isEnabled) {
  * @param {boolean} isEnabled
  */
 ns.setAdvancedModeCookie = function(isEnabled) {
+  ns.isAdvancedMode = isEnabled;
   if (isEnabled) {
     //Keep cookie for 3 months.
     var expires = new Date();
@@ -260,6 +256,14 @@ ns.setAdvancedModeCookie = function(isEnabled) {
     //Expire/delete cookie.
     document.cookie = 'advanced_mode=; expires=Thu, 01 Jan 1970 00:00:00 UTC';
   }
+};
+
+/**
+ * Getter for advanced mode
+ * @returns {Boolean} isAdvancedMode Enabled advanced mode
+ */
+ns.getAdvancedMode = function () {
+  return ns.isAdvancedMode;
 };
 
 /**
@@ -457,14 +461,19 @@ ns.createError = function (message) {
  *
  * @param {String} type
  * @param {String} content
+ * @param {String} description
+ * @param {Boolean} advanced Advanced mode toggled
  * @returns {String}
  */
 ns.createItem = function (type, content, description, advanced) {
-  var advancedClass = '';
-  if (advanced) {
-    advancedClass = ' h5p-advanced';
+  var advancedClassString = '';
+  if (advanced !== undefined && advanced) {
+    advancedClassString = ' h5p-advanced';
+    if (ns.isAdvancedMode) {
+      advancedClassString += ' h5p-advanced-enabled';
+    }
   }
-  var html = '<div class="field ' + type + advancedClass +  '">' + content + '<div class="h5p-errors errors"></div>';
+  var html = '<div class="field ' + type + advancedClassString +  '">' + content + '<div class="h5p-errors errors"></div>';
   if (description !== undefined) {
     html += '<div class="h5peditor-field-description">' + description + '</div>';
   }
