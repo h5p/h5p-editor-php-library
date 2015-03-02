@@ -115,21 +115,30 @@ class H5peditorFile {
           'image/png' => 'png',
           'image/jpeg' => 'jpg',
           'image/gif' => 'gif',
+          'image/svg' => 'svg',
         );
         if (!$this->check($allowed)) {
           $this->result->error = $this->interface->t('Invalid image file format. Use jpg, png or gif.');
           return FALSE;
         }
 
-        $image = @getimagesize($_FILES['file']['tmp_name']);
-        if (!$image) {
-          $this->result->error = $this->interface->t('File is not an image.');
-          return FALSE;
+        if ($this->type = "svg") {
+          $svgfile = simplexml_load_file("svgimage.svg");
+          $this->result->width = substr($svgfile[width],0,-2);
+          $this->result->height = substr($svgfile[height],0,-2);        
+          $this->result->mime = $this->type;
         }
-
-        $this->result->width = $image[0];
-        $this->result->height = $image[1];
-        $this->result->mime = $this->type;
+        else {
+          $image = @getimagesize($_FILES['file']['tmp_name']);
+          if (!$image) {
+            $this->result->error = $this->interface->t('File is not an image.');
+            return FALSE;
+          }
+          
+          $this->result->width = $image[0];
+          $this->result->height = $image[1];
+          $this->result->mime = $this->type;
+        }
         break;
 
       case 'audio':
