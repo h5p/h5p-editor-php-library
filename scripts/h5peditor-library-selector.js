@@ -127,6 +127,9 @@ ns.LibrarySelector.prototype.loadSemantics = function (library) {
 
     that.form.processSemantics(semantics, (library === that.defaultLibrary || library === that.defaultLibraryParameterized ? that.defaultParams : {}));
 
+    // Create header and toggle advanced fields
+    that.form.createHeader(that.$selector.children('option').filter(':selected').text());
+
     that.$selector.attr('disabled', false);
     $loading.remove();
   });

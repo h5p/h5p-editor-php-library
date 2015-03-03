@@ -5,6 +5,7 @@
 // Use resources set in parent window
 var ns = H5PEditor = window.parent.H5PEditor;
 ns.$ = H5P.jQuery;
+ns.isAdvancedMode = false;
 
 // Load needed resources from parent.
 H5PIntegration = window.parent.H5PIntegration;
@@ -133,6 +134,7 @@ ns.loadLibrary = function (libraryName, callback) {
  * @returns {undefined}
  */
 ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
+  ns.isAdvancedMode = ns.getAdvancedModeCookie();
   var ancestor;
   parent.children = [];
 
@@ -162,7 +164,6 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
     }
 
     var widget = ns.getWidgetName(field);
-
     // TODO: Remove later, this is here for debugging purposes.
     if (ns.widgets[widget] === undefined) {
       $wrapper.append('<div>[field:' + field.type + ':' + widget + ':' + field.name + ']</div>');
@@ -188,6 +189,7 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
       }
     });
     fieldInstance.appendTo($wrapper);
+
     parent.children.push(fieldInstance);
   }
 
@@ -198,6 +200,70 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
     }
     delete parent.readies;
   }
+};
+
+/**
+ * Get boolean of whether advanced mode is enabled
+ *
+ * @returns {boolean} Advanced mode
+ */
+ns.getAdvancedModeCookie = function () {
+  var isAdvancedMode = false;
+  var advancedModeString = '';
+  document.cookie.split(';').forEach(function (cookieEntry) {
+    cookieEntry = cookieEntry.trim();
+    if (cookieEntry.indexOf('advanced_mode=') === 0) {
+      advancedModeString = cookieEntry.substring('advanced_mode='.length, cookieEntry.length);
+      return;
+    }
+  });
+  if (advancedModeString === 'true') {
+    isAdvancedMode = true;
+  }
+  return isAdvancedMode;
+};
+
+/**
+ * Toggle advanced fields on/off
+ *
+ * @param {boolean} isEnabled
+ */
+ns.toggleAdvancedFields = function ($wrapper, isEnabled) {
+  $wrapper.find('.h5p-advanced').each(function () {
+    if (isEnabled) {
+      ns.$(this).addClass('h5p-advanced-enabled');
+    }
+    else {
+      ns.$(this).removeClass('h5p-advanced-enabled');
+    }
+  });
+};
+
+/**
+ * Set or delete "Advanced Mode" cookie
+ *
+ * @param {boolean} isEnabled
+ */
+ns.setAdvancedModeCookie = function(isEnabled) {
+  ns.isAdvancedMode = isEnabled;
+  if (isEnabled) {
+    //Keep cookie for 3 months.
+    var expires = new Date();
+    expires.setMonth(expires.getMonth() + 3);
+    document.cookie = 'advanced_mode='+isEnabled+'; expires='+expires.toDateString();
+  }
+  else {
+    //Expire/delete cookie.
+    document.cookie = 'advanced_mode=; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+  }
+};
+
+/**
+ * Getter for advanced mode
+ * @returns {Boolean} isAdvancedMode Enabled advanced mode
+ */
+ns.getAdvancedMode = function () {
+  return ns.isAdvancedMode;
 };
 
 /**
@@ -395,10 +461,19 @@ ns.createError = function (message) {
  *
  * @param {String} type
  * @param {String} content
+ * @param {String} description
+ * @param {Boolean} advanced Advanced mode toggled
  * @returns {String}
  */
-ns.createItem = function (type, content, description) {
-  var html = '<div class="field ' + type + '">' + content + '<div class="h5p-errors"></div>';
+ns.createItem = function (type, content, description, advanced) {
+  var advancedClassString = '';
+  if (advanced !== undefined && advanced) {
+    advancedClassString = ' h5p-advanced';
+    if (ns.isAdvancedMode) {
+      advancedClassString += ' h5p-advanced-enabled';
+    }
+  }
+  var html = '<div class="field ' + type + advancedClassString +  '">' + content + '<div class="h5p-errors errors"></div>';
   if (description !== undefined) {
     html += '<div class="h5peditor-field-description">' + description + '</div>';
   }
