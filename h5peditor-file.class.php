@@ -118,7 +118,7 @@ class H5peditorFile {
           'image/svg' => 'svg',
         );
         if (!$this->check($allowed)) {
-          $this->result->error = $this->interface->t('Invalid image file format. Use jpg, png or gif.');
+          $this->result->error = $this->interface->t('Invalid image file format. Use jpg, png, svg or gif.');
           return FALSE;
         }
 
