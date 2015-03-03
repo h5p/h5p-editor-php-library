@@ -81,7 +81,7 @@ ns.Number.prototype.createHtml = function () {
 
   var label = ns.createLabel(this.field, input);
 
-  return ns.createItem(this.field.type, label, this.field.description, this.field.advanced);
+  return ns.createItem(this.field.type, label, this.field.description);
 };
 
 /**

@@ -121,7 +121,7 @@ ns.Dimensions.prototype.createHtml = function () {
   var input = ns.createText(this.params !== undefined ? this.params.width : undefined, 15, 'Width') + ' x ' + ns.createText(this.params !== undefined ? this.params.height : undefined, 15, 'Height');
   var label = ns.createLabel(this.field, input);
 
-  return ns.createItem(this.field.widget, label, this.field.description, this.field.description, this.field.advanced);
+  return ns.createItem(this.field.widget, label, this.field.description, this.field.description);
 };
 
 /**

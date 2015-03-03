@@ -39,7 +39,7 @@ ns.Boolean.prototype.createHtml = function () {
   }
   html += '</label>';
 
-  return ns.createItem(this.field.type, html, this.field.description, this.field.advanced);
+  return ns.createItem(this.field.type, html, this.field.description);
 };
 
 /**

@@ -6,26 +6,14 @@ var ns = H5PEditor;
  */
 ns.Form = function () {
   var self = this;
-
+  
   this.params = {};
   this.passReadies = false;
   this.commonFields = {};
-  this.$form = ns.$(
-    '<div class="h5peditor-form">' +
-    ' <div class="tree"></div>' +
-    ' <div class="common collapsed hidden">' +
-    '   <div class="h5peditor-label">' +
-    '     <span class="icon"></span>' + ns.t('core', 'commonFields') +
-    '   </div>' +
-    '   <div class="fields">' +
-    '     <p class="desc">' + ns.t('core', 'commonFieldsDescription') + '</p>' +
-    '   </div>' +
-    ' </div>' +
-    '</div>'
-  );
+  this.$form = ns.$('<div class="h5peditor-form"><div class="tree"></div><div class="common collapsed hidden"><div class="h5peditor-label"><span class="icon"></span>' + ns.t('core', 'commonFields') + '</div><div class="fields"><p class="desc">' + ns.t('core', 'commonFieldsDescription') + '</p></div></div></div>');
   this.$common = this.$form.find('.common > .fields');
   this.library = '';
-
+  
   this.$common.prev().click(function () {
     self.$common.parent().toggleClass('collapsed');
   });
@@ -78,67 +66,6 @@ ns.Form.prototype.processSemantics = function (semantics, defaultParams) {
     this.$form.replaceWith($error);
     this.$form = $error;
   }
-};
-
-/**
- * Creates a header for the given library.
- *
- * @param library
- */
-ns.Form.prototype.createHeader = function (library) {
-  var that = this;
-  var isAdvancedMode = ns.getAdvancedModeCookie();
-
-  (this.$form).prepend(ns.$(
-    '<div class="h5peditor-library-header">' +
-    ' <div class="h5peditor-library-title">' + library + '</div>' +
-    ' <div class="h5peditor-advanced-mode">' +
-    '   <span class="h5peditor-advanced-mode-text">Advanced Mode</span>' +
-    '   <div class="h5p-advanced-mode-container">' +
-    '     <label class="h5p-advanced-mode-label">' +
-    '       <input type="checkbox" class="h5p-advanced-mode-checkbox" tabindex="1">' +
-    '         <span class="h5p-advanced-mode-inner"></span>' +
-    '         <span class="h5p-advanced-mode-switch"></span>' +
-    '       </input>' +
-    '     </label>' +
-    '   </div>' +
-    ' </div>' +
-    '</div>'));
-
-  var $advancedModeLabel = ns.$('.h5p-advanced-mode-label', this.$form.children('.h5peditor-library-header'));
-  var $advancedModeCheckbox = ns.$('.h5p-advanced-mode-checkbox', this.$form.children('.h5peditor-library-header'))
-    .change(function (e) {
-      e.stopImmediatePropagation();
-      if (ns.$(this).prop('checked')) {
-        $advancedModeLabel.addClass('h5p-advanced-mode-on');
-        isAdvancedMode = true;
-      } else {
-        $advancedModeLabel.removeClass('h5p-advanced-mode-on');
-        isAdvancedMode = false;
-      }
-
-      //Toggle advanced settings on/off
-      ns.toggleAdvancedFields(that.$form, isAdvancedMode);
-
-      //Set new cookies
-      ns.setAdvancedModeCookie(isAdvancedMode);
-    }).keydown(function (e) { // Trigger the click event from the keyboard
-      var code = e.which;
-      // 32 = Space
-      if (code === 32) {
-        ns.$(this).click();
-        ns.$(this).focus();
-        e.preventDefault();
-      }
-    });
-
-  if (isAdvancedMode) {
-    $advancedModeLabel.addClass('h5p-advanced-mode-on');
-    $advancedModeCheckbox.prop('checked', true);
-  }
-
-  //Toggle advanced settings
-  ns.toggleAdvancedFields(this.$form, isAdvancedMode);
 };
 
 /**

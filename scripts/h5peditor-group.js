@@ -67,15 +67,8 @@ ns.Group.prototype.appendTo = function ($wrapper) {
     this.setValue(this.field);
     return;
   }
-  var advancedClassString = 'field group';
-  if (this.field.advanced) {
-    advancedClassString += ' h5p-advanced';
-    if (ns.isAdvancedMode) {
-      advancedClassString += ' h5p-advanced-enabled';
-    }
-  }
 
-  this.$group = ns.$('<fieldset class="' + advancedClassString + '"><div class="title"><a href="#" class="expand" title="' + ns.t('core', 'expandCollapse') + '"></a><span class="text"></span></div><div class="content"></div></fieldset>')
+  this.$group = ns.$('<fieldset class="field group"><div class="title"><a href="#" class="expand" title="' + ns.t('core', 'expandCollapse') + '"></a><span class="text"></span></div><div class="content"></div></fieldset>')
   .appendTo($wrapper).find('.expand').click(function () {
     that.expand();
     return false;

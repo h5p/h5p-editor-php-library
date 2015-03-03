@@ -45,7 +45,7 @@ ns.File.prototype.appendTo = function ($wrapper) {
     label = '<span class="h5peditor-label">' + (this.field.label === undefined ? this.field.name : this.field.label) + '</span>';
   }
 
-  var html = ns.createItem(this.field.type, label + '<div class="file"></div><a class="h5p-copyright-button" href="#">' + ns.t('core', 'editCopyright') + '</a><div class="h5p-editor-dialog"><a href="#" class="h5p-close" title="' + ns.t('core', 'close') + '"></a></div>', this.field.description, this.field.advanced);
+  var html = ns.createItem(this.field.type, label + '<div class="file"></div><a class="h5p-copyright-button" href="#">' + ns.t('core', 'editCopyright') + '</a><div class="h5p-editor-dialog"><a href="#" class="h5p-close" title="' + ns.t('core', 'close') + '"></a></div>', this.field.description);
 
   var $container = ns.$(html).appendTo($wrapper);
   this.$file = $container.find('.file');

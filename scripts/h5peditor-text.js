@@ -73,7 +73,7 @@ ns.Text.prototype.createHtml = function () {
   var input = ns.createText(this.value, this.field.maxLength, this.field.placeholder);
   var label = ns.createLabel(this.field, input);
 
-  return ns.createItem(this.field.type, label, this.field.description, this.field.advanced);
+  return ns.createItem(this.field.type, label, this.field.description);
 };
 
 /**

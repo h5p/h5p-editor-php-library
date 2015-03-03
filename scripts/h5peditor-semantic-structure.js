@@ -33,13 +33,6 @@ H5PEditor.SemanticStructure = (function ($) {
      */
     var $widgetSelect, $wrapper, $inner, $errors, $description, $helpText, widgets;
 
-    var advancedClassString = '';
-    if (field.advanced !== undefined && field.advanced) {
-      advancedClassString = ' h5p-advanced';
-      if (H5PEditor.isAdvancedMode) {
-        advancedClassString += ' h5p-advanced-enabled';
-      }
-    }
     /**
      * Initialize. Wrapped to avoid leaking variables
      * @private
@@ -47,7 +40,7 @@ H5PEditor.SemanticStructure = (function ($) {
     var init = function () {
       // Create field wrapper
       $wrapper = $('<div/>', {
-        'class': 'field ' + field.type + advancedClassString
+        'class': 'field ' + field.type
       });
 
       /* We want to be in control of the label, description and errors
