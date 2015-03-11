@@ -8,14 +8,14 @@ class H5peditorFile {
 
   function __construct($interface, $files_directory) {
     $field = filter_input(INPUT_POST, 'field', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-    
+
     // Check for file upload.
     if ($field === NULL || empty($_FILES) || !isset($_FILES['file'])) {
       return;
     }
 
     $this->interface = $interface;
-    
+
     // Create a new result object.
     $this->result = new stdClass();
 
@@ -55,7 +55,7 @@ class H5peditorFile {
 
     $this->size = $_FILES['file']['size'];
   }
-  
+
   /**
    *
    * @return boolean
