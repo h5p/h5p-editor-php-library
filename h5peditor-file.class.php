@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 class H5peditorFile {
 
@@ -122,11 +122,17 @@ class H5peditorFile {
           return FALSE;
         }
 
-        if ($this->type = "svg") {
-          $svgfile = simplexml_load_file("svgimage.svg");
-          $this->result->width = substr($svgfile[width],0,-2);
-          $this->result->height = substr($svgfile[height],0,-2);        
-          $this->result->mime = $this->type;
+        if ($this->type == "svg") {
+          $svgfile = simplexml_load_file($_FILES['file']['tmp_name']);
+          if (substr($svgfile[width],0,-2) => 0 || substr($svgfile[height],0,-2)) {
+            $this->result->width = substr($svgfile[width],0,-2);
+            $this->result->height = substr($svgfile[height],0,-2);        
+            $this->result->mime = $this->type;
+          {
+          else {
+            $this->result->error = $this->interface->t('File is not an image.');
+            return FALSE;
+          }
         }
         else {
           $image = @getimagesize($_FILES['file']['tmp_name']);
