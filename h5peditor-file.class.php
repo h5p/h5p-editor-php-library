@@ -124,13 +124,13 @@ class H5peditorFile {
 
         if ($this->type == "svg") {
           $svgfile = simplexml_load_file($_FILES['file']['tmp_name']);
-          if (substr($svgfile[width],0,-2) => 0 || substr($svgfile[height],0,-2)) {
+          if (substr($svgfile[width],0,-2) > 0 && substr($svgfile[height],0,-2) > 0) {
             $this->result->width = substr($svgfile[width],0,-2);
             $this->result->height = substr($svgfile[height],0,-2);        
             $this->result->mime = $this->type;
-          {
+          }
           else {
-            $this->result->error = $this->interface->t('File is not an image.');
+            $this->result->error = $this->interface->t('SVG File is not an image. Height and/or Width has a zero or less value.');
             return FALSE;
           }
         }
@@ -139,8 +139,7 @@ class H5peditorFile {
           if (!$image) {
             $this->result->error = $this->interface->t('File is not an image.');
             return FALSE;
-          }
-          
+          }       
           $this->result->width = $image[0];
           $this->result->height = $image[1];
           $this->result->mime = $this->type;
