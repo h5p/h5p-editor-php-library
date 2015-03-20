@@ -309,8 +309,9 @@ class H5peditor {
    *
    * @param string $library_name
    *  Name of the library we want to fetch data for
+   * @param string $prefix Optional. Files are relative to another dir.
    */
-  public function getLibraryData($machineName, $majorVersion, $minorVersion, $languageCode) {
+  public function getLibraryData($machineName, $majorVersion, $minorVersion, $languageCode, $prefix = '') {
     $libraryData = new stdClass();
 
     $libraries = $this->findEditorLibraries($machineName, $majorVersion, $minorVersion);
@@ -330,7 +331,7 @@ class H5peditor {
     // Stylesheets
     if (!empty($files['styles'])) {
       foreach ($files['styles'] as $css) {
-        H5peditor::buildCssPath(NULL, $this->h5p->url . dirname($css->path) . '/');
+        H5peditor::buildCssPath(NULL, $this->h5p->url . $prefix . dirname($css->path) . '/');
         $libraryData->css[$this->h5p->url . $css->path . $css->version] = preg_replace_callback('/url\([\'"]?(?![a-z]+:|\/+)([^\'")]+)[\'"]?\)/i', 'H5peditor::buildCssPath', file_get_contents($this->h5p->path . $css->path));
       }
     }
