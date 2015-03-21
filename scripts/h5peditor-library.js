@@ -13,9 +13,10 @@ var ns = H5PEditor;
 ns.Library = function (parent, field, params, setValue) {
   var self = this;
   H5P.EventDispatcher.call(this);
-  
   if (params === undefined) {
-    this.params = {params: {}};
+    this.params = {
+      params: {}
+    };
     // If you do a console log here it might show that this.params is
     // something else than what we set it to. One of life's big mysteries...
     setValue(field, this.params);
@@ -120,6 +121,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
   if (libraryName === '-') {
     delete this.params.library;
     delete this.params.params;
+    delete this.params.uuid;
     this.$libraryWrapper.attr('class', 'libwrap');
     return;
   }
@@ -133,6 +135,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     if (preserveParams === undefined || !preserveParams) {
       // Reset params
       that.params.params = {};
+      that.params.uuid = H5P.createUUID();
     }
 
     ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper.html(''), that);
