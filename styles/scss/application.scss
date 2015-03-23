@@ -151,29 +151,32 @@ a {
     @include box-shadow(0 0 4px #a7a7a7);
 
     & > .title {
+      cursor: pointer;
       padding: 4px 8px;
       overflow: hidden;
       background: #f4f4f4;
+      overflow: hidden;
+      outline: none;
 
       &:first-letter {
         text-transform: uppercase;
       }
-      .expand {
-        cursor: pointer;
-        float: left;
+      &:before {
+        content: "";
+        display: inline-block;
+        vertical-align: middle;
         width: 13px;
         height: 13px;
-        margin: 4px 0 0;
+        margin: 0 6px 2px 2px;
         background: inline-image("expand.png") no-repeat;
         opacity: 0.8;
-
-        &:hover {
-          opacity: 1;
-        }
       }
-      .text {
-        overflow: hidden;
-        padding: 0 8px;
+      &:hover:before,
+      &:focus:before {
+        opacity: 1;
+      }
+      &:active:before {
+        opacity: 0.5;
       }
     }
     & > .content {
@@ -208,7 +211,7 @@ a {
     & > .title {
       border-bottom: 1px solid #676767;
 
-      .expand {
+      &:before {
         background-image: inline-image("collapse.png");
       }
     }
