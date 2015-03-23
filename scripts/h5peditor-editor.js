@@ -79,8 +79,8 @@ ns.Editor = function (library, defaultParams, replace) {
   iframe.contentDocument.write('\
     <!doctype html><html>\
     <head>\
-      ' + ns.wrap('<link rel="stylesheet" href="' + ns.baseUrl, ns.assets.css, '">') + '\
-      ' + ns.wrap('<script src="' + ns.baseUrl, ns.assets.js, '"></script>') + '\
+      ' + ns.wrap('<link rel="stylesheet" href="', ns.assets.css, '">') + '\
+      ' + ns.wrap('<script src="', ns.assets.js, '"></script>') + '\
     </head><body>\
       <div class="h5p-editor">' + ns.t('core', 'loading', {':type': 'libraries'}) + '</div>\
     </body></html>');
