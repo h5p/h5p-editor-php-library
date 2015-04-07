@@ -121,7 +121,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
   if (libraryName === '-') {
     delete this.params.library;
     delete this.params.params;
-    delete this.params.uuid;
+    delete this.params.subContentId;
     this.$libraryWrapper.attr('class', 'libwrap');
     return;
   }
@@ -135,7 +135,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     if (preserveParams === undefined || !preserveParams) {
       // Reset params
       that.params.params = {};
-      that.params.uuid = H5P.createUUID();
+      that.params.subContentId = H5P.createUUID();
     }
 
     ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper.html(''), that);
