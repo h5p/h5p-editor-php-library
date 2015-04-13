@@ -53,19 +53,8 @@ ns.Form.prototype.remove = function () {
  * @returns {undefined}
  */
 ns.Form.prototype.processSemantics = function (semantics, defaultParams) {
-  try {
-    this.params = defaultParams;
-    ns.processSemanticsChunk(semantics, this.params, this.$form.children('.tree'), this);
-  }
-  catch (error) {
-    if (window['console'] !== undefined && typeof console.error === 'function') {
-      console.error(error.stack);
-    }
-
-    var $error = ns.$('<div class="h5peditor-error">' + ns.t('core', 'semanticsError', {':error': error}) + '</div>');
-    this.$form.replaceWith($error);
-    this.$form = $error;
-  }
+  this.params = defaultParams;
+  ns.processSemanticsChunk(semantics, this.params, this.$form.children('.tree'), this);
 };
 
 /**
