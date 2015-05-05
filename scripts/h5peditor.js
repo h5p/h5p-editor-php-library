@@ -30,7 +30,7 @@ ns.semanticsLoaded = {};
 ns.isIE = navigator.userAgent.match(/; MSIE \d+.\d+;/) !== null;
 
 /**
- * Extremely advanced function that loads the given library, inserts any css and js and
+ * Loads the given library, inserts any css and js and
  * then runs the callback with the samantics as an argument.
  *
  * @param {string} libraryName
