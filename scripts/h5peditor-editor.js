@@ -1,12 +1,15 @@
-var H5PEditor = H5PEditor || {};
+/**
+ * @namespace
+ */
+var H5PEditor = (H5PEditor || {});
 var ns = H5PEditor;
 
 /**
  * Construct the editor.
  *
- * @param {String} library
+ * @class H5PEditor.Editor
+ * @param {string} library
  * @param {Object} defaultParams
- * @returns {H5peditor}
  */
 ns.Editor = function (library, defaultParams, replace) {
   var self = this;
@@ -76,19 +79,21 @@ ns.Editor = function (library, defaultParams, replace) {
     }
   }).get(0);
   iframe.contentDocument.open();
-  iframe.contentDocument.write('\
-    <!doctype html><html>\
-    <head>\
-      ' + ns.wrap('<link rel="stylesheet" href="', ns.assets.css, '">') + '\
-      ' + ns.wrap('<script src="', ns.assets.js, '"></script>') + '\
-    </head><body>\
-      <div class="h5p-editor">' + ns.t('core', 'loading', {':type': 'libraries'}) + '</div>\
-    </body></html>');
+  iframe.contentDocument.write(
+    '<!doctype html><html>' +
+    '<head>' +
+      ns.wrap('<link rel="stylesheet" href="', ns.assets.css, '">') +
+      ns.wrap('<script src="', ns.assets.js, '"></script>') +
+    '</head><body>' +
+      '<div class="h5p-editor">' + ns.t('core', 'loading', {':type': 'libraries'}) + '</div>' +
+    '</body></html>');
   iframe.contentDocument.close();
   iframe.contentDocument.documentElement.style.overflow = 'hidden';
 
   /**
-   * Private. Checks if iframe needs resizing, and then resize it.
+   * Checks if iframe needs resizing, and then resize it.
+   *
+   * @private
    */
   var resize = function () {
     if (iframe.clientHeight === iframe.contentDocument.body.scrollHeight &&
@@ -112,7 +117,10 @@ ns.Editor = function (library, defaultParams, replace) {
 };
 
 /**
- * Return library used.
+ * Find out which library is used/selected.
+ *
+ * @alias H5PEditor.Editor#getLibrary
+ * @returns {string} Library name
  */
 ns.Editor.prototype.getLibrary = function () {
   if (this.selector !== undefined) {
@@ -121,7 +129,10 @@ ns.Editor.prototype.getLibrary = function () {
 };
 
 /**
- * Return params needed to start library.
+ * Get parameters needed to start library.
+ *
+ * @alias H5PEditor.Editor#getParams
+ * @returns {Object} Library parameters
  */
 ns.Editor.prototype.getParams = function () {
   if (this.selector !== undefined) {
@@ -129,33 +140,39 @@ ns.Editor.prototype.getParams = function () {
   }
 };
 
+/**
+ * Editor translations index by library name or "core".
+ *
+ * @member {Object} H5PEditor.language
+ */
 ns.language = {};
 
 /**
  * Translate text strings.
  *
- * @param {String} library
- *  library machineName, or "core"
- * @param {String} key
- * @param {Object} vars
- * @returns {String|@exp;H5peditor@call;t}
+ * @method H5PEditor.t
+ * @param {string} library The library name(machineName), or "core".
+ * @param {string} key Translation string identifier.
+ * @param {Object} vars Placeholders and values to replace in the text.
+ * @returns {string} Translated string, or a text if string translation is missing.
  */
 ns.t = function (library, key, vars) {
   if (ns.language[library] === undefined) {
     return 'Missing translations for library ' + library;
   }
 
+  var translation;
   if (library === 'core') {
     if (ns.language[library][key] === undefined) {
       return 'Missing translation for ' + key;
     }
-    var translation = ns.language[library][key];
+    translation = ns.language[library][key];
   }
   else {
-    if (ns.language[library]['libraryStrings'] === undefined || ns.language[library]['libraryStrings'][key] === undefined) {
+    if (ns.language[library].libraryStrings === undefined || ns.language[library].libraryStrings[key] === undefined) {
       return ns.t('core', 'missingTranslation', {':key': key});
     }
-    var translation = ns.language[library]['libraryStrings'][key];
+    translation = ns.language[library].libraryStrings[key];
   }
 
   // Replace placeholder with variables.
@@ -171,6 +188,12 @@ ns.t = function (library, key, vars) {
 
 /**
  * Wraps multiple content between a prefix and a suffix.
+ *
+ * @method H5PEditor.wrap
+ * @param {string} prefix Inserted before the content.
+ * @param {Array} content List of content to be wrapped.
+ * @param {string} suffix Inserted after the content.
+ * @returns {string} All content put together with prefix and suffix.
  */
 ns.wrap = function (prefix, content, suffix) {
   var result = '';

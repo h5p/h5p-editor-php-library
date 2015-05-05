@@ -1,14 +1,23 @@
-var H5PEditor = H5PEditor || {};
+var H5PEditor = (H5PEditor || {});
 var ns = H5PEditor;
+
+/**
+ * Callback for setting new parameters.
+ *
+ * @callback H5PEditor.newParams
+ * @param {Object} field Current field details.
+ * @param {Object} params New parameters.
+ */
 
 /**
  * Create a field where one can select and include another library to the form.
  *
- * @param {mixed} parent
- * @param {Object} field
- * @param {mixed} params
- * @param {function} setValue
- * @returns {ns.Library}
+ * @class H5PEditor.Library
+ * @extends H5P.EventDispatcher
+ * @param {Object} parent Parent field in editor.
+ * @param {Object} field Details for current field.
+ * @param {Object} params Default parameters.
+ * @param {newParams} setValue Callback for setting new parameters.
  */
 ns.Library = function (parent, field, params, setValue) {
   var self = this;
@@ -24,12 +33,10 @@ ns.Library = function (parent, field, params, setValue) {
     this.params = params;
   }
   this.field = field;
-  this.$myField;
   this.parent = parent;
   this.changes = [];
   this.optionsLoaded = false;
   this.library = parent.library + '/' + field.name;
-  this.libraries;
 
   this.passReadies = true;
   parent.ready(function () {
@@ -43,8 +50,8 @@ ns.Library.prototype.constructor = ns.Library;
 /**
  * Append the library selector to the form.
  *
- * @param {jQuery} $wrapper
- * @returns {undefined}
+ * @alias H5PEditor.Library#appendTo
+ * @param {H5P.jQuery} $wrapper
  */
 ns.Library.prototype.appendTo = function ($wrapper) {
   var that = this;
@@ -64,21 +71,22 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   this.$select = this.$myField.children('select');
   this.$libraryWrapper = this.$myField.children('.libwrap');
   ns.LibraryListCache.getLibraries(that.field.options, that.librariesLoaded, that);
-}
+};
 
 /**
  * Handler for when the library list has been loaded
- * 
- * @param {H5P.Event} event
+ *
+ * @alias H5PEditor.Library#librariesLoaded
+ * @param {Array} libList
  */
-ns.Library.prototype.librariesLoaded = function(libList) {
+ns.Library.prototype.librariesLoaded = function (libList) {
   this.libraries = libList;
   var self = this;
   var options = ns.createOption('-', '-');
   for (var i = 0; i < self.libraries.length; i++) {
     var library = self.libraries[i];
-    if (library.uberName === self.params.library
-      || (library.title !== undefined && (library.restricted === undefined || !library.restricted))) {
+    if (library.uberName === self.params.library ||
+        (library.title !== undefined && (library.restricted === undefined || !library.restricted))) {
       options += ns.createOption(library.uberName, library.title, library.uberName === self.params.library);
     }
   }
@@ -104,14 +112,14 @@ ns.Library.prototype.librariesLoaded = function(libList) {
   if (this.params.library !== undefined) {
     self.loadLibrary(this.params.library, true);
   }
-}
+};
 
 /**
  * Load the selected library.
  *
- * @param {String} libraryName On the form machineName.majorVersion.minorVersion
- * @param {Boolean} preserveParams
- * @returns {unresolved}
+ * @alias H5PEditor.Library#loadLibrary
+ * @param {string} libraryName On the form machineName.majorVersion.minorVersion
+ * @param {boolean} preserveParams
  */
 ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
   var that = this;
@@ -150,9 +158,10 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 };
 
 /**
- * Add the given callback or run
- * @param {type} callback
- * @returns {Number|@pro;length@this.changes}
+ * Add the given callback or run it.
+ *
+ * @alias H5PEditor.Library#change
+ * @param {Function} callback
  */
 ns.Library.prototype.change = function (callback) {
   if (callback !== undefined) {
@@ -161,8 +170,8 @@ ns.Library.prototype.change = function (callback) {
   }
   else {
     // Find library
-    var library;
-    for (var i = 0; i < this.libraries.length; i++) {
+    var library, i;
+    for (i = 0; i < this.libraries.length; i++) {
       if (this.libraries[i].uberName === this.currentLibrary) {
         library = this.libraries[i];
         break;
@@ -170,7 +179,7 @@ ns.Library.prototype.change = function (callback) {
     }
 
     // Run callbacks
-    for (var i = 0; i < this.changes.length; i++) {
+    for (i = 0; i < this.changes.length; i++) {
       this.changes[i](library);
     }
   }
@@ -178,6 +187,9 @@ ns.Library.prototype.change = function (callback) {
 
 /**
  * Validate this field and its children.
+ *
+ * @alias H5PEditor.Library#validate
+ * @returns {boolean}
  */
 ns.Library.prototype.validate = function () {
   if (this.params.library === undefined) {
@@ -200,8 +212,8 @@ ns.Library.prototype.validate = function () {
 /**
  * Collect functions to execute once the tree is complete.
  *
- * @param {function} ready
- * @returns {undefined}
+ * @alias H5PEditor.Library#ready
+ * @param {Function} ready
  */
 ns.Library.prototype.ready = function (ready) {
   if (this.passReadies) {
@@ -215,7 +227,7 @@ ns.Library.prototype.ready = function (ready) {
 /**
  * Custom remove children that supports common fields.
  *
- * @returns {unresolved}
+ * * @alias H5PEditor.Library#removeChildren
  */
 ns.Library.prototype.removeChildren = function () {
   if (this.currentLibrary === '-' || this.children === undefined) {
@@ -256,7 +268,7 @@ ns.Library.prototype.removeChildren = function () {
 /**
  * Allows ancestors and widgets to do stuff with our children.
  *
- * @public
+ * @alias H5PEditor.Library#forEachChild
  * @param {Function} task
  */
 ns.Library.prototype.forEachChild = function (task) {
@@ -269,6 +281,8 @@ ns.Library.prototype.forEachChild = function (task) {
 
 /**
  * Called when this item is being removed.
+ *
+ * @alias H5PEditor.Library#remove
  */
 ns.Library.prototype.remove = function () {
   this.removeChildren();
