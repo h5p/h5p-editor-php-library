@@ -137,7 +137,8 @@ ns.Html.prototype.createToolbar = function () {
   };
 
   if (this.field.font !== undefined) {
-    
+    this.tags.push('span');
+
     /**
      * Help set specified values for property.
      *
@@ -257,7 +258,7 @@ ns.Html.prototype.createToolbar = function () {
   }
 
   // Set format_tags if not empty. CKeditor does not like empty format_tags.
-  if (formats.length > 0) {
+  if (formats.length) {
     ret.format_tags = formats.join(';');
   }
 
