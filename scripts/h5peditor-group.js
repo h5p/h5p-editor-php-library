@@ -44,6 +44,13 @@ ns.Group = function (parent, field, params, setValue) {
   else {
     this.field = field;
   }
+
+  if (this.field.optional === true) {
+    // If this field is optional, make sure child fields are aswell
+    for (var j = 0; j < this.field.fields.length; j++) {
+      this.field.fields[j].optional = true;
+    }
+  }
 };
 
 /**
@@ -61,11 +68,36 @@ ns.Group.prototype.appendTo = function ($wrapper) {
     return;
   }
 
-  this.$group = ns.$('<fieldset class="field group"><div class="title"><a href="#" class="expand" title="' + ns.t('core', 'expandCollapse') + '"></a><span class="text"></span></div><div class="content"></div></fieldset>')
-  .appendTo($wrapper).find('.expand').click(function () {
-    that.expand();
-    return false;
-  }).end();
+  // Add fieldset wrapper for group
+  this.$group = ns.$('<fieldset/>', {
+    'class': 'field group',
+    appendTo: $wrapper
+  });
+
+  // Add title expand/collapse button
+  ns.$('<div/>', {
+    'class': 'title',
+    title: ns.t('core', 'expandCollapse'),
+    role: 'button',
+    tabIndex: 0,
+    on: {
+      click: function () {
+        that.expand();
+      },
+      keypress: function (event) {
+        if ((event.charCode || event.keyCode) === 32) {
+          that.expand();
+        }
+      }
+    },
+    appendTo: this.$group
+  });
+
+  // Add content container
+  var $content = ns.$('<div/>', {
+    'class': 'content',
+    appendTo: this.$group
+  });
 
   if (this.field.fields.length === 1) {
     this.children = [];
@@ -74,14 +106,14 @@ ns.Group.prototype.appendTo = function ($wrapper) {
     this.children[0] = new ns.widgets[widget](this, field, this.params, function (field, value) {
       that.setValue(that.field, value);
     });
-    this.children[0].appendTo(this.$group.children('.content'));
+    this.children[0].appendTo($content);
   }
   else {
     if (this.params === undefined) {
       this.params = {};
       this.setValue(this.field, this.params);
     }
-    ns.processSemanticsChunk(this.field.fields, this.params, this.$group.children('.content'), this);
+    ns.processSemanticsChunk(this.field.fields, this.params, $content, this);
   }
 
   // Set summary
@@ -117,12 +149,14 @@ ns.Group.prototype.expand = function () {
 ns.Group.prototype.findSummary = function () {
   var that = this;
   var summary;
-
   for (var j = 0; j < this.children.length; j++) {
     var child = this.children[j];
+    if (child.field === undefined) {
+      continue;
+    }
     var params = this.field.fields.length === 1 ? this.params : this.params[child.field.name];
-    var widget = ns.getWidgetName(child.field); 
-    
+    var widget = ns.getWidgetName(child.field);
+
     if (widget === 'text') {
       if (params !== undefined && params !== '') {
         summary = params.replace(/(<([^>]+)>)/ig, "");
@@ -163,7 +197,7 @@ ns.Group.prototype.setSummary = function (summary) {
     summary = this.field.label;
   }
 
-  this.$group.children('.title').children('.text').text(summary);
+  this.$group.children('.title').text(summary);
 };
 
 /**
@@ -181,6 +215,18 @@ ns.Group.prototype.validate = function () {
   }
 
   return valid;
+};
+
+/**
+ * Allows ancestors and widgets to do stuff with our children.
+ *
+ * @public
+ * @param {Function} task
+ */
+ns.Group.prototype.forEachChild = function (task) {
+  for (var i = 0; i < this.children.length; i++) {
+    task(this.children[i], i);
+  }
 };
 
 /**

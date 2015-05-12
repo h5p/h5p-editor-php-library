@@ -7,6 +7,7 @@ class H5peditor {
   );
   public static $scripts = array(
     'scripts/h5peditor.js',
+    'scripts/h5peditor-semantic-structure.js',
     'scripts/h5peditor-editor.js',
     'scripts/h5peditor-library-selector.js',
     'scripts/h5peditor-form.js',
@@ -19,7 +20,9 @@ class H5peditor {
     'scripts/h5peditor-group.js',
     'scripts/h5peditor-boolean.js',
     'scripts/h5peditor-list.js',
+    'scripts/h5peditor-list-editor.js',
     'scripts/h5peditor-library.js',
+    'scripts/h5peditor-library-list-cache.js',
     'scripts/h5peditor-select.js',
     'scripts/h5peditor-dimensions.js',
     'scripts/h5peditor-coordinates.js',
@@ -154,7 +157,8 @@ class H5peditor {
 
       // Remove old files.
       for ($i = 0, $s = count($oldFiles); $i < $s; $i++) {
-        if (!in_array($oldFiles[$i], $newFiles) && substr($oldFiles[$i], 0, 7) != 'http://') {
+        if (!in_array($oldFiles[$i], $newFiles) &&
+            preg_match('/^\w+:\/\//i', $oldFiles[$i]) === 0) {
           $removeFile = $this->content_directory . $oldFiles[$i];
           unlink($removeFile);
           $this->storage->removeFile($removeFile);
@@ -288,16 +292,15 @@ class H5peditor {
     $library = $this->h5p->loadLibrary($machineName, $majorVersion, $minorVersion);
     $dependencies = array();
     $this->h5p->findLibraryDependencies($dependencies, $library);
-    
+
     $editorLibraries = array();
     foreach ($dependencies as $dependency) {
       if ($dependency['type'] !== 'editor') {
         continue; // Only load editor libraries.
       }
-      $dependency['library']['dropCss'] = $dependency['dropCss'];
       $editorLibraries[$dependency['library']['libraryId']] = $dependency['library'];
     }
-    
+
     return $editorLibraries;
   }
 
@@ -306,28 +309,48 @@ class H5peditor {
    *
    * @param string $library_name
    *  Name of the library we want to fetch data for
+   * @param string $prefix Optional. Files are relative to another dir.
    */
-  public function getLibraryData($machineName, $majorVersion, $minorVersion, $languageCode) {
+  public function getLibraryData($machineName, $majorVersion, $minorVersion, $languageCode, $path = '', $prefix = '') {
     $libraryData = new stdClass();
 
     $libraries = $this->findEditorLibraries($machineName, $majorVersion, $minorVersion);
     $libraryData->semantics = $this->h5p->loadLibrarySemantics($machineName, $majorVersion, $minorVersion);
-    $libraryData->language = $this->storage->getLanguage($machineName, $majorVersion, $minorVersion, $languageCode);
+    $libraryData->language = $this->getLibraryLanguage($machineName, $majorVersion, $minorVersion, $languageCode);
 
-    $files = $this->h5p->getDependenciesFiles($libraries);
+    $files = $this->h5p->getDependenciesFiles($libraries, $prefix);
+    $this->storage->alterLibraryFiles($files, $libraries);
+
+    if ($path) {
+      $path .= '/';
+    }
 
     // Javascripts
     if (!empty($files['scripts'])) {
       foreach ($files['scripts'] as $script) {
-        $libraryData->javascript[$script->path . $script->version] = "\n" . file_get_contents($script->path);
+        if (preg_match ('/:\/\//', $script->path) === 1) {
+          // External file
+          $libraryData->javascript[$script->path . $script->version] = "\n" . file_get_contents($script->path);
+        }
+        else {
+          // Local file
+          $libraryData->javascript[$this->h5p->url . $script->path . $script->version] = "\n" . file_get_contents($path . $script->path);
+        }
       }
     }
 
     // Stylesheets
     if (!empty($files['styles'])) {
       foreach ($files['styles'] as $css) {
-        H5peditor::buildCssPath(NULL, $this->basePath . dirname($css->path) . '/');
-        $libraryData->css[$css->path . $css->version] = preg_replace_callback('/url\([\'"]?(?![a-z]+:|\/+)([^\'")]+)[\'"]?\)/i', 'H5peditor::buildCssPath', file_get_contents($css->path));
+        if (preg_match ('/:\/\//', $css->path) === 1) {
+          // External file
+          $libraryData->css[$css->path. $css->version] = file_get_contents($css->path);
+        }
+        else {
+          // Local file
+          H5peditor::buildCssPath(NULL, $this->h5p->url . dirname($css->path) . '/');
+          $libraryData->css[$this->h5p->url . $css->path . $css->version] = preg_replace_callback('/url\([\'"]?(?![a-z]+:|\/+)([^\'")]+)[\'"]?\)/i', 'H5peditor::buildCssPath', file_get_contents($path . $css->path));
+        }
       }
     }
 

@@ -1,25 +1,37 @@
-var H5PEditor = H5PEditor || {};
+var H5PEditor = (H5PEditor || {});
 var ns = H5PEditor;
+
+/**
+ * Callback for setting new parameters.
+ *
+ * @callback H5PEditor.newParams
+ * @param {Object} field Current field details.
+ * @param {Object} params New parameters.
+ */
 
 /**
  * Create a field where one can select and include another library to the form.
  *
- * @param {mixed} parent
- * @param {Object} field
- * @param {mixed} params
- * @param {function} setValue
- * @returns {ns.Library}
+ * @class H5PEditor.Library
+ * @extends H5P.EventDispatcher
+ * @param {Object} parent Parent field in editor.
+ * @param {Object} field Details for current field.
+ * @param {Object} params Default parameters.
+ * @param {newParams} setValue Callback for setting new parameters.
  */
 ns.Library = function (parent, field, params, setValue) {
-  var that = this;
-
+  var self = this;
+  H5P.EventDispatcher.call(this);
   if (params === undefined) {
-    this.params = {params: {}};
+    this.params = {
+      params: {}
+    };
+    // If you do a console log here it might show that this.params is
+    // something else than what we set it to. One of life's big mysteries...
     setValue(field, this.params);
   } else {
     this.params = params;
   }
-
   this.field = field;
   this.parent = parent;
   this.changes = [];
@@ -28,15 +40,18 @@ ns.Library = function (parent, field, params, setValue) {
 
   this.passReadies = true;
   parent.ready(function () {
-    that.passReadies = false;
+    self.passReadies = false;
   });
 };
+
+ns.Library.prototype = Object.create(H5P.EventDispatcher.prototype);
+ns.Library.prototype.constructor = ns.Library;
 
 /**
  * Append the library selector to the form.
  *
- * @param {jQuery} $wrapper
- * @returns {undefined}
+ * @alias H5PEditor.Library#appendTo
+ * @param {H5P.jQuery} $wrapper
  */
 ns.Library.prototype.appendTo = function ($wrapper) {
   var that = this;
@@ -52,52 +67,59 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   // TODO: Remove errors, it is deprecated
   html += '<div class="errors h5p-errors"></div><div class="libwrap"></div></div>';
 
-  var $field = ns.$(html).appendTo($wrapper);
-  this.$select = $field.children('select');
-  this.$libraryWrapper = $field.children('.libwrap');
+  this.$myField = ns.$(html).appendTo($wrapper);
+  this.$select = this.$myField.children('select');
+  this.$libraryWrapper = this.$myField.children('.libwrap');
+  ns.LibraryListCache.getLibraries(that.field.options, that.librariesLoaded, that);
+};
 
-  ns.$.post(ns.getAjaxUrl('libraries'), {libraries: that.field.options}, function (data) {
-    that.libraries = data;
-    var options = ns.createOption('-', '-');
-    for (var i = 0; i < data.length; i++) {
-      var library = data[i];
-      if (library.uberName === that.params.library
-        || (library.title !== undefined && (library.restricted === undefined || !library.restricted))) {
-        options += ns.createOption(library.uberName, library.title, library.uberName === that.params.library);
-      }
+/**
+ * Handler for when the library list has been loaded
+ *
+ * @alias H5PEditor.Library#librariesLoaded
+ * @param {Array} libList
+ */
+ns.Library.prototype.librariesLoaded = function (libList) {
+  this.libraries = libList;
+  var self = this;
+  var options = ns.createOption('-', '-');
+  for (var i = 0; i < self.libraries.length; i++) {
+    var library = self.libraries[i];
+    if (library.uberName === self.params.library ||
+        (library.title !== undefined && (library.restricted === undefined || !library.restricted))) {
+      options += ns.createOption(library.uberName, library.title, library.uberName === self.params.library);
     }
+  }
 
-    that.$select.html(options).change(function () {
-      if (that.params.library === undefined || confirm(H5PEditor.t('core', 'confirmChangeLibrary'))) {
-        that.loadLibrary(ns.$(this).val());
-      }
-    });
-
-    if (data.length === 1) {
-      that.$select.hide();
-      $field.children('.h5peditor-label').hide();
-      that.loadLibrary(that.$select.children(':last').val(), true);
-    }
-
-    if (that.runChangeCallback === true) {
-      // In case a library has been selected programmatically trigger change events, e.g. a default library.
-      that.change();
-      that.runChangeCallback = false;
+  self.$select.html(options).change(function () {
+    if (self.params.library === undefined || confirm(H5PEditor.t('core', 'confirmChangeLibrary'))) {
+      self.loadLibrary(ns.$(this).val());
     }
   });
 
+  if (self.libraries.length === 1) {
+    self.$select.hide();
+    self.$myField.children('.h5peditor-label').hide();
+    self.loadLibrary(self.$select.children(':last').val(), true);
+  }
+
+  if (self.runChangeCallback === true) {
+    // In case a library has been selected programmatically trigger change events, e.g. a default library.
+    self.change();
+    self.runChangeCallback = false;
+  }
   // Load default library.
   if (this.params.library !== undefined) {
-    that.loadLibrary(this.params.library, true);
+    self.loadLibrary(this.params.library, true);
   }
 };
 
 /**
  * Load the selected library.
  *
- * @param {String} libraryName On the form machineName.majorVersion.minorVersion
- * @param {Boolean} preserveParams
- * @returns {unresolved}
+ * @alias H5PEditor.Library#loadLibrary
+ * @param {string} libraryName On the form machineName.majorVersion.minorVersion
+ * @param {boolean} preserveParams
  */
 ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
   var that = this;
@@ -107,6 +129,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
   if (libraryName === '-') {
     delete this.params.library;
     delete this.params.params;
+    delete this.params.subContentId;
     this.$libraryWrapper.attr('class', 'libwrap');
     return;
   }
@@ -120,8 +143,9 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     if (preserveParams === undefined || !preserveParams) {
       // Reset params
       that.params.params = {};
+      that.params.subContentId = H5P.createUUID();
     }
-    
+
     ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper.html(''), that);
 
     if (that.libraries !== undefined) {
@@ -134,9 +158,10 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 };
 
 /**
- * Add the given callback or run
- * @param {type} callback
- * @returns {Number|@pro;length@this.changes}
+ * Add the given callback or run it.
+ *
+ * @alias H5PEditor.Library#change
+ * @param {Function} callback
  */
 ns.Library.prototype.change = function (callback) {
   if (callback !== undefined) {
@@ -145,8 +170,8 @@ ns.Library.prototype.change = function (callback) {
   }
   else {
     // Find library
-    var library;
-    for (var i = 0; i < this.libraries.length; i++) {
+    var library, i;
+    for (i = 0; i < this.libraries.length; i++) {
       if (this.libraries[i].uberName === this.currentLibrary) {
         library = this.libraries[i];
         break;
@@ -154,7 +179,7 @@ ns.Library.prototype.change = function (callback) {
     }
 
     // Run callbacks
-    for (var i = 0; i < this.changes.length; i++) {
+    for (i = 0; i < this.changes.length; i++) {
       this.changes[i](library);
     }
   }
@@ -162,6 +187,9 @@ ns.Library.prototype.change = function (callback) {
 
 /**
  * Validate this field and its children.
+ *
+ * @alias H5PEditor.Library#validate
+ * @returns {boolean}
  */
 ns.Library.prototype.validate = function () {
   if (this.params.library === undefined) {
@@ -170,9 +198,11 @@ ns.Library.prototype.validate = function () {
 
   var valid = true;
 
-  for (var i = 0; i < this.children.length; i++) {
-    if (this.children[i].validate() === false) {
-      valid = false;
+  if (this.children) {
+    for (var i = 0; i < this.children.length; i++) {
+      if (this.children[i].validate() === false) {
+        valid = false;
+      }
     }
   }
 
@@ -182,8 +212,8 @@ ns.Library.prototype.validate = function () {
 /**
  * Collect functions to execute once the tree is complete.
  *
- * @param {function} ready
- * @returns {undefined}
+ * @alias H5PEditor.Library#ready
+ * @param {Function} ready
  */
 ns.Library.prototype.ready = function (ready) {
   if (this.passReadies) {
@@ -197,7 +227,7 @@ ns.Library.prototype.ready = function (ready) {
 /**
  * Custom remove children that supports common fields.
  *
- * @returns {unresolved}
+ * * @alias H5PEditor.Library#removeChildren
  */
 ns.Library.prototype.removeChildren = function () {
   if (this.currentLibrary === '-' || this.children === undefined) {
@@ -236,11 +266,29 @@ ns.Library.prototype.removeChildren = function () {
 };
 
 /**
+ * Allows ancestors and widgets to do stuff with our children.
+ *
+ * @alias H5PEditor.Library#forEachChild
+ * @param {Function} task
+ */
+ns.Library.prototype.forEachChild = function (task) {
+  for (var i = 0; i < this.children.length; i++) {
+    if (task(this.children[i], i)) {
+      return;
+    }
+  }
+};
+
+/**
  * Called when this item is being removed.
+ *
+ * @alias H5PEditor.Library#remove
  */
 ns.Library.prototype.remove = function () {
   this.removeChildren();
-  this.$select.parent().remove();
+  if (this.$select !== undefined) {
+    this.$select.parent().remove();
+  }
 };
 
 // Tell the editor what widget we are.
