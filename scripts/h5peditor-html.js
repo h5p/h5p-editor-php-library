@@ -106,6 +106,16 @@ ns.Html.prototype.createToolbar = function () {
     });
   }
 
+  // Create wrapper for text styling options
+  var styles = {
+    name: "styles",
+    items: []
+  };
+  var colors = {
+    name: "colors",
+    items: []
+  };
+
   // Add format group if formatters in tags (h1, h2, etc). Formats use their
   // own format_tags to filter available formats.
   if (this.inTags("h1")) formats.push("h1");
@@ -119,18 +129,137 @@ ns.Html.prototype.createToolbar = function () {
   if (formats.length > 0 || this.inTags('p') || this.inTags('div')) {
     formats.push("p");   // If the formats are shown, always have a paragraph..
     this.tags.push("p");
-    toolbar.push({
-      name: "styles",
-      items: ['Format']
-    });
+    styles.items.push('Format');
   }
 
   var ret = {
     toolbar: toolbar
   };
+
+  if (this.field.font !== undefined) {
+    this.tags.push('span');
+
+    /**
+     * Help set specified values for property.
+     *
+     * @private
+     * @param {Array} values list
+     * @param {string} prop Property
+     * @param {string} [defProp] Default property name
+     */
+    var setValues = function (values, prop, defProp) {
+      ret[prop] = '';
+      for (var i = 0; i < values.length; i++) {
+        var val = values[i];
+        if (val.label && val.css) {
+          // Add label and CSS
+          ret[prop] += val.label + '/' + val.css + ';';
+
+          // Check if default value
+          if (defProp && val.default) {
+            ret[defProp] = val.label;
+          }
+        }
+      }
+    };
+
+    /**
+     * @private
+     * @param {Array} values
+     * @returns {string}
+     */
+    var getColors = function (values) {
+      var colors = '';
+      for (var i = 0; i < values.length; i++) {
+        var val = values[i];
+        if (val.label && val.css) {
+          var css = val.css.match(/^#?([a-f0-9]{3}[a-f0-9]{3}?)$/i);
+          if (!css) {
+            continue;
+          }
+
+          // Add label and CSS
+          if (colors) {
+            colors += ',';
+          }
+          colors += val.label + '/' + css[1];
+        }
+      }
+      return colors;
+    };
+
+    if (this.field.font.family) {
+      // Font family chooser
+      styles.items.push('Font');
+
+      if (this.field.font.family instanceof Array) {
+        // Use specified families
+        setValues(this.field.font.family, 'font_names', 'font_defaultLabel');
+      }
+    }
+
+    if (this.field.font.size) {
+      // Font size chooser
+      styles.items.push('FontSize');
+
+      ret.fontSize_sizes = '';
+      if (this.field.font.size instanceof Array) {
+        // Use specified sizes
+        setValues(this.field.font.size, 'fontSize_sizes', 'fontSize_defaultLabel');
+      }
+      else {
+        ret.fontSize_defaultLabel = '100%';
+
+        // Standard font size that is used. (= 100%)
+        var defaultFont = 16;
+
+        // Standard font sizes that is available.
+        var defaultAvailable = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72];
+        for (var i = 0; i < defaultAvailable.length; i++) {
+          // Calculate percentage of standard font size. This enables scaling
+          // in content types without rounding errors across browsers.
+          var em = defaultAvailable[i] / 16;
+          ret.fontSize_sizes += (em * 100) + '%/' + em + 'em;';
+        }
+
+      }
+
+    }
+
+    if (this.field.font.color) {
+      // Text color chooser
+      colors.items.push('TextColor');
+
+      if (this.field.font.color instanceof Array) {
+        ret.colorButton_colors = getColors(this.field.font.color);
+        ret.colorButton_enableMore = false;
+      }
+    }
+
+    if (this.field.font.background) {
+      // Text background color chooser
+      colors.items.push('BGColor');
+
+      if (this.field.font.background instanceof Array) {
+        ret.colorButton_colors = getColors(this.field.font.color);
+        ret.colorButton_enableMore = false;
+      }
+    }
+  }
+
+  // Add the text styling options
+  if (styles.items.length) {
+    toolbar.push(styles);
+    ret.extraPlugins = 'font';
+  }
+  if (colors.items.length) {
+    toolbar.push(colors);
+    ret.extraPlugins = (ret.extraPlugins ? ret.extraPlugins + ',' : '') + 'colorbutton';
+  }
+
   // Set format_tags if not empty. CKeditor does not like empty format_tags.
-  if (formats.length > 0) {
-    ret['format_tags'] = formats.join(';');
+  if (formats.length) {
+    ret.format_tags = formats.join(';');
   }
 
   // Enable selection of enterMode in module semantics.
