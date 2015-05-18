@@ -250,11 +250,9 @@ ns.Html.prototype.createToolbar = function () {
   // Add the text styling options
   if (styles.items.length) {
     toolbar.push(styles);
-    ret.extraPlugins = 'font';
   }
   if (colors.items.length) {
     toolbar.push(colors);
-    ret.extraPlugins = (ret.extraPlugins ? ret.extraPlugins + ',' : '') + 'colorbutton';
   }
 
   // Set format_tags if not empty. CKeditor does not like empty format_tags.
