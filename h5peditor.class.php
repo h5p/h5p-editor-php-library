@@ -293,15 +293,19 @@ class H5peditor {
     $dependencies = array();
     $this->h5p->findLibraryDependencies($dependencies, $library);
 
-    $editorLibraries = array();
-    foreach ($dependencies as $dependency) {
-      if ($dependency['type'] !== 'editor') {
-        continue; // Only load editor libraries.
+    // Order dependencies by weight
+    $orderedDependencies = array();
+    for ($i = 1, $s = count($dependencies); $i <= $s; $i++) {
+      foreach ($dependencies as $dependency) {
+        if ($dependency['weight'] === $i && $dependency['type'] === 'editor') {
+          // Only load editor libraries.
+          $orderedDependencies[$dependency['library']['libraryId']] = $dependency['library'];
+          break;
+        }
       }
-      $editorLibraries[$dependency['library']['libraryId']] = $dependency['library'];
     }
 
-    return $editorLibraries;
+    return $orderedDependencies;
   }
 
   /**
