@@ -118,6 +118,14 @@ ns.Group.prototype.appendTo = function ($wrapper) {
 
   // Set summary
   this.findSummary();
+  
+  //Check if group should be expanded. Default is to be expanded unless explicity defined in semantics by optional attribute expanded
+  if (this.field.expanded === false) {
+	  this.$group.removeClass('expanded');
+  }
+  else {
+	  this.$group.addClass('expanded');
+  }
 };
 
 /**
