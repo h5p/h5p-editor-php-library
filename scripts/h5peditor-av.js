@@ -156,11 +156,10 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       that.$uploading = $('<div class="h5peditor-uploading h5p-throbber">' + H5PEditor.t('core', 'uploading') + '</div>').insertAfter(that.$add.hide());
     };
 
-    H5PEditor.File.callback = function (json) {
+    H5PEditor.File.callback = function (err, result) {
       try {
-        var result = JSON.parse(json);
-        if (result.error !== undefined) {
-          throw(result.error);
+        if (err) {
+          throw err;
         }
 
         if (that.params === undefined) {
