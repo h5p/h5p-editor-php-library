@@ -218,7 +218,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     }
 
     var mime;
-    var matches = url.match(/\.(webm|mp4|ogv)/i);
+    var matches = url.match(/\.(webm|mp4|ogv|m4a|mp3|ogg|oga|wav)/i);
     if (matches !== null) {
       mime = matches[matches.length - 1];
     }
