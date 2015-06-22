@@ -30,5 +30,8 @@ H5PEditor.language.core = {
   close: "Chiudi",
   tutorialAvailable: "Tutorial disponibile",
   editMode: "Modalità modifica",
-  listLabel: "Lista"
+  listLabel: "Lista",
+  uploadError: 'File Upload Error',
+  fileToLarge: 'The file you are trying to upload might be too large.',
+  noSemantics: 'Error, could not load the content type form.'
 };

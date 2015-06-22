@@ -32,5 +32,6 @@ H5PEditor.language.core = {
   editMode: 'Redigeringsmodus',
   listLabel: 'Liste',
   uploadError: 'Filopplasting feilet',
-  fileToLarge: 'Filen du prøver å laste opp kan være for stor.'
+  fileToLarge: 'Filen du prøver å laste opp kan være for stor.',
+  noSemantics: 'Feil, kunne ikke laste skjemaet for innholdstypen.'
 };
