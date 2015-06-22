@@ -249,13 +249,13 @@ ns.File.addIframe = function () {
       }
       catch (err) {
         H5P.error(err);
-        error = 'The file you are trying to upload might be too large.';
+        error = H5PEditor.t('core', 'fileToLarge');
       }
 
       // Trigger callback if set.
       if (ns.File.callback !== undefined) {
         if (error) {
-          ns.File.callback('File Upload Error: ' + error);
+          ns.File.callback(H5PEditor.t('core', 'uploadError') + ': ' + error);
         }
         else {
           ns.File.callback(undefined, response);
