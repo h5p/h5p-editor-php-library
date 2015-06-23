@@ -40,4 +40,5 @@ CKEDITOR.editorConfig = function( config ) {
 	config.height = 80;
 	config.autoGrow_onStartup = true;
 	config.autoGrow_maxHeight = 500;
+	config.colorButton_enableMore = true;
 };
