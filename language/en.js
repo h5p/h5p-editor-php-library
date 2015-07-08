@@ -20,7 +20,7 @@ H5PEditor.language.core = {
   addEntity: 'Add :entity',
   tooLong: 'Field value is too long, should contain :max letters or less.',
   invalidFormat: 'Field value contains an invalid format or characters that are forbidden.',
-  confirmChangeLibrary: 'Are you sure you wish to change library?',
+  confirmChangeLibrary: 'By doing this you will loose all work done with the current content type. Are you sure you wish to change content type?',
   moreLibraries: 'Look for <a href="http://h5p.org/content-types-and-applications" target="_blank">more content types</a> on h5p.org',
   commonFields: 'Settings and texts',
   commonFieldsDescription: 'Here you can edit settings or translate texts used in this content.',

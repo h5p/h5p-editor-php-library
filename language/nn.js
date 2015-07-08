@@ -20,7 +20,7 @@ H5PEditor.language.core = {
   addEntity: 'Legg til :entity',
   tooLong: 'Feltets verdi er for lang, den må vere på :max tegn eller mindre.',
   invalidFormat: 'Feltets verdi er på eit ugyldig format eller bruker ulovlege tegn.',
-  confirmChangeLibrary: 'Er du sikker på at du ønskjer å byte bibliotek?',
+  confirmChangeLibrary: 'Gjør du dette mister du alt arbeid gjort med nåværande innhaldstype. Er du sikker på at du ønskjer å byte innhaldstype?',
   moreLibraries: 'Sjå etter <a href="http://h5p.org/content-types-and-applications" target="_blank">fleir innhaldstypar</a> på h5p.org',
   commonFields: 'Innstillinger og tekstar',
   commonFieldsDescription: 'Her kan du redigere innstillinger eller oversette tekstar som brukast i dette innhaldet.',
