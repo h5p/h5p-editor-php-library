@@ -29,6 +29,9 @@ H5PEditor.language.core = {
   editCopyright: 'Edit copyright',
   close: 'Close',
   tutorialAvailable: 'Tutorial available',
-  editMode: 'Redigeringsmodus',
-  listLabel: 'Liste'
+  editMode: 'Editing mode',
+  listLabel: 'List',
+  uploadError: 'File Upload Error',
+  fileToLarge: 'The file you are trying to upload might be too large.',
+  noSemantics: 'Error, could not load the content type form.'
 };
