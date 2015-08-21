@@ -31,4 +31,7 @@ H5PEditor.language.core = {
   tutorialAvailable: 'Tutoriel disponible',
   editMode: 'Mode de rédaction',
   listLabel: 'Liste'
+  uploadError: 'Erreur pendant l envoi du fichier',
+  fileToLarge: 'Le fichier que vous envoyez est trop lourd.',
+  noSemantics: 'Erreur, impossible de charger ce type de contenu.'
 };
