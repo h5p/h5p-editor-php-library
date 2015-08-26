@@ -81,10 +81,10 @@ ns.Group.prototype.appendTo = function ($wrapper) {
     role: 'button',
     tabIndex: 0,
     on: {
-      click: function () {
+      click: function () {
         that.toggle();
       },
-      keypress: function (event) {
+      keypress: function (event) {
         if ((event.charCode || event.keyCode) === 32) {
           that.toggle();
         }
