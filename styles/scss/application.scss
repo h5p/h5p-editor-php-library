@@ -66,6 +66,10 @@ a {
     min-height: 20px;
     @include border-radius(3px);
   }
+  .h5peditor-text {
+    width: 100%;
+    box-sizing: border-box;
+  }
   select {
     padding: 2px;
   }
