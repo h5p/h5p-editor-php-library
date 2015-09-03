@@ -320,6 +320,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     H5P.jQuery(this).trigger('blur'); // Why do we do this? - FRL, 20120723.
 
     ns.Html.current = that;
+    ckConfig.width = this.offsetWidth - 8; // Avoid miscalculations
     that.ckeditor = CKEDITOR.replace(this, ckConfig);
 
     that.ckeditor.on('blur', function () {
