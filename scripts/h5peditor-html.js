@@ -358,12 +358,10 @@ ns.Html.prototype.appendTo = function ($wrapper) {
  * Create HTML for the HTML field.
  */
 ns.Html.prototype.createHtml = function () {
-  var html = '<label class="h5peditor-label">';
-
+  var html = '';
   if (this.field.label !== undefined) {
-    html += '<span class="h5peditor-label">' + this.field.label + '</span>';
+    html += '<label class="h5peditor-label">' + this.field.label + '</label>';
   }
-  html += '</label>';
 
   html += '<div class="ckeditor" tabindex="0" contenteditable="true">';
 
