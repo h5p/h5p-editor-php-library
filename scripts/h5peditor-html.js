@@ -168,7 +168,7 @@ ns.Html.prototype.createToolbar = function () {
      * @param {Array} values
      * @returns {string}
      */
-    var getColors = function (values) {
+    var getColors = function (values) {
       var colors = '';
       for (var i = 0; i < values.length; i++) {
         var val = values[i];
@@ -283,6 +283,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
   var that = this;
 
   this.$item = ns.$(ns.createItem(this.field.type, this.createHtml(), this.field.description)).appendTo($wrapper);
+
   this.$input = this.$item.children('.ckeditor');
   this.$errors = this.$item.children('.h5p-errors');
 
@@ -307,6 +308,9 @@ ns.Html.prototype.appendTo = function ($wrapper) {
   }
 
   this.$item.children('.ckeditor').focus(function () {
+    // Remove placeholder
+    that.$item.find('.h5peditor-ckeditor-placeholder').remove();
+
     if (ns.Html.first) {
       CKEDITOR.basePath = ns.basePath + '/ckeditor/';
     }
@@ -368,6 +372,10 @@ ns.Html.prototype.createHtml = function () {
   if (this.value !== undefined) {
     html += this.value;
   }
+  else if (this.field.placeholder !== undefined) {
+    html += '<span class="h5peditor-ckeditor-placeholder">' + this.field.placeholder + '</span>';
+  }
+
   html += '</div>';
 
   return html;
