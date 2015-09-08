@@ -66,7 +66,7 @@ a {
     min-height: 20px;
     @include border-radius(3px);
   }
-  .h5peditor-text {
+  .h5peditor-text, textarea {
     width: 100%;
     box-sizing: border-box;
   }
@@ -121,6 +121,10 @@ a {
       float: left;
       width: 0.6875em;
       text-indent: -0.0625em;
+      cursor: move;
+      cursor: grab;
+      cursor: -moz-grab;
+      cursor: -webkit-grab;
 
       &:after {
         font-family: $i;
@@ -144,6 +148,11 @@ a {
       text-overflow: ellipsis;
     }
   }
+  .moving .order {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+  }
   .h5p-ul {
     padding: 0;
     margin: 8px 0;
@@ -161,7 +170,8 @@ a {
       &:hover {
         text-decoration: none;
       }
-      &:first-child {
+      &:first-child,
+      &.moving {
         border-top: 1px solid #ccc;
       }
       &.collapsed .list-item-title-bar {
