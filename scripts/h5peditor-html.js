@@ -66,6 +66,12 @@ ns.Html.prototype.createToolbar = function () {
     });
   }
 
+  // Alignment is added to all wysiwygs
+  toolbar.push({
+    name: "justify",
+    items: ["JustifyLeft", "JustifyCenter", "JustifyRight"]
+  });
+
   // Paragraph styles
   if (this.inTags("ul")) {
     paragraph.push("BulletedList");
