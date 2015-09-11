@@ -237,7 +237,6 @@ a {
   .group {
     margin: 16px 0;
     border: 1px solid #676767;
-    background: #d5e9ff;
     @include border-radius(0);
 
     @include box-shadow(0 0 4px #a7a7a7);
@@ -256,30 +255,6 @@ a {
     }
     & > .content {
       display: none;
-    }
-    .h5p-li {
-      background: #fff;
-      &:hover {
-        background: #fff;
-      }
-      .group {
-        background: #fff;
-        .h5p-li {
-          background: #fff;
-          &:hover {
-            background: #fff;
-          }
-          .group {
-            background: #feedff;
-          }
-        }
-        .group {
-          background: #feedff;
-        }
-      }
-    }
-    .group {
-      background: #ebfffa;
     }
   }
   .expanded {
@@ -541,24 +516,25 @@ a {
   }
   .common {
     margin-top: 1em;
-    background: #fff;
-    border: 1px solid #ccc;
+    border: 1px solid #676767;
+    box-shadow: 0 0 4px #a7a7a7;
 
     & > .h5peditor-label {
       font-size: 1em;
       font-weight: normal;
-      padding: 0.5em 0.75em 0.4em;
+      padding: 4px 8px;
       background: #ddd;
       cursor: pointer;
+      border-bottom: 1px solid #676767;
 
       & > .icon {
         display: inline-block;
-        width: 20px;
-        height: 13px;
         background: inline-image("collapse.png") no-repeat left center;
         opacity: 0.8;
-        vertical-align: top;
-        margin-top: 4px;
+        vertical-align: middle;
+        width: 13px;
+        height: 13px;
+        margin: 0 6px 2px 2px;
       }
       &:hover > .icon {
         opacity: 1;
@@ -577,8 +553,12 @@ a {
     }
 
     &.collapsed {
-      & > .h5peditor-label > .icon {
-        background-image: inline-image("expand.png");
+      & > .h5peditor-label {
+        border-bottom: 0;
+
+        & > .icon {
+          background-image: inline-image("expand.png");
+        }
       }
       & > .fields {
         display: none;
