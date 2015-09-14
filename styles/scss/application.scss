@@ -236,14 +236,11 @@ a {
   }
   .group {
     margin: 16px 0;
-    border: 1px solid #676767;
-    @include border-radius(0);
-
-    @include box-shadow(0 0 4px #a7a7a7);
+    border: 1px solid #ccc;
 
     & > .title {
       cursor: pointer;
-      padding: 4px 8px;
+      padding: 6px 8px 5px;
       overflow: hidden;
       background: #f4f4f4;
       overflow: hidden;
@@ -259,7 +256,7 @@ a {
   }
   .expanded {
     & > .title {
-      border-bottom: 1px solid #676767;
+      border-bottom: 1px solid #ccc;
     }
     & > .content {
       padding: 4px 8px;
@@ -516,16 +513,15 @@ a {
   }
   .common {
     margin-top: 1em;
-    border: 1px solid #676767;
-    box-shadow: 0 0 4px #a7a7a7;
+    border: 1px solid #ccc;
 
     & > .h5peditor-label {
       font-size: 1em;
       font-weight: normal;
-      padding: 4px 8px;
+      padding: 6px 8px 5px;
       background: #ddd;
       cursor: pointer;
-      border-bottom: 1px solid #676767;
+      border-bottom: 1px solid #ccc;
 
       & > .icon {
         display: inline-block;
