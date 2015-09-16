@@ -25,15 +25,20 @@ a {
     margin-top: 0.4em;
   }
 
+  .tree > .field:first-child {
+    margin-top: 0;
+  }
+
   .field {
     margin: 8px 0;
     font-size: 16px;
     padding: 0;
-    &:first-child {
-      margin-top: 0;
-    }
     &:last-child {
       margin-bottom: 0;
+    }
+
+    .h5peditor-widget-wrapper button {
+      margin-top: 4px;
     }
 
     &.boolean .h5peditor-label {
@@ -155,7 +160,7 @@ a {
   }
   .h5p-ul {
     padding: 0;
-    margin: 8px 0;
+    margin: 0;
     list-style: none;
 
     .h5p-li {
@@ -231,11 +236,7 @@ a {
   .group > .title:active:before {
     opacity: 0.5;
   }
-  .content > .field {
-    margin: 8px 0 20px 0;
-  }
   .group {
-    margin: 16px 0;
     border: 1px solid #ccc;
 
     & > .title {
@@ -512,7 +513,7 @@ a {
     vertical-align: bottom;
   }
   .common {
-    margin-top: 1em;
+    margin-top: 8px;
     border: 1px solid #ccc;
 
     & > .h5peditor-label {
