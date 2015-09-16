@@ -44,7 +44,7 @@ a {
     }
 
     .library {
-      border: 1px solid #666;
+      border: 1px solid #ccc;
       padding: 8px;
     }
   }
@@ -203,7 +203,7 @@ a {
       border-right: 0;
     }
   }*/
-  .listgroup .h5peditor-label {
+  .listgroup > .list-item-title-bar > .h5peditor-label {
     cursor: pointer;
   }
   .listgroup > .list-item-title-bar > .h5peditor-label:before,
