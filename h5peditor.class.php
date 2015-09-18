@@ -158,7 +158,7 @@ class H5peditor {
       // Remove old files.
       for ($i = 0, $s = count($oldFiles); $i < $s; $i++) {
         if (!in_array($oldFiles[$i], $newFiles) &&
-            preg_match('/^\w+:\/\//i', $oldFiles[$i]) === 0) {
+            preg_match('/^(\w+:\/\/|\.\.\/)/i', $oldFiles[$i]) === 0) {
           $removeFile = $this->content_directory . $oldFiles[$i];
           unlink($removeFile);
           $this->storage->removeFile($removeFile);
@@ -193,28 +193,13 @@ class H5peditor {
    * @param object $field
    * @param mixed $params
    * @param array $files
-   * @param array $libraries
    */
   private function processField(&$field, &$params, &$files) {
-    static $h5peditor_path;
-    if (!$h5peditor_path) {
-      $h5peditor_path = $this->editorFilesDir . DIRECTORY_SEPARATOR;
-    }
     switch ($field->type) {
       case 'file':
       case 'image':
         if (isset($params->path)) {
-          $oldPath = $h5peditor_path . $params->path;
-          $newPath = $this->content_directory . $params->path;
-          if (file_exists($oldPath)) {
-            rename($oldPath, $newPath);
-            $this->storage->keepFile($oldPath, $newPath);
-          }
-          elseif (file_exists($newPath)) {
-            $this->storage->keepFile($newPath, $newPath);
-          }
-
-          $files[] = $params->path;
+          $this->processFile($params, $files);
         }
         break;
 
@@ -222,16 +207,7 @@ class H5peditor {
       case 'audio':
         if (is_array($params)) {
           for ($i = 0, $s = count($params); $i < $s; $i++) {
-            $oldPath = $h5peditor_path . $params[$i]->path;
-            $newPath = $this->content_directory . $params[$i]->path;
-            if (file_exists($oldPath)) {
-              rename($oldPath, $newPath);
-              $this->storage->keepFile($oldPath, $newPath);
-            }
-            elseif (file_exists($newPath)) {
-              $this->storage->keepFile($newPath, $newPath);
-            }
-            $files[] = $params[$i]->path;
+            $this->processFile($params, $files);
           }
         }
         break;
@@ -263,6 +239,45 @@ class H5peditor {
         }
         break;
     }
+  }
+
+  /**
+   * @param mixed $params
+   * @param array $files
+   */
+  private function processFile(&$params, &$files) {
+    static $h5peditor_path;
+    if (!$h5peditor_path) {
+      $h5peditor_path = $this->editorFilesDir . DIRECTORY_SEPARATOR;
+    }
+
+    // File could be copied from another content folder.
+    $matches = array();
+    if (preg_match('/^(\.\.\/){1,2}(\d+|editor)\/(.+)$/', $params->path, $matches)) {
+      // Create copy of file
+      $source = $this->content_directory . $params->path;
+      $destination = $this->content_directory . $matches[3];
+      if (file_exists($source) && !file_exists($destination)) {
+        copy($source, $destination);
+      }
+      $params->path = $matches[3];
+    }
+    else {
+      // Check if tmp file
+      $oldPath = $h5peditor_path . $params->path;
+      $newPath = $this->content_directory . $params->path;
+      if (file_exists($newPath)) {
+        // Uploaded to content folder, make sure the cleanup script doesn't get it.
+        $this->storage->keepFile($newPath, $newPath);
+      }
+      elseif (file_exists($oldPath)) {
+        // Move file from editor tmp folder
+        rename($oldPath, $newPath);
+        $this->storage->keepFile($oldPath, $newPath);
+      }
+    }
+
+    $files[] = $params->path;
   }
 
   /**
