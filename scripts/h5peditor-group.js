@@ -215,7 +215,7 @@ ns.Group.prototype.setSummary = function (summary) {
     summary = this.field.label;
   }
 
-  this.$group.children('.title').text(summary);
+  this.$group.children('.title').html(summary);
 };
 
 /**
