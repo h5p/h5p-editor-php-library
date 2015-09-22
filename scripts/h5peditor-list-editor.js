@@ -225,8 +225,10 @@ H5PEditor.ListEditor = (function ($) {
         // Append field
         item.appendTo($content);
 
-        // Try to find and move the label to the title bar
-        $content.children('.field').find('.h5peditor-label').appendTo($titleBar);
+        if (item.field.label !== 0) {
+          // Try to find and move the label to the title bar
+          $content.children('.field').find('.h5peditor-label:first').appendTo($titleBar);
+        }
       }
 
       // Append item to list
