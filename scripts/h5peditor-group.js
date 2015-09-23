@@ -208,7 +208,14 @@ ns.Group.prototype.findSummary = function () {
  * @returns {undefined}
  */
 ns.Group.prototype.setSummary = function (summary) {
-  var summaryText = ns.$.parseHTML(summary)[0].nodeValue;
+  var summaryText;
+
+  // Parse html
+  var summaryTextNode = ns.$.parseHTML(summary);
+
+  if (summaryTextNode.length) {
+    summaryText = summaryTextNode[0].nodeValue;
+  }
 
   if (summaryText !== undefined) {
     summaryText = this.field.label + ': ' + (summaryText.length > 48 ? summaryText.substr(0, 45) + '...' : summaryText);
