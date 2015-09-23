@@ -208,14 +208,16 @@ ns.Group.prototype.findSummary = function () {
  * @returns {undefined}
  */
 ns.Group.prototype.setSummary = function (summary) {
-  if (summary !== undefined) {
-    summary = this.field.label + ': ' + (summary.length > 48 ? summary.substr(0, 45) + '...' : summary);
+  var summaryText = ns.$.parseHTML(summary)[0].nodeValue;
+
+  if (summaryText !== undefined) {
+    summaryText = this.field.label + ': ' + (summaryText.length > 48 ? summaryText.substr(0, 45) + '...' : summaryText);
   }
   else {
-    summary = this.field.label;
+    summaryText = this.field.label;
   }
 
-  this.$group.children('.title').html(summary);
+  this.$group.children('.title').html(summaryText);
 };
 
 /**
