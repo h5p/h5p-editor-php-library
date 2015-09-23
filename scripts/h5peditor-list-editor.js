@@ -121,7 +121,7 @@ H5PEditor.ListEditor = (function ($) {
        *
        * @private
        */
-      var down = function () {
+      var down = function (event) {
         if (event.which !== 1) {
           return; // Only allow left mouse button
         }
