@@ -29,7 +29,7 @@ class H5peditor {
     'scripts/h5peditor-none.js',
     'ckeditor/ckeditor.js',
   );
-  private $h5p, $storage, $files_directory, $basePath;
+  private $h5p, $storage, $files_directory, $basePath, $relativePathRegExp;
 
   /**
    * Constructor for the core editor library.
@@ -40,12 +40,13 @@ class H5peditor {
    * @param string $filesDir H5P files directory.
    * @param string $editorFilesDir Optional custom editor files directory outside h5p files directory.
    */
-  function __construct($h5p, $storage, $basePath, $filesDir, $editorFilesDir = NULL) {
+  function __construct($h5p, $storage, $basePath, $filesDir, $editorFilesDir = NULL, $relativePathRegExp = '/^(\.\.\/){1,2}(\d+|editor)\/(.+)$/') {
     $this->h5p = $h5p;
     $this->storage = $storage;
     $this->basePath = $basePath;
     $this->contentFilesDir = $filesDir . DIRECTORY_SEPARATOR . 'content';
     $this->editorFilesDir = ($editorFilesDir === NULL ? $filesDir . DIRECTORY_SEPARATOR . 'editor' : $editorFilesDir);
+    $this->relativePathRegExp = $relativePathRegExp;
   }
 
   /**
@@ -253,7 +254,7 @@ class H5peditor {
 
     // File could be copied from another content folder.
     $matches = array();
-    if (preg_match('/^(\.\.\/){1,2}(\d+|editor)\/(.+)$/', $params->path, $matches)) {
+    if (preg_match($this->relativePathRegExp, $params->path, $matches)) {
       // Create copy of file
       $source = $this->content_directory . $params->path;
       $destination = $this->content_directory . $matches[3];
