@@ -126,6 +126,9 @@ H5PEditor.ListEditor = (function ($) {
           return; // Only allow left mouse button
         }
 
+        // Prevent wysiwyg becoming unresponsive
+        H5PEditor.Html.removeWysiwyg();
+
         // Start tracking mouse
         H5P.$body
           .attr('unselectable', 'on')
