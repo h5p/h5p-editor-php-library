@@ -208,7 +208,7 @@ class H5peditor {
       case 'audio':
         if (is_array($params)) {
           for ($i = 0, $s = count($params); $i < $s; $i++) {
-            $this->processFile($params, $files);
+            $this->processFile($params[$i], $files);
           }
         }
         break;
