@@ -217,14 +217,23 @@ ns.Group.prototype.findSummary = function () {
  * @returns {undefined}
  */
 ns.Group.prototype.setSummary = function (summary) {
-  if (summary !== undefined) {
-    summary = this.field.label + ': ' + (summary.length > 48 ? summary.substr(0, 45) + '...' : summary);
-  }
-  else {
-    summary = this.field.label;
+  var summaryText;
+
+  // Parse html
+  var summaryTextNode = ns.$.parseHTML(summary);
+
+  if (summaryTextNode !== null) {
+    summaryText = summaryTextNode[0].nodeValue;
   }
 
-  this.$group.children('.title').html(summary);
+  if (summaryText !== undefined) {
+    summaryText = this.field.label + ': ' + (summaryText.length > 48 ? summaryText.substr(0, 45) + '...' : summaryText);
+  }
+  else {
+    summaryText = this.field.label;
+  }
+
+  this.$group.children('.title').html(summaryText);
 };
 
 /**

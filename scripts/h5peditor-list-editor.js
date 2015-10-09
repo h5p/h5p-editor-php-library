@@ -121,10 +121,13 @@ H5PEditor.ListEditor = (function ($) {
        *
        * @private
        */
-      var down = function () {
+      var down = function (event) {
         if (event.which !== 1) {
           return; // Only allow left mouse button
         }
+
+        // Prevent wysiwyg becoming unresponsive
+        H5PEditor.Html.removeWysiwyg();
 
         // Start tracking mouse
         H5P.$body

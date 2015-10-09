@@ -777,11 +777,10 @@ a {
   display: block;
   font-weight: bold;
   font-size: 16px;
-  overflow: hidden;
   padding-top: 4px;
 }
 
-/* line 686, ../scss/application.scss */
+/* line 685, ../scss/application.scss */
 #h5peditor-uploader {
   position: absolute;
   width: 1px;
@@ -791,12 +790,12 @@ a {
   overflow: hidden;
 }
 
-/* line 695, ../scss/application.scss */
+/* line 694, ../scss/application.scss */
 .h5p-tutorial-url {
   font-size: 0.875em;
 }
 
-/* line 699, ../scss/application.scss */
+/* line 698, ../scss/application.scss */
 .h5p-tutorial-url:before {
   font-family: "H5P";
   content: "\e889";
@@ -806,7 +805,7 @@ a {
   left: .2em;
 }
 
-/* line 708, ../scss/application.scss */
+/* line 707, ../scss/application.scss */
 .h5peditor-widget-select {
   overflow: hidden;
   margin: 0 0 -1px;
@@ -814,7 +813,7 @@ a {
   list-style: none;
 }
 
-/* line 714, ../scss/application.scss */
+/* line 713, ../scss/application.scss */
 .h5peditor-widget-option {
   float: right;
   border: 1px solid #ccc;
@@ -829,24 +828,24 @@ a {
   outline: none;
 }
 
-/* line 727, ../scss/application.scss */
+/* line 726, ../scss/application.scss */
 .h5peditor-widget-option:hover {
   color: #000;
 }
 
-/* line 730, ../scss/application.scss */
+/* line 729, ../scss/application.scss */
 .h5peditor-widget-option:active {
   color: #8e636a;
   /* Pink chocolate */
 }
 
-/* line 733, ../scss/application.scss */
+/* line 732, ../scss/application.scss */
 .h5peditor-widget-active {
   background: #fff;
   line-height: 1.357142857em;
 }
 
-/* line 738, ../scss/application.scss */
+/* line 737, ../scss/application.scss */
 .h5peditor-widgets > .h5peditor-widget-wrapper {
   border: 1px solid #ccc;
   background: #fff;
@@ -854,12 +853,12 @@ a {
   padding: 0.5em;
 }
 
-/* line 744, ../scss/application.scss */
+/* line 743, ../scss/application.scss */
 .h5peditor-widgets > .h5peditor-label {
   float: left;
 }
 
-/* line 747, ../scss/application.scss */
+/* line 746, ../scss/application.scss */
 .h5p-editor-iframe {
   margin-bottom: 1em;
 }
