@@ -81,7 +81,7 @@ H5PEditor.List = (function ($) {
      * @param {number} index
      * @param {*} value
      */
-    var setParameters = function (index, value) {
+    var setParameters = function (index, value) {
       if (parameters === undefined) {
         // Create new parameters for list
         parameters = [];
