@@ -174,7 +174,7 @@ ns.Html.prototype.createToolbar = function () {
      * @param {Array} values
      * @returns {string}
      */
-    var getColors = function (values) {
+    var getColors = function (values) {
       var colors = '';
       for (var i = 0; i < values.length; i++) {
         var val = values[i];
