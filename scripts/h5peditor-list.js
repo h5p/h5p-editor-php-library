@@ -224,8 +224,10 @@ H5PEditor.List = (function ($) {
       children.splice(newIndex, 0, child[0]);
 
       // Update parameters
-      var params = parameters.splice(currentIndex, 1);
-      parameters.splice(newIndex, 0, params[0]);
+      if (parameters) {
+        var params = parameters.splice(currentIndex, 1);
+        parameters.splice(newIndex, 0, params[0]);
+      }
     };
 
     /**
