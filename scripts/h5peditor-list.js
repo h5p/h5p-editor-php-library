@@ -56,6 +56,9 @@ H5PEditor.List = (function ($) {
       var i;
       if (parameters !== undefined && parameters.length) {
         for (i = 0; i < parameters.length; i++) {
+          if (parameters[i] === null) {
+            parameters[i] = undefined;
+          }
           addItem(i);
         }
       }
