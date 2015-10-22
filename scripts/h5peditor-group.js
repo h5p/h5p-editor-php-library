@@ -11,6 +11,9 @@ var ns = H5PEditor;
  * @returns {ns.Group}
  */
 ns.Group = function (parent, field, params, setValue) {
+  // Support for events
+  H5P.EventDispatcher.call(this);
+
   if (field.label === undefined) {
     field.label = field.name;
   }
@@ -52,6 +55,10 @@ ns.Group = function (parent, field, params, setValue) {
     }
   }
 };
+
+// Extends the event dispatcher
+ns.Group.prototype = Object.create(H5P.EventDispatcher.prototype);
+ns.Group.prototype.constructor = ns.Group;
 
 /**
  * Append group to its wrapper.
@@ -143,6 +150,7 @@ ns.Group.prototype.toggle = function () {
  */
 ns.Group.prototype.expand = function () {
   this.$group.addClass('expanded');
+  this.trigger('expanded');
 };
 
 /**
@@ -158,8 +166,9 @@ ns.Group.prototype.collapse = function () {
   }
   if (valid) {
     this.$group.removeClass('expanded');
+    this.trigger('collapsed');
   }
-}
+};
 
 /**
  * Find summary to display in group header.

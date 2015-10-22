@@ -330,6 +330,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     H5P.jQuery(this).trigger('blur'); // Why do we do this? - FRL, 20120723.
 
     ns.Html.current = that;
+    ckConfig.width = this.offsetWidth - 8; // Avoid miscalculations
     that.ckeditor = CKEDITOR.replace(this, ckConfig);
 
     that.ckeditor.on('blur', function () {
@@ -367,12 +368,10 @@ ns.Html.prototype.appendTo = function ($wrapper) {
  * Create HTML for the HTML field.
  */
 ns.Html.prototype.createHtml = function () {
-  var html = '<label class="h5peditor-label">';
-
+  var html = '';
   if (this.field.label !== undefined) {
-    html += '<span class="h5peditor-label">' + this.field.label + '</span>';
+    html += '<label class="h5peditor-label">' + this.field.label + '</label>';
   }
-  html += '</label>';
 
   html += '<div class="ckeditor" tabindex="0" contenteditable="true">';
 
