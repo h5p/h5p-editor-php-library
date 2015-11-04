@@ -272,9 +272,9 @@ class H5peditor {
         $this->storage->keepFile($newPath, $newPath);
       }
       elseif (file_exists($oldPath)) {
-        // Move file from editor tmp folder
-        rename($oldPath, $newPath);
-        $this->storage->keepFile($oldPath, $newPath);
+        // Copy file from editor tmp folder to content folder
+        copy($oldPath, $newPath);
+        // Not moved in-case it has been copied to multiple content.
       }
     }
 
