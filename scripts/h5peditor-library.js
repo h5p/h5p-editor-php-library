@@ -92,9 +92,14 @@ ns.Library.prototype.librariesLoaded = function (libList) {
   }
 
   self.$select.html(options).change(function () {
-    if (self.params.library === undefined || confirm(H5PEditor.t('core', 'confirmChangeLibrary'))) {
-      self.loadLibrary(ns.$(this).val());
-    }
+    var lib = ns.$(this).val();
+    // Use timeout to avoid bug in Chrome >44, when confirm is used inside change event.
+    // Ref. https://code.google.com/p/chromium/issues/detail?id=525629
+    setTimeout(function () {
+      if (self.params.library === undefined || confirm(H5PEditor.t('core', 'confirmChangeLibrary'))) {
+        self.loadLibrary(lib);
+      }
+    }, 0);
   });
 
   if (self.libraries.length === 1) {
