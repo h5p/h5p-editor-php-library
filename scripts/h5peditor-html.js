@@ -314,8 +314,12 @@ ns.Html.prototype.appendTo = function ($wrapper) {
   }
 
   this.$item.children('.ckeditor').focus(function () {
+
+    // Blur is not fired on destroy. Therefore we need to keep track of it!
+    var blurFired = false;
+
     // Remove placeholder
-    that.$item.find('.h5peditor-ckeditor-placeholder').remove();
+    that.$placeholder = that.$item.find('.h5peditor-ckeditor-placeholder').detach();
 
     if (ns.Html.first) {
       CKEDITOR.basePath = ns.basePath + '/ckeditor/';
@@ -327,18 +331,40 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     // Remove existing CK instance.
     ns.Html.removeWysiwyg();
 
-    H5P.jQuery(this).trigger('blur'); // Why do we do this? - FRL, 20120723.
-
     ns.Html.current = that;
     ckConfig.width = this.offsetWidth - 8; // Avoid miscalculations
     that.ckeditor = CKEDITOR.replace(this, ckConfig);
 
-    that.ckeditor.on('blur', function () {
+    that.ckeditor.on('focus', function () {
+      blurFired = false;
+    });
+
+    that.ckeditor.once('destroy', function () {
+
+      // In some cases, the blur event is not fired. Need to be sure it is, so that
+      // validation and saving is done
+      if (!blurFired) {
+        blur();
+      }
+
+      // Display placeholder if:
+      // -- there are no errors
+      // -- The value is empty
+      // -- A placeholder is defined
+      if (that.$errors.children().length === 0 && that.value !== undefined && that.value.length === 0 && that.$placeholder.length !== 0) {
+        that.$placeholder.appendTo(that.$item.find('.ckeditor'));
+      }
+    });
+
+    var blur = function () {
+      blurFired = true;
       // Do not validate if the field has been hidden.
       if (that.$item.is(':visible')) {
         that.validate();
       }
-    });
+    };
+
+    that.ckeditor.on('blur', blur);
 
     // Add events to ckeditor. It is beeing done here since we know it exists
     // at this point... Use case from commit message: "Make the default
