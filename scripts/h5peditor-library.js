@@ -98,6 +98,9 @@ ns.Library.prototype.librariesLoaded = function (libList) {
     setTimeout(function () {
       if (self.params.library === undefined || confirm(H5PEditor.t('core', 'confirmChangeLibrary'))) {
         self.loadLibrary(lib);
+      } else {
+        // Reset selector
+        self.$select.val(self.currentLibrary);
       }
     }, 0);
   });
