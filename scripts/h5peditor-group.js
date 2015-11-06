@@ -107,6 +107,7 @@ ns.Group.prototype.appendTo = function ($wrapper) {
   });
 
   if (this.field.fields.length === 1) {
+    $content.addClass('h5peditor-single');
     this.children = [];
     var field = this.field.fields[0];
     var widget = field.widget === undefined ? field.type : field.widget;
