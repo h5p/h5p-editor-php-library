@@ -348,10 +348,11 @@ ns.Html.prototype.appendTo = function ($wrapper) {
       }
 
       // Display placeholder if:
-      // -- there are no errors
-      // -- The value is empty
+      // -- The value held by the field is empty AND
+      // -- The value shown in the UI is empty AND
       // -- A placeholder is defined
-      if (that.$errors.children().length === 0 && that.value !== undefined && that.value.length === 0 && that.$placeholder.length !== 0) {
+      var value = that.ckeditor !== undefined ? that.ckeditor.getData() : that.$input.html();
+      if (that.$placeholder.length !== 0 && (value === undefined || value.length === 0) && (that.value === undefined || that.value.length === 0)) {
         that.$placeholder.appendTo(that.$item.find('.ckeditor'));
       }
     });
