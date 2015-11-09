@@ -201,7 +201,7 @@ ns.Library.prototype.change = function (callback) {
  */
 ns.Library.prototype.validate = function () {
   if (this.params.library === undefined) {
-    return false;
+    return (this.field.optional === true);
   }
 
   var valid = true;
