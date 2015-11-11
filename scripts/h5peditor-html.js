@@ -426,6 +426,9 @@ ns.Html.prototype.validate = function () {
   // Get contents from editor
   var value = this.ckeditor !== undefined ? this.ckeditor.getData() : this.$input.html();
 
+  // Remove placeholder text if any:
+  value = value.replace(/<span class="h5peditor-ckeditor-placeholder">.*<\/span>/, '');
+
   var $value = ns.$('<div>' + value + '</div>');
   var textValue = $value.text();
 
