@@ -146,6 +146,7 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
   }
 
   for (var i = 0; i < semanticsChunk.length; i++) {
+    var usingDefaultValue = false;
     var field = semanticsChunk[i];
 
     // Check generic field properties.
@@ -159,6 +160,7 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
     // Set default value.
     if (params[field.name] === undefined && field['default'] !== undefined) {
       params[field.name] = field['default'];
+      usingDefaultValue = true;
     }
 
     var widget = ns.getWidgetName(field);
@@ -186,7 +188,7 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
       else {
         params[field.name] = value;
       }
-    });
+    }, usingDefaultValue);
     fieldInstance.appendTo($wrapper);
     parent.children.push(fieldInstance);
   }

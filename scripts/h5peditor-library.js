@@ -19,7 +19,8 @@ var ns = H5PEditor;
  * @param {Object} params Default parameters.
  * @param {newParams} setValue Callback for setting new parameters.
  */
-ns.Library = function (parent, field, params, setValue) {
+ns.Library = function (parent, field, params, setValue, usingDefaultValue) {
+  this.usingDefaultValue = usingDefaultValue;
   var self = this;
   H5P.EventDispatcher.call(this);
   if (params === undefined) {
@@ -108,7 +109,7 @@ ns.Library.prototype.librariesLoaded = function (libList) {
   if (self.libraries.length === 1) {
     self.$select.hide();
     self.$myField.children('.h5peditor-label').hide();
-    self.loadLibrary(self.$select.children(':last').val(), true);
+    self.loadLibrary(self.$select.children(':last').val(), !self.usingDefaultValue);
   }
 
   if (self.runChangeCallback === true) {
@@ -118,7 +119,7 @@ ns.Library.prototype.librariesLoaded = function (libList) {
   }
   // Load default library.
   if (this.params.library !== undefined) {
-    self.loadLibrary(this.params.library, true);
+    self.loadLibrary(this.params.library, !self.usingDefaultValue);
   }
 };
 
