@@ -151,6 +151,8 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     if (preserveParams === undefined || !preserveParams) {
       // Reset params
       that.params.params = {};
+    }
+    if (that.params.subContentId === undefined) {
       that.params.subContentId = H5P.createUUID();
     }
 
