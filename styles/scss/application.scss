@@ -74,6 +74,7 @@ a {
     outline: none;
     min-height: 20px;
     @include border-radius(3px);
+    word-wrap: break-word;
   }
   .h5peditor-text, textarea {
     width: 100%;
