@@ -78,7 +78,7 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
         firstTime = false;
       }
 
-      var tutorialUrl = ns.$(this).find(':selected').data('tutorial-url');
+      var tutorialUrl = that.$selector.find(':selected').data('tutorial-url');
       that.$tutorialUrl.attr('href', tutorialUrl).toggle(tutorialUrl !== undefined && tutorialUrl !== null && tutorialUrl.length !== 0);
     }, 0);
   });
