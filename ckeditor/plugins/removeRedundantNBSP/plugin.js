@@ -18,7 +18,7 @@ CKEDITOR.plugins.add('removeRedundantNBSP', {
     if (htmlFilter) {
       htmlFilter.addRules({
         text: function(text) {
-          return text.replace(/(\w)&nbsp;/, '$1 ');
+          return text.replace(/(\w)&nbsp;/gi, '$1 ');
         }
       }, {
         applyToAll: true,
