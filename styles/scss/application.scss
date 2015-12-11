@@ -33,6 +33,7 @@ a {
     margin: 8px 0;
     font-size: 16px;
     padding: 0;
+    min-width: inherit;
     &:last-child {
       margin-bottom: 0;
     }
