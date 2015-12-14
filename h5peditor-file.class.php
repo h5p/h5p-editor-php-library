@@ -153,6 +153,7 @@ class H5peditorFile {
           'video/webm' => 'webm',
          // 'application/ogg' => 'ogv',
           'video/ogg' => 'ogv',
+          'text/srt' => 'srt'
         );
         if (!$this->check($allowed)) {
           $this->result->error = $this->interface->t('Invalid video file format. Use mp4 or webm.');
@@ -175,9 +176,13 @@ class H5peditorFile {
     preg_match('/([a-z0-9]{1,})$/i', $_FILES['file']['name'], $matches);
 
     $this->name = uniqid($this->field->name . '-');
-    if (isset($matches[0])) {
+
+    if (isset($matches[0]) && $matches[0] != 'srt') {
       $this->name .= '.' . $matches[0];
+    } else {
+      $this->name = $_FILES['file']['name'];
     }
+
     $this->name = $this->field->type . 's/' . $this->name;
 
     $this->path = $this->files_directory . '/' . $this->name;
