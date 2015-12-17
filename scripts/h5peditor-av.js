@@ -52,13 +52,15 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       self.$addDialog.addClass('h5p-open');
     });
     this.$addDialog = this.$add.next();
+    var $url = this.$addDialog.find('.h5p-file-url');
     this.$addDialog.find('.h5p-cancel').click(function () {
+      self.updateIndex = undefined;
+      $url.val('');
       self.$addDialog.removeClass('h5p-open');
     });
     this.$addDialog.find('.h5p-file-upload').click(function () {
       self.uploadFile();
     });
-    var $url = this.$addDialog.find('.h5p-file-url');
     this.$addDialog.find('.h5p-insert').click(function () {
       self.useUrl($url.val().trim());
       self.$addDialog.removeClass('h5p-open');
@@ -99,7 +101,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     if (that.updateIndex !== undefined) {
       this.$add.parent().children(':eq(' + index + ')').find('.h5p-type').attr('title', file.mime).text(file.mime.split('/')[1]);
-      self.updateIndex = undefined;
+      this.updateIndex = undefined;
       return;
     }
 
