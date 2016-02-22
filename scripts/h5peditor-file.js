@@ -246,6 +246,9 @@ ns.File.addIframe = function () {
         if (response.error) {
           error = response.error;
         }
+        if (response.success === false) {
+          error = (response.message ? response.message : 'Unknown file upload error');
+        }
       }
       catch (err) {
         H5P.error(err);
@@ -267,7 +270,13 @@ ns.File.addIframe = function () {
     }
 
     $body.html('');
-    var $form = ns.$('<form method="post" enctype="multipart/form-data" action="' + ns.getAjaxUrl('files') + '"><input name="file" type="file"/><input name="field" type="hidden"/><input name="contentId" type="hidden" value="' + (ns.contentId === undefined ? 0 : ns.contentId) + '"/></form>').appendTo($body);
+    var $form = ns.$(
+      '<form method="post" enctype="multipart/form-data" action="' + ns.getAjaxUrl('files') + '">' +
+        '<input name="file" type="file"/>' +
+        '<input name="field" type="hidden"/>' +
+        '<input name="contentId" type="hidden" value="' + (ns.contentId === undefined ? 0 : ns.contentId) + '"/>' +
+        '<input name="token" type="hidden" value="' + H5PIntegration.editor.uploadToken + '"/>' +
+      '</form>').appendTo($body);
 
     ns.File.$field = $form.children('input[name="field"]');
     ns.File.$file = $form.children('input[name="file"]');
