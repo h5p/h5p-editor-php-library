@@ -275,7 +275,7 @@ ns.File.addIframe = function () {
         '<input name="file" type="file"/>' +
         '<input name="field" type="hidden"/>' +
         '<input name="contentId" type="hidden" value="' + (ns.contentId === undefined ? 0 : ns.contentId) + '"/>' +
-        '<input name="token" type="hidden" value="' + H5PIntegration.editor.uploadToken + '"/>' +
+        '<input name="token" type="hidden" value="' + ns.uploadToken + '"/>' +
       '</form>').appendTo($body);
 
     ns.File.$field = $form.children('input[name="field"]');
