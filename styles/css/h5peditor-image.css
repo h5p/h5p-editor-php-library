@@ -1,0 +1,18 @@
+.h5peditor .h5p-editing-image-button {
+  line-height: 1.5;
+  margin-right: 0.5em;
+}
+
+.h5peditor .field.image .file {
+  display: inline-block;
+  float: none;
+}
+
+.h5peditor .h5p-editor-image-buttons {
+  display: block;
+}
+
+.h5peditor .h5p-copyright-button {
+  float: none;
+  display: inline-block;
+}
