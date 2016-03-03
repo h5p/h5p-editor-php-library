@@ -101,7 +101,7 @@ ns.File.prototype.addFile = function () {
   if (this.field.type === 'image') {
     thumbnail = {};
     thumbnail.path = H5P.getPath(this.params.path, H5PEditor.contentId),
-    thumbnail.height = 100;
+      thumbnail.height = 100;
     if (this.params.width !== undefined) {
       thumbnail.width = thumbnail.height * (this.params.width / this.params.height);
     }
@@ -286,4 +286,3 @@ ns.File.addIframe = function () {
 
 // Tell the editor what widget we are.
 ns.widgets.file = ns.File;
-ns.widgets.image = ns.File;

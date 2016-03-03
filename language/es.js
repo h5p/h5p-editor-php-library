@@ -33,5 +33,6 @@ H5PEditor.language.core = {
   listLabel: 'Lista',
   uploadError: 'Error en la subida del archivo',
   fileToLarge: 'El archivo que intentas subir es demasiado grande.',
-  noSemantics: 'Error, no se ha podido cargar el formulario del tipo de contenido.'
+  noSemantics: 'Error, no se ha podido cargar el formulario del tipo de contenido.',
+  editImage: 'Edit image'
 };
