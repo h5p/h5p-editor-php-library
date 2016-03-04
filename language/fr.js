@@ -34,5 +34,8 @@ H5PEditor.language.core = {
   uploadError: 'Erreur pendant l envoi du fichier',
   fileToLarge: 'Le fichier que vous envoyez est trop lourd.',
   noSemantics: 'Erreur, impossible de charger ce type de contenu.',
-  editImage: 'Edit image'
+  editImage: 'Edit image',
+  saveLabel: 'Save',
+  cancelLabel: 'Cancel',
+  resetToOriginalLabel: 'Reset to original'
 };

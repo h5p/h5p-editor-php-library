@@ -12,9 +12,6 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     var self = this;
     var uniqueId = instanceCounter;
     instanceCounter++;
-    console.log("h5peditor", H5PEditor);
-    console.log("h5p", H5P);
-    console.log("body", H5P.$body);
     var isShowing = false;
 
     var background = document.createElement('div');
@@ -26,8 +23,40 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
 
     var header = document.createElement('div');
     header.className = 'h5p-editing-image-header';
-    header.textContent = 'Edit Image!';
     popup.appendChild(header);
+
+    var headerTitle = document.createElement('div');
+    headerTitle.className = 'h5p-editing-image-header-title';
+    headerTitle.textContent = 'Edit Image!';
+    header.appendChild(headerTitle);
+
+    var headerButtons = document.createElement('div');
+    headerButtons.className = 'h5p-editing-image-header-buttons';
+    header.appendChild(headerButtons);
+
+    var resetButton = document.createElement('button');
+    resetButton.textContent = ns.t('core', 'resetToOriginalLabel');
+    resetButton.className = 'h5p-editing-image-reset-button';
+    resetButton.onclick = function () {
+      resetToOriginalImage();
+    };
+    headerButtons.appendChild(resetButton);
+
+    var cancelButton = document.createElement('button');
+    cancelButton.textContent = ns.t('core', 'cancelLabel');
+    cancelButton.className = 'h5p-editing-image-cancel-button';
+    cancelButton.onclick = function () {
+      self.trigger('canceled');
+    };
+    headerButtons.appendChild(cancelButton);
+
+    var saveButton = document.createElement('button');
+    saveButton.textContent = ns.t('core', 'saveLabel');
+    saveButton.className = 'h5p-editing-image-save-button';
+    saveButton.onclick = function () {
+      saveImage();
+    };
+    headerButtons.appendChild(saveButton);
 
     var editingImage = new Image();
     editingImage.className = 'h5p-editing-image';
@@ -37,6 +66,10 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     H5P.$body.get(0).appendChild(background);
 
     var topOffset = 0;
+
+    var resetToOriginalImage = function () {
+      self.trigger('resetImage');
+    };
 
     var loadScripts = function () {
       loadScript('../..' + editorPath + 'libs/fabric.js', function () {
@@ -60,22 +93,25 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       });
     };
 
+    var saveImage = function() {
+
+      // Check if image has changed
+      console.log("transformations", self.darkroom.transformations);
+      console.log("transformations", self.darkroom.transformations.length);
+      if (self.darkroom.transformations.length) {
+        var newImage = self.darkroom.canvas.toDataURL();
+        self.trigger('savedImage', newImage);
+      }
+
+      self.hide();
+    };
+
     var createDarkroom = function () {
-      new Darkroom('#h5p-editing-image-' + uniqueId, {
-        initialize: function () {
-          self.adjustOffset();
-        },
+      self.darkroom = new Darkroom('#h5p-editing-image-' + uniqueId, {
         plugins: {
-          save : {
-            callback: function () {
-              var newImage = this.darkroom.canvas.toDataURL();
-              self.trigger('savedImage', newImage);
-              self.hide();
-            }
-          }
+          save : false
         }
       });
-
     };
 
     this.adjustOffset = function (offset) {
@@ -87,23 +123,33 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       popup.style.top = topOffset + 'px';
     };
 
+    this.setImage = function (imgSrc) {
+      var darkroom = popup.querySelector('.darkroom-container');
+      popup.removeChild(darkroom);
+
+      editingImage.src = imgSrc;
+      popup.appendChild(editingImage);
+
+      createDarkroom();
+    };
+
     this.show = function (offset, imageSrc) {
       topOffset = offset.top;
 
       if (imageSrc) {
-        console.log("inside imagesrc");
-        editingImage.src = imageSrc;
 
         if (!scriptsLoaded) {
+          editingImage.src = imageSrc;
           loadScripts();
         }
         else {
-          createDarkroom();
+          self.setImage(imageSrc);
         }
       }
 
       isShowing = true;
       background.classList.remove('hidden');
+      this.adjustOffset();
     };
 
     this.hide = function () {

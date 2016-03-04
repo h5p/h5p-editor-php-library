@@ -12,7 +12,6 @@ var ns = H5PEditor;
  */
 ns.widgets.image = function (parent, field, params, setValue) {
   var self = this;
-  console.log("image", field, params);
 
   this.parent = parent;
   this.field = field;
@@ -73,43 +72,48 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
 
   var editImagePopup = new H5PEditor.ImageEditingPopup();
   editImagePopup.on('savedImage', function (e) {
-    console.log("got event");
-    console.log("set as new img source");
+    self.isEditing = false;
     var src = e.data;
     self.$img.attr('src', e.data);
 
     // Set current source as original image, if no original image
-    if (!params.originalImage) {
-      params.originalImage = {
-        path: params.path,
-        mime: params.mime,
-        height: params.height,
-        width: params.width
+    if (!self.params.originalImage) {
+      self.params.originalImage = {
+        path: self.params.path,
+        mime: self.params.mime,
+        height: self.params.height,
+        width: self.params.width
       }
     }
 
     // Set new source as current image
+    self.setImageChangeCallback();
+    ns.File.$data.val(e.data);
+    ns.File.$field.val(JSON.stringify(self.field));
+    ns.File.$file.change();
+  });
 
+  editImagePopup.on('resetImage', function () {
+    var imageSrc = self.params.originalImage ?
+      H5P.getPath(self.params.originalImage.path, H5PEditor.contentId) :
+      H5P.getPath(self.params.path, H5PEditor.contentId);
+
+    editImagePopup.setImage(imageSrc);
+  });
+
+  editImagePopup.on('canceled', function () {
+    self.isEditing = false;
   });
 
   $container.find('.h5p-editing-image-button').click(function () {
-    console.log("this", H5P.jQuery(this));
-    console.log("offset body", H5P.jQuery(this).offset());
-    console.log("self", self);
-    console.log("params", self.params);
+
     if (self.params && self.params.path) {
-      console.log("image src", self.$img, self.$img.attr('src'));
       var imageSrc;
       if (!self.isEditing) {
         imageSrc = self.$img.attr('src');
         self.isEditing = true;
       }
-      console.log("show, imagesrc", imageSrc);
       editImagePopup.show(H5P.jQuery(this).offset(), imageSrc);
-    }
-    else {
-      // TODO: handle no image set
-      console.log("NO image set");
     }
   });
 
@@ -204,22 +208,8 @@ ns.widgets.image.prototype.addFile = function () {
   this.$img = this.$file.find('img');
 };
 
-/**
- * Start a new upload.
- */
-ns.widgets.image.prototype.uploadFile = function () {
+ns.widgets.image.prototype.setImageChangeCallback = function () {
   var that = this;
-  debugger;
-
-  if (ns.File.$file === 0) {
-    return; // Wait for our turn :)
-  }
-
-  this.$errors.html('');
-
-  ns.File.changeCallback = function () {
-    that.$file.html('<div class="h5peditor-uploading h5p-throbber">' + ns.t('core', 'uploading') + '</div>');
-  };
 
   ns.File.callback = function (err, result) {
     try {
@@ -227,11 +217,10 @@ ns.widgets.image.prototype.uploadFile = function () {
         throw err;
       }
 
-      that.params = {
-        path: result.path,
-        mime: result.mime,
-        copyright: that.copyright
-      };
+      that.params.path = result.path;
+      that.params.mime = result.mime;
+      that.params.copyright = that.copyright;
+
       if (that.field.type === 'image') {
         that.params.width = result.width;
         that.params.height = result.height;
@@ -249,6 +238,25 @@ ns.widgets.image.prototype.uploadFile = function () {
 
     that.addFile();
   };
+};
+
+/**
+ * Start a new upload.
+ */
+ns.widgets.image.prototype.uploadFile = function () {
+  var that = this;
+
+  if (ns.File.$file === 0) {
+    return; // Wait for our turn :)
+  }
+
+  this.$errors.html('');
+
+  ns.File.changeCallback = function () {
+    that.$file.html('<div class="h5peditor-uploading h5p-throbber">' + ns.t('core', 'uploading') + '</div>');
+  };
+
+  this.setImageChangeCallback();
 
   if (this.field.mimes !== undefined) {
     var mimes = '';
@@ -297,71 +305,3 @@ ns.widgets.image.prototype.ready = function (ready) {
     ready();
   }
 };
-
-/*
-
-H5PEditor.widgets.imageEditing = H5PEditor.ImageEditing = (function ($, ImageEditingPopup) {
-
-  /!**
-   * Edit images
-   *
-   * @param parent
-   * @param field
-   * @param params
-   * @param setValue
-   * @constructor
-   *!/
-  function ImageEditing(parent, field, params, setValue) {
-    console.log("iamge editing constructor", params, field);
-    var self = this;
-
-    params = params || {};
-
-    var imageFields = field.fields.find(function (image) {
-      return image.name === 'image';
-    });
-
-    var originalImageFields = field.fields.find(function (image) {
-      return image.name === 'originalImage';
-    });
-
-    var popup = new ImageEditingPopup();
-
-    var $imageEditing = $('<div>', {
-      'class': 'h5p-image-editing'
-    });
-
-    var $imageEditingButton = $('<button>', {
-      'class': 'h5p-editor-image-editing-button',
-      'html': H5PEditor.t('H5PEditor.ImageEditing', 'editImage', {}),
-      'appendTo': $imageEditing
-    }).click(function () {
-
-    });
-
-    this.appendTo = function ($wrapper) {
-      H5PEditor.processSemanticsChunk([imageFields],  params, $imageEditing, self);
-
-      // Append before copyright button
-      var $copyrightButton = $imageEditing.find('.h5p-copyright-button');
-      $imageEditingButton.insertBefore($copyrightButton);
-
-      $imageEditing.appendTo($wrapper);
-    };
-
-    this.passReadies = true;
-    this.ready = function () {
-      return true;
-    };
-
-    this.validate = function () {
-      return true;
-    }
-  }
-
-  return ImageEditing;
-})(
-  H5P.jQuery,
-  H5PEditor.ImageEditing.ImageEditingPopup
-);
-*/

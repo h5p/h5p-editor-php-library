@@ -49,3 +49,12 @@
 .h5p-editing-image-popup .darkroom-image-container .canvas-container {
   margin: auto;
 }
+
+.h5p-editing-image-header-title {
+  display: inline-block;
+}
+
+.h5p-editing-image-header-buttons {
+  display: inline-block;
+  float: right;
+}

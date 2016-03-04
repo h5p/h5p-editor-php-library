@@ -34,22 +34,38 @@ class H5peditorFile {
     // Get the field.
     $this->field = json_decode($field);
 
-    if (function_exists('finfo_file')) {
-      $finfo = finfo_open(FILEINFO_MIME_TYPE);
-      $this->type = finfo_file($finfo, $_FILES['file']['tmp_name']);
-      finfo_close($finfo);
-    }
-    elseif (function_exists('mime_content_type')) {
-      // Deprecated, only when finfo isn't available.
-      $this->type = mime_content_type($_FILES['file']['tmp_name']);
+    // Check if uploaded bit64 encoded file
+    if (isset($_POST) && isset($_POST['dataURI']) && $_POST['dataURI'] !== '') {
+      $data = $_POST['dataURI'];
+
+      list($type, $data) = explode(';', $data);
+      list(, $data)      = explode(',', $data);
+      $this->data = base64_decode($data);
+      //file_put_contents('/tmp/image.png', $data);
+
+      list(, $type) = explode(':', $type);
+      list(, $extension) = explode('/', $type);
+      $this->type = $type;
+      $this->extension = $extension;
+      $this->size = strlen($this->data);
     }
     else {
-      $this->type = $_FILES['file']['type'];
+      if (function_exists('finfo_file')) {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $this->type = finfo_file($finfo, $_FILES['file']['tmp_name']);
+        finfo_close($finfo);
+      }
+      elseif (function_exists('mime_content_type')) {
+        // Deprecated, only when finfo isn't available.
+        $this->type = mime_content_type($_FILES['file']['tmp_name']);
+      }
+      else {
+        $this->type = $_FILES['file']['type'];
+      }
+
+      $this->extension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+      $this->size = $_FILES['file']['size'];
     }
-
-    $this->extension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
-
-    $this->size = $_FILES['file']['size'];
   }
 
   /**
@@ -117,7 +133,13 @@ class H5peditorFile {
           return FALSE;
         }
 
-        $image = @getimagesize($_FILES['file']['tmp_name']);
+        if (isset($this->data)) {
+          $image = getimagesizefromstring($this->data);
+        }
+        else {
+          $image = @getimagesize($_FILES['file']['tmp_name']);
+        }
+
         if (!$image) {
           $this->result->error = $this->interface->t('File is not an image.');
           return FALSE;
@@ -170,20 +192,30 @@ class H5peditorFile {
     return TRUE;
   }
 
- public function copy() {
+  public function copy() {
     $matches = array();
     preg_match('/([a-z0-9]{1,})$/i', $_FILES['file']['name'], $matches);
 
     $this->name = uniqid($this->field->name . '-');
-    if (isset($matches[0])) {
+    if (isset($this->data)) {
+      $this->name .= '.' . $this->extension;
+    }
+    else if (isset($matches[0])) {
       $this->name .= '.' . $matches[0];
     }
+
     $this->name = $this->field->type . 's/' . $this->name;
 
     $this->path = $this->files_directory . '/' . $this->name;
-    if (!copy($_FILES['file']['tmp_name'], $this->path)) {
-      $this->result->error = $this->interface->t('Could not copy file.');
-      return FALSE;
+
+    if (isset($this->data)) {
+      file_put_contents($this->path, $this->data);
+    }
+    else {
+      if (!copy($_FILES['file']['tmp_name'], $this->path)) {
+        $this->result->error = $this->interface->t('Could not copy file.');
+        return FALSE;
+      }
     }
 
     $this->result->path = $this->name;

@@ -267,15 +267,23 @@ ns.File.addIframe = function () {
     }
 
     $body.html('');
-    var $form = ns.$('<form method="post" enctype="multipart/form-data" action="' + ns.getAjaxUrl('files') + '"><input name="file" type="file"/><input name="field" type="hidden"/><input name="contentId" type="hidden" value="' + (ns.contentId === undefined ? 0 : ns.contentId) + '"/></form>').appendTo($body);
+    var $form = ns.$(
+      '<form method="post" enctype="multipart/form-data" action="' + ns.getAjaxUrl('files') + '">' +
+        '<input name="file" type="file"/>' +
+        '<input name="field" type="hidden"/>' +
+        '<input name="dataURI" type="hidden"/>' +
+        '<input name="contentId" type="hidden" value="' + (ns.contentId === undefined ? 0 : ns.contentId) + '"/>' +
+      '</form>').appendTo($body);
 
     ns.File.$field = $form.children('input[name="field"]');
     ns.File.$file = $form.children('input[name="file"]');
+    ns.File.$data = $form.children('input[name="dataURI"]');
 
     ns.File.$file.change(function () {
       if (ns.File.changeCallback !== undefined) {
         ns.File.changeCallback();
       }
+      ns.File.$data = 0;
       ns.File.$field = 0;
       ns.File.$file = 0;
       $form.submit();

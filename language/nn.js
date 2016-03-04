@@ -34,5 +34,8 @@ H5PEditor.language.core = {
   uploadError: 'Filopplasting feilet',
   fileToLarge: 'Filen du prøver å laste opp kan være for stor.',
   noSemantics: 'Feil, kunne ikke laste skjemaet for innholdstypen.',
-  editImage: 'Rediger bilete'
+  editImage: 'Rediger bilete',
+  saveLabel: 'Lagre',
+  cancelLabel: 'Avbryt',
+  resetToOriginalLabel: 'Tilbakestill bilde'
 };
