@@ -37,5 +37,6 @@ H5PEditor.language.core = {
   editImage: 'Rediger bilde',
   saveLabel: 'Lagre',
   cancelLabel: 'Avbryt',
-  resetToOriginalLabel: 'Tilbakestill bilde'
+  resetToOriginalLabel: 'Tilbakestill bilde',
+  loadingImageEditor: 'Laster inn bilderedigering, vennligst vent...'
 };

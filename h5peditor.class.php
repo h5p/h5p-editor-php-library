@@ -206,6 +206,11 @@ class H5peditor {
       case 'image':
         if (isset($params->path)) {
           $this->processFile($params, $files);
+
+          // Process original image
+          if (isset($params->originalImage) && isset($params->originalImage->path)) {
+            $this->processFile($params->originalImage, $files);
+          }
         }
         break;
 

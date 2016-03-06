@@ -37,5 +37,6 @@ H5PEditor.language.core = {
   editImage: 'Edit image',
   saveLabel: 'Save',
   cancelLabel: 'Cancel',
-  resetToOriginalLabel: 'Reset to original'
+  resetToOriginalLabel: 'Reset to original',
+  loadingImageEditor: 'Loading image editor, please wait...'
 };

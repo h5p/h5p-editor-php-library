@@ -3,6 +3,10 @@
   margin-right: 0.5em;
 }
 
+.h5peditor .h5p-editing-image-button.hidden {
+  display: none;
+}
+
 .h5peditor .field.image .file {
   display: inline-block;
   float: none;

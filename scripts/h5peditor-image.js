@@ -26,6 +26,9 @@ ns.widgets.image = function (parent, field, params, setValue) {
   // Keep track of editing image
   this.isEditing = false;
 
+  // Keep track of type of image that is being uploaded
+  this.isOriginalImage = false;
+
   this.changes = [];
   this.passReadies = true;
   parent.ready(function () {
@@ -60,6 +63,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
 
   var html = ns.createItem(this.field.type, htmlString, this.field.description);
   var $container = ns.$(html).appendTo($wrapper);
+  this.$editImage = $container.find('.h5p-editing-image-button');
   this.$file = $container.find('.file');
   this.$errors = $container.find('.h5p-errors');
   this.addFile();
@@ -70,11 +74,14 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
     return false;
   });
 
-  var editImagePopup = new H5PEditor.ImageEditingPopup();
+  var editImagePopup = new H5PEditor.ImageEditingPopup(this.field.ratio);
   editImagePopup.on('savedImage', function (e) {
+
+    // Not editing any longer
     self.isEditing = false;
-    var src = e.data;
-    self.$img.attr('src', e.data);
+
+    // No longer a original image
+    self.isOriginalImage = false;
 
     // Set current source as original image, if no original image
     if (!self.params.originalImage) {
@@ -110,10 +117,10 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
     if (self.params && self.params.path) {
       var imageSrc;
       if (!self.isEditing) {
-        imageSrc = self.$img.attr('src');
+        imageSrc = H5P.getPath(self.params.path, H5PEditor.contentId);
         self.isEditing = true;
       }
-      editImagePopup.show(H5P.jQuery(this).offset(), imageSrc);
+      editImagePopup.show(ns.$(this).offset(), imageSrc);
     }
   });
 
@@ -149,6 +156,8 @@ ns.widgets.image.prototype.addFile = function () {
   var that = this;
 
   if (this.params === undefined) {
+
+    // No image look
     this.$file
       .html('<a href="#" class="add" title="' + ns.t('core', 'addFile') + '"></a>')
       .children('.add')
@@ -156,6 +165,11 @@ ns.widgets.image.prototype.addFile = function () {
         that.uploadFile();
         return false;
       });
+
+    // Remove edit image button
+    this.$editImage.addClass('hidden');
+    this.isEditing = false;
+
     return;
   }
 
@@ -205,7 +219,8 @@ ns.widgets.image.prototype.addFile = function () {
       return false;
     });
 
-  this.$img = this.$file.find('img');
+  // Uploading original image
+  that.$editImage.removeClass('hidden');
 };
 
 ns.widgets.image.prototype.setImageChangeCallback = function () {
@@ -217,9 +232,16 @@ ns.widgets.image.prototype.setImageChangeCallback = function () {
         throw err;
       }
 
+      that.params = that.params || {};
       that.params.path = result.path;
       that.params.mime = result.mime;
       that.params.copyright = that.copyright;
+
+      // Uploaded new original image
+      if (that.isOriginalImage) {
+        that.isOriginalImage = false;
+        delete that.params.originalImage;
+      }
 
       if (that.field.type === 'image') {
         that.params.width = result.width;
@@ -231,6 +253,10 @@ ns.widgets.image.prototype.setImageChangeCallback = function () {
       for (var i = 0; i < that.changes.length; i++) {
         that.changes[i](that.params);
       }
+
+      // Show edit image button
+      that.$editImage.removeClass('hidden');
+      that.isEditing = false;
     }
     catch (error) {
       that.$errors.append(ns.createError(error));
@@ -253,6 +279,8 @@ ns.widgets.image.prototype.uploadFile = function () {
   this.$errors.html('');
 
   ns.File.changeCallback = function () {
+    // Hide edit image button
+    that.$editImage.addClass('hidden');
     that.$file.html('<div class="h5peditor-uploading h5p-throbber">' + ns.t('core', 'uploading') + '</div>');
   };
 
@@ -271,6 +299,9 @@ ns.widgets.image.prototype.uploadFile = function () {
   else if (this.field.type === 'image') {
     ns.File.$file.attr('accept', 'image/jpeg,image/png,image/gif');
   }
+
+  // Uploading new original image
+  that.isOriginalImage = true;
 
   ns.File.$field.val(JSON.stringify(this.field));
   ns.File.$file.click();

@@ -21,13 +21,25 @@
   top: 0;
   left: 50%;
   height: auto;
-  width: auto;
-  min-width: 70%;
-  max-width: calc(100% - 2em);
+  width: 100%;
+  max-height: 100%;
   -webkit-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
   transform: translateX(-50%);
   background: #fff;
+  padding: 0.5em;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.h5p-editing-image {
+  max-height:100%;
+  max-width:100%;
+}
+
+.h5p-editing-image.hidden {
+  display: none;
 }
 
 .h5p-editing-image-popup .darkroom-toolbar {
@@ -42,10 +54,6 @@
   content: initial;
 }
 
-.h5p-editing-image-popup .darkroom-image-container {
-  padding: 0.5em;
-}
-
 .h5p-editing-image-popup .darkroom-image-container .canvas-container {
   margin: auto;
 }
@@ -57,4 +65,12 @@
 .h5p-editing-image-header-buttons {
   display: inline-block;
   float: right;
+}
+.h5p-editing-image-loading {
+  padding: 1em;
+}
+
+.h5p-editing-image-loading.hidden {
+  display: none;
+
 }
