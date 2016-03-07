@@ -2,13 +2,13 @@ var H5PEditor = H5PEditor || {};
 var ns = H5PEditor;
 
 /**
- * Adds a file upload field to the form.
+ * Adds an image upload field with image editing tool to the form.
  *
- * @param {mixed} parent
- * @param {object} field
- * @param {mixed} params
- * @param {function} setValue
- * @returns {ns.File}
+ * @param {Object} parent Parent widget of this widget
+ * @param {Object} field Semantic fields
+ * @param {Object} params Existing image parameters
+ * @param {function} setValue Function for updating parameters
+ * @returns {ns.widgets.image}
  */
 ns.widgets.image = function (parent, field, params, setValue) {
   ns.File.call(this, parent, field, params, setValue);
@@ -44,7 +44,6 @@ ns.widgets.image.prototype.constructor = ns.widgets.image;
  * Append field to the given wrapper.
  *
  * @param {jQuery} $wrapper
- * @returns {undefined}
  */
 ns.widgets.image.prototype.appendTo = function ($wrapper) {
   var self = this;
@@ -142,9 +141,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
 
 
 /**
- * Sync copyright between all video files.
- *
- * @returns {undefined}
+ * Sync copyright.
  */
 ns.widgets.image.prototype.setCopyright = function (value) {
   this.copyright = this.params.copyright = value;
@@ -154,7 +151,7 @@ ns.widgets.image.prototype.setCopyright = function (value) {
 /**
  * Creates thumbnail HTML and actions.
  *
- * @returns {Boolean}
+ * @returns {boolean} True if file was added, false if file was removed
  */
 ns.widgets.image.prototype.addFile = function () {
   var that = this;
@@ -174,7 +171,7 @@ ns.widgets.image.prototype.addFile = function () {
     this.$editImage.addClass('hidden');
     this.isEditing = false;
 
-    return;
+    return false;
   }
 
   var source = H5P.getPath(this.params.path, H5PEditor.contentId);
@@ -216,8 +213,13 @@ ns.widgets.image.prototype.addFile = function () {
 
   // Notify listeners that image was changed to params
   that.trigger('changedImage', this.params);
+
+  return true;
 };
 
+/**
+ * Set callback for when an image has been uploaded.
+ */
 ns.widgets.image.prototype.setImageChangeCallback = function () {
   var that = this;
 
@@ -336,7 +338,6 @@ ns.widgets.image.prototype.remove = function () {
  * Collect functions to execute once the tree is complete.
  *
  * @param {function} ready
- * @returns {undefined}
  */
 ns.widgets.image.prototype.ready = function (ready) {
   if (this.passReadies) {

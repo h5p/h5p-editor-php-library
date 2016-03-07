@@ -34,15 +34,16 @@ class H5peditorFile {
     // Get the field.
     $this->field = json_decode($field);
 
-    // Check if uploaded bit64 encoded file
+    // Check if uploaded base64 encoded file
     if (isset($_POST) && isset($_POST['dataURI']) && $_POST['dataURI'] !== '') {
       $data = $_POST['dataURI'];
 
+      // Extract data from string
       list($type, $data) = explode(';', $data);
       list(, $data)      = explode(',', $data);
       $this->data = base64_decode($data);
-      //file_put_contents('/tmp/image.png', $data);
 
+      // Extract file type and extension
       list(, $type) = explode(':', $type);
       list(, $extension) = explode('/', $type);
       $this->type = $type;
@@ -50,6 +51,8 @@ class H5peditorFile {
       $this->size = strlen($this->data);
     }
     else {
+
+      // Handle temporarily uploaded form file
       if (function_exists('finfo_file')) {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $this->type = finfo_file($finfo, $_FILES['file']['tmp_name']);
@@ -133,10 +136,12 @@ class H5peditorFile {
           return FALSE;
         }
 
+        // Get image size from base64 string
         if (isset($this->data)) {
           $image = getimagesizefromstring($this->data);
         }
         else {
+          // Image size from temp file
           $image = @getimagesize($_FILES['file']['tmp_name']);
         }
 
@@ -197,6 +202,8 @@ class H5peditorFile {
     preg_match('/([a-z0-9]{1,})$/i', $_FILES['file']['name'], $matches);
 
     $this->name = uniqid($this->field->name . '-');
+
+    // Add extension to name
     if (isset($this->data)) {
       $this->name .= '.' . $this->extension;
     }
@@ -205,13 +212,14 @@ class H5peditorFile {
     }
 
     $this->name = $this->field->type . 's/' . $this->name;
-
     $this->path = $this->files_directory . '/' . $this->name;
 
+    // Save file to path
     if (isset($this->data)) {
       file_put_contents($this->path, $this->data);
     }
     else {
+      // Copy tmp file to new path
       if (!copy($_FILES['file']['tmp_name'], $this->path)) {
         $this->result->error = $this->interface->t('Could not copy file.');
         return FALSE;
