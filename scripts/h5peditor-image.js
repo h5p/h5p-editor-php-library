@@ -11,7 +11,7 @@ var ns = H5PEditor;
  * @returns {ns.File}
  */
 ns.widgets.image = function (parent, field, params, setValue) {
-  H5P.EventDispatcher.call(this);
+  ns.File.call(this, parent, field, params, setValue);
   var self = this;
 
   this.parent = parent;
@@ -37,7 +37,7 @@ ns.widgets.image = function (parent, field, params, setValue) {
   });
 };
 
-ns.widgets.image.prototype = Object.create(H5P.EventDispatcher.prototype);
+ns.widgets.image.prototype = Object.create(ns.File.prototype);
 ns.widgets.image.prototype.constructor = ns.widgets.image;
 
 /**

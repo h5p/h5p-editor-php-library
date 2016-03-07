@@ -11,6 +11,7 @@ var ns = H5PEditor;
  * @returns {ns.File}
  */
 ns.File = function (parent, field, params, setValue) {
+  H5P.EventDispatcher.call(this);
   var self = this;
 
   this.parent = parent;
@@ -29,6 +30,10 @@ ns.File = function (parent, field, params, setValue) {
     self.passReadies = false;
   });
 };
+
+
+ns.File.prototype = Object.create(H5P.EventDispatcher.prototype);
+ns.File.prototype.constructor = ns.File;
 
 /**
  * Append field to the given wrapper.
