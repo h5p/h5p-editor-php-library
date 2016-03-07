@@ -12,6 +12,11 @@
   z-index: 1;
 }
 
+#darkroom-icons {
+  top:0;
+  left:0;
+}
+
 .h5p-editing-image-popup-background.hidden {
   display: none;
 }
