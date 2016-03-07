@@ -11,6 +11,7 @@ var ns = H5PEditor;
  * @returns {ns.File}
  */
 ns.widgets.image = function (parent, field, params, setValue) {
+  H5P.EventDispatcher.call(this);
   var self = this;
 
   this.parent = parent;
@@ -35,6 +36,9 @@ ns.widgets.image = function (parent, field, params, setValue) {
     self.passReadies = false;
   });
 };
+
+ns.widgets.image.prototype = Object.create(H5P.EventDispatcher.prototype);
+ns.widgets.image.prototype.constructor = ns.widgets.image;
 
 /**
  * Append field to the given wrapper.
@@ -173,17 +177,12 @@ ns.widgets.image.prototype.addFile = function () {
     return;
   }
 
-  var thumbnail;
-  if (this.field.type === 'image') {
-    thumbnail = {};
-    thumbnail.path = H5P.getPath(this.params.path, H5PEditor.contentId);
-      thumbnail.height = 100;
-    if (this.params.width !== undefined) {
-      thumbnail.width = thumbnail.height * (this.params.width / this.params.height);
-    }
-  }
-  else {
-    thumbnail = ns.fileIcon;
+  var source = H5P.getPath(this.params.path, H5PEditor.contentId);
+  var thumbnail = {};
+  thumbnail.path = source;
+  thumbnail.height = 100;
+  if (this.params.width !== undefined) {
+    thumbnail.width = thumbnail.height * (this.params.width / this.params.height);
   }
 
   var thumbnailWidth = thumbnail.width === undefined ? '' : ' width="' + thumbnail.width + '"';
@@ -208,19 +207,15 @@ ns.widgets.image.prototype.addFile = function () {
       if (!confirm(ns.t('core', 'confirmRemoval', {':type': 'file'}))) {
         return false;
       }
-      delete that.params;
-      that.setValue(that.field);
-      that.addFile();
-
-      for (var i = 0; i < that.changes.length; i++) {
-        that.changes[i]();
-      }
-
+      that.removeImage();
       return false;
     });
 
   // Uploading original image
   that.$editImage.removeClass('hidden');
+
+  // Notify listeners that image was changed to params
+  that.trigger('changedImage', this.params);
 };
 
 ns.widgets.image.prototype.setImageChangeCallback = function () {
@@ -243,10 +238,8 @@ ns.widgets.image.prototype.setImageChangeCallback = function () {
         delete that.params.originalImage;
       }
 
-      if (that.field.type === 'image') {
-        that.params.width = result.width;
-        that.params.height = result.height;
-      }
+      that.params.width = result.width;
+      that.params.height = result.height;
 
       that.setValue(that.field, that.params);
 
@@ -264,6 +257,23 @@ ns.widgets.image.prototype.setImageChangeCallback = function () {
 
     that.addFile();
   };
+};
+
+/**
+ * Remove image
+ */
+ns.widgets.image.prototype.removeImage = function () {
+
+  // Notify listeners that we removed image with params
+  this.trigger('removedImage', this.params);
+
+  delete this.params;
+  this.setValue(this.field);
+  this.addFile();
+
+  for (var i = 0; i < this.changes.length; i++) {
+    this.changes[i]();
+  }
 };
 
 /**

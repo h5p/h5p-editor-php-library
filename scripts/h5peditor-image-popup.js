@@ -31,7 +31,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     var createButton = function (coreString, className, clickEvent) {
       var button = document.createElement('button');
       button.textContent = ns.t('core', coreString);
-      button.className = 'h5p-editing-image-' + className + '-button';
+      button.className = className;
       button.onclick = clickEvent;
       headerButtons.appendChild(button);
     };
@@ -91,6 +91,9 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
 
       // Check if image has changed
       if (self.darkroom.transformations.length || isReset) {
+        // Remove current cropping region
+        self.darkroom.plugins.crop.releaseFocus();
+
         var newImage = self.darkroom.canvas.toDataURL();
         self.trigger('savedImage', newImage);
       }
@@ -149,12 +152,14 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     this.setImage = function (imgSrc) {
       // Set new image
       var darkroom = popup.querySelector('.darkroom-container');
-      popup.removeChild(darkroom);
+      if (darkroom) {
+        darkroom.parentNode.removeChild(darkroom);
+      }
 
       editingImage.src = imgSrc;
       imageLoading.classList.remove('hidden');
       editingImage.classList.add('hidden');
-      popup.appendChild(editingImage);
+      editingContainer.appendChild(editingImage);
 
       createDarkroom();
     };
@@ -225,15 +230,22 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     header.appendChild(headerButtons);
 
     // Create header buttons
-    createButton('resetToOriginalLabel', 'reset', function () {
+    createButton('resetToOriginalLabel', 'h5p-editing-image-reset-button h5p-remove', function () {
       self.trigger('resetImage');
       isReset = true;
     });
-    createButton('cancelLabel', 'cancel', function () {self.trigger('canceled')});
-    createButton('saveLabel', 'save', function () {
+    createButton('cancelLabel', 'h5p-editing-image-cancel-button', function () {
+      self.trigger('canceled');
+      self.hide();
+    });
+    createButton('saveLabel', 'h5p-editing-image-save-button h5p-done', function () {
       saveImage();
       self.hide();
     });
+
+    var editingContainer = document.createElement('div');
+    editingContainer.className = 'h5p-editing-image-editing-container';
+    popup.appendChild(editingContainer);
 
     var imageLoading = document.createElement('div');
     imageLoading.className = 'h5p-editing-image-loading';
@@ -244,7 +256,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     var editingImage = new Image();
     editingImage.className = 'h5p-editing-image hidden';
     editingImage.id = 'h5p-editing-image-' + uniqueId;
-    popup.appendChild(editingImage);
+    editingContainer.appendChild(editingImage);
 
     // Append to body
     H5P.$body.get(0).appendChild(background);
