@@ -46,7 +46,14 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
 
       // Only use 65% of screen height
       var maxScreenHeight = screen.height * 0.65;
-      var editorHeight = background.offsetHeight;
+
+      // Calculate editor max height
+      var backgroundStyle = getComputedStyle(background);
+      var darkroomToolbarHeight = 40;
+      var darkroomPadding = 32;
+      var editorHeight = background.offsetHeight - parseInt(backgroundStyle['padding-bottom'])
+        - parseInt(backgroundStyle['padding-top']) - header.offsetHeight - darkroomToolbarHeight
+        - darkroomPadding;
 
       // Use smallest of screen height and editor height,
       // we don't want to overflow editor or screen
@@ -141,6 +148,19 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
 
       // Min offset is 0
       offsetCentered = offsetCentered > 0 ? offsetCentered : 0;
+
+      // Available editor height
+      var backgroundStyle = getComputedStyle(background);
+      var backgroundHeight = background.offsetHeight -
+        parseInt(backgroundStyle['padding-top']) -
+        parseInt(backgroundStyle['padding-bottom']);
+
+      // Check that popup does not overflow editor
+      if (popup.offsetHeight + offsetCentered > backgroundHeight) {
+        var newOffset = backgroundHeight - popup.offsetHeight;
+        offsetCentered = newOffset < 0 ? 0 : newOffset;
+      }
+
       popup.style.top = offsetCentered + 'px';
     };
 
