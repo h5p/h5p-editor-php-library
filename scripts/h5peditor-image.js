@@ -1,3 +1,4 @@
+/*global H5P*/
 var H5PEditor = H5PEditor || {};
 var ns = H5PEditor;
 
@@ -93,7 +94,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
         mime: self.params.mime,
         height: self.params.height,
         width: self.params.width
-      }
+      };
     }
 
     // Set new source as current image
@@ -104,10 +105,9 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
   });
 
   editImagePopup.on('resetImage', function () {
-    var imageSrc = self.params.originalImage ?
-      H5P.getPath(self.params.originalImage.path, H5PEditor.contentId) :
-      H5P.getPath(self.params.path, H5PEditor.contentId);
-
+    var imagePath = self.params.originalImage ? self.params.originalImage.path
+      : self.params.path;
+    var imageSrc = H5P.getPath(imagePath, H5PEditor.contentId);
     editImagePopup.setImage(imageSrc);
   });
 
@@ -127,12 +127,13 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
     }
   });
 
-  var group = new ns.widgets.group(self, ns.copyrightSemantics, self.copyright, function (field, value) {
-    if (self.params !== undefined) {
-      self.params.copyright = value;
-    }
-    self.copyright = value;
-  });
+  var group = new ns.widgets.group(self, ns.copyrightSemantics, self.copyright,
+    function (field, value) {
+      if (self.params !== undefined) {
+        self.params.copyright = value;
+      }
+      self.copyright = value;
+    });
   group.appendTo($dialog);
   group.expand();
   group.$group.find('.title').remove();
@@ -184,7 +185,7 @@ ns.widgets.image.prototype.addFile = function () {
 
   var thumbnailWidth = thumbnail.width === undefined ? '' : ' width="' + thumbnail.width + '"';
   var altText = (this.field.label === undefined ? '' : this.field.label);
-  var fileHtmlString = '' +
+  var fileHtmlString =
     '<a href="#" title="' + ns.t('core', 'changeFile') + '" class="thumbnail">' +
       '<img ' + thumbnailWidth + 'height="' + thumbnail.height + '" alt="' + altText + '"/>' +
     '</a>' +
@@ -201,7 +202,7 @@ ns.widgets.image.prototype.addFile = function () {
     .end()
     .next()
     .click(function () {
-      if (!confirm(ns.t('core', 'confirmRemoval', {':type': 'file'}))) {
+      if (!window.confirm(ns.t('core', 'confirmRemoval', {':type': 'file'}))) {
         return false;
       }
       that.removeImage();

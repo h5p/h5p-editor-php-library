@@ -12,11 +12,11 @@
   float: none;
 }
 
-.h5peditor .h5p-editor-image-buttons {
+.h5peditor .h5p-editor-image-buttons .h5p-editor-image-buttons {
   display: block;
 }
 
-.h5peditor .h5p-copyright-button {
+.h5peditor .h5p-editor-image-buttons .h5p-copyright-button {
   float: none;
   display: inline-block;
 }

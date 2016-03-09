@@ -1,9 +1,7 @@
-var H5PEditor = H5PEditor || {};
-
+/*global H5PEditor, H5P, ns, Darkroom*/
 H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
   var instanceCounter = 0;
   var scriptsLoaded = false;
-  var editorPath = '../../sites/all/modules/h5p/modules/h5peditor/h5peditor/';
 
   /**
    * Popup for editing images
@@ -20,6 +18,58 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     var topOffset = 0;
     var maxWidth;
     var maxHeight;
+
+    // Create elements
+    var background = document.createElement('div');
+    background.className = 'h5p-editing-image-popup-background hidden';
+
+    var popup = document.createElement('div');
+    popup.className = 'h5p-editing-image-popup';
+    background.appendChild(popup);
+
+    var header = document.createElement('div');
+    header.className = 'h5p-editing-image-header';
+    popup.appendChild(header);
+
+    var headerTitle = document.createElement('div');
+    headerTitle.className = 'h5p-editing-image-header-title';
+    headerTitle.textContent = 'Edit Image!';
+    header.appendChild(headerTitle);
+
+    var headerButtons = document.createElement('div');
+    headerButtons.className = 'h5p-editing-image-header-buttons';
+    header.appendChild(headerButtons);
+
+    var editingContainer = document.createElement('div');
+    editingContainer.className = 'h5p-editing-image-editing-container';
+    popup.appendChild(editingContainer);
+
+    var imageLoading = document.createElement('div');
+    imageLoading.className = 'h5p-editing-image-loading';
+    imageLoading.textContent = ns.t('core', 'loadingImageEditor');
+    popup.appendChild(imageLoading);
+
+    // Create editing image
+    var editingImage = new Image();
+    editingImage.className = 'h5p-editing-image hidden';
+    editingImage.id = 'h5p-editing-image-' + uniqueId;
+    editingContainer.appendChild(editingImage);
+
+    // Append to body
+    H5P.$body.get(0).appendChild(background);
+
+    // Close popup on background click
+    background.onclick = function () {
+      this.hide();
+    }.bind(this);
+
+    // Prevent closing popup
+    popup.onclick = function (e) {
+      e.stopPropagation();
+    };
+
+    // Make sure each ImageEditingPopup instance has a unique ID
+    instanceCounter += 1;
 
     /**
      * Create header button
@@ -41,19 +91,22 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
      */
     var setDarkroomDimensions = function () {
       // Set max dimensions
-      var style = getComputedStyle(popup);
-      maxWidth = popup.offsetWidth - parseInt(style.paddingLeft) - parseInt(style.paddingRight);
+      var style = window.getComputedStyle(popup);
+      maxWidth = popup.offsetWidth -
+        parseInt(style.paddingLeft, 10) -
+        parseInt(style.paddingRight, 10);
 
       // Only use 65% of screen height
       var maxScreenHeight = screen.height * 0.65;
 
       // Calculate editor max height
-      var backgroundStyle = getComputedStyle(background);
+      var backgroundStyle = window.getComputedStyle(background);
       var darkroomToolbarHeight = 40;
       var darkroomPadding = 32;
-      var editorHeight = background.offsetHeight - parseInt(backgroundStyle['padding-bottom'])
-        - parseInt(backgroundStyle['padding-top']) - header.offsetHeight - darkroomToolbarHeight
-        - darkroomPadding;
+      var editorHeight = background.offsetHeight -
+        parseInt(backgroundStyle['padding-bottom'], 10) -
+        parseInt(backgroundStyle['padding-top'], 10) -
+        header.offsetHeight - darkroomToolbarHeight - darkroomPadding;
 
       // Use smallest of screen height and editor height,
       // we don't want to overflow editor or screen
@@ -61,13 +114,25 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     };
 
     /**
-     * Load scripts dynamically
+     * Create image editing tool from image.
      */
-    var loadScripts = function () {
-      loadScript(editorPath + 'libs/fabric.js', function () {
-        loadScript(editorPath + 'libs/darkroom.js', function () {
-          createDarkroom();
-          scriptsLoaded = true;
+    var createDarkroom = function () {
+      window.requestAnimationFrame(function () {
+        setDarkroomDimensions();
+
+        self.darkroom = new Darkroom('#h5p-editing-image-' + uniqueId, {
+          initialize: function () {
+            self.adjustPopupOffset();
+            imageLoading.classList.add('hidden');
+          },
+          maxWidth: maxWidth,
+          maxHeight: maxHeight,
+          plugins: {
+            crop: {
+              ratio: ratio || null
+            },
+            save : false
+          }
         });
       });
     };
@@ -92,44 +157,45 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     };
 
     /**
-     * Grab canvas data and pass data to listeners.
+     * Load scripts dynamically
      */
-    var saveImage = function() {
-
-      // Check if image has changed
-      if (self.darkroom.transformations.length || isReset) {
-        // Remove current cropping region
-        self.darkroom.plugins.crop.releaseFocus();
-
-        var newImage = self.darkroom.canvas.toDataURL();
-        self.trigger('savedImage', newImage);
-      }
-
-      isReset = false;
+    var loadScripts = function () {
+      loadScript(H5PEditor.basePath + 'libs/fabric.js', function () {
+        loadScript(H5PEditor.basePath + 'libs/darkroom.js', function () {
+          createDarkroom();
+          scriptsLoaded = true;
+        });
+      });
     };
 
     /**
-     * Create image editing tool from image.
+     * Grab canvas data and pass data to listeners.
      */
-    var createDarkroom = function () {
-      requestAnimationFrame(function () {
-        setDarkroomDimensions();
+    var saveImage = function () {
 
-        self.darkroom = new Darkroom('#h5p-editing-image-' + uniqueId, {
-          initialize: function () {
-            self.adjustPopupOffset();
-            imageLoading.classList.add('hidden');
-          },
-          maxWidth: maxWidth,
-          maxHeight: maxHeight,
-          plugins: {
-            crop: {
-              ratio: ratio || null
-            },
-            save : false
-          }
-        });
-      });
+      var isCropped = self.darkroom.plugins.crop.hasFocus();
+      var canvas = self.darkroom.canvas.getElement();
+
+      var convertData = function () {
+        var newImage = self.darkroom.canvas.toDataURL();
+        self.trigger('savedImage', newImage);
+        canvas.removeEventListener('crop:update', convertData, false);
+      };
+
+      // Check if image has changed
+      if (self.darkroom.transformations.length || isReset || isCropped) {
+
+        if (isCropped) {
+          //self.darkroom.plugins.crop.okButton.element.click();
+          self.darkroom.plugins.crop.cropCurrentZone();
+
+          canvas.addEventListener('crop:update', convertData, false);
+        } else {
+          convertData();
+        }
+      }
+
+      isReset = false;
     };
 
     /**
@@ -150,10 +216,10 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       offsetCentered = offsetCentered > 0 ? offsetCentered : 0;
 
       // Available editor height
-      var backgroundStyle = getComputedStyle(background);
+      var backgroundStyle = window.getComputedStyle(background);
       var backgroundHeight = background.offsetHeight -
-        parseInt(backgroundStyle['padding-top']) -
-        parseInt(backgroundStyle['padding-bottom']);
+        parseInt(backgroundStyle['padding-top'], 10) -
+        parseInt(backgroundStyle['padding-bottom'], 10);
 
       // Check that popup does not overflow editor
       if (popup.offsetHeight + offsetCentered > backgroundHeight) {
@@ -197,8 +263,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
         if (!scriptsLoaded) {
           editingImage.src = imageSrc;
           loadScripts();
-        }
-        else {
+        } else {
           self.setImage(imageSrc);
         }
       }
@@ -222,32 +287,10 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     this.toggle = function () {
       if (isShowing) {
         this.hide();
-      }
-      else {
+      } else {
         this.show();
       }
     };
-
-    // Create elements
-    var background = document.createElement('div');
-    background.className = 'h5p-editing-image-popup-background hidden';
-
-    var popup = document.createElement('div');
-    popup.className = 'h5p-editing-image-popup';
-    background.appendChild(popup);
-
-    var header = document.createElement('div');
-    header.className = 'h5p-editing-image-header';
-    popup.appendChild(header);
-
-    var headerTitle = document.createElement('div');
-    headerTitle.className = 'h5p-editing-image-header-title';
-    headerTitle.textContent = 'Edit Image!';
-    header.appendChild(headerTitle);
-
-    var headerButtons = document.createElement('div');
-    headerButtons.className = 'h5p-editing-image-header-buttons';
-    header.appendChild(headerButtons);
 
     // Create header buttons
     createButton('resetToOriginalLabel', 'h5p-editing-image-reset-button h5p-remove', function () {
@@ -262,37 +305,6 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       saveImage();
       self.hide();
     });
-
-    var editingContainer = document.createElement('div');
-    editingContainer.className = 'h5p-editing-image-editing-container';
-    popup.appendChild(editingContainer);
-
-    var imageLoading = document.createElement('div');
-    imageLoading.className = 'h5p-editing-image-loading';
-    imageLoading.textContent = ns.t('core', 'loadingImageEditor');
-    popup.appendChild(imageLoading);
-
-    // Create editing image
-    var editingImage = new Image();
-    editingImage.className = 'h5p-editing-image hidden';
-    editingImage.id = 'h5p-editing-image-' + uniqueId;
-    editingContainer.appendChild(editingImage);
-
-    // Append to body
-    H5P.$body.get(0).appendChild(background);
-
-    // Close popup on background click
-    background.onclick = function () {
-      this.hide();
-    }.bind(this);
-
-    // Prevent closing popup
-    popup.onclick = function (e) {
-      e.stopPropagation();
-    };
-
-    // Make sure each ImageEditingPopup instance has a unique ID
-    instanceCounter++;
   }
 
   ImageEditingPopup.prototype = Object.create(EventDispatcher.prototype);
@@ -300,4 +312,4 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
 
   return ImageEditingPopup;
 
-})(H5P.jQuery, H5P.EventDispatcher);
+}(H5P.jQuery, H5P.EventDispatcher));

@@ -216,7 +216,10 @@ class H5peditorFile {
 
     // Save file to path
     if (isset($this->data)) {
-      file_put_contents($this->path, $this->data);
+      // Store base64 file to new path
+      if (!file_put_contents($this->path, $this->data)) {
+        $this->result->error = $this->interface->t('Could not save file.');
+      }
     }
     else {
       // Copy tmp file to new path
