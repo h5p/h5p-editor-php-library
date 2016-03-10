@@ -138,7 +138,14 @@ class H5peditorFile {
 
         // Get image size from base64 string
         if (isset($this->data)) {
-          $image = getimagesizefromstring($this->data);
+
+          if (!function_exists('getimagesizefromstring')) {
+            $uri = 'data://application/octet-stream;base64,'  . base64_encode($this->data);
+            $image =  getimagesize($uri);
+          }
+          else {
+            $image = getimagesizefromstring($this->data);
+          }
         }
         else {
           // Image size from temp file
