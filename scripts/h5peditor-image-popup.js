@@ -122,6 +122,9 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
 
         self.darkroom = new Darkroom('#h5p-editing-image-' + uniqueId, {
           initialize: function () {
+            // Reset transformations
+            this.transformations = [];
+
             self.adjustPopupOffset();
             imageLoading.classList.add('hidden');
           },
