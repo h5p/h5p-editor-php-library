@@ -9,7 +9,7 @@
   background: rgba(0,0,0,0.8);
   padding: 3em 1em;
   box-sizing: border-box;
-  z-index: 2;
+  z-index: 101;
 }
 
 #darkroom-icons {
