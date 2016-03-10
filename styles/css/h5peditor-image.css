@@ -1,6 +1,9 @@
 .h5peditor .h5p-editing-image-button {
   line-height: 1.5;
   margin-right: 0.5em;
+  margin-bottom: 0.5em;
+  padding-left: 1em;
+  padding-right: 1em;
 }
 
 .h5peditor .ui-dialog .h5p-editing-image-button {
