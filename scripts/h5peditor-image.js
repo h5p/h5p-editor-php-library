@@ -98,6 +98,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
     }
 
     // Set new source as current image
+    self.setUploadingThrobber();
     self.setImageChangeCallback();
     ns.File.$data.val(e.data);
     ns.File.$field.val(JSON.stringify(self.field));
@@ -280,6 +281,19 @@ ns.widgets.image.prototype.removeImage = function () {
 };
 
 /**
+ * Replace image with throbber to show that image is being uploaded
+ */
+ns.widgets.image.prototype.setUploadingThrobber = function () {
+  var that = this;
+
+  ns.File.changeCallback = function () {
+    // Hide edit image button
+    that.$editImage.addClass('hidden');
+    that.$file.html('<div class="h5peditor-uploading h5p-throbber">' + ns.t('core', 'uploading') + '</div>');
+  };
+};
+
+/**
  * Start a new upload.
  */
 ns.widgets.image.prototype.uploadFile = function () {
@@ -291,12 +305,7 @@ ns.widgets.image.prototype.uploadFile = function () {
 
   this.$errors.html('');
 
-  ns.File.changeCallback = function () {
-    // Hide edit image button
-    that.$editImage.addClass('hidden');
-    that.$file.html('<div class="h5peditor-uploading h5p-throbber">' + ns.t('core', 'uploading') + '</div>');
-  };
-
+  this.setUploadingThrobber();
   this.setImageChangeCallback();
 
   if (this.field.mimes !== undefined) {
