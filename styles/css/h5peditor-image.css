@@ -2,9 +2,23 @@
   line-height: 1.5;
   margin-right: 0.5em;
   margin-bottom: 0.5em;
-  padding-left: 1em;
   padding-right: 1em;
 }
+
+.h5peditor .h5p-editing-image-button:before {
+  font-family: "H5P";
+  content: "\e900";
+  color: #666;
+  padding-right: 0.25em;
+  vertical-align: middle;
+  font-size: 1.5em;
+  line-height: 0.9;
+}
+
+.h5peditor .h5p-editing-image-button.loading:before {
+  content: "\e901";
+}
+
 
 .h5peditor .ui-dialog .h5p-editing-image-button {
   font-size: 0.875em;

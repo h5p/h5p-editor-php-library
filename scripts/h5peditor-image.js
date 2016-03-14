@@ -116,14 +116,21 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
     self.isEditing = false;
   });
 
-  $container.find('.h5p-editing-image-button').click(function () {
+  editImagePopup.on('initialized', function () {
+    // Remove throbber from image
+    self.$editImage.removeClass('loading');
+  });
 
+  $container.find('.h5p-editing-image-button').click(function () {
     if (self.params && self.params.path) {
       var imageSrc;
       if (!self.isEditing) {
         imageSrc = H5P.getPath(self.params.path, H5PEditor.contentId);
         self.isEditing = true;
       }
+      self.$editImage.toggleClass('loading');
+
+      // Add throbber to image
       editImagePopup.show(ns.$(this).offset(), imageSrc);
     }
   });

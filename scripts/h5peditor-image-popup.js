@@ -90,23 +90,21 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
      * Set max width and height for image editing tool
      */
     var setDarkroomDimensions = function () {
+
       // Set max dimensions
-      var style = window.getComputedStyle(popup);
-      maxWidth = popup.offsetWidth -
-        parseInt(style.paddingLeft, 10) -
-        parseInt(style.paddingRight, 10);
+      var backgroundPaddingWidth = 16 * 2;
+      maxWidth = H5P.$body.get(0).offsetWidth - backgroundPaddingWidth;
 
       // Only use 65% of screen height
       var maxScreenHeight = screen.height * 0.65;
 
       // Calculate editor max height
-      var backgroundStyle = window.getComputedStyle(background);
       var darkroomToolbarHeight = 40;
       var darkroomPadding = 32;
-      var editorHeight = background.offsetHeight -
-        parseInt(backgroundStyle['padding-bottom'], 10) -
-        parseInt(backgroundStyle['padding-top'], 10) -
-        header.offsetHeight - darkroomToolbarHeight - darkroomPadding;
+      var backgroundPaddingHeight = 48 * 2;
+      var editorHeight = H5P.$body.get(0).offsetHeight -
+        backgroundPaddingHeight - header.offsetHeight -
+        darkroomToolbarHeight - darkroomPadding;
 
       // Use smallest of screen height and editor height,
       // we don't want to overflow editor or screen
@@ -126,7 +124,9 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
             this.transformations = [];
 
             self.adjustPopupOffset();
+            background.classList.remove('hidden');
             imageLoading.classList.add('hidden');
+            self.trigger('initialized');
           },
           maxWidth: maxWidth,
           maxHeight: maxHeight,
@@ -266,13 +266,17 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
         if (!scriptsLoaded) {
           editingImage.src = imageSrc;
           loadScripts();
-        } else {
+        }
+        else {
           self.setImage(imageSrc);
         }
       }
+      else {
+        background.classList.remove('hidden');
+        self.trigger('showedPopup');
+      }
 
       isShowing = true;
-      background.classList.remove('hidden');
       this.adjustPopupOffset(offset);
     };
 
