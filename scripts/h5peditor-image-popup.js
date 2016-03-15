@@ -114,8 +114,11 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
 
     /**
      * Create image editing tool from image.
+     *
+     * @params {boolean} [skipOffsetAdjustment]
+     *    Skip adjusting offset of image popup
      */
-    var createDarkroom = function () {
+    var createDarkroom = function (skipOffsetAdjustment) {
       window.requestAnimationFrame(function () {
         setDarkroomDimensions();
 
@@ -124,7 +127,11 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
             // Reset transformations
             this.transformations = [];
 
-            self.adjustPopupOffset();
+            // Adjust popup offset if not skipped
+            if (!skipOffsetAdjustment) {
+              self.adjustPopupOffset();
+            }
+
             background.classList.remove('hidden');
             imageLoading.classList.add('hidden');
             self.trigger('initialized');
@@ -251,7 +258,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       editingImage.classList.add('hidden');
       editingContainer.appendChild(editingImage);
 
-      createDarkroom();
+      createDarkroom(true);
     };
 
     /**
