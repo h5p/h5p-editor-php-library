@@ -93,14 +93,15 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
 
       // Set max dimensions
       var backgroundPaddingWidth = 16 * 2;
-      maxWidth = H5P.$body.get(0).offsetWidth - backgroundPaddingWidth;
+      var darkroomPadding = 32 * 2;
+      maxWidth = H5P.$body.get(0).offsetWidth - backgroundPaddingWidth -
+        darkroomPadding;
 
       // Only use 65% of screen height
       var maxScreenHeight = screen.height * 0.65;
 
       // Calculate editor max height
       var darkroomToolbarHeight = 40;
-      var darkroomPadding = 32;
       var backgroundPaddingHeight = 48 * 2;
       var editorHeight = H5P.$body.get(0).offsetHeight -
         backgroundPaddingHeight - header.offsetHeight -
