@@ -281,7 +281,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       }
       else {
         background.classList.remove('hidden');
-        self.trigger('showedPopup');
+        self.trigger('initialized');
       }
 
       isShowing = true;
