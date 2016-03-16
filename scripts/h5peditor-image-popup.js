@@ -127,6 +127,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
               self.adjustPopupOffset();
             }
 
+            H5P.$body.get(0).classList.add('h5p-editor-image-popup');
             background.classList.remove('hidden');
             imageLoading.classList.add('hidden');
             self.trigger('initialized');
@@ -301,6 +302,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
         }
       }
       else {
+        H5P.$body.get(0).classList.add('h5p-editor-image-popup');
         background.classList.remove('hidden');
         self.trigger('initialized');
       }
@@ -314,6 +316,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
      */
     this.hide = function () {
       isShowing = false;
+      H5P.$body.get(0).classList.remove('h5p-editor-image-popup');
       background.classList.add('hidden');
     };
 
