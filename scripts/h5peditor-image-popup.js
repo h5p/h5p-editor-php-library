@@ -92,20 +92,17 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     var setDarkroomDimensions = function () {
 
       // Set max dimensions
-      var backgroundPaddingWidth = 16 * 2;
-      var darkroomPadding = 32 * 2;
-      maxWidth = H5P.$body.get(0).offsetWidth - backgroundPaddingWidth -
-        darkroomPadding;
+      var dims = ImageEditingPopup.staticDimensions;
+      maxWidth = H5P.$body.get(0).offsetWidth - dims.backgroundPaddingWidth -
+        dims.darkroomPadding;
 
       // Only use 65% of screen height
-      var maxScreenHeight = screen.height * 0.65;
+      var maxScreenHeight = screen.height * dims.maxScreenHeightPercentage;
 
       // Calculate editor max height
-      var darkroomToolbarHeight = 40;
-      var backgroundPaddingHeight = 48 * 2;
       var editorHeight = H5P.$body.get(0).offsetHeight -
-        backgroundPaddingHeight - header.offsetHeight -
-        darkroomToolbarHeight - darkroomPadding;
+        dims.backgroundPaddingHeight - dims.popupHeaderHeight -
+        dims.darkroomToolbarHeight - dims.darkroomPadding;
 
       // Use smallest of screen height and editor height,
       // we don't want to overflow editor or screen
@@ -120,8 +117,6 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
      */
     var createDarkroom = function (skipOffsetAdjustment) {
       window.requestAnimationFrame(function () {
-        setDarkroomDimensions();
-
         self.darkroom = new Darkroom('#h5p-editing-image-' + uniqueId, {
           initialize: function () {
             // Reset transformations
@@ -221,20 +216,45 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
         topOffset = offset.top;
       }
 
-      var offsetCentered = topOffset - (popup.offsetHeight / 2);
+      // Only use 65% of screen height
+      var maxScreenHeight = screen.height * 0.65;
+
+      // Calculate editor max height
+      var dims = ImageEditingPopup.staticDimensions;
+      var backgroundHeight = H5P.$body.get(0).offsetHeight - dims.backgroundPaddingHeight;
+      var popupHeightNoImage = dims.darkroomToolbarHeight + dims.popupHeaderHeight +
+        dims.darkroomPadding;
+      var editorHeight =  backgroundHeight - popupHeightNoImage;
+
+      // Available editor height
+      var availableHeight = maxScreenHeight < editorHeight ? maxScreenHeight : editorHeight;
+
+      // Check if image is smaller than available height
+      var actualImageHeight;
+      if (editingImage.naturalHeight < availableHeight) {
+        actualImageHeight = editingImage.naturalHeight;
+      }
+      else {
+        actualImageHeight = availableHeight;
+
+        // We must check ratio as well
+        var imageRatio = editingImage.naturalHeight / editingImage.naturalWidth;
+        var maxActualImageHeight = maxWidth * imageRatio;
+        if (maxActualImageHeight < actualImageHeight) {
+          actualImageHeight = maxActualImageHeight;
+        }
+      }
+
+      var popupHeightWImage = actualImageHeight + popupHeightNoImage;
+      var offsetCentered = topOffset - (popupHeightWImage / 2) -
+        (dims.backgroundPaddingHeight / 2);
 
       // Min offset is 0
       offsetCentered = offsetCentered > 0 ? offsetCentered : 0;
 
-      // Available editor height
-      var backgroundStyle = window.getComputedStyle(background);
-      var backgroundHeight = background.offsetHeight -
-        parseInt(backgroundStyle['padding-top'], 10) -
-        parseInt(backgroundStyle['padding-bottom'], 10);
-
       // Check that popup does not overflow editor
-      if (popup.offsetHeight + offsetCentered > backgroundHeight) {
-        var newOffset = backgroundHeight - popup.offsetHeight;
+      if (popupHeightWImage + offsetCentered > backgroundHeight) {
+        var newOffset = backgroundHeight - popupHeightWImage;
         offsetCentered = newOffset < 0 ? 0 : newOffset;
       }
 
@@ -268,6 +288,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
      * @param {string} [imageSrc] Source of image that will be edited
      */
     this.show = function (offset, imageSrc) {
+      setDarkroomDimensions();
       if (imageSrc) {
 
         // Load image editing scripts dynamically
@@ -324,6 +345,15 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
 
   ImageEditingPopup.prototype = Object.create(EventDispatcher.prototype);
   ImageEditingPopup.prototype.constructor = ImageEditingPopup;
+
+  ImageEditingPopup.staticDimensions = {
+    backgroundPaddingWidth: 32,
+    backgroundPaddingHeight: 96,
+    darkroomPadding: 64,
+    darkroomToolbarHeight: 40,
+    maxScreenHeightPercentage: 0.65,
+    popupHeaderHeight: 59
+  };
 
   return ImageEditingPopup;
 
