@@ -493,6 +493,7 @@ a {
       @include text-shadow(rgba(black, 0.4) 0 0 4px, rgba(black, 0.4) 0 0 4px, rgba(black, 0.4) 0 0 4px);
     }
     img {
+      max-width: 100%;
       vertical-align: bottom;
     }
   }
