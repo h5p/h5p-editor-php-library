@@ -205,7 +205,6 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
      * @param {number} [offset.top] Offset to top.
      */
     this.adjustPopupOffset = function (offset) {
-      console.log("adjusting popup offset", offset);
       if (offset) {
         topOffset = offset.top;
       }
@@ -218,16 +217,13 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       var backgroundHeight = H5P.$body.get(0).offsetHeight - dims.backgroundPaddingHeight;
       var popupHeightNoImage = dims.darkroomToolbarHeight + dims.popupHeaderHeight +
         dims.darkroomPadding;
-      console.log("popup height no image", popupHeightNoImage);
       var editorHeight =  backgroundHeight - popupHeightNoImage;
-      console.log("editor height", editorHeight);
 
       // Available editor height
       var availableHeight = maxScreenHeight < editorHeight ? maxScreenHeight : editorHeight;
 
       // Check if image is smaller than available height
       var actualImageHeight;
-      console.log("natural height", editingImage.naturalHeight);
       if (editingImage.naturalHeight < availableHeight) {
         actualImageHeight = editingImage.naturalHeight;
       }
@@ -241,14 +237,10 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
           actualImageHeight = maxActualImageHeight;
         }
       }
-      console.log("actual image height", actualImageHeight);
 
       var popupHeightWImage = actualImageHeight + popupHeightNoImage;
       var offsetCentered = topOffset - (popupHeightWImage / 2) -
         (dims.backgroundPaddingHeight / 2);
-
-      console.log("popup height w image", popupHeightWImage);
-      console.log("offset centered", offsetCentered);
 
       // Min offset is 0
       offsetCentered = offsetCentered > 0 ? offsetCentered : 0;
@@ -259,7 +251,6 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
         offsetCentered = newOffset < 0 ? 0 : newOffset;
       }
 
-      console.log("final popup offset", offsetCentered);
       popup.style.top = offsetCentered + 'px';
     };
 
@@ -304,7 +295,6 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
 
         if (offset) {
           var imageLoaded = function () {
-            console.log("editing image loaded");
             this.adjustPopupOffset(offset);
             editingImage.removeEventListener('load', imageLoaded);
           }.bind(this);
