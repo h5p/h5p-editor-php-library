@@ -3,7 +3,10 @@
 class H5peditor {
 
   public static $styles = array(
+    'libs/darkroom.css',
     'styles/css/application.css',
+    'styles/css/h5peditor-image.css',
+    'styles/css/h5peditor-image-popup.css'
   );
   public static $scripts = array(
     'scripts/h5peditor.js',
@@ -16,6 +19,8 @@ class H5peditor {
     'scripts/h5peditor-number.js',
     'scripts/h5peditor-textarea.js',
     'scripts/h5peditor-file.js',
+    'scripts/h5peditor-image.js',
+    'scripts/h5peditor-image-popup.js',
     'scripts/h5peditor-av.js',
     'scripts/h5peditor-group.js',
     'scripts/h5peditor-boolean.js',
@@ -201,6 +206,11 @@ class H5peditor {
       case 'image':
         if (isset($params->path)) {
           $this->processFile($params, $files);
+
+          // Process original image
+          if (isset($params->originalImage) && isset($params->originalImage->path)) {
+            $this->processFile($params->originalImage, $files);
+          }
         }
         break;
 
