@@ -493,6 +493,7 @@ a {
       @include text-shadow(rgba(black, 0.4) 0 0 4px, rgba(black, 0.4) 0 0 4px, rgba(black, 0.4) 0 0 4px);
     }
     img {
+      max-width: 100%;
       vertical-align: bottom;
     }
   }
@@ -602,18 +603,28 @@ a {
     padding: 0.875em 0 1em 3.25em;
     font-style: italic;
   }
-  .h5p-copyright-button {
+
+  a.h5p-copyright-button {
     background: linear-gradient(to bottom,#fff 0,#f2f2f2 100%);
     border: 1px solid #ccc;
     border-radius: 0.25em;
     font-size: 0.875em;
     color: #333;
     cursor: pointer;
+    line-height: 2em;
+
+    &:before {
+      padding-left: 0.25em;
+    }
+  }
+
+  .h5p-copyright-button {
     float: left;
     display: block;
     clear: both;
-    line-height: 2em;
     padding-right: 1em;
+    line-height: 1.5;
+    margin-bottom: 0.5em;
 
     &:before {
       font-family: $i;
@@ -622,8 +633,7 @@ a {
       padding-right: 0.25em;
       vertical-align: middle;
       font-size: 1.5em;
-      vertical-align: middle;
-      padding-left: 0.25em;
+      line-height: 0.9;
     }
     &:hover {
       text-decoration: none;
