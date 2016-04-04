@@ -501,7 +501,7 @@ ns.libraryToString = function (library) {
  *  return false if the library parameter is invalid
  */
 ns.libraryFromString = function (library) {
-  var regExp = /(.+)\s(\d)+\.(\d)$/g;
+  var regExp = /(.+)\s(\d+)\.(\d+)$/g;
   var res = regExp.exec(library);
   if (res !== null) {
     return {
@@ -511,6 +511,7 @@ ns.libraryFromString = function (library) {
     };
   }
   else {
+    H5P.error('Invalid überName');
     return false;
   }
 };
