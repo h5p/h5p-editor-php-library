@@ -11,6 +11,7 @@ var ns = H5PEditor;
  * @returns {ns.File}
  */
 ns.File = function (parent, field, params, setValue) {
+  H5P.EventDispatcher.call(this);
   var self = this;
 
   this.parent = parent;
@@ -29,6 +30,10 @@ ns.File = function (parent, field, params, setValue) {
     self.passReadies = false;
   });
 };
+
+
+ns.File.prototype = Object.create(H5P.EventDispatcher.prototype);
+ns.File.prototype.constructor = ns.File;
 
 /**
  * Append field to the given wrapper.
@@ -100,7 +105,7 @@ ns.File.prototype.addFile = function () {
   var thumbnail;
   if (this.field.type === 'image') {
     thumbnail = {};
-    thumbnail.path = H5P.getPath(this.params.path, H5PEditor.contentId),
+    thumbnail.path = H5P.getPath(this.params.path, H5PEditor.contentId);
     thumbnail.height = 100;
     if (this.params.width !== undefined) {
       thumbnail.width = thumbnail.height * (this.params.width / this.params.height);
@@ -276,15 +281,18 @@ ns.File.addIframe = function () {
         '<input name="field" type="hidden"/>' +
         '<input name="contentId" type="hidden" value="' + (ns.contentId === undefined ? 0 : ns.contentId) + '"/>' +
         '<input name="token" type="hidden" value="' + ns.uploadToken + '"/>' +
+        '<input name="dataURI" type="hidden"/>' +
       '</form>').appendTo($body);
 
     ns.File.$field = $form.children('input[name="field"]');
     ns.File.$file = $form.children('input[name="file"]');
+    ns.File.$data = $form.children('input[name="dataURI"]');
 
     ns.File.$file.change(function () {
       if (ns.File.changeCallback !== undefined) {
         ns.File.changeCallback();
       }
+      ns.File.$data = 0;
       ns.File.$field = 0;
       ns.File.$file = 0;
       $form.submit();
@@ -295,4 +303,3 @@ ns.File.addIframe = function () {
 
 // Tell the editor what widget we are.
 ns.widgets.file = ns.File;
-ns.widgets.image = ns.File;
