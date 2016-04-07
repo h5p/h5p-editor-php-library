@@ -135,8 +135,7 @@ ns.File.prototype.addFile = function () {
     that.uploadFile();
     return false;
   }).children('img').attr('src', thumbnail.path).end().next().click(function (e) {
-    var offset = H5P.jQuery(this).offset();
-    that.confirmRemovalDialog.show(offset.top, offset.left);
+    that.confirmRemovalDialog.show(H5P.jQuery(this).offset().top);
     return false;
   });
 };

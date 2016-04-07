@@ -117,8 +117,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       .children('.h5p-remove')
         .click(function () {
           if (that.$add.is(':visible')) {
-            var offset = $file.offset();
-            confirmRemovalDialog.show(offset.top, offset.left);
+            confirmRemovalDialog.show($file.offset().top);
           }
 
           return false;

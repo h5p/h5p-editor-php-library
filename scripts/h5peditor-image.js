@@ -219,8 +219,7 @@ ns.widgets.image.prototype.addFile = function () {
     .end()
     .next()
     .click(function () {
-      var offset = that.$file.offset();
-      that.confirmRemovalDialog.show(offset.top, offset.left);
+      that.confirmRemovalDialog.show(that.$file.offset().top);
       return false;
     });
 

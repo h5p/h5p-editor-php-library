@@ -116,8 +116,7 @@ ns.Library.prototype.librariesLoaded = function (libList) {
       if (self.params.library) {
 
         // Confirm changing library
-        var selectOffset = self.$select.offset();
-        self.confirmChangeLibrary.show(selectOffset.top, selectOffset.left);
+        self.confirmChangeLibrary.show(self.$select.offset().top);
       } else {
 
         // Load new library

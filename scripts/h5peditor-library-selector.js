@@ -89,8 +89,7 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
     // Ref. https://code.google.com/p/chromium/issues/detail?id=525629
     setTimeout(function () {
       if (!firstTime) {
-        var selectOffset = that.$selector.offset();
-        changeLibraryDialog.show(selectOffset.top, selectOffset.left);
+        changeLibraryDialog.show(that.$selector.offset().top);
       }
       else {
         changeLibraryToSelector();
