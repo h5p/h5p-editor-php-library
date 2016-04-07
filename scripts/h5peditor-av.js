@@ -117,7 +117,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       .children('.h5p-remove')
         .click(function () {
           if (that.$add.is(':visible')) {
-            confirmRemovalDialog.show($file.offset().top);
+            var offset = $file.offset();
+            confirmRemovalDialog.show(offset.top, offset.left);
           }
 
           return false;
@@ -126,6 +127,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     // Create remove file dialog
     var confirmRemovalDialog = new H5P.ConfirmationDialog({
+      headerText: H5PEditor.t('core', 'removeFile'),
       dialogText: H5PEditor.t('core', 'confirmRemoval', {':type': 'file'})
     }).appendTo(document.body);
 

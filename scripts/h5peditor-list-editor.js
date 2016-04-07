@@ -205,7 +205,8 @@ H5PEditor.ListEditor = (function ($) {
         tabIndex: 1,
         on: {
           click: function () {
-            confirmRemovalDialog.show($(this).offset().top);
+            var offset = $(this).offset();
+            confirmRemovalDialog.show(offset.top, offset.left);
           }
         }
       }).appendTo($titleBar);

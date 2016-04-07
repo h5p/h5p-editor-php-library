@@ -32,6 +32,7 @@ ns.File = function (parent, field, params, setValue) {
 
   // Create remove file dialog
   this.confirmRemovalDialog = new H5P.ConfirmationDialog({
+    headerText: H5PEditor.t('core', 'removeFile'),
     dialogText: H5PEditor.t('core', 'confirmRemoval', {':type': 'file'})
   }).appendTo(document.body);
 
@@ -134,7 +135,8 @@ ns.File.prototype.addFile = function () {
     that.uploadFile();
     return false;
   }).children('img').attr('src', thumbnail.path).end().next().click(function (e) {
-    that.confirmRemovalDialog.show(H5P.jQuery(this).offset().top);
+    var offset = H5P.jQuery(this).offset();
+    that.confirmRemovalDialog.show(offset.top, offset.left);
     return false;
   });
 };

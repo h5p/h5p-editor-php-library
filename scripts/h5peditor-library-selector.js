@@ -56,6 +56,7 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
 
   // Create confirm dialog
   var changeLibraryDialog = new H5P.ConfirmationDialog({
+    headerText: H5PEditor.t('core', 'changeLibrary'),
     dialogText: H5PEditor.t('core', 'confirmChangeLibrary')
   }).appendTo(document.body);
 
@@ -88,7 +89,8 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
     // Ref. https://code.google.com/p/chromium/issues/detail?id=525629
     setTimeout(function () {
       if (!firstTime) {
-        changeLibraryDialog.show(that.$selector.offset().top);
+        var selectOffset = that.$selector.offset();
+        changeLibraryDialog.show(selectOffset.top, selectOffset.left);
       }
       else {
         changeLibraryToSelector();

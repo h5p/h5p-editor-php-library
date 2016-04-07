@@ -45,6 +45,7 @@ ns.Library = function (parent, field, params, setValue) {
 
   // Confirmation dialog for changing library
   this.confirmChangeLibrary = new H5P.ConfirmationDialog({
+    headerText: H5PEditor.t('core', 'changeLibrary'),
     dialogText: H5PEditor.t('core', 'confirmChangeLibrary')
   }).appendTo(document.body);
 
@@ -115,7 +116,8 @@ ns.Library.prototype.librariesLoaded = function (libList) {
       if (self.params.library) {
 
         // Confirm changing library
-        self.confirmChangeLibrary.show(self.$select.offset().top);
+        var selectOffset = self.$select.offset();
+        self.confirmChangeLibrary.show(selectOffset.top, selectOffset.left);
       } else {
 
         // Load new library
