@@ -12,7 +12,7 @@ H5PEditor.language.core = {
   outOfStep: 'El valor de :property solo puede ser cambiado en pasos de :step.',
   addFile: 'Añadir archivo',
   removeFile: 'Eliminar archivo',
-  changeLibrary: 'biblioteca de cambio',
+  changeLibrary: 'Cambiar el tipo de contenido',
   confirmRemoval: '¿Estás seguro de que quieres eliminar este :type?',
   removeImage: 'Eliminar imagen',
   confirmImageRemoval: 'Esto eliminará la imagen. ¿Seguro que desea continuar?',

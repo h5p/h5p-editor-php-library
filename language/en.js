@@ -16,7 +16,7 @@ H5PEditor.language.core = {
   removeImage: 'Remove image',
   confirmImageRemoval: 'This will remove your image. Are you sure you wish to proceed?',
   changeFile: 'Change file',
-  changeLibrary: 'Change library',
+  changeLibrary: 'Change content type?',
   semanticsError: 'Semantics error: :error',
   missingProperty: 'Field :index is missing its :property property.',
   expandCollapse: 'Expand/Collapse',
