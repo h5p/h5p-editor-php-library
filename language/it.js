@@ -13,7 +13,10 @@ H5PEditor.language.core = {
   addFile: "Aggiungi file",
   removeFile: "Rimuovi file",
   confirmRemoval: "Sei sicuro di voler rimuovere questo :type?",
+  removeImage: 'Rimuovi immagine',
+  confirmImageRemoval: 'Questo rimuoverà l\'immagine . Sei sicuro di voler procedere ?',
   changeFile: "Cambia file",
+  changeLibrary: 'Cambiare tipo di contenuto',
   semanticsError: "Errore semantico: :error",
   missingProperty: "Nel campo :index manca la sua proprietà :property.",
   expandCollapse: "Espandi/Collassa",
@@ -33,5 +36,10 @@ H5PEditor.language.core = {
   listLabel: "Lista",
   uploadError: 'File Upload Error',
   fileToLarge: 'The file you are trying to upload might be too large.',
-  noSemantics: 'Error, could not load the content type form.'
+  noSemantics: 'Error, could not load the content type form.',
+  editImage: 'Edit image',
+  saveLabel: 'Save',
+  cancelLabel: 'Cancel',
+  resetToOriginalLabel: 'Reset to original',
+  loadingImageEditor: 'Loading image editor, please wait...'
 };

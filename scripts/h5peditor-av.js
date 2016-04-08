@@ -116,27 +116,37 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       })
       .children('.h5p-remove')
         .click(function () {
-          if (!that.$add.is(':visible') || !confirm(H5PEditor.t('core', 'confirmRemoval', {':type': 'file'}))) {
-            return false;
+          if (that.$add.is(':visible')) {
+            confirmRemovalDialog.show($file.offset().top);
           }
 
-          // Remove from params.
-          if (that.params.length === 1) {
-            delete that.params;
-            that.setValue(that.field);
-          }
-          else {
-            that.params.splice(index, 1);
-          }
-
-          $file.remove();
-
-          for (var i = 0; i < that.changes.length; i++) {
-            that.changes[i]();
-          }
           return false;
         })
         .end();
+
+    // Create remove file dialog
+    var confirmRemovalDialog = new H5P.ConfirmationDialog({
+      headerText: H5PEditor.t('core', 'removeFile'),
+      dialogText: H5PEditor.t('core', 'confirmRemoval', {':type': 'file'})
+    }).appendTo(document.body);
+
+    // Remove file on confirmation
+    confirmRemovalDialog.on('confirmed', function () {
+      // Remove from params.
+      if (that.params.length === 1) {
+        delete that.params;
+        that.setValue(that.field);
+      }
+      else {
+        that.params.splice(index, 1);
+      }
+
+      $file.remove();
+
+      for (var i = 0; i < that.changes.length; i++) {
+        that.changes[i]();
+      }
+    });
   };
 
   /**

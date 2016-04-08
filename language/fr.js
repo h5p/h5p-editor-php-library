@@ -13,7 +13,10 @@ H5PEditor.language.core = {
   addFile: 'Ajouter un fichier',
   removeFile: 'Supprimer un fichier',
   confirmRemoval: 'Voulez-vous vraiment supprimer :type?',
+  removeImage: 'Supprimer l\'image',
+  confirmImageRemoval: 'Cela permettra d\'éliminer votre image . Êtes- vous sûr de vouloir continuer?',
   changeFile: 'Changer le fichier',
+  changeLibrary: 'Changer le type de contenu',
   semanticsError: 'Erreur de langue: :error',
   missingProperty: 'Le champ :index ne comporte pas la mention :property.',
   expandCollapse: 'Dérouler/Enrouler',
@@ -33,5 +36,10 @@ H5PEditor.language.core = {
   listLabel: 'Liste',
   uploadError: 'Erreur pendant l envoi du fichier',
   fileToLarge: 'Le fichier que vous envoyez est trop lourd.',
-  noSemantics: 'Erreur, impossible de charger ce type de contenu.'
+  noSemantics: 'Erreur, impossible de charger ce type de contenu.',
+  editImage: 'Edit image',
+  saveLabel: 'Save',
+  cancelLabel: 'Cancel',
+  resetToOriginalLabel: 'Reset to original',
+  loadingImageEditor: 'Loading image editor, please wait...'
 };

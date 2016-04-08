@@ -12,7 +12,10 @@ H5PEditor.language.core = {
   outOfStep: 'El valor de :property solo puede ser cambiado en pasos de :step.',
   addFile: 'Añadir archivo',
   removeFile: 'Eliminar archivo',
+  changeLibrary: 'Cambiar el tipo de contenido',
   confirmRemoval: '¿Estás seguro de que quieres eliminar este :type?',
+  removeImage: 'Eliminar imagen',
+  confirmImageRemoval: 'Esto eliminará la imagen. ¿Seguro que desea continuar?',
   changeFile: 'Cambiar archivo',
   semanticsError: 'Error en semantics: :error',
   missingProperty: 'El campo :index no contiene la propiedad :property.',
@@ -33,5 +36,10 @@ H5PEditor.language.core = {
   listLabel: 'Lista',
   uploadError: 'Error en la subida del archivo',
   fileToLarge: 'El archivo que intentas subir es demasiado grande.',
-  noSemantics: 'Error, no se ha podido cargar el formulario del tipo de contenido.'
+  noSemantics: 'Error, no se ha podido cargar el formulario del tipo de contenido.',
+  editImage: 'Edit image',
+  saveLabel: 'Save',
+  cancelLabel: 'Cancel',
+  resetToOriginalLabel: 'Reset to original',
+  loadingImageEditor: 'Loading image editor, please wait...'
 };
