@@ -391,10 +391,13 @@ ns.Html.prototype.appendTo = function ($wrapper) {
         dialogDefinition.onShow = function () {
           onShow.apply(this, arguments);
 
+          // Grab current item
+          var $item = ns.Html.current.$item;
+
           // Position dialog above text field
-          var itemPos = that.$item.offset();
-          var itemWidth = that.$item.width();
-          var itemHeight = that.$item.height();
+          var itemPos = $item.offset();
+          var itemWidth = $item.width();
+          var itemHeight = $item.height();
           var dialogSize = this.getSize();
 
           var x = itemPos.left + (itemWidth / 2) - (dialogSize.width / 2);
