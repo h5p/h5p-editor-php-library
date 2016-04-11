@@ -8,7 +8,7 @@ H5PEditor.language.core = {
   requiredProperty: ":property è richiesta e deve avere un valore.",
   onlyNumbers: "Il valore di :property può contenere solo numeri.",
   exceedsMax: "Il valore di :property eccede il massimo di :max.",
-  exceedsMin: "Il valore di :property eccede il minimo di :min.",
+  belowMin: "Il valore di :property eccede il minimo di :min.",
   outOfStep: "Il valore di :property può essere modificato solo negli step di :step.",
   addFile: "Aggiungi file",
   removeFile: "Rimuovi file",
