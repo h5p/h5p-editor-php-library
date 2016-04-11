@@ -452,7 +452,7 @@ ns.createLabel = function (field, content) {
   var html = '<label class="h5peditor-label-wrapper">';
 
   if (field.label !== 0) {
-    html += '<span class="h5peditor-label">' + (field.label === undefined ? field.name : field.label) + '</span>';
+    html += '<span class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' + (field.label === undefined ? field.name : field.label) + '</span>';
   }
 
   return html + content + '</label>';

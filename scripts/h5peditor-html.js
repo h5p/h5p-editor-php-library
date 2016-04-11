@@ -417,7 +417,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
 ns.Html.prototype.createHtml = function () {
   var html = '';
   if (this.field.label !== undefined) {
-    html += '<label class="h5peditor-label">' + this.field.label + '</label>';
+    html += '<label class="h5peditor-label' + (this.field.optional ? '' : ' h5peditor-required') + '">' + this.field.label + '</label>';
   }
 
   html += '<div class="ckeditor" tabindex="0" contenteditable="true">';

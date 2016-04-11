@@ -895,3 +895,10 @@ a {
 .h5p-editor-iframe {
   margin-bottom: 1em;
 }
+
+/* line 778, ../scss/application.scss */
+.h5peditor-required:after {
+  content: "*";
+  color: #b00003;
+  margin-left: 0.25em;
+}

@@ -62,7 +62,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
   var label = '';
   if (this.field.label !== 0) {
     var labelString = this.field.label === undefined ? this.field.name : this.field.label;
-    label = '<span class="h5peditor-label">' + labelString + '</span>';
+    label = '<span class="h5peditor-label' + (this.field.optional ? '' : ' h5peditor-required') + '">' + labelString + '</span>';
   }
 
   var htmlString = label + '<div class="file"></div>' +
