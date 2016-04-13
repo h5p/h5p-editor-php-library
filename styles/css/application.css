@@ -74,7 +74,7 @@ a {
 .h5peditor .errors p,
 .h5peditor .h5p-errors {
   margin: 0 0 4px 0;
-  color: #f00;
+  color: #da0001;
 }
 /* line 68, ../scss/application.scss */
 .h5peditor textarea {
@@ -899,6 +899,6 @@ a {
 /* line 778, ../scss/application.scss */
 .h5peditor-required:after {
   content: "*";
-  color: #b00003;
+  color: #da0001;
   margin-left: 0.25em;
 }

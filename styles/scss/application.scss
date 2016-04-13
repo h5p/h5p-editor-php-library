@@ -63,7 +63,7 @@ a {
   .errors p,
   .h5p-errors {
     margin: 0 0 4px 0;
-    color: #f00;
+    color: #da0001;
   }
   textarea {
     resize: vertical;
@@ -777,6 +777,6 @@ a {
 }
 .h5peditor-required:after {
   content: "*";
-  color: #b00003;
+  color: #da0001;
   margin-left: 0.25em;
 }
