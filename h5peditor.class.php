@@ -139,7 +139,7 @@ class H5peditor {
    *
    * @param string $oldLibrary
    * @param string $oldParameters
-   * @param object $newLibrary
+   * @param array $newLibrary
    * @param string $newParameters
    */
   public function processParameters($contentId, $newLibrary, $newParameters, $oldLibrary = NULL, $oldParameters = NULL) {
