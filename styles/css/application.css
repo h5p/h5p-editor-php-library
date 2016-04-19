@@ -792,11 +792,14 @@ a {
 /* line 693, ../scss/application.scss */
 .h5peditor-field-description,
 .h5p-help-text {
-  font-size: 10px;
-  color: #555555;
+  font-size: 12px;
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: #666;
+  line-height: 15px;
 }
 
-/* line 699, ../scss/application.scss */
+/* line 702, ../scss/application.scss */
 .h5peditor-form {
   position: relative;
   margin: 0.5em 0 0;
@@ -805,7 +808,7 @@ a {
   border: 1px solid #ccc;
 }
 
-/* line 707, ../scss/application.scss */
+/* line 710, ../scss/application.scss */
 .h5peditor-label {
   display: block;
   font-weight: bold;
@@ -813,7 +816,7 @@ a {
   padding-top: 4px;
 }
 
-/* line 714, ../scss/application.scss */
+/* line 717, ../scss/application.scss */
 #h5peditor-uploader {
   position: absolute;
   width: 1px;
@@ -823,12 +826,12 @@ a {
   overflow: hidden;
 }
 
-/* line 723, ../scss/application.scss */
+/* line 726, ../scss/application.scss */
 .h5p-tutorial-url {
   font-size: 0.875em;
 }
 
-/* line 727, ../scss/application.scss */
+/* line 730, ../scss/application.scss */
 .h5p-tutorial-url:before {
   font-family: "H5P";
   content: "\e889";
@@ -838,7 +841,7 @@ a {
   left: .2em;
 }
 
-/* line 736, ../scss/application.scss */
+/* line 739, ../scss/application.scss */
 .h5peditor-widget-select {
   overflow: hidden;
   margin: 0 0 -1px;
@@ -846,7 +849,7 @@ a {
   list-style: none;
 }
 
-/* line 742, ../scss/application.scss */
+/* line 745, ../scss/application.scss */
 .h5peditor-widget-option {
   float: right;
   border: 1px solid #ccc;
@@ -861,24 +864,24 @@ a {
   outline: none;
 }
 
-/* line 755, ../scss/application.scss */
+/* line 758, ../scss/application.scss */
 .h5peditor-widget-option:hover {
   color: #000;
 }
 
-/* line 758, ../scss/application.scss */
+/* line 761, ../scss/application.scss */
 .h5peditor-widget-option:active {
   color: #8e636a;
   /* Pink chocolate */
 }
 
-/* line 761, ../scss/application.scss */
+/* line 764, ../scss/application.scss */
 .h5peditor-widget-active {
   background: #fff;
   line-height: 1.357142857em;
 }
 
-/* line 766, ../scss/application.scss */
+/* line 769, ../scss/application.scss */
 .h5peditor-widgets > .h5peditor-widget-wrapper {
   border: 1px solid #ccc;
   background: #fff;
@@ -886,17 +889,17 @@ a {
   padding: 0.5em;
 }
 
-/* line 772, ../scss/application.scss */
+/* line 775, ../scss/application.scss */
 .h5peditor-widgets > .h5peditor-label {
   float: left;
 }
 
-/* line 775, ../scss/application.scss */
+/* line 778, ../scss/application.scss */
 .h5p-editor-iframe {
   margin-bottom: 1em;
 }
 
-/* line 778, ../scss/application.scss */
+/* line 781, ../scss/application.scss */
 .h5peditor-required:after {
   content: "*";
   color: #da0001;
