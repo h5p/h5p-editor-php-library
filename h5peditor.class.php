@@ -65,7 +65,7 @@ class H5peditor {
       $libraries = array();
       foreach ($_POST['libraries'] as $libraryName) {
         $matches = array();
-        preg_match_all('/(.+)\s(\d)+\.(\d)$/', $libraryName, $matches);
+        preg_match_all('/(.+)\s(\d+)\.(\d+)$/', $libraryName, $matches);
         if ($matches) {
           $libraries[] = (object) array(
             'uberName' => $libraryName,
@@ -139,7 +139,7 @@ class H5peditor {
    *
    * @param string $oldLibrary
    * @param string $oldParameters
-   * @param object $newLibrary
+   * @param array $newLibrary
    * @param string $newParameters
    */
   public function processParameters($contentId, $newLibrary, $newParameters, $oldLibrary = NULL, $oldParameters = NULL) {
