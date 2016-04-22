@@ -364,7 +364,7 @@ class H5peditor {
         }
         else {
           // Local file
-          $libraryData->javascript[$this->h5p->url . $script->path . $script->version] = "\n" . file_get_contents($path . $script->path);
+          $libraryData->javascript[$this->h5p->url . $script->path . $script->version] = "\n" . $this->h5p->fs->getContent($path . $script->path);
         }
       }
     }
@@ -379,7 +379,7 @@ class H5peditor {
         else {
           // Local file
           H5peditor::buildCssPath(NULL, $this->h5p->url . dirname($css->path) . '/');
-          $libraryData->css[$this->h5p->url . $css->path . $css->version] = preg_replace_callback('/url\([\'"]?(?![a-z]+:|\/+)([^\'")]+)[\'"]?\)/i', 'H5peditor::buildCssPath', file_get_contents($path . $css->path));
+          $libraryData->css[$this->h5p->url . $css->path . $css->version] = preg_replace_callback('/url\([\'"]?(?![a-z]+:|\/+)([^\'")]+)[\'"]?\)/i', 'H5peditor::buildCssPath', $this->h5p->fs->getContent($path . $css->path));
         }
       }
     }
