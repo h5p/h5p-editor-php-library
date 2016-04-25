@@ -280,15 +280,24 @@ ns.File.addIframe = function () {
       initialized = true;
     }
 
+    // Clear out iframe
     $body.html('');
-    var $form = ns.$(
-      '<form method="post" enctype="multipart/form-data" action="' + ns.getAjaxUrl('files') + '">' +
-        '<input name="file" type="file"/>' +
-        '<input name="field" type="hidden"/>' +
-        '<input name="contentId" type="hidden" value="' + (ns.contentId === undefined ? 0 : ns.contentId) + '"/>' +
-        '<input name="token" type="hidden" value="' + ns.uploadToken + '"/>' +
-        '<input name="dataURI" type="hidden"/>' +
-      '</form>').appendTo($body);
+
+    // Create form for uploading file
+    var form = '<form method="post" enctype="multipart/form-data" action="' + ns.getAjaxUrl('files') + '">' +
+      '<input name="file" type="file"/>' +
+      '<input name="field" type="hidden"/>' +
+      '<input name="dataURI" type="hidden"/>' +
+      '<input name="contentId" type="hidden" value="' + (ns.contentId === undefined ? 0 : ns.contentId) + '"/>';
+
+    // Allow for extra parameters in upload form, e.g. context or security token
+    for (var up in ns.uploadParams) {
+      if (ns.uploadParams.hasOwnProperty(up)) {
+        form += '<input name="' + up + '" type="hidden" value="' + ns.uploadParams[up] + '"/>';
+      }
+    }
+
+    var $form = ns.$(form + '</form>').appendTo($body);
 
     ns.File.$field = $form.children('input[name="field"]');
     ns.File.$file = $form.children('input[name="file"]');
