@@ -325,6 +325,7 @@ class H5peditor {
       foreach ($dependencies as $dependency) {
         if ($dependency['weight'] === $i && $dependency['type'] === 'editor') {
           // Only load editor libraries.
+          $dependency['library']['id'] = $dependency['library']['libraryId'];
           $orderedDependencies[$dependency['library']['libraryId']] = $dependency['library'];
           break;
         }
