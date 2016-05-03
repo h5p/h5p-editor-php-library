@@ -93,6 +93,9 @@ class H5peditor {
             'majorVersion' => $devLibs[$lid]['majorVersion'],
             'minorVersion' => $devLibs[$lid]['minorVersion'],
             'runnable' => $devLibs[$lid]['runnable'],
+            'restricted' => $libraries[$i]->restricted,
+            'tutorialUrl' => $libraries[$i]->tutorialUrl,
+            'isOld' => $libraries[$i]->isOld
           );
         }
       }
