@@ -34,23 +34,20 @@ class H5peditor {
     'scripts/h5peditor-none.js',
     'ckeditor/ckeditor.js',
   );
-  private $h5p, $storage, $files_directory, $basePath, $relativePathRegExp;
+  private $h5p, $storage, $relativePathRegExp;
 
   /**
    * Constructor for the core editor library.
    *
-   * @param \H5PCore $h5p Instance of core.
-   * @param mixed $storage Instance of h5peditor storage.
-   * @param string $basePath Url path to prefix assets with.
-   * @param string $filesDir H5P files directory.
-   * @param string $editorFilesDir Optional custom editor files directory outside h5p files directory.
+   * @param \H5PCore $h5p Instance of core
+   * @param \H5peditorStorage $storage Instance of h5peditor storage
+   * @param string $relativePathRegExp
+   * Optional custom regexp for detecting usage of files that's in another
+   * content folder or the editor's tmp directory
    */
-  function __construct($h5p, $storage, $basePath, $filesDir, $editorFilesDir = NULL, $relativePathRegExp = '/^(\.\.\/){1,2}(\d+|editor)\/(.+)$/') {
+  function __construct($h5p, $storage, $relativePathRegExp = '/^(\.\.\/){1,2}(\d+|editor)\/(.+)$/') {
     $this->h5p = $h5p;
     $this->storage = $storage;
-    $this->basePath = $basePath;
-    $this->contentFilesDir = $filesDir . DIRECTORY_SEPARATOR . 'content';
-    $this->editorFilesDir = ($editorFilesDir === NULL ? $filesDir . DIRECTORY_SEPARATOR . 'editor' : $editorFilesDir);
     $this->relativePathRegExp = $relativePathRegExp;
   }
 
@@ -102,39 +99,6 @@ class H5peditor {
   }
 
   /**
-   * Keep track of temporary files.
-   *
-   * @param object file
-   */
-  public function addTmpFile($file) {
-    $this->storage->addTmpFile($file);
-  }
-
-  /**
-   * Create directories for uploaded content.
-   *
-   * @param int $id
-   * @return boolean
-   */
-  public function createDirectories($id) {
-    $this->content_directory = $this->contentFilesDir . DIRECTORY_SEPARATOR . $id . DIRECTORY_SEPARATOR;
-
-    if (!is_dir($this->contentFilesDir)) {
-      mkdir($this->contentFilesDir, 0777, true);
-    }
-
-    $sub_directories = array('', 'files', 'images', 'videos', 'audios');
-    foreach ($sub_directories AS $sub_directory) {
-      $sub_directory = $this->content_directory . $sub_directory;
-      if (!is_dir($sub_directory) && !mkdir($sub_directory)) {
-        return FALSE;
-      }
-    }
-
-    return TRUE;
-  }
-
-  /**
    * Move uploaded files, remove old files and update library usage.
    *
    * @param string $oldLibrary
@@ -145,6 +109,9 @@ class H5peditor {
   public function processParameters($contentId, $newLibrary, $newParameters, $oldLibrary = NULL, $oldParameters = NULL) {
     $newFiles = array();
     $oldFiles = array();
+
+    // Keep track of current content ID (used when processing files)
+    $this->contentId = $contentId;
 
     // Find new libraries/content dependencies and files.
     // Start by creating a fake library field to process. This way we get all the dependencies of the main library as well.
@@ -165,9 +132,8 @@ class H5peditor {
       for ($i = 0, $s = count($oldFiles); $i < $s; $i++) {
         if (!in_array($oldFiles[$i], $newFiles) &&
             preg_match('/^(\w+:\/\/|\.\.\/)/i', $oldFiles[$i]) === 0) {
-          $removeFile = $this->content_directory . $oldFiles[$i];
-          unlink($removeFile);
-          $this->storage->removeFile($removeFile);
+          $this->h5p->fs->removeContentFile($oldFiles[$i], $this->contentId);
+          // (optionally we could just have marked them as tmp files)
         }
       }
     }
@@ -257,34 +223,29 @@ class H5peditor {
    * @param array $files
    */
   private function processFile(&$params, &$files) {
-    static $h5peditor_path;
-    if (!$h5peditor_path) {
-      $h5peditor_path = $this->editorFilesDir . DIRECTORY_SEPARATOR;
-    }
-
     // File could be copied from another content folder.
     $matches = array();
     if (preg_match($this->relativePathRegExp, $params->path, $matches)) {
-      // Create copy of file
-      $source = $this->content_directory . $params->path;
-      $destination = $this->content_directory . $matches[3];
-      if (file_exists($source) && !file_exists($destination)) {
-        copy($source, $destination);
-      }
+
+      // Create a copy of the file
+      $this->h5p->fs->cloneContentFile($matches[3], $matches[2], $this->contentId);
+
+      // Update Params with correct filename
       $params->path = $matches[3];
     }
     else {
-      // Check if tmp file
-      $oldPath = $h5peditor_path . $params->path;
-      $newPath = $this->content_directory . $params->path;
-      if (file_exists($newPath)) {
-        // Uploaded to content folder, make sure the cleanup script doesn't get it.
-        $this->storage->keepFile($newPath, $newPath);
+      // Check if file exists in content folder
+      $fileId = $this->h5p->fs->getContentFile($params->path, $this->contentId);
+      if ($fileId) {
+        // Mark the file as a keeper
+        $this->storage->keepFile($fileId);
       }
-      elseif (file_exists($oldPath)) {
-        // Copy file from editor tmp folder to content folder
-        copy($oldPath, $newPath);
-        // Not moved in-case it has been copied to multiple content.
+      else {
+        // File is not in content folder, try to copy it from the editor tmp dir
+        // to content folder.
+        $this->h5p->fs->cloneContentFile($params->path, 'editor', $this->contentId);
+        // (not removed in case someone has copied it)
+        // (will automatically be removed after 24 hours)
       }
     }
 

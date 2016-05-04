@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A defined interface for the editor to communicate with the database of the 
+ * A defined interface for the editor to communicate with the database of the
  * web system.
  */
 interface H5peditorStorage {
@@ -19,36 +19,12 @@ interface H5peditorStorage {
   public function getLanguage($machineName, $majorVersion, $minorVersion, $language);
 
   /**
-   * Mark the given file as a temporary file.
+   * "Callback" for mark the given file as a permanent file.
+   * Used when saving content that has new uploaded files.
    *
-   * NOTE: THIS FUNCTION IS DEPRACTED AND WILL BE REMOVED VERY SOON!
-   * All file operations are now handeled by the implementation of the file
-   * storage interface in h5p-php-library.
-   *
-   * @param stdClass $file File object
+   * @param int $fileId
    */
-  public function addTmpFile($file);
-
-  /**
-   * Mark the given file as a permanent file.
-   *
-   * TODO: Consider if this should be deprecated when solving h5p/h5p-moodle-plugin#49
-   * There might be a better way of solving this.
-   *
-   * @param string $oldpath
-   * @param string $newpath
-   */
-  public function keepFile($oldPath, $newPath);
-
-  /**
-   * File is deleted, remove from DB.
-   *
-   * TODO: Consider if this should be deprecated when solving h5p/h5p-moodle-plugin#49
-   * There might be a better way of solving this.
-   *
-   * @param string $path
-   */
-  public function removeFile($path);
+  public function keepFile($fileId);
 
   /**
    * Decides which content types the editor should have.
