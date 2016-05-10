@@ -36,10 +36,11 @@ interface H5peditorStorage {
    * Editor that already knows which content types are supported in its
    * slides.
    *
+   * @param int $context_id Identifier for current context
    * @param array $libraries List of library names + version to load info for
    * @return array List of all libraries loaded
    */
-  public function getLibraries($libraries = NULL);
+  public function getLibraries($context_id = NULL, $libraries = NULL);
 
   /**
    * Alter styles and scripts
