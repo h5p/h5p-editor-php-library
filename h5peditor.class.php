@@ -74,15 +74,7 @@ class H5peditor {
       }
     }
 
-    $uploadParams = array();
-    if (isset($_POST['uploadParams'])) {
-      $uploadParams = $_POST['uploadParams'];
-    }
-
-    $libraries = $this->storage->getLibraries(
-        isset($uploadParams['contextId']) ? $uploadParams['contextId'] : NULL,
-        !isset($libraries) ? NULL : $libraries
-    );
+    $libraries = $this->storage->getLibraries(!isset($libraries) ? NULL : $libraries);
 
     if ($this->h5p->development_mode & H5PDevelopment::MODE_LIBRARY) {
       $devLibs = $this->h5p->h5pD->getLibraries();
