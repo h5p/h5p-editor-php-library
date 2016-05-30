@@ -313,8 +313,18 @@ class H5peditor {
     $libraryData->semantics = $this->h5p->loadLibrarySemantics($machineName, $majorVersion, $minorVersion);
     $libraryData->language = $this->getLibraryLanguage($machineName, $majorVersion, $minorVersion, $languageCode);
 
+    // Temporarily disable asset aggregation
+    $aggregateAssets = $this->h5p->aggregateAssets;
+    $this->h5p->aggregateAssets = FALSE;
+    // This is done to prevent files being loaded multiple times due to how
+    // the editor works.
+
+    // Get list of JS and CSS files that belongs to the dependencies
     $files = $this->h5p->getDependenciesFiles($libraries, $prefix);
     $this->storage->alterLibraryFiles($files, $libraries);
+
+    // Restore asset aggregation setting
+    $this->h5p->aggregateAssets = $aggregateAssets;
 
     if ($path) {
       $path .= '/';
