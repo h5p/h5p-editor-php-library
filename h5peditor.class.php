@@ -4,9 +4,7 @@ class H5peditor {
 
   public static $styles = array(
     'libs/darkroom.css',
-    'styles/css/application.css',
-    'styles/css/h5peditor-image.css',
-    'styles/css/h5peditor-image-popup.css'
+    'styles/css/application.css'
   );
   public static $scripts = array(
     'scripts/h5peditor.js',
