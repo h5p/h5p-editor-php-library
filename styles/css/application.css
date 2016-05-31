@@ -1,11 +1,11 @@
-/* line 2, ../scss/h5peditor-image-edit.scss */
+/* line 2, ../scss/_h5peditor-image-edit.scss */
 .h5peditor .h5p-editing-image-button {
   line-height: 1.5;
   margin-right: 0.5em;
   margin-bottom: 0.5em;
   padding-right: 1em;
 }
-/* line 9, ../scss/h5peditor-image-edit.scss */
+/* line 9, ../scss/_h5peditor-image-edit.scss */
 .h5peditor .h5p-editing-image-button:before {
   font-family: "H5P";
   content: "\e900";
@@ -15,40 +15,40 @@
   font-size: 1.5em;
   line-height: 0.9;
 }
-/* line 19, ../scss/h5peditor-image-edit.scss */
+/* line 19, ../scss/_h5peditor-image-edit.scss */
 .h5peditor .ui-dialog .h5p-editing-image-button,
 .h5peditor .ui-dialog .h5p-copyright-button {
   padding-left: 0.5em;
 }
-/* line 24, ../scss/h5peditor-image-edit.scss */
+/* line 24, ../scss/_h5peditor-image-edit.scss */
 .h5peditor .h5p-editing-image-button.loading:before {
   content: "\e901";
 }
-/* line 28, ../scss/h5peditor-image-edit.scss */
+/* line 28, ../scss/_h5peditor-image-edit.scss */
 .h5peditor .h5p-editing-image-button.hidden {
   display: none;
 }
-/* line 32, ../scss/h5peditor-image-edit.scss */
+/* line 32, ../scss/_h5peditor-image-edit.scss */
 .h5peditor .field.image .file {
   display: inline-block;
   float: none;
 }
-/* line 38, ../scss/h5peditor-image-edit.scss */
+/* line 38, ../scss/_h5peditor-image-edit.scss */
 .h5peditor .h5p-editor-image-buttons .h5p-editor-image-buttons {
   display: block;
 }
-/* line 42, ../scss/h5peditor-image-edit.scss */
+/* line 42, ../scss/_h5peditor-image-edit.scss */
 .h5peditor .h5p-editor-image-buttons .h5p-copyright-button {
   float: none;
   display: inline-block;
 }
 
-/* line 1, ../scss/h5peditor-image-edit-popup.scss */
+/* line 1, ../scss/_h5peditor-image-edit-popup.scss */
 body.h5p-editor-image-popup {
   position: relative;
 }
 
-/* line 5, ../scss/h5peditor-image-edit-popup.scss */
+/* line 5, ../scss/_h5peditor-image-edit-popup.scss */
 .h5p-editing-image-popup-background {
   position: absolute;
   top: 0;
@@ -61,18 +61,18 @@ body.h5p-editor-image-popup {
   z-index: 101;
 }
 
-/* line 19, ../scss/h5peditor-image-edit-popup.scss */
+/* line 19, ../scss/_h5peditor-image-edit-popup.scss */
 #darkroom-icons {
   top: 0;
   left: 0;
 }
 
-/* line 24, ../scss/h5peditor-image-edit-popup.scss */
+/* line 24, ../scss/_h5peditor-image-edit-popup.scss */
 .h5p-editing-image-popup-background.hidden {
   display: none;
 }
 
-/* line 28, ../scss/h5peditor-image-edit-popup.scss */
+/* line 28, ../scss/_h5peditor-image-edit-popup.scss */
 .h5p-editing-image-popup {
   display: inline-block;
   position: relative;
@@ -90,23 +90,23 @@ body.h5p-editor-image-popup {
   box-sizing: border-box;
 }
 
-/* line 45, ../scss/h5peditor-image-edit-popup.scss */
+/* line 45, ../scss/_h5peditor-image-edit-popup.scss */
 .h5p-editing-image-header {
   padding: 1em 0.75em;
 }
 
-/* line 49, ../scss/h5peditor-image-edit-popup.scss */
+/* line 49, ../scss/_h5peditor-image-edit-popup.scss */
 .h5p-editing-image {
   max-height: 100%;
   max-width: 100%;
 }
 
-/* line 54, ../scss/h5peditor-image-edit-popup.scss */
+/* line 54, ../scss/_h5peditor-image-edit-popup.scss */
 .h5p-editing-image.hidden {
   display: none;
 }
 
-/* line 59, ../scss/h5peditor-image-edit-popup.scss */
+/* line 59, ../scss/_h5peditor-image-edit-popup.scss */
 .h5p-editing-image-popup .darkroom-toolbar {
   position: relative;
   -webkit-border-radius: 0;
@@ -114,48 +114,48 @@ body.h5p-editor-image-popup {
   border-radius: 0;
   top: 0;
 }
-/* line 67, ../scss/h5peditor-image-edit-popup.scss */
+/* line 67, ../scss/_h5peditor-image-edit-popup.scss */
 .h5p-editing-image-popup .darkroom-toolbar:before {
   content: initial;
 }
-/* line 71, ../scss/h5peditor-image-edit-popup.scss */
+/* line 71, ../scss/_h5peditor-image-edit-popup.scss */
 .h5p-editing-image-popup .darkroom-image-container {
   padding: 32px 2em;
 }
-/* line 75, ../scss/h5peditor-image-edit-popup.scss */
+/* line 75, ../scss/_h5peditor-image-edit-popup.scss */
 .h5p-editing-image-popup .darkroom-image-container .canvas-container {
   box-shadow: 0 0 8px 3px rgba(0, 0, 0, 0.6);
   margin: auto;
 }
 
-/* line 81, ../scss/h5peditor-image-edit-popup.scss */
+/* line 81, ../scss/_h5peditor-image-edit-popup.scss */
 .h5p-editing-image-header-title {
   display: inline-block;
   font-size: 1.25em;
 }
 
-/* line 86, ../scss/h5peditor-image-edit-popup.scss */
+/* line 86, ../scss/_h5peditor-image-edit-popup.scss */
 .h5p-editing-image-header-buttons {
   display: inline-block;
   float: right;
 }
 
-/* line 90, ../scss/h5peditor-image-edit-popup.scss */
+/* line 90, ../scss/_h5peditor-image-edit-popup.scss */
 .h5p-editing-image-loading {
   padding: 1em;
 }
 
-/* line 94, ../scss/h5peditor-image-edit-popup.scss */
+/* line 94, ../scss/_h5peditor-image-edit-popup.scss */
 .h5p-editing-image-loading.hidden {
   display: none;
 }
 
-/* line 98, ../scss/h5peditor-image-edit-popup.scss */
+/* line 98, ../scss/_h5peditor-image-edit-popup.scss */
 .h5p-editing-image-editing-container {
   background: #666;
 }
 
-/* line 103, ../scss/h5peditor-image-edit-popup.scss */
+/* line 103, ../scss/_h5peditor-image-edit-popup.scss */
 .h5p-editing-image-header-buttons button {
   padding: 0.5em 1.75em;
   margin: 0 0 0 1em;
@@ -167,11 +167,11 @@ body.h5p-editor-image-popup {
   background: -webkit-linear-gradient(top, #fff 0, #f2f2f2 100%);
   background: -ms-linear-gradient(top, #fff 0, #f2f2f2 100%);
 }
-/* line 117, ../scss/h5peditor-image-edit-popup.scss */
+/* line 117, ../scss/_h5peditor-image-edit-popup.scss */
 .h5p-editing-image-header-buttons button:hover {
   background: #ededed;
 }
-/* line 121, ../scss/h5peditor-image-edit-popup.scss */
+/* line 121, ../scss/_h5peditor-image-edit-popup.scss */
 .h5p-editing-image-header-buttons .h5p-done {
   color: #fff;
   border-color: #20588F;
@@ -179,13 +179,13 @@ body.h5p-editor-image-popup {
   background: -webkit-linear-gradient(top, #5A94D3 0, #3673B5 100%);
   background: -ms-linear-gradient(top, #5A94D3 0, #3673B5 100%);
 }
-/* line 130, ../scss/h5peditor-image-edit-popup.scss */
+/* line 130, ../scss/_h5peditor-image-edit-popup.scss */
 .h5p-editing-image-header-buttons .h5p-done:hover {
   background: #3275bc;
   background: -webkit-linear-gradient(top, #3275bc 0, #285585 100%);
   background: -ms-linear-gradient(top, #3275bc 0, #285585 100%);
 }
-/* line 136, ../scss/h5peditor-image-edit-popup.scss */
+/* line 136, ../scss/_h5peditor-image-edit-popup.scss */
 .h5p-editing-image-header-buttons .h5p-remove {
   background: none;
   border: none;
@@ -194,7 +194,7 @@ body.h5p-editor-image-popup {
   padding-left: 0;
   border-radius: 0;
 }
-/* line 145, ../scss/h5peditor-image-edit-popup.scss */
+/* line 145, ../scss/_h5peditor-image-edit-popup.scss */
 .h5p-editing-image-header-buttons .h5p-remove:hover {
   background: none;
   color: #e40000;
