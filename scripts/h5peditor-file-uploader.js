@@ -14,6 +14,8 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
     // Initialize event inheritance
     EventDispatcher.call(self);
 
+    var isUploadingData;
+
     /**
      * Trigger uploading start.
      *
@@ -25,6 +27,8 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
       if (!nextIframe.isReady()) {
         return false; // Iframe isn't loaded. The caller should try again later
       }
+
+      isUploadingData = (data !== undefined);
 
       // Add event listeners
       nextIframe.on('upload', function (event) {
@@ -59,6 +63,15 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
         throw('Missing data.');
       }
       return upload(data);
+    };
+
+    /**
+     * Makes it possible to check if it is data or a file being uploaded.
+     *
+     * @return {boolean}
+     */
+    self.isUploadingData = function () {
+      return isUploadingData;
     };
 
     if (!nextIframe) {

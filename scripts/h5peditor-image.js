@@ -53,8 +53,10 @@ ns.widgets.image = function (parent, field, params, setValue) {
     // Hide edit image button
     self.$editImage.addClass('hidden');
 
-    // Uploading new original image
-    self.isOriginalImage = true;
+    if (!self.isUploadingData()) {
+      // Uploading new original image
+      self.isOriginalImage = true;
+    }
   });
 
   // When a new file has been uploaded
