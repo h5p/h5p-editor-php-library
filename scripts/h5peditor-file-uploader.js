@@ -179,28 +179,6 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
         appendTo: $form
       });
 
-      // Add upload token or upload params if they exist
-      if (H5PEditor.uploadToken) {
-        $('<input/>', {
-          type: 'hidden',
-          name: 'token',
-          value: H5PEditor.uploadToken,
-          appendTo: $form
-        });
-      }
-      else if (H5PEditor.uploadParams) {
-        for (var up in H5PEditor.uploadParams) {
-          if (H5PEditor.uploadParams.hasOwnProperty(up)) {
-            $('<input/>', {
-              type: 'hidden',
-              name: up,
-              value: H5PEditor.uploadParams[up],
-              appendTo: $form
-            });
-          }
-        }
-      }
-
       // Add form to iframe
       var $body = $iframe.contents().find('body');
       $form.appendTo($body);
