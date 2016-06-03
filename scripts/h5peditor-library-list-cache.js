@@ -56,9 +56,9 @@ llc.getLibraries = function(libraries, handler, thisArg) {
         handler.call(thisArg, data);
         llc.runQue();
       },
-      data: H5PEditor.$.extend({
+      data: {
         'libraries': libraries
-      }, H5PEditor.uploadParams),
+      },
       dataType: "json"
     };
     H5PEditor.$.ajax(ajaxParams);

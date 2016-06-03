@@ -6,7 +6,6 @@
     H5PEditor.fileIcon = H5PIntegration.editor.fileIcon;
     H5PEditor.ajaxPath = H5PIntegration.editor.ajaxPath;
     H5PEditor.filesPath = H5PIntegration.editor.filesPath;
-    H5PEditor.uploadParams = H5PIntegration.editor.uploadParams;
 
     // Semantics describing what copyright information can be stored for media.
     H5PEditor.copyrightSemantics = H5PIntegration.editor.copyrightSemantics;

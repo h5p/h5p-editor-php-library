@@ -36,8 +36,7 @@ ns.Editor = function (library, defaultParams, replace) {
     // Load libraries list
     $.ajax({
       dataType: 'json',
-      url: ns.getAjaxUrl('libraries'),
-      data: H5PEditor.uploadParams
+      url: ns.getAjaxUrl('libraries')
     }).fail(function () {
       $container.html('Error, unable to load libraries.');
     }).done(function (data) {
