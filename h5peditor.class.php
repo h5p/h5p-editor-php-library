@@ -16,6 +16,7 @@ class H5peditor {
     'scripts/h5peditor-html.js',
     'scripts/h5peditor-number.js',
     'scripts/h5peditor-textarea.js',
+    'scripts/h5peditor-file-uploader.js',
     'scripts/h5peditor-file.js',
     'scripts/h5peditor-image.js',
     'scripts/h5peditor-image-popup.js',

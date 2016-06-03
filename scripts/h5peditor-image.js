@@ -12,8 +12,10 @@ var ns = H5PEditor;
  * @returns {ns.widgets.image}
  */
 ns.widgets.image = function (parent, field, params, setValue) {
-  ns.File.call(this, parent, field, params, setValue);
   var self = this;
+
+  // Initialize inheritance
+  ns.File.call(self, parent, field, params, setValue);
 
   this.parent = parent;
   this.field = field;
@@ -45,6 +47,34 @@ ns.widgets.image = function (parent, field, params, setValue) {
   this.confirmationDialog.on('confirmed', function () {
     self.removeImage();
   });
+
+  // When uploading starts
+  self.on('upload', function () {
+    // Hide edit image button
+    self.$editImage.addClass('hidden');
+
+    if (!self.isUploadingData()) {
+      // Uploading new original image
+      self.isOriginalImage = true;
+    }
+  });
+
+  // When a new file has been uploaded
+  self.on('fileUploaded', function (event) {
+    // Uploaded new original image
+    if (self.isOriginalImage) {
+      self.isOriginalImage = false;
+      delete self.params.originalImage;
+    }
+
+    // Store width and height
+    self.params.width = event.data.width;
+    self.params.height = event.data.height;
+
+    // Show edit image button
+    self.$editImage.removeClass('hidden');
+    self.isEditing = false;
+  });
 };
 
 ns.widgets.image.prototype = Object.create(ns.File.prototype);
@@ -57,7 +87,6 @@ ns.widgets.image.prototype.constructor = ns.widgets.image;
  */
 ns.widgets.image.prototype.appendTo = function ($wrapper) {
   var self = this;
-  ns.File.addIframe();
 
   var label = '';
   if (this.field.label !== 0) {
@@ -93,7 +122,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
     // Not editing any longer
     self.isEditing = false;
 
-    // No longer a original image
+    // No longer an original image
     self.isOriginalImage = false;
 
     // Set current source as original image, if no original image
@@ -106,12 +135,8 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
       };
     }
 
-    // Set new source as current image
-    self.setUploadingThrobber();
-    self.setImageChangeCallback();
-    ns.File.$data.val(e.data);
-    ns.File.$field.val(JSON.stringify(self.field));
-    ns.File.$file.change();
+    // Upload new image
+    self.uploadData(e.data);
   });
 
   editImagePopup.on('resetImage', function () {
@@ -181,7 +206,7 @@ ns.widgets.image.prototype.addFile = function () {
       .html('<a href="#" class="add" title="' + ns.t('core', 'addFile') + '"></a>')
       .children('.add')
       .click(function () {
-        that.uploadFile();
+        that.openFileSelector();
         return false;
       });
 
@@ -211,7 +236,7 @@ ns.widgets.image.prototype.addFile = function () {
   this.$file.html(fileHtmlString)
     .children(':eq(0)')
     .click(function () {
-      that.uploadFile();
+      that.openFileSelector();
       return false;
     })
     .children('img')
@@ -233,50 +258,6 @@ ns.widgets.image.prototype.addFile = function () {
 };
 
 /**
- * Set callback for when an image has been uploaded.
- */
-ns.widgets.image.prototype.setImageChangeCallback = function () {
-  var that = this;
-
-  ns.File.callback = function (err, result) {
-    try {
-      if (err) {
-        throw err;
-      }
-
-      that.params = that.params || {};
-      that.params.path = result.path;
-      that.params.mime = result.mime;
-      that.params.copyright = that.copyright;
-
-      // Uploaded new original image
-      if (that.isOriginalImage) {
-        that.isOriginalImage = false;
-        delete that.params.originalImage;
-      }
-
-      that.params.width = result.width;
-      that.params.height = result.height;
-
-      that.setValue(that.field, that.params);
-
-      for (var i = 0; i < that.changes.length; i++) {
-        that.changes[i](that.params);
-      }
-
-      // Show edit image button
-      that.$editImage.removeClass('hidden');
-      that.isEditing = false;
-    }
-    catch (error) {
-      that.$errors.append(ns.createError(error));
-    }
-
-    that.addFile();
-  };
-};
-
-/**
  * Remove image
  */
 ns.widgets.image.prototype.removeImage = function () {
@@ -291,55 +272,6 @@ ns.widgets.image.prototype.removeImage = function () {
   for (var i = 0; i < this.changes.length; i++) {
     this.changes[i]();
   }
-};
-
-/**
- * Replace image with throbber to show that image is being uploaded
- */
-ns.widgets.image.prototype.setUploadingThrobber = function () {
-  var that = this;
-
-  ns.File.changeCallback = function () {
-    // Hide edit image button
-    that.$editImage.addClass('hidden');
-    that.$file.html('<div class="h5peditor-uploading h5p-throbber">' + ns.t('core', 'uploading') + '</div>');
-  };
-};
-
-/**
- * Start a new upload.
- */
-ns.widgets.image.prototype.uploadFile = function () {
-  var that = this;
-
-  if (ns.File.$file === 0) {
-    return; // Wait for our turn :)
-  }
-
-  this.$errors.html('');
-
-  this.setUploadingThrobber();
-  this.setImageChangeCallback();
-
-  if (this.field.mimes !== undefined) {
-    var mimes = '';
-    for (var i = 0; i < this.field.mimes.length; i++) {
-      if (mimes !== '') {
-        mimes += ',';
-      }
-      mimes += this.field.mimes[i];
-    }
-    ns.File.$file.attr('accept', mimes);
-  }
-  else if (this.field.type === 'image') {
-    ns.File.$file.attr('accept', 'image/jpeg,image/png,image/gif');
-  }
-
-  // Uploading new original image
-  that.isOriginalImage = true;
-
-  ns.File.$field.val(JSON.stringify(this.field));
-  ns.File.$file.click();
 };
 
 /**
