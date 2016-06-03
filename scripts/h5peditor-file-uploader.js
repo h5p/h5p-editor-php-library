@@ -86,7 +86,7 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
     EventDispatcher.call(self);
 
     var ready = false;
-    var $iframe, $form, $file, $field;
+    var $iframe, $form, $file, $data, $field;
 
     /**
      * @private
