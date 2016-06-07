@@ -56,14 +56,14 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     editingContainer.appendChild(editingImage);
 
     // Close popup on background click
-    background.onclick = function () {
+    background.addEventListener('click', function () {
       this.hide();
-    }.bind(this);
+    }.bind(this));
 
     // Prevent closing popup
-    popup.onclick = function (e) {
+    popup.addEventListener('click', function (e) {
       e.stopPropagation();
-    };
+    });
 
     // Make sure each ImageEditingPopup instance has a unique ID
     instanceCounter += 1;
@@ -79,7 +79,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       var button = document.createElement('button');
       button.textContent = ns.t('core', coreString);
       button.className = className;
-      button.onclick = clickEvent;
+      button.addEventListener('click', clickEvent);
       headerButtons.appendChild(button);
     };
 
