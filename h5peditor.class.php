@@ -301,11 +301,12 @@ class H5peditor {
   /**
    * Get all scripts, css and semantics data for a library
    *
-   * @param string $library_name
-   *  Name of the library we want to fetch data for
-   * @param string $prefix Optional. Files are relative to another dir.
+   * @param string $machineName Library name
+   * @param int $majorVersion
+   * @param int $minorVersion
+   * @param string $prefix Optional part to add between URL and asset path
    */
-  public function getLibraryData($machineName, $majorVersion, $minorVersion, $languageCode, $path = '', $prefix = '') {
+  public function getLibraryData($machineName, $majorVersion, $minorVersion, $languageCode, $prefix = '') {
     $libraryData = new stdClass();
 
     $libraries = $this->findEditorLibraries($machineName, $majorVersion, $minorVersion);
@@ -319,15 +320,14 @@ class H5peditor {
     // the editor works.
 
     // Get list of JS and CSS files that belongs to the dependencies
-    $files = $this->h5p->getDependenciesFiles($libraries, $prefix);
+    $files = $this->h5p->getDependenciesFiles($libraries);
     $this->storage->alterLibraryFiles($files, $libraries);
 
     // Restore asset aggregation setting
     $this->h5p->aggregateAssets = $aggregateAssets;
 
-    if ($path) {
-      $path .= '/';
-    }
+    // Create base URL
+    $url = $this->h5p->url . $prefix;
 
     // Javascripts
     if (!empty($files['scripts'])) {
@@ -338,7 +338,7 @@ class H5peditor {
         }
         else {
           // Local file
-          $libraryData->javascript[$this->h5p->url . $script->path . $script->version] = "\n" . $this->h5p->fs->getContent($path . $script->path);
+          $libraryData->javascript[$url . $script->path . $script->version] = "\n" . $this->h5p->fs->getContent($script->path);
         }
       }
     }
@@ -352,8 +352,8 @@ class H5peditor {
         }
         else {
           // Local file
-          H5peditor::buildCssPath(NULL, $this->h5p->url . dirname($css->path) . '/');
-          $libraryData->css[$this->h5p->url . $css->path . $css->version] = preg_replace_callback('/url\([\'"]?(?![a-z]+:|\/+)([^\'")]+)[\'"]?\)/i', 'H5peditor::buildCssPath', $this->h5p->fs->getContent($path . $css->path));
+          H5peditor::buildCssPath(NULL, $url . dirname($css->path) . '/');
+          $libraryData->css[$url . $css->path . $css->version] = preg_replace_callback('/url\([\'"]?(?![a-z]+:|\/+)([^\'")]+)[\'"]?\)/i', 'H5peditor::buildCssPath', $this->h5p->fs->getContent($css->path));
         }
       }
     }
