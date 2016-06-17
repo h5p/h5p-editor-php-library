@@ -36,8 +36,7 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
     // Never deny editing existing content
     // For new content deny old or restricted libs.
     if (this.defaultLibrary === libraryName ||
-       ((library.restricted === undefined || !library.restricted) &&
-         library.isOld !== true
+       ((library.restricted === undefined || !library.restricted)
       )
     ) {
       options += '<option value="' + libraryName + '"';
@@ -47,7 +46,7 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
       if (library.tutorialUrl !== undefined) {
         options += ' data-tutorial-url="' + library.tutorialUrl + '"';
       }
-      options += '>' + library.title + (library.isOld===true ? ' (deprecated)' : '') + '</option>';
+      options += '>' + library.title + (library.isOld===true ? ' (' + libraryName.split(' ')[1] + ')' : '') + '</option>';
     }
   }
 

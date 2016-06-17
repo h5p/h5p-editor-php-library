@@ -36,6 +36,7 @@ H5PEditor.language.core = {
   listLabel: 'List',
   uploadError: 'File Upload Error',
   fileToLarge: 'The file you are trying to upload might be too large.',
+  unknownFileUploadError: 'Unknown file upload error',
   noSemantics: 'Error, could not load the content type form.',
   editImage: 'Edit image',
   saveLabel: 'Save',
