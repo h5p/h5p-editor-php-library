@@ -25,8 +25,9 @@
     content: "\e901";
   }
 
-  .h5p-editing-image-button.hidden {
-    display: none;
+  .h5p-editing-image-button.hidden,
+  .h5p-copyright-button.hidden {
+    display: none !important;
   }
 
   .field.image .file {
