@@ -106,6 +106,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
   var html = ns.createItem(this.field.type, htmlString, this.field.description);
   var $container = ns.$(html).appendTo($wrapper);
   this.$editImage = $container.find('.h5p-editing-image-button');
+  this.$copyrightButton = $container.find('.h5p-copyright-button');
   this.$file = $container.find('.file');
   this.$errors = $container.find('.h5p-errors');
   this.addFile();
@@ -212,6 +213,7 @@ ns.widgets.image.prototype.addFile = function () {
 
     // Remove edit image button
     this.$editImage.addClass('hidden');
+    this.$copyrightButton.addClass('hidden');
     this.isEditing = false;
 
     return false;
@@ -250,6 +252,7 @@ ns.widgets.image.prototype.addFile = function () {
 
   // Uploading original image
   that.$editImage.removeClass('hidden');
+  that.$copyrightButton.removeClass('hidden');
 
   // Notify listeners that image was changed to params
   that.trigger('changedImage', this.params);
