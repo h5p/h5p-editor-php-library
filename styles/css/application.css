@@ -25,19 +25,20 @@
   content: "\e901";
 }
 /* line 28, ../scss/_h5peditor-image-edit.scss */
-.h5peditor .h5p-editing-image-button.hidden {
-  display: none;
+.h5peditor .h5p-editing-image-button.hidden,
+.h5peditor .h5p-copyright-button.hidden {
+  display: none !important;
 }
-/* line 32, ../scss/_h5peditor-image-edit.scss */
+/* line 33, ../scss/_h5peditor-image-edit.scss */
 .h5peditor .field.image .file {
   display: inline-block;
   float: none;
 }
-/* line 38, ../scss/_h5peditor-image-edit.scss */
+/* line 39, ../scss/_h5peditor-image-edit.scss */
 .h5peditor .h5p-editor-image-buttons .h5p-editor-image-buttons {
   display: block;
 }
-/* line 42, ../scss/_h5peditor-image-edit.scss */
+/* line 43, ../scss/_h5peditor-image-edit.scss */
 .h5peditor .h5p-editor-image-buttons .h5p-copyright-button {
   float: none;
   display: inline-block;
