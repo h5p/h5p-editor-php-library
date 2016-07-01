@@ -50,7 +50,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
       try {
         if (result.error) {
-          throw err;
+          throw result.error;
         }
 
         // Set params if none is set
