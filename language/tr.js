@@ -42,5 +42,12 @@ H5PEditor.language.core = {
   saveLabel: 'Kaydet',
   cancelLabel: 'İptal',
   resetToOriginalLabel: 'Özgün biçimine sıfırla',
-  loadingImageEditor: 'Resim düzenleyici yükleniyor, bekleyin ...'
+  loadingImageEditor: 'Resim düzenleyici yükleniyor, bekleyin ...',
+  selectFiletoUpload: 'Select file to upload',
+  or: 'or',
+  enterAudioUrl: 'Enter audio source URL',
+  enterVideoUrl: 'Enter video source URL or YouTube link',
+  addVideoDescription: 'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube links.',
+  insert: 'Insert',
+  cancel: 'Cancel'
 };

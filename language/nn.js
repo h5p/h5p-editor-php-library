@@ -41,5 +41,12 @@ H5PEditor.language.core = {
   saveLabel: 'Lagre',
   cancelLabel: 'Avbryt',
   resetToOriginalLabel: 'Tilbakestill bilde',
-  loadingImageEditor: 'Laster inn bilderedigering, vennligst vent...'
+  loadingImageEditor: 'Laster inn bilderedigering, vennligst vent...',
+  selectFiletoUpload: 'Velg fil som skal lastes opp',
+  or: 'eller',
+  enterAudioUrl: 'Skriv inn nettadresse til lydkilde',
+  enterVideoUrl: 'Skriv inn nettadresse til videokilde eller YouTube-lenke',
+  addVideoDescription: 'H5P støtter alle eksterne videokilder på formatene mp4, webm eller ogv, slik som Vimeo Pro, og har støtte for YouTube-lenker.',
+  insert: 'Sett inn',
+  cancel: 'Avbryt'
 };
