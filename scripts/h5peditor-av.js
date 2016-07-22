@@ -292,7 +292,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   /**
    * HTML for add button.
    *
-   * @returns {String}
+   * @param {string} type 'video' or 'audio'
+   * @returns {string} HTML
    */
   C.createAdd = function (type) {
     var inputPlaceholder = H5PEditor.t('core', type === 'audio' ? 'enterAudioUrl' : 'enterVideoUrl');
