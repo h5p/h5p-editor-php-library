@@ -44,7 +44,7 @@ class H5peditor {
    * @param string $filesDir H5P files directory.
    * @param string $editorFilesDir Optional custom editor files directory outside h5p files directory.
    */
-  function __construct($h5p, $storage, $basePath, $filesDir, $editorFilesDir = NULL, $relativePathRegExp = '/^(\.\.\/){1,2}(\d+|editor)\/(.+)$/') {
+  function __construct($h5p, $storage, $basePath, $filesDir, $editorFilesDir = NULL, $relativePathRegExp = '/^(\.\.\/){1,2}(.*content\/)?(\d+|editor)\/(.+)$/') {
     $this->h5p = $h5p;
     $this->storage = $storage;
     $this->basePath = $basePath;
@@ -268,12 +268,12 @@ class H5peditor {
     $matches = array();
     if (preg_match($this->relativePathRegExp, $params->path, $matches)) {
       // Create copy of file
-      $source = $this->content_directory . $params->path;
-      $destination = $this->content_directory . $matches[3];
+      $source = $this->content_directory . '../' . $matches[3] . '/' . $matches[4];
+      $destination = $this->content_directory . $matches[4];
       if (file_exists($source) && !file_exists($destination)) {
         copy($source, $destination);
       }
-      $params->path = $matches[3];
+      $params->path = $matches[4];
     }
     else {
       // Check if tmp file
