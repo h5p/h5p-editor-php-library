@@ -33,7 +33,8 @@ class H5peditor {
     'scripts/h5peditor-none.js',
     'ckeditor/ckeditor.js',
   );
-  private $h5p, $storage, $relativePathRegExp;
+
+  private $h5p, $storage;
 
   /**
    * Constructor for the core editor library.
@@ -44,10 +45,9 @@ class H5peditor {
    * Optional custom regexp for detecting usage of files that's in another
    * content folder or the editor's tmp directory
    */
-  function __construct($h5p, $storage, $relativePathRegExp = '/^(\.\.\/){1,2}(\d+|editor)\/(.+)$/') {
+  function __construct($h5p, $storage) {
     $this->h5p = $h5p;
     $this->storage = $storage;
-    $this->relativePathRegExp = $relativePathRegExp;
   }
 
   /**
@@ -227,13 +227,13 @@ class H5peditor {
   private function processFile(&$params, &$files) {
     // File could be copied from another content folder.
     $matches = array();
-    if (preg_match($this->relativePathRegExp, $params->path, $matches)) {
+    if (preg_match($this->h5p->relativePathRegExp, $params->path, $matches)) {
 
       // Create a copy of the file
-      $this->h5p->fs->cloneContentFile($matches[3], $matches[2], $this->contentId);
+      $this->h5p->fs->cloneContentFile($matches[5], $matches[4], $this->contentId);
 
       // Update Params with correct filename
-      $params->path = $matches[3];
+      $params->path = $matches[5];
     }
     else {
       // Check if file exists in content folder
