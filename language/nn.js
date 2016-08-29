@@ -6,7 +6,6 @@ H5PEditor.language.core = {
   notImageField: '":path" er ikkje eit bilete.',
   notImageOrDimensionsField: '":path" er korkje eit bilete- eller dimensjonsfelt.',
   requiredProperty: '":property" er påkravd og må ha ein verdi.',
-  requiredPropertyWysiwyg: ':fieldName er påkravd',
   onlyNumbers: '":property" kan berre innhalde tal.',
   exceedsMax: '":property" overstig maksverdien på :max.',
   belowMin: '":property" er mindre enn minimumsverdien på :min.',

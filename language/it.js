@@ -6,7 +6,6 @@ H5PEditor.language.core = {
   notImageField: ":path non è un'immagine.",
   notImageOrDimensionsField: ":path non è un'immagine o dimensioni campo.",
   requiredProperty: ":property è richiesta e deve avere un valore.",
-  requiredPropertyWysiwyg: ':fieldName is required',
   onlyNumbers: "Il valore di :property può contenere solo numeri.",
   exceedsMax: "Il valore di :property eccede il massimo di :max.",
   belowMin: "Il valore di :property eccede il minimo di :min.",

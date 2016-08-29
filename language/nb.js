@@ -6,7 +6,6 @@ H5PEditor.language.core = {
   notImageField: '":path" er ikke et bilde.',
   notImageOrDimensionsField: '":path" er verken et bilde- eller dimensjonsfelt.',
   requiredProperty: '":property" er påkrevd og må ha en verdi.',
-  requiredPropertyWysiwyg: ':fieldName er påkrevd',
   onlyNumbers: '":property" kan bare innholde tall.',
   exceedsMax: '":property" overstiger maksverdien på :max.',
   belowMin: '":property" er mindre enn minimumsverdien på :min.',
