@@ -245,9 +245,37 @@ H5PEditor.ListEditor = (function ($) {
       // Append item to list
       $item.appendTo($list);
 
-      // Good UX: automatically expand groups if not explicitly disabled by semantics
       if (item instanceof H5PEditor.Group) {
+        // Good UX: automatically expand groups if not explicitly disabled by semantics
         item.expand();
+
+        var childWidget = ns.getWidgetName(item.children[0].field);
+
+        if (childWidget === 'html') {
+          // Change label to reflect content of listgroup
+          if (item.params.text && item.params.text !== undefined) {
+            var itemLabel = item.field.label;
+
+            setListgroupTitle(itemLabel, $(item.params.text).text())
+
+            item.children[0].$input.change(function (e) {
+              // TODO: Get text from CKEditor. The `innerText` of target
+              //       doesn't actually change at first.
+              setListgroupTitle(itemLabel, e.target.innerText);
+            });
+          }
+        }
+      }
+
+      /**
+       * Add text to the listgroups title element.
+       *
+       * @private
+       * @param {string} label
+       * @param {string} text
+       */
+      function setListgroupTitle(label, text) {
+        $titleBar.children('.title').html(label + ': ' + text);
       }
     };
 
