@@ -21,6 +21,7 @@ H5PEditor.ListEditor = (function ($) {
 
     // Create add button
     var $button = $('<button/>', {
+      class: list.getImportance(),
       text: H5PEditor.t('core', 'addEntity', {':entity': entity})
     }).click(function () {
       list.addItem();
@@ -215,6 +216,7 @@ H5PEditor.ListEditor = (function ($) {
         // Append to item
         item.appendTo($item);
         $item.addClass('listgroup');
+        $titleBar.addClass(list.getImportance());
 
         // Move label
         $item.children('.field').children('.title').appendTo($titleBar).addClass('h5peditor-label');

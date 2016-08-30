@@ -394,6 +394,28 @@ ns.createError = function (message) {
 };
 
 /**
+ * Turn a numbered importance into a string.
+ *
+ * @param {Number} importance
+ * @returns {String}
+ */
+ns.createImportance = function (importance) {
+  if (importance === 1) {
+    return 'very-important';
+  }
+  else if (importance === 2) {
+    return 'important';
+  }
+  else if (importance === 3) {
+    return 'less-important';
+  }
+  else {
+    return '';
+  }
+};
+
+
+/**
  * Create HTML wrapper for field items.
  *
  * @param {String} type
