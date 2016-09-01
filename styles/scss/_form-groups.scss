@@ -1,0 +1,301 @@
+%title-bar {
+  height: $form-item-height-normal;
+  background: $form-item-background-color;
+  box-sizing: border-box;
+  border: 1px solid $form-border-color;
+  line-height: $form-item-height-normal;
+  overflow: hidden;
+}
+
+%title-bar-very-important {
+  background: $form-item-very-important-color;
+  border: 1px solid $form-item-very-important-border-color;
+  height: $form-item-height-large;
+}
+
+%title-bar-text-very-important {
+  font-size: $font-size-large;
+  font-weight: 600;
+  color: $white-color;
+  line-height: $form-item-height-large;
+  // Fix white text on dark background blockiness
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+%title-bar-important {
+  background: $form-item-important-color;
+  border: 1px solid $form-item-important-border-color;
+  height: $form-item-height-normal;
+}
+
+%title-bar-text-important {
+  font-size: $font-size-normal;
+  font-weight: 600;
+  color: $white-color;
+  line-height: $form-item-height-normal;
+  // Fix white text on dark background blockiness
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.group {
+  border: none;
+
+  & > .title {
+    @extend %title-bar;
+    padding: 0 $min-padding;
+    outline: none;
+    cursor: pointer;
+
+    &:first-letter {
+      text-transform: uppercase;
+    }
+  }
+
+  & > .content {
+    display: none;
+    margin: 0;
+    padding: $padding;
+    border: 1px solid $form-border-color;
+    border-top: none;
+    background: $form-content-background-color;
+  }
+
+  &.very-important > .title {
+    @extend %title-bar-very-important;
+    @extend %title-bar-text-very-important;
+
+    &:before {
+      color: $white-color;
+    }
+  }
+
+  &.important > .title {
+    @extend %title-bar-important;
+    @extend %title-bar-text-important;
+
+    &:before {
+      color: $white-color;
+    }
+  }
+}
+
+.list-item-title-bar {
+  @extend %title-bar;
+
+  .remove, .order {
+    cursor: pointer;
+    width: 1.25em;
+    line-height: $form-item-height-normal - 2;
+    float: right;
+    font-size: 1.75em;
+    overflow: hidden;
+
+    &:hover {
+      opacity: 1;
+      text-decoration: none;
+    }
+  }
+
+  .remove:after {
+    font-family: $i;
+    content: "\e890";
+    color: #666;
+    display: inline-block;
+    line-height: $form-item-height-normal - 2;
+  }
+
+  .remove:hover:after {
+    color: #c33f62;
+  }
+
+  .order {
+    float: left;
+    width: 0.6875em;
+    text-indent: -0.0625em;
+    cursor: move;
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+
+    &:after {
+      font-family: $i;
+      content: "\e600";
+      color: #ccc;
+      display: inline-block;
+      line-height: $form-item-height-normal - 2;
+    }
+
+    &:hover:after {
+      color: #027AC6;
+    }
+  }
+
+  & > .h5peditor-label {
+    margin: 0 1.5em;
+    padding: 0;
+    white-space: nowrap;
+    font-weight: normal;
+    line-height: $form-item-height-normal - 2;
+    outline: none;
+    text-overflow: ellipsis;
+  }
+
+  &.very-important {
+    background: #3579C6;
+    border: 1px solid #2074B0;
+    height: 50px;
+
+    & > .title {
+      border: none;
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 50px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .remove,
+    .order {
+      line-height: 50px;
+      font-size: 40px;
+
+      &:after {
+        line-height: 50px;
+      }
+    }
+    .order:after {
+      color: #205C92;
+    }
+    .order:hover:after {
+      color: #163E62;
+    }
+    .remove:after {
+      color: #C9DDf0;
+    }
+    .remove:hover:after {
+      color: white;
+    }
+  }
+}
+.group.expanded,
+.listgroup.expanded {
+  & > .content {
+    display: block;
+  }
+}
+
+  .listgroup > .list-item-title-bar > .h5peditor-label {
+    cursor: pointer;
+  }
+  .listgroup > .list-item-title-bar > .h5peditor-label:before,
+  .group > .title:before  {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    width: 13px;
+    height: 13px;
+    margin: 0 6px 2px 2px;
+    background: inline-image("expand.png") no-repeat;
+    opacity: 0.8;
+  }
+  .listgroup.expanded > .list-item-title-bar > .h5peditor-label:before,
+  .expanded > .title:before {
+    background-image: inline-image("collapse.png");
+  }
+  .listgroup > .list-item-title-bar > .h5peditor-label:hover:before,
+  .listgroup > .list-item-title-bar > .h5peditor-label:focus:before,
+  .group > .title:hover:before,
+  .group > .title:focus:before {
+    opacity: 1;
+  }
+  .listgroup > .list-item-title-bar > .h5peditor-label:active:before,
+  .group > .title:active:before {
+    opacity: 0.5;
+  }
+  .listgroup > .group.field {
+    margin: 0;
+    padding: 0;
+  }
+  .content {
+    display: none;
+    margin: 0;
+    padding: $padding;
+    border: 1px solid $form-border-color;
+    border-top: none;
+    background: $form-content-background-color;
+  }
+
+.common {
+  margin-top: $min-padding;
+
+  & > .h5peditor-label {
+    @extend %title-bar;
+    padding: 0 $min-padding;
+    font-weight: 400;
+    cursor: pointer;
+
+    & > .icon {
+      display: inline-block;
+      background: inline-image("collapse.png") no-repeat left center;
+      opacity: 0.8;
+      vertical-align: middle;
+      width: 13px;
+      height: 13px;
+      margin: 0 6px 2px 2px;
+    }
+    &:hover > .icon {
+      opacity: 1;
+    }
+  }
+  & > .fields {
+    min-height: 2em;
+    padding: $padding;
+    border: 1px solid $form-border-color;
+    border-top: none;
+    background: $form-content-background-color;
+
+    & > .desc {
+      margin: 0;
+      font-size: 0.875em;
+      color: #666;
+    }
+
+    p:first-child {
+      margin-bottom: $padding;
+    }
+  }
+
+  &.collapsed {
+    & > .h5peditor-label > .icon {
+      background-image: inline-image("expand.png");
+    }
+    & > .fields {
+      display: none;
+    }
+  }
+
+  &.hidden {
+    display: none;
+  }
+}
+
+//****************************************************************************
+// IMPORTANCE SELECTORS
+//****************************************************************************
+.listgroup {
+  border: none;
+}
+
+.group .group,
+.common .group {
+  & > .title {
+    background: $form-background-color;
+  }
+
+  & > .content {
+    background: $form-background-color;
+  }
+}
