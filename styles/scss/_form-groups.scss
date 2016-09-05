@@ -313,4 +313,14 @@
   & > .content {
     background: $form-background-color;
   }
+
+  .group {
+    & > .title {
+      background: $form-content-background-color;
+    }
+
+    & > .content {
+      background: $form-content-background-color;
+    }
+  }
 }
