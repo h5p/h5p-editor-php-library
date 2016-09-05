@@ -260,9 +260,10 @@ H5PEditor.ListEditor = (function ($) {
           }
 
           item.children[0].$input.change(function (e) {
-            // TODO: Get text from CKEditor. The `innerText` of target
-            //       doesn't actually change at first.
-            setListgroupTitle(itemLabel, e.target.innerText);
+            setListgroupTitle(
+              itemLabel,
+              $('<p>').html(item.children[0].value).text()
+            );
           });
         }
       }
