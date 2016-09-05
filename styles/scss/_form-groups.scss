@@ -233,6 +233,7 @@
 
   & > .h5peditor-label {
     @extend %title-bar;
+    margin: 0;
     padding: 0 $min-padding;
     font-weight: 400;
     cursor: pointer;
