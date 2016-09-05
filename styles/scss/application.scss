@@ -144,12 +144,27 @@ a {
       @include button-background(
         $form-item-very-important-color,
         $form-item-very-important-highlight-color);
-      border: 1px solid #2074B0;
+      border: 1px solid $form-item-very-important-border-color;
       text-transform: uppercase;
       font-size: $font-size-large;
       font-weight: 600;
       color: white;
       height: $form-item-height-large;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    &.important {
+      @include border-radius(3px);
+      @include button-background(
+        $form-item-important-color,
+        $form-item-important-highlight-color);
+      border: 1px solid $form-item-important-border-color;
+      text-transform: uppercase;
+      font-size: $font-size-normal;
+      font-weight: 600;
+      color: white;
+      height: $form-item-height-normal;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
