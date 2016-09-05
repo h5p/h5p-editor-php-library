@@ -187,46 +187,46 @@
   }
 }
 
-  .listgroup > .list-item-title-bar > .h5peditor-label {
-    cursor: pointer;
-  }
-  .listgroup > .list-item-title-bar > .h5peditor-label:before,
-  .group > .title:before  {
-    content: "";
-    display: inline-block;
-    vertical-align: middle;
-    width: 13px;
-    height: 13px;
-    margin: 0 6px 2px 2px;
-    background: inline-image("expand.png") no-repeat;
-    opacity: 0.8;
-  }
-  .listgroup.expanded > .list-item-title-bar > .h5peditor-label:before,
-  .expanded > .title:before {
-    background-image: inline-image("collapse.png");
-  }
-  .listgroup > .list-item-title-bar > .h5peditor-label:hover:before,
-  .listgroup > .list-item-title-bar > .h5peditor-label:focus:before,
-  .group > .title:hover:before,
-  .group > .title:focus:before {
-    opacity: 1;
-  }
-  .listgroup > .list-item-title-bar > .h5peditor-label:active:before,
-  .group > .title:active:before {
-    opacity: 0.5;
-  }
-  .listgroup > .group.field {
-    margin: 0;
-    padding: 0;
-  }
-  .content {
-    display: none;
-    margin: 0;
-    padding: $padding;
-    border: 1px solid $form-border-color;
-    border-top: none;
-    background: $form-content-background-color;
-  }
+.listgroup > .list-item-title-bar > .h5peditor-label {
+  cursor: pointer;
+}
+.listgroup > .list-item-title-bar > .h5peditor-label:before,
+.group > .title:before  {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  width: 13px;
+  height: 13px;
+  margin: 0 6px 2px 2px;
+  background: inline-image("expand.png") no-repeat;
+  opacity: 0.8;
+}
+.listgroup.expanded > .list-item-title-bar > .h5peditor-label:before,
+.expanded > .title:before {
+  background-image: inline-image("collapse.png");
+}
+.listgroup > .list-item-title-bar > .h5peditor-label:hover:before,
+.listgroup > .list-item-title-bar > .h5peditor-label:focus:before,
+.group > .title:hover:before,
+.group > .title:focus:before {
+  opacity: 1;
+}
+.listgroup > .list-item-title-bar > .h5peditor-label:active:before,
+.group > .title:active:before {
+  opacity: 0.5;
+}
+.listgroup > .group.field {
+  margin: 0;
+  padding: 0;
+}
+.content {
+  display: none;
+  margin: 0;
+  padding: $padding;
+  border: 1px solid $form-border-color;
+  border-top: none;
+  background: $form-content-background-color;
+}
 
 .common {
   margin-top: $min-padding;
@@ -283,9 +283,6 @@
   }
 }
 
-//****************************************************************************
-// IMPORTANCE SELECTORS
-//****************************************************************************
 .listgroup {
   border: none;
 }
