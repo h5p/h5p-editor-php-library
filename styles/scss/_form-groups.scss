@@ -1,9 +1,5 @@
-%title-bar {
-  height: $form-item-height-normal;
-  background: $form-item-background-color;
+%title-bar-base {
   box-sizing: border-box;
-  border: 1px solid $form-border-color;
-  line-height: $form-item-height-normal;
   overflow: hidden;
 }
 
@@ -39,11 +35,26 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+%title-bar-less-important {
+  background: $form-item-background-color;
+  height: $form-item-height-normal;
+  border: 1px solid $form-border-color;
+}
+
+%title-bar-text-less-important {
+  font-size: $font-size-normal;
+  font-weight: 400;
+  color: $font-color;
+  line-height: $form-item-height-normal;
+}
+
 .group {
   border: none;
 
   & > .title {
-    @extend %title-bar;
+    @extend %title-bar-base;
+    @extend %title-bar-less-important;
+    @extend %title-bar-text-less-important;
     padding: 0 $min-padding;
     outline: none;
     cursor: pointer;
@@ -82,7 +93,9 @@
 }
 
 .list-item-title-bar {
-  @extend %title-bar;
+  @extend %title-bar-base;
+  @extend %title-bar-less-important;
+  @extend %title-bar-text-less-important;
 
   .remove, .order {
     cursor: pointer;
@@ -232,7 +245,9 @@
   margin-top: $min-padding;
 
   & > .h5peditor-label {
-    @extend %title-bar;
+    @extend %title-bar-base;
+    @extend %title-bar-less-important;
+    @extend %title-bar-text-less-important;
     margin: 0;
     padding: 0 $min-padding;
     font-weight: 400;
