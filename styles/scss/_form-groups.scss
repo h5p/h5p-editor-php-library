@@ -156,27 +156,20 @@
   }
 
   &.very-important {
-    background: #3579C6;
-    border: 1px solid #2074B0;
-    height: 50px;
+    @extend %title-bar-very-important;
 
     & > .title {
+      @extend %title-bar-text-very-important;
       border: none;
-      color: white;
-      font-size: 18px;
-      font-weight: 600;
-      line-height: 50px;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
     }
 
     .remove,
     .order {
-      line-height: 50px;
+      line-height: $form-item-height-large;
       font-size: 40px;
 
       &:after {
-        line-height: 50px;
+        line-height: $form-item-height-large;
       }
     }
     .order:after {
@@ -190,6 +183,15 @@
     }
     .remove:hover:after {
       color: white;
+    }
+  }
+
+  &.important {
+    @extend %title-bar-important;
+
+    & > .title {
+      @extend %title-bar-text-important;
+      border: none;
     }
   }
 }
