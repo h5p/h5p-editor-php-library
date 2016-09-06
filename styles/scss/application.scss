@@ -17,7 +17,7 @@ $i: 'H5P';
 html, body {
   margin: 0;
   padding: 0;
-  color: $font-color;
+  color: $text-color;
   font-family: $font-family;
   max-width: 960px;
   position: relative;
@@ -88,7 +88,7 @@ a {
   textarea:focus,
   .h5peditor-text:focus {
     outline: none;
-    background-color: #fff;
+    background-color: $white;
     border-color: #53a0ff;
   }
   .moving .order {
@@ -108,7 +108,7 @@ a {
 
       &.placeholder {
         box-sizing: border-box;
-        background: $white-color;
+        background: $white;
         border: 1px solid $form-border-color;
       }
 
@@ -120,8 +120,8 @@ a {
   input[type="button"], button {
     @include border-radius(3px);
     @include button-background(
-      $form-item-background-color,
-      $form-item-background-highlight-color);
+      $form-item-background,
+      $form-item-background-highlight);
     width: auto;
     margin: $min-padding 0 0 0;
     padding: 0 $padding;
@@ -131,58 +131,58 @@ a {
     font-size: $font-size-normal;
     font-family: $font-family;
     line-height: $form-item-height-normal;
-    color: $font-color;
+    color: $text-color;
     cursor: pointer;
 
     &:hover {
       @include button-background(
-        $form-item-background-hover-color,
-        $form-item-background-hover-highlight-color);
-      border-color: $form-item-background-hover-color;
+        $form-item-background-hover,
+        $form-item-background-hover-highlight);
+      border-color: $form-item-background-hover;
       text-decoration: none;
     }
 
     &.very-important {
       @include border-radius(3px);
       @include button-background(
-        $form-item-very-important-color,
-        $form-item-very-important-highlight-color);
+        $form-item-very-important-background,
+        $form-item-very-important-background-highlight);
       border: 1px solid $form-item-very-important-border-color;
       text-transform: uppercase;
       font-size: $font-size-large;
       font-weight: 600;
-      color: white;
+      color: $white;
       height: $form-item-height-large;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
 
       &:hover {
         @include button-background(
-          $form-item-very-important-hover-color,
-          $form-item-very-important-hover-highlight-color);
-        border-color: $form-item-very-important-hover-color;
+          $form-item-very-important-background-hover,
+          $form-item-very-important-background-hover-highlight);
+        border-color: $form-item-very-important-background-hover;
       }
     }
 
     &.important {
       @include border-radius(3px);
       @include button-background(
-        $form-item-important-color,
-        $form-item-important-highlight-color);
+        $form-item-important-background,
+        $form-item-important-background-highlight);
       border: 1px solid $form-item-important-border-color;
       text-transform: uppercase;
       font-size: $font-size-normal;
       font-weight: 600;
-      color: white;
+      color: $white;
       height: $form-item-height-normal;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
 
       &:hover {
         @include button-background(
-          $form-item-important-hover-color,
-          $form-item-important-hover-highlight-color);
-        border-color: $form-item-important-hover-color;
+          $form-item-important-background-hover,
+          $form-item-important-background-hover-highlight);
+        border-color: $form-item-important-background-hover;
       }
     }
   }
@@ -572,7 +572,7 @@ a {
 .h5peditor-form {
   position: relative;
   padding: 10px;
-  background: $form-background-color;
+  background: $form-background;
   border: 1px solid $form-border-color;
 }
 

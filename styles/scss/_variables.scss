@@ -1,8 +1,8 @@
 // General editor
-$black-color: #454347;
-$white-color: #fff;
+$black: #454347;
+$white: #FFFFFF;
 
-$font-color: $black-color;
+$text-color: $black;
 
 $font-family: 'Open Sans', sans-serif;
 
@@ -16,32 +16,30 @@ $min-padding: 10px;
 $padding: 20px;
 
 // Form
-$form-background-color: #fbfbfb;
-$form-border-color: #d0d0d1;
-$form-content-background-color: $white-color;
+$form-background: #FBFBFB;
+$form-border-color: #D0D0D1;
+$form-content-background: $white;
 
-$form-input-color: $white-color;
+$form-input-color: $white;
 $form-input-placeholder-color: #858585;
 $form-input-box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.12);
 
-$form-item-background-color: #ECECED;
-$form-item-background-highlight-color: #F3F3F3;
-$form-item-background-hover-color: #DAD9DA;
-$form-item-background-hover-highlight-color: #DEDDDE;
+$form-item-background: #ECECED;
+$form-item-background-highlight: #F3F3F3;
+$form-item-background-hover: #DAD9DA;
+$form-item-background-hover-highlight: #DEDDDE;
 
-$form-content-background-color: $white-color;
-
-$form-item-very-important-color: #2579C6;
-$form-item-very-important-highlight-color: #3B87CC;
+$form-item-very-important-background: #2579C6;
+$form-item-very-important-background-highlight: #3B87CC;
 $form-item-very-important-border-color: #2074B0;
-$form-item-very-important-hover-color: #195286;
-$form-item-very-important-hover-highlight-color: #306492;
+$form-item-very-important-background-hover: #195286;
+$form-item-very-important-background-hover-highlight: #306492;
 
-$form-item-important-color: #868587;
-$form-item-important-highlight-color: #929193;
+$form-item-important-background: #868587;
+$form-item-important-background-highlight: #929193;
 $form-item-important-border-color: #7D7B7E;
-$form-item-important-hover-color: #585659;
-$form-item-important-hover-highlight-color: #69676A;
+$form-item-important-background-hover: #585659;
+$form-item-important-background-hover-highlight: #69676A;
 
 $form-item-height-large: 50px;
 $form-item-height-normal: 40px;
