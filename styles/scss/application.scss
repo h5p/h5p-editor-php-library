@@ -134,12 +134,20 @@ a {
     color: $text-color;
     cursor: pointer;
 
-    &:hover {
+    &[disabled] {
+      opacity: 0.5;
+    }
+
+    &:hover:not([disabled]) {
       @include button-background(
         $form-item-background-hover,
         $form-item-background-hover-highlight);
       border-color: $form-item-background-hover;
       text-decoration: none;
+    }
+
+    &:hover[disabled] {
+      cursor: not-allowed;
     }
 
     &.very-important {
@@ -156,7 +164,7 @@ a {
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
 
-      &:hover {
+      &:hover:not([disabled]) {
         @include button-background(
           $form-item-very-important-background-hover,
           $form-item-very-important-background-hover-highlight);
@@ -178,7 +186,7 @@ a {
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
 
-      &:hover {
+      &:hover:not([disabled]) {
         @include button-background(
           $form-item-important-background-hover,
           $form-item-important-background-hover-highlight);
