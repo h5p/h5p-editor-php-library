@@ -24,18 +24,24 @@ $form-input-color: $white-color;
 $form-input-placeholder-color: #858585;
 $form-input-box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.12);
 
-$form-item-background-color: #ececed;
-$form-item-background-highlight-color: #f3f3f3;
+$form-item-background-color: #ECECED;
+$form-item-background-highlight-color: #F3F3F3;
+$form-item-background-hover-color: #DAD9DA;
+$form-item-background-hover-highlight-color: #DEDDDE;
 
 $form-content-background-color: $white-color;
 
 $form-item-very-important-color: #2579C6;
 $form-item-very-important-highlight-color: #3B87CC;
 $form-item-very-important-border-color: #2074B0;
+$form-item-very-important-hover-color: #195286;
+$form-item-very-important-hover-highlight-color: #306492;
 
 $form-item-important-color: #868587;
 $form-item-important-highlight-color: #929193;
-$form-item-important-border-color: #7d7b7e;
+$form-item-important-border-color: #7D7B7E;
+$form-item-important-hover-color: #585659;
+$form-item-important-hover-highlight-color: #69676A;
 
 $form-item-height-large: 50px;
 $form-item-height-normal: 40px;

@@ -135,8 +135,11 @@ a {
     cursor: pointer;
 
     &:hover {
+      @include button-background(
+        $form-item-background-hover-color,
+        $form-item-background-hover-highlight-color);
+      border-color: $form-item-background-hover-color;
       text-decoration: none;
-      border-color: #999;
     }
 
     &.very-important {
@@ -152,6 +155,13 @@ a {
       height: $form-item-height-large;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+
+      &:hover {
+        @include button-background(
+          $form-item-very-important-hover-color,
+          $form-item-very-important-hover-highlight-color);
+        border-color: $form-item-very-important-hover-color;
+      }
     }
 
     &.important {
@@ -167,6 +177,13 @@ a {
       height: $form-item-height-normal;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+
+      &:hover {
+        @include button-background(
+          $form-item-important-hover-color,
+          $form-item-important-hover-highlight-color);
+        border-color: $form-item-important-hover-color;
+      }
     }
   }
   .dimensions input, .coordinates input, .number input {
