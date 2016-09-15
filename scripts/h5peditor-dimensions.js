@@ -136,7 +136,7 @@ ns.Dimensions.prototype.validate = function () {
   this.$inputs.each(function (i) {
     var $input = ns.$(this);
     var value = H5P.trim($input.val());
-    var property = i ? 'height' : 'width';
+    var property = ns.t('core', i ? 'height' : 'width');
 
     if ((that.field.optional === undefined || !that.field.optional) && !value.length) {
       that.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': property})));

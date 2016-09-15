@@ -71,7 +71,7 @@ H5PEditor.widgets.select = H5PEditor.Select = (function (E) {
 
     if (this.field.optional !== true && value === undefined) {
       // Not optional and no value selected, print required error
-      this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': 'text field'})));
+      this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': ns.t('core', 'textField')})));
 
       return false;
     }

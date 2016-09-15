@@ -6,7 +6,6 @@ H5PEditor.language.core = {
   notImageField: '":path" er ikkje eit bilete.',
   notImageOrDimensionsField: '":path" er korkje eit bilete- eller dimensjonsfelt.',
   requiredProperty: '":property" er påkravd og må ha ein verdi.',
-  requiredPropertyWysiwyg: ':fieldName er påkravd',
   onlyNumbers: '":property" kan berre innhalde tal.',
   exceedsMax: '":property" overstig maksverdien på :max.',
   belowMin: '":property" er mindre enn minimumsverdien på :min.',
@@ -49,5 +48,9 @@ H5PEditor.language.core = {
   enterVideoUrl: 'Skriv inn nettadresse til videokilde eller YouTube-lenke',
   addVideoDescription: 'H5P støtter alle eksterne videokilder på formatene mp4, webm eller ogv, slik som Vimeo Pro, og har støtte for YouTube-lenker.',
   insert: 'Sett inn',
-  cancel: 'Avbryt'
+  cancel: 'Avbryt',
+  height: 'Høyde',
+  width: 'Bredde',
+  textField: 'Tekstfelt',
+  numberField: 'Nummerfelt'
 };

@@ -6,7 +6,6 @@ H5PEditor.language.core = {
   notImageField: '":path" n est pas une image.',
   notImageOrDimensionsField: '":path" n est pas une image ou aux bonnes dimensions.',
   requiredProperty: 'La :property doit être renseignée.',
-  requiredPropertyWysiwyg: ':fieldName is required',
   onlyNumbers: 'La :property ne peut contenir que des nombres.',
   exceedsMax: 'La :property dépasse le maximum de :max.',
   belowMin: 'La :property dépasse le minimum de :min.',
@@ -49,5 +48,9 @@ H5PEditor.language.core = {
   enterVideoUrl: 'Enter video source URL or YouTube link',
   addVideoDescription: 'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube links.',
   insert: 'Insert',
-  cancel: 'Cancel'
+  cancel: 'Cancel',
+  height: 'height',
+  width: 'width',
+  textField: 'text field',
+  numberField: 'number field'
 };

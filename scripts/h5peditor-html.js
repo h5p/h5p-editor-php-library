@@ -458,7 +458,7 @@ ns.Html.prototype.validate = function () {
   if (!this.field.optional && !textValue.length) {
     // We can accept empty text, if there's an image instead.
     if (! (this.inTags("img") && $value.find('img').length > 0)) {
-      this.$errors.append(ns.createError(ns.t('core', 'requiredPropertyWysiwyg', {':fieldName': '<em>' + this.field.label + '</em>'})));
+      this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': ns.t('core', 'textField')})));
     }
   }
 
