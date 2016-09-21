@@ -38,13 +38,19 @@ H5PEditor.widgets.select = H5PEditor.Select = (function (E) {
     });
   };
 
+  C.prototype.isOptional = function () {
+    return (this.field.optional === true);
+  };
+
   /**
    * Generate HTML for the widget.
    *
    * @returns {String} HTML.
    */
   C.prototype.createHtml = function () {
-    var options = E.createOption('-', '-');
+    if (this.isOptional() || this.field.default === undefined) {
+      var options = E.createOption('-', '-');
+    }
     for (var i = 0; i < this.field.options.length; i++) {
       var option = this.field.options[i];
       options += E.createOption(option.value, option.label, option.value === this.value);
