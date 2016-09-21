@@ -118,7 +118,7 @@ ns.Dimensions.prototype.appendTo = function ($wrapper) {
  * Create HTML for the field.
  */
 ns.Dimensions.prototype.createHtml = function () {
-  var input = ns.createText(this.params !== undefined ? this.params.width : undefined, 15, 'Width') + ' x ' + ns.createText(this.params !== undefined ? this.params.height : undefined, 15, 'Height');
+  var input = ns.createText(this.params !== undefined ? this.params.width : undefined, 15, ns.t('core', 'width')) + ' x ' + ns.createText(this.params !== undefined ? this.params.height : undefined, 15, ns.t('core', 'height'));
   var label = ns.createLabel(this.field, input);
 
   return ns.createItem(this.field.widget, label, this.field.description, this.field.description);
@@ -136,7 +136,7 @@ ns.Dimensions.prototype.validate = function () {
   this.$inputs.each(function (i) {
     var $input = ns.$(this);
     var value = H5P.trim($input.val());
-    var property = i ? 'height' : 'width';
+    var property = ns.t('core', i ? 'height' : 'width');
 
     if ((that.field.optional === undefined || !that.field.optional) && !value.length) {
       that.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': property})));
