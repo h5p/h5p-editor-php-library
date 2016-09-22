@@ -27,7 +27,7 @@ ns.Text.prototype.appendTo = function ($wrapper) {
   var that = this;
 
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
-  this.$input = this.$item.children('label').children('input');
+  this.$input = this.$item.find('input');
   this.$errors = this.$item.children('.h5p-errors');
 
   this.$input.change(function () {
