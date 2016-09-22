@@ -15,7 +15,7 @@
 $i: 'H5P';
 
 html, body {
-  margin: 0;
+  margin: 0;;;
   padding: 0;
   color: $text-color;
   font-family: $font-family;
@@ -114,6 +114,14 @@ a {
 
       &:hover {
         text-decoration: none;
+      }
+
+      &:nth-child(2).moving {
+        margin-top: 0;
+      }
+
+      &:nth-last-child(2).placeholder {
+        margin-bottom: 0;
       }
     }
   }
