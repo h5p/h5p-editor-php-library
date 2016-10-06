@@ -737,6 +737,11 @@ a {
       display: inline-block;
     }
   }
+
+  .h5p-li > .content > .library {
+    border: 0;
+    padding: 0;
+  }
 }
 
 .h5peditor-field-description,
