@@ -277,11 +277,7 @@ H5PEditor.ListEditor = (function ($) {
        */
       function setListgroupTitle(label, text) {
         if (text !== undefined && text !== '') {
-          $titleBar.children('.title').html(
-            label +
-            ': ' +
-            (text.length > 48 ? text.substr(0, 45) + '...' : text)
-          );
+          $titleBar.children('.title').html(label + ': ' + text);
         }
         else {
           $titleBar.children('.title').html(label);
