@@ -249,22 +249,31 @@ H5PEditor.ListEditor = (function ($) {
         // Good UX: automatically expand groups if not explicitly disabled by semantics
         item.expand();
 
-        var childWidget = ns.getWidgetName(item.children[0].field);
+        var firstChild = item.children[0];
+        var secondChild = item.children[1];
+        var firstWidget = ns.getWidgetName(firstChild.field);
+        var secondWidget = ns.getWidgetName(secondChild.field);
+        var itemLabel = item.field.label;
 
-        if (childWidget === 'html') {
-          var itemLabel = item.field.label;
-
+        if (firstWidget === 'html' || firstWidget === 'text') {
           // Change label to reflect content of listgroup
-          if (item.params.text && item.params.text !== undefined) {
-            setListgroupTitle(itemLabel, $(item.params.text).text())
-          }
+          setListgroupTitle(itemLabel, $('<p>').html(firstChild.value).text());
 
-          item.children[0].$input.change(function (e) {
-            setListgroupTitle(
-              itemLabel,
-              $('<p>').html(item.children[0].value).text()
-            );
+          // Update label when description has changed
+          firstChild.$input.change(function () {
+            setListgroupTitle(itemLabel, $('<p>').html(firstChild.value).text());
           });
+        }
+        else if (firstWidget === 'image') {
+          if (secondWidget === 'text') {
+            // Change label to reflect content of listgroup
+            setListgroupTitle(itemLabel, $('<p>').html(secondChild.value).text());
+
+            // Update label when description has changed
+            secondChild.$input.change(function () {
+              setListgroupTitle(itemLabel, $('<p>').html(secondChild.value).text());
+            });
+          }
         }
       }
 
