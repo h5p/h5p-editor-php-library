@@ -746,8 +746,11 @@ a {
 
 .h5peditor-field-description,
 .h5p-help-text {
-  font-size: 10px;
-  color: #555555;
+  font-size: 12px;
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: #666;
+  line-height: 15px;
 }
 
 .h5peditor-form {
