@@ -26,8 +26,8 @@ ns.Number.prototype.appendTo = function ($wrapper) {
   var that = this;
 
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
-  this.$errors = this.$item.children('.h5p-errors');
-  var $inputs = this.$item.children('label').children('input');
+  this.$errors = this.$item.find('.h5p-errors');
+  var $inputs = this.$item.find('input');
   if ($inputs.length === 1) {
     this.$input = $inputs;
   }
