@@ -288,7 +288,7 @@ ns.Html.prototype.createToolbar = function () {
 ns.Html.prototype.appendTo = function ($wrapper) {
   var that = this;
 
-  this.$item = ns.$(ns.createItem(this.field.type, this.createHtml(), this.field.description)).appendTo($wrapper);
+  this.$item = ns.$(ns.createItem(this.field.type, this.createHtml())).appendTo($wrapper);
 
   this.$input = this.$item.children('.ckeditor');
   this.$errors = this.$item.children('.h5p-errors');
@@ -389,7 +389,9 @@ ns.Html.prototype.appendTo = function ($wrapper) {
         // Override show event handler
         var onShow = dialogDefinition.onShow;
         dialogDefinition.onShow = function () {
-          onShow.apply(this, arguments);
+          if (onShow !== undefined) {
+            onShow.apply(this, arguments);
+          }
 
           // Grab current item
           var $item = ns.Html.current.$item;
@@ -420,6 +422,7 @@ ns.Html.prototype.createHtml = function () {
     html += '<label class="h5peditor-label' + (this.field.optional ? '' : ' h5peditor-required') + '">' + this.field.label + '</label>';
   }
 
+  html += ns.createDescription(this.field.description);
   html += '<div class="ckeditor" tabindex="0" contenteditable="true">';
 
   if (this.value !== undefined) {
@@ -456,7 +459,7 @@ ns.Html.prototype.validate = function () {
   if (!this.field.optional && !textValue.length) {
     // We can accept empty text, if there's an image instead.
     if (! (this.inTags("img") && $value.find('img').length > 0)) {
-      this.$errors.append(ns.createError(this.field.label + ' is required and must have some text or at least an image in it.'));
+      this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': ns.t('core', 'textField')})));
     }
   }
 

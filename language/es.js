@@ -41,5 +41,16 @@ H5PEditor.language.core = {
   saveLabel: 'Save',
   cancelLabel: 'Cancel',
   resetToOriginalLabel: 'Reset to original',
-  loadingImageEditor: 'Loading image editor, please wait...'
+  loadingImageEditor: 'Loading image editor, please wait...',
+  selectFiletoUpload: 'Select file to upload',
+  or: 'or',
+  enterAudioUrl: 'Enter audio source URL',
+  enterVideoUrl: 'Enter video source URL or YouTube link',
+  addVideoDescription: 'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube links.',
+  insert: 'Insert',
+  cancel: 'Cancel',
+  height: 'height',
+  width: 'width',
+  textField: 'text field',
+  numberField: 'number field'
 };
