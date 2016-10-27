@@ -991,15 +991,68 @@ a {
   -webkit-transform: scale(1.1, 1.1);
   transform: scale(1.1, 1.1);
 }
-
-/* line 696, ../scss/application.scss */
-.h5peditor-field-description,
-.h5p-help-text {
-  font-size: 10px;
-  color: #555555;
+/* line 694, ../scss/application.scss */
+.h5peditor .h5p-editing-image-button {
+  line-height: 1.5;
+  margin-right: 0.5em;
+  margin-bottom: 0.5em;
+  padding-right: 1em;
+}
+/* line 701, ../scss/application.scss */
+.h5peditor .h5p-editing-image-button:before {
+  font-family: "H5P";
+  content: "\e900";
+  color: #666;
+  padding-right: 0.25em;
+  vertical-align: middle;
+  font-size: 1.5em;
+  line-height: 0.9;
+}
+/* line 711, ../scss/application.scss */
+.h5peditor .ui-dialog .h5p-editing-image-button,
+.h5peditor .ui-dialog .h5p-copyright-button {
+  padding-left: 0.5em;
+}
+/* line 716, ../scss/application.scss */
+.h5peditor .h5p-editing-image-button.loading:before {
+  content: "\e901";
+}
+/* line 720, ../scss/application.scss */
+.h5peditor .h5p-editing-image-button.hidden {
+  display: none;
+}
+/* line 724, ../scss/application.scss */
+.h5peditor .field.image .file {
+  display: inline-block;
+  float: none;
+}
+/* line 730, ../scss/application.scss */
+.h5peditor .h5p-editor-image-buttons .h5p-editor-image-buttons {
+  display: block;
+}
+/* line 734, ../scss/application.scss */
+.h5peditor .h5p-editor-image-buttons .h5p-copyright-button {
+  float: none;
+  display: inline-block;
+}
+/* line 740, ../scss/application.scss */
+.h5peditor .h5p-li > .content > .library {
+  border: 0;
+  padding: 0;
 }
 
-/* line 702, ../scss/application.scss */
+/* line 746, ../scss/application.scss */
+.h5peditor-field-description,
+.h5p-help-text {
+  font-size: 12px;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #666;
+  line-height: 15px;
+  letter-spacing: 0.2px;
+}
+
+/* line 756, ../scss/application.scss */
 .h5peditor-form {
   position: relative;
   margin: 0.5em 0 0;
@@ -1008,7 +1061,7 @@ a {
   border: 1px solid #ccc;
 }
 
-/* line 710, ../scss/application.scss */
+/* line 764, ../scss/application.scss */
 .h5peditor-label {
   display: block;
   font-weight: bold;
@@ -1016,7 +1069,7 @@ a {
   padding-top: 4px;
 }
 
-/* line 717, ../scss/application.scss */
+/* line 771, ../scss/application.scss */
 #h5peditor-uploader {
   position: absolute;
   width: 1px;
@@ -1026,12 +1079,12 @@ a {
   overflow: hidden;
 }
 
-/* line 726, ../scss/application.scss */
+/* line 780, ../scss/application.scss */
 .h5p-tutorial-url {
   font-size: 0.875em;
 }
 
-/* line 730, ../scss/application.scss */
+/* line 784, ../scss/application.scss */
 .h5p-tutorial-url:before {
   font-family: "H5P";
   content: "\e889";
@@ -1041,7 +1094,7 @@ a {
   left: .2em;
 }
 
-/* line 739, ../scss/application.scss */
+/* line 793, ../scss/application.scss */
 .h5peditor-widget-select {
   overflow: hidden;
   margin: 0 0 -1px;
@@ -1049,7 +1102,7 @@ a {
   list-style: none;
 }
 
-/* line 745, ../scss/application.scss */
+/* line 799, ../scss/application.scss */
 .h5peditor-widget-option {
   float: right;
   border: 1px solid #ccc;
@@ -1064,24 +1117,24 @@ a {
   outline: none;
 }
 
-/* line 758, ../scss/application.scss */
+/* line 812, ../scss/application.scss */
 .h5peditor-widget-option:hover {
   color: #000;
 }
 
-/* line 761, ../scss/application.scss */
+/* line 815, ../scss/application.scss */
 .h5peditor-widget-option:active {
   color: #8e636a;
   /* Pink chocolate */
 }
 
-/* line 764, ../scss/application.scss */
+/* line 818, ../scss/application.scss */
 .h5peditor-widget-active {
   background: #fff;
   line-height: 1.357142857em;
 }
 
-/* line 769, ../scss/application.scss */
+/* line 823, ../scss/application.scss */
 .h5peditor-widgets > .h5peditor-widget-wrapper {
   border: 1px solid #ccc;
   background: #fff;
@@ -1089,17 +1142,17 @@ a {
   padding: 0.5em;
 }
 
-/* line 775, ../scss/application.scss */
+/* line 829, ../scss/application.scss */
 .h5peditor-widgets > .h5peditor-label {
   float: left;
 }
 
-/* line 778, ../scss/application.scss */
+/* line 832, ../scss/application.scss */
 .h5p-editor-iframe {
   margin-bottom: 1em;
 }
 
-/* line 781, ../scss/application.scss */
+/* line 835, ../scss/application.scss */
 .h5peditor-required:after {
   content: "*";
   color: #da0001;

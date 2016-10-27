@@ -79,13 +79,10 @@ class H5peditorFile {
    * @return boolean
    */
   public function check($mimes) {
-    foreach ($mimes as $mime => $extension) {
-      // TODO: Either remove everything that has to do with mime types, or make it work
-      // Currently we're experiencing trouble with mime types on different servers...
-      if (/*$this->type === $mime && */strtolower($this->extension) === $extension) {
-        $this->type = $mime;
-        return TRUE;
-      }
+    $extension = strtolower($this->extension);
+    if (isset($mimes[$extension])) {
+      $this->type = $mimes[$extension];
+      return TRUE;
     }
     return FALSE;
   }
@@ -120,9 +117,10 @@ class H5peditorFile {
 
       case 'image':
         $allowed = array(
-          'image/png' => 'png',
-          'image/jpeg' => 'jpg',
-          'image/gif' => 'gif',
+          'png' => 'image/png',
+          'jpg' => 'image/jpeg',
+          'jpeg' => 'image/jpeg',
+          'gif' => 'image/gif'
         );
         if (!$this->check($allowed)) {
           $this->result->error = $this->interface->t('Invalid image file format. Use jpg, png or gif.');
@@ -157,18 +155,13 @@ class H5peditorFile {
 
       case 'audio':
         $allowed = array(
-          'audio/mpeg' => 'mp3',
-          'audio/mp3' => 'mp3',
-          'audio/x-wav' => 'wav',
-          'audio/wav' => 'wav',
-          //'application/ogg' => 'ogg',
-          'audio/ogg' => 'ogg',
-          //'video/ogg' => 'ogg',
+          'mp3' => 'audio/mp3',
+          'wav' => 'audio/wav',
+          'ogg' => 'audio/ogg'
         );
         if (!$this->check($allowed)) {
           $this->result->error = $this->interface->t('Invalid audio file format. Use mp3 or wav.');
           return FALSE;
-
         }
 
         $this->result->mime = $this->type;
@@ -176,10 +169,9 @@ class H5peditorFile {
 
       case 'video':
         $allowed = array(
-          'video/mp4' => 'mp4',
-          'video/webm' => 'webm',
-         // 'application/ogg' => 'ogv',
-          'video/ogg' => 'ogv',
+          'mp4' => 'video/mp4',
+          'webm' => 'video/webm',
+          'ogv' => 'video/ogg'
         );
         if (!$this->check($allowed)) {
           $this->result->error = $this->interface->t('Invalid video file format. Use mp4 or webm.');
