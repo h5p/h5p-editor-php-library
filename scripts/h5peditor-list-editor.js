@@ -249,32 +249,19 @@ H5PEditor.ListEditor = (function ($) {
         // Good UX: automatically expand groups if not explicitly disabled by semantics
         item.expand();
 
-        var firstChild = item.children[0];
-        var secondChild = item.children[1];
-        var firstWidget = ns.getWidgetName(firstChild.field);
-        var secondWidget = ns.getWidgetName(secondChild.field);
-        var itemLabel = item.field.label;
-
-        if (firstWidget === 'html' || firstWidget === 'text') {
-          // Change label to reflect content of listgroup
-          setListgroupTitle(itemLabel, $('<p>').html(firstChild.value).text());
-
-          // Update label when description has changed
-          firstChild.$input.change(function () {
-            setListgroupTitle(itemLabel, $('<p>').html(firstChild.value).text());
-          });
-        }
-        else if (firstWidget === 'image') {
-          if (secondWidget === 'text') {
-            // Change label to reflect content of listgroup
-            setListgroupTitle(itemLabel, $('<p>').html(secondChild.value).text());
+        item.children.some(function (child) {
+          var isTextField = self.isTextField(child);
+          if (isTextField) {
+            // Change label to reflect content of list group
+            setListgroupTitle(item.field.label, $('<p>').html(child.value).text());
 
             // Update label when description has changed
-            secondChild.$input.change(function () {
-              setListgroupTitle(itemLabel, $('<p>').html(secondChild.value).text());
+            child.$input.change(function () {
+              setListgroupTitle(item.field.label, $('<p>').html(child.value).text());
             });
           }
-        }
+          return isTextField;
+        });
       }
 
       /**
@@ -285,13 +272,23 @@ H5PEditor.ListEditor = (function ($) {
        * @param {string} text
        */
       function setListgroupTitle(label, text) {
+        var title = label;
         if (text !== undefined && text !== '') {
-          $titleBar.children('.title').html(label + ': ' + text);
+          title += ': ' + text;
         }
-        else {
-          $titleBar.children('.title').html(label);
-        }
+        $titleBar.children('.title').html(title);
       }
+    };
+
+    /**
+     * Determine if child is a text field
+     *
+     * @param {Object} child
+     * @returns {boolean} True if child is a text field
+     */
+    self.isTextField = function (child) {
+      var widget = ns.getWidgetName(child.field);
+      return widget === 'html' || widget === 'text';
     };
 
     /**
