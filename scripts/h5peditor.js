@@ -452,14 +452,14 @@ ns.createText = function (value, maxLength, placeholder) {
  * @param {String} content
  * @returns {String}
  */
-ns.createLabel = function (field) {
+ns.createLabel = function (field, content) {
   var html = '<label class="h5peditor-label-wrapper">';
 
   if (field.label !== 0) {
     html += '<span class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' + (field.label === undefined ? field.name : field.label) + '</span>';
   }
 
-  return html + '</label>';
+  return html + (content || '') + '</label>';
 };
 
 /**
