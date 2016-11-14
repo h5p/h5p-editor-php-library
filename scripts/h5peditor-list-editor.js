@@ -253,15 +253,25 @@ H5PEditor.ListEditor = (function ($) {
           var isTextField = self.isTextField(child);
           if (isTextField) {
             // Change label to reflect content of list group
-            setListgroupTitle(item.field.label, $('<p>').html(child.value).text());
+            setListgroupTitle(item.field.label, parseHtml(child.value));
 
             // Update label when description has changed
             child.$input.change(function () {
-              setListgroupTitle(item.field.label, $('<p>').html(child.value).text());
+              setListgroupTitle(item.field.label, parseHtml(child.value));
             });
           }
           return isTextField;
         });
+      }
+
+      /**
+       * Parses a html string with special character codes into a text string
+       *
+       * @param {string} html
+       * @returns {string} Parsed html string
+       */
+      function parseHtml(html) {
+        return $('<p>').html(html).text();
       }
 
       /**
