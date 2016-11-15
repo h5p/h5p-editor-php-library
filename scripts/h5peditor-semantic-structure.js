@@ -41,7 +41,7 @@ H5PEditor.SemanticStructure = (function ($) {
     var init = function () {
       // Create field wrapper
       $wrapper = $('<div/>', {
-        'class': 'field ' + field.type
+        'class': 'field ' + field.type + ' ' + H5PEditor.createImportance(field.importance)
       });
 
       /* We want to be in control of the label, description and errors

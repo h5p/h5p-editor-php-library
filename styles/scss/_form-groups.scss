@@ -1,0 +1,375 @@
+%title-bar-base {
+  overflow: hidden;
+}
+
+%title-bar-very-important {
+  background: $form-item-very-important-background;
+  border: 1px solid $form-item-very-important-border-color;
+  height: $form-item-height-large;
+}
+
+%title-bar-text-very-important {
+  font-size: $font-size-large;
+  font-weight: 600;
+  color: $white;
+  line-height: $form-item-height-large;
+  // Fix white text on dark background blockiness
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+%title-bar-important {
+  background: $form-item-important-background;
+  border: 1px solid $form-item-important-border-color;
+  height: $form-item-height-normal;
+}
+
+%title-bar-text-important {
+  font-size: $font-size-normal;
+  font-weight: 600;
+  color: $white;
+  line-height: $form-item-height-normal;
+  // Fix white text on dark background blockiness
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+%title-bar-less-important {
+  background: $form-item-background;
+  height: $form-item-height-normal;
+  border: 1px solid $form-border-color;
+}
+
+%title-bar-text-less-important {
+  font-size: $font-size-normal;
+  font-weight: 400;
+  color: $text-color;
+  line-height: $form-item-height-normal;
+}
+
+.group {
+  border: none;
+
+  & > .title {
+    @extend %title-bar-base;
+    @extend %title-bar-less-important;
+    @extend %title-bar-text-less-important;
+    padding: 0 $min-padding;
+    outline: none;
+    cursor: pointer;
+
+    &:first-letter {
+      text-transform: uppercase;
+    }
+  }
+
+  & > .content {
+    display: none;
+    margin: 0;
+    padding: $padding;
+    border: 1px solid $form-border-color;
+    border-top: none;
+    background: $form-content-background;
+  }
+
+  &.very-important > .title {
+    @extend %title-bar-very-important;
+    @extend %title-bar-text-very-important;
+
+    &:before {
+      color: $white;
+    }
+  }
+
+  &.important > .title {
+    @extend %title-bar-important;
+    @extend %title-bar-text-important;
+
+    &:before {
+      color: $white;
+    }
+  }
+}
+
+.list-item-title-bar {
+  @extend %title-bar-base;
+  @extend %title-bar-less-important;
+  @extend %title-bar-text-less-important;
+
+  & > .h5peditor-label {
+    margin: 0 60px 0 0;
+    padding: 0 $min-padding;
+    white-space: nowrap;
+    font-weight: normal;
+    line-height: $form-item-height-normal - 2;
+    outline: none;
+    text-overflow: ellipsis;
+  }
+
+  & > .list-actions {
+    height: 100%;
+    float: right;
+  }
+
+  .remove {
+    cursor: pointer;
+    width: 1.25em;
+    height: $form-item-height-normal - 2;
+    font-size: 1.75em;
+    display: inline-block;
+    overflow: hidden;
+
+    &:hover {
+      opacity: 1;
+      text-decoration: none;
+    }
+  }
+
+  .remove:after {
+    font-family: $i;
+    content: "\e890";
+    color: $text-color;
+    opacity: 0.7;
+    display: inline-block;
+    line-height: $form-item-height-normal - 2;
+  }
+
+  .remove:hover:after {
+    opacity: 1;
+  }
+
+  .order-group {
+    text-align: center;
+    display: inline-block;
+    overflow: hidden;
+  }
+
+  .order-up, .order-down {
+    width: $form-item-height-normal / 2;
+    height: $form-item-height-normal / 2;
+    background: $form-item-background-hover;
+    font-size: $font-size-normal;
+    line-height: $form-item-height-normal / 2;
+    cursor: pointer;
+
+    &:hover {
+      background: $form-border-color;
+    }
+
+    &:after {
+      font-family: $i;
+      content: "\e58e";
+      color: #666;
+      display: inline-block;
+    }
+  }
+
+  .order-down:after {
+    content: "\e58f";
+  }
+
+  &.very-important {
+    @extend %title-bar-very-important;
+
+    & > .title {
+      @extend %title-bar-text-very-important;
+      border: none;
+    }
+
+    .remove {
+      height: $form-item-height-large;
+      line-height: $form-item-height-large;
+      font-size: 40px;
+
+      &:after {
+        line-height: $form-item-height-large;
+      }
+    }
+    .remove:after {
+      color: $white;
+      opacity: 0.7;
+    }
+    .remove:hover:after {
+      opacity: 1;
+    }
+
+    .order-up, .order-down {
+      width: $form-item-height-large / 2;
+      height: $form-item-height-large / 2;
+      background: $form-item-very-important-border-color;
+      font-size: $font-size-large;
+      line-height: $form-item-height-large / 2;
+
+      &:hover {
+        background: $form-item-very-important-background-hover;
+      }
+
+      &:after {
+        color: $white;
+      }
+    }
+  }
+
+  &.important {
+    @extend %title-bar-important;
+
+    & > .title {
+      @extend %title-bar-text-important;
+      border: none;
+    }
+
+    .remove {
+      height: $form-item-height-normal;
+      line-height: $form-item-height-normal;
+      font-size: 30px;
+
+      &:after {
+        line-height: $form-item-height-normal;
+      }
+    }
+    .remove:after {
+      color: $white;
+      opacity: 0.7;
+    }
+    .remove:hover:after {
+      opacity: 1;
+    }
+
+    .order-up, .order-down {
+      width: $form-item-height-normal / 2;
+      height: $form-item-height-normal / 2;
+      background: $form-item-important-border-color;
+      font-size: $font-size-normal;
+      line-height: $form-item-height-normal / 2;
+
+      &:hover {
+        background: $form-item-important-background-hover;
+      }
+
+      &:after {
+        color: $white;
+      }
+    }
+  }
+}
+.group.expanded,
+.listgroup.expanded {
+  & > .content {
+    display: block;
+  }
+}
+
+.listgroup > .list-item-title-bar > .h5peditor-label {
+  cursor: pointer;
+}
+.listgroup > .list-item-title-bar > .h5peditor-label:before,
+.group > .title:before  {
+  content: "\e566";
+  font-family: $i;
+  opacity: 0.7;
+}
+.listgroup.expanded > .list-item-title-bar > .h5peditor-label:before,
+.expanded > .title:before {
+  content: "\e565";
+}
+.listgroup > .list-item-title-bar > .h5peditor-label:hover:before,
+.listgroup > .list-item-title-bar > .h5peditor-label:focus:before,
+.group > .title:hover:before,
+.group > .title:focus:before {
+  opacity: 1;
+}
+
+.listgroup > .list-item-title-bar > .h5peditor-label:active:before,
+.group > .title:active:before {
+  opacity: 0.5;
+}
+.listgroup > .group.field {
+  margin: 0;
+  padding: 0;
+}
+.content {
+  display: block;
+  margin: 0;
+  padding: $padding;
+  border: 1px solid $form-border-color;
+  border-top: none;
+  background: $form-content-background;
+}
+
+.common {
+  margin-top: $min-padding;
+
+  & > .h5peditor-label {
+    @extend %title-bar-base;
+    @extend %title-bar-less-important;
+    @extend %title-bar-text-less-important;
+    margin: 0;
+    padding: 0 $min-padding;
+    font-weight: 400;
+    cursor: pointer;
+
+    & > .icon:before {
+      content: "\e565";
+      font-family: $i;
+      opacity: 0.7;
+    }
+    &:hover > .icon {
+      opacity: 1;
+    }
+  }
+  & > .fields {
+    min-height: 2em;
+    padding: $padding;
+    border: 1px solid $form-border-color;
+    border-top: none;
+    background: $form-content-background;
+
+    & > .desc {
+      margin: 0;
+      font-size: 0.875em;
+      color: #666;
+    }
+
+    p:first-child {
+      margin-bottom: $padding;
+    }
+  }
+
+  &.collapsed {
+    & > .h5peditor-label > .icon:before {
+      content: "\e566";
+    }
+    & > .fields {
+      display: none;
+    }
+  }
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.listgroup {
+  border: none;
+}
+
+.group .group,
+.common .group {
+  & > .title {
+    background: $form-background;
+  }
+
+  & > .content {
+    background: $form-background;
+  }
+
+  .group {
+    & > .title {
+      background: $form-content-background;
+    }
+
+    & > .content {
+      background: $form-content-background;
+    }
+  }
+}
