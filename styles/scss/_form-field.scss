@@ -1,0 +1,39 @@
+.field {
+  @include field-margin($padding);
+  font-size: $font-size-normal;
+  padding: 0;
+
+  //// Exceptions for top level fields
+  // Last field in the tree should have `$padding` to
+  // bottom group `Settings and texts`.
+  .tree > &:last-child {
+    margin-bottom: $padding;
+  }
+  // Assumes last group is `Behavioural settings`, which should
+  // be grouped with the bottom group `Settings and texts`.
+  .tree > &.group:last-child {
+    margin-bottom: 0;
+  }
+
+  .fields > &.group {
+    @include field-margin($min-padding);
+  }
+
+  &.boolean .h5peditor-label {
+    display: inline;
+  }
+
+  &.video, &.image, &.file, &.audio {
+    position: relative;
+  }
+
+  &.image .file {
+    display: inline-block;
+    float: none;
+  }
+
+  .library {
+    border: 1px solid $form-border-color;
+    padding: $min-padding;
+  }
+}
