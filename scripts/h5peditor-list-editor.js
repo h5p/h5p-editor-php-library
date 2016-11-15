@@ -245,10 +245,60 @@ H5PEditor.ListEditor = (function ($) {
       // Append item to list
       $item.appendTo($list);
 
-      // Good UX: automatically expand groups if not explicitly disabled by semantics
       if (item instanceof H5PEditor.Group) {
+        // Good UX: automatically expand groups if not explicitly disabled by semantics
         item.expand();
+
+        item.children.some(function (child) {
+          var isTextField = self.isTextField(child);
+          if (isTextField) {
+            // Change label to reflect content of list group
+            setListgroupTitle(item.field.label, parseHtml(child.value));
+
+            // Update label when description has changed
+            child.$input.change(function () {
+              setListgroupTitle(item.field.label, parseHtml(child.value));
+            });
+          }
+          return isTextField;
+        });
       }
+
+      /**
+       * Parses a html string with special character codes into a text string
+       *
+       * @param {string} html
+       * @returns {string} Parsed html string
+       */
+      function parseHtml(html) {
+        return $('<p>').html(html).text();
+      }
+
+      /**
+       * Add text to the listgroups title element.
+       *
+       * @private
+       * @param {string} label
+       * @param {string} text
+       */
+      function setListgroupTitle(label, text) {
+        var title = label;
+        if (text !== undefined && text !== '') {
+          title += ': ' + text;
+        }
+        $titleBar.children('.title').html(title);
+      }
+    };
+
+    /**
+     * Determine if child is a text field
+     *
+     * @param {Object} child
+     * @returns {boolean} True if child is a text field
+     */
+    self.isTextField = function (child) {
+      var widget = ns.getWidgetName(child.field);
+      return widget === 'html' || widget === 'text';
     };
 
     /**
