@@ -5,15 +5,20 @@
 @import "compass/css3/transition";
 @import "compass/css3/transform";
 
+@import "variables";
+@import "mixins";
+@import "form-field";
+@import "form-groups";
 @import "h5peditor-image-edit";
 @import "h5peditor-image-edit-popup";
 
 $i: 'H5P';
 
 html, body {
-  margin: 0;
+  margin: 0;;;
   padding: 0;
-  font-family: 'Open Sans', sans-serif;
+  color: $text-color;
+  font-family: $font-family;
   max-width: 960px;
   position: relative;
 }
@@ -28,36 +33,6 @@ a {
     font-size: 0.875em;
     margin-top: 0.4em;
   }
-
-  .tree > .field:first-child {
-    margin-top: 0;
-  }
-
-  .field {
-    margin: 8px 0;
-    font-size: 16px;
-    padding: 0;
-    min-width: inherit;
-    &:last-child {
-      margin-bottom: 0;
-    }
-
-    .h5peditor-widget-wrapper button {
-      margin-top: 4px;
-    }
-
-    &.boolean .h5peditor-label {
-      display: inline;
-    }
-    &.video, &.image, &.file, &.audio {
-      position: relative;
-    }
-
-    .library {
-      border: 1px solid #ccc;
-      padding: 8px;
-    }
-  }
   .h5peditor-single > .field.library {
     border: 0;
     padding: 0;
@@ -65,20 +40,23 @@ a {
 
   .errors p,
   .h5p-errors {
-    margin: 0 0 4px 0;
     color: #da0001;
   }
   textarea {
     resize: vertical;
   }
-  textarea, .h5peditor-text, .ckeditor {
-    padding: 4px 8px;
-    font-size: 16px;
-    border: 1px solid #a0a0a0;
-    background: #f9f9f9;
+  textarea,
+  .h5peditor-text,
+  .ckeditor {
+    @include box-shadow($form-input-box-shadow);
+    box-sizing: border-box;
+    margin: 0;
+    padding: $min-padding;
+    min-height: 40px;
+    border: 1px solid $form-border-color;
+    background: $form-input-color;
     outline: none;
-    min-height: 20px;
-    @include border-radius(3px);
+    font-size: 16px;
     word-wrap: break-word;
   }
   .h5peditor-text, textarea {
@@ -87,19 +65,19 @@ a {
   }
   /* Placeholders - need to be on separate lines. If not, the browsers will invlaidate them */
   ::-webkit-input-placeholder {
-    color: #bbb;
+    color: $form-input-placeholder-color;
   }
   :-moz-placeholder {
-    color: #bbb;
+    color: $form-input-placeholder-color;
   }
   ::-moz-placeholder {
-    color: #bbb;
+    color: $form-input-placeholder-color;
   }
   :-ms-input-placeholder {
-    color: #bbb;
+    color: $form-input-placeholder-color;
   }
   .h5peditor-ckeditor-placeholder {
-    color: #bbb;
+    color: $form-input-placeholder-color;
   }
   select {
     padding: 2px;
@@ -110,7 +88,7 @@ a {
   textarea:focus,
   .h5peditor-text:focus {
     outline: none;
-    background-color: #fff;
+    background-color: $white;
     border-color: #53a0ff;
   }
   .list-item-title-bar {
@@ -188,123 +166,104 @@ a {
     list-style: none;
 
     .h5p-li {
+      @include field-margin($min-padding);
       padding: 0;
-      margin: 0;
       list-style: none;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-top: 0;
+
+      &.placeholder {
+        box-sizing: border-box;
+        background: $white;
+        border: 1px solid $form-border-color;
+      }
 
       &:hover {
         text-decoration: none;
       }
-      &:first-child,
-      &.moving {
-        border-top: 1px solid #ccc;
-      }
-      &.collapsed .list-item-title-bar {
-        border-bottom: 0;
+
+      &:nth-child(2).moving {
+        margin-top: 0;
       }
 
-      & > .group {
-        border: 0;
-        margin: 0;
-        background-color: transparent;
-        box-shadow: none;
+      &:nth-last-child(2).placeholder {
+        margin-bottom: 0;
       }
-    }
-  }
-  /*.listgroup > .group {
-    .field {
-      margin-right: 8px;
-      &.list {
-        margin-right: 0;
-      }
-    }
-    .h5p-li {
-      border-right: 0;
-    }
-  }*/
-  .listgroup > .list-item-title-bar > .h5peditor-label {
-    cursor: pointer;
-  }
-  .listgroup > .list-item-title-bar > .h5peditor-label:before,
-  .group > .title:before  {
-    content: "";
-    display: inline-block;
-    vertical-align: middle;
-    width: 13px;
-    height: 13px;
-    margin: 0 6px 2px 2px;
-    background: inline-image("expand.png") no-repeat;
-    opacity: 0.8;
-  }
-  .listgroup.expanded > .list-item-title-bar > .h5peditor-label:before,
-  .expanded > .title:before {
-    background-image: inline-image("collapse.png");
-  }
-  .listgroup > .list-item-title-bar > .h5peditor-label:hover:before,
-  .listgroup > .list-item-title-bar > .h5peditor-label:focus:before,
-  .group > .title:hover:before,
-  .group > .title:focus:before {
-    opacity: 1;
-  }
-  .listgroup > .list-item-title-bar > .h5peditor-label:active:before,
-  .group > .title:active:before {
-    opacity: 0.5;
-  }
-  .content {
-    background: #fff;
-    margin: 0;
-    padding: 8px;
-    .field:first-child {
-      margin-top: 0;
-    }
-    .field:last-child {
-      margin-bottom: 0;
-    }
-  }
-  .group {
-    margin: -1px 0 0;
-    border: 1px solid #ccc;
-
-    & > .title {
-      cursor: pointer;
-      padding: 6px 8px 5px;
-      overflow: hidden;
-      background: #f4f4f4;
-      outline: none;
-
-      &:first-letter {
-        text-transform: uppercase;
-      }
-    }
-    & > .content {
-      display: none;
-    }
-  }
-  .expanded {
-    & > .title {
-      border-bottom: 1px solid #ccc;
-    }
-    & > .content {
-      display: block;
     }
   }
   input[type="button"], button {
+    @include border-radius(3px);
+    @include button-background(
+      $form-item-background,
+      $form-item-background-highlight);
     width: auto;
-    margin: 0;
-    padding: 4px 8px;
-    background: linear-gradient(to bottom,#fff 0,#f2f2f2 100%);
-    border: 1px solid #ccc;
-    border-radius: 0.25em;
-    font-size: 0.875em;
-    color: #333;
+    margin: $min-padding 0 0 0;
+    padding: 0 $padding;
+    box-sizing: border-box;
+    height: $form-item-height-normal;
+    border: 1px solid $form-border-color;
+    font-size: $font-size-normal;
+    font-family: $font-family;
+    line-height: $form-item-height-normal;
+    color: $text-color;
     cursor: pointer;
 
-    &:hover {
+    &[disabled] {
+      opacity: 0.5;
+    }
+
+    &:hover:not([disabled]) {
+      @include button-background(
+        $form-item-background-hover,
+        $form-item-background-hover-highlight);
+      border-color: $form-item-background-hover;
       text-decoration: none;
-      border-color: #999;
+    }
+
+    &:hover[disabled] {
+      cursor: not-allowed;
+    }
+
+    &.very-important {
+      @include border-radius(3px);
+      @include button-background(
+        $form-item-very-important-background,
+        $form-item-very-important-background-highlight);
+      border: 1px solid $form-item-very-important-border-color;
+      text-transform: uppercase;
+      font-size: $font-size-large;
+      font-weight: 600;
+      color: $white;
+      height: $form-item-height-large;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+
+      &:hover:not([disabled]) {
+        @include button-background(
+          $form-item-very-important-background-hover,
+          $form-item-very-important-background-hover-highlight);
+        border-color: $form-item-very-important-background-hover;
+      }
+    }
+
+    &.important {
+      @include border-radius(3px);
+      @include button-background(
+        $form-item-important-background,
+        $form-item-important-background-highlight);
+      border: 1px solid $form-item-important-border-color;
+      text-transform: uppercase;
+      font-size: $font-size-normal;
+      font-weight: 600;
+      color: $white;
+      height: $form-item-height-normal;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+
+      &:hover:not([disabled]) {
+        @include button-background(
+          $form-item-important-background-hover,
+          $form-item-important-background-hover-highlight);
+        border-color: $form-item-important-background-hover;
+      }
     }
   }
   .dimensions input, .coordinates input, .number input {
@@ -458,7 +417,6 @@ a {
   }
   .file {
     position: relative;
-    float: left;
 
     .thumbnail {
       display: inline-block;
@@ -560,65 +518,15 @@ a {
     }
   }
   .libwrap {
-    margin-top: 16px;
+    margin-top: $padding;
+
+    &:empty {
+      margin-top: 0;
+    }
   }
   input[type="checkbox"] {
     margin: 4px 4px 4px 0;
     vertical-align: bottom;
-  }
-  .common {
-    margin-top: 8px;
-    border: 1px solid #ccc;
-
-    & > .h5peditor-label {
-      font-size: 1em;
-      font-weight: normal;
-      padding: 6px 8px 5px;
-      background: #ddd;
-      cursor: pointer;
-      border-bottom: 1px solid #ccc;
-
-      & > .icon {
-        display: inline-block;
-        background: inline-image("collapse.png") no-repeat left center;
-        opacity: 0.8;
-        vertical-align: middle;
-        width: 13px;
-        height: 13px;
-        margin: 0 6px 2px 2px;
-      }
-      &:hover > .icon {
-        opacity: 1;
-      }
-    }
-    & > .fields {
-      margin: 0.3125em 0.5em 0.5em;
-      padding-bottom: 0.25em;
-      min-height: 2em;
-
-      & > .desc {
-        margin: 0;
-        font-size: 0.875em;
-        color: #666;
-      }
-    }
-
-    &.collapsed {
-      & > .h5peditor-label {
-        border-bottom: 0;
-
-        & > .icon {
-          background-image: inline-image("expand.png");
-        }
-      }
-      & > .fields {
-        display: none;
-      }
-    }
-
-    &.hidden {
-      display: none;
-    }
   }
   .moving {
     position: absolute;
@@ -751,11 +659,6 @@ a {
     display: none;
   }
 
-  .field.image .file {
-    display: inline-block;
-    float: none;
-  }
-
   .h5p-editor-image-buttons {
     .h5p-editor-image-buttons {
       display: block;
@@ -785,17 +688,16 @@ a {
 
 .h5peditor-form {
   position: relative;
-  margin: 0.5em 0 0;
-  background: #fff;
-  padding: 8px;
-  border: 1px solid #ccc;
+  padding: 10px;
+  background: $form-background;
+  border: 1px solid $form-border-color;
 }
 
 .h5peditor-label {
   display: block;
+  margin-bottom: $min-padding;
   font-weight: bold;
   font-size: 16px;
-  padding-top: 4px;
 }
 
 #h5peditor-uploader {
