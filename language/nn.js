@@ -10,6 +10,7 @@ H5PEditor.language.core = {
   exceedsMax: '":property" overstig maksverdien på :max.',
   belowMin: '":property" er mindre enn minimumsverdien på :min.',
   outOfStep: '":property" kan berre endrast i steg på :step.',
+  add: 'Add',
   addFile: 'Legg til fil',
   removeFile: 'Fjern fil',
   confirmRemoval: 'Er du sikker på at du ønskjer å fjerne denne :type?',

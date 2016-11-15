@@ -470,9 +470,37 @@ a {
     .add {
       display: block;
       cursor: pointer;
-      width: 44px;
-      height: 44px;
-      background: inline-image("add.png");
+      padding: 0 1.25em 0 1em;
+
+      height: 40px;
+      line-height: 40px;
+
+      background: linear-gradient(to bottom, #ffffff 0, #f2f2f2 100%);
+      border: 1px solid #cccccc;
+      border-radius: 0.25em;
+      color: #222222;
+      font-weight:bold;
+
+      &:hover {
+        background: #ededed;
+      }
+
+      &:focus {
+        box-shadow: 0 0 16px 0 rgba(133,188,255,0.84);
+      }
+
+      .h5peditor-field-image-upload-icon {
+        display: inline-block;
+        height: 100%;
+        width: 20px;
+        margin-right: 1em;
+        background: no-repeat center inline-image("plus-icon.svg");
+      }
+
+      .h5peditor-field-image-upload-text {
+        display: inline-block;
+        vertical-align: top;
+      }
     }
     .remove {
       display: block;
