@@ -57,10 +57,6 @@
     padding: 0 $min-padding;
     outline: none;
     cursor: pointer;
-
-    &:first-letter {
-      text-transform: uppercase;
-    }
   }
 
   & > .content {
@@ -361,7 +357,7 @@
     color: #454347;
     font-size: 18px;
     font-weight: 600;
-  } 
+  }
 }
 
 .group .group,
