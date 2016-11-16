@@ -10,6 +10,7 @@ H5PEditor.language.core = {
   exceedsMax: 'La :property dépasse le maximum de :max.',
   belowMin: 'La :property dépasse le minimum de :min.',
   outOfStep: 'La :property ne peut être effectuée que par étape  :step.',
+  add: 'Add',
   addFile: 'Ajouter un fichier',
   removeFile: 'Supprimer un fichier',
   confirmRemoval: 'Voulez-vous vraiment supprimer :type?',
