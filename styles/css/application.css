@@ -54,7 +54,7 @@
 .field.group .h5peditor-label {
   color: #454347;
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 /* line 1, ../scss/_form-groups.scss */
@@ -357,7 +357,7 @@
 .common .h5peditor-label {
   color: #454347;
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 600;
 }
 /* line 308, ../scss/_form-groups.scss */
 .common > .h5peditor-label {
