@@ -203,8 +203,8 @@ ns.widgets.image.prototype.addFile = function () {
     this.$file
       .html(
         '<a href="#" class="add" title="' + ns.t('core', 'addFile') + '">' +
-          '<div class="h5peditor-field-image-upload-icon"></div>' +
-          '<div class="h5peditor-field-image-upload-text">' + ns.t('core', 'add') + '</div>' +
+          '<div class="h5peditor-field-file-upload-icon"></div>' +
+          '<div class="h5peditor-field-file-upload-text">' + ns.t('core', 'add') + '</div>' +
         '</a>'
       )
       .children('.add')

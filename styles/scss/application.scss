@@ -426,7 +426,7 @@ a {
       cursor: pointer;
     }
     .add {
-      display: block;
+      display: inline-block;
       cursor: pointer;
       padding: 0 1.25em 0 1em;
 
@@ -447,7 +447,7 @@ a {
         box-shadow: 0 0 16px 0 rgba(133,188,255,0.84);
       }
 
-      .h5peditor-field-image-upload-icon {
+      .h5peditor-field-file-upload-icon {
         display: inline-block;
         height: 100%;
         width: 20px;
@@ -455,7 +455,7 @@ a {
         background: no-repeat center inline-image("plus-icon.svg");
       }
 
-      .h5peditor-field-image-upload-text {
+      .h5peditor-field-file-upload-text {
         display: inline-block;
         vertical-align: top;
       }
