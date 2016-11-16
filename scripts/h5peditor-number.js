@@ -131,6 +131,10 @@ ns.Number.prototype.validate = function () {
   return ns.checkErrors(this.$errors, this.$input, value);
 };
 
+ns.Number.prototype.getDomElement = function () {
+  return this.$item;
+};
+
 /**
  * Remove this item.
  */

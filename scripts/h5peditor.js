@@ -187,6 +187,11 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
         params[field.name] = value;
       }
     });
+    if (fieldInstance.remove === undefined) {
+      fieldInstance.remove = function () {
+        // Do nothing
+      };
+    }
     fieldInstance.appendTo($wrapper);
     parent.children.push(fieldInstance);
   }
@@ -544,7 +549,7 @@ ns.getWidgetName = function (field) {
 };
 
 /**
- * Mimics how php's htmlspecialchars works (the way we uses it)
+ * Mimics how php's htmlspecialchars works (the way we use it)
  */
 ns.htmlspecialchars = function(string) {
   return string.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#039;').replace(/"/g, '&quot;');
