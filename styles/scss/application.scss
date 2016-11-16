@@ -150,8 +150,8 @@ a {
       margin: 0 1.5em;
       overflow: hidden;
       white-space: nowrap;
-      line-height: 2.25em;
       font-weight: normal;
+      font-size: 18px;
       text-overflow: ellipsis;
     }
   }
@@ -651,9 +651,10 @@ a {
 .h5peditor-field-description,
 .h5p-help-text {
   font-size: 12px;
+  margin-top: 6px;
   margin-bottom: 6px;
   font-weight: 500;
-  color: #666;
+  color: #454347;
   line-height: 15px;
   letter-spacing: 0.2px;
 }
@@ -667,9 +668,10 @@ a {
 
 .h5peditor-label {
   display: block;
-  margin-bottom: $min-padding;
-  font-weight: bold;
-  font-size: 16px;
+  margin-bottom: 4px;
+  font-weight: 600;
+  font-size: 20px;
+  color: #1b5891;
 }
 
 #h5peditor-uploader {

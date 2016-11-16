@@ -299,13 +299,18 @@
 .common {
   margin-top: $min-padding;
 
+  .h5peditor-label {
+    color: #454347;
+    font-size: 18px;
+    font-weight: 400;
+  }
+
   & > .h5peditor-label {
     @extend %title-bar-base;
     @extend %title-bar-less-important;
     @extend %title-bar-text-less-important;
     margin: 0;
     padding: 0 $min-padding;
-    font-weight: 400;
     cursor: pointer;
 
     & > .icon:before {
@@ -351,6 +356,12 @@
 
 .listgroup {
   border: none;
+
+  .h5peditor-label {
+    color: #454347;
+    font-size: 18px;
+    font-weight: 600;
+  } 
 }
 
 .group .group,
