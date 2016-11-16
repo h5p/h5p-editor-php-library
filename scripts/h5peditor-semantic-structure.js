@@ -272,8 +272,8 @@ H5PEditor.SemanticStructure = (function ($) {
       text: text
     });
   };
-  
-  
+
+
 
   /**
    * @constant
