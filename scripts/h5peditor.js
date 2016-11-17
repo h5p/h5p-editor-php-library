@@ -400,18 +400,8 @@ ns.createError = function (message) {
  * @returns {String}
  */
 ns.createImportance = function (importance) {
-  if (importance === 1) {
-    return 'very-important';
-  }
-  else if (importance === 2) {
-    return 'important';
-  }
-  else if (importance === 3) {
-    return 'less-important';
-  }
-  else {
-    return '';
-  }
+  if(importance) return 'importance-'.concat(importance);
+  else return '';
 };
 
 
