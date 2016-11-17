@@ -1,6 +1,6 @@
 H5PEditor.language.core = {
   missingTranslation: '[Falta la traducción :key]',
-  loading: 'Cargando :type, por favor espera...',
+  loading: 'Cargando, por favor espera...',
   selectLibrary: 'Selecciona la librería que quieres usar con tu contenido.',
   unknownFieldPath: 'No se puede encontrar ":path".',
   notImageField: '":path" no es una imagen.',

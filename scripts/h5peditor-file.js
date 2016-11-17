@@ -161,7 +161,6 @@ ns.File.prototype.addFile = function () {
   if (this.params === undefined) {
     this.$file.html(
       '<a href="#" class="add" title="' + ns.t('core', 'addFile') + '">' +
-        '<div class="h5peditor-field-file-upload-icon"></div>' +
         '<div class="h5peditor-field-file-upload-text">' + ns.t('core', 'add') + '</div>' +
       '</a>'
     ).children('.add').click(function () {

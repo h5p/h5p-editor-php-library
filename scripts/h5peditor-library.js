@@ -161,7 +161,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     return;
   }
 
-  this.$libraryWrapper.html(ns.t('core', 'loading', {':type': 'semantics'})).attr('class', 'libwrap ' + libraryName.split(' ')[0].toLowerCase().replace('.', '-') + '-editor');
+  this.$libraryWrapper.html(ns.t('core', 'loading')).attr('class', 'libwrap ' + libraryName.split(' ')[0].toLowerCase().replace('.', '-') + '-editor');
 
   ns.loadLibrary(libraryName, function (semantics) {
     that.currentLibrary = libraryName;
