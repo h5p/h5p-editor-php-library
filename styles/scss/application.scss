@@ -91,75 +91,6 @@ a {
     background-color: $white;
     border-color: #53a0ff;
   }
-  .list-item-title-bar {
-    height: 2.3125em;
-    background: #f5f5f5;
-    border-bottom: 1px solid #ccc;
-    overflow: hidden;
-
-    .remove, .order {
-      cursor: pointer;
-      width: 1.25em;
-      line-height: 1.125em;
-      float: right;
-      font-size: 1.75em;
-      overflow: hidden;
-
-      &:hover {
-        opacity: 1;
-        text-decoration: none;
-      }
-    }
-
-    .remove:after {
-      font-family: $i;
-      content: "\e890";
-      color: #666;
-      display: inline-block;
-      line-height: 1.375em;
-    }
-
-    .remove:hover:after {
-      color: #c33f62;
-    }
-
-    .order {
-      float: left;
-      width: 0.6875em;
-      text-indent: -0.0625em;
-      cursor: move;
-      cursor: grab;
-      cursor: -moz-grab;
-      cursor: -webkit-grab;
-
-      &:after {
-        font-family: $i;
-        content: "\e600";
-        color: #ccc;
-        display: inline-block;
-        line-height: 1.375em;
-      }
-
-      &:hover:after {
-        color: #027AC6;
-      }
-    }
-
-    & > .h5peditor-label {
-      padding: 0.0625em 0 0;
-      margin: 0 1.5em;
-      overflow: hidden;
-      white-space: nowrap;
-      font-weight: normal;
-      font-size: 18px;
-      text-overflow: ellipsis;
-    }
-  }
-  .moving .order {
-    cursor: grabbing;
-    cursor: -moz-grabbing;
-    cursor: -webkit-grabbing;
-  }
   .h5p-ul {
     padding: 0;
     margin: 0;
@@ -192,8 +123,8 @@ a {
   input[type="button"], button {
     @include border-radius(3px);
     @include button-background(
-      $form-item-background,
-      $form-item-background-highlight);
+      $form-item-importance-medium-background,
+      $form-item-importance-medium-background-highlight);
     width: auto;
     margin: $min-padding 0 0 0;
     padding: 0 $padding;
@@ -203,7 +134,7 @@ a {
     font-size: $font-size-normal;
     font-family: $font-family;
     line-height: $form-item-height-normal;
-    color: $text-color;
+    color: $white;
     cursor: pointer;
 
     &[disabled] {
@@ -212,9 +143,9 @@ a {
 
     &:hover:not([disabled]) {
       @include button-background(
-        $form-item-background-hover,
-        $form-item-background-hover-highlight);
-      border-color: $form-item-background-hover;
+        $form-item-importance-medium-background-hover,
+        $form-item-importance-medium-background-hover-highlight);
+      border-color: $form-item-importance-medium-background-hover;
       text-decoration: none;
     }
 
@@ -222,12 +153,12 @@ a {
       cursor: not-allowed;
     }
 
-    &.very-important {
+    &.importance-high {
       @include border-radius(3px);
       @include button-background(
-        $form-item-very-important-background,
-        $form-item-very-important-background-highlight);
-      border: 1px solid $form-item-very-important-border-color;
+        $form-item-importance-high-background,
+        $form-item-importance-high-background-highlight);
+      border: 1px solid $form-item-importance-high-border-color;
       text-transform: uppercase;
       font-size: $font-size-large;
       font-weight: 600;
@@ -238,31 +169,31 @@ a {
 
       &:hover:not([disabled]) {
         @include button-background(
-          $form-item-very-important-background-hover,
-          $form-item-very-important-background-hover-highlight);
-        border-color: $form-item-very-important-background-hover;
+          $form-item-importance-high-background-hover,
+          $form-item-importance-high-background-hover-highlight);
+        border-color: $form-item-importance-high-background-hover;
       }
     }
 
-    &.important {
+    &.importance-low {
       @include border-radius(3px);
       @include button-background(
-        $form-item-important-background,
-        $form-item-important-background-highlight);
-      border: 1px solid $form-item-important-border-color;
+        $form-item-importance-medium-background,
+        $form-item-importance-medium-background-highlight);
+      border: 1px solid $form-item-importance-medium-border-color;
       text-transform: uppercase;
       font-size: $font-size-normal;
       font-weight: 600;
-      color: $white;
+      color: $text-color;
       height: $form-item-height-normal;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
 
       &:hover:not([disabled]) {
         @include button-background(
-          $form-item-important-background-hover,
-          $form-item-important-background-hover-highlight);
-        border-color: $form-item-important-background-hover;
+          $form-item-importance-medium-background-hover,
+          $form-item-importance-medium-background-hover-highlight);
+        border-color: $form-item-importance-medium-background-hover;
       }
     }
   }
@@ -533,6 +464,12 @@ a {
     z-index: 1;
     @include opacity(0.8);
     -webkit-transform: translateZ(0);
+
+    .h5peditor-label {
+      cursor: grabbing;
+      cursor: -moz-grabbing;
+      cursor: -webkit-grabbing;
+    }
   }
 
   .h5peditor-uploading, .h5peditor-loading {

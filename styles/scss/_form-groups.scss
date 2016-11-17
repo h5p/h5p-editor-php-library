@@ -1,14 +1,13 @@
 %title-bar-base {
-  overflow: hidden;
+  visibility: inherit;
 }
 
-%title-bar-very-important {
-  background: $form-item-very-important-background;
-  border: 1px solid $form-item-very-important-border-color;
+%title-bar-importance-high {
+  background: $form-item-importance-high-background;
+  border: 1px solid $form-item-importance-high-border-color;
   height: $form-item-height-large;
 }
-
-%title-bar-text-very-important {
+%title-bar-text-importance-high {
   font-size: $font-size-large;
   font-weight: 600;
   color: $white;
@@ -18,13 +17,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-%title-bar-important {
-  background: $form-item-important-background;
-  border: 1px solid $form-item-important-border-color;
+%title-bar-importance-medium {
+  background: $form-item-importance-medium-background;
+  border: 1px solid $form-item-importance-medium-border-color;
   height: $form-item-height-normal;
 }
-
-%title-bar-text-important {
+%title-bar-text-importance-medium {
   font-size: $font-size-normal;
   font-weight: 600;
   color: $white;
@@ -34,13 +32,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-%title-bar-less-important {
-  background: $form-item-background;
+%title-bar-importance-low {
+  background: $form-item-importance-low-background;
   height: $form-item-height-normal;
   border: 1px solid $form-border-color;
 }
-
-%title-bar-text-less-important {
+%title-bar-text-importance-low {
   font-size: $font-size-normal;
   font-weight: 400;
   color: $text-color;
@@ -52,11 +49,13 @@
 
   & > .title {
     @extend %title-bar-base;
-    @extend %title-bar-less-important;
-    @extend %title-bar-text-less-important;
+    @extend %title-bar-importance-medium;
+    @extend %title-bar-text-importance-medium;
+
     padding: 0 $min-padding;
     outline: none;
     cursor: pointer;
+    color: $white;
   }
 
   & > .content {
@@ -68,36 +67,38 @@
     background: $form-content-background;
   }
 
-  &.very-important > .title {
-    @extend %title-bar-very-important;
-    @extend %title-bar-text-very-important;
-
-    &:before {
-      color: $white;
-    }
+  &.importance-high > .title {
+    @extend %title-bar-importance-high;
+    @extend %title-bar-text-importance-high;
+    color: $white;
   }
 
-  &.important > .title {
-    @extend %title-bar-important;
-    @extend %title-bar-text-important;
+  &.importance-low > .title {
+    @extend %title-bar-importance-low;
+    @extend %title-bar-text-importance-low;
+    color: $text-color;
 
     &:before {
-      color: $white;
+      color: $text-color;
+    }
+    &:focus:before {
+      outline: 1px dashed $text-color;
     }
   }
 }
 
 .list-item-title-bar {
   @extend %title-bar-base;
-  @extend %title-bar-less-important;
-  @extend %title-bar-text-less-important;
+  @extend %title-bar-importance-medium;
 
   & > .h5peditor-label {
-    margin: 0 60px 0 0;
+    @extend %title-bar-text-importance-medium;
+
+    overflow: hidden;
+    margin: 0 $form-item-buttons-width-normal 0 0;
     padding: 0 $min-padding;
     white-space: nowrap;
-    font-weight: normal;
-    line-height: $form-item-height-normal - 2;
+    line-height: $form-item-height-normal;
     outline: none;
     text-overflow: ellipsis;
   }
@@ -110,10 +111,9 @@
   .remove {
     cursor: pointer;
     width: 1.25em;
-    height: $form-item-height-normal - 2;
+    height: $form-item-height-normal;
     font-size: 1.75em;
     display: inline-block;
-    overflow: hidden;
 
     &:hover {
       opacity: 1;
@@ -124,10 +124,10 @@
   .remove:after {
     font-family: $i;
     content: "\e890";
-    color: $text-color;
+    color: $white;
     opacity: 0.7;
     display: inline-block;
-    line-height: $form-item-height-normal - 2;
+    line-height: $form-item-height-normal;
   }
 
   .remove:hover:after {
@@ -136,26 +136,25 @@
 
   .order-group {
     text-align: center;
-    display: inline-block;
-    overflow: hidden;
+    float: right;
   }
 
   .order-up, .order-down {
     width: $form-item-height-normal / 2;
     height: $form-item-height-normal / 2;
-    background: $form-item-background-hover;
+    background: $form-item-importance-medium-border-color;
     font-size: $font-size-normal;
     line-height: $form-item-height-normal / 2;
     cursor: pointer;
 
     &:hover {
-      background: $form-border-color;
+      background: $form-item-importance-medium-background-hover;
     }
 
     &:after {
       font-family: $i;
       content: "\e58e";
-      color: #666;
+      color: $white;
       display: inline-block;
     }
   }
@@ -164,12 +163,13 @@
     content: "\e58f";
   }
 
-  &.very-important {
-    @extend %title-bar-very-important;
+  &.importance-high {
+    @extend %title-bar-importance-high;
 
     & > .title {
-      @extend %title-bar-text-very-important;
+      @extend %title-bar-text-importance-high;
       border: none;
+      margin: 0 $form-item-buttons-width-large 0 0;
     }
 
     .remove {
@@ -192,12 +192,12 @@
     .order-up, .order-down {
       width: $form-item-height-large / 2;
       height: $form-item-height-large / 2;
-      background: $form-item-very-important-border-color;
+      background: $form-item-importance-high-border-color;
       font-size: $font-size-large;
       line-height: $form-item-height-large / 2;
 
       &:hover {
-        background: $form-item-very-important-background-hover;
+        background: $form-item-importance-high-background-hover;
       }
 
       &:after {
@@ -206,12 +206,20 @@
     }
   }
 
-  &.important {
-    @extend %title-bar-important;
+  &.importance-low {
+    @extend %title-bar-importance-low;
 
     & > .title {
-      @extend %title-bar-text-important;
+      @extend %title-bar-text-importance-low;
       border: none;
+      margin: 0 $form-item-buttons-width-normal 0 0;
+
+      &:before {
+        color: $text-color;
+      }
+      &:focus:before {
+        outline: 1px dashed $text-color;
+      }
     }
 
     .remove {
@@ -224,7 +232,7 @@
       }
     }
     .remove:after {
-      color: $white;
+      color: $text-color;
       opacity: 0.7;
     }
     .remove:hover:after {
@@ -234,16 +242,16 @@
     .order-up, .order-down {
       width: $form-item-height-normal / 2;
       height: $form-item-height-normal / 2;
-      background: $form-item-important-border-color;
+      background: $form-item-importance-low-border-color;
       font-size: $font-size-normal;
       line-height: $form-item-height-normal / 2;
 
       &:hover {
-        background: $form-item-important-background-hover;
+        background: $form-item-importance-low-background-hover;
       }
 
       &:after {
-        color: $white;
+        color: $text-color;
       }
     }
   }
@@ -258,11 +266,17 @@
 .listgroup > .list-item-title-bar > .h5peditor-label {
   cursor: pointer;
 }
-.listgroup > .list-item-title-bar > .h5peditor-label:before,
-.group > .title:before  {
-  content: "\e566";
-  font-family: $i;
-  opacity: 0.7;
+.list-item-title-bar > .h5peditor-label,
+.group > .title  {
+  &:before {
+    content: "\e566";
+    font-family: $i;
+    margin-right: $min-padding/2;
+  }
+
+  &:focus:before {
+    outline: 1px dashed $white;
+  }
 }
 .listgroup.expanded > .list-item-title-bar > .h5peditor-label:before,
 .expanded > .title:before {
@@ -272,13 +286,14 @@
 .listgroup > .list-item-title-bar > .h5peditor-label:focus:before,
 .group > .title:hover:before,
 .group > .title:focus:before {
-  opacity: 1;
+
 }
 
 .listgroup > .list-item-title-bar > .h5peditor-label:active:before,
 .group > .title:active:before {
-  opacity: 0.5;
+
 }
+
 .listgroup > .group.field {
   margin: 0;
   padding: 0;
@@ -295,16 +310,10 @@
 .common {
   margin-top: $min-padding;
 
-  .h5peditor-label {
-    color: #454347;
-    font-size: 18px;
-    font-weight: 600;
-  }
-
   & > .h5peditor-label {
     @extend %title-bar-base;
-    @extend %title-bar-less-important;
-    @extend %title-bar-text-less-important;
+    @extend %title-bar-importance-low;
+    @extend %title-bar-text-importance-low;
     margin: 0;
     padding: 0 $min-padding;
     cursor: pointer;
@@ -350,33 +359,30 @@
   }
 }
 
-.listgroup {
-  border: none;
+.h5peditor-button[aria-label] {
+  position: relative;
 
-  .h5peditor-label {
-    color: #454347;
-    font-size: 18px;
-    font-weight: 600;
+  &:before {
+    content: attr(aria-label);
+    visibility: hidden;
+
+    position: absolute;
+    top: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+
+    padding: 0.25em 0.75em;
+    background: $text-color;
+    color: $white;
+    white-space: nowrap;
+    font-size: $font-size-small;
+    line-height: 1.5;
+    box-shadow: 0 0 0.5em $form-input-placeholder-color;
   }
-}
 
-.group .group,
-.common .group {
-  & > .title {
-    background: $form-background;
-  }
-
-  & > .content {
-    background: $form-background;
-  }
-
-  .group {
-    & > .title {
-      background: $form-content-background;
-    }
-
-    & > .content {
-      background: $form-content-background;
-    }
+  &:hover:before,
+  &:focus:before {
+    visibility: visible;
   }
 }

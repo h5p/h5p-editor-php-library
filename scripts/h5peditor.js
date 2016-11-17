@@ -571,3 +571,33 @@ ns.getWidgetName = function (field) {
 ns.htmlspecialchars = function(string) {
   return string.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#039;').replace(/"/g, '&quot;');
 };
+
+/**
+ * Makes it easier to add consistent buttons across the editor widget.
+ *
+ * @param {string} id Typical CSS class format
+ * @param {string} title Human readable format
+ * @param {function} handler Action handler when triggered
+ * @return {H5P.jQuery}
+ */
+ns.createButton = function (id, title, handler) {
+  return ns.$('<div/>', {
+    class: 'h5peditor-button ' + id,
+    role: 'button',
+    tabIndex: 0,
+    'aria-label': title,
+    on: {
+      click: function (event) {
+        handler();
+      },
+      keydown: function (event) {
+        switch (event.which) {
+          case 13: // Enter
+          case 32: // Space
+            handler();
+            event.preventDefault();
+        }
+      }
+    }
+  });
+};

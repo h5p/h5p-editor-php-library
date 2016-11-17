@@ -29,11 +29,6 @@ H5PEditor.ListEditor = (function ($) {
 
     // Used when dragging items around
     var adjustX, adjustY, marginTop, formOffset;
-    // Timeout triggered on mousedown
-    var dragStartTimeout = false;
-    // Time to wait before a drag is started
-    var dragDelay = 250;
-    var dragActive = false;
 
     /**
      * @private
@@ -81,7 +76,7 @@ H5PEditor.ListEditor = (function ($) {
      * @param {Object} item
      */
     self.addItem = function (item) {
-      var $placeholder;
+      var $placeholder, mouseDownAt;
       var $item = $('<li/>', {
         'class' : 'h5p-li',
       });
@@ -104,6 +99,43 @@ H5PEditor.ListEditor = (function ($) {
        * @param {Object} event
        */
       var move = function (event) {
+        if (mouseDownAt) {
+          // Have not started moving yet
+
+          if (! (event.pageX > mouseDownAt.x + 5 || event.pageX < mouseDownAt.x - 5 ||
+                 event.pageY > mouseDownAt.y + 5 || event.pageY < mouseDownAt.y - 5) ) {
+            return; // Not ready to start moving
+          }
+
+          // Prevent wysiwyg becoming unresponsive
+          H5PEditor.Html.removeWysiwyg();
+
+          // Prepare to start moving
+          mouseDownAt = null;
+
+          var offset = $item.offset();
+          adjustX = event.pageX - offset.left;
+          adjustY = event.pageY - offset.top;
+          marginTop = parseInt($item.css('marginTop'));
+          formOffset = $list.offsetParent().offset();
+          // TODO: Couldn't formOffset and margin be added?
+
+          var width = $item.width();
+          var height = $item.height();
+
+          $item.addClass('moving').css({
+            width: width,
+            height: height
+          });
+          $placeholder = $('<li/>', {
+            'class': 'placeholder h5p-li',
+            css: {
+              width: width,
+              height: height
+            }
+          }).insertBefore($item);
+        }
+
         moveItem($item, $placeholder, event.pageX, event.pageY);
       };
 
@@ -112,25 +144,37 @@ H5PEditor.ListEditor = (function ($) {
        *
        * @private
        */
-      var up = function () {
-        H5P.$body
+      var up = function (event) {
+
+        // Stop listening for mouse move events
+        H5P.$window
           .unbind('mousemove', move)
-          .unbind('mouseup', up)
-          .unbind('mouseleave', up)
-          .attr('unselectable', 'off')
+          .unbind('mouseup', up);
+
+        // Enable text select again
+        H5P.$body
           .css({
             '-moz-user-select': '',
             '-webkit-user-select': '',
             'user-select': '',
             '-ms-user-select': ''
           })
+          .attr('unselectable', 'off')
           [0].onselectstart = H5P.$body[0].ondragstart = null;
 
-        $item.removeClass('moving').css({
-          width: 'auto',
-          height: 'auto'
-        });
-        $placeholder.remove();
+        if (!mouseDownAt) {
+          // Not your regular click, we have been moving
+          $item.removeClass('moving').css({
+            width: 'auto',
+            height: 'auto'
+          });
+          $placeholder.remove();
+
+          if (item instanceof H5PEditor.Group) {
+            // Avoid groups expand/collapse toggling
+            item.preventToggle = true;
+          }
+        }
       };
 
       /**
@@ -143,131 +187,67 @@ H5PEditor.ListEditor = (function ($) {
           return; // Only allow left mouse button
         }
 
-        // Prevent wysiwyg becoming unresponsive
-        H5PEditor.Html.removeWysiwyg();
+        mouseDownAt = {
+          x: event.pageX,
+          y: event.pageY
+        };
 
-        // Start tracking mouse
+        // Start listening for mouse move events
+        H5P.$window
+          .mousemove(move)
+          .mouseup(up);
+
+        // Prevent text select
         H5P.$body
-          .attr('unselectable', 'on')
-          .mouseup(up)
-          .bind('mouseleave', up)
           .css({
             '-moz-user-select': 'none',
             '-webkit-user-select': 'none',
             'user-select': 'none',
             '-ms-user-select': 'none'
           })
-          .mousemove(move)
+          .attr('unselectable', 'on')
           [0].onselectstart = H5P.$body[0].ondragstart = function () {
             return false;
           };
-
-        var offset = $item.offset();
-        adjustX = event.pageX - offset.left;
-        adjustY = event.pageY - offset.top;
-        marginTop = parseInt($item.css('marginTop'));
-        formOffset = $list.offsetParent().offset();
-        // TODO: Couldn't formOffset and margin be added?
-
-        var width = $item.width();
-        var height = $item.height();
-
-        $item.addClass('moving').css({
-          width: width,
-          height: height
-        });
-        $placeholder = $('<li/>', {
-          'class': 'placeholder h5p-li',
-          css: {
-            width: width,
-            height: height
-          }
-        }).insertBefore($item);
-
-        move(event);
-        return false;
       };
 
       /**
-       * Mouse down callback
-       *
-       * @private
-       * @param {Object} e
-       */
-      function mouseDown(e) {
-        dragStartTimeout = setTimeout(function dragStart() {
-          dragStartTimeout = false;
-          dragActive = true;
-
-          down(e);
-        }, dragDelay)
-      }
-
-      /**
-       * Mouse up callback
-       *
-       * @private
-       * @param {Object} e
-       */
-      function mouseUp(e) {
-        if (dragStartTimeout !== false) {
-          clearTimeout(dragStartTimeout);
-
-          if (e.target.className === 'order-up') {
-            moveItemUp();
-          }
-          else if (e.target.className === 'order-down') {
-            moveItemDown();
-          }
-        }
-        else if (dragActive) {
-          dragActive = false;
-
-          up(e);
-        }
-      }
-
-      /**
-       * Move list item up in list
+       * Order current list item up
        *
        * @private
        */
-      function moveItemUp() {
+      var moveItemUp = function () {
         var $prev = $item.prev();
-
-        // Move up if item isn't first in list
-        if ($prev.length) {
-          var currentIndex = $item.index();
-
-          // Prevent wysiwyg becoming unresponsive
-          H5PEditor.Html.removeWysiwyg();
-
-          $prev.insertAfter($item);
-
-          list.moveItem(currentIndex, currentIndex - 1);
+        if (!$prev.length) {
+          return; // Cannot move item further up
         }
-      }
+
+        // Prevent wysiwyg becoming unresponsive
+        H5PEditor.Html.removeWysiwyg();
+
+        var currentIndex = $item.index();
+        $prev.insertAfter($item);
+        list.moveItem(currentIndex, currentIndex - 1);
+      };
 
       /**
-       * Move list item down in list
+       * Order current ist item down
        *
        * @private
        */
-      function moveItemDown() {
+      var moveItemDown = function () {
         var $next = $item.next();
-
-        // Move down if item isn't last in list
-        if ($next.length) {
-          var currentIndex = $item.index();
-
-          // Prevent wysiwyg becoming unresponsive
-          H5PEditor.Html.removeWysiwyg();
-
-          $next.insertBefore($item);
-
-          list.moveItem(currentIndex, currentIndex + 1);
+        if (!$next.length) {
+          return; // Cannot move item further down
         }
-      }
+
+        // Prevent wysiwyg becoming unresponsive
+        H5PEditor.Html.removeWysiwyg();
+
+        var currentIndex = $item.index();
+        $next.insertBefore($item);
+        list.moveItem(currentIndex, currentIndex + 1);
+      };
 
       // List item title bar
       var $titleBar = $('<div/>', {
@@ -279,19 +259,7 @@ H5PEditor.ListEditor = (function ($) {
       var $listActions = $('<div/>', {
         class: 'list-actions',
         appendTo: $titleBar
-      })
-
-      // Append remove button
-      $('<div/>', {
-        'class' : 'remove',
-        role: 'button',
-        tabIndex: 1,
-        on: {
-          click: function () {
-            confirmRemovalDialog.show($(this).offset().top);
-          }
-        }
-      }).appendTo($listActions);
+      });
 
       // Append order button
       var $orderGroup = $('<div/>', {
@@ -299,39 +267,14 @@ H5PEditor.ListEditor = (function ($) {
         appendTo: $listActions
       });
 
-      $('<div/>', {
-        class: 'order-up',
-        role: 'button',
-        tabIndex: 1,
-        on: {
-          keydown: function (e) {
-            if (e.keyCode === 32) {
-              moveItemUp();
-              return false;
-            }
-          },
-          mousedown: mouseDown,
-          mouseup: mouseUp
-        },
-        appendTo: $orderGroup
-      });
+      // TODO: Translate
+      H5PEditor.createButton('order-up', 'Order item up', moveItemUp).appendTo($orderGroup);
+      H5PEditor.createButton('order-down', 'Order item down', moveItemDown).appendTo($orderGroup);
 
-      $('<div/>', {
-        class: 'order-down',
-        role: 'button',
-        tabIndex: 1,
-        on: {
-          keydown: function (e) {
-            if (e.keyCode === 32) {
-              moveItemDown();
-              return false;
-            }
-          },
-          mousedown: mouseDown,
-          mouseup: mouseUp
-        },
-        appendTo: $orderGroup
-      });
+      // TODO: Translate
+      H5PEditor.createButton('remove', 'Remove item', function () {
+        confirmRemovalDialog.show($(this).offset().top);
+      }).appendTo($listActions);
 
       // Append new field item to content wrapper
       if (item instanceof H5PEditor.Group) {
@@ -387,6 +330,8 @@ H5PEditor.ListEditor = (function ($) {
           return isTextField;
         });
       }
+
+      $titleBar.children('.h5peditor-label').mousedown(down);
 
       /**
        * Parses a html string with special character codes into a text string

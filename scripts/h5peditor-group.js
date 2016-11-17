@@ -138,6 +138,11 @@ ns.Group.prototype.appendTo = function ($wrapper) {
  * Toggle expand/collapse for the given group.
  */
 ns.Group.prototype.toggle = function () {
+  if (this.preventToggle) {
+    this.preventToggle = false;
+    return;
+  }
+
   if (this.$group.hasClass('expanded')) {
     this.collapse();
   }

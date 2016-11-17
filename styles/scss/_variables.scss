@@ -24,23 +24,28 @@ $form-input-color: $white;
 $form-input-placeholder-color: #858585;
 $form-input-box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.12);
 
-$form-item-background: #ECECED;
-$form-item-background-highlight: #F3F3F3;
-$form-item-background-hover: #DAD9DA;
-$form-item-background-hover-highlight: #DEDDDE;
+$form-item-importance-high-background: #2579C6;
+$form-item-importance-high-background-highlight: #3B87CC;
+$form-item-importance-high-border-color: #2074B0;
+$form-item-importance-high-background-hover: #195286;
+$form-item-importance-high-background-hover-highlight: #306492;
 
-$form-item-very-important-background: #2579C6;
-$form-item-very-important-background-highlight: #3B87CC;
-$form-item-very-important-border-color: #2074B0;
-$form-item-very-important-background-hover: #195286;
-$form-item-very-important-background-hover-highlight: #306492;
+$form-item-importance-medium-background: #747275;
+$form-item-importance-medium-background-highlight: #817f82;
+$form-item-importance-medium-border-color: #636164;
+$form-item-importance-medium-background-hover: #5b595c;
+$form-item-importance-medium-background-hover-highlight: #676569;
 
-$form-item-important-background: #868587;
-$form-item-important-background-highlight: #929193;
-$form-item-important-border-color: #7D7B7E;
-$form-item-important-background-hover: #585659;
-$form-item-important-background-hover-highlight: #69676A;
+$form-item-importance-low-background: #ECECED;
+$form-item-importance-low-background-highlight: #F3F3F3;
+$form-item-importance-low-border-color: #D0D0D1;
+$form-item-importance-low-background-hover: #DAD9DA;
+$form-item-importance-low-background-hover-highlight: #DEDDDE;
 
 $form-item-height-large: 48px; // 50px total with border
 $form-item-height-normal: 38px; // 40px total with border
 $form-item-height-small: 28px; // 30px total with border
+
+$form-item-buttons-width-large: 74px;
+$form-item-buttons-width-normal: 54px;
+$form-item-buttons-width-small: 54px;
