@@ -1,6 +1,6 @@
 H5PEditor.language.core = {
   missingTranslation: '[Mangler oversettelse :key]',
-  loading: 'Laster :type, vennligst vent...',
+  loading: 'Laster, vennligst vent...',
   selectLibrary: 'Velg biblioteket du ønsker å bruke for innholdet ditt.',
   unknownFieldPath: 'Kan ikke finne ":path".',
   notImageField: '":path" er ikke et bilde.',
