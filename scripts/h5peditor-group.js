@@ -121,7 +121,10 @@ ns.Group.prototype.appendTo = function ($wrapper) {
       this.params = {};
       this.setValue(this.field, this.params);
     }
-    ns.processSemanticsChunk(this.field.fields, this.params, $content, this);
+
+    var params = this.initSubContent(this.params);
+
+    ns.processSemanticsChunk(this.field.fields, params, $content, this);
   }
 
   // Set summary
@@ -134,6 +137,20 @@ ns.Group.prototype.appendTo = function ($wrapper) {
   }
 };
 
+/**
+ * Add generated 'subContentId' attribute, if group is "sub content (library-like embedded structure)"
+ *
+ * @param {object} params
+ * @return {object}
+ */
+ns.Group.prototype.initSubContent = function (params) {
+  // If group contains library-like sub content that needs UUIDs
+  if(this.field.isSubContent === true){
+    params['subContentId'] = params['subContentId'] || this.guid();
+  }
+
+  return params;
+};
 /**
  * Toggle expand/collapse for the given group.
  */
@@ -284,6 +301,21 @@ ns.Group.prototype.remove = function () {
     ns.removeChildren(this.children);
     this.$group.remove();
   }
+};
+
+/**
+ * Generate new UUID
+ *
+ * @return {string}
+ */
+ns.Group.prototype.guid = function () {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+    .toString(16)
+    .substring(1);
+  }
+
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 };
 
 // Tell the editor what widget we are.
