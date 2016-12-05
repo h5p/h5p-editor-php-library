@@ -62,6 +62,10 @@ a {
   .h5peditor-text, textarea {
     width: 100%;
     box-sizing: border-box;
+
+    &.error {
+      border-color: red;
+    }
   }
   /* Placeholders - need to be on separate lines. If not, the browsers will invlaidate them */
   ::-webkit-input-placeholder {
