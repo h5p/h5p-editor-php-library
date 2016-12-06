@@ -80,14 +80,14 @@
 }
 
 /* line 20, ../scss/_form-groups.scss */
-.group > .title, .list-item-title-bar {
+.group.importance-medium > .title {
   background: #747275;
   border: 1px solid #636164;
   height: 38px;
 }
 
 /* line 25, ../scss/_form-groups.scss */
-.group > .title, .list-item-title-bar > .h5peditor-label {
+.group.importance-medium > .title {
   font-size: 16px;
   font-weight: 600;
   color: #FFFFFF;
@@ -97,14 +97,14 @@
 }
 
 /* line 35, ../scss/_form-groups.scss */
-.group.importance-low > .title, .list-item-title-bar.importance-low, .common > .h5peditor-label {
+.group > .title, .list-item-title-bar, .list-item-title-bar.importance-low, .common > .h5peditor-label {
   background: #ECECED;
   height: 38px;
   border: 1px solid #D0D0D1;
 }
 
 /* line 40, ../scss/_form-groups.scss */
-.group.importance-low > .title, .list-item-title-bar.importance-low > .title, .common > .h5peditor-label {
+.group > .title, .list-item-title-bar > .h5peditor-label, .list-item-title-bar.importance-low > .title, .common > .h5peditor-label {
   font-size: 16px;
   font-weight: 400;
   color: #454347;
@@ -120,9 +120,17 @@
   padding: 0 10px;
   outline: none;
   cursor: pointer;
-  color: #FFFFFF;
+  color: #454347;
 }
-/* line 61, ../scss/_form-groups.scss */
+/* line 59, ../scss/_form-groups.scss */
+.group > .title:before {
+  color: color;
+}
+/* line 62, ../scss/_form-groups.scss */
+.group > .title:focus:before {
+  outline: 1px dashed color;
+}
+/* line 67, ../scss/_form-groups.scss */
 .group > .content {
   display: none;
   margin: 0;
@@ -131,24 +139,16 @@
   border-top: none;
   background: #FFFFFF;
 }
-/* line 70, ../scss/_form-groups.scss */
+/* line 76, ../scss/_form-groups.scss */
 .group.importance-high > .title {
   color: #FFFFFF;
 }
-/* line 76, ../scss/_form-groups.scss */
-.group.importance-low > .title {
-  color: #454347;
-}
-/* line 81, ../scss/_form-groups.scss */
-.group.importance-low > .title:before {
-  color: #454347;
-}
-/* line 84, ../scss/_form-groups.scss */
-.group.importance-low > .title:focus:before {
-  outline: 1px dashed #454347;
+/* line 82, ../scss/_form-groups.scss */
+.group.importance-medium > .title {
+  color: #FFFFFF;
 }
 
-/* line 94, ../scss/_form-groups.scss */
+/* line 93, ../scss/_form-groups.scss */
 .list-item-title-bar > .h5peditor-label {
   overflow: hidden;
   margin: 0 54px 0 0;
@@ -158,12 +158,12 @@
   outline: none;
   text-overflow: ellipsis;
 }
-/* line 106, ../scss/_form-groups.scss */
+/* line 105, ../scss/_form-groups.scss */
 .list-item-title-bar > .list-actions {
   height: 100%;
   float: right;
 }
-/* line 111, ../scss/_form-groups.scss */
+/* line 110, ../scss/_form-groups.scss */
 .list-item-title-bar .remove {
   cursor: pointer;
   width: 1.25em;
@@ -171,12 +171,12 @@
   font-size: 1.75em;
   display: inline-block;
 }
-/* line 118, ../scss/_form-groups.scss */
+/* line 117, ../scss/_form-groups.scss */
 .list-item-title-bar .remove:hover {
   opacity: 1;
   text-decoration: none;
 }
-/* line 124, ../scss/_form-groups.scss */
+/* line 123, ../scss/_form-groups.scss */
 .list-item-title-bar .remove:after {
   font-family: "H5P";
   content: "\e890";
@@ -185,16 +185,16 @@
   display: inline-block;
   line-height: 38px;
 }
-/* line 133, ../scss/_form-groups.scss */
+/* line 132, ../scss/_form-groups.scss */
 .list-item-title-bar .remove:hover:after {
   opacity: 1;
 }
-/* line 137, ../scss/_form-groups.scss */
+/* line 136, ../scss/_form-groups.scss */
 .list-item-title-bar .order-group {
   text-align: center;
   float: right;
 }
-/* line 142, ../scss/_form-groups.scss */
+/* line 141, ../scss/_form-groups.scss */
 .list-item-title-bar .order-up, .list-item-title-bar .order-down {
   width: 19px;
   height: 19px;
@@ -203,46 +203,46 @@
   line-height: 19px;
   cursor: pointer;
 }
-/* line 150, ../scss/_form-groups.scss */
+/* line 149, ../scss/_form-groups.scss */
 .list-item-title-bar .order-up:hover, .list-item-title-bar .order-down:hover {
   background: #5b595c;
 }
-/* line 154, ../scss/_form-groups.scss */
+/* line 153, ../scss/_form-groups.scss */
 .list-item-title-bar .order-up:after, .list-item-title-bar .order-down:after {
   font-family: "H5P";
   content: "\e58e";
   color: #FFFFFF;
   display: inline-block;
 }
-/* line 162, ../scss/_form-groups.scss */
+/* line 161, ../scss/_form-groups.scss */
 .list-item-title-bar .order-down:after {
   content: "\e58f";
 }
-/* line 169, ../scss/_form-groups.scss */
+/* line 168, ../scss/_form-groups.scss */
 .list-item-title-bar.importance-high > .title {
   border: none;
   margin: 0 74px 0 0;
 }
-/* line 175, ../scss/_form-groups.scss */
+/* line 174, ../scss/_form-groups.scss */
 .list-item-title-bar.importance-high .remove {
   height: 48px;
   line-height: 48px;
   font-size: 40px;
 }
-/* line 180, ../scss/_form-groups.scss */
+/* line 179, ../scss/_form-groups.scss */
 .list-item-title-bar.importance-high .remove:after {
   line-height: 48px;
 }
-/* line 184, ../scss/_form-groups.scss */
+/* line 183, ../scss/_form-groups.scss */
 .list-item-title-bar.importance-high .remove:after {
   color: #FFFFFF;
   opacity: 0.7;
 }
-/* line 188, ../scss/_form-groups.scss */
+/* line 187, ../scss/_form-groups.scss */
 .list-item-title-bar.importance-high .remove:hover:after {
   opacity: 1;
 }
-/* line 192, ../scss/_form-groups.scss */
+/* line 191, ../scss/_form-groups.scss */
 .list-item-title-bar.importance-high .order-up, .list-item-title-bar.importance-high .order-down {
   width: 24px;
   height: 24px;
@@ -250,47 +250,47 @@
   font-size: 18px;
   line-height: 24px;
 }
-/* line 199, ../scss/_form-groups.scss */
+/* line 198, ../scss/_form-groups.scss */
 .list-item-title-bar.importance-high .order-up:hover, .list-item-title-bar.importance-high .order-down:hover {
   background: #195286;
 }
-/* line 203, ../scss/_form-groups.scss */
+/* line 202, ../scss/_form-groups.scss */
 .list-item-title-bar.importance-high .order-up:after, .list-item-title-bar.importance-high .order-down:after {
   color: #FFFFFF;
 }
-/* line 212, ../scss/_form-groups.scss */
+/* line 211, ../scss/_form-groups.scss */
 .list-item-title-bar.importance-low > .title {
   border: none;
   margin: 0 54px 0 0;
 }
-/* line 217, ../scss/_form-groups.scss */
+/* line 216, ../scss/_form-groups.scss */
 .list-item-title-bar.importance-low > .title:before {
   color: #454347;
 }
-/* line 220, ../scss/_form-groups.scss */
+/* line 219, ../scss/_form-groups.scss */
 .list-item-title-bar.importance-low > .title:focus:before {
   outline: 1px dashed #454347;
 }
-/* line 225, ../scss/_form-groups.scss */
+/* line 224, ../scss/_form-groups.scss */
 .list-item-title-bar.importance-low .remove {
   height: 38px;
   line-height: 38px;
   font-size: 30px;
 }
-/* line 230, ../scss/_form-groups.scss */
+/* line 229, ../scss/_form-groups.scss */
 .list-item-title-bar.importance-low .remove:after {
   line-height: 38px;
 }
-/* line 234, ../scss/_form-groups.scss */
+/* line 233, ../scss/_form-groups.scss */
 .list-item-title-bar.importance-low .remove:after {
   color: #454347;
   opacity: 0.7;
 }
-/* line 238, ../scss/_form-groups.scss */
+/* line 237, ../scss/_form-groups.scss */
 .list-item-title-bar.importance-low .remove:hover:after {
   opacity: 1;
 }
-/* line 242, ../scss/_form-groups.scss */
+/* line 241, ../scss/_form-groups.scss */
 .list-item-title-bar.importance-low .order-up, .list-item-title-bar.importance-low .order-down {
   width: 19px;
   height: 19px;
@@ -298,52 +298,52 @@
   font-size: 16px;
   line-height: 19px;
 }
-/* line 249, ../scss/_form-groups.scss */
+/* line 248, ../scss/_form-groups.scss */
 .list-item-title-bar.importance-low .order-up:hover, .list-item-title-bar.importance-low .order-down:hover {
   background: #DAD9DA;
 }
-/* line 253, ../scss/_form-groups.scss */
+/* line 252, ../scss/_form-groups.scss */
 .list-item-title-bar.importance-low .order-up:after, .list-item-title-bar.importance-low .order-down:after {
   color: #454347;
 }
 
-/* line 261, ../scss/_form-groups.scss */
+/* line 260, ../scss/_form-groups.scss */
 .group.expanded > .content,
 .listgroup.expanded > .content {
   display: block;
 }
 
-/* line 266, ../scss/_form-groups.scss */
+/* line 265, ../scss/_form-groups.scss */
 .listgroup > .list-item-title-bar > .h5peditor-label {
   cursor: pointer;
 }
 
-/* line 271, ../scss/_form-groups.scss */
+/* line 270, ../scss/_form-groups.scss */
 .list-item-title-bar > .h5peditor-label:before,
 .group > .title:before {
   content: "\e566";
   font-family: "H5P";
   margin-right: 5px;
 }
-/* line 277, ../scss/_form-groups.scss */
+/* line 276, ../scss/_form-groups.scss */
 .list-item-title-bar > .h5peditor-label:focus:before,
 .group > .title:focus:before {
   outline: 1px dashed #FFFFFF;
 }
 
-/* line 281, ../scss/_form-groups.scss */
+/* line 280, ../scss/_form-groups.scss */
 .listgroup.expanded > .list-item-title-bar > .h5peditor-label:before,
 .expanded > .title:before {
   content: "\e565";
 }
 
-/* line 297, ../scss/_form-groups.scss */
+/* line 296, ../scss/_form-groups.scss */
 .listgroup > .group.field {
   margin: 0;
   padding: 0;
 }
 
-/* line 301, ../scss/_form-groups.scss */
+/* line 300, ../scss/_form-groups.scss */
 .content {
   display: block;
   margin: 0;
@@ -353,27 +353,27 @@
   background: #FFFFFF;
 }
 
-/* line 310, ../scss/_form-groups.scss */
+/* line 309, ../scss/_form-groups.scss */
 .common {
   margin-top: 10px;
 }
-/* line 313, ../scss/_form-groups.scss */
+/* line 312, ../scss/_form-groups.scss */
 .common > .h5peditor-label {
   margin: 0;
   padding: 0 10px;
   cursor: pointer;
 }
-/* line 321, ../scss/_form-groups.scss */
+/* line 320, ../scss/_form-groups.scss */
 .common > .h5peditor-label > .icon:before {
   content: "\e565";
   font-family: "H5P";
   opacity: 0.7;
 }
-/* line 326, ../scss/_form-groups.scss */
+/* line 325, ../scss/_form-groups.scss */
 .common > .h5peditor-label:hover > .icon {
   opacity: 1;
 }
-/* line 330, ../scss/_form-groups.scss */
+/* line 329, ../scss/_form-groups.scss */
 .common > .fields {
   min-height: 2em;
   padding: 20px;
@@ -381,34 +381,34 @@
   border-top: none;
   background: #FFFFFF;
 }
-/* line 337, ../scss/_form-groups.scss */
+/* line 336, ../scss/_form-groups.scss */
 .common > .fields > .desc {
   margin: 0;
   font-size: 0.875em;
   color: #666;
 }
-/* line 343, ../scss/_form-groups.scss */
+/* line 342, ../scss/_form-groups.scss */
 .common > .fields p:first-child {
   margin-bottom: 20px;
 }
-/* line 349, ../scss/_form-groups.scss */
+/* line 348, ../scss/_form-groups.scss */
 .common.collapsed > .h5peditor-label > .icon:before {
   content: "\e566";
 }
-/* line 352, ../scss/_form-groups.scss */
+/* line 351, ../scss/_form-groups.scss */
 .common.collapsed > .fields {
   display: none;
 }
-/* line 357, ../scss/_form-groups.scss */
+/* line 356, ../scss/_form-groups.scss */
 .common.hidden {
   display: none;
 }
 
-/* line 362, ../scss/_form-groups.scss */
+/* line 361, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label] {
   position: relative;
 }
-/* line 365, ../scss/_form-groups.scss */
+/* line 364, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label]:before {
   content: attr(aria-label);
   visibility: hidden;
@@ -425,7 +425,7 @@
   line-height: 1.5;
   box-shadow: 0 0 0.5em #858585;
 }
-/* line 384, ../scss/_form-groups.scss */
+/* line 383, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label]:hover:before, .h5peditor-button[aria-label]:focus:before {
   visibility: visible;
 }

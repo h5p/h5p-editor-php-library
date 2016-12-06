@@ -49,13 +49,19 @@
 
   & > .title {
     @extend %title-bar-base;
-    @extend %title-bar-importance-medium;
-    @extend %title-bar-text-importance-medium;
-
+    @extend %title-bar-importance-low;
+    @extend %title-bar-text-importance-low;
     padding: 0 $min-padding;
     outline: none;
     cursor: pointer;
-    color: $white;
+    color: $text-color;
+
+    &:before {
+      color: color;
+    }
+    &:focus:before {
+      outline: 1px dashed color;
+    }
   }
 
   & > .content {
@@ -73,26 +79,19 @@
     color: $white;
   }
 
-  &.importance-low > .title {
-    @extend %title-bar-importance-low;
-    @extend %title-bar-text-importance-low;
-    color: $text-color;
-
-    &:before {
-      color: $text-color;
-    }
-    &:focus:before {
-      outline: 1px dashed $text-color;
-    }
+  &.importance-medium > .title{
+    @extend %title-bar-importance-medium;
+    @extend %title-bar-text-importance-medium;
+    color: $white;
   }
 }
 
 .list-item-title-bar {
   @extend %title-bar-base;
-  @extend %title-bar-importance-medium;
+  @extend %title-bar-importance-low;
 
   & > .h5peditor-label {
-    @extend %title-bar-text-importance-medium;
+    @extend %title-bar-text-importance-low;
 
     overflow: hidden;
     margin: 0 $form-item-buttons-width-normal 0 0;
