@@ -72,7 +72,7 @@
     color: $white;
   }
 
-  &.importance-low > .title{
+  &.importance-low > .title {
     @extend %title-bar-importance-low;
     @extend %title-bar-text-importance-low;
     color: $text-color;
