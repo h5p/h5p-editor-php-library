@@ -21,6 +21,9 @@
 
   &.boolean .h5peditor-label {
     display: inline;
+    color: #454347;
+    font-size: 18px;
+    font-weight: 600;
   }
 
   &.video, &.image, &.file, &.audio {
