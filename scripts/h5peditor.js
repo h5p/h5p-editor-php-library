@@ -582,13 +582,13 @@ ns.createButton = function (id, title, handler) {
     'aria-label': title,
     on: {
       click: function (event) {
-        handler();
+        handler.call(this);
       },
       keydown: function (event) {
         switch (event.which) {
           case 13: // Enter
           case 32: // Space
-            handler();
+            handler.call(this);
             event.preventDefault();
         }
       }
