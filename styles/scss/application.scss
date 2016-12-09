@@ -103,8 +103,8 @@ a {
 
       &.placeholder {
         box-sizing: border-box;
-        background: $white;
-        border: 1px solid $form-border-color;
+        background: #e8f2fa;
+        border: dashed 2px #2782d1;
       }
 
       &:hover {

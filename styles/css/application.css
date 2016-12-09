@@ -756,8 +756,8 @@ a {
 /* line 104, ../scss/application.scss */
 .h5peditor .h5p-ul .h5p-li.placeholder {
   box-sizing: border-box;
-  background: #FFFFFF;
-  border: 1px solid #D0D0D1;
+  background: #e8f2fa;
+  border: dashed 2px #2782d1;
 }
 /* line 110, ../scss/application.scss */
 .h5peditor .h5p-ul .h5p-li:hover {
