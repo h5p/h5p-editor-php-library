@@ -87,7 +87,7 @@
   }
 }
 
-.list-item-title-bar {
+.h5p-li > .list-item-title-bar {
   @extend %title-bar-base;
   @extend %title-bar-importance-medium;
 
@@ -267,7 +267,7 @@
 .listgroup > .list-item-title-bar > .h5peditor-label {
   cursor: pointer;
 }
-.list-item-title-bar > .h5peditor-label,
+.list-item-title-bar > .title,
 .group > .title  {
   &:before {
     content: "\e566";
@@ -306,6 +306,9 @@
   border: 1px solid $form-border-color;
   border-top: none;
   background: $form-content-background;
+}
+.h5p-li > .content {
+  padding: 10px;
 }
 
 .common {

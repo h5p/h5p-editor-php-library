@@ -305,7 +305,7 @@ H5PEditor.ListEditor = (function ($) {
 
         if (item.field.label !== 0) {
           // Try to find and move the label to the title bar
-          $content.children('.field').find('.h5peditor-label:first').appendTo($titleBar);
+          $content.children('.field').find('.h5peditor-label:first').removeClass('h5peditor-required').appendTo($titleBar);
         }
       }
 
