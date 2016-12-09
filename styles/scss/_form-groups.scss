@@ -106,6 +106,7 @@
   & > .list-actions {
     height: 100%;
     float: right;
+    position: relative;
   }
 
   .remove {
@@ -360,16 +361,14 @@
 }
 
 .h5peditor-button[aria-label] {
-  position: relative;
 
   &:before {
     content: attr(aria-label);
     visibility: hidden;
 
     position: absolute;
-    top: 125%;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 115%;
+    right: -10%;
     z-index: 2;
 
     padding: 0.25em 0.75em;
