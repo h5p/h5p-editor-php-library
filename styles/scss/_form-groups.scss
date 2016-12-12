@@ -383,8 +383,7 @@
     box-shadow: 0 0 0.5em $form-input-placeholder-color;
   }
 
-  &:hover:before,
-  &:focus:before {
+  &:hover:before {
     visibility: visible;
   }
 }
