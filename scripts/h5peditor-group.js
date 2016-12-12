@@ -94,6 +94,7 @@ ns.Group.prototype.appendTo = function ($wrapper) {
       keypress: function (event) {
         if ((event.charCode || event.keyCode) === 32) {
           that.toggle();
+          event.preventDefault();
         }
       }
     },
