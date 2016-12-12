@@ -267,12 +267,10 @@ H5PEditor.ListEditor = (function ($) {
         appendTo: $listActions
       });
 
-      // TODO: Translate
-      H5PEditor.createButton('order-up', 'Order item up', moveItemUp).appendTo($orderGroup);
-      H5PEditor.createButton('order-down', 'Order item down', moveItemDown).appendTo($orderGroup);
+      H5PEditor.createButton('order-up', H5PEditor.t('core', 'orderItemUp'), moveItemUp).appendTo($orderGroup);
+      H5PEditor.createButton('order-down', H5PEditor.t('core', 'orderItemDown'), moveItemDown).appendTo($orderGroup);
 
-      // TODO: Translate
-      H5PEditor.createButton('remove', 'Remove item', function () {
+      H5PEditor.createButton('remove', H5PEditor.t('core', 'removeItem'), function () {
         confirmRemovalDialog.show($(this).offset().top);
       }).appendTo($listActions);
 
