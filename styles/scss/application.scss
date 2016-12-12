@@ -638,17 +638,31 @@ a {
   overflow: hidden;
 }
 
-.h5p-tutorial-url {
-  font-size: 0.875em;
+.h5p-tutorial-url,
+.h5p-example-url {
+  font-size: 1.2em;
+  color: rgb(34, 132, 205);
+  margin-left: 20px;
 }
 
 .h5p-tutorial-url:before {
   font-family: $i;
-  content: "\e889";
+  content: "\e90a";
   font-size: 1.5em;
   position: relative;
   top: .2em;
   left: .2em;
+  margin-right: 10px;
+}
+
+.h5p-example-url:before {
+  font-family: $i;
+  content: "\e90b";
+  font-size: 1.5em;
+  position: relative;
+  top: .2em;
+  left: .2em;
+  margin-right: 10px;
 }
 
 .h5peditor-widget-select {

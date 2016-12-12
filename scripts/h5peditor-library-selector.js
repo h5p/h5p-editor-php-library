@@ -47,12 +47,16 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
       if (library.tutorialUrl !== undefined) {
         options += ' data-tutorial-url="' + library.tutorialUrl + '"';
       }
+      if (library.exampleUrl !== undefined) {
+        options += ' data-example-url="' + library.exampleUrl + '"';
+      }
       options += '>' + library.title + (library.isOld===true ? ' (deprecated)' : '') + '</option>';
     }
   }
 
-  //Add tutorial link:
-  this.$tutorialUrl = ns.$('<a class="h5p-tutorial-url" target="_blank">' + ns.t('core', 'tutorialAvailable') + '</a>').hide();
+  //Add tutorial and example link:
+  this.$tutorialUrl = ns.$('<a class="h5p-tutorial-url" target="_blank">' + ns.t('core', 'tutorial') + '</a>').hide();
+  this.$exampleUrl = ns.$('<a class="h5p-example-url" target="_blank">' + ns.t('core', 'example') + '</a>').hide();
 
   // Create confirm dialog
   var changeLibraryDialog = new H5P.ConfirmationDialog({
@@ -81,7 +85,9 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
     }
 
     var tutorialUrl = that.$selector.find(':selected').data('tutorial-url');
+    var exampleUrl = that.$selector.find(':selected').data('example-url');
     that.$tutorialUrl.attr('href', tutorialUrl).toggle(tutorialUrl !== undefined && tutorialUrl !== null && tutorialUrl.length !== 0);
+    that.$exampleUrl.attr('href', exampleUrl).toggle(exampleUrl !== undefined && exampleUrl !== null && exampleUrl.length !== 0);
   };
 
   this.$selector = ns.$('<select name="h5peditor-library" title="' + ns.t('core', 'selectLibrary') + '">' + options + '</select>').change(function () {
@@ -109,6 +115,7 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
 
   this.$selector.appendTo($element);
   this.$tutorialUrl.appendTo($element);
+  this.$exampleUrl.appendTo($element);
 
   $element.append('<div class="h5p-more-libraries">' + ns.t('core', 'moreLibraries') + '</div>');
 };
