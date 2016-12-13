@@ -580,6 +580,7 @@ ns.createButton = function (id, title, handler, displayTitle) {
     class: 'h5peditor-button ' + id,
     role: 'button',
     tabIndex: 0,
+    'aria-disabled': 'false',
     on: {
       click: function (event) {
         handler.call(this);

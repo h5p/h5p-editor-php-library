@@ -386,4 +386,8 @@
   &:hover:before {
     visibility: visible;
   }
+
+  &[aria-disabled="true"]:before {
+    display: none;
+  }
 }

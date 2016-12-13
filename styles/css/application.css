@@ -433,6 +433,10 @@
 .h5peditor-button[aria-label]:hover:before {
   visibility: visible;
 }
+/* line 390, ../scss/_form-groups.scss */
+.h5peditor-button[aria-label][aria-disabled="true"]:before {
+  display: none;
+}
 
 /* line 2, ../scss/_h5peditor-image-edit.scss */
 .h5peditor .h5p-editing-image-button {
