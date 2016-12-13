@@ -137,6 +137,11 @@ a {
     color: $white;
     cursor: pointer;
 
+    &:before,
+    &:after {
+      color: $white;
+    }
+
     &[disabled] {
       opacity: 0.5;
     }
@@ -167,6 +172,11 @@ a {
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
 
+      &:before,
+      &:after {
+        color: $white;
+      }
+
       &:hover:not([disabled]) {
         @include button-background(
           $form-item-importance-high-background-hover,
@@ -178,22 +188,27 @@ a {
     &.importance-low {
       @include border-radius(3px);
       @include button-background(
-        $form-item-importance-medium-background,
-        $form-item-importance-medium-background-highlight);
-      border: 1px solid $form-item-importance-medium-border-color;
+        $form-item-importance-low-background,
+        $form-item-importance-low-background-highlight);
+      border: 1px solid $form-item-importance-low-border-color;
       text-transform: uppercase;
       font-size: $font-size-normal;
       font-weight: 600;
-      color: $text-color;
+      color: $black;
       height: $form-item-height-normal;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
 
+      &:before,
+      &:after {
+        color: $black;
+      }
+
       &:hover:not([disabled]) {
         @include button-background(
-          $form-item-importance-medium-background-hover,
-          $form-item-importance-medium-background-hover-highlight);
-        border-color: $form-item-importance-medium-background-hover;
+          $form-item-importance-low-background-hover,
+          $form-item-importance-low-background-hover-highlight);
+        border-color: $form-item-importance-low-background-hover;
       }
     }
   }
@@ -497,7 +512,6 @@ a {
     &:before {
       font-family: $i;
       content: "\e88f";
-      color: #666;
       padding-right: 0.25em;
       vertical-align: middle;
       font-size: 1.5em;
@@ -556,45 +570,8 @@ a {
     }
   }
 
-  .h5p-editing-image-button {
-    line-height: 1.5;
-    margin-right: 0.5em;
-    margin-bottom: 0.5em;
-    padding-right: 1em;
-  }
-
-  .h5p-editing-image-button:before {
-    font-family: "H5P";
-    content: "\e900";
-    color: #666;
-    padding-right: 0.25em;
-    vertical-align: middle;
-    font-size: 1.5em;
-    line-height: 0.9;
-  }
-
-  .ui-dialog .h5p-editing-image-button,
-  .ui-dialog .h5p-copyright-button {
-    padding-left: 0.5em;
-  }
-
-  .h5p-editing-image-button.loading:before {
-    content: "\e901";
-  }
-
   .h5p-editing-image-button.hidden {
     display: none;
-  }
-
-  .h5p-editor-image-buttons {
-    .h5p-editor-image-buttons {
-      display: block;
-    }
-
-    .h5p-copyright-button {
-      float: none;
-      display: inline-block;
-    }
   }
 
   .h5p-li > .content > .library {
