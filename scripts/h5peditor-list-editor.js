@@ -298,6 +298,9 @@ H5PEditor.ListEditor = (function ($) {
           'class' : 'content'
         }).appendTo($item);
 
+        // Add importance to items not in groups
+        $titleBar.addClass(list.getImportance());
+
         // Append field
         item.appendTo($content);
 
