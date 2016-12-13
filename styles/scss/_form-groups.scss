@@ -88,6 +88,7 @@
 }
 
 .h5p-li > .list-item-title-bar {
+
   @extend %title-bar-base;
   @extend %title-bar-importance-medium;
 
@@ -101,6 +102,14 @@
     line-height: $form-item-height-normal;
     outline: none;
     text-overflow: ellipsis;
+  }
+
+  &.importance-high > .h5peditor-label {
+    @extend %title-bar-text-importance-high;
+  }
+
+  &.importance-low > .h5peditor-label {
+    @extend %title-bar-text-importance-low;
   }
 
   & > .list-actions {
