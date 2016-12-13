@@ -423,6 +423,7 @@ ns.Html.prototype.createHtml = function () {
   }
 
   html += ns.createDescription(this.field.description);
+  html += ns.createImportantDescription(this.field.importantDescription);
   html += '<div class="ckeditor" tabindex="0" contenteditable="true">';
 
   if (this.value !== undefined) {

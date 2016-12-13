@@ -492,6 +492,42 @@ ns.createDescription = function (description) {
 };
 
 /**
+ * Create an important description
+ * @param {String} importantDescription
+ * @returns {string}
+ */
+ns.createImportantDescription = function (importantDescription) {
+  var html = '';
+
+  if (importantDescription !== undefined) {
+    var dialogClass = (typeof h5peditorImportantDescriptionSeen === 'undefined' ? ' show' : ' hide');
+
+    html = '<div class="h5peditor-field-important-description' + dialogClass + '">';
+    html += '<span class="important-description-close" onclick="ns.$(this).parent().slideUp();">Hide</span>';
+    html += '<span class="important-description-title">' + importantDescription.title + '</span>';
+
+    if (importantDescription.listItems !== undefined && importantDescription.listItems.length > 0) {
+      html += '<ul class="important-description-list">';
+      for (var key in importantDescription.listItems) {
+        html += '<li class="important-description-list-item">' + importantDescription.listItems[key] + '</li>';
+      }
+      html += '</ul>';
+    }
+
+    if (importantDescription.example !== undefined) {
+      html += '<div class="important-description-example">';
+      html += '<div class="important-description-example-title"><span>Example:</span></div>';
+      html += '<div class="important-description-example-text"><span>' + importantDescription.example + '</span></div>';
+      html += '</div>';
+    }
+
+    html += '</div>';
+    h5peditorImportantDescriptionSeen = true;
+  }
+  return html;
+};
+
+/**
  * Check if any errors has been set.
  *
  * @param {jQuery} $errors

@@ -614,6 +614,72 @@ a {
   letter-spacing: 0.2px;
 }
 
+.h5peditor-field-important-description {
+  position: relative;
+  padding: 30px 50px;
+  margin: 10px 0;
+  border: 1px solid #ffde78;
+  background-color: #f9f9d8;
+  color: #000;
+  display: none;
+
+  &.show {
+    display: block;
+  }
+
+  .important-description-close {
+    position: absolute;
+    font-size: 0.9em;
+    line-height: 2em;
+    right: 1.5em;
+    top: 1em;
+    user-select: none;
+    cursor: pointer;
+
+    &:before {
+      font-family: "H5P";
+      content: "\e894";
+      vertical-align: middle;
+      font-size: 1.7em;
+    }
+  }
+
+  .important-description-title {
+    font-weight: bold;
+    font-size: 1em;
+  }
+
+  .important-description-list {
+    list-style: none;
+    padding: 0;
+    line-height: 2em;
+    margin-top: 20px;
+
+    .important-description-list-item:before {
+      content: "• ";
+      color: gray;
+    }
+  }
+
+  .important-description-example {
+    border: 1px solid #bbde98;
+    background-color: #d9fac3;
+    display: flex;
+    margin-top: 20px;
+
+    .important-description-example-title {
+      padding: 15px;
+      font-weight: bold;
+    }
+
+    .important-description-example-text {
+      padding: 15px;
+      width: 100%;
+      background-color: #f6fef1;
+    }
+  }
+}
+
 .h5peditor-form {
   position: relative;
   padding: 10px;
