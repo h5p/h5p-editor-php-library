@@ -430,7 +430,7 @@
   box-shadow: 0 0 0.5em #858585;
 }
 /* line 386, ../scss/_form-groups.scss */
-.h5peditor-button[aria-label]:hover:before, .h5peditor-button[aria-label]:focus:before {
+.h5peditor-button[aria-label]:hover:before {
   visibility: visible;
 }
 
