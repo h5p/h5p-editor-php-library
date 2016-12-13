@@ -572,14 +572,14 @@ ns.htmlspecialchars = function(string) {
  * @param {string} id Typical CSS class format
  * @param {string} title Human readable format
  * @param {function} handler Action handler when triggered
+ * @param {boolean} [displayTitle=false] Show button with text
  * @return {H5P.jQuery}
  */
-ns.createButton = function (id, title, handler) {
-  return ns.$('<div/>', {
+ns.createButton = function (id, title, handler, displayTitle) {
+  var options = {
     class: 'h5peditor-button ' + id,
     role: 'button',
     tabIndex: 0,
-    'aria-label': title,
     on: {
       click: function (event) {
         handler.call(this);
@@ -593,5 +593,10 @@ ns.createButton = function (id, title, handler) {
         }
       }
     }
-  });
+  };
+
+  // Determine if we're a icon only button or have a textual label
+  options[displayTitle ? 'html' : 'aria-label'] = title;
+
+  return ns.$('<div/>', options);
 };
