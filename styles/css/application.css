@@ -54,7 +54,7 @@
   padding: 10px;
 }
 /* line 43, ../scss/_form-field.scss */
-.field.group .h5peditor-label {
+.field.group.importance-high .h5peditor-label {
   display: block;
   margin-bottom: 4px;
   font-weight: 600;
@@ -405,29 +405,35 @@
   background: #FFFFFF;
 }
 /* line 350, ../scss/_form-groups.scss */
+.common > .fields .h5peditor-label {
+  color: #454347;
+  font-size: 18px;
+  font-weight: 600;
+}
+/* line 356, ../scss/_form-groups.scss */
 .common > .fields > .desc {
   margin: 0;
   font-size: 0.875em;
   color: #666;
 }
-/* line 356, ../scss/_form-groups.scss */
+/* line 362, ../scss/_form-groups.scss */
 .common > .fields p:first-child {
   margin-bottom: 20px;
 }
-/* line 362, ../scss/_form-groups.scss */
+/* line 368, ../scss/_form-groups.scss */
 .common.collapsed > .h5peditor-label > .icon:before {
   content: "\e566";
 }
-/* line 365, ../scss/_form-groups.scss */
+/* line 371, ../scss/_form-groups.scss */
 .common.collapsed > .fields {
   display: none;
 }
-/* line 370, ../scss/_form-groups.scss */
+/* line 376, ../scss/_form-groups.scss */
 .common.hidden {
   display: none;
 }
 
-/* line 377, ../scss/_form-groups.scss */
+/* line 383, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label]:before {
   content: attr(aria-label);
   visibility: hidden;
@@ -443,11 +449,11 @@
   line-height: 1.5;
   box-shadow: 0 0 0.5em #858585;
 }
-/* line 395, ../scss/_form-groups.scss */
+/* line 401, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label]:hover:before {
   visibility: visible;
 }
-/* line 399, ../scss/_form-groups.scss */
+/* line 405, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label][aria-disabled="true"]:before {
   display: none;
 }
