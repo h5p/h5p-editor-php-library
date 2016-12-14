@@ -55,6 +55,20 @@
 }
 /* line 43, ../scss/_form-field.scss */
 .field.group .h5peditor-label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+  font-size: 20px;
+  color: #1b5891;
+}
+/* line 51, ../scss/_form-field.scss */
+.field.group.importance-medium .h5peditor-label {
+  color: #454347;
+  font-size: 18px;
+  font-weight: 600;
+}
+/* line 57, ../scss/_form-field.scss */
+.field.group.importance-low .h5peditor-label {
   color: #454347;
   font-size: 18px;
   font-weight: 600;
@@ -433,7 +447,7 @@
 .h5peditor-button[aria-label]:hover:before {
   visibility: visible;
 }
-/* line 390, ../scss/_form-groups.scss */
+/* line 399, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label][aria-disabled="true"]:before {
   display: none;
 }

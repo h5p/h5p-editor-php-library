@@ -41,6 +41,20 @@
   }
 
   &.group .h5peditor-label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+    font-size: 20px;
+    color: #1b5891;  
+  }
+  
+  &.group.importance-medium .h5peditor-label {
+    color: #454347;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  &.group.importance-low .h5peditor-label {
     color: #454347;
     font-size: 18px;
     font-weight: 600;
