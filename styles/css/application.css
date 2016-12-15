@@ -467,7 +467,7 @@
   padding-right: 20px;
   margin-right: 0.5em;
   height: 30px;
-  padding: 4px 8px;
+  padding-left: 0;
 }
 /* line 12, ../scss/_h5peditor-image-edit.scss */
 .h5peditor .h5p-editing-image-button:hover:not([disabled]) {
@@ -479,35 +479,36 @@
   font-family: "H5P";
   content: "\e900";
   color: #666;
-  padding-right: 0.25em;
+  padding-right: 0.3em;
+  padding-left: 0.45em;
   vertical-align: middle;
   font-size: 1.5em;
   line-height: 0.9;
 }
-/* line 28, ../scss/_h5peditor-image-edit.scss */
+/* line 29, ../scss/_h5peditor-image-edit.scss */
 .h5peditor .ui-dialog .h5p-editing-image-button,
 .h5peditor .ui-dialog .h5p-copyright-button {
   padding-left: 0.5em;
 }
-/* line 33, ../scss/_h5peditor-image-edit.scss */
+/* line 34, ../scss/_h5peditor-image-edit.scss */
 .h5peditor .h5p-editing-image-button.loading:before {
   content: "\e901";
 }
-/* line 37, ../scss/_h5peditor-image-edit.scss */
+/* line 38, ../scss/_h5peditor-image-edit.scss */
 .h5peditor .h5p-editing-image-button.hidden,
 .h5peditor .h5p-copyright-button.hidden {
   display: none !important;
 }
-/* line 42, ../scss/_h5peditor-image-edit.scss */
+/* line 43, ../scss/_h5peditor-image-edit.scss */
 .h5peditor .field.image .file {
   display: inline-block;
   float: none;
 }
-/* line 48, ../scss/_h5peditor-image-edit.scss */
+/* line 49, ../scss/_h5peditor-image-edit.scss */
 .h5peditor .h5p-editor-image-buttons .h5p-editor-image-buttons {
   display: block;
 }
-/* line 52, ../scss/_h5peditor-image-edit.scss */
+/* line 53, ../scss/_h5peditor-image-edit.scss */
 .h5peditor .h5p-editor-image-buttons .h5p-copyright-button {
   float: none;
   display: inline-block;
