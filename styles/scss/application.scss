@@ -494,21 +494,17 @@ a {
   }
 
   a.h5p-copyright-button {
-    @include border-radius(3px);
-    @include button-background(
-    $form-item-importance-medium-background,
-    $form-item-importance-medium-background-highlight);
-    width: auto;
-    margin: $min-padding 0 0 0;
-    padding: 0 $padding;
-    box-sizing: border-box;
-    height: $form-item-height-normal;
-    border: 1px solid $form-border-color;
-    font-size: $font-size-normal;
-    font-family: $font-family;
-    line-height: $form-item-height-normal;
-    color: $white;
+    background: linear-gradient(to bottom,#fff 0,#f2f2f2 100%);
+    border: 1px solid #ccc;
+    border-radius: 0.25em;
+    font-size: 0.875em;
+    color: #333;
     cursor: pointer;
+    line-height: 2em;
+
+    &:before {
+      padding-left: 0.25em;
+    }
   }
 
   .h5p-copyright-button {
