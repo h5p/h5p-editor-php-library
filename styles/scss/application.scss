@@ -500,42 +500,38 @@ a {
   }
 
   a.h5p-copyright-button {
-    @include border-radius(3px);
-    @include button-background(
-    $form-item-importance-medium-background,
-    $form-item-importance-medium-background-highlight);
-    width: auto;
-    margin: $min-padding 0 0 0;
-    padding: 0 $padding;
-    box-sizing: border-box;
-    height: $form-item-height-normal;
-    border: 1px solid $form-border-color;
-    font-size: $font-size-normal;
-    font-family: $font-family;
-    line-height: $form-item-height-normal;
-    color: $white;
-    cursor: pointer;
+    height: $form-item-height-small;
+    float: left;
+    display: block;
   }
 
   .h5p-copyright-button {
-    float: left;
-    display: block;
+    @include border-radius(3px);
+    height: 30px;
+    background: linear-gradient(to bottom, #fff 0, #f2f2f2 100%);
+    border: 1px solid $form-border-color;
+    color: $black;
+    font-size: $font-size-small;
+    line-height: $form-item-height-small;
+    padding-right: $padding;
+    padding-left: 0;
+    margin-bottom: $min-padding;
     clear: both;
-    padding-right: 1em;
-    line-height: 1.5;
-    margin-bottom: 0.5em;
 
     &:before {
       font-family: $i;
       content: "\e88f";
-      padding-right: 0.25em;
+      color: #666;
+      padding: 0 0.25em 0 0.25em;
       vertical-align: middle;
       font-size: 1.5em;
       line-height: 0.9;
     }
-    &:hover {
+
+    &:hover:not([disabled]) {
+      background: linear-gradient(to bottom, #fff 0, #f2f2f2 100%);
       text-decoration: none;
-      border-color: #999;
+      border-color: $black;
     }
   }
 
