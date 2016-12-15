@@ -1,14 +1,24 @@
 .h5peditor {
   .h5p-editing-image-button {
-    line-height: 1.5;
+    background: linear-gradient(to bottom, #fff 0, #f2f2f2 100%);
+    font-size: $font-size-small;
+    color: $black;
+    line-height: $form-item-height-small;
+    padding-right: $padding;
     margin-right: 0.5em;
-    margin-bottom: 0.5em;
-    padding-right: 1em;
+		height: 30px;
+    padding: 4px 8px;
+
+    &:hover:not([disabled]) {
+    background: linear-gradient(to bottom, #fff 0, #f2f2f2 100%);
+      border-color: $black;
+    }
   }
 
   .h5p-editing-image-button:before {
     font-family: "H5P";
     content: "\e900";
+    color: #666;
     padding-right: 0.25em;
     vertical-align: middle;
     font-size: 1.5em;
