@@ -145,7 +145,7 @@
   margin: 0;
   padding: 20px;
   border: 1px solid #D0D0D1;
-  border-top: none;
+  border: none;
   background: #FFFFFF;
 }
 /* line 69, ../scss/_form-groups.scss */
