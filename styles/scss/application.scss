@@ -80,13 +80,19 @@ a {
     color: $form-input-placeholder-color;
   }
   select {
-   width: 268px;
-   height: 34px;
-   line-height: 1;
-   padding: 5px;
-   font-family: "Open Sans", sans-serif;
-   font-size: 16px;
-   border: 1px solid #D0D0D1;
+    line-height: 1;
+    padding: 7px 25px 6px 8px;
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+    border: 1px solid $form-border-color;;
+    background: $form-input-color inline-image('down.png') no-repeat;
+    background-position: calc(100% - 10px);
+    @include box-shadow($form-input-box-shadow);
+    -moz-appearance: none;
+    -webkit-appearance: none;
+  }
+  select::-ms-expand {
+    display: none;
   }
   a:focus {
     outline: none;
