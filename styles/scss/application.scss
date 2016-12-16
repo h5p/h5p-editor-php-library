@@ -563,6 +563,12 @@ a {
 
     .content {
       border: none;
+
+      .h5peditor-label {
+        color: $black;
+        font-size: $font-size-large;
+        font-weight: 600;
+      }
     }
 
     .h5p-close {
