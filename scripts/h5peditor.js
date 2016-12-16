@@ -492,11 +492,9 @@ ns.createDescription = function (description) {
 };
 
 /**
- * Create a description
- * @param {String} description
- * @returns {string}
+ * Create an array to keep what important description has been seen
  */
-ns.editorSeenArray = [];
+ns.editorImportantDescriptionSeenArray = [];
 
 /**
  * Create an important description
@@ -510,9 +508,9 @@ ns.createImportantDescription = function (importantDescription, context) {
     var closeButtonScript = 'ns.$(this).parent().removeClass(\'show\');';
     closeButtonScript += "sessionStorage." + context + " = '1'";
 
-    var dialogClass = (sessionStorage[context] === undefined && ns.editorSeenArray.indexOf(context) === -1 ? ' show' : '')
+    var dialogClass = (sessionStorage[context] === undefined && ns.editorImportantDescriptionSeenArray.indexOf(context) === -1 ? ' show' : '')
 
-    ns.editorSeenArray.push(context);
+    ns.editorImportantDescriptionSeenArray.push(context);
 
     html += '<div class="h5peditor-field-important-description' + dialogClass + '">';
 
