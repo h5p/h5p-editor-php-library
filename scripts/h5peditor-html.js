@@ -418,21 +418,29 @@ ns.Html.prototype.appendTo = function ($wrapper) {
  */
 ns.Html.prototype.createHtml = function () {
   var html = '';
+  var extraClasses = '';
+
   if (this.field.label !== undefined) {
     html += '<label class="h5peditor-label' + (this.field.optional ? '' : ' h5peditor-required') + '">' + this.field.label + '</label>';
   }
 
   html += ns.createDescription(this.field.description);
-  html += ns.createImportantDescription(this.field.importantDescription);
-  html += '<div class="ckeditor" tabindex="0" contenteditable="true">';
+  html += ns.createImportantDescription(this.field.importantDescription, ns.$('.h5peditor').attr('class').replace(/(\s|-)/g, '_'));
 
+  if (this.field.importantDescription !== undefined) {
+    extraClasses = ' hasImportantDescription';
+    html += '<span class="icon-important-desc" onclick="ns.$(this).parent().find(\'.h5peditor-field-important-description\').addClass(\'show\');">';
+    html += '<span class="path1"></span><span class="path2"></span><span class="path3"></span>';
+    html += '</span>';
+  }
+
+  html += '<div class="ckeditor' + extraClasses + '" tabindex="0" contenteditable="true">';
   if (this.value !== undefined) {
     html += this.value;
   }
   else if (this.field.placeholder !== undefined) {
     html += '<span class="h5peditor-ckeditor-placeholder">' + this.field.placeholder + '</span>';
   }
-
   html += '</div>';
 
   return html;

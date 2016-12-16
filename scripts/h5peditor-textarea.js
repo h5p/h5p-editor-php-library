@@ -45,7 +45,15 @@ ns.Textarea.prototype.appendTo = function ($wrapper) {
  * Create HTML for the text field.
  */
 ns.Textarea.prototype.createHtml = function () {
-  var input = '<textarea cols="30" rows="4"';
+  var importantDescriptionIcon = '';
+  if (this.field.importantDescription !== undefined) {
+    extraClasses = ' hasImportantDescription';
+    importantDescriptionIcon += '<span class="icon-important-desc" onclick="ns.$(this).parent().find(\'.h5peditor-field-important-description\').addClass(\'show\');">';
+    importantDescriptionIcon += '<span class="path1"></span><span class="path2"></span><span class="path3"></span>';
+    importantDescriptionIcon += '</span>';
+  }
+
+  var input = '<textarea class="' + extraClasses + '" cols="25" rows="4"';
   if (this.field.placeholder !== undefined) {
     input += ' placeholder="' + this.field.placeholder + '"';
   }
@@ -57,8 +65,9 @@ ns.Textarea.prototype.createHtml = function () {
 
   var label = ns.createLabel(this.field);
   var description = ns.createDescription(this.field.description);
+  var importantDescription = ns.createImportantDescription(this.field.importantDescription, ns.$('.h5peditor').attr('class').replace(/(\s|-)/g, '_'));
 
-  return ns.createItem(this.field.type, label + description + input);
+  return ns.createItem(this.field.type, label + description + importantDescription + input + importantDescriptionIcon);
 };
 
 /**

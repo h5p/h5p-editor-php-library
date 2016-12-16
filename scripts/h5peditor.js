@@ -492,19 +492,35 @@ ns.createDescription = function (description) {
 };
 
 /**
+ * Create a description
+ * @param {String} description
+ * @returns {string}
+ */
+ns.editorSeenArray = [];
+
+/**
  * Create an important description
  * @param {String} importantDescription
  * @returns {string}
  */
-ns.createImportantDescription = function (importantDescription) {
+ns.createImportantDescription = function (importantDescription, context) {
   var html = '';
 
   if (importantDescription !== undefined) {
-    var dialogClass = (typeof h5peditorImportantDescriptionSeen === 'undefined' ? ' show' : ' hide');
+    var closeButtonScript = 'ns.$(this).parent().removeClass(\'show\');';
+    closeButtonScript += "sessionStorage." + context + " = '1'";
 
-    html = '<div class="h5peditor-field-important-description' + dialogClass + '">';
-    html += '<span class="important-description-close" onclick="ns.$(this).parent().slideUp();">Hide</span>';
-    html += '<span class="important-description-title">' + importantDescription.title + '</span>';
+    var dialogClass = (sessionStorage[context] === undefined && ns.editorSeenArray.indexOf(context) === -1 ? ' show' : '')
+
+    ns.editorSeenArray.push(context);
+
+    html += '<div class="h5peditor-field-important-description' + dialogClass + '">';
+
+    html += '<div class="important-description-close" onclick="' + closeButtonScript + '">';
+    html += '<span>' + importantDescription.button + '</span>';
+    html += '</div>';
+
+    html += '<span class="h5p-info-icon"></span><span class="important-description-title">' + importantDescription.title + '</span>';
 
     if (importantDescription.listItems !== undefined && importantDescription.listItems.length > 0) {
       html += '<ul class="important-description-list">';
@@ -516,13 +532,12 @@ ns.createImportantDescription = function (importantDescription) {
 
     if (importantDescription.example !== undefined) {
       html += '<div class="important-description-example">';
-      html += '<div class="important-description-example-title"><span>Example:</span></div>';
-      html += '<div class="important-description-example-text"><span>' + importantDescription.example + '</span></div>';
+      html += '<div class="important-description-example-title"><span>' + importantDescription.example.title + ':</span></div>';
+      html += '<div class="important-description-example-text"><span>' + importantDescription.example.text + '</span></div>';
       html += '</div>';
     }
 
     html += '</div>';
-    h5peditorImportantDescriptionSeen = true;
   }
   return html;
 };

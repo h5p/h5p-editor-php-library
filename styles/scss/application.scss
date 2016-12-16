@@ -44,7 +44,17 @@ a {
   }
   textarea {
     resize: vertical;
+
+    &.hasImportantDescription {
+      width: calc(100% - 70px);
+    }
   }
+  .ckeditor {
+    &.hasImportantDescription {
+      margin-right: 70px;
+    }
+  }
+
   textarea,
   .h5peditor-text,
   .ckeditor {
@@ -375,7 +385,7 @@ a {
       }
 
       .h5peditor-field-file-upload-text:before {
-        font-family: "H5P";
+        font-family: $i;
         content: "\e902";
         color: #39c943;
         margin-right: 1em;
@@ -544,7 +554,7 @@ a {
         right: -0.125em;
         top: 0;
         position: absolute;
-        font-family: "H5P";
+        font-family: $i;
         content: "\e894";
         line-height: 1em;
         @include transition(scale 0.2s);
@@ -564,7 +574,7 @@ a {
   }
 
   .h5p-editing-image-button:before {
-    font-family: "H5P";
+    font-family: $i;
     content: "\e900";
     color: #666;
     padding-right: 0.25em;
@@ -637,16 +647,25 @@ a {
     cursor: pointer;
 
     &:before {
-      font-family: "H5P";
+      font-family: $i;
       content: "\e894";
       vertical-align: middle;
-      font-size: 1.7em;
+      font-size: 1.9em;
     }
+  }
+
+  .h5p-info-icon:before {
+    font-family: $i;
+    content: "\e90e";
+    font-size: 3em;
+    margin-left: -0.3em;
+    vertical-align: middle;
   }
 
   .important-description-title {
     font-weight: bold;
-    font-size: 1em;
+    font-size: 1.2em;
+    vertical-align: middle;
   }
 
   .important-description-list {
@@ -657,7 +676,9 @@ a {
 
     .important-description-list-item:before {
       content: "• ";
-      color: gray;
+      color: #adacac;
+      font-size: 1.5em;
+      vertical-align: middle;
     }
   }
 
@@ -912,5 +933,30 @@ body.h5p-editor-image-popup {
   .h5p-remove:hover {
     background: none;
     color: #e40000;
+  }
+}
+
+.icon-important-desc {
+  font-family: $i; 
+  font-size: 2em;
+  float: right;
+  width: 70px;
+  text-align: center;
+  line-height: 1.25em;
+  cursor: pointer;
+
+  .path1:before {
+    content: "\e90c";
+    color: rgb(243, 213, 90);
+  }
+  .path2:before {
+    content: "\e90d";
+    margin-left: -1em;
+    color: rgb(243, 213, 90);
+  }
+  .path3:before {
+    content: "\e90e";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
   }
 }
