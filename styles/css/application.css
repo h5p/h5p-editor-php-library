@@ -59,15 +59,14 @@
   margin-bottom: 4px;
   font-weight: 600;
   font-size: 20px;
-  color: #1b5891;
 }
-/* line 51, ../scss/_form-field.scss */
+/* line 50, ../scss/_form-field.scss */
 .field.group.importance-medium .h5peditor-label {
   color: #454347;
   font-size: 18px;
   font-weight: 600;
 }
-/* line 57, ../scss/_form-field.scss */
+/* line 56, ../scss/_form-field.scss */
 .field.group.importance-low .h5peditor-label {
   color: #454347;
   font-size: 18px;
