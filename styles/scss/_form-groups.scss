@@ -66,6 +66,14 @@
     background: $form-content-background;
   }
 
+  &.odd .content {
+    background: #FBFBFB;
+  }
+
+  &.even .content .content {
+    background: #FBFBFB;
+  }
+
   &.importance-high > .title {
     @extend %title-bar-importance-high;
     @extend %title-bar-text-importance-high;
