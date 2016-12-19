@@ -273,6 +273,9 @@ ns.Group.prototype.setSummary = function (summary) {
     summaryText = summaryTextNode[0].nodeValue;
   }
 
+  // Make it possible for parent to monitor summary changes
+  this.trigger('summary', summaryText);
+
   if (summaryText !== undefined) {
     summaryText = this.field.label + ': ' + (summaryText.length > 48 ? summaryText.substr(0, 45) + '...' : summaryText);
   }
