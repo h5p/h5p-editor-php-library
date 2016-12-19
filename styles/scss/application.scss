@@ -162,7 +162,6 @@ a {
       @include button-background(
         $form-item-importance-medium-background-hover,
         $form-item-importance-medium-background-hover-highlight);
-      border-color: $form-item-importance-medium-background-hover;
       text-decoration: none;
     }
 
@@ -387,11 +386,12 @@ a {
       display: inline-block;
       cursor: pointer;
       padding: 0.5em 1.5em 0.5em 1.2em;
-      background: linear-gradient(to bottom, #ffffff 0, #f2f2f2 100%);
-      border: 1px solid #cccccc;
+      background: linear-gradient(to bottom, #fbfbfb 0, #f2f2f2 100%);
+      border: 1px solid #d0d0d1;
       border-radius: 0.25em;
       color: #222222;
-      font-weight:bold;
+      font-weight: bold;
+      text-transform: uppercase;
 
       &:hover {
         background: #ededed;
@@ -529,7 +529,7 @@ a {
     }
 
     &:hover:not([disabled]) {
-      background: linear-gradient(to bottom, #fff 0, #f2f2f2 100%);
+      background: linear-gradient(to bottom, #fff 0, #d0d0d1 100%);
       text-decoration: none;
       border-color: #666666;
     }

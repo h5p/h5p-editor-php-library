@@ -1,5 +1,6 @@
 %title-bar-base {
   visibility: inherit;
+  cursor: pointer;
 }
 
 %title-bar-importance-high {
@@ -53,7 +54,6 @@
     @extend %title-bar-text-importance-medium;
     padding: 0 $min-padding;
     outline: none;
-    cursor: pointer;
     color: $white;
   }
 
@@ -64,6 +64,14 @@
     border: 1px solid $form-border-color;
     border-top: none;
     background: $form-content-background;
+  }
+
+  &.odd .content {
+    background: #FBFBFB;
+  }
+
+  &.even .content .content {
+    background: #FBFBFB;
   }
 
   &.importance-high > .title {

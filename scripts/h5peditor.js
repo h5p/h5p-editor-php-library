@@ -268,6 +268,26 @@ ns.findLibraryAncestor = function (parent) {
 };
 
 /**
+ * getParentZebra
+ *
+ * Alternate the background color of fields
+ *
+ * @param parent
+ * @returns {string} to determine background color of callee
+ */
+ns.getParentZebra = function (parent) {
+  if (parent && parent.zebra) {
+    return parent.zebra;
+  }
+  else if (parent) {
+    ns.getParentZebra(parent.parent);
+  }
+  else{
+    return;
+  }
+};
+
+/**
  * Find the nearest ancestor which handles commonFields.
  *
  * @param {type} parent
