@@ -1014,13 +1014,13 @@ a {
   color: #b83c3c;
   background: transparent;
   border: 0;
-  outline: 0;
   cursor: pointer;
 }
-/* line 305, ../scss/application.scss */
+/* line 304, ../scss/application.scss */
 .h5peditor .h5p-add-dialog .h5p-cancel:focus,
 .h5peditor .h5p-add-dialog .h5p-cancel:hover {
   color: #e20d0d;
+  background: transparent;
 }
 /* line 310, ../scss/application.scss */
 .h5peditor .h5p-or {
