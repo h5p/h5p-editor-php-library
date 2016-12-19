@@ -132,7 +132,7 @@ a {
     }
   }
   input[type="button"], button {
-    @include border-radius(3px);
+    @include border-radius(0.25em);
     @include button-background(
       $form-item-importance-medium-background,
       $form-item-importance-medium-background-highlight);
@@ -147,6 +147,7 @@ a {
     line-height: $form-item-height-normal;
     color: $white;
     cursor: pointer;
+    font-weight: 600;
 
     &:before,
     &:after {
@@ -170,13 +171,13 @@ a {
     }
 
     &.importance-high {
-      @include border-radius(3px);
+      @include border-radius(0.25em);
       @include button-background(
         $form-item-importance-high-background,
         $form-item-importance-high-background-highlight);
       border: 1px solid $form-item-importance-high-border-color;
       text-transform: uppercase;
-      font-size: $font-size-large;
+      font-size: $font-size-normal;
       font-weight: 600;
       color: $white;
       height: $form-item-height-large;
@@ -197,7 +198,7 @@ a {
     }
 
     &.importance-low {
-      @include border-radius(3px);
+      @include border-radius(0.25em);
       @include button-background(
         $form-item-importance-low-background,
         $form-item-importance-low-background-highlight);
@@ -505,7 +506,7 @@ a {
   }
 
   .h5p-copyright-button {
-    @include border-radius(3px);
+    @include border-radius(0.25em);
     height: 30px;
     background: linear-gradient(to bottom, #fff 0, #f2f2f2 100%);
     border: 1px solid $form-border-color;
@@ -530,7 +531,7 @@ a {
     &:hover:not([disabled]) {
       background: linear-gradient(to bottom, #fff 0, #f2f2f2 100%);
       text-decoration: none;
-      border-color: $black;
+      border-color: #666666;
     }
   }
 
@@ -604,27 +605,27 @@ a {
 .h5peditor-field-description,
 .h5p-help-text {
   font-size: 12px;
-  margin-top: 6px;
-  margin-bottom: 6px;
+  margin-top: 4px;
+  margin-bottom: 8px;
   font-weight: 500;
-  color: #454347;
+  color: #5d6c7d;
   line-height: 15px;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.5px;
 }
 
 .h5peditor-form {
   position: relative;
-  padding: 10px;
+  padding: 20px;
   background: $form-background;
   border: 1px solid $form-border-color;
 }
 
 .h5peditor-label {
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   font-weight: 600;
-  font-size: 20px;
-  color: #1b5891;
+  font-size: 1.1em;
+  color: $blue;
 }
 
 #h5peditor-uploader {
@@ -684,6 +685,7 @@ a {
   background: #fff;
   margin: 0 0 0.25em;
   padding: 0.5em;
+
 }
 .h5peditor-widgets > .h5peditor-label {
   float: left;

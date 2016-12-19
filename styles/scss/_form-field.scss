@@ -22,7 +22,7 @@
   &.boolean .h5peditor-label {
     display: inline;
     color: #454347;
-    font-size: 18px;
+    font-size: $font-size-normal;
     font-weight: 600;
   }
 
@@ -36,26 +36,27 @@
   }
 
   .library {
-    border: 1px solid $form-border-color;
-    padding: $min-padding;
+    border: 0px solid $form-border-color;
+  //  padding: $min-padding;
   }
 
   &.group.importance-high .h5peditor-label {
     display: block;
-    margin-bottom: 4px;
+    margin-bottom: 10px;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 1.05em;;
+  //  color: $blue;
   }
 
   &.group.importance-medium .h5peditor-label {
     color: $black;
-    font-size: $font-size-large;
+    font-size: 1.05em;
     font-weight: 600;
   }
 
   &.group.importance-low .h5peditor-label {
     color: $black;
-    font-size: $font-size-large;
+    font-size: 1.05em;
     font-weight: 600;
   }
 }
