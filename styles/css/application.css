@@ -764,7 +764,7 @@ a {
 }
 /* line 82, ../scss/application.scss */
 .h5peditor select {
-  padding: 7px 30px 6px 8px;
+  padding: 10px 30px 10px 8px;
   font-family: "Open Sans", sans-serif;
   font-size: 16px;
   border: 1px solid #D0D0D1;
@@ -1475,29 +1475,29 @@ a {
   padding: 0.5em;
 }
 
-/* line 693, ../scss/application.scss */
+/* line 692, ../scss/application.scss */
 .h5peditor-widgets > .h5peditor-label {
   float: left;
 }
 
-/* line 696, ../scss/application.scss */
+/* line 695, ../scss/application.scss */
 .h5p-editor-iframe {
   margin-bottom: 1em;
 }
 
-/* line 699, ../scss/application.scss */
+/* line 698, ../scss/application.scss */
 .h5peditor-required:after {
   content: "*";
   color: #da0001;
   margin-left: 0.25em;
 }
 
-/* line 705, ../scss/application.scss */
+/* line 704, ../scss/application.scss */
 body.h5p-editor-image-popup {
   position: relative;
 }
 
-/* line 709, ../scss/application.scss */
+/* line 708, ../scss/application.scss */
 .h5p-editing-image-popup-background {
   position: absolute;
   top: 0;
@@ -1510,18 +1510,18 @@ body.h5p-editor-image-popup {
   z-index: 101;
 }
 
-/* line 723, ../scss/application.scss */
+/* line 722, ../scss/application.scss */
 #darkroom-icons {
   top: 0;
   left: 0;
 }
 
-/* line 728, ../scss/application.scss */
+/* line 727, ../scss/application.scss */
 .h5p-editing-image-popup-background.hidden {
   display: none;
 }
 
-/* line 732, ../scss/application.scss */
+/* line 731, ../scss/application.scss */
 .h5p-editing-image-popup {
   display: inline-block;
   position: relative;
@@ -1539,23 +1539,23 @@ body.h5p-editor-image-popup {
   box-sizing: border-box;
 }
 
-/* line 749, ../scss/application.scss */
+/* line 748, ../scss/application.scss */
 .h5p-editing-image-header {
   padding: 1em 0.75em;
 }
 
-/* line 753, ../scss/application.scss */
+/* line 752, ../scss/application.scss */
 .h5p-editing-image {
   max-height: 100%;
   max-width: 100%;
 }
 
-/* line 758, ../scss/application.scss */
+/* line 757, ../scss/application.scss */
 .h5p-editing-image.hidden {
   display: none;
 }
 
-/* line 763, ../scss/application.scss */
+/* line 762, ../scss/application.scss */
 .h5p-editing-image-popup .darkroom-toolbar {
   position: relative;
   -webkit-border-radius: 0;
@@ -1563,48 +1563,48 @@ body.h5p-editor-image-popup {
   border-radius: 0;
   top: 0;
 }
-/* line 771, ../scss/application.scss */
+/* line 770, ../scss/application.scss */
 .h5p-editing-image-popup .darkroom-toolbar:before {
   content: initial;
 }
-/* line 775, ../scss/application.scss */
+/* line 774, ../scss/application.scss */
 .h5p-editing-image-popup .darkroom-image-container {
   padding: 32px 2em;
 }
-/* line 779, ../scss/application.scss */
+/* line 778, ../scss/application.scss */
 .h5p-editing-image-popup .darkroom-image-container .canvas-container {
   box-shadow: 0 0 8px 3px rgba(0, 0, 0, 0.6);
   margin: auto;
 }
 
-/* line 785, ../scss/application.scss */
+/* line 784, ../scss/application.scss */
 .h5p-editing-image-header-title {
   display: inline-block;
   font-size: 1.25em;
 }
 
-/* line 790, ../scss/application.scss */
+/* line 789, ../scss/application.scss */
 .h5p-editing-image-header-buttons {
   display: inline-block;
   float: right;
 }
 
-/* line 794, ../scss/application.scss */
+/* line 793, ../scss/application.scss */
 .h5p-editing-image-loading {
   padding: 1em;
 }
 
-/* line 798, ../scss/application.scss */
+/* line 797, ../scss/application.scss */
 .h5p-editing-image-loading.hidden {
   display: none;
 }
 
-/* line 802, ../scss/application.scss */
+/* line 801, ../scss/application.scss */
 .h5p-editing-image-editing-container {
   background: #666;
 }
 
-/* line 807, ../scss/application.scss */
+/* line 806, ../scss/application.scss */
 .h5p-editing-image-header-buttons button {
   padding: 0.5em 1.75em;
   margin: 0 0 0 1em;
@@ -1616,11 +1616,11 @@ body.h5p-editor-image-popup {
   background: -webkit-linear-gradient(top, #fff 0, #f2f2f2 100%);
   background: -ms-linear-gradient(top, #fff 0, #f2f2f2 100%);
 }
-/* line 821, ../scss/application.scss */
+/* line 820, ../scss/application.scss */
 .h5p-editing-image-header-buttons button:hover {
   background: #ededed;
 }
-/* line 825, ../scss/application.scss */
+/* line 824, ../scss/application.scss */
 .h5p-editing-image-header-buttons .h5p-done {
   color: #fff;
   border-color: #20588F;
@@ -1628,13 +1628,13 @@ body.h5p-editor-image-popup {
   background: -webkit-linear-gradient(top, #5A94D3 0, #3673B5 100%);
   background: -ms-linear-gradient(top, #5A94D3 0, #3673B5 100%);
 }
-/* line 834, ../scss/application.scss */
+/* line 833, ../scss/application.scss */
 .h5p-editing-image-header-buttons .h5p-done:hover {
   background: #3275bc;
   background: -webkit-linear-gradient(top, #3275bc 0, #285585 100%);
   background: -ms-linear-gradient(top, #3275bc 0, #285585 100%);
 }
-/* line 840, ../scss/application.scss */
+/* line 839, ../scss/application.scss */
 .h5p-editing-image-header-buttons .h5p-remove {
   background: none;
   border: none;
@@ -1643,7 +1643,7 @@ body.h5p-editor-image-popup {
   padding-left: 0;
   border-radius: 0;
 }
-/* line 849, ../scss/application.scss */
+/* line 848, ../scss/application.scss */
 .h5p-editing-image-header-buttons .h5p-remove:hover {
   background: none;
   color: #e40000;
