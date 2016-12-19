@@ -49,8 +49,15 @@
   float: none;
 }
 /* line 38, ../scss/_form-field.scss */
+
 .field .library {
   border: 0px solid #D0D0D1;
+}
+
+.field .h5p-vtab-form > .library {
+  border: 1px solid #D0D0D1;
+  padding: 10px;
+
 }
 /* line 43, ../scss/_form-field.scss */
 .field.group.importance-high .h5peditor-label {

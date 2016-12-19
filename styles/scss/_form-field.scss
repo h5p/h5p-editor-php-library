@@ -37,7 +37,12 @@
 
   .library {
     border: 0px solid $form-border-color;
-  //  padding: $min-padding;
+  }
+
+  .h5p-vtab-form > .library {
+    border: 1px solid $form-border-color;
+    padding: $min-padding;
+
   }
 
   &.group.importance-high .h5peditor-label {
