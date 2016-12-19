@@ -76,16 +76,17 @@
 /* line 1, ../scss/_form-groups.scss */
 .group > .title, .h5p-li > .list-item-title-bar, .common > .h5peditor-label {
   visibility: inherit;
+  cursor: pointer;
 }
 
-/* line 5, ../scss/_form-groups.scss */
+/* line 6, ../scss/_form-groups.scss */
 .group.importance-high > .title, .h5p-li > .list-item-title-bar.importance-high {
   background: #2579C6;
   border: 1px solid #2074B0;
   height: 48px;
 }
 
-/* line 10, ../scss/_form-groups.scss */
+/* line 11, ../scss/_form-groups.scss */
 .group.importance-high > .title, .h5p-li > .list-item-title-bar.importance-high > .h5peditor-label, .h5p-li > .list-item-title-bar.importance-high > .title {
   font-size: 18px;
   font-weight: 600;
@@ -95,14 +96,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* line 20, ../scss/_form-groups.scss */
+/* line 21, ../scss/_form-groups.scss */
 .group > .title, .h5p-li > .list-item-title-bar {
   background: #747275;
   border: 1px solid #636164;
   height: 38px;
 }
 
-/* line 25, ../scss/_form-groups.scss */
+/* line 26, ../scss/_form-groups.scss */
 .group > .title, .h5p-li > .list-item-title-bar > .h5peditor-label {
   font-size: 16px;
   font-weight: 600;
@@ -112,14 +113,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* line 35, ../scss/_form-groups.scss */
+/* line 36, ../scss/_form-groups.scss */
 .group.importance-low > .title, .h5p-li > .list-item-title-bar.importance-low, .common > .h5peditor-label {
   background: #ECECED;
   height: 38px;
   border: 1px solid #D0D0D1;
 }
 
-/* line 40, ../scss/_form-groups.scss */
+/* line 41, ../scss/_form-groups.scss */
 .group.importance-low > .title, .h5p-li > .list-item-title-bar.importance-low > .h5peditor-label, .h5p-li > .list-item-title-bar.importance-low > .title, .common > .h5peditor-label {
   font-size: 16px;
   font-weight: 400;
@@ -127,15 +128,14 @@
   line-height: 38px;
 }
 
-/* line 47, ../scss/_form-groups.scss */
+/* line 48, ../scss/_form-groups.scss */
 .group {
   border: none;
 }
-/* line 50, ../scss/_form-groups.scss */
+/* line 51, ../scss/_form-groups.scss */
 .group > .title {
   padding: 0 10px;
   outline: none;
-  cursor: pointer;
   color: #FFFFFF;
 }
 /* line 60, ../scss/_form-groups.scss */

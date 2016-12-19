@@ -1,5 +1,6 @@
 %title-bar-base {
   visibility: inherit;
+  cursor: pointer;
 }
 
 %title-bar-importance-high {
@@ -53,7 +54,6 @@
     @extend %title-bar-text-importance-medium;
     padding: 0 $min-padding;
     outline: none;
-    cursor: pointer;
     color: $white;
   }
 
