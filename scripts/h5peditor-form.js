@@ -17,6 +17,9 @@ ns.Form = function () {
   this.$common.prev().click(function () {
     self.$common.parent().toggleClass('collapsed');
   });
+
+  // Alternate background colors
+  this.zebra = "odd";
 };
 
 /**
