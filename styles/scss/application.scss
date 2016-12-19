@@ -374,6 +374,9 @@ a {
   .file {
     position: relative;
 
+    .file {
+      float: left;
+    }
     .thumbnail {
       display: inline-block;
       margin: 10px 10px 10px 0;
