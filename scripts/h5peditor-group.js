@@ -56,12 +56,15 @@ ns.Group = function (parent, field, params, setValue) {
   }
 
   // Alternate background colors
-  if (ns.getParentZebra(parent) === 'odd' || ns.getParentZebra(parent) === undefined){
+  if (ns.getParentZebra(parent) === 'odd'){
     this.zebra = 'even';
   }
   else {
     this.zebra = 'odd'; 
   } 
+  if (parent.constructor.name === 'List'){
+    this.zebra = parent.zebra;
+  }
 
 };
 

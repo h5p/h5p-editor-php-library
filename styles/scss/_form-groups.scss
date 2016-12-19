@@ -67,11 +67,7 @@
   }
 
   &.odd .content {
-    background: #FBFBFB;
-  }
-
-  &.even .content .content {
-    background: #FBFBFB;
+    background: orange;
   }
 
   &.importance-high > .title {
@@ -92,6 +88,12 @@
     &:focus:before {
       outline: 1px dashed $text-color;
     }
+  }
+}
+
+.h5p-li {
+  &.odd .content {
+    background: orange;
   }
 }
 
