@@ -664,11 +664,10 @@ a {
   border: 1px solid #ccc;
   border-bottom: 0;
   margin-left: 0.5em;
-  margin-top: 6px;
-  padding: 0.25em 0.5em;
-  color: #555;
+  padding: 0.6em 1em;
+  color: #0E1A25;
   font-size: 0.875em;
-  background: #f4f4f4;
+  background: #e4eaf2;
   line-height: 1.285714286em;
   cursor: pointer;
   outline: none;
@@ -850,4 +849,23 @@ body.h5p-editor-image-popup {
     background: none;
     color: #e40000;
   }
+}
+
+.h5peditor-widgets > .h5peditor-label {
+  margin-top: 5px;
+}
+
+/* Help CKEditor blend into the H5PEditor */
+.h5peditor .cke_bottom,
+.h5peditor .cke_top {
+  background: #e4eaf2;
+}
+.h5peditor .cke_chrome {
+  border: 1px solid #D0D0D1;
+  background: #e4eaf2;
+}
+.h5peditor .cke_contents,
+.h5peditor .cke_toolgroup,
+.h5peditor .cke_combo_button {
+  border: 1px solid #D0D0D1;
 }
