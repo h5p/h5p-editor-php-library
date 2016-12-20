@@ -201,7 +201,7 @@ H5PEditor.SemanticStructure = (function ($) {
         $helpText.html(self.widget.helpText).appendTo($inner);
       }
       else {
-        $helpText.remove();
+        $helpText.detach();
       }
     };
 
