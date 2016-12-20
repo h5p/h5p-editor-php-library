@@ -541,7 +541,6 @@ a {
   .h5p-editor-dialog {
     position: absolute;
     z-index: 1;
-    background: #fff;
     padding: 10px 10px 0;
     margin: 5.5em 0 1em;
     visibility: hidden;
@@ -567,6 +566,7 @@ a {
 
     .content {
       border: none;
+      background: $white;
 
       .h5peditor-label {
         color: $black;

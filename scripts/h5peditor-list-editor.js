@@ -13,10 +13,10 @@ H5PEditor.ListEditor = (function ($) {
     var self = this;
 
     var entity = list.getEntity();
-
+   
     // Create list html
     var $list = $('<ul/>', {
-      'class': 'h5p-ul'
+      'class': 'h5p-ul' 
     });
 
     // Create add button
@@ -68,14 +68,6 @@ H5PEditor.ListEditor = (function ($) {
         list.moveItem(currentIndex, currentIndex + 1);
       }
     };
-    
-    // Alternate background colors
-    if (ns.getParentZebra(list.parent) === 'odd' || ns.getParentZebra(list.parent) === undefined){
-     list.zebra = 'even';
-    }
-    else {
-      list.zebra = 'odd'; 
-    } 
 
     /**
      * Adds UI items to the widget.
@@ -86,7 +78,7 @@ H5PEditor.ListEditor = (function ($) {
     self.addItem = function (item) {
       var $placeholder, mouseDownAt;
       var $item = $('<li/>', {
-        'class' : 'h5p-li' + ' ' + list.zebra,
+        'class' : 'h5p-li' + ' ' + 'collection',
       });
 
       // Create confirmation dialog for removing list item
