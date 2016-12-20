@@ -429,7 +429,7 @@ ns.Html.prototype.createHtml = function () {
 
   if (this.field.importantDescription !== undefined) {
     extraClasses = ' hasImportantDescription';
-    html += '<span class="icon-important-desc" onclick="ns.$(this).parent().find(\'.h5peditor-field-important-description\').addClass(\'show\');">';
+    html += '<span class="icon-important-desc" onclick="ns.$(this).parent().find(\'.h5peditor-field-important-description\').toggleClass(\'show\');">';
     html += '<span class="path1"></span><span class="path2"></span><span class="path3"></span>';
     html += '</span>';
   }

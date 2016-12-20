@@ -48,7 +48,7 @@ ns.Textarea.prototype.createHtml = function () {
   var importantDescriptionIcon = '';
   if (this.field.importantDescription !== undefined) {
     extraClasses = ' hasImportantDescription';
-    importantDescriptionIcon += '<span class="icon-important-desc" onclick="ns.$(this).parent().find(\'.h5peditor-field-important-description\').addClass(\'show\');">';
+    importantDescriptionIcon += '<span class="icon-important-desc" onclick="ns.$(this).parent().find(\'.h5peditor-field-important-description\').toggleClass(\'show\');">';
     importantDescriptionIcon += '<span class="path1"></span><span class="path2"></span><span class="path3"></span>';
     importantDescriptionIcon += '</span>';
   }
