@@ -60,8 +60,8 @@ ns.Group = function (parent, field, params, setValue) {
     this.zebra = 'even';
   }
   else {
-    this.zebra = 'odd'; 
-  } 
+    this.zebra = 'odd';
+  }
 
 };
 
@@ -240,7 +240,7 @@ ns.Group.prototype.findSummary = function () {
     var params = (that.hasSingleChild() && !that.isSubContent()) ? this.params : this.params[child.field.name];
     var widget = ns.getWidgetName(child.field);
 
-    if (widget === 'text') {
+    if (widget === 'text' || widget === 'html') {
       if (params !== undefined && params !== '') {
         summary = params.replace(/(<([^>]+)>)/ig, "");
       }
