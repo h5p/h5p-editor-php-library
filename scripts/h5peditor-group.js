@@ -60,10 +60,14 @@ ns.Group = function (parent, field, params, setValue) {
     this.zebra = 'even';
   }
   else {
+<<<<<<< HEAD
     this.zebra = 'odd'; 
   } 
   if (parent.constructor.name === 'List'){
     this.zebra = parent.zebra;
+=======
+    this.zebra = 'odd';
+>>>>>>> ad294765a9bbffcbada474dffac916635170ee32
   }
 
 };
@@ -243,7 +247,7 @@ ns.Group.prototype.findSummary = function () {
     var params = (that.hasSingleChild() && !that.isSubContent()) ? this.params : this.params[child.field.name];
     var widget = ns.getWidgetName(child.field);
 
-    if (widget === 'text') {
+    if (widget === 'text' || widget === 'html') {
       if (params !== undefined && params !== '') {
         summary = params.replace(/(<([^>]+)>)/ig, "");
       }
