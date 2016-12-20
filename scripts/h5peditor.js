@@ -513,7 +513,7 @@ ns.createImportantDescription = function (importantDescription, context) {
     ns.editorImportantDescriptionSeenArray.push(context);
 
     html += '<div class="h5peditor-field-important-description' + dialogClass + '">';
-
+    html += '<div class="important-description-tail"></div>';
     html += '<div class="important-description-close" onclick="' + closeButtonScript + '">';
     html += '<span>' + importantDescription.button + '</span>';
     html += '</div>';

@@ -626,7 +626,8 @@ a {
 
 .h5peditor-field-important-description {
   position: relative;
-  padding: 30px 50px;
+  padding: 1.5em 2.2em 2em 2.2em;
+  font-size: 0.9em;
   margin: 10px 0;
   border: 1px solid #ffde78;
   background-color: #f9f9d8;
@@ -635,6 +636,20 @@ a {
 
   &.show {
     display: block;
+  }
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: -8px;
+    right:26px;
+    width: 14px;
+    height: 14px; 
+    background: #f9f9d8;
+    border-right:1px solid #ffde78;
+    border-bottom:1px solid #ffde78;
+    -webkit-transform:rotate(45deg);
   }
 
   .important-description-close {
@@ -654,12 +669,16 @@ a {
     }
   }
 
-  .h5p-info-icon:before {
-    font-family: $i;
-    content: "\e90e";
-    font-size: 3em;
-    margin-left: -0.3em;
-    vertical-align: middle;
+  .h5p-info-icon {
+    font-size: 0.75em; 
+
+    &:before {
+      font-family: $i;
+      content: "\e90e";
+      font-size: 3em;
+      margin-left: -0.3em;
+      vertical-align: middle;
+    }
   }
 
   .important-description-title {
@@ -674,11 +693,15 @@ a {
     line-height: 2em;
     margin-top: 20px;
 
-    .important-description-list-item:before {
-      content: "• ";
-      color: #adacac;
-      font-size: 1.5em;
-      vertical-align: middle;
+    .important-description-list-item {
+      line-height: 1.8em;
+
+      &:before {
+        content: "• ";
+        color: #adacac;
+        font-size: 1.5em;
+        vertical-align: middle;
+      }
     }
   }
 
