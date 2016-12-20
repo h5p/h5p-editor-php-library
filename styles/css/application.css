@@ -50,7 +50,7 @@
 }
 /* line 41, ../scss/_form-field.scss */
 .field .library {
-  border: 0 solid #D0D0D1;
+  border: 0;
 }
 /* line 45, ../scss/_form-field.scss */
 .field.group.importance-high .h5peditor-label {
