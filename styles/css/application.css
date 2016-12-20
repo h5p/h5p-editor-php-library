@@ -435,12 +435,21 @@
   content: "\e565";
   font-family: "H5P";
   opacity: 0.7;
+  margin-right: 5px;
 }
-/* line 411, ../scss/_form-groups.scss */
+/* line 412, ../scss/_form-groups.scss */
 .common > .h5peditor-label:hover > .icon {
   opacity: 1;
 }
-/* line 415, ../scss/_form-groups.scss */
+/* line 416, ../scss/_form-groups.scss */
+.common > .h5peditor-label:focus {
+  outline: none;
+}
+/* line 420, ../scss/_form-groups.scss */
+.common > .h5peditor-label:focus > .icon:before {
+  outline: 1px dashed #0E1A25;
+}
+/* line 424, ../scss/_form-groups.scss */
 .common > .fields {
   min-height: 2em;
   padding: 20px;
@@ -448,36 +457,36 @@
   border-top: none;
   background: #FFFFFF;
 }
-/* line 422, ../scss/_form-groups.scss */
+/* line 431, ../scss/_form-groups.scss */
 .common > .fields .h5peditor-label {
   color: #0E1A25;
   font-size: 18px;
   font-weight: 600;
 }
-/* line 428, ../scss/_form-groups.scss */
+/* line 437, ../scss/_form-groups.scss */
 .common > .fields > .desc {
   margin: 0;
   font-size: 0.875em;
   color: #666;
 }
-/* line 434, ../scss/_form-groups.scss */
+/* line 443, ../scss/_form-groups.scss */
 .common > .fields p:first-child {
   margin-bottom: 20px;
 }
-/* line 440, ../scss/_form-groups.scss */
+/* line 449, ../scss/_form-groups.scss */
 .common.collapsed > .h5peditor-label > .icon:before {
   content: "\e566";
 }
-/* line 443, ../scss/_form-groups.scss */
+/* line 452, ../scss/_form-groups.scss */
 .common.collapsed > .fields {
   display: none;
 }
-/* line 448, ../scss/_form-groups.scss */
+/* line 457, ../scss/_form-groups.scss */
 .common.hidden {
   display: none;
 }
 
-/* line 455, ../scss/_form-groups.scss */
+/* line 464, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label]:before {
   content: attr(aria-label);
   visibility: hidden;
@@ -493,11 +502,11 @@
   line-height: 1.5;
   box-shadow: 0 0 0.5em #858585;
 }
-/* line 473, ../scss/_form-groups.scss */
+/* line 482, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label]:hover:before {
   visibility: visible;
 }
-/* line 477, ../scss/_form-groups.scss */
+/* line 486, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label][aria-disabled="true"]:before {
   display: none;
 }
