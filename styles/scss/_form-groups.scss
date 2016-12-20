@@ -94,7 +94,7 @@
 .h5p-li, .group {
   &.collection > .content {
     background: $white;
-    
+
     .h5p-li, .group {
       &.collection > .content {
         background: $form-background;
@@ -128,7 +128,7 @@
 }
 
 // Zebra pattern for common fields
-.common { 
+.common {
   .h5p-li, .group {
     &.collection > .content {
       background: $form-background;
@@ -404,9 +404,18 @@
       content: "\e565";
       font-family: $i;
       opacity: 0.7;
+      margin-right: 5px;
     }
     &:hover > .icon {
       opacity: 1;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus > .icon:before {
+      outline: 1px dashed $text-color;
     }
   }
   & > .fields {
