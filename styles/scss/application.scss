@@ -80,7 +80,7 @@ a {
     color: $form-input-placeholder-color;
   }
   select {
-    padding: 7px 30px 6px 8px;
+    padding: 10px 30px 10px 8px;
     font-family: "Open Sans", sans-serif;
     font-size: 16px;
     border: 1px solid $form-border-color;;
@@ -299,12 +299,12 @@ a {
       color: #b83c3c;
       background: transparent;
       border: 0;
-      outline: 0;
       cursor: pointer;
     }
     .h5p-cancel:focus,
     .h5p-cancel:hover {
       color: #e20d0d;
+      background: transparent;
     }
   }
   .h5p-or {
@@ -664,10 +664,10 @@ a {
   border: 1px solid #ccc;
   border-bottom: 0;
   margin-left: 0.5em;
-  padding: 0.25em 0.5em;
-  color: #555;
+  padding: 0.6em 1em;
+  color: #0E1A25;
   font-size: 0.875em;
-  background: #f4f4f4;
+  background: #e4eaf2;
   line-height: 1.285714286em;
   cursor: pointer;
   outline: none;
@@ -688,7 +688,6 @@ a {
   background: #fff;
   margin: 0 0 0.25em;
   padding: 0.5em;
-
 }
 .h5peditor-widgets > .h5peditor-label {
   float: left;
@@ -850,4 +849,23 @@ body.h5p-editor-image-popup {
     background: none;
     color: #e40000;
   }
+}
+
+.h5peditor-widgets > .h5peditor-label {
+  margin-top: 5px;
+}
+
+/* Help CKEditor blend into the H5PEditor */
+.h5peditor .cke_bottom,
+.h5peditor .cke_top {
+  background: #e4eaf2;
+}
+.h5peditor .cke_chrome {
+  border: 1px solid #D0D0D1;
+  background: #e4eaf2;
+}
+.h5peditor .cke_contents,
+.h5peditor .cke_toolgroup,
+.h5peditor .cke_combo_button {
+  border: 1px solid #D0D0D1;
 }
