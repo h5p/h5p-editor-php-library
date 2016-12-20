@@ -13,7 +13,6 @@ H5PEditor.ListEditor = (function ($) {
     var self = this;
 
     var entity = list.getEntity();
-   
     // Create list html
     var $list = $('<ul/>', {
       'class': 'h5p-ul' 
