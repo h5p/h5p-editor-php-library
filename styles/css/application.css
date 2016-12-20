@@ -152,32 +152,23 @@
   background: #FFFFFF;
 }
 /* line 69, ../scss/_form-groups.scss */
-.group.odd .content {
-  background: orange;
-}
-/* line 73, ../scss/_form-groups.scss */
 .group.importance-high > .title {
   color: #FFFFFF;
 }
-/* line 79, ../scss/_form-groups.scss */
+/* line 75, ../scss/_form-groups.scss */
 .group.importance-low > .title {
   color: #0E1A25;
 }
-/* line 84, ../scss/_form-groups.scss */
+/* line 80, ../scss/_form-groups.scss */
 .group.importance-low > .title:before {
   color: #0E1A25;
 }
-/* line 88, ../scss/_form-groups.scss */
+/* line 84, ../scss/_form-groups.scss */
 .group.importance-low > .title:focus:before {
   outline: 1px dashed #0E1A25;
 }
 
-/* line 95, ../scss/_form-groups.scss */
-.h5p-li.odd .content {
-  background: orange;
-}
-
-/* line 104, ../scss/_form-groups.scss */
+/* line 94, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar > .h5peditor-label {
   overflow: hidden;
   margin: 0 54px 0 0;
@@ -187,13 +178,13 @@
   outline: none;
   text-overflow: ellipsis;
 }
-/* line 124, ../scss/_form-groups.scss */
+/* line 114, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar > .list-actions {
   height: 100%;
   float: right;
   position: relative;
 }
-/* line 130, ../scss/_form-groups.scss */
+/* line 120, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar .remove {
   cursor: pointer;
   width: 1.25em;
@@ -201,12 +192,12 @@
   font-size: 1.75em;
   display: inline-block;
 }
-/* line 137, ../scss/_form-groups.scss */
+/* line 127, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar .remove:hover {
   opacity: 1;
   text-decoration: none;
 }
-/* line 143, ../scss/_form-groups.scss */
+/* line 133, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar .remove:after {
   font-family: "H5P";
   content: "\e890";
@@ -215,16 +206,16 @@
   display: inline-block;
   line-height: 38px;
 }
-/* line 152, ../scss/_form-groups.scss */
+/* line 142, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar .remove:hover:after {
   opacity: 1;
 }
-/* line 156, ../scss/_form-groups.scss */
+/* line 146, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar .order-group {
   text-align: center;
   float: right;
 }
-/* line 161, ../scss/_form-groups.scss */
+/* line 151, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar .order-up, .h5p-li > .list-item-title-bar .order-down {
   width: 19px;
   height: 19px;
@@ -233,46 +224,46 @@
   line-height: 19px;
   cursor: pointer;
 }
-/* line 169, ../scss/_form-groups.scss */
+/* line 159, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar .order-up:hover, .h5p-li > .list-item-title-bar .order-down:hover {
   background: #57636e;
 }
-/* line 173, ../scss/_form-groups.scss */
+/* line 163, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar .order-up:after, .h5p-li > .list-item-title-bar .order-down:after {
   font-family: "H5P";
   content: "\e58e";
   color: #FFFFFF;
   display: inline-block;
 }
-/* line 181, ../scss/_form-groups.scss */
+/* line 171, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar .order-down:after {
   content: "\e58f";
 }
-/* line 188, ../scss/_form-groups.scss */
+/* line 178, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high > .title {
   border: none;
   margin: 0 74px 0 0;
 }
-/* line 194, ../scss/_form-groups.scss */
+/* line 184, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .remove {
   height: 48px;
   line-height: 48px;
   font-size: 40px;
 }
-/* line 199, ../scss/_form-groups.scss */
+/* line 189, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .remove:after {
   line-height: 48px;
 }
-/* line 203, ../scss/_form-groups.scss */
+/* line 193, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .remove:after {
   color: #FFFFFF;
   opacity: 0.7;
 }
-/* line 207, ../scss/_form-groups.scss */
+/* line 197, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .remove:hover:after {
   opacity: 1;
 }
-/* line 211, ../scss/_form-groups.scss */
+/* line 201, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .order-up, .h5p-li > .list-item-title-bar.importance-high .order-down {
   width: 24px;
   height: 24px;
@@ -280,47 +271,47 @@
   font-size: 18px;
   line-height: 24px;
 }
-/* line 218, ../scss/_form-groups.scss */
+/* line 208, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .order-up:hover, .h5p-li > .list-item-title-bar.importance-high .order-down:hover {
   background: #3B71A5;
 }
-/* line 222, ../scss/_form-groups.scss */
+/* line 212, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .order-up:after, .h5p-li > .list-item-title-bar.importance-high .order-down:after {
   color: #FFFFFF;
 }
-/* line 231, ../scss/_form-groups.scss */
+/* line 221, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-low > .title {
   border: none;
   margin: 0 54px 0 0;
 }
-/* line 236, ../scss/_form-groups.scss */
+/* line 226, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-low > .title:before {
   color: #0E1A25;
 }
-/* line 239, ../scss/_form-groups.scss */
+/* line 229, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-low > .title:focus:before {
   outline: 1px dashed #0E1A25;
 }
-/* line 244, ../scss/_form-groups.scss */
+/* line 234, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-low .remove {
   height: 38px;
   line-height: 38px;
   font-size: 30px;
 }
-/* line 249, ../scss/_form-groups.scss */
+/* line 239, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-low .remove:after {
   line-height: 38px;
 }
-/* line 253, ../scss/_form-groups.scss */
+/* line 243, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-low .remove:after {
   color: #0E1A25;
   opacity: 0.7;
 }
-/* line 257, ../scss/_form-groups.scss */
+/* line 247, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-low .remove:hover:after {
   opacity: 1;
 }
-/* line 261, ../scss/_form-groups.scss */
+/* line 251, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-low .order-up, .h5p-li > .list-item-title-bar.importance-low .order-down {
   width: 19px;
   height: 19px;
@@ -328,52 +319,52 @@
   font-size: 16px;
   line-height: 19px;
 }
-/* line 268, ../scss/_form-groups.scss */
+/* line 258, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-low .order-up:hover, .h5p-li > .list-item-title-bar.importance-low .order-down:hover {
   background: #DAD9DA;
 }
-/* line 272, ../scss/_form-groups.scss */
+/* line 262, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-low .order-up:after, .h5p-li > .list-item-title-bar.importance-low .order-down:after {
   color: #0E1A25;
 }
 
-/* line 280, ../scss/_form-groups.scss */
+/* line 270, ../scss/_form-groups.scss */
 .group.expanded > .content,
 .listgroup.expanded > .content {
   display: block;
 }
 
-/* line 285, ../scss/_form-groups.scss */
+/* line 275, ../scss/_form-groups.scss */
 .listgroup > .list-item-title-bar > .h5peditor-label {
   cursor: pointer;
 }
 
-/* line 290, ../scss/_form-groups.scss */
+/* line 280, ../scss/_form-groups.scss */
 .list-item-title-bar > .title:before,
 .group > .title:before {
   content: "\e566";
   font-family: "H5P";
   margin-right: 5px;
 }
-/* line 296, ../scss/_form-groups.scss */
+/* line 286, ../scss/_form-groups.scss */
 .list-item-title-bar > .title:focus:before,
 .group > .title:focus:before {
   outline: 1px dashed #FFFFFF;
 }
 
-/* line 300, ../scss/_form-groups.scss */
+/* line 290, ../scss/_form-groups.scss */
 .listgroup.expanded > .list-item-title-bar > .h5peditor-label:before,
 .expanded > .title:before {
   content: "\e565";
 }
 
-/* line 316, ../scss/_form-groups.scss */
+/* line 306, ../scss/_form-groups.scss */
 .listgroup > .group.field {
   margin: 0;
   padding: 0;
 }
 
-/* line 320, ../scss/_form-groups.scss */
+/* line 310, ../scss/_form-groups.scss */
 .content {
   display: block;
   margin: 0;
@@ -383,32 +374,32 @@
   background: #FFFFFF;
 }
 
-/* line 328, ../scss/_form-groups.scss */
+/* line 318, ../scss/_form-groups.scss */
 .h5p-li > .content {
   padding: 10px;
 }
 
-/* line 332, ../scss/_form-groups.scss */
+/* line 322, ../scss/_form-groups.scss */
 .common {
   margin-top: 10px;
 }
-/* line 335, ../scss/_form-groups.scss */
+/* line 325, ../scss/_form-groups.scss */
 .common > .h5peditor-label {
   margin: 0;
   padding: 0 10px;
   cursor: pointer;
 }
-/* line 343, ../scss/_form-groups.scss */
+/* line 333, ../scss/_form-groups.scss */
 .common > .h5peditor-label > .icon:before {
   content: "\e565";
   font-family: "H5P";
   opacity: 0.7;
 }
-/* line 348, ../scss/_form-groups.scss */
+/* line 338, ../scss/_form-groups.scss */
 .common > .h5peditor-label:hover > .icon {
   opacity: 1;
 }
-/* line 352, ../scss/_form-groups.scss */
+/* line 342, ../scss/_form-groups.scss */
 .common > .fields {
   min-height: 2em;
   padding: 20px;
@@ -416,36 +407,36 @@
   border-top: none;
   background: #FFFFFF;
 }
-/* line 359, ../scss/_form-groups.scss */
+/* line 349, ../scss/_form-groups.scss */
 .common > .fields .h5peditor-label {
   color: #0E1A25;
   font-size: 18px;
   font-weight: 600;
 }
-/* line 365, ../scss/_form-groups.scss */
+/* line 355, ../scss/_form-groups.scss */
 .common > .fields > .desc {
   margin: 0;
   font-size: 0.875em;
   color: #666;
 }
-/* line 371, ../scss/_form-groups.scss */
+/* line 361, ../scss/_form-groups.scss */
 .common > .fields p:first-child {
   margin-bottom: 20px;
 }
-/* line 377, ../scss/_form-groups.scss */
+/* line 367, ../scss/_form-groups.scss */
 .common.collapsed > .h5peditor-label > .icon:before {
   content: "\e566";
 }
-/* line 380, ../scss/_form-groups.scss */
+/* line 370, ../scss/_form-groups.scss */
 .common.collapsed > .fields {
   display: none;
 }
-/* line 385, ../scss/_form-groups.scss */
+/* line 375, ../scss/_form-groups.scss */
 .common.hidden {
   display: none;
 }
 
-/* line 392, ../scss/_form-groups.scss */
+/* line 382, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label]:before {
   content: attr(aria-label);
   visibility: hidden;
@@ -461,13 +452,57 @@
   line-height: 1.5;
   box-shadow: 0 0 0.5em #858585;
 }
-/* line 410, ../scss/_form-groups.scss */
+/* line 400, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label]:hover:before {
   visibility: visible;
 }
-/* line 414, ../scss/_form-groups.scss */
+/* line 404, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label][aria-disabled="true"]:before {
   display: none;
+}
+/* line 410, ../scss/_form-groups.scss */
+.h5peditor-button[aria-label] .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content {
+  background: #FFFFFF;
+}
+/* line 414, ../scss/_form-groups.scss */
+.h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content {
+  background: #FAFBFC;
+}
+/* line 418, ../scss/_form-groups.scss */
+.h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .group.collection > .content {
+  background: #FFFFFF;
+}
+/* line 422, ../scss/_form-groups.scss */
+.h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content {
+  background: #FAFBFC;
+}
+/* line 426, ../scss/_form-groups.scss */
+.h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content {
+  background: #FFFFFF;
+}
+/* line 430, ../scss/_form-groups.scss */
+.h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content {
+  background: #FAFBFC;
+}
+/* line 448, ../scss/_form-groups.scss */
+.h5peditor-button[aria-label] .common .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content {
+  background: #FAFBFC;
+}
+/* line 452, ../scss/_form-groups.scss */
+.h5peditor-button[aria-label] .common .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .group.collection > .content {
+  background: #FFFFFF;
+}
+/* line 456, ../scss/_form-groups.scss */
+.h5peditor-button[aria-label] .common .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .group.collection > .content .group.collection > .content {
+  background: #FAFBFC;
+}
+/* line 460, ../scss/_form-groups.scss */
+.h5peditor-button[aria-label] .common .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content {
+  background: #FFFFFF;
+}
+/* line 464, ../scss/_form-groups.scss */
+.h5peditor-button[aria-label] .common .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content .group.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .h5p-li.collection > .content, .h5peditor-button[aria-label] .common .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content .group.collection > .content {
+  background: #FAFBFC;
 }
 
 /* line 2, ../scss/_h5peditor-image-edit.scss */
@@ -1295,7 +1330,6 @@ a {
 .h5peditor .h5p-editor-dialog {
   position: absolute;
   z-index: 1;
-  background: #fff;
   padding: 10px 10px 0;
   margin: 5.5em 0 1em;
   visibility: hidden;
@@ -1311,7 +1345,7 @@ a {
   -webkit-transition-delay: 0.2s, 0.2s, 0s, 0s;
   transition: visibility 0s 0.2s, height 0s 0.2s, opacity 0.2s, margin-top 0.2s;
 }
-/* line 554, ../scss/application.scss */
+/* line 553, ../scss/application.scss */
 .h5peditor .h5p-editor-dialog.h5p-open {
   margin-top: 3.5em;
   visibility: visible;
@@ -1323,15 +1357,16 @@ a {
   -webkit-transition-delay: 0s, 0s, 0s, 0s;
   transition: visibility 0s 0s, height 0s 0s, opacity 0.2s, margin-top 0.2s;
 }
-/* line 562, ../scss/application.scss */
+/* line 561, ../scss/application.scss */
 .h5peditor .h5p-editor-dialog > .field {
   margin: 0 0 10px;
   border: 0;
   box-shadow: none;
 }
-/* line 568, ../scss/application.scss */
+/* line 567, ../scss/application.scss */
 .h5peditor .h5p-editor-dialog .content {
   border: none;
+  background: #FFFFFF;
 }
 /* line 571, ../scss/application.scss */
 .h5peditor .h5p-editor-dialog .content .h5peditor-label {

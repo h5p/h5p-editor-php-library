@@ -66,10 +66,6 @@
     background: $form-content-background;
   }
 
-  &.odd .content {
-    background: orange;
-  }
-
   &.importance-high > .title {
     @extend %title-bar-importance-high;
     @extend %title-bar-text-importance-high;
@@ -88,12 +84,6 @@
     &:focus:before {
       outline: 1px dashed $text-color;
     }
-  }
-}
-
-.h5p-li {
-  &.odd .content {
-    background: orange;
   }
 }
 
@@ -414,4 +404,75 @@
   &[aria-disabled="true"]:before {
     display: none;
   }
+
+// Zebra pattern for lists and groups
+.h5p-li, .group {
+  &.collection > .content {
+    background: $white;
+    
+    .h5p-li, .group {
+      &.collection > .content {
+        background: $form-background;
+
+       .h5p-li, .group {
+         &.collection > .content {
+           background: $white;
+
+           .h5p-li, .group {
+             &.collection > .content {
+               background: $form-background;
+
+               .h5p-li, .group {
+                 &.collection > .content {
+                   background: $white;
+
+                   .h5p-li, .group {
+                     &.collection > .content {
+                       background: $form-background;
+                     }
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+      }
+    }
+  }
+}
+
+// Zebra pattern for common fields
+.common { 
+  .h5p-li, .group {
+    &.collection > .content {
+      background: $form-background;
+
+       .h5p-li, .group {
+         &.collection > .content {
+           background: $white;
+
+          .h5p-li, .group {
+            &.collection > .content {
+            background: $form-background;
+
+               .h5p-li, .group {
+                 &.collection > .content {
+                   background: $white;
+
+                  .h5p-li, .group {
+                    &.collection > .content {
+                    background: $form-background;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 }

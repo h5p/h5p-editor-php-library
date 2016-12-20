@@ -276,14 +276,11 @@ ns.findLibraryAncestor = function (parent) {
  * @returns {string} to determine background color of callee
  */
 ns.getParentZebra = function (parent) {
-  if (parent && parent.zebra) {
+  if (parent.zebra) {
     return parent.zebra;
   }
-  else if (parent) {
-    ns.getParentZebra(parent.parent);
-  }
-  else{
-    return;
+  else {
+    return ns.getParentZebra(parent.parent);
   }
 };
 

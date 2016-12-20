@@ -55,17 +55,6 @@ ns.Group = function (parent, field, params, setValue) {
     }
   }
 
-  // Alternate background colors
-  if (ns.getParentZebra(parent) === 'odd'){
-    this.zebra = 'even';
-  }
-  else {
-    this.zebra = 'odd'; 
-  } 
-  if (parent.constructor.name === 'List'){
-    this.zebra = parent.zebra;
-  }
-
 };
 
 // Extends the event dispatcher
@@ -89,7 +78,7 @@ ns.Group.prototype.appendTo = function ($wrapper) {
 
   // Add fieldset wrapper for group
   this.$group = ns.$('<fieldset/>', {
-    'class': 'field group ' + H5PEditor.createImportance(this.field.importance) + ' ' + this.zebra,
+    'class': 'field group ' + H5PEditor.createImportance(this.field.importance) + ' ' + 'collection',
     appendTo: $wrapper
   });
 
