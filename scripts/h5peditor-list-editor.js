@@ -13,10 +13,9 @@ H5PEditor.ListEditor = (function ($) {
     var self = this;
 
     var entity = list.getEntity();
-
     // Create list html
     var $list = $('<ul/>', {
-      'class': 'h5p-ul'
+      'class': 'h5p-ul' 
     });
 
     // Create add button
@@ -78,7 +77,7 @@ H5PEditor.ListEditor = (function ($) {
     self.addItem = function (item) {
       var $placeholder, mouseDownAt;
       var $item = $('<li/>', {
-        'class' : 'h5p-li',
+        'class' : 'h5p-li' + ' ' + 'collection',
       });
 
       // Create confirmation dialog for removing list item
