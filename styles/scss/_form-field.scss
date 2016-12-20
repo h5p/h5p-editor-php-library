@@ -1,3 +1,6 @@
+@import 'variables';
+@import 'mixins';
+
 .field {
   @include field-margin($padding);
   font-size: $font-size-normal;
@@ -36,13 +39,7 @@
   }
 
   .library {
-    border: 0px solid $form-border-color;
-  }
-
-  .h5p-vtab-form > .library {
-    border: 1px solid $form-border-color;
-    padding: $min-padding;
-
+    border: 0 solid $form-border-color;
   }
 
   &.group.importance-high .h5peditor-label {

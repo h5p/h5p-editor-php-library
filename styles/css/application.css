@@ -1,4 +1,4 @@
-/* line 1, ../scss/_form-field.scss */
+/* line 4, ../scss/_form-field.scss */
 .field {
   margin: 20px 0;
   font-size: 16px;
@@ -12,15 +12,15 @@
 .field:last-child {
   margin-bottom: 0;
 }
-/* line 9, ../scss/_form-field.scss */
+/* line 12, ../scss/_form-field.scss */
 .tree > .field:last-child {
   margin-bottom: 20px;
 }
-/* line 14, ../scss/_form-field.scss */
+/* line 17, ../scss/_form-field.scss */
 .tree > .field.group:last-child {
   margin-bottom: 0;
 }
-/* line 18, ../scss/_form-field.scss */
+/* line 21, ../scss/_form-field.scss */
 .fields > .field.group {
   margin: 10px 0;
 }
@@ -32,45 +32,40 @@
 .fields > .field.group:last-child {
   margin-bottom: 0;
 }
-/* line 22, ../scss/_form-field.scss */
+/* line 25, ../scss/_form-field.scss */
 .field.boolean .h5peditor-label {
   display: inline;
   color: #454347;
   font-size: 16px;
   font-weight: 600;
 }
-/* line 29, ../scss/_form-field.scss */
+/* line 32, ../scss/_form-field.scss */
 .field.video, .field.image, .field.file, .field.audio {
   position: relative;
 }
-/* line 33, ../scss/_form-field.scss */
+/* line 36, ../scss/_form-field.scss */
 .field.image .file {
   display: inline-block;
   float: none;
 }
-/* line 38, ../scss/_form-field.scss */
+/* line 41, ../scss/_form-field.scss */
 .field .library {
-  border: 0px solid #D0D0D1;
+  border: 0 solid #D0D0D1;
 }
-/* line 42, ../scss/_form-field.scss */
-.field .h5p-vtab-form > .library {
-  border: 1px solid #D0D0D1;
-  padding: 10px;
-}
-/* line 48, ../scss/_form-field.scss */
+/* line 45, ../scss/_form-field.scss */
 .field.group.importance-high .h5peditor-label {
   display: block;
   margin-bottom: 10px;
   font-weight: 600;
   font-size: 1.05em;
 }
-/* line 56, ../scss/_form-field.scss */
+/* line 53, ../scss/_form-field.scss */
 .field.group.importance-medium .h5peditor-label {
   color: #0E1A25;
   font-size: 1.05em;
   font-weight: 600;
 }
-/* line 62, ../scss/_form-field.scss */
+/* line 59, ../scss/_form-field.scss */
 .field.group.importance-low .h5peditor-label {
   color: #0E1A25;
   font-size: 1.05em;
