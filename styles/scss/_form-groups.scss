@@ -91,37 +91,31 @@
 }
 
 // Zebra pattern for lists and groups
-.h5p-panel > .content {
-  background-color: $white;
-}
+.common, .content {
+  .content {
+    background-color: $form-background;
 
-.common,
-.h5p-panel {
-  .h5p-panel {
-    & > .content {
-      background-color: $form-background;
-    }
-  
-    .h5p-panel {
-      & > .content {
-        background-color: $white;
-      }
+    .content {
+      background-color: $white;
 
-     .h5p-panel {
-       & > .content {
-         background-color: $form-background;
+     .content {
+       background-color: $form-background;
+
+       .content {
+         background-color: $white;
+
+         .content {
+           background-color: $form-background;
+    
+           .content {
+             background-color: $white;
+           }
+         }
        }
-
-      .h5p-panel {
-        & > .content {
-          background-color: $white;
-        }
-      }
      }
-    }
+   }
   }
 }
-
 
 .h5p-li > .list-item-title-bar {
   @extend %title-bar-base;
