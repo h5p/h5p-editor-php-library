@@ -12,15 +12,11 @@
 .field:last-child {
   margin-bottom: 0;
 }
-/* line 12, ../scss/_form-field.scss */
-.tree > .field:last-child {
-  margin-bottom: 20px;
-}
-/* line 17, ../scss/_form-field.scss */
+/* line 11, ../scss/_form-field.scss */
 .tree > .field.group:last-child {
   margin-bottom: 0;
 }
-/* line 21, ../scss/_form-field.scss */
+/* line 15, ../scss/_form-field.scss */
 .fields > .field.group {
   margin: 10px 0;
 }
@@ -32,40 +28,40 @@
 .fields > .field.group:last-child {
   margin-bottom: 0;
 }
-/* line 25, ../scss/_form-field.scss */
+/* line 19, ../scss/_form-field.scss */
 .field.boolean .h5peditor-label {
   display: inline;
   color: #454347;
   font-size: 16px;
   font-weight: 600;
 }
-/* line 32, ../scss/_form-field.scss */
+/* line 26, ../scss/_form-field.scss */
 .field.video, .field.image, .field.file, .field.audio {
   position: relative;
 }
-/* line 36, ../scss/_form-field.scss */
+/* line 30, ../scss/_form-field.scss */
 .field.image .file {
   display: inline-block;
   float: none;
 }
-/* line 41, ../scss/_form-field.scss */
+/* line 35, ../scss/_form-field.scss */
 .field .library {
   border: 0;
 }
-/* line 45, ../scss/_form-field.scss */
+/* line 39, ../scss/_form-field.scss */
 .field.group.importance-high .h5peditor-label {
   display: block;
   margin-bottom: 10px;
   font-weight: 600;
   font-size: 1.05em;
 }
-/* line 53, ../scss/_form-field.scss */
+/* line 47, ../scss/_form-field.scss */
 .field.group.importance-medium .h5peditor-label {
   color: #0E1A25;
   font-size: 1.05em;
   font-weight: 600;
 }
-/* line 59, ../scss/_form-field.scss */
+/* line 53, ../scss/_form-field.scss */
 .field.group.importance-low .h5peditor-label {
   color: #0E1A25;
   font-size: 1.05em;
@@ -164,38 +160,38 @@
 }
 
 /* line 94, ../scss/_form-groups.scss */
-.h5p-collection {
+.h5p-collection > .content {
   background-color: #FFFFFF;
 }
 
 /* line 100, ../scss/_form-groups.scss */
 .common .h5p-collection > .content,
-.h5p-collection .h5p-collection .h5p-collection > .content {
+.h5p-collection > .content .h5p-collection > .content {
   background-color: #FAFBFC;
 }
 /* line 103, ../scss/_form-groups.scss */
 .common .h5p-collection > .content .h5p-collection > .content,
-.h5p-collection .h5p-collection .h5p-collection > .content .h5p-collection > .content {
+.h5p-collection > .content .h5p-collection > .content .h5p-collection > .content {
   background-color: #FFFFFF;
 }
 /* line 106, ../scss/_form-groups.scss */
 .common .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content,
-.h5p-collection .h5p-collection .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content {
+.h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content {
   background-color: #FAFBFC;
 }
 /* line 109, ../scss/_form-groups.scss */
 .common .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content,
-.h5p-collection .h5p-collection .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content {
+.h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content {
   background-color: #FFFFFF;
 }
 /* line 112, ../scss/_form-groups.scss */
 .common .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content,
-.h5p-collection .h5p-collection .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content {
+.h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content {
   background-color: #FAFBFC;
 }
 /* line 115, ../scss/_form-groups.scss */
 .common .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content,
-.h5p-collection .h5p-collection .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content {
+.h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content {
   background-color: #FFFFFF;
 }
 
@@ -407,7 +403,7 @@
 
 /* line 354, ../scss/_form-groups.scss */
 .common {
-  margin-top: 10px;
+  margin-top: 20px;
 }
 /* line 357, ../scss/_form-groups.scss */
 .common > .h5peditor-label {
@@ -419,22 +415,21 @@
 .common > .h5peditor-label > .icon:before {
   content: "\e565";
   font-family: "H5P";
-  opacity: 0.7;
   margin-right: 5px;
 }
-/* line 371, ../scss/_form-groups.scss */
+/* line 370, ../scss/_form-groups.scss */
 .common > .h5peditor-label:hover > .icon {
   opacity: 1;
 }
-/* line 375, ../scss/_form-groups.scss */
+/* line 374, ../scss/_form-groups.scss */
 .common > .h5peditor-label:focus {
   outline: none;
 }
-/* line 379, ../scss/_form-groups.scss */
+/* line 378, ../scss/_form-groups.scss */
 .common > .h5peditor-label:focus > .icon:before {
   outline: 1px dashed #0E1A25;
 }
-/* line 383, ../scss/_form-groups.scss */
+/* line 382, ../scss/_form-groups.scss */
 .common > .fields {
   min-height: 2em;
   padding: 20px;
@@ -442,36 +437,36 @@
   border-top: none;
   background: #FFFFFF;
 }
-/* line 390, ../scss/_form-groups.scss */
+/* line 389, ../scss/_form-groups.scss */
 .common > .fields .h5peditor-label {
   color: #0E1A25;
   font-size: 18px;
   font-weight: 600;
 }
-/* line 396, ../scss/_form-groups.scss */
+/* line 395, ../scss/_form-groups.scss */
 .common > .fields > .desc {
   margin: 0;
   font-size: 0.875em;
   color: #666;
 }
-/* line 402, ../scss/_form-groups.scss */
+/* line 401, ../scss/_form-groups.scss */
 .common > .fields p:first-child {
   margin-bottom: 20px;
 }
-/* line 408, ../scss/_form-groups.scss */
+/* line 407, ../scss/_form-groups.scss */
 .common.collapsed > .h5peditor-label > .icon:before {
   content: "\e566";
 }
-/* line 411, ../scss/_form-groups.scss */
+/* line 410, ../scss/_form-groups.scss */
 .common.collapsed > .fields {
   display: none;
 }
-/* line 416, ../scss/_form-groups.scss */
+/* line 415, ../scss/_form-groups.scss */
 .common.hidden {
   display: none;
 }
 
-/* line 423, ../scss/_form-groups.scss */
+/* line 422, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label]:before {
   content: attr(aria-label);
   visibility: hidden;
@@ -487,11 +482,11 @@
   line-height: 1.5;
   box-shadow: 0 0 0.5em #858585;
 }
-/* line 441, ../scss/_form-groups.scss */
+/* line 440, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label]:hover:before {
   visibility: visible;
 }
-/* line 445, ../scss/_form-groups.scss */
+/* line 444, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label][aria-disabled="true"]:before {
   display: none;
 }
