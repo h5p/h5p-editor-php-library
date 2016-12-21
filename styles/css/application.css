@@ -164,7 +164,7 @@
 }
 
 /* line 94, ../scss/_form-groups.scss */
-.h5p-collection {
+.h5p-collection > .content {
   background-color: #FFFFFF;
 }
 
