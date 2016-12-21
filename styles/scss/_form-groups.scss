@@ -98,19 +98,19 @@
 .common, 
 .h5p-collection .h5p-collection {
   .h5p-collection > .content {
-    background-color: orange;
+    background-color: $form-background;
 
     .h5p-collection > .content {
       background-color: $white;
 
       .h5p-collection > .content {
-        background-color: orange;
+        background-color: $form-background;
 
         .h5p-collection > .content {
           background-color: $white;
 
           .h5p-collection > .content {
-            background-color: orange;
+            background-color: $form-background;
 
             .h5p-collection > .content {
               background-color: $white;
