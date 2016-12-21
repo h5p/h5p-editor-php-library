@@ -91,67 +91,29 @@
 }
 
 // Zebra pattern for lists and groups
-.h5p-li, .group {
-  &.collection > .content {
-    background: $white;
-
-    .h5p-li, .group {
-      &.collection > .content {
-        background: $form-background;
-
-       .h5p-li, .group {
-         &.collection > .content {
-           background: $white;
-
-           .h5p-li, .group {
-             &.collection > .content {
-               background: $form-background;
-
-               .h5p-li, .group {
-                 &.collection > .content {
-                   background: $white;
-
-                   .h5p-li, .group {
-                     &.collection > .content {
-                       background: $form-background;
-                     }
-                   }
-                 }
-               }
-             }
-           }
-         }
-       }
-      }
-    }
-  }
+.h5p-collection {
+  background-color: $white;
 }
 
-// Zebra pattern for common fields
-.common {
-  .h5p-li, .group {
-    &.collection > .content {
-      background: $form-background;
+.common, 
+.h5p-collection .h5p-collection {
+  .h5p-collection > .content {
+    background-color: orange;
 
-       .h5p-li, .group {
-         &.collection > .content {
-           background: $white;
+    .h5p-collection > .content {
+      background-color: $white;
 
-          .h5p-li, .group {
-            &.collection > .content {
-            background: $form-background;
+      .h5p-collection > .content {
+        background-color: orange;
 
-               .h5p-li, .group {
-                 &.collection > .content {
-                   background: $white;
+        .h5p-collection > .content {
+          background-color: $white;
 
-                  .h5p-li, .group {
-                    &.collection > .content {
-                    background: $form-background;
-                    }
-                  }
-                }
-              }
+          .h5p-collection > .content {
+            background-color: orange;
+
+            .h5p-collection > .content {
+              background-color: $white;
             }
           }
         }
