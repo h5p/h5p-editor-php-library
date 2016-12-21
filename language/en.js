@@ -1,6 +1,6 @@
 H5PEditor.language.core = {
   missingTranslation: '[Missing translation :key]',
-  loading: 'Loading :type, please wait...',
+  loading: 'Loading, please wait...',
   selectLibrary: 'Select the library you wish to use for your content.',
   unknownFieldPath: 'Unable to find ":path".',
   notImageField: '":path" is not an image.',
@@ -10,6 +10,7 @@ H5PEditor.language.core = {
   exceedsMax: 'The :property value exceeds the maximum of :max.',
   belowMin: 'The :property value is below the minimum of :min.',
   outOfStep: 'The :property value can only be changed in steps of :step.',
+  add: 'Add',
   addFile: 'Add file',
   removeFile: 'Remove file',
   confirmRemoval: 'Are you sure you wish to remove this :type?',
@@ -53,5 +54,8 @@ H5PEditor.language.core = {
   height: 'height',
   width: 'width',
   textField: 'text field',
-  numberField: 'number field'
+  numberField: 'number field',
+  orderItemUp: 'Order item up',
+  orderItemDown: 'Order item down',
+  removeItem: 'Remove item'
 };

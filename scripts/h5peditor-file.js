@@ -117,6 +117,7 @@ ns.File.prototype.appendTo = function ($wrapper) {
   var html = ns.createItem(this.field.type, label + description + fileHtml);
 
   var $container = ns.$(html).appendTo($wrapper);
+  this.$copyrightButton = $container.find('.h5p-copyright-button');
   this.$file = $container.find('.file');
   this.$errors = $container.find('.h5p-errors');
   this.addFile();
@@ -159,10 +160,15 @@ ns.File.prototype.addFile = function () {
   var that = this;
 
   if (this.params === undefined) {
-    this.$file.html('<a href="#" class="add" title="' + ns.t('core', 'addFile') + '"></a>').children('.add').click(function () {
+    this.$file.html(
+      '<a href="#" class="add" title="' + ns.t('core', 'addFile') + '">' +
+        '<div class="h5peditor-field-file-upload-text">' + ns.t('core', 'add') + '</div>' +
+      '</a>'
+    ).children('.add').click(function () {
       that.openFileSelector();
       return false;
     });
+    this.$copyrightButton.addClass('hidden');
     return;
   }
 
@@ -186,6 +192,7 @@ ns.File.prototype.addFile = function () {
     that.confirmRemovalDialog.show(H5P.jQuery(this).offset().top);
     return false;
   });
+  that.$copyrightButton.removeClass('hidden');
 };
 
 /**

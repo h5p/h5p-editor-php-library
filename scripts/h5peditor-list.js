@@ -299,6 +299,18 @@ H5PEditor.List = (function ($) {
       return valid;
     };
 
+    self.getImportance = function () {
+      if (field.importance !== undefined) {
+        return H5PEditor.createImportance(field.importance);
+      }
+      else if (field.field.importance !== undefined) {
+        return H5PEditor.createImportance(field.field.importance);
+      }
+      else {
+        return '';
+      }
+    }
+
     /**
      * Creates a copy of the current valid value. A copy is created to avoid
      * mistakes like directly editing the parameter values, which will cause

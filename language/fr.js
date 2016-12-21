@@ -10,6 +10,7 @@ H5PEditor.language.core = {
   exceedsMax: 'La :property dépasse le maximum de :max.',
   belowMin: 'La :property dépasse le minimum de :min.',
   outOfStep: 'La :property ne peut être effectuée que par étape  :step.',
+  add: 'Add',
   addFile: 'Ajouter un fichier',
   removeFile: 'Supprimer un fichier',
   confirmRemoval: 'Voulez-vous vraiment supprimer :type?',
@@ -52,5 +53,8 @@ H5PEditor.language.core = {
   height: 'height',
   width: 'width',
   textField: 'text field',
-  numberField: 'number field'
+  numberField: 'number field',
+  orderItemUp: 'Order item up',
+  orderItemDown: 'Order item down',
+  removeItem: 'Remove item'
 };

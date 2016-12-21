@@ -1,0 +1,58 @@
+@import 'variables';
+@import 'mixins';
+
+.field {
+  @include field-margin($padding);
+  font-size: $font-size-normal;
+  padding: 0;
+
+  // Assumes last group is `Behavioural settings`, which should
+  // be grouped with the bottom group `Settings and texts`.
+  .tree > &.group:last-child {
+    margin-bottom: 0;
+  }
+
+  .fields > &.group {
+    @include field-margin($min-padding);
+  }
+
+  &.boolean .h5peditor-label {
+    display: inline;
+    color: #454347;
+    font-size: $font-size-normal;
+    font-weight: 600;
+  }
+
+  &.video, &.image, &.file, &.audio {
+    position: relative;
+  }
+
+  &.image .file {
+    display: inline-block;
+    float: none;
+  }
+
+  .library {
+    border: 0;
+  }
+
+  &.group.importance-high .h5peditor-label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 1.05em;;
+  //  color: $blue;
+  }
+
+  &.group.importance-medium .h5peditor-label {
+    color: $black;
+    font-size: 1.05em;
+    font-weight: 600;
+  }
+
+  &.group.importance-low .h5peditor-label {
+    color: $black;
+    font-size: 1.05em;
+    font-weight: 600;
+  }
+}

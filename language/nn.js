@@ -1,6 +1,6 @@
 H5PEditor.language.core = {
   missingTranslation: '[Manglar oversettelse :key]',
-  loading: 'Lastar :type, ver venleg og vent...',
+  loading: 'Lastar, ver venleg og vent...',
   selectLibrary: 'Vel biblioteket du ønskjer å bruke for innhaldet ditt.',
   unknownFieldPath: 'Kan ikkje finne ":path".',
   notImageField: '":path" er ikkje eit bilete.',
@@ -10,6 +10,7 @@ H5PEditor.language.core = {
   exceedsMax: '":property" overstig maksverdien på :max.',
   belowMin: '":property" er mindre enn minimumsverdien på :min.',
   outOfStep: '":property" kan berre endrast i steg på :step.',
+  add: 'Add',
   addFile: 'Legg til fil',
   removeFile: 'Fjern fil',
   confirmRemoval: 'Er du sikker på at du ønskjer å fjerne denne :type?',
@@ -52,5 +53,8 @@ H5PEditor.language.core = {
   height: 'Høyde',
   width: 'Bredde',
   textField: 'Tekstfelt',
-  numberField: 'Nummerfelt'
+  numberField: 'Nummerfelt',
+  orderItemUp: 'Flytt element opp',
+  orderItemDown: 'Flytt element ned',
+  removeItem: 'Fjern element'
 };

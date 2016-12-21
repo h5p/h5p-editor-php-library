@@ -77,7 +77,7 @@ ns.Group.prototype.appendTo = function ($wrapper) {
 
   // Add fieldset wrapper for group
   this.$group = ns.$('<fieldset/>', {
-    'class': 'field group',
+    'class': 'field group ' + H5PEditor.createImportance(this.field.importance) + ' ' + 'h5p-collection',
     appendTo: $wrapper
   });
 
@@ -94,6 +94,7 @@ ns.Group.prototype.appendTo = function ($wrapper) {
       keypress: function (event) {
         if ((event.charCode || event.keyCode) === 32) {
           that.toggle();
+          event.preventDefault();
         }
       }
     },
@@ -178,6 +179,11 @@ ns.Group.prototype.isSubContent = function () {
  * Toggle expand/collapse for the given group.
  */
 ns.Group.prototype.toggle = function () {
+  if (this.preventToggle) {
+    this.preventToggle = false;
+    return;
+  }
+
   if (this.$group.hasClass('expanded')) {
     this.collapse();
   }
@@ -225,7 +231,7 @@ ns.Group.prototype.findSummary = function () {
     var params = (that.hasSingleChild() && !that.isSubContent()) ? this.params : this.params[child.field.name];
     var widget = ns.getWidgetName(child.field);
 
-    if (widget === 'text') {
+    if (widget === 'text' || widget === 'html') {
       if (params !== undefined && params !== '') {
         summary = params.replace(/(<([^>]+)>)/ig, "");
       }
@@ -266,6 +272,9 @@ ns.Group.prototype.setSummary = function (summary) {
   if (summaryTextNode !== null) {
     summaryText = summaryTextNode[0].nodeValue;
   }
+
+  // Make it possible for parent to monitor summary changes
+  this.trigger('summary', summaryText);
 
   if (summaryText !== undefined) {
     summaryText = this.field.label + ': ' + (summaryText.length > 48 ? summaryText.substr(0, 45) + '...' : summaryText);

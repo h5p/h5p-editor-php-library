@@ -268,6 +268,23 @@ ns.findLibraryAncestor = function (parent) {
 };
 
 /**
+ * getParentZebra
+ *
+ * Alternate the background color of fields
+ *
+ * @param parent
+ * @returns {string} to determine background color of callee
+ */
+ns.getParentZebra = function (parent) {
+  if (parent.zebra) {
+    return parent.zebra;
+  }
+  else {
+    return ns.getParentZebra(parent.parent);
+  }
+};
+
+/**
  * Find the nearest ancestor which handles commonFields.
  *
  * @param {type} parent
@@ -392,6 +409,22 @@ ns.followField = function (parent, path, callback) {
 ns.createError = function (message) {
   return '<p>' + message + '</p>';
 };
+
+/**
+ * Turn a numbered importance into a string.
+ *
+ * @param {Number} importance
+ * @returns {String}
+ */
+ns.createImportance = function (importance) {
+  if (importance) {
+    return 'importance-'.concat(importance);
+  }
+  else {
+    return '';
+  }
+};
+
 
 /**
  * Create HTML wrapper for field items.
@@ -548,4 +581,40 @@ ns.getWidgetName = function (field) {
  */
 ns.htmlspecialchars = function(string) {
   return string.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#039;').replace(/"/g, '&quot;');
+};
+
+/**
+ * Makes it easier to add consistent buttons across the editor widget.
+ *
+ * @param {string} id Typical CSS class format
+ * @param {string} title Human readable format
+ * @param {function} handler Action handler when triggered
+ * @param {boolean} [displayTitle=false] Show button with text
+ * @return {H5P.jQuery}
+ */
+ns.createButton = function (id, title, handler, displayTitle) {
+  var options = {
+    class: 'h5peditor-button ' + id,
+    role: 'button',
+    tabIndex: 0,
+    'aria-disabled': 'false',
+    on: {
+      click: function (event) {
+        handler.call(this);
+      },
+      keydown: function (event) {
+        switch (event.which) {
+          case 13: // Enter
+          case 32: // Space
+            handler.call(this);
+            event.preventDefault();
+        }
+      }
+    }
+  };
+
+  // Determine if we're a icon only button or have a textual label
+  options[displayTitle ? 'html' : 'aria-label'] = title;
+
+  return ns.$('<div/>', options);
 };

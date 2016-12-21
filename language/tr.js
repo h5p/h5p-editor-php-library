@@ -10,6 +10,7 @@ H5PEditor.language.core = {
   exceedsMax: ':property değeri :max değerini aşıyor.',
   belowMin: ':property değeri :min değerinin altında.',
   outOfStep: ':property değeri yalnızca :step aşamalarıyla değiştirilebilir.',
+  add: 'Add',
   addFile: 'Dosya ekle',
   removeFile: 'Dosya kaldır',
   confirmRemoval: ':type kaldırılacak, emin misiniz?',
@@ -53,5 +54,8 @@ H5PEditor.language.core = {
   height: 'height',
   width: 'width',
   textField: 'text field',
-  numberField: 'number field'
+  numberField: 'number field',
+  orderItemUp: 'Order item up',
+  orderItemDown: 'Order item down',
+  removeItem: 'Remove item'
 };
