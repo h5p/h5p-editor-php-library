@@ -8,8 +8,9 @@
     line-height: $form-item-height-small;
     padding-right: $padding;
     margin-right: 0.5em;
-		height: 30px;
+    height: 30px;
     padding-left: 0;
+    font-weight: normal;
 
     &:hover:not([disabled]) {
       background: linear-gradient(to bottom, #fff 0, #d0d0d1 100%);
