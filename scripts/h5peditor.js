@@ -425,21 +425,22 @@ ns.createImportance = function (importance) {
   }
 };
 
-
 /**
  * Create HTML wrapper for field items.
+ * Makes sure the different elements are placed in an consistent order.
  *
- * @param {String} type
- * @param {String} content
- * @param {String} [description]
- * @returns {String}
+ * @param {string} type
+ * @param {string} clabel
+ * @param {string} [description]
+ * @param {string} [content]
+ * @returns {string} HTML
  */
-ns.createItem = function (type, content, description) {
-  var html = '<div class="field ' + type + '">' + content + '<div class="h5p-errors"></div>';
-  if (description !== undefined) {
-    html += '<div class="h5peditor-field-description">' + description + '</div>';
-  }
-  return html + '</div>';
+ns.createItem = function (type, label, description, content) {
+  return '<div class="field ' + type.toLowerCase() + '">' + label +
+           (description ? '<div class="h5peditor-field-description">' + description + '</div>' : '') +
+           (content ? content : '') +
+           '<div class="h5p-errors"></div>' +
+         '</div>';
 };
 
 /**
