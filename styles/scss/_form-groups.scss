@@ -390,7 +390,7 @@
 }
 
 .common {
-  margin-top: $min-padding;
+  margin-top: $padding;
 
   & > .h5peditor-label {
     @extend %title-bar-base;

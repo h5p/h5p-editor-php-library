@@ -12,15 +12,11 @@
 .field:last-child {
   margin-bottom: 0;
 }
-/* line 12, ../scss/_form-field.scss */
-.tree > .field:last-child {
-  margin-bottom: 20px;
-}
-/* line 17, ../scss/_form-field.scss */
+/* line 11, ../scss/_form-field.scss */
 .tree > .field.group:last-child {
   margin-bottom: 0;
 }
-/* line 21, ../scss/_form-field.scss */
+/* line 15, ../scss/_form-field.scss */
 .fields > .field.group {
   margin: 10px 0;
 }
@@ -32,40 +28,40 @@
 .fields > .field.group:last-child {
   margin-bottom: 0;
 }
-/* line 25, ../scss/_form-field.scss */
+/* line 19, ../scss/_form-field.scss */
 .field.boolean .h5peditor-label {
   display: inline;
   color: #454347;
   font-size: 16px;
   font-weight: 600;
 }
-/* line 32, ../scss/_form-field.scss */
+/* line 26, ../scss/_form-field.scss */
 .field.video, .field.image, .field.file, .field.audio {
   position: relative;
 }
-/* line 36, ../scss/_form-field.scss */
+/* line 30, ../scss/_form-field.scss */
 .field.image .file {
   display: inline-block;
   float: none;
 }
-/* line 41, ../scss/_form-field.scss */
+/* line 35, ../scss/_form-field.scss */
 .field .library {
   border: 0;
 }
-/* line 45, ../scss/_form-field.scss */
+/* line 39, ../scss/_form-field.scss */
 .field.group.importance-high .h5peditor-label {
   display: block;
   margin-bottom: 10px;
   font-weight: 600;
   font-size: 1.05em;
 }
-/* line 53, ../scss/_form-field.scss */
+/* line 47, ../scss/_form-field.scss */
 .field.group.importance-medium .h5peditor-label {
   color: #0E1A25;
   font-size: 1.05em;
   font-weight: 600;
 }
-/* line 59, ../scss/_form-field.scss */
+/* line 53, ../scss/_form-field.scss */
 .field.group.importance-low .h5peditor-label {
   color: #0E1A25;
   font-size: 1.05em;
@@ -417,7 +413,7 @@
 
 /* line 392, ../scss/_form-groups.scss */
 .common {
-  margin-top: 10px;
+  margin-top: 20px;
 }
 /* line 395, ../scss/_form-groups.scss */
 .common > .h5peditor-label {
