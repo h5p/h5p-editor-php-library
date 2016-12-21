@@ -160,42 +160,32 @@
 }
 
 /* line 94, ../scss/_form-groups.scss */
-.h5p-collection > .content {
+.h5p-panel > .content {
   background-color: #FFFFFF;
 }
 
-/* line 100, ../scss/_form-groups.scss */
-.common .h5p-collection > .content,
-.h5p-collection > .content .h5p-collection > .content {
+/* line 101, ../scss/_form-groups.scss */
+.common .h5p-panel > .content,
+.h5p-panel .h5p-panel > .content {
   background-color: #FAFBFC;
-}
-/* line 103, ../scss/_form-groups.scss */
-.common .h5p-collection > .content .h5p-collection > .content,
-.h5p-collection > .content .h5p-collection > .content .h5p-collection > .content {
-  background-color: #FFFFFF;
 }
 /* line 106, ../scss/_form-groups.scss */
-.common .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content,
-.h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content {
-  background-color: #FAFBFC;
-}
-/* line 109, ../scss/_form-groups.scss */
-.common .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content,
-.h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content {
+.common .h5p-panel .h5p-panel > .content,
+.h5p-panel .h5p-panel .h5p-panel > .content {
   background-color: #FFFFFF;
 }
-/* line 112, ../scss/_form-groups.scss */
-.common .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content,
-.h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content {
+/* line 111, ../scss/_form-groups.scss */
+.common .h5p-panel .h5p-panel .h5p-panel > .content,
+.h5p-panel .h5p-panel .h5p-panel .h5p-panel > .content {
   background-color: #FAFBFC;
 }
-/* line 115, ../scss/_form-groups.scss */
-.common .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content,
-.h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content .h5p-collection > .content {
+/* line 116, ../scss/_form-groups.scss */
+.common .h5p-panel .h5p-panel .h5p-panel .h5p-panel > .content,
+.h5p-panel .h5p-panel .h5p-panel .h5p-panel .h5p-panel > .content {
   background-color: #FFFFFF;
 }
 
-/* line 129, ../scss/_form-groups.scss */
+/* line 130, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar > .h5peditor-label {
   overflow: hidden;
   margin: 0 54px 0 0;
@@ -205,13 +195,13 @@
   outline: none;
   text-overflow: ellipsis;
 }
-/* line 149, ../scss/_form-groups.scss */
+/* line 150, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar > .list-actions {
   height: 100%;
   float: right;
   position: relative;
 }
-/* line 155, ../scss/_form-groups.scss */
+/* line 156, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar .remove {
   cursor: pointer;
   width: 1.25em;
@@ -219,12 +209,12 @@
   font-size: 1.75em;
   display: inline-block;
 }
-/* line 162, ../scss/_form-groups.scss */
+/* line 163, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar .remove:hover {
   opacity: 1;
   text-decoration: none;
 }
-/* line 168, ../scss/_form-groups.scss */
+/* line 169, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar .remove:after {
   font-family: "H5P";
   content: "\e890";
@@ -233,16 +223,16 @@
   display: inline-block;
   line-height: 38px;
 }
-/* line 177, ../scss/_form-groups.scss */
+/* line 178, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar .remove:hover:after {
   opacity: 1;
 }
-/* line 181, ../scss/_form-groups.scss */
+/* line 182, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar .order-group {
   text-align: center;
   float: right;
 }
-/* line 186, ../scss/_form-groups.scss */
+/* line 187, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar .order-up, .h5p-li > .list-item-title-bar .order-down {
   width: 19px;
   height: 19px;
@@ -251,46 +241,46 @@
   line-height: 19px;
   cursor: pointer;
 }
-/* line 194, ../scss/_form-groups.scss */
+/* line 195, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar .order-up:hover, .h5p-li > .list-item-title-bar .order-down:hover {
   background: #57636e;
 }
-/* line 198, ../scss/_form-groups.scss */
+/* line 199, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar .order-up:after, .h5p-li > .list-item-title-bar .order-down:after {
   font-family: "H5P";
   content: "\e58e";
   color: #FFFFFF;
   display: inline-block;
 }
-/* line 206, ../scss/_form-groups.scss */
+/* line 207, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar .order-down:after {
   content: "\e58f";
 }
-/* line 213, ../scss/_form-groups.scss */
+/* line 214, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high > .title {
   border: none;
   margin: 0 74px 0 0;
 }
-/* line 219, ../scss/_form-groups.scss */
+/* line 220, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .remove {
   height: 48px;
   line-height: 48px;
   font-size: 40px;
 }
-/* line 224, ../scss/_form-groups.scss */
+/* line 225, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .remove:after {
   line-height: 48px;
 }
-/* line 228, ../scss/_form-groups.scss */
+/* line 229, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .remove:after {
   color: #FFFFFF;
   opacity: 0.7;
 }
-/* line 232, ../scss/_form-groups.scss */
+/* line 233, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .remove:hover:after {
   opacity: 1;
 }
-/* line 236, ../scss/_form-groups.scss */
+/* line 237, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .order-up, .h5p-li > .list-item-title-bar.importance-high .order-down {
   width: 24px;
   height: 24px;
@@ -298,47 +288,47 @@
   font-size: 18px;
   line-height: 24px;
 }
-/* line 243, ../scss/_form-groups.scss */
+/* line 244, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .order-up:hover, .h5p-li > .list-item-title-bar.importance-high .order-down:hover {
   background: #3B71A5;
 }
-/* line 247, ../scss/_form-groups.scss */
+/* line 248, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .order-up:after, .h5p-li > .list-item-title-bar.importance-high .order-down:after {
   color: #FFFFFF;
 }
-/* line 256, ../scss/_form-groups.scss */
+/* line 257, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-low > .title {
   border: none;
   margin: 0 54px 0 0;
 }
-/* line 261, ../scss/_form-groups.scss */
+/* line 262, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-low > .title:before {
   color: #0E1A25;
 }
-/* line 264, ../scss/_form-groups.scss */
+/* line 265, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-low > .title:focus:before {
   outline: 1px dashed #0E1A25;
 }
-/* line 269, ../scss/_form-groups.scss */
+/* line 270, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-low .remove {
   height: 38px;
   line-height: 38px;
   font-size: 30px;
 }
-/* line 274, ../scss/_form-groups.scss */
+/* line 275, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-low .remove:after {
   line-height: 38px;
 }
-/* line 278, ../scss/_form-groups.scss */
+/* line 279, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-low .remove:after {
   color: #0E1A25;
   opacity: 0.7;
 }
-/* line 282, ../scss/_form-groups.scss */
+/* line 283, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-low .remove:hover:after {
   opacity: 1;
 }
-/* line 286, ../scss/_form-groups.scss */
+/* line 287, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-low .order-up, .h5p-li > .list-item-title-bar.importance-low .order-down {
   width: 19px;
   height: 19px;
@@ -346,52 +336,52 @@
   font-size: 16px;
   line-height: 19px;
 }
-/* line 293, ../scss/_form-groups.scss */
+/* line 294, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-low .order-up:hover, .h5p-li > .list-item-title-bar.importance-low .order-down:hover {
   background: #DAD9DA;
 }
-/* line 297, ../scss/_form-groups.scss */
+/* line 298, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-low .order-up:after, .h5p-li > .list-item-title-bar.importance-low .order-down:after {
   color: #0E1A25;
 }
 
-/* line 305, ../scss/_form-groups.scss */
+/* line 306, ../scss/_form-groups.scss */
 .group.expanded > .content,
 .listgroup.expanded > .content {
   display: block;
 }
 
-/* line 310, ../scss/_form-groups.scss */
+/* line 311, ../scss/_form-groups.scss */
 .listgroup > .list-item-title-bar > .h5peditor-label {
   cursor: pointer;
 }
 
-/* line 315, ../scss/_form-groups.scss */
+/* line 316, ../scss/_form-groups.scss */
 .list-item-title-bar > .title:before,
 .group > .title:before {
   content: "\e566";
   font-family: "H5P";
   margin-right: 5px;
 }
-/* line 321, ../scss/_form-groups.scss */
+/* line 322, ../scss/_form-groups.scss */
 .list-item-title-bar > .title:focus:before,
 .group > .title:focus:before {
   outline: 1px dashed #FFFFFF;
 }
 
-/* line 325, ../scss/_form-groups.scss */
+/* line 326, ../scss/_form-groups.scss */
 .listgroup.expanded > .list-item-title-bar > .h5peditor-label:before,
 .expanded > .title:before {
   content: "\e565";
 }
 
-/* line 341, ../scss/_form-groups.scss */
+/* line 342, ../scss/_form-groups.scss */
 .listgroup > .group.field {
   margin: 0;
   padding: 0;
 }
 
-/* line 345, ../scss/_form-groups.scss */
+/* line 346, ../scss/_form-groups.scss */
 .content {
   display: block;
   margin: 0;
@@ -401,35 +391,35 @@
   background: #FFFFFF;
 }
 
-/* line 354, ../scss/_form-groups.scss */
+/* line 355, ../scss/_form-groups.scss */
 .common {
   margin-top: 20px;
 }
-/* line 357, ../scss/_form-groups.scss */
+/* line 358, ../scss/_form-groups.scss */
 .common > .h5peditor-label {
   margin: 0;
   padding: 0 10px;
   cursor: pointer;
 }
-/* line 365, ../scss/_form-groups.scss */
+/* line 366, ../scss/_form-groups.scss */
 .common > .h5peditor-label > .icon:before {
   content: "\e565";
   font-family: "H5P";
   margin-right: 5px;
 }
-/* line 370, ../scss/_form-groups.scss */
+/* line 371, ../scss/_form-groups.scss */
 .common > .h5peditor-label:hover > .icon {
   opacity: 1;
 }
-/* line 374, ../scss/_form-groups.scss */
+/* line 375, ../scss/_form-groups.scss */
 .common > .h5peditor-label:focus {
   outline: none;
 }
-/* line 378, ../scss/_form-groups.scss */
+/* line 379, ../scss/_form-groups.scss */
 .common > .h5peditor-label:focus > .icon:before {
   outline: 1px dashed #0E1A25;
 }
-/* line 382, ../scss/_form-groups.scss */
+/* line 383, ../scss/_form-groups.scss */
 .common > .fields {
   min-height: 2em;
   padding: 20px;
@@ -437,36 +427,36 @@
   border-top: none;
   background: #FFFFFF;
 }
-/* line 389, ../scss/_form-groups.scss */
+/* line 390, ../scss/_form-groups.scss */
 .common > .fields .h5peditor-label {
   color: #0E1A25;
   font-size: 18px;
   font-weight: 600;
 }
-/* line 395, ../scss/_form-groups.scss */
+/* line 396, ../scss/_form-groups.scss */
 .common > .fields > .desc {
   margin: 0;
   font-size: 0.875em;
   color: #666;
 }
-/* line 401, ../scss/_form-groups.scss */
+/* line 402, ../scss/_form-groups.scss */
 .common > .fields p:first-child {
   margin-bottom: 20px;
 }
-/* line 407, ../scss/_form-groups.scss */
+/* line 408, ../scss/_form-groups.scss */
 .common.collapsed > .h5peditor-label > .icon:before {
   content: "\e566";
 }
-/* line 410, ../scss/_form-groups.scss */
+/* line 411, ../scss/_form-groups.scss */
 .common.collapsed > .fields {
   display: none;
 }
-/* line 415, ../scss/_form-groups.scss */
+/* line 416, ../scss/_form-groups.scss */
 .common.hidden {
   display: none;
 }
 
-/* line 422, ../scss/_form-groups.scss */
+/* line 423, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label]:before {
   content: attr(aria-label);
   visibility: hidden;
@@ -482,11 +472,11 @@
   line-height: 1.5;
   box-shadow: 0 0 0.5em #858585;
 }
-/* line 440, ../scss/_form-groups.scss */
+/* line 441, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label]:hover:before {
   visibility: visible;
 }
-/* line 444, ../scss/_form-groups.scss */
+/* line 445, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label][aria-disabled="true"]:before {
   display: none;
 }
