@@ -46,6 +46,8 @@ ns.Textarea.prototype.appendTo = function ($wrapper) {
  */
 ns.Textarea.prototype.createHtml = function () {
   var importantDescriptionIcon = '';
+  var extraClasses = '';
+
   if (this.field.importantDescription !== undefined) {
     extraClasses = ' hasImportantDescription';
     importantDescriptionIcon += '<span class="icon-important-desc" onclick="ns.$(this).parent().find(\'.h5peditor-field-important-description\').toggleClass(\'show\');">';
