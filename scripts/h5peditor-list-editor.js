@@ -77,7 +77,7 @@ H5PEditor.ListEditor = (function ($) {
     self.addItem = function (item) {
       var $placeholder, mouseDownAt;
       var $item = $('<li/>', {
-        'class' : 'h5p-li' + ' ' + 'collection',
+        'class' : 'h5p-li' + ' ' + 'h5p-collection',
       });
 
       // Create confirmation dialog for removing list item
