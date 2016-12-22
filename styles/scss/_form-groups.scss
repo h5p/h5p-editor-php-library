@@ -12,7 +12,6 @@
   height: $form-item-height-large;
 }
 %title-bar-text-importance-high {
-  font-size: $font-size-large;
   font-weight: 600;
   color: $white;
   line-height: $form-item-height-large;
@@ -27,7 +26,6 @@
   height: $form-item-height-normal;
 }
 %title-bar-text-importance-medium {
-  font-size: $font-size-normal;
   font-weight: 600;
   color: $white;
   line-height: $form-item-height-normal;
@@ -42,7 +40,6 @@
   border: 1px solid $form-border-color;
 }
 %title-bar-text-importance-low {
-  font-size: $font-size-normal;
   font-weight: 400;
   color: $text-color;
   line-height: $form-item-height-normal;
@@ -106,7 +103,7 @@
 
          .content {
            background-color: $form-background;
-    
+
            .content {
              background-color: $white;
            }
@@ -135,6 +132,10 @@
 
   &.importance-high > .h5peditor-label {
     @extend %title-bar-text-importance-high;
+  }
+
+  &.importance-medium > .h5peditor-label {
+    @extend %title-bar-text-importance-medium;
   }
 
   &.importance-low > .h5peditor-label {
