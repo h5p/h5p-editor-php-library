@@ -429,6 +429,7 @@ ns.createImportance = function (importance) {
  * Create HTML wrapper for field items.
  * Makes sure the different elements are placed in an consistent order.
  *
+ * @since 1.12
  * @param {string} type
  * @param {string} [label]
  * @param {string} [description]
