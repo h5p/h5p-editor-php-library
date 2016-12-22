@@ -75,7 +75,7 @@ H5PEditor.SemanticStructure = (function ($) {
 
       // Create inner wrapper
       $inner = $('<div/>', {
-        'class': 'h5peditor-widget-wrapper',
+        'class': 'h5peditor-widget-wrapper' + (widgets.length > 1 ? ' content' : ' '),
         appendTo: $wrapper
       });
 
