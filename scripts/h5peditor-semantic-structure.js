@@ -196,7 +196,7 @@ H5PEditor.SemanticStructure = (function ($) {
       if ($description !== undefined) {
         $description.appendTo($inner);
       }
-      
+
       if (self.widget.helpText !== undefined) {
         $helpText.html(self.widget.helpText).appendTo($inner);
       }

@@ -430,13 +430,14 @@ ns.createImportance = function (importance) {
  * Makes sure the different elements are placed in an consistent order.
  *
  * @param {string} type
- * @param {string} clabel
+ * @param {string} [label]
  * @param {string} [description]
  * @param {string} [content]
  * @returns {string} HTML
  */
 ns.createItem = function (type, label, description, content) {
-  return '<div class="field ' + type.toLowerCase() + '">' + label +
+  return '<div class="field ' + type.toLowerCase() + '">' +
+           (label ? label : '') +
            (description ? '<div class="h5peditor-field-description">' + description + '</div>' : '') +
            (content ? content : '') +
            '<div class="h5p-errors"></div>' +
