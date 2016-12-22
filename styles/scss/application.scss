@@ -374,9 +374,10 @@ a {
   }
   .file {
     position: relative;
+    float: left;
 
-    .file {
-      float: left;
+    &.field {
+      float: none;
     }
     .thumbnail {
       display: inline-block;
@@ -518,7 +519,6 @@ a {
     line-height: $form-item-height-small;
     padding-right: $padding;
     padding-left: 0;
-    margin-bottom: $min-padding;
     clear: both;
     font-weight: normal;
 
