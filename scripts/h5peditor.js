@@ -437,7 +437,7 @@ ns.createImportance = function (importance) {
  * @returns {string} HTML
  */
 ns.createItem = function (type, label, description, content) {
-  return '<div class="field ' + type.toLowerCase() + '">' +
+  return '<div class="field ' + type + '">' +
            (label ? label : '') +
            (description ? '<div class="h5peditor-field-description">' + description + '</div>' : '') +
            (content ? content : '') +
