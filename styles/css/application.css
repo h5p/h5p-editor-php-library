@@ -709,7 +709,7 @@ body.h5p-editor-image-popup {
 */
 /* line 10, ../scss/_deprecated.scss */
 .h5p-vtab-wrapper > .h5p-vtab-forms .h5p-remove:after {
-  color: red;
+  color: #d0d0d1;
 }
 
 /* END HFP-409 */

@@ -8,7 +8,6 @@
  Styling that lets old vtabs styling work with the editor upgrade, in Dec 2016 release
 */
 .h5p-vtab-wrapper > .h5p-vtab-forms .h5p-remove:after {
-  //color: $form-border-color;
-  color: red;
+  color: $form-border-color;
 }
 /* END HFP-409 */
