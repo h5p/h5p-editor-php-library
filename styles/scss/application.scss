@@ -549,6 +549,7 @@ a {
     opacity: 0;
     height: 0;
     overflow: hidden;
+    background: #fff;
     @include box-shadow(0 0 8px #666);
     @include transition(visibility 0s 0.2s, height 0s 0.2s, opacity 0.2s, margin-top 0.2s);
 
