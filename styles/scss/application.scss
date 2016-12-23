@@ -174,7 +174,7 @@ a {
       @include button-background(
         $form-item-importance-high-background,
         $form-item-importance-high-background-highlight);
-      border: 1px solid $form-item-importance-high-border-color;
+      border-color: $form-item-importance-high-border-color;
       text-transform: uppercase;
       font-size: $font-size-normal;
       font-weight: 600;
