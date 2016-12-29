@@ -88,10 +88,7 @@ ns.widgets.image.prototype.constructor = ns.widgets.image;
 ns.widgets.image.prototype.appendTo = function ($wrapper) {
   var self = this;
 
-  var label = ns.createLabel(this.field);
-
-  var description = ns.createDescription(this.field.description);
-  var htmlString = label + description + '<div class="file"></div>' +
+  var htmlString = '<div class="file"></div>' +
     '<div class="h5p-editor-image-buttons">' +
       '<button class="h5peditor-button-textual h5p-editing-image-button">' + ns.t('core', 'editImage') + '</button>' +
       '<button class="h5peditor-button-textual h5p-copyright-button">' + ns.t('core', 'editCopyright') + '</button>' +
@@ -100,7 +97,10 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
       '<a href="#" class="h5p-close" title="' + ns.t('core', 'close') + '"></a>' +
     '</div>';
 
-  var html = ns.createItem(this.field.type, htmlString);
+
+  var html = ns.createFieldMarkup(this.field, htmlString);
+  //var html = ns.createItem(this.field.type, htmlString);
+
   var $container = ns.$(html).appendTo($wrapper);
   this.$editImage = $container.find('.h5p-editing-image-button');
   this.$copyrightButton = $container.find('.h5p-copyright-button');

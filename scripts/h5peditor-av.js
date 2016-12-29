@@ -98,18 +98,14 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   C.prototype.appendTo = function ($wrapper) {
     var self = this;
 
-    var label = H5PEditor.createLabel(this.field);
-    var description = H5PEditor.createDescription(this.field.description);
-
     var imageHtml =
-      '<div class="file">' + C.createAdd(self.field.type) + '</div>' +
+      '<div class="file" tomtest="2">' + C.createAdd(self.field.type) + '</div>' +
       '<a class="h5p-copyright-button" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>' +
       '<div class="h5p-editor-dialog">' +
         '<a href="#" class="h5p-close" title="' + H5PEditor.t('core', 'close') + '"></a>' +
       '</div>';
 
-    var html = H5PEditor.createItem(this.field.type,
-      label + description + imageHtml);
+    var html = H5PEditor.createFieldMarkup(this.field, imageHtml);
 
     var $container = $(html).appendTo($wrapper);
     var $file = $container.children('.file');
