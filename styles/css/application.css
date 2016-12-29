@@ -31,28 +31,25 @@
 /* line 19, ../scss/_form-field.scss */
 .field.boolean .h5peditor-label {
   display: inline;
-  color: #454347;
-  font-size: 16px;
-  font-weight: 600;
 }
-/* line 26, ../scss/_form-field.scss */
+/* line 23, ../scss/_form-field.scss */
 .field.video, .field.image, .field.file, .field.audio {
   position: relative;
 }
-/* line 30, ../scss/_form-field.scss */
+/* line 27, ../scss/_form-field.scss */
 .field.image .file {
   display: inline-block;
   float: none;
 }
-/* line 35, ../scss/_form-field.scss */
+/* line 32, ../scss/_form-field.scss */
 .field .library {
   border: 0;
 }
-/* line 41, ../scss/_form-field.scss */
+/* line 38, ../scss/_form-field.scss */
 .field.list.importance-low > .h5peditor-label, .field.list.importance-medium > .h5peditor-label {
   color: #454347;
 }
-/* line 45, ../scss/_form-field.scss */
+/* line 42, ../scss/_form-field.scss */
 .field.list.importance-high > .h5peditor-label {
   color: #356593;
 }
