@@ -417,29 +417,41 @@ ns.createError = function (message) {
  * @returns {String}
  */
 ns.createImportance = function (importance) {
-  if (importance) {
-    return 'importance-'.concat(importance);
-  }
-  else {
-    return '';
-  }
+  return importance ? 'importance-'.concat(importance) : '';
 };
 
 /**
  * Create HTML wrapper for field items.
  * Makes sure the different elements are placed in an consistent order.
  *
- * @since 1.12
  * @param {string} type
  * @param {string} [label]
  * @param {string} [description]
  * @param {string} [content]
+ * @deprecated since version 1.12. Use createFieldMarkup instead.
+ * @see createFieldMarkup
  * @returns {string} HTML
  */
 ns.createItem = function (type, label, description, content) {
   return '<div class="field ' + type + '">' +
            (label ? label : '') +
            (description ? '<div class="h5peditor-field-description">' + description + '</div>' : '') +
+           (content ? content : '') +
+           '<div class="h5p-errors"></div>' +
+         '</div>';
+};
+
+/**
+ * Create HTML wrapper for a field item.
+ *
+ * @param  {Object} field
+ * @param  {string} content
+ * @return {string} HTML
+ */
+ns.createFieldMarkup = function (field, content) {
+  return '<div class="field field-' + field.name + ' ' + field.type + ' ' + ns.createImportance(field.importance) + '">' +
+           (field.label ? '<div class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' + field.label + '</div>' : '') +
+           (field.description ? '<div class="h5peditor-field-description">' + field.description + '</div>' : '') +
            (content ? content : '') +
            '<div class="h5p-errors"></div>' +
          '</div>';
