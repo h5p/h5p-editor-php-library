@@ -443,13 +443,15 @@ ns.createItem = function (type, label, description, content) {
 
 /**
  * Create HTML wrapper for a field item.
+ * Replacement for createItem()
  *
+ * @since 1.12
  * @param  {Object} field
  * @param  {string} content
  * @return {string} HTML
  */
 ns.createFieldMarkup = function (field, content) {
-  return '<div class="field field-' + field.name + ' ' + field.type + ' ' + ns.createImportance(field.importance) + '">' +
+  return '<div class="field field-name-' + field.name + ' ' + field.type + ' ' + ns.createImportance(field.importance) + (field.widget ? ' ' + field.widget : '') + '">' +
            (field.label ? '<div class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' + field.label + '</div>' : '') +
            (field.description ? '<div class="h5peditor-field-description">' + field.description + '</div>' : '') +
            (content ? content : '') +
