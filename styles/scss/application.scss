@@ -13,8 +13,6 @@
 @import "h5peditor-image-edit-popup";
 @import "deprecated";
 
-$i: 'H5P';
-
 html, body {
   margin: 0;
   padding: 0;
@@ -129,98 +127,6 @@ a {
 
       &:nth-last-child(2).placeholder {
         margin-bottom: 0;
-      }
-    }
-  }
-  input[type="button"], button {
-    @include border-radius(0.25em);
-    @include button-background(
-      $form-item-importance-medium-background,
-      $form-item-importance-medium-background-highlight);
-    width: auto;
-    margin: $min-padding 0 0 0;
-    padding: 0 $padding;
-    box-sizing: border-box;
-    height: $form-item-height-normal;
-    border: 1px solid $form-border-color;
-    font-size: $font-size-normal;
-    font-family: $font-family;
-    line-height: $form-item-height-normal;
-    color: $white;
-    cursor: pointer;
-    font-weight: 600;
-
-    &:before,
-    &:after {
-      color: $white;
-    }
-
-    &[disabled] {
-      opacity: 0.5;
-    }
-
-    &:hover:not([disabled]) {
-      @include button-background(
-        $form-item-importance-medium-background-hover,
-        $form-item-importance-medium-background-hover-highlight);
-      text-decoration: none;
-    }
-
-    &:hover[disabled] {
-      cursor: not-allowed;
-    }
-
-    &.importance-high {
-      @include border-radius(0.25em);
-      @include button-background(
-        $form-item-importance-high-background,
-        $form-item-importance-high-background-highlight);
-      border-color: $form-item-importance-high-border-color;
-      text-transform: uppercase;
-      font-size: $font-size-normal;
-      font-weight: 600;
-      color: $white;
-      height: $form-item-height-large;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-
-      &:before,
-      &:after {
-        color: $white;
-      }
-
-      &:hover:not([disabled]) {
-        @include button-background(
-          $form-item-importance-high-background-hover,
-          $form-item-importance-high-background-hover-highlight);
-        border-color: $form-item-importance-high-background-hover;
-      }
-    }
-
-    &.importance-low {
-      @include border-radius(0.25em);
-      @include button-background(
-        $form-item-importance-low-background,
-        $form-item-importance-low-background-highlight);
-      border: 1px solid $form-item-importance-low-border-color;
-      text-transform: uppercase;
-      font-size: $font-size-normal;
-      font-weight: 600;
-      color: $black;
-      height: $form-item-height-normal;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-
-      &:before,
-      &:after {
-        color: $black;
-      }
-
-      &:hover:not([disabled]) {
-        @include button-background(
-          $form-item-importance-low-background-hover,
-          $form-item-importance-low-background-hover-highlight);
-        border-color: $form-item-importance-low-background-hover;
       }
     }
   }
@@ -396,7 +302,6 @@ a {
       border-radius: 0.25em;
       color: #222222;
       font-weight: bold;
-      text-transform: uppercase;
 
       &:hover {
         background: #ededed;
@@ -407,7 +312,7 @@ a {
       }
 
       .h5peditor-field-file-upload-text:before {
-        font-family: "H5P";
+        font-family: $i;
         content: "\e902";
         color: #39c943;
         margin-right: 1em;
@@ -536,7 +441,7 @@ a {
     &:hover:not([disabled]) {
       background: linear-gradient(to bottom, #fff 0, #d0d0d1 100%);
       text-decoration: none;
-      border-color: #666666;
+      border-color: #999;
     }
   }
 
@@ -586,7 +491,7 @@ a {
         right: -0.125em;
         top: 0;
         position: absolute;
-        font-family: "H5P";
+        font-family: $i;
         content: "\e894";
         line-height: 1em;
         @include transition(scale 0.2s);
@@ -598,16 +503,89 @@ a {
     }
   }
 
-  .h5p-editing-image-button.hidden {
-    display: none;
-  }
-
   .h5p-li > .content > .library {
     border: 0;
     padding: 0;
   }
 }
+.h5peditor-button-textual {
+  @include border-radius(0.25em);
+  @include button-background(
+    $form-item-importance-medium-background,
+    $form-item-importance-medium-background-highlight);
+  display: inline-block;
+  width: auto;
+  margin: $min-padding 0 0 0;
+  padding: 0 $padding;
+  box-sizing: border-box;
+  height: $form-item-height-normal;
+  border: 1px solid $form-border-color;
+  font-size: $font-size-normal;
+  font-family: $font-family;
+  line-height: $form-item-height-normal;
+  color: $white;
+  cursor: pointer;
+  font-weight: 600;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
+  &:before,
+  &:after {
+    color: $white;
+  }
+
+  &[disabled] {
+    opacity: 0.5;
+  }
+
+  &:hover:not([disabled]) {
+    @include button-background(
+      $form-item-importance-medium-background-hover,
+      $form-item-importance-medium-background-hover-highlight);
+    text-decoration: none;
+  }
+
+  &:hover[disabled] {
+    cursor: none;
+  }
+
+  &.importance-high {
+    @include button-background(
+      $form-item-importance-high-background,
+      $form-item-importance-high-background-highlight);
+    border-color: $form-item-importance-high-border-color;
+    text-transform: uppercase;
+    height: $form-item-height-large;
+    line-height: $form-item-height-large;
+
+    &:hover:not([disabled]) {
+      @include button-background(
+        $form-item-importance-high-background-hover,
+        $form-item-importance-high-background-hover-highlight);
+      border-color: $form-item-importance-high-background-hover;
+    }
+  }
+
+  &.importance-low {
+    @include button-background(
+      $form-item-importance-low-background,
+      $form-item-importance-low-background-highlight);
+    border-color: $form-item-importance-low-border-color;
+    color: $black;
+
+    &:before,
+    &:after {
+      color: $black;
+    }
+
+    &:hover:not([disabled]) {
+      @include button-background(
+        $form-item-importance-low-background-hover,
+        $form-item-importance-low-background-hover-highlight);
+      border-color: $form-item-importance-low-background-hover;
+    }
+  }
+}
 .h5peditor-field-description,
 .h5p-help-text {
   font-size: 12px;
@@ -701,156 +679,6 @@ a {
   content: "*";
   color: #da0001;
   margin-left: 0.25em;
-}
-
-body.h5p-editor-image-popup {
-  position: relative;
-}
-
-.h5p-editing-image-popup-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-
-  width: 100%;
-  height: 100%;
-
-  background: rgba(0,0,0,0.8);
-  padding: 3em 1em;
-  box-sizing: border-box;
-  z-index: 101;
-}
-
-#darkroom-icons {
-  top:0;
-  left:0;
-}
-
-.h5p-editing-image-popup-background.hidden {
-  display: none;
-}
-
-.h5p-editing-image-popup {
-  display: inline-block;
-  position: relative;
-  top: 0;
-  left: 50%;
-  height: auto;
-  width: 100%;
-  max-height: 100%;
-  -webkit-transform: translateX(-50%);
-  -ms-transform: translateX(-50%);
-  transform: translateX(-50%);
-  background: #fff;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-.h5p-editing-image-header {
-  padding: 1em 0.75em;
-}
-
-.h5p-editing-image {
-  max-height:100%;
-  max-width:100%;
-}
-
-.h5p-editing-image.hidden {
-  display: none;
-}
-
-.h5p-editing-image-popup {
-  .darkroom-toolbar {
-    position: relative;
-    -webkit-border-radius:0;
-    -moz-border-radius:0;
-    border-radius:0;
-    top:0;
-  }
-
-  .darkroom-toolbar:before {
-    content: initial;
-  }
-
-  .darkroom-image-container {
-    padding: 32px 2em;
-  }
-
-  .darkroom-image-container .canvas-container {
-    box-shadow: 0 0 8px 3px rgba(0, 0, 0, 0.6);
-    margin: auto;
-  }
-}
-
-.h5p-editing-image-header-title {
-  display: inline-block;
-  font-size: 1.25em;
-}
-
-.h5p-editing-image-header-buttons {
-  display: inline-block;
-  float: right;
-}
-.h5p-editing-image-loading {
-  padding: 1em;
-}
-
-.h5p-editing-image-loading.hidden {
-  display: none;
-}
-
-.h5p-editing-image-editing-container {
-  background: #666;
-}
-
-.h5p-editing-image-header-buttons {
-  button {
-    padding: 0.5em 1.75em;
-    margin: 0 0 0 1em;
-
-    border: 1px solid #ccc;
-    border-radius: 0.25em;
-    color: #333;
-    cursor: pointer;
-
-    background: #f2f2f2;
-    background: -webkit-linear-gradient(top,#fff 0,#f2f2f2 100%);
-    background: -ms-linear-gradient(top,#fff 0,#f2f2f2 100%);
-  }
-
-  button:hover {
-    background: #ededed;
-  }
-
-  .h5p-done {
-    color: #fff;
-    border-color: #20588F;
-
-    background: #3673B5;
-    background: -webkit-linear-gradient(top,#5A94D3 0,#3673B5 100%);
-    background: -ms-linear-gradient(top,#5A94D3 0,#3673B5 100%);
-  }
-
-  .h5p-done:hover {
-    background: #3275bc;
-    background: -webkit-linear-gradient(top,#3275bc 0,#285585 100%);
-    background: -ms-linear-gradient(top,#3275bc 0,#285585 100%);
-  }
-
-  .h5p-remove {
-    background: none;
-    border: none;
-    color: #a00;
-    padding-right: 0;
-    padding-left: 0;
-    border-radius: 0;
-  }
-
-  .h5p-remove:hover {
-    background: none;
-    color: #e40000;
-  }
 }
 
 .h5peditor-widgets > .h5peditor-label {

@@ -15,16 +15,13 @@ H5PEditor.ListEditor = (function ($) {
     var entity = list.getEntity();
     // Create list html
     var $list = $('<ul/>', {
-      'class': 'h5p-ul' 
+      'class': 'h5p-ul'
     });
 
     // Create add button
-    var $button = $('<button/>', {
-      class: list.getImportance(),
-      text: H5PEditor.t('core', 'addEntity', {':entity': entity})
-    }).click(function () {
+    var $button = ns.createButton(list.getImportance(), H5PEditor.t('core', 'addEntity', {':entity': entity}), function () {
       list.addItem();
-    });
+    }, true);
 
     // Used when dragging items around
     var adjustX, adjustY, marginTop, formOffset;

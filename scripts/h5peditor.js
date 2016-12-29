@@ -597,7 +597,7 @@ ns.htmlspecialchars = function(string) {
  */
 ns.createButton = function (id, title, handler, displayTitle) {
   var options = {
-    class: 'h5peditor-button ' + id,
+    class: 'h5peditor-button ' + (displayTitle ? 'h5peditor-button-textual ' : '') + id,
     role: 'button',
     tabIndex: 0,
     'aria-disabled': 'false',

@@ -93,8 +93,8 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
   var description = ns.createDescription(this.field.description);
   var htmlString = label + description + '<div class="file"></div>' +
     '<div class="h5p-editor-image-buttons">' +
-      '<button class="h5p-editing-image-button">' + ns.t('core', 'editImage') + '</button>' +
-      '<button class="h5p-copyright-button">' + ns.t('core', 'editCopyright') + '</button>' +
+      '<button class="h5peditor-button-textual h5p-editing-image-button">' + ns.t('core', 'editImage') + '</button>' +
+      '<button class="h5peditor-button-textual h5p-copyright-button">' + ns.t('core', 'editCopyright') + '</button>' +
     '</div>' +
     '<div class="h5p-editor-dialog">' +
       '<a href="#" class="h5p-close" title="' + ns.t('core', 'close') + '"></a>' +
