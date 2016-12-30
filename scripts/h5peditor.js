@@ -448,15 +448,51 @@ ns.createItem = function (type, label, description, content) {
  * @since 1.12
  * @param  {Object} field
  * @param  {string} content
- * @return {string} HTML
+ * @return {string}
  */
 ns.createFieldMarkup = function (field, content) {
-  return '<div class="field field-name-' + field.name + ' ' + field.type + ' ' + ns.createImportance(field.importance) + (field.widget ? ' ' + field.widget : '') + '">' +
-           (field.label ? '<div class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' + field.label + '</div>' : '') +
-           (field.description ? '<div class="h5peditor-field-description">' + field.description + '</div>' : '') +
-           (content ? content : '') +
-           '<div class="h5p-errors"></div>' +
-         '</div>';
+  var markup;
+
+  // non checkbox layout
+  if(field.type !== 'boolean') {
+    markup =
+      (field.label ? '<div class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' + field.label + '</div>' : '') +
+      (field.description ? '<div class="h5peditor-field-description">' + field.description + '</div>' : '') +
+      (content ? content : '');
+  }
+  // checkbox layout
+  else {
+    var label = (field.label !== 0) ? (field.label || field.name) : '';
+
+    markup =
+      (field.description ? '<div class="h5peditor-field-description">' + field.description + '</div>' : '') +
+      '<label class="h5peditor-label">' + content + label + '</label>';
+  }
+
+  // removes undefined and joins
+  var wrapperClasses = this.joinNonEmptyStrings(['field', 'field-name-' + field.name, field.type, ns.createImportance(field.importance), field.widget]);
+
+  // wrap and return
+  return '' +
+    '<div class="' + wrapperClasses + '">' +
+      markup +
+      '<div class="h5p-errors"></div>' +
+    '</div>';
+};
+
+/**
+ * Joins an array of strings if they are defined and non empty
+ *
+ * @param {string[]} arr
+ * @param {string} [separator] Default is space
+ * @return {string}
+ */
+ns.joinNonEmptyStrings = function(arr, separator){
+  separator = separator || ' ';
+
+  return arr.filter(function(str){
+    return str !== undefined && str.length > 0;
+  }).join(separator);
 };
 
 /**

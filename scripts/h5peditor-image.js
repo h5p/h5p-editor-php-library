@@ -99,7 +99,6 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
 
 
   var html = ns.createFieldMarkup(this.field, htmlString);
-  //var html = ns.createItem(this.field.type, htmlString);
 
   var $container = ns.$(html).appendTo($wrapper);
   this.$editImage = $container.find('.h5p-editing-image-button');
