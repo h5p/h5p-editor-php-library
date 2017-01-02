@@ -62,7 +62,8 @@ a {
     width: 100%;
     box-sizing: border-box;
   }
-  /* Placeholders - need to be on separate lines. If not, the browsers will invlaidate them */
+  /* Placeholders - need to be on separate lines. If not,
+     the browsers will invalidate them */
   ::-webkit-input-placeholder {
     color: $form-input-placeholder-color;
   }
@@ -409,12 +410,6 @@ a {
     font-style: italic;
   }
 
-  a.h5p-copyright-button {
-    height: $form-item-height-small;
-    float: left;
-    display: block;
-  }
-
   .h5p-copyright-button {
     @include border-radius(0.25em);
     height: 30px;
@@ -443,6 +438,11 @@ a {
       text-decoration: none;
       border-color: #999;
     }
+  }
+
+  /* Copyright button for video */
+  .field.video > .h5p-copyright-button {
+    float: left;
   }
 
   .h5p-editor-dialog {
@@ -508,6 +508,8 @@ a {
     padding: 0;
   }
 }
+/* Placed this outside of .h5peditor context above. Don't want it to be more
+   specific than neccessary (because of overriding) */
 .h5peditor-button-textual {
   @include border-radius(0.25em);
   @include button-background(
@@ -536,6 +538,7 @@ a {
 
   &[disabled] {
     opacity: 0.5;
+    pointer-events: none;
   }
 
   &:hover:not([disabled]) {
@@ -546,7 +549,7 @@ a {
   }
 
   &:hover[disabled] {
-    cursor: none;
+    cursor: default;
   }
 
   &.importance-high {
@@ -663,7 +666,6 @@ a {
   background: #fff;
   line-height: 1.357142857em;
 }
-
 .h5peditor-widgets > .h5peditor-widget-wrapper {
   border: 1px solid #ccc;
   margin: 0 0 0.25em;
@@ -671,6 +673,7 @@ a {
 }
 .h5peditor-widgets > .h5peditor-label {
   float: left;
+  margin-top: 5px;
 }
 .h5p-editor-iframe {
   margin-bottom: 1em;
@@ -679,10 +682,6 @@ a {
   content: "*";
   color: #da0001;
   margin-left: 0.25em;
-}
-
-.h5peditor-widgets > .h5peditor-label {
-  margin-top: 5px;
 }
 
 /* Help CKEditor blend into the H5PEditor */
