@@ -260,7 +260,7 @@ a {
       @include opacity(1);
     }
     .h5p-remove:after {
-      font-family: $i;
+      font-family: $icon-font-family;
       font-size: 1.4em;
       color: #fff;
       content: "\e890";
@@ -312,7 +312,7 @@ a {
       }
 
       .h5peditor-field-file-upload-text:before {
-        font-family: $i;
+        font-family: $icon-font-family;
         content: "\e902";
         color: #39c943;
         margin-right: 1em;
@@ -326,7 +326,7 @@ a {
       cursor: pointer;
     }
     .remove:before {
-      font-family: $i;
+      font-family: $icon-font-family;
       font-size: 1.4em;
       color: #fff;
       content: "\e890";
@@ -429,7 +429,7 @@ a {
     font-weight: normal;
 
     &:before {
-      font-family: $i;
+      font-family: $icon-font-family;
       content: "\e88f";
       color: #666;
       padding: 0 0.25em 0 0.25em;
@@ -491,7 +491,7 @@ a {
         right: -0.125em;
         top: 0;
         position: absolute;
-        font-family: $i;
+        font-family: $icon-font-family;
         content: "\e894";
         line-height: 1em;
         @include transition(scale 0.2s);
@@ -626,7 +626,7 @@ a {
 }
 
 .h5p-tutorial-url:before {
-  font-family: $i;
+  font-family: $icon-font-family;
   content: "\e889";
   font-size: 1.5em;
   position: relative;

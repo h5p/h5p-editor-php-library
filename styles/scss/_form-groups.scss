@@ -159,7 +159,7 @@
   }
 
   .remove:after {
-    font-family: $i;
+    font-family: $icon-font-family;
     content: "\e890";
     opacity: 0.7;
     display: inline-block;
@@ -188,7 +188,7 @@
     }
 
     &:after {
-      font-family: $i;
+      font-family: $icon-font-family;
       content: "\e58e";
       display: inline-block;
     }
@@ -301,7 +301,7 @@
 .group > .title  {
   &:before {
     content: "\e566";
-    font-family: $i;
+    font-family: $icon-font-family;
     margin-right: $min-padding/2;
   }
 
@@ -340,7 +340,7 @@
 
     & > .icon:before {
       content: "\e565";
-      font-family: $i;
+      font-family: $icon-font-family;
       margin-right: 5px;
     }
     &:hover > .icon {
