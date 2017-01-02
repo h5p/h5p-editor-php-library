@@ -99,7 +99,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     var self = this;
 
     var imageHtml =
-      '<div class="file" tomtest="2">' + C.createAdd(self.field.type) + '</div>' +
+      '<div class="file">' + C.createAdd(self.field.type) + '</div>' +
       '<a class="h5p-copyright-button" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>' +
       '<div class="h5p-editor-dialog">' +
         '<a href="#" class="h5p-close" title="' + H5PEditor.t('core', 'close') + '"></a>' +

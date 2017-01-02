@@ -465,8 +465,8 @@ ns.createFieldMarkup = function (field, content) {
     var label = (field.label !== 0) ? (field.label || field.name) : '';
 
     markup =
-      (field.description ? '<div class="h5peditor-field-description">' + field.description + '</div>' : '') +
-      '<label class="h5peditor-label">' + content + label + '</label>';
+      '<label class="h5peditor-label">' + content + label + '</label>' +
+      (field.description ? '<div class="h5peditor-field-description">' + field.description + '</div>' : '');
   }
 
   // removes undefined and joins
