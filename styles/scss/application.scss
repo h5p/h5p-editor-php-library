@@ -440,8 +440,9 @@ a {
     }
   }
 
-  /* Copyright button for video */
-  .field.video > .h5p-copyright-button {
+  /* Copyright button for video & audio */
+  .field.video > .h5p-copyright-button,
+  .field.audio > .h5p-copyright-button {
     float: left;
   }
 
