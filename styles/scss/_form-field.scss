@@ -33,14 +33,12 @@
     border: 0;
   }
 
-  &.list {
-    &.importance-low > .h5peditor-label,
-    &.importance-medium > .h5peditor-label {
-      color: #454347;
-    }
+  &.importance-low > .h5peditor-label,
+  &.importance-medium > .h5peditor-label {
+    color: #454347;
+  }
 
-    &.importance-high > .h5peditor-label {
-      color: #356593;
-    }
+  &.importance-high > .h5peditor-label {
+    color: #356593;
   }
 }

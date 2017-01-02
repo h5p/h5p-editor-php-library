@@ -45,12 +45,12 @@
 .field .library {
   border: 0;
 }
-/* line 37, ../scss/_form-field.scss */
-.field.list.importance-low > .h5peditor-label, .field.list.importance-medium > .h5peditor-label {
+/* line 36, ../scss/_form-field.scss */
+.field.importance-low > .h5peditor-label, .field.importance-medium > .h5peditor-label {
   color: #454347;
 }
-/* line 42, ../scss/_form-field.scss */
-.field.list.importance-high > .h5peditor-label {
+/* line 41, ../scss/_form-field.scss */
+.field.importance-high > .h5peditor-label {
   color: #356593;
 }
 
