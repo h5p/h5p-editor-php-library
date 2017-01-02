@@ -100,7 +100,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     var label = H5PEditor.createLabel(this.field);
     var description = H5PEditor.createDescription(this.field.description);
-
     var imageHtml =
       '<div class="file">' + C.createAdd(self.field.type) + '</div>' +
       '<a class="h5p-copyright-button" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>' +
@@ -138,6 +137,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       for (var i = 0; i < this.params.length; i++) {
         this.addFile(i);
       }
+    }
+    else {
+      $container.find('.h5p-copyright-button').addClass('hidden');
     }
 
     var $dialog = $container.find('.h5p-editor-dialog');
@@ -189,6 +191,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         })
         .end();
 
+    this.$add.parent().next('.h5p-copyright-button').removeClass('hidden');
+
     // Create remove file dialog
     var confirmRemovalDialog = new H5P.ConfirmationDialog({
       headerText: H5PEditor.t('core', 'removeFile'),
@@ -199,6 +203,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     confirmRemovalDialog.on('confirmed', function () {
       // Remove from params.
       if (that.params.length === 1) {
+        that.$add.parent().next('.h5p-copyright-button').addClass('hidden');
         delete that.params;
         that.setValue(that.field);
       }
