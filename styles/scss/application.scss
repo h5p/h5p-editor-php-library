@@ -11,11 +11,10 @@
 @import "form-groups";
 @import "h5peditor-image-edit";
 @import "h5peditor-image-edit-popup";
-
-$i: 'H5P';
+@import "deprecated";
 
 html, body {
-  margin: 0;;;
+  margin: 0;
   padding: 0;
   color: $text-color;
   font-family: $font-family;
@@ -63,7 +62,8 @@ a {
     width: 100%;
     box-sizing: border-box;
   }
-  /* Placeholders - need to be on separate lines. If not, the browsers will invlaidate them */
+  /* Placeholders - need to be on separate lines. If not,
+     the browsers will invalidate them */
   ::-webkit-input-placeholder {
     color: $form-input-placeholder-color;
   }
@@ -128,98 +128,6 @@ a {
 
       &:nth-last-child(2).placeholder {
         margin-bottom: 0;
-      }
-    }
-  }
-  input[type="button"], button {
-    @include border-radius(0.25em);
-    @include button-background(
-      $form-item-importance-medium-background,
-      $form-item-importance-medium-background-highlight);
-    width: auto;
-    margin: $min-padding 0 0 0;
-    padding: 0 $padding;
-    box-sizing: border-box;
-    height: $form-item-height-normal;
-    border: 1px solid $form-border-color;
-    font-size: $font-size-normal;
-    font-family: $font-family;
-    line-height: $form-item-height-normal;
-    color: $white;
-    cursor: pointer;
-    font-weight: 600;
-
-    &:before,
-    &:after {
-      color: $white;
-    }
-
-    &[disabled] {
-      opacity: 0.5;
-    }
-
-    &:hover:not([disabled]) {
-      @include button-background(
-        $form-item-importance-medium-background-hover,
-        $form-item-importance-medium-background-hover-highlight);
-      text-decoration: none;
-    }
-
-    &:hover[disabled] {
-      cursor: not-allowed;
-    }
-
-    &.importance-high {
-      @include border-radius(0.25em);
-      @include button-background(
-        $form-item-importance-high-background,
-        $form-item-importance-high-background-highlight);
-      border: 1px solid $form-item-importance-high-border-color;
-      text-transform: uppercase;
-      font-size: $font-size-normal;
-      font-weight: 600;
-      color: $white;
-      height: $form-item-height-large;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-
-      &:before,
-      &:after {
-        color: $white;
-      }
-
-      &:hover:not([disabled]) {
-        @include button-background(
-          $form-item-importance-high-background-hover,
-          $form-item-importance-high-background-hover-highlight);
-        border-color: $form-item-importance-high-background-hover;
-      }
-    }
-
-    &.importance-low {
-      @include border-radius(0.25em);
-      @include button-background(
-        $form-item-importance-low-background,
-        $form-item-importance-low-background-highlight);
-      border: 1px solid $form-item-importance-low-border-color;
-      text-transform: uppercase;
-      font-size: $font-size-normal;
-      font-weight: 600;
-      color: $black;
-      height: $form-item-height-normal;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-
-      &:before,
-      &:after {
-        color: $black;
-      }
-
-      &:hover:not([disabled]) {
-        @include button-background(
-          $form-item-importance-low-background-hover,
-          $form-item-importance-low-background-hover-highlight);
-        border-color: $form-item-importance-low-background-hover;
       }
     }
   }
@@ -353,7 +261,7 @@ a {
       @include opacity(1);
     }
     .h5p-remove:after {
-      font-family: $i;
+      font-family: $icon-font-family;
       font-size: 1.4em;
       color: #fff;
       content: "\e890";
@@ -374,9 +282,10 @@ a {
   }
   .file {
     position: relative;
+    float: left;
 
-    .file {
-      float: left;
+    &.field {
+      float: none;
     }
     .thumbnail {
       display: inline-block;
@@ -394,7 +303,6 @@ a {
       border-radius: 0.25em;
       color: #222222;
       font-weight: bold;
-      text-transform: uppercase;
 
       &:hover {
         background: #ededed;
@@ -405,7 +313,7 @@ a {
       }
 
       .h5peditor-field-file-upload-text:before {
-        font-family: "H5P";
+        font-family: $icon-font-family;
         content: "\e902";
         color: #39c943;
         margin-right: 1em;
@@ -419,7 +327,7 @@ a {
       cursor: pointer;
     }
     .remove:before {
-      font-family: $i;
+      font-family: $icon-font-family;
       font-size: 1.4em;
       color: #fff;
       content: "\e890";
@@ -502,12 +410,6 @@ a {
     font-style: italic;
   }
 
-  a.h5p-copyright-button {
-    height: $form-item-height-small;
-    float: left;
-    display: block;
-  }
-
   .h5p-copyright-button {
     @include border-radius(0.25em);
     height: 30px;
@@ -518,12 +420,11 @@ a {
     line-height: $form-item-height-small;
     padding-right: $padding;
     padding-left: 0;
-    margin-bottom: $min-padding;
     clear: both;
     font-weight: normal;
 
     &:before {
-      font-family: $i;
+      font-family: $icon-font-family;
       content: "\e88f";
       color: #666;
       padding: 0 0.25em 0 0.25em;
@@ -535,8 +436,14 @@ a {
     &:hover:not([disabled]) {
       background: linear-gradient(to bottom, #fff 0, #d0d0d1 100%);
       text-decoration: none;
-      border-color: #666666;
+      border-color: #999;
     }
+  }
+
+  /* Copyright button for video & audio */
+  .field.video > .h5p-copyright-button,
+  .field.audio > .h5p-copyright-button {
+    float: left;
   }
 
   .h5p-editor-dialog {
@@ -548,6 +455,7 @@ a {
     opacity: 0;
     height: 0;
     overflow: hidden;
+    background: #fff;
     @include box-shadow(0 0 8px #666);
     @include transition(visibility 0s 0.2s, height 0s 0.2s, opacity 0.2s, margin-top 0.2s);
 
@@ -584,7 +492,7 @@ a {
         right: -0.125em;
         top: 0;
         position: absolute;
-        font-family: "H5P";
+        font-family: $icon-font-family;
         content: "\e894";
         line-height: 1em;
         @include transition(scale 0.2s);
@@ -596,23 +504,99 @@ a {
     }
   }
 
-  .h5p-editing-image-button.hidden {
-    display: none;
-  }
-
   .h5p-li > .content > .library {
     border: 0;
     padding: 0;
   }
 }
+/* Placed this outside of .h5peditor context above. Don't want it to be more
+   specific than neccessary (because of overriding) */
+.h5peditor-button-textual {
+  @include border-radius(0.25em);
+  @include button-background(
+    $form-item-importance-medium-background,
+    $form-item-importance-medium-background-highlight);
+  display: inline-block;
+  width: auto;
+  margin: $min-padding 0 0 0;
+  padding: 0 $padding;
+  box-sizing: border-box;
+  height: $form-item-height-normal;
+  border: 1px solid $form-border-color;
+  font-size: $font-size-normal;
+  font-family: $font-family;
+  line-height: $form-item-height-normal;
+  color: $white;
+  cursor: pointer;
+  font-weight: 600;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
+  &:before,
+  &:after {
+    color: $white;
+  }
+
+  &[disabled] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  &:hover:not([disabled]) {
+    @include button-background(
+      $form-item-importance-medium-background-hover,
+      $form-item-importance-medium-background-hover-highlight);
+    text-decoration: none;
+  }
+
+  &:hover[disabled] {
+    cursor: default;
+  }
+
+  &.importance-high {
+    @include button-background(
+      $form-item-importance-high-background,
+      $form-item-importance-high-background-highlight);
+    border-color: $form-item-importance-high-border-color;
+    text-transform: uppercase;
+    height: $form-item-height-large;
+    line-height: $form-item-height-large;
+
+    &:hover:not([disabled]) {
+      @include button-background(
+        $form-item-importance-high-background-hover,
+        $form-item-importance-high-background-hover-highlight);
+      border-color: $form-item-importance-high-background-hover;
+    }
+  }
+
+  &.importance-low {
+    @include button-background(
+      $form-item-importance-low-background,
+      $form-item-importance-low-background-highlight);
+    border-color: $form-item-importance-low-border-color;
+    color: $black;
+
+    &:before,
+    &:after {
+      color: $black;
+    }
+
+    &:hover:not([disabled]) {
+      @include button-background(
+        $form-item-importance-low-background-hover,
+        $form-item-importance-low-background-hover-highlight);
+      border-color: $form-item-importance-low-background-hover;
+    }
+  }
+}
 .h5peditor-field-description,
 .h5p-help-text {
   font-size: 12px;
   margin-top: 4px;
   margin-bottom: 8px;
   font-weight: 500;
-  color: #5d6c7d;
+  color: #434446;
   line-height: 15px;
   letter-spacing: 0.5px;
 }
@@ -628,8 +612,8 @@ a {
   display: block;
   margin-bottom: 6px;
   font-weight: 600;
-  font-size: 1.1em;
-  color: $blue;
+  font-size: $font-size-normal;
+  color: $black;
 }
 
 #h5peditor-uploader {
@@ -646,7 +630,7 @@ a {
 }
 
 .h5p-tutorial-url:before {
-  font-family: $i;
+  font-family: $icon-font-family;
   content: "\e889";
   font-size: 1.5em;
   position: relative;
@@ -668,7 +652,7 @@ a {
   padding: 0.6em 1em;
   color: #0E1A25;
   font-size: 0.875em;
-  background: #e4eaf2;
+  background: #f5f5f5;
   line-height: 1.285714286em;
   cursor: pointer;
   outline: none;
@@ -683,15 +667,14 @@ a {
   background: #fff;
   line-height: 1.357142857em;
 }
-
 .h5peditor-widgets > .h5peditor-widget-wrapper {
   border: 1px solid #ccc;
-  background: #fff;
   margin: 0 0 0.25em;
   padding: 0.5em;
 }
 .h5peditor-widgets > .h5peditor-label {
   float: left;
+  margin-top: 5px;
 }
 .h5p-editor-iframe {
   margin-bottom: 1em;
@@ -702,171 +685,17 @@ a {
   margin-left: 0.25em;
 }
 
-body.h5p-editor-image-popup {
-  position: relative;
-}
-
-.h5p-editing-image-popup-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-
-  width: 100%;
-  height: 100%;
-
-  background: rgba(0,0,0,0.8);
-  padding: 3em 1em;
-  box-sizing: border-box;
-  z-index: 101;
-}
-
-#darkroom-icons {
-  top:0;
-  left:0;
-}
-
-.h5p-editing-image-popup-background.hidden {
-  display: none;
-}
-
-.h5p-editing-image-popup {
-  display: inline-block;
-  position: relative;
-  top: 0;
-  left: 50%;
-  height: auto;
-  width: 100%;
-  max-height: 100%;
-  -webkit-transform: translateX(-50%);
-  -ms-transform: translateX(-50%);
-  transform: translateX(-50%);
-  background: #fff;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-.h5p-editing-image-header {
-  padding: 1em 0.75em;
-}
-
-.h5p-editing-image {
-  max-height:100%;
-  max-width:100%;
-}
-
-.h5p-editing-image.hidden {
-  display: none;
-}
-
-.h5p-editing-image-popup {
-  .darkroom-toolbar {
-    position: relative;
-    -webkit-border-radius:0;
-    -moz-border-radius:0;
-    border-radius:0;
-    top:0;
-  }
-
-  .darkroom-toolbar:before {
-    content: initial;
-  }
-
-  .darkroom-image-container {
-    padding: 32px 2em;
-  }
-
-  .darkroom-image-container .canvas-container {
-    box-shadow: 0 0 8px 3px rgba(0, 0, 0, 0.6);
-    margin: auto;
-  }
-}
-
-.h5p-editing-image-header-title {
-  display: inline-block;
-  font-size: 1.25em;
-}
-
-.h5p-editing-image-header-buttons {
-  display: inline-block;
-  float: right;
-}
-.h5p-editing-image-loading {
-  padding: 1em;
-}
-
-.h5p-editing-image-loading.hidden {
-  display: none;
-}
-
-.h5p-editing-image-editing-container {
-  background: #666;
-}
-
-.h5p-editing-image-header-buttons {
-  button {
-    padding: 0.5em 1.75em;
-    margin: 0 0 0 1em;
-
-    border: 1px solid #ccc;
-    border-radius: 0.25em;
-    color: #333;
-    cursor: pointer;
-
-    background: #f2f2f2;
-    background: -webkit-linear-gradient(top,#fff 0,#f2f2f2 100%);
-    background: -ms-linear-gradient(top,#fff 0,#f2f2f2 100%);
-  }
-
-  button:hover {
-    background: #ededed;
-  }
-
-  .h5p-done {
-    color: #fff;
-    border-color: #20588F;
-
-    background: #3673B5;
-    background: -webkit-linear-gradient(top,#5A94D3 0,#3673B5 100%);
-    background: -ms-linear-gradient(top,#5A94D3 0,#3673B5 100%);
-  }
-
-  .h5p-done:hover {
-    background: #3275bc;
-    background: -webkit-linear-gradient(top,#3275bc 0,#285585 100%);
-    background: -ms-linear-gradient(top,#3275bc 0,#285585 100%);
-  }
-
-  .h5p-remove {
-    background: none;
-    border: none;
-    color: #a00;
-    padding-right: 0;
-    padding-left: 0;
-    border-radius: 0;
-  }
-
-  .h5p-remove:hover {
-    background: none;
-    color: #e40000;
-  }
-}
-
-.h5peditor-widgets > .h5peditor-label {
-  margin-top: 5px;
-}
-
 /* Help CKEditor blend into the H5PEditor */
 .h5peditor .cke_bottom,
 .h5peditor .cke_top {
-  background: #e4eaf2;
+  background: #d0d0d1;
 }
 .h5peditor .cke_chrome {
-  border: 1px solid #D0D0D1;
-  background: #e4eaf2;
+  border: 1px solid #f5f5f5;
+  background: #d0d0d1;
 }
 .h5peditor .cke_contents,
 .h5peditor .cke_toolgroup,
 .h5peditor .cke_combo_button {
-  border: 1px solid #D0D0D1;
+  border: 1px solid #f5f5f5;
 }

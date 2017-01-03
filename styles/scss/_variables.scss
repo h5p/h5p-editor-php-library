@@ -1,13 +1,13 @@
 // General editor
-$black: #0E1A25;
+$black: #212121;
 $white: #FFFFFF;
-$blue: #356593;
+$blue: #285c8b;
 
 $text-color: $black;
 
 $font-family: 'Open Sans', sans-serif;
 
-$i: 'H5P';
+$icon-font-family: 'H5P';
 
 $font-size-large: 18px;
 $font-size-normal: 16px;
@@ -17,31 +17,31 @@ $min-padding: 10px;
 $padding: 20px;
 
 // Form
-$form-background: #FAFBFC;
-$form-border-color: #D0D0D1;
+$form-background: #fcfcfc;
+$form-border-color: #d0d0d1;
 $form-content-background: $white;
 
 $form-input-color: $white;
 $form-input-placeholder-color: #858585;
 $form-input-box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.12);
 
-$form-item-importance-high-background: #488ac9;
-$form-item-importance-high-background-highlight: #3B87CC;
-$form-item-importance-high-border-color: #3B71A5;
-$form-item-importance-high-background-hover: #3B71A5;
-$form-item-importance-high-background-hover-highlight: #3b71a5;
+$form-item-importance-high-background: #2579C6;
+$form-item-importance-high-background-highlight: #3080c9;
+$form-item-importance-high-border-color: #1f67a8;
+$form-item-importance-high-background-hover: #1f67a8;
+$form-item-importance-high-background-hover-highlight: #2a6fac;
 
-$form-item-importance-medium-background: #687786;
-$form-item-importance-medium-background-highlight: #687786;
-$form-item-importance-medium-border-color: #57636e;
-$form-item-importance-medium-background-hover: #57636e;
-$form-item-importance-medium-background-hover-highlight: #57636e;
+$form-item-importance-medium-background: #747275;
+$form-item-importance-medium-background-highlight: #7b797c;
+$form-item-importance-medium-border-color: #636164;
+$form-item-importance-medium-background-hover: #636164;
+$form-item-importance-medium-background-hover-highlight: #6b696c;
 
-$form-item-importance-low-background: #e4eaf2;
-$form-item-importance-low-background-highlight: #F3F3F3;
-$form-item-importance-low-border-color: #afbac9;
-$form-item-importance-low-background-hover: #DAD9DA;
-$form-item-importance-low-background-hover-highlight: #DEDDDE;
+$form-item-importance-low-background: #f5f5f5;
+$form-item-importance-low-background-highlight: #eeeeef;
+$form-item-importance-low-border-color: #d0d0d1;
+$form-item-importance-low-background-hover: #deddde;
+$form-item-importance-low-background-hover-highlight: #deddde;
 
 $form-item-height-large: 48px; // 50px total with border
 $form-item-height-normal: 38px; // 40px total with border

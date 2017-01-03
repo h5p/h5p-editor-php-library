@@ -18,9 +18,6 @@
 
   &.boolean .h5peditor-label {
     display: inline;
-    color: #454347;
-    font-size: $font-size-normal;
-    font-weight: 600;
   }
 
   &.video, &.image, &.file, &.audio {
@@ -36,23 +33,12 @@
     border: 0;
   }
 
-  &.group.importance-high .h5peditor-label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: 600;
-    font-size: 1.05em;;
-  //  color: $blue;
+  &.importance-low > .h5peditor-label,
+  &.importance-medium > .h5peditor-label {
+    color: #454347;
   }
 
-  &.group.importance-medium .h5peditor-label {
-    color: $black;
-    font-size: 1.05em;
-    font-weight: 600;
-  }
-
-  &.group.importance-low .h5peditor-label {
-    color: $black;
-    font-size: 1.05em;
-    font-weight: 600;
+  &.importance-high > .h5peditor-label {
+    color: #356593;
   }
 }

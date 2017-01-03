@@ -79,10 +79,7 @@ ns.Number.prototype.createHtml = function () {
   }
    */
 
-  var label = ns.createLabel(this.field);
-  var description = ns.createDescription(this.field.description);
-
-  return ns.createItem(this.field.type, label + description + input);
+  return ns.createFieldMarkup(this.field, input);
 };
 
 /**

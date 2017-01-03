@@ -14,11 +14,12 @@
 
     &:hover:not([disabled]) {
       background: linear-gradient(to bottom, #fff 0, #d0d0d1 100%);
+      border-color: #999;
     }
   }
 
   .h5p-editing-image-button:before {
-    font-family: "H5P";
+    font-family: $icon-font-family;
     content: "\e900";
     color: #666;
     padding-right: 0.3em;
@@ -26,11 +27,6 @@
     vertical-align: middle;
     font-size: 1.5em;
     line-height: 0.9;
-  }
-
-  .ui-dialog .h5p-editing-image-button,
-  .ui-dialog .h5p-copyright-button {
-    padding-left: 0.5em;
   }
 
   .h5p-editing-image-button.loading:before {
@@ -42,19 +38,13 @@
     display: none !important;
   }
 
+  .ui-dialog .h5p-editing-image-button,
+  .ui-dialog .h5p-copyright-button {
+    padding-left: 0.5em;
+  }
+
   .field.image .file {
     display: inline-block;
     float: none;
-  }
-
-  .h5p-editor-image-buttons {
-    .h5p-editor-image-buttons {
-      display: block;
-    }
-
-    .h5p-copyright-button {
-      float: none;
-      display: inline-block;
-    }
   }
 }

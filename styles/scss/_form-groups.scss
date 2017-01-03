@@ -5,22 +5,19 @@
   visibility: inherit;
   cursor: pointer;
 }
-
 %title-bar-importance-high {
   background: $form-item-importance-high-background;
   border: 1px solid $form-item-importance-high-border-color;
   height: $form-item-height-large;
 }
 %title-bar-text-importance-high {
-  font-size: $font-size-large;
+  font-size: $font-size-normal;
   font-weight: 600;
-  color: $white;
   line-height: $form-item-height-large;
   // Fix white text on dark background blockiness
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
 %title-bar-importance-medium {
   background: $form-item-importance-medium-background;
   border: 1px solid $form-item-importance-medium-border-color;
@@ -57,7 +54,6 @@
     @extend %title-bar-text-importance-medium;
     padding: 0 $min-padding;
     outline: none;
-    color: $white;
   }
 
   & > .content {
@@ -80,51 +76,43 @@
     @extend %title-bar-text-importance-low;
     color: $text-color;
 
-    &:before {
-      color: $text-color;
-    }
-
     &:focus:before {
-      outline: 1px dashed $text-color;
+      outline: 1px dashed;
     }
   }
 }
 
 // Zebra pattern for lists and groups
-.h5p-collection > .content {
-  background-color: $white;
-}
-
-.common,
-.h5p-collection > .content {
-  .h5p-collection > .content {
+.common, .content {
+  .content {
     background-color: $form-background;
 
-    .h5p-collection > .content {
+    .content {
       background-color: $white;
 
-      .h5p-collection > .content {
-        background-color: $form-background;
+     .content {
+       background-color: $form-background;
 
-        .h5p-collection > .content {
-          background-color: $white;
+       .content {
+         background-color: $white;
 
-          .h5p-collection > .content {
-            background-color: $form-background;
+         .content {
+           background-color: $form-background;
 
-            .h5p-collection > .content {
-              background-color: $white;
-            }
-          }
-        }
-      }
-    }
+           .content {
+             background-color: $white;
+           }
+         }
+       }
+     }
+   }
   }
 }
 
 .h5p-li > .list-item-title-bar {
   @extend %title-bar-base;
   @extend %title-bar-importance-medium;
+  color: $white;
 
   & > .h5peditor-label {
     @extend %title-bar-text-importance-medium;
@@ -140,6 +128,10 @@
 
   &.importance-high > .h5peditor-label {
     @extend %title-bar-text-importance-high;
+  }
+
+  &.importance-medium > .h5peditor-label {
+    @extend %title-bar-text-importance-medium;
   }
 
   &.importance-low > .h5peditor-label {
@@ -166,9 +158,8 @@
   }
 
   .remove:after {
-    font-family: $i;
+    font-family: $icon-font-family;
     content: "\e890";
-    color: $white;
     opacity: 0.7;
     display: inline-block;
     line-height: $form-item-height-normal;
@@ -181,24 +172,23 @@
   .order-group {
     text-align: center;
     float: right;
+    background: $form-item-importance-medium-border-color;
+    font-size: $font-size-normal;
+    cursor: pointer;
   }
 
   .order-up, .order-down {
     width: $form-item-height-normal / 2;
     height: $form-item-height-normal / 2;
-    background: $form-item-importance-medium-border-color;
-    font-size: $font-size-normal;
     line-height: $form-item-height-normal / 2;
-    cursor: pointer;
 
     &:hover {
       background: $form-item-importance-medium-background-hover;
     }
 
     &:after {
-      font-family: $i;
+      font-family: $icon-font-family;
       content: "\e58e";
-      color: $white;
       display: inline-block;
     }
   }
@@ -223,29 +213,25 @@
 
       &:after {
         line-height: $form-item-height-large;
+        opacity: 0.7;
+      }
+      &:hover:after {
+        opacity: 1;
       }
     }
-    .remove:after {
-      color: $white;
-      opacity: 0.7;
-    }
-    .remove:hover:after {
-      opacity: 1;
+
+    .order-group {
+      background: $form-item-importance-high-border-color;
+      font-size: $font-size-large;
     }
 
     .order-up, .order-down {
       width: $form-item-height-large / 2;
       height: $form-item-height-large / 2;
-      background: $form-item-importance-high-border-color;
-      font-size: $font-size-large;
       line-height: $form-item-height-large / 2;
 
       &:hover {
         background: $form-item-importance-high-background-hover;
-      }
-
-      &:after {
-        color: $white;
       }
     }
   }
@@ -314,7 +300,7 @@
 .group > .title  {
   &:before {
     content: "\e566";
-    font-family: $i;
+    font-family: $icon-font-family;
     margin-right: $min-padding/2;
   }
 
@@ -326,18 +312,6 @@
 .expanded > .title:before {
   content: "\e565";
 }
-.listgroup > .list-item-title-bar > .h5peditor-label:hover:before,
-.listgroup > .list-item-title-bar > .h5peditor-label:focus:before,
-.group > .title:hover:before,
-.group > .title:focus:before {
-
-}
-
-.listgroup > .list-item-title-bar > .h5peditor-label:active:before,
-.group > .title:active:before {
-
-}
-
 .listgroup > .group.field {
   margin: 0;
   padding: 0;
@@ -361,10 +335,11 @@
     margin: 0;
     padding: 0 $min-padding;
     cursor: pointer;
+    font-size: 1em;
 
     & > .icon:before {
       content: "\e565";
-      font-family: $i;
+      font-family: $icon-font-family;
       margin-right: 5px;
     }
     &:hover > .icon {
@@ -376,7 +351,7 @@
     }
 
     &:focus > .icon:before {
-      outline: 1px dashed $text-color;
+      outline: 1px dashed;
     }
   }
   & > .fields {
@@ -444,6 +419,4 @@
   &[aria-disabled="true"]:before {
     display: none;
   }
-
-
 }
