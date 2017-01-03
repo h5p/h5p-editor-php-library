@@ -402,34 +402,29 @@
   background: #FFFFFF;
 }
 /* line 364, ../scss/_form-groups.scss */
-.common > .fields .h5peditor-label {
-  font-size: 18px;
-  font-weight: 600;
-}
-/* line 369, ../scss/_form-groups.scss */
 .common > .fields > .desc {
   margin: 0;
   font-size: 0.875em;
   color: #666;
 }
-/* line 375, ../scss/_form-groups.scss */
+/* line 370, ../scss/_form-groups.scss */
 .common > .fields p:first-child {
   margin-bottom: 20px;
 }
-/* line 381, ../scss/_form-groups.scss */
+/* line 376, ../scss/_form-groups.scss */
 .common.collapsed > .h5peditor-label > .icon:before {
   content: "\e566";
 }
-/* line 384, ../scss/_form-groups.scss */
+/* line 379, ../scss/_form-groups.scss */
 .common.collapsed > .fields {
   display: none;
 }
-/* line 389, ../scss/_form-groups.scss */
+/* line 384, ../scss/_form-groups.scss */
 .common.hidden {
   display: none;
 }
 
-/* line 396, ../scss/_form-groups.scss */
+/* line 391, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label]:before {
   content: attr(aria-label);
   visibility: hidden;
@@ -445,11 +440,11 @@
   line-height: 1.5;
   box-shadow: 0 0 0.5em #858585;
 }
-/* line 414, ../scss/_form-groups.scss */
+/* line 409, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label]:hover:before {
   visibility: visible;
 }
-/* line 418, ../scss/_form-groups.scss */
+/* line 413, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label][aria-disabled="true"]:before {
   display: none;
 }
