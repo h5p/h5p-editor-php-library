@@ -478,7 +478,6 @@ a {
       background: $white;
 
       .h5peditor-label {
-        color: $black;
         font-size: $font-size-large;
         font-weight: 600;
       }
@@ -613,7 +612,7 @@ a {
   margin-bottom: 6px;
   font-weight: 600;
   font-size: $font-size-normal;
-  color: $black;
+  color: $form-label;
 }
 
 #h5peditor-uploader {
