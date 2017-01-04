@@ -8,7 +8,7 @@ H5PEditor.language.core = {
   requiredProperty: '":property" er påkravd og må ha ein verdi.',
   onlyNumbers: '":property" kan berre innhalde tal.',
   exceedsMax: '":property" overstig maksverdien på :max.',
-  belowMin: '":property" er mindre enn minimumsverdien på :min.',
+  belowMin: '":property" Du må legge inn minst :min element i lista.',
   outOfStep: '":property" kan berre endrast i steg på :step.',
   add: 'Add',
   addFile: 'Legg til fil',
