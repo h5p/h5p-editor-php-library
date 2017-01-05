@@ -536,20 +536,11 @@ a {
     color: $white;
   }
 
-  &[disabled] {
-    opacity: 0.5;
-    pointer-events: none;
-  }
-
-  &:hover:not([disabled]) {
+  &:hover {
     @include button-background(
       $form-item-importance-medium-background-hover,
       $form-item-importance-medium-background-hover-highlight);
     text-decoration: none;
-  }
-
-  &:hover[disabled] {
-    cursor: default;
   }
 
   &.importance-high {
