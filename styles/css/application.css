@@ -61,14 +61,14 @@
 .group.importance-high > .title, .h5p-li > .list-item-title-bar.importance-high {
   background: #2579c6;
   border: 1px solid #1f67a8;
-  height: 48px;
+  height: 42px;
 }
 
 /* line 13, ../scss/_form-groups.scss */
 .group.importance-high > .title, .h5p-li > .list-item-title-bar.importance-high > .h5peditor-label, .h5p-li > .list-item-title-bar.importance-high > .title {
   font-size: 16px;
   font-weight: 600;
-  line-height: 48px;
+  line-height: 42px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -241,13 +241,13 @@
 }
 /* line 209, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .remove {
-  height: 48px;
-  line-height: 48px;
+  height: 42px;
+  line-height: 42px;
   font-size: 40px;
 }
 /* line 214, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .remove:after {
-  line-height: 48px;
+  line-height: 42px;
   opacity: 0.7;
 }
 /* line 218, ../scss/_form-groups.scss */
@@ -261,9 +261,9 @@
 }
 /* line 228, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .order-up, .h5p-li > .list-item-title-bar.importance-high .order-down {
-  width: 24px;
-  height: 24px;
-  line-height: 24px;
+  width: 21px;
+  height: 21px;
+  line-height: 21px;
 }
 /* line 233, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .order-up:hover, .h5p-li > .list-item-title-bar.importance-high .order-down:hover {
@@ -1310,8 +1310,8 @@ a {
   background-image: linear-gradient(#3080c9 50%, transparent 50%, transparent);
   border-color: #1f67a8;
   text-transform: uppercase;
-  height: 48px;
-  line-height: 48px;
+  height: 42px;
+  line-height: 42px;
 }
 /* line 555, ../scss/application.scss */
 .h5peditor-button-textual.importance-high:hover:not([disabled]) {
