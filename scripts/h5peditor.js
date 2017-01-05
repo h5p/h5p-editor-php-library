@@ -453,14 +453,12 @@ ns.createItem = function (type, label, description, content) {
 ns.createFieldMarkup = function (field, content) {
   var markup;
 
-  // non checkbox layout
-  if(field.type !== 'boolean') {
+  if (field.type !== 'boolean') {
     markup =
       (field.label ? '<div class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' + field.label + '</div>' : '') +
       (field.description ? '<div class="h5peditor-field-description">' + field.description + '</div>' : '') +
       (content ? content : '');
   }
-  // checkbox layout
   else {
     var label = (field.label !== 0) ? (field.label || field.name) : '';
 
@@ -473,11 +471,10 @@ ns.createFieldMarkup = function (field, content) {
   var wrapperClasses = this.joinNonEmptyStrings(['field', 'field-name-' + field.name, field.type, ns.createImportance(field.importance), field.widget]);
 
   // wrap and return
-  return '' +
-    '<div class="' + wrapperClasses + '">' +
-      markup +
-      '<div class="h5p-errors"></div>' +
-    '</div>';
+  return '<div class="' + wrapperClasses + '">' +
+    markup +
+    '<div class="h5p-errors"></div>' +
+  '</div>';
 };
 
 /**
@@ -487,10 +484,10 @@ ns.createFieldMarkup = function (field, content) {
  * @param {string} [separator] Default is space
  * @return {string}
  */
-ns.joinNonEmptyStrings = function(arr, separator){
+ns.joinNonEmptyStrings = function (arr, separator) {
   separator = separator || ' ';
 
-  return arr.filter(function(str){
+  return arr.filter(function (str) {
     return str !== undefined && str.length > 0;
   }).join(separator);
 };
