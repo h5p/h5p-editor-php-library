@@ -29,23 +29,6 @@ ns.semanticsLoaded = {};
  */
 ns.isIE = navigator.userAgent.match(/; MSIE \d+.\d+;/) !== null;
 
-if (field.type !== 'boolean') {
-  markup =
-    (field.label ? '<div class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' + field.label + '</div>' : '') +
-    (field.description ? '<div class="h5peditor-field-description">' + field.description + '</div>' : '') +
-    (content ? content : '');
-}
-else {
-  var label = (field.label !== 0) ? (field.label || field.name) : '';
-
-  markup =
-    '<label class="h5peditor-label">' + content + label + '</label>' +
-    (field.description ? '<div class="h5peditor-field-description">' + field.description + '</div>' : '');
-}
-
-// removes undefined and joins
-var wrapperClasses = this.joinNonEmptyStrings(['field', 'field-name-' + field.name, field.type, ns.createImportance(field.importance), field.widget]);
-
 /**
  * Loads the given library, inserts any css and js and
  * then runs the callback with the samantics as an argument.
