@@ -1,22 +1,23 @@
+@import 'variables';
+@import 'mixins';
+
 %title-bar-base {
   visibility: inherit;
+  cursor: pointer;
 }
-
 %title-bar-importance-high {
   background: $form-item-importance-high-background;
   border: 1px solid $form-item-importance-high-border-color;
   height: $form-item-height-large;
 }
 %title-bar-text-importance-high {
-  font-size: $font-size-large;
+  font-size: $font-size-normal;
   font-weight: 600;
-  color: $white;
   line-height: $form-item-height-large;
   // Fix white text on dark background blockiness
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
 %title-bar-importance-medium {
   background: $form-item-importance-medium-background;
   border: 1px solid $form-item-importance-medium-border-color;
@@ -51,11 +52,8 @@
     @extend %title-bar-base;
     @extend %title-bar-importance-medium;
     @extend %title-bar-text-importance-medium;
-
     padding: 0 $min-padding;
     outline: none;
-    cursor: pointer;
-    color: $white;
   }
 
   & > .content {
@@ -78,18 +76,43 @@
     @extend %title-bar-text-importance-low;
     color: $text-color;
 
-    &:before {
-      color: $text-color;
-    }
     &:focus:before {
-      outline: 1px dashed $text-color;
+      outline: 1px dashed;
     }
   }
 }
 
-.list-item-title-bar {
+// Zebra pattern for lists and groups
+.common, .content {
+  .content {
+    background-color: $form-background;
+
+    .content {
+      background-color: $white;
+
+     .content {
+       background-color: $form-background;
+
+       .content {
+         background-color: $white;
+
+         .content {
+           background-color: $form-background;
+
+           .content {
+             background-color: $white;
+           }
+         }
+       }
+     }
+   }
+  }
+}
+
+.h5p-li > .list-item-title-bar {
   @extend %title-bar-base;
   @extend %title-bar-importance-medium;
+  color: $white;
 
   & > .h5peditor-label {
     @extend %title-bar-text-importance-medium;
@@ -103,9 +126,22 @@
     text-overflow: ellipsis;
   }
 
+  &.importance-high > .h5peditor-label {
+    @extend %title-bar-text-importance-high;
+  }
+
+  &.importance-medium > .h5peditor-label {
+    @extend %title-bar-text-importance-medium;
+  }
+
+  &.importance-low > .h5peditor-label {
+    @extend %title-bar-text-importance-low;
+  }
+
   & > .list-actions {
     height: 100%;
     float: right;
+    position: relative;
   }
 
   .remove {
@@ -122,9 +158,8 @@
   }
 
   .remove:after {
-    font-family: $i;
+    font-family: $icon-font-family;
     content: "\e890";
-    color: $white;
     opacity: 0.7;
     display: inline-block;
     line-height: $form-item-height-normal;
@@ -137,24 +172,23 @@
   .order-group {
     text-align: center;
     float: right;
+    background: $form-item-importance-medium-border-color;
+    font-size: $font-size-normal;
+    cursor: pointer;
   }
 
   .order-up, .order-down {
     width: $form-item-height-normal / 2;
     height: $form-item-height-normal / 2;
-    background: $form-item-importance-medium-border-color;
-    font-size: $font-size-normal;
     line-height: $form-item-height-normal / 2;
-    cursor: pointer;
 
     &:hover {
       background: $form-item-importance-medium-background-hover;
     }
 
     &:after {
-      font-family: $i;
+      font-family: $icon-font-family;
       content: "\e58e";
-      color: $white;
       display: inline-block;
     }
   }
@@ -179,29 +213,25 @@
 
       &:after {
         line-height: $form-item-height-large;
+        opacity: 0.7;
+      }
+      &:hover:after {
+        opacity: 1;
       }
     }
-    .remove:after {
-      color: $white;
-      opacity: 0.7;
-    }
-    .remove:hover:after {
-      opacity: 1;
+
+    .order-group {
+      background: $form-item-importance-high-border-color;
+      font-size: $font-size-large;
     }
 
     .order-up, .order-down {
       width: $form-item-height-large / 2;
       height: $form-item-height-large / 2;
-      background: $form-item-importance-high-border-color;
-      font-size: $font-size-large;
       line-height: $form-item-height-large / 2;
 
       &:hover {
         background: $form-item-importance-high-background-hover;
-      }
-
-      &:after {
-        color: $white;
       }
     }
   }
@@ -266,11 +296,11 @@
 .listgroup > .list-item-title-bar > .h5peditor-label {
   cursor: pointer;
 }
-.list-item-title-bar > .h5peditor-label,
+.list-item-title-bar > .title,
 .group > .title  {
   &:before {
     content: "\e566";
-    font-family: $i;
+    font-family: $icon-font-family;
     margin-right: $min-padding/2;
   }
 
@@ -282,18 +312,6 @@
 .expanded > .title:before {
   content: "\e565";
 }
-.listgroup > .list-item-title-bar > .h5peditor-label:hover:before,
-.listgroup > .list-item-title-bar > .h5peditor-label:focus:before,
-.group > .title:hover:before,
-.group > .title:focus:before {
-
-}
-
-.listgroup > .list-item-title-bar > .h5peditor-label:active:before,
-.group > .title:active:before {
-
-}
-
 .listgroup > .group.field {
   margin: 0;
   padding: 0;
@@ -308,7 +326,7 @@
 }
 
 .common {
-  margin-top: $min-padding;
+  margin-top: $padding;
 
   & > .h5peditor-label {
     @extend %title-bar-base;
@@ -317,14 +335,23 @@
     margin: 0;
     padding: 0 $min-padding;
     cursor: pointer;
+    font-size: 1em;
 
     & > .icon:before {
       content: "\e565";
-      font-family: $i;
-      opacity: 0.7;
+      font-family: $icon-font-family;
+      margin-right: 5px;
     }
     &:hover > .icon {
       opacity: 1;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus > .icon:before {
+      outline: 1px dashed;
     }
   }
   & > .fields {
@@ -360,16 +387,14 @@
 }
 
 .h5peditor-button[aria-label] {
-  position: relative;
 
   &:before {
     content: attr(aria-label);
     visibility: hidden;
 
     position: absolute;
-    top: 125%;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 115%;
+    right: -10%;
     z-index: 2;
 
     padding: 0.25em 0.75em;
@@ -381,8 +406,11 @@
     box-shadow: 0 0 0.5em $form-input-placeholder-color;
   }
 
-  &:hover:before,
-  &:focus:before {
+  &:hover:before {
     visibility: visible;
+  }
+
+  &[aria-disabled="true"]:before {
+    display: none;
   }
 }

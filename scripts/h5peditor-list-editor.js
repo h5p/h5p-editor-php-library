@@ -13,19 +13,15 @@ H5PEditor.ListEditor = (function ($) {
     var self = this;
 
     var entity = list.getEntity();
-
     // Create list html
     var $list = $('<ul/>', {
       'class': 'h5p-ul'
     });
 
     // Create add button
-    var $button = $('<button/>', {
-      class: list.getImportance(),
-      text: H5PEditor.t('core', 'addEntity', {':entity': entity})
-    }).click(function () {
+    var $button = ns.createButton(list.getImportance(), H5PEditor.t('core', 'addEntity', {':entity': entity}), function () {
       list.addItem();
-    });
+    }, true);
 
     // Used when dragging items around
     var adjustX, adjustY, marginTop, formOffset;
@@ -267,12 +263,10 @@ H5PEditor.ListEditor = (function ($) {
         appendTo: $listActions
       });
 
-      // TODO: Translate
-      H5PEditor.createButton('order-up', 'Order item up', moveItemUp).appendTo($orderGroup);
-      H5PEditor.createButton('order-down', 'Order item down', moveItemDown).appendTo($orderGroup);
+      H5PEditor.createButton('order-up', H5PEditor.t('core', 'orderItemUp'), moveItemUp).appendTo($orderGroup);
+      H5PEditor.createButton('order-down', H5PEditor.t('core', 'orderItemDown'), moveItemDown).appendTo($orderGroup);
 
-      // TODO: Translate
-      H5PEditor.createButton('remove', 'Remove item', function () {
+      H5PEditor.createButton('remove', H5PEditor.t('core', 'removeItem'), function () {
         confirmRemovalDialog.show($(this).offset().top);
       }).appendTo($listActions);
 
@@ -300,12 +294,15 @@ H5PEditor.ListEditor = (function ($) {
           'class' : 'content'
         }).appendTo($item);
 
+        // Add importance to items not in groups
+        $titleBar.addClass(list.getImportance());
+
         // Append field
         item.appendTo($content);
 
         if (item.field.label !== 0) {
           // Try to find and move the label to the title bar
-          $content.children('.field').find('.h5peditor-label:first').appendTo($titleBar);
+          $content.children('.field').find('.h5peditor-label:first').removeClass('h5peditor-required').appendTo($titleBar);
         }
       }
 
