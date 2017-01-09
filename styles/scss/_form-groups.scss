@@ -54,7 +54,6 @@
     @extend %title-bar-text-importance-medium;
     padding: 0 $min-padding;
     outline: none;
-    color: $white;
   }
 
   & > .content {
@@ -159,7 +158,7 @@
   }
 
   .remove:after {
-    font-family: $i;
+    font-family: $icon-font-family;
     content: "\e890";
     opacity: 0.7;
     display: inline-block;
@@ -188,7 +187,7 @@
     }
 
     &:after {
-      font-family: $i;
+      font-family: $icon-font-family;
       content: "\e58e";
       display: inline-block;
     }
@@ -301,7 +300,7 @@
 .group > .title  {
   &:before {
     content: "\e566";
-    font-family: $i;
+    font-family: $icon-font-family;
     margin-right: $min-padding/2;
   }
 
@@ -340,7 +339,7 @@
 
     & > .icon:before {
       content: "\e565";
-      font-family: $i;
+      font-family: $icon-font-family;
       margin-right: 5px;
     }
     &:hover > .icon {
@@ -361,12 +360,6 @@
     border: 1px solid $form-border-color;
     border-top: none;
     background: $form-content-background;
-
-    .h5peditor-label {
-      color: $black;
-      font-size: $font-size-large;
-      font-weight: 600;
-    }
 
     & > .desc {
       margin: 0;
