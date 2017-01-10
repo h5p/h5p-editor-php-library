@@ -73,6 +73,7 @@ ns.Form.prototype.replace = function ($element) {
  * Remove the current form.
  */
 ns.Form.prototype.remove = function () {
+  ns.removeChildren(this.children);
   this.$form.remove();
 };
 
