@@ -30,7 +30,7 @@ ns.Boolean.prototype.createHtml = function () {
   var checked = (this.value !== undefined && this.value) ? ' checked' : '';
   var content = '<input type="checkbox"' + checked + ' />';
 
-  return ns.createFieldMarkup(this.field, content);
+  return ns.createBooleanFieldMarkup(this.field, content);
 };
 
 /**
