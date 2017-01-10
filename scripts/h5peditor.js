@@ -417,7 +417,7 @@ ns.createError = function (message) {
  * @returns {String}
  */
 ns.createImportance = function (importance) {
-  return importance ? 'importance-'.concat(importance) : '';
+  return importance ? 'importance-' + importance : '';
 };
 
 /**
