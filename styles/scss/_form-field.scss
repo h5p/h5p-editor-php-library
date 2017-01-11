@@ -33,12 +33,8 @@
     border: 0;
   }
 
-  &.importance-low > .h5peditor-label,
-  &.importance-medium > .h5peditor-label {
-    color: #454347;
-  }
-
   &.importance-high > .h5peditor-label {
+    font-size: $font-size-large;
     color: #356593;
   }
 }

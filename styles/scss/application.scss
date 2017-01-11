@@ -478,7 +478,6 @@ a {
       background: $white;
 
       .h5peditor-label {
-        color: $black;
         font-size: $font-size-large;
         font-weight: 600;
       }
@@ -537,20 +536,11 @@ a {
     color: $white;
   }
 
-  &[disabled] {
-    opacity: 0.5;
-    pointer-events: none;
-  }
-
-  &:hover:not([disabled]) {
+  &:hover {
     @include button-background(
       $form-item-importance-medium-background-hover,
       $form-item-importance-medium-background-hover-highlight);
     text-decoration: none;
-  }
-
-  &:hover[disabled] {
-    cursor: default;
   }
 
   &.importance-high {
@@ -613,7 +603,7 @@ a {
   margin-bottom: 6px;
   font-weight: 600;
   font-size: $font-size-normal;
-  color: $black;
+  color: $form-label;
 }
 
 #h5peditor-uploader {

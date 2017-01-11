@@ -413,11 +413,11 @@ ns.createError = function (message) {
 /**
  * Turn a numbered importance into a string.
  *
- * @param {Number} importance
+ * @param {string} importance
  * @returns {String}
  */
 ns.createImportance = function (importance) {
-  return importance ? 'importance-'.concat(importance) : '';
+  return importance ? 'importance-' + importance : '';
 };
 
 /**
@@ -428,7 +428,7 @@ ns.createImportance = function (importance) {
  * @param {string} [label]
  * @param {string} [description]
  * @param {string} [content]
- * @deprecated since version 1.12. Use createFieldMarkup instead.
+ * @deprecated since version 1.12 (Jan. 2017, will be removed Jan. 2018). Use createFieldMarkup instead.
  * @see createFieldMarkup
  * @returns {string} HTML
  */
@@ -442,41 +442,67 @@ ns.createItem = function (type, label, description, content) {
 };
 
 /**
+ * An object describing the semantics of a field
+ * @typedef {Object} SemanticField
+ * @property {string} name
+ * @property {string} type
+ * @property {string} label
+ * @property {string} [importance]
+ * @property {string} [description]
+ * @property {string} [widget]
+ * @property {boolean} [optional]
+ */
+
+/**
  * Create HTML wrapper for a field item.
  * Replacement for createItem()
  *
  * @since 1.12
- * @param  {Object} field
+ * @param  {SemanticField} field
  * @param  {string} content
+ *
  * @return {string}
  */
 ns.createFieldMarkup = function (field, content) {
-  var markup;
+  content = content || '';
+  var markup = this.createLabel(field) + this.createDescription(field.description) + content;
 
-  // non checkbox layout
-  if(field.type !== 'boolean') {
-    markup =
-      (field.label ? '<div class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' + field.label + '</div>' : '') +
-      (field.description ? '<div class="h5peditor-field-description">' + field.description + '</div>' : '') +
-      (content ? content : '');
-  }
-  // checkbox layout
-  else {
-    var label = (field.label !== 0) ? (field.label || field.name) : '';
+  return this.wrapFieldMarkup(field, markup);
+};
 
-    markup =
-      '<label class="h5peditor-label">' + content + label + '</label>' +
-      (field.description ? '<div class="h5peditor-field-description">' + field.description + '</div>' : '');
-  }
+/**
+ * Create HTML wrapper for a boolean field item.
+ *
+ * @param  {SemanticField} field
+ * @param  {string} content
+ *
+ * @return {string}
+ */
+ns.createBooleanFieldMarkup = function (field, content) {
+  var markup =
+    '<label class="h5peditor-label">' + content + (field.label || field.name || '') + '</label>' +
+    this.createDescription(field.description);
 
+  return this.wrapFieldMarkup(field, markup);
+};
+
+/**
+ * Wraps a field with some metadata classes, and adds error field
+ *
+ * @param {SemanticField} field
+ * @param {string} markup
+ *
+ * @private
+ * @return {string}
+ */
+ns.wrapFieldMarkup = function (field, markup) {
   // removes undefined and joins
   var wrapperClasses = this.joinNonEmptyStrings(['field', 'field-name-' + field.name, field.type, ns.createImportance(field.importance), field.widget]);
 
   // wrap and return
-  return '' +
-    '<div class="' + wrapperClasses + '">' +
-      markup +
-      '<div class="h5p-errors"></div>' +
+  return '<div class="' + wrapperClasses + '">' +
+    markup +
+    '<div class="h5p-errors"></div>' +
     '</div>';
 };
 
@@ -487,10 +513,10 @@ ns.createFieldMarkup = function (field, content) {
  * @param {string} [separator] Default is space
  * @return {string}
  */
-ns.joinNonEmptyStrings = function(arr, separator){
+ns.joinNonEmptyStrings = function (arr, separator) {
   separator = separator || ' ';
 
-  return arr.filter(function(str){
+  return arr.filter(function (str) {
     return str !== undefined && str.length > 0;
   }).join(separator);
 };
@@ -510,9 +536,10 @@ ns.createOption = function (value, text, selected) {
 /**
  * Create HTML for text input.
  *
- * @param {String} description
  * @param {String} value
- * @param {Integer} maxLength
+ * @param {number} maxLength
+ * @param {String} placeholder
+ *
  * @returns {String}
  */
 ns.createText = function (value, maxLength, placeholder) {
@@ -534,8 +561,8 @@ ns.createText = function (value, maxLength, placeholder) {
 /**
  * Create a label to wrap content in.
  *
- * @param {Object} field
- * @param {String} content
+ * @param {SemanticField} field
+ * @param {String} [content]
  * @returns {String}
  */
 ns.createLabel = function (field, content) {

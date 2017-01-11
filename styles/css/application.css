@@ -45,12 +45,9 @@
 .field .library {
   border: 0;
 }
-/* line 37, ../scss/_form-field.scss */
-.field.importance-low > .h5peditor-label, .field.importance-medium > .h5peditor-label {
-  color: #454347;
-}
-/* line 41, ../scss/_form-field.scss */
+/* line 36, ../scss/_form-field.scss */
 .field.importance-high > .h5peditor-label {
+  font-size: 18px;
   color: #356593;
 }
 
@@ -64,14 +61,14 @@
 .group.importance-high > .title, .h5p-li > .list-item-title-bar.importance-high {
   background: #2579c6;
   border: 1px solid #1f67a8;
-  height: 48px;
+  height: 42px;
 }
 
 /* line 13, ../scss/_form-groups.scss */
 .group.importance-high > .title, .h5p-li > .list-item-title-bar.importance-high > .h5peditor-label, .h5p-li > .list-item-title-bar.importance-high > .title {
   font-size: 16px;
   font-weight: 600;
-  line-height: 48px;
+  line-height: 42px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -244,13 +241,13 @@
 }
 /* line 209, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .remove {
-  height: 48px;
-  line-height: 48px;
+  height: 42px;
+  line-height: 42px;
   font-size: 40px;
 }
 /* line 214, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .remove:after {
-  line-height: 48px;
+  line-height: 42px;
   opacity: 0.7;
 }
 /* line 218, ../scss/_form-groups.scss */
@@ -264,9 +261,9 @@
 }
 /* line 228, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .order-up, .h5p-li > .list-item-title-bar.importance-high .order-down {
-  width: 24px;
-  height: 24px;
-  line-height: 24px;
+  width: 21px;
+  height: 21px;
+  line-height: 21px;
 }
 /* line 233, ../scss/_form-groups.scss */
 .h5p-li > .list-item-title-bar.importance-high .order-up:hover, .h5p-li > .list-item-title-bar.importance-high .order-down:hover {
@@ -405,35 +402,29 @@
   background: white;
 }
 /* line 364, ../scss/_form-groups.scss */
-.common > .fields .h5peditor-label {
-  color: #212121;
-  font-size: 18px;
-  font-weight: 600;
-}
-/* line 370, ../scss/_form-groups.scss */
 .common > .fields > .desc {
   margin: 0;
   font-size: 0.875em;
   color: #666;
 }
-/* line 376, ../scss/_form-groups.scss */
+/* line 370, ../scss/_form-groups.scss */
 .common > .fields p:first-child {
   margin-bottom: 20px;
 }
-/* line 382, ../scss/_form-groups.scss */
+/* line 376, ../scss/_form-groups.scss */
 .common.collapsed > .h5peditor-label > .icon:before {
   content: "\e566";
 }
-/* line 385, ../scss/_form-groups.scss */
+/* line 379, ../scss/_form-groups.scss */
 .common.collapsed > .fields {
   display: none;
 }
-/* line 390, ../scss/_form-groups.scss */
+/* line 384, ../scss/_form-groups.scss */
 .common.hidden {
   display: none;
 }
 
-/* line 397, ../scss/_form-groups.scss */
+/* line 391, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label]:before {
   content: attr(aria-label);
   visibility: hidden;
@@ -449,11 +440,11 @@
   line-height: 1.5;
   box-shadow: 0 0 0.5em #858585;
 }
-/* line 415, ../scss/_form-groups.scss */
+/* line 409, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label]:hover:before {
   visibility: visible;
 }
-/* line 419, ../scss/_form-groups.scss */
+/* line 413, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label][aria-disabled="true"]:before {
   display: none;
 }
@@ -1241,15 +1232,14 @@ a {
 }
 /* line 480, ../scss/application.scss */
 .h5peditor .h5p-editor-dialog .content .h5peditor-label {
-  color: #212121;
   font-size: 18px;
   font-weight: 600;
 }
-/* line 487, ../scss/application.scss */
+/* line 486, ../scss/application.scss */
 .h5peditor .h5p-editor-dialog .h5p-close {
   color: #494949;
 }
-/* line 490, ../scss/application.scss */
+/* line 489, ../scss/application.scss */
 .h5peditor .h5p-editor-dialog .h5p-close:before {
   font-size: 2em;
   right: -0.125em;
@@ -1263,7 +1253,7 @@ a {
   -o-transition: scale 0.2s;
   transition: scale 0.2s;
 }
-/* line 501, ../scss/application.scss */
+/* line 500, ../scss/application.scss */
 .h5peditor .h5p-editor-dialog .h5p-close:hover:before {
   -webkit-transform: scale(1.1, 1.1);
   -moz-transform: scale(1.1, 1.1);
@@ -1271,7 +1261,7 @@ a {
   -o-transform: scale(1.1, 1.1);
   transform: scale(1.1, 1.1);
 }
-/* line 507, ../scss/application.scss */
+/* line 506, ../scss/application.scss */
 .h5peditor .h5p-li > .content > .library {
   border: 0;
   padding: 0;
@@ -1279,7 +1269,7 @@ a {
 
 /* Placed this outside of .h5peditor context above. Don't want it to be more
    specific than neccessary (because of overriding) */
-/* line 514, ../scss/application.scss */
+/* line 513, ../scss/application.scss */
 .h5peditor-button-textual {
   -webkit-border-radius: 0.25em;
   -moz-border-radius: 0.25em;
@@ -1304,59 +1294,50 @@ a {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-/* line 536, ../scss/application.scss */
+/* line 535, ../scss/application.scss */
 .h5peditor-button-textual:before, .h5peditor-button-textual:after {
   color: white;
 }
-/* line 540, ../scss/application.scss */
-.h5peditor-button-textual[disabled] {
-  opacity: 0.5;
-  pointer-events: none;
-}
-/* line 545, ../scss/application.scss */
-.h5peditor-button-textual:hover:not([disabled]) {
+/* line 539, ../scss/application.scss */
+.h5peditor-button-textual:hover {
   background: #636164;
   background-image: linear-gradient(#6b696c 50%, transparent 50%, transparent);
   text-decoration: none;
 }
-/* line 552, ../scss/application.scss */
-.h5peditor-button-textual:hover[disabled] {
-  cursor: default;
-}
-/* line 556, ../scss/application.scss */
+/* line 546, ../scss/application.scss */
 .h5peditor-button-textual.importance-high {
   background: #2579c6;
   background-image: linear-gradient(#3080c9 50%, transparent 50%, transparent);
   border-color: #1f67a8;
   text-transform: uppercase;
-  height: 48px;
-  line-height: 48px;
+  height: 42px;
+  line-height: 42px;
 }
-/* line 565, ../scss/application.scss */
+/* line 555, ../scss/application.scss */
 .h5peditor-button-textual.importance-high:hover:not([disabled]) {
   background: #1f67a8;
   background-image: linear-gradient(#2a6fac 50%, transparent 50%, transparent);
   border-color: #1f67a8;
 }
-/* line 573, ../scss/application.scss */
+/* line 563, ../scss/application.scss */
 .h5peditor-button-textual.importance-low {
   background: whitesmoke;
   background-image: linear-gradient(#eeeeef 50%, transparent 50%, transparent);
   border-color: #d0d0d1;
   color: #212121;
 }
-/* line 581, ../scss/application.scss */
+/* line 571, ../scss/application.scss */
 .h5peditor-button-textual.importance-low:before, .h5peditor-button-textual.importance-low:after {
   color: #212121;
 }
-/* line 585, ../scss/application.scss */
+/* line 575, ../scss/application.scss */
 .h5peditor-button-textual.importance-low:hover:not([disabled]) {
   background: #deddde;
   background-image: linear-gradient(#deddde 50%, transparent 50%, transparent);
   border-color: #deddde;
 }
 
-/* line 594, ../scss/application.scss */
+/* line 584, ../scss/application.scss */
 .h5peditor-field-description,
 .h5p-help-text {
   font-size: 12px;
@@ -1368,7 +1349,7 @@ a {
   letter-spacing: 0.5px;
 }
 
-/* line 604, ../scss/application.scss */
+/* line 594, ../scss/application.scss */
 .h5peditor-form {
   position: relative;
   padding: 20px;
@@ -1376,16 +1357,16 @@ a {
   border: 1px solid #d0d0d1;
 }
 
-/* line 611, ../scss/application.scss */
+/* line 601, ../scss/application.scss */
 .h5peditor-label {
   display: block;
   margin-bottom: 6px;
   font-weight: 600;
   font-size: 16px;
-  color: #212121;
+  color: #454347;
 }
 
-/* line 619, ../scss/application.scss */
+/* line 609, ../scss/application.scss */
 #h5peditor-uploader {
   position: absolute;
   width: 1px;
@@ -1395,12 +1376,12 @@ a {
   overflow: hidden;
 }
 
-/* line 628, ../scss/application.scss */
+/* line 618, ../scss/application.scss */
 .h5p-tutorial-url {
   font-size: 0.875em;
 }
 
-/* line 632, ../scss/application.scss */
+/* line 622, ../scss/application.scss */
 .h5p-tutorial-url:before {
   font-family: "H5P";
   content: "\e889";
@@ -1410,7 +1391,7 @@ a {
   left: .2em;
 }
 
-/* line 641, ../scss/application.scss */
+/* line 631, ../scss/application.scss */
 .h5peditor-widget-select {
   overflow: hidden;
   margin: 0 0 -1px;
@@ -1418,7 +1399,7 @@ a {
   list-style: none;
 }
 
-/* line 647, ../scss/application.scss */
+/* line 637, ../scss/application.scss */
 .h5peditor-widget-option {
   float: right;
   border: 1px solid #ccc;
@@ -1433,42 +1414,42 @@ a {
   outline: none;
 }
 
-/* line 660, ../scss/application.scss */
+/* line 650, ../scss/application.scss */
 .h5peditor-widget-option:hover {
   color: #000;
 }
 
-/* line 663, ../scss/application.scss */
+/* line 653, ../scss/application.scss */
 .h5peditor-widget-option:active {
   color: #8e636a;
   /* Pink chocolate */
 }
 
-/* line 666, ../scss/application.scss */
+/* line 656, ../scss/application.scss */
 .h5peditor-widget-active {
   background: #fff;
   line-height: 1.357142857em;
 }
 
-/* line 670, ../scss/application.scss */
+/* line 660, ../scss/application.scss */
 .h5peditor-widgets > .h5peditor-widget-wrapper {
   border: 1px solid #ccc;
   margin: 0 0 0.25em;
   padding: 0.5em;
 }
 
-/* line 675, ../scss/application.scss */
+/* line 665, ../scss/application.scss */
 .h5peditor-widgets > .h5peditor-label {
   float: left;
   margin-top: 5px;
 }
 
-/* line 679, ../scss/application.scss */
+/* line 669, ../scss/application.scss */
 .h5p-editor-iframe {
   margin-bottom: 1em;
 }
 
-/* line 682, ../scss/application.scss */
+/* line 672, ../scss/application.scss */
 .h5peditor-required:after {
   content: "*";
   color: #da0001;
@@ -1476,19 +1457,19 @@ a {
 }
 
 /* Help CKEditor blend into the H5PEditor */
-/* line 690, ../scss/application.scss */
+/* line 680, ../scss/application.scss */
 .h5peditor .cke_bottom,
 .h5peditor .cke_top {
   background: #d0d0d1;
 }
 
-/* line 693, ../scss/application.scss */
+/* line 683, ../scss/application.scss */
 .h5peditor .cke_chrome {
   border: 1px solid #f5f5f5;
   background: #d0d0d1;
 }
 
-/* line 699, ../scss/application.scss */
+/* line 689, ../scss/application.scss */
 .h5peditor .cke_contents,
 .h5peditor .cke_toolgroup,
 .h5peditor .cke_combo_button {
