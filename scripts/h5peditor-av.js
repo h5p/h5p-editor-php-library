@@ -324,7 +324,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    */
   C.providers = [{
     name: 'YouTube',
-    regexp: /^https?:\/\/(youtu.be|(www.)?youtube.com)\//i
+    regexp: /^https?:\/\/((youtu.|y2u.)?be|(www.|m.)?youtube.com)\//i
   }];
 
   return C;
