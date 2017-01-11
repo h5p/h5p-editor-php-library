@@ -472,6 +472,8 @@ ns.Html.prototype.validate = function () {
   // Display errors and bail if set.
   if (that.$errors.children().length) {
     return false;
+  } else {
+    this.$input.removeClass('error');
   }
 
   this.value = value;
