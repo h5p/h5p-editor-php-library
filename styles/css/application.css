@@ -46,7 +46,7 @@
   border: 0;
 }
 /* line 36, ../scss/_form-field.scss */
-.field.importance-high > .h5peditor-label {
+.field.importance-high > .h5peditor-label-wrapper > .h5peditor-label {
   font-size: 18px;
   color: #356593;
 }
