@@ -310,9 +310,14 @@ ns.removeChildren = function (children) {
 
   for (var i = 0; i < children.length; i++) {
     // Common fields will be removed by library.
-    if (children[i].field === undefined ||
-        children[i].field.common === undefined ||
-        !children[i].field.common) {
+    var isCommonField = (children[i].field === undefined ||
+                         children[i].field.common === undefined ||
+                         !children[i].field.common);
+
+    var hasRemove = (children[i].remove instanceof Function ||
+                     typeof children[i].remove === 'function');
+
+    if (isCommonField && hasRemove) {
       children[i].remove();
     }
   }
