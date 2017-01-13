@@ -441,6 +441,7 @@ a {
   }
 
   /* Copyright button for video & audio */
+  .field.file > .h5p-copyright-button,
   .field.video > .h5p-copyright-button,
   .field.audio > .h5p-copyright-button {
     float: left;
@@ -449,7 +450,6 @@ a {
   .h5p-editor-dialog {
     position: absolute;
     z-index: 1;
-    padding: 10px 10px 0;
     margin: 5.5em 0 1em;
     visibility: hidden;
     opacity: 0;
@@ -468,7 +468,7 @@ a {
     }
 
     & > .field {
-      margin: 0 0 10px;
+      margin: 0;
       border: 0;
       box-shadow: none;
     }

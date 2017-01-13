@@ -287,13 +287,13 @@ H5PEditor.List = (function ($) {
           children !== undefined && children.length > field.max) {
         // Invalid, more parameters than max allowed.
         valid = false;
-        self.setError(H5PEditor.t('core', 'exceedsMax', {':property': '<em>' + self.label + '</em>', ':max': field.max}));
+        self.setError(H5PEditor.t('core', 'listExceedsMax', {':max': field.max}));
       }
       if (field.min !== undefined && field.min > 0 &&
           (children === undefined || children.length < field.min)) {
         // Invalid, less parameters than min allowed.
         valid = false;
-        self.setError(H5PEditor.t('core', 'belowMin', {':property': '<em>' + self.label + '</em>', ':min': field.min}));
+        self.setError(H5PEditor.t('core', 'listBelowMin', {':min': field.min}));
       }
 
       return valid;
@@ -309,7 +309,7 @@ H5PEditor.List = (function ($) {
       else {
         return '';
       }
-    }
+    };
 
     /**
      * Creates a copy of the current valid value. A copy is created to avoid
