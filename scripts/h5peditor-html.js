@@ -436,8 +436,10 @@ ns.Html.prototype.createHtml = function () {
  */
 ns.Html.prototype.validate = function () {
   var that = this;
+
   if (that.$errors.children().length) {
     that.$errors.empty();
+    this.$input.addClass('error');
   }
 
   // Get contents from editor
@@ -470,6 +472,8 @@ ns.Html.prototype.validate = function () {
   // Display errors and bail if set.
   if (that.$errors.children().length) {
     return false;
+  } else {
+    this.$input.removeClass('error');
   }
 
   this.value = value;

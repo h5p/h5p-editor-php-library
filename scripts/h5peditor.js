@@ -608,6 +608,7 @@ ns.checkErrors = function ($errors, $input, value) {
         return;
       }
       $errors.html('');
+      $input.removeClass('error');
       $input.unbind('keyup');
     });
 
