@@ -24,9 +24,9 @@
     position: relative;
   }
 
-  &.image .file {
-    display: inline-block;
-    float: none;
+  .h5p-editor-image-buttons {
+    float: left;
+    clear: both;
   }
 
   .library {

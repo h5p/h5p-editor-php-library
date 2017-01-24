@@ -58,4 +58,4 @@ H5PEditor.language.core = {
   "orderItemUp": "Element nach vorne sortieren",
   "orderItemDown": "Element nach hinten sortieren",
   "removeItem": "Element entfernen"
-}
+};
