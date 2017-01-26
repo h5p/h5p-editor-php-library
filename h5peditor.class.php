@@ -33,21 +33,17 @@ class H5peditor {
     'scripts/h5peditor-none.js',
     'ckeditor/ckeditor.js',
   );
-  private $h5p, $storage, $relativePathRegExp;
+  private $h5p, $storage;
 
   /**
    * Constructor for the core editor library.
    *
    * @param \H5PCore $h5p Instance of core
    * @param \H5peditorStorage $storage Instance of h5peditor storage
-   * @param string $relativePathRegExp
-   * Optional custom regexp for detecting usage of files that's in another
-   * content folder or the editor's tmp directory
    */
-  function __construct($h5p, $storage, $relativePathRegExp = '/^(\.\.\/){1,2}(\d+|editor)\/(.+)$/') {
+  function __construct($h5p, $storage) {
     $this->h5p = $h5p;
     $this->storage = $storage;
-    $this->relativePathRegExp = $relativePathRegExp;
   }
 
   /**
@@ -111,17 +107,18 @@ class H5peditor {
   /**
    * Move uploaded files, remove old files and update library usage.
    *
-   * @param string $oldLibrary
-   * @param string $oldParameters
+   * @param stdClass $content
    * @param array $newLibrary
-   * @param string $newParameters
+   * @param array $newParameters
+   * @param array $oldLibrary
+   * @param array $oldParameters
    */
-  public function processParameters($contentId, $newLibrary, $newParameters, $oldLibrary = NULL, $oldParameters = NULL) {
+  public function processParameters($content, $newLibrary, $newParameters, $oldLibrary = NULL, $oldParameters = NULL) {
     $newFiles = array();
     $oldFiles = array();
 
     // Keep track of current content ID (used when processing files)
-    $this->contentId = $contentId;
+    $this->content = $content;
 
     // Find new libraries/content dependencies and files.
     // Start by creating a fake library field to process. This way we get all the dependencies of the main library as well.
@@ -142,7 +139,7 @@ class H5peditor {
       for ($i = 0, $s = count($oldFiles); $i < $s; $i++) {
         if (!in_array($oldFiles[$i], $newFiles) &&
             preg_match('/^(\w+:\/\/|\.\.\/)/i', $oldFiles[$i]) === 0) {
-          $this->h5p->fs->removeContentFile($oldFiles[$i], $this->contentId);
+          $this->h5p->fs->removeContentFile($oldFiles[$i], $content);
           // (optionally we could just have marked them as tmp files)
         }
       }
@@ -237,17 +234,17 @@ class H5peditor {
   private function processFile(&$params, &$files) {
     // File could be copied from another content folder.
     $matches = array();
-    if (preg_match($this->relativePathRegExp, $params->path, $matches)) {
+    if (preg_match($this->h5p->relativePathRegExp, $params->path, $matches)) {
 
       // Create a copy of the file
-      $this->h5p->fs->cloneContentFile($matches[3], $matches[2], $this->contentId);
+      $this->h5p->fs->cloneContentFile($matches[5], $matches[4], $this->content);
 
       // Update Params with correct filename
-      $params->path = $matches[3];
+      $params->path = $matches[5];
     }
     else {
       // Check if file exists in content folder
-      $fileId = $this->h5p->fs->getContentFile($params->path, $this->contentId);
+      $fileId = $this->h5p->fs->getContentFile($params->path, $this->content);
       if ($fileId) {
         // Mark the file as a keeper
         $this->storage->keepFile($fileId);
@@ -255,7 +252,7 @@ class H5peditor {
       else {
         // File is not in content folder, try to copy it from the editor tmp dir
         // to content folder.
-        $this->h5p->fs->cloneContentFile($params->path, 'editor', $this->contentId);
+        $this->h5p->fs->cloneContentFile($params->path, 'editor', $this->content);
         // (not removed in case someone has copied it)
         // (will automatically be removed after 24 hours)
       }
