@@ -27,7 +27,7 @@ ns.Text.prototype.appendTo = function ($wrapper) {
   var that = this;
 
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
-  this.$input = this.$item.children('label').children('input');
+  this.$input = this.$item.find('input');
   this.$errors = this.$item.children('.h5p-errors');
 
   this.$input.change(function () {
@@ -71,9 +71,7 @@ ns.Text.prototype.change = function (callback) {
  */
 ns.Text.prototype.createHtml = function () {
   var input = ns.createText(this.value, this.field.maxLength, this.field.placeholder);
-  var label = ns.createLabel(this.field, input);
-
-  return ns.createItem(this.field.type, label, this.field.description);
+  return ns.createFieldMarkup(this.field, input);
 };
 
 /**
@@ -84,8 +82,15 @@ ns.Text.prototype.validate = function () {
 
   var value = H5P.trim(this.$input.val());
 
+  if (this.$errors.html().length > 0) {
+    this.$input.addClass('error');
+  }
+
+  // Clear errors before showing new ones
+  this.$errors.html('');
+
   if ((that.field.optional === undefined || !that.field.optional) && !value.length) {
-    this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': 'text field'})));
+    this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': ns.t('core', 'textField')})));
   }
   else if (value.length > this.field.maxLength) {
     this.$errors.append(ns.createError(ns.t('core', 'tooLong', {':max': this.field.maxLength})));

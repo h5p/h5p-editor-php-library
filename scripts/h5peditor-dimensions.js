@@ -118,10 +118,8 @@ ns.Dimensions.prototype.appendTo = function ($wrapper) {
  * Create HTML for the field.
  */
 ns.Dimensions.prototype.createHtml = function () {
-  var input = ns.createText(this.params !== undefined ? this.params.width : undefined, 15, 'Width') + ' x ' + ns.createText(this.params !== undefined ? this.params.height : undefined, 15, 'Height');
-  var label = ns.createLabel(this.field, input);
-
-  return ns.createItem(this.field.widget, label, this.field.description, this.field.description);
+  var input = ns.createText(this.params !== undefined ? this.params.width : undefined, 15, ns.t('core', 'width')) + ' x ' + ns.createText(this.params !== undefined ? this.params.height : undefined, 15, ns.t('core', 'height'));
+  return ns.createFieldMarkup(this.field, input);
 };
 
 /**
@@ -137,19 +135,20 @@ ns.Dimensions.prototype.validate = function () {
     var $input = ns.$(this);
     var value = H5P.trim($input.val());
     var property = i ? 'height' : 'width';
+    var propertyTranslated = ns.t('core', property);
 
     if ((that.field.optional === undefined || !that.field.optional) && !value.length) {
-      that.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': property})));
+      that.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': propertyTranslated})));
       return false;
     }
     else if (!value.match(new RegExp('^[0-9]+$'))) {
-      that.$errors.append(ns.createError(ns.t('core', 'onlyNumbers', {':property': property})));
+      that.$errors.append(ns.createError(ns.t('core', 'onlyNumbers', {':property': propertyTranslated})));
       return false;
     }
 
     value = parseInt(value);
     if (that.max !== undefined && value > that.max[property]) {
-      that.$errors.append(ns.createError(ns.t('core', 'exceedsMax', {':property': property, ':max': that.max[property]})));
+      that.$errors.append(ns.createError(ns.t('core', 'exceedsMax', {':property': propertyTranslated, ':max': that.max[property]})));
       return false;
     }
 

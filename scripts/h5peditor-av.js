@@ -50,7 +50,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
       try {
         if (result.error) {
-          throw err;
+          throw result.error;
         }
 
         // Set params if none is set
@@ -98,12 +98,14 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   C.prototype.appendTo = function ($wrapper) {
     var self = this;
 
-    var label = '';
-    if (this.field.label !== 0) {
-      label = '<span class="h5peditor-label' + (this.field.optional ? '' : ' h5peditor-required') + '">' + (this.field.label === undefined ? this.field.name : this.field.label) + '</span>';
-    }
+    var imageHtml =
+      '<div class="file">' + C.createAdd(self.field.type) + '</div>' +
+      '<a class="h5p-copyright-button" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>' +
+      '<div class="h5p-editor-dialog">' +
+        '<a href="#" class="h5p-close" title="' + H5PEditor.t('core', 'close') + '"></a>' +
+      '</div>';
 
-    var html = H5PEditor.createItem(this.field.type, label + '<div class="file">' + C.createAdd() + '</div><a class="h5p-copyright-button" href="#">' + ns.t('core', 'editCopyright') + '</a><div class="h5p-editor-dialog"><a href="#" class="h5p-close" title="' + ns.t('core', 'close') + '"></a></div>', this.field.description);
+    var html = H5PEditor.createFieldMarkup(this.field, imageHtml);
 
     var $container = $(html).appendTo($wrapper);
     var $file = $container.children('.file');
@@ -292,10 +294,28 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   /**
    * HTML for add button.
    *
-   * @returns {String}
+   * @param {string} type 'video' or 'audio'
+   * @returns {string} HTML
    */
-  C.createAdd = function () {
-    return '<div role="button" tabindex="1" class="h5p-add-file" title="' + H5PEditor.t('core', 'addFile') + '"></div><div class="h5p-add-dialog"><div class="h5p-dialog-box"><button class="h5p-file-upload">Select file to upload</button></div><div class="h5p-or"><span>or</span></div><div class="h5p-dialog-box"><input type="text" placeholder="Type in file url (YouTube is supported for videos)" class="h5p-file-url h5peditor-text"/></div><div class="h5p-buttons"><button class="h5p-insert">Insert</button><button class="h5p-cancel">Cancel</button></div></div>';
+  C.createAdd = function (type) {
+    var inputPlaceholder = H5PEditor.t('core', type === 'audio' ? 'enterAudioUrl' : 'enterVideoUrl');
+    var description = (type === 'audio' ? '' : '<div class="h5p-errors"></div><div class="h5peditor-field-description">' + H5PEditor.t('core', 'addVideoDescription') + '</div>');
+
+    return '<div role="button" tabindex="1" class="h5p-add-file" title="' + H5PEditor.t('core', 'addFile') + '"></div>' +
+        '<div class="h5p-add-dialog">' +
+          '<div class="h5p-dialog-box">' +
+            '<button class="h5peditor-button-textual h5p-file-upload">' + H5PEditor.t('core', 'selectFiletoUpload') + '</button>' +
+          '</div>' +
+          '<div class="h5p-or"><span>' + H5PEditor.t('core', 'or') + '</span></div>' +
+          '<div class="h5p-dialog-box">' +
+            '<input type="text" placeholder="' + inputPlaceholder + '" class="h5p-file-url h5peditor-text"/>' +
+            description +
+          '</div>' +
+          '<div class="h5p-buttons">' +
+            '<button class="h5peditor-button-textual h5p-insert">' + H5PEditor.t('core', 'insert') + '</button>' +
+            '<button class="h5peditor-button-textual h5p-cancel">' + H5PEditor.t('core', 'cancel') + '</button>' +
+          '</div>' +
+        '</div>';
   };
 
   /**
@@ -304,7 +324,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    */
   C.providers = [{
     name: 'YouTube',
-    regexp: /^https?:\/\/(youtu.be|(www.)?youtube.com)\//i
+    regexp: /^https?:\/\/((youtu.|y2u.)?be|(www.|m.)?youtube.com)\//i
   }];
 
   return C;

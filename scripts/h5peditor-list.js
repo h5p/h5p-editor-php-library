@@ -115,14 +115,6 @@ H5PEditor.List = (function ($) {
         setParameters(i === undefined ? index : i, value);
       });
 
-      if (!passReadyCallbacks) {
-        // Run collected ready callbacks
-        for (var i = 0; i < readyCallbacks.length; i++) {
-          readyCallbacks[i]();
-        }
-        readyCallbacks = []; // Reset
-      }
-
       return child;
     };
 
@@ -166,6 +158,15 @@ H5PEditor.List = (function ($) {
 
       var child = addItem(id, paramsOverride);
       self.widget.addItem(child, id);
+
+      if (!passReadyCallbacks) {
+        // Run collected ready callbacks
+        for (var i = 0; i < readyCallbacks.length; i++) {
+          readyCallbacks[i]();
+        }
+        readyCallbacks = []; // Reset
+      }
+
       return true;
     };
 
@@ -283,19 +284,31 @@ H5PEditor.List = (function ($) {
 
       // Validate our self
       if (field.max !== undefined && field.max > 0 &&
-          parameters !== undefined && parameters.length > field.max) {
+          children !== undefined && children.length > field.max) {
         // Invalid, more parameters than max allowed.
         valid = false;
-        self.setError(H5PEditor.t('core', 'exceedsMax', {':property': '<em>' + self.label + '</em>', ':max': field.max}));
+        self.setError(H5PEditor.t('core', 'listExceedsMax', {':max': field.max}));
       }
       if (field.min !== undefined && field.min > 0 &&
-          (parameters === undefined || parameters.length < field.min)) {
+          (children === undefined || children.length < field.min)) {
         // Invalid, less parameters than min allowed.
         valid = false;
-        self.setError(H5PEditor.t('core', 'belowMin', {':property': '<em>' + self.label + '</em>', ':min': field.min}));
+        self.setError(H5PEditor.t('core', 'listBelowMin', {':min': field.min}));
       }
 
       return valid;
+    };
+
+    self.getImportance = function () {
+      if (field.importance !== undefined) {
+        return H5PEditor.createImportance(field.importance);
+      }
+      else if (field.field.importance !== undefined) {
+        return H5PEditor.createImportance(field.field.importance);
+      }
+      else {
+        return '';
+      }
     };
 
     /**

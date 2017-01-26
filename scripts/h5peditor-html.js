@@ -288,7 +288,7 @@ ns.Html.prototype.createToolbar = function () {
 ns.Html.prototype.appendTo = function ($wrapper) {
   var that = this;
 
-  this.$item = ns.$(ns.createItem(this.field.type, this.createHtml(), this.field.description)).appendTo($wrapper);
+  this.$item = ns.$(ns.createFieldMarkup(this.field, this.createHtml())).appendTo($wrapper);
 
   this.$input = this.$item.children('.ckeditor');
   this.$errors = this.$item.children('.h5p-errors');
@@ -417,12 +417,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
  * Create HTML for the HTML field.
  */
 ns.Html.prototype.createHtml = function () {
-  var html = '';
-  if (this.field.label !== undefined) {
-    html += '<label class="h5peditor-label' + (this.field.optional ? '' : ' h5peditor-required') + '">' + this.field.label + '</label>';
-  }
-
-  html += '<div class="ckeditor" tabindex="0" contenteditable="true">';
+  var html = '<div class="ckeditor" tabindex="0" contenteditable="true">';
 
   if (this.value !== undefined) {
     html += this.value;
@@ -441,8 +436,10 @@ ns.Html.prototype.createHtml = function () {
  */
 ns.Html.prototype.validate = function () {
   var that = this;
+
   if (that.$errors.children().length) {
     that.$errors.empty();
+    this.$input.addClass('error');
   }
 
   // Get contents from editor
@@ -458,7 +455,7 @@ ns.Html.prototype.validate = function () {
   if (!this.field.optional && !textValue.length) {
     // We can accept empty text, if there's an image instead.
     if (! (this.inTags("img") && $value.find('img').length > 0)) {
-      this.$errors.append(ns.createError(this.field.label + ' is required and must have some text or at least an image in it.'));
+      this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': ns.t('core', 'textField')})));
     }
   }
 
@@ -475,6 +472,8 @@ ns.Html.prototype.validate = function () {
   // Display errors and bail if set.
   if (that.$errors.children().length) {
     return false;
+  } else {
+    this.$input.removeClass('error');
   }
 
   this.value = value;

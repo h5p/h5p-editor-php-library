@@ -26,8 +26,8 @@ ns.Number.prototype.appendTo = function ($wrapper) {
   var that = this;
 
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
-  this.$errors = this.$item.children('.h5p-errors');
-  var $inputs = this.$item.children('label').children('input');
+  this.$errors = this.$item.find('.h5p-errors');
+  var $inputs = this.$item.find('input');
   if ($inputs.length === 1) {
     this.$input = $inputs;
   }
@@ -79,9 +79,7 @@ ns.Number.prototype.createHtml = function () {
   }
    */
 
-  var label = ns.createLabel(this.field, input);
-
-  return ns.createItem(this.field.type, label, this.field.description);
+  return ns.createFieldMarkup(this.field, input);
 };
 
 /**
@@ -93,6 +91,13 @@ ns.Number.prototype.validate = function () {
   var value = H5P.trim(this.$input.val());
   var decimals = this.field.decimals !== undefined && this.field.decimals;
 
+  if (this.$errors.html().length > 0) {
+    this.$input.addClass('error');
+  }
+
+  // Clear errors before showing new ones
+  this.$errors.html('');
+
   if (!value.length) {
     if (that.field.optional === true) {
       // Field is optional and does not have a value, nothing more to validate
@@ -100,13 +105,13 @@ ns.Number.prototype.validate = function () {
     }
 
     // Field must have a value
-    this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': 'number field'})));
+    this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': ns.t('core', 'numberField')})));
   }
   else if (decimals && !value.match(new RegExp('^-?[0-9]+(.|,)[0-9]{1,}$'))) {
-    this.$errors.append(ns.createError(ns.t('core', 'onlyNumbers', {':property': 'number field'})));
+    this.$errors.append(ns.createError(ns.t('core', 'onlyNumbers', {':property': that.field.label})));
   }
   else if (!decimals && !value.match(new RegExp('^-?[0-9]+$'))) {
-    this.$errors.append(ns.createError(ns.t('core', 'onlyNumbers', {':property': 'number field'})));
+    this.$errors.append(ns.createError(ns.t('core', 'onlyNumbers', {':property': that.field.label})));
   }
   else {
     if (decimals) {
@@ -117,13 +122,13 @@ ns.Number.prototype.validate = function () {
     }
 
     if (this.field.max !== undefined && value > this.field.max) {
-      this.$errors.append(ns.createError(ns.t('core', 'exceedsMax', {':property': 'number field', ':max': this.field.max})));
+      this.$errors.append(ns.createError(ns.t('core', 'exceedsMax', {':property': that.field.label, ':max': this.field.max})));
     }
     else if (this.field.min !== undefined && value < this.field.min) {
-      this.$errors.append(ns.createError(ns.t('core', 'belowMin', {':property': 'number field', ':min': this.field.min})));
+      this.$errors.append(ns.createError(ns.t('core', 'belowMin', {':property': that.field.label, ':min': this.field.min})));
     }
     else if (this.field.step !== undefined && value % this.field.step)  {
-      this.$errors.append(ns.createError(ns.t('core', 'outOfStep', {':property': 'number field', ':step': this.field.step})));
+      this.$errors.append(ns.createError(ns.t('core', 'outOfStep', {':property': that.field.label, ':step': this.field.step})));
     }
   }
 

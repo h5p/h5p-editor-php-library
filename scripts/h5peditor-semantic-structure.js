@@ -31,7 +31,8 @@ H5PEditor.SemanticStructure = (function ($) {
      * Global instance variables.
      * @private
      */
-    var $widgetSelect, $wrapper, $inner, $errors, $description, $helpText, widgets;
+    var $widgetSelect, $wrapper, $inner, $errors, $content,
+      $description, $helpText, widgets;
 
     /**
      * Initialize. Wrapped to avoid leaking variables
@@ -40,7 +41,7 @@ H5PEditor.SemanticStructure = (function ($) {
     var init = function () {
       // Create field wrapper
       $wrapper = $('<div/>', {
-        'class': 'field ' + field.type
+        'class': 'field ' + field.type + ' ' + H5PEditor.createImportance(field.importance)
       });
 
       /* We want to be in control of the label, description and errors
@@ -56,7 +57,6 @@ H5PEditor.SemanticStructure = (function ($) {
         $label = createLabel(self.label, field.optional).appendTo($wrapper);
       }
 
-      var innerClass;
       widgets = getValidWidgets();
       if (widgets.length > 1) {
         // Create widget select box
@@ -75,8 +75,12 @@ H5PEditor.SemanticStructure = (function ($) {
 
       // Create inner wrapper
       $inner = $('<div/>', {
-        'class': 'h5peditor-widget-wrapper',
+        'class': 'h5peditor-widget-wrapper' + (widgets.length > 1 ? ' content' : ' '),
         appendTo: $wrapper
+      });
+
+      $content = $('<div/>', {
+        'class': 'h5peditor-field-content'
       });
 
       // Create errors container
@@ -192,7 +196,13 @@ H5PEditor.SemanticStructure = (function ($) {
       if ($description !== undefined) {
         $description.appendTo($inner);
       }
-      $helpText.html(self.widget.helpText !== undefined ? self.widget.helpText : '').appendTo($inner);
+
+      if (self.widget.helpText !== undefined) {
+        $helpText.html(self.widget.helpText).appendTo($inner);
+      }
+      else {
+        $helpText.detach();
+      }
     };
 
     /**
@@ -268,6 +278,8 @@ H5PEditor.SemanticStructure = (function ($) {
       text: text
     });
   };
+
+
 
   /**
    * @constant

@@ -76,10 +76,9 @@ ns.Library.prototype.appendTo = function ($wrapper) {
     html = '<label class="h5peditor-label' + (this.field.optional ? '' : ' h5peditor-required') + '">' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
   }
 
+  html += ns.createDescription(this.field.description);
   html = '<div class="field ' + this.field.type + '">' + html + '<select>' + ns.createOption('-', 'Loading...') + '</select>';
-  if (this.field.description !== undefined) {
-    html += '<div class="h5peditor-field-description">' + this.field.description + '</div>';
-  }
+
   // TODO: Remove errors, it is deprecated
   html += '<div class="errors h5p-errors"></div><div class="libwrap"></div></div>';
 
@@ -162,7 +161,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     return;
   }
 
-  this.$libraryWrapper.html(ns.t('core', 'loading', {':type': 'semantics'})).attr('class', 'libwrap ' + libraryName.split(' ')[0].toLowerCase().replace('.', '-') + '-editor');
+  this.$libraryWrapper.html(ns.t('core', 'loading')).attr('class', 'libwrap ' + libraryName.split(' ')[0].toLowerCase().replace('.', '-') + '-editor');
 
   ns.loadLibrary(libraryName, function (semantics) {
     that.currentLibrary = libraryName;
@@ -222,10 +221,6 @@ ns.Library.prototype.change = function (callback) {
  * @returns {boolean}
  */
 ns.Library.prototype.validate = function () {
-  if (this.params.library === undefined) {
-    return (this.field.optional === true);
-  }
-
   var valid = true;
 
   if (this.children) {
@@ -235,8 +230,11 @@ ns.Library.prototype.validate = function () {
       }
     }
   }
+  else if (this.libraries && this.libraries.length) {
+    valid = false;
+  }
 
-  return valid;
+  return (this.field.optional ? true : valid);
 };
 
 /**
