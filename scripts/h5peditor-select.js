@@ -19,7 +19,7 @@ H5PEditor.widgets.select = H5PEditor.Select = (function (E) {
     this.changes = [];
     this.triggerListeners = function (value) {
       // Run callbacks
-      for (i = 0; i < this.changes.length; i++) {
+      for (var i = 0; i < this.changes.length; i++) {
         this.changes[i](value);
       }
     }
