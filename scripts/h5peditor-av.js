@@ -1,9 +1,5 @@
 var H5PEditor = H5PEditor || {};
 
-/*
- * TODO: save quality name
- */
-
 /**
  * Audio/Video module.
  * Makes it possible to add audio or video through file uploads and urls.
@@ -22,6 +18,11 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    */
   function C(parent, field, params, setValue) {
     var self = this;
+    console.log('parent');
+    console.log(parent);
+
+    console.log('params');
+    console.log(params);
 
     // Initialize inheritance
     H5PEditor.FileUploader.call(self, field);
@@ -63,18 +64,23 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           self.setValue(self.field, self.params);
         }
 
+        var index = (self.updateIndex !== undefined ? self.updateIndex : self.params.length);
+        // remember quality name that has been set already
+        if (self.params[index] !== undefined) {
+          if (self.params[index].metadata !== undefined) {
+              var qualityName = self.params[index].metadata.qualityName;
+          }
+        }
         // Add a new file/source
         var file = {
           path: result.data.path,
           mime: result.data.mime,
-          copyright: self.copyright
+          copyright: self.copyright,
+          metadata: {
+            qualityName: qualityName
+          }
         };
-        var index = (self.updateIndex !== undefined ? self.updateIndex : self.params.length);
 
-        // remember quality name that has been set already
-        if (self.params[index] !== undefined && self.params[index].qualityName !== undefined) {
-          file.qualityName = self.params[index].qualityName;
-        }
         self.params[index] = file;
         self.addFile(index);
 
@@ -188,7 +194,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           return; // Do not allow editing of file while uploading
         }
         that.$addDialog.addClass('h5p-open').find('.h5p-file-url').val(that.params[index].path);
-        that.$addDialog.find('.h5p-quality-name').val(that.params[index].qualityName);
+        if (that.params[index].metadata !== undefined && that.params[index].metadata.qualityName !== undefined) {
+          that.$addDialog.find('.h5p-quality-name').val(that.params[index].metadata.qualityName);
+        }
         that.updateIndex = index;
       })
       .children('.h5p-remove')
@@ -250,11 +258,12 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     var file = {
       path: url,
       mime: this.field.type + '/' + (mime ? mime : 'unknown'),
-      copyright: this.copyright
+      copyright: this.copyright,
+      metadata: {
+        qualityName: (qualityName !== "" ? qualityName : undefined)
+      }
     };
-    if (qualityName !== undefined && qualityName !== "") {
-      file.qualityName = qualityName;
-    }
+
     var index = (this.updateIndex !== undefined ? this.updateIndex : this.params.length);
     this.params[index] = file;
     this.addFile(index);
