@@ -303,7 +303,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     // allow to set quality name for content type 'interactive video'
     var qualityNameInput = '';
-    if (caller === '/interactiveVideo/video') {
+    if (caller !== undefined && caller === '/interactiveVideo/video') {
       var inputPlaceholderQualityName = H5PEditor.t('core', 'enterQualityName');
       var descriptionQualityName = '<div class="h5p-errors"></div><div class="h5peditor-field-description">' + H5PEditor.t('core', 'addQualityNameDescription') + '</div>';
       qualityNameInput = '<div class="h5p-or"><span>' + H5PEditor.t('core', 'and') + '</span></div>' +
