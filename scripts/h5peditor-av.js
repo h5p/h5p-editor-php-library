@@ -99,7 +99,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     var self = this;
 
     var imageHtml =
-      '<div class="file">' + C.createAdd(self.field.type) + '</div>' +
+      '<div class="file">' + C.createAdd(self.field.type, self.parent.library) + '</div>' +
       '<a class="h5p-copyright-button" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>' +
       '<div class="h5p-editor-dialog">' +
         '<a href="#" class="h5p-close" title="' + H5PEditor.t('core', 'close') + '"></a>' +
@@ -297,9 +297,21 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * @param {string} type 'video' or 'audio'
    * @returns {string} HTML
    */
-  C.createAdd = function (type) {
+  C.createAdd = function (type, caller) {
     var inputPlaceholder = H5PEditor.t('core', type === 'audio' ? 'enterAudioUrl' : 'enterVideoUrl');
     var description = (type === 'audio' ? '' : '<div class="h5p-errors"></div><div class="h5peditor-field-description">' + H5PEditor.t('core', 'addVideoDescription') + '</div>');
+
+    // allow to set quality name for content type 'interactive video'
+    var qualityNameInput = '';
+    if (caller === '/interactiveVideo/video') {
+      var inputPlaceholderQualityName = H5PEditor.t('core', 'enterQualityName');
+      var descriptionQualityName = '<div class="h5p-errors"></div><div class="h5peditor-field-description">' + H5PEditor.t('core', 'addQualityNameDescription') + '</div>';
+      qualityNameInput = '<div class="h5p-or"><span>' + H5PEditor.t('core', 'and') + '</span></div>' +
+        '<div class="h5p-dialog-box">' +
+          '<input type="text" placeholder="' + inputPlaceholderQualityName + '" class="h5p-quality-name h5peditor-text"/>' +
+          descriptionQualityName +
+        '</div>';
+    }
 
     return '<div role="button" tabindex="1" class="h5p-add-file" title="' + H5PEditor.t('core', 'addFile') + '"></div>' +
         '<div class="h5p-add-dialog">' +
@@ -311,6 +323,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
             '<input type="text" placeholder="' + inputPlaceholder + '" class="h5p-file-url h5peditor-text"/>' +
             description +
           '</div>' +
+          qualityNameInput +
           '<div class="h5p-buttons">' +
             '<button class="h5peditor-button-textual h5p-insert">' + H5PEditor.t('core', 'insert') + '</button>' +
             '<button class="h5peditor-button-textual h5p-cancel">' + H5PEditor.t('core', 'cancel') + '</button>' +
