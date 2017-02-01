@@ -1,5 +1,9 @@
 var H5PEditor = H5PEditor || {};
 
+/*
+ * TODO: save quality name
+ */
+
 /**
  * Audio/Video module.
  * Makes it possible to add audio or video through file uploads and urls.
@@ -66,6 +70,11 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           copyright: self.copyright
         };
         var index = (self.updateIndex !== undefined ? self.updateIndex : self.params.length);
+
+        // remember quality name that has been set already
+        if (self.params[index] !== undefined && self.params[index].qualityName !== undefined) {
+          file.qualityName = self.params[index].qualityName;
+        }
         self.params[index] = file;
         self.addFile(index);
 
@@ -114,18 +123,24 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     });
     this.$addDialog = this.$add.next();
     var $url = this.$addDialog.find('.h5p-file-url');
+
+    // TODO: Check for content type === interactiveVideo
+    var $qualityName = this.$addDialog.find('.h5p-quality-name');
+
     this.$addDialog.find('.h5p-cancel').click(function () {
       self.updateIndex = undefined;
       $url.val('');
+      $qualityName.val('');
       self.$addDialog.removeClass('h5p-open');
     });
     this.$addDialog.find('.h5p-file-upload').click(function () {
       self.openFileSelector();
     });
     this.$addDialog.find('.h5p-insert').click(function () {
-      self.useUrl($url.val().trim());
+      self.useUrl($url.val().trim(), $qualityName.val().trim());
       self.$addDialog.removeClass('h5p-open');
       $url.val('');
+      $qualityName.val('');
     });
 
     this.$errors = $container.children('.h5p-errors');
@@ -173,6 +188,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           return; // Do not allow editing of file while uploading
         }
         that.$addDialog.addClass('h5p-open').find('.h5p-file-url').val(that.params[index].path);
+        that.$addDialog.find('.h5p-quality-name').val(that.params[index].qualityName);
         that.updateIndex = index;
       })
       .children('.h5p-remove')
@@ -180,7 +196,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           if (that.$add.is(':visible')) {
             confirmRemovalDialog.show($file.offset().top);
           }
-
           return false;
         })
         .end();
@@ -210,7 +225,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     });
   };
 
-  C.prototype.useUrl = function (url) {
+  C.prototype.useUrl = function (url, qualityName) {
     if (this.params === undefined) {
       this.params = [];
       this.setValue(this.field, this.params);
@@ -231,11 +246,15 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       }
     }
 
+    // Add a new file/source
     var file = {
       path: url,
       mime: this.field.type + '/' + (mime ? mime : 'unknown'),
       copyright: this.copyright
     };
+    if (qualityName !== undefined && qualityName !== "") {
+      file.qualityName = qualityName;
+    }
     var index = (this.updateIndex !== undefined ? this.updateIndex : this.params.length);
     this.params[index] = file;
     this.addFile(index);
