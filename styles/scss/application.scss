@@ -57,10 +57,18 @@ a {
     outline: none;
     font-size: 16px;
     word-wrap: break-word;
+
+    &.error {
+      border-color: red;
+    }
   }
   .h5peditor-text, textarea {
     width: 100%;
     box-sizing: border-box;
+
+    &.error {
+      border-color: red;
+    }
   }
   /* Placeholders - need to be on separate lines. If not,
      the browsers will invalidate them */
