@@ -59,5 +59,8 @@ H5PEditor.language.core = {
   numberField: 'Nummerfelt',
   orderItemUp: 'Flytt element opp',
   orderItemDown: 'Flytt element ned',
-  removeItem: 'Fjern element'
+  removeItem: 'Fjern element',
+  and: 'and',
+  enterQualityName: 'Enter optional quality name',
+  addQualityNameDescription: 'If you have the same video in different qualities, give each one a name, for instance "4K", "HD", "Mobile".'
 };
