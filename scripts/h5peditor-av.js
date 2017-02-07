@@ -18,11 +18,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    */
   function C(parent, field, params, setValue) {
     var self = this;
-    console.log('parent');
-    console.log(parent);
-
-    console.log('params');
-    console.log(params);
 
     // Initialize inheritance
     H5PEditor.FileUploader.call(self, field);
