@@ -125,8 +125,11 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     this.$addDialog = this.$add.next();
     var $url = this.$addDialog.find('.h5p-file-url');
 
-    // TODO: Check for content type === interactiveVideo
-    var $qualityName = this.$addDialog.find('.h5p-quality-name');
+    // get quality Name if already set, but for 'interactiveVideo' only
+    var $qualityName;
+    if (parent !== undefined && parent === '/interactiveVideo/video') {
+      $qualityName = this.$addDialog.find('.h5p-quality-name');
+    }
 
     this.$addDialog.find('.h5p-cancel').click(function () {
       self.updateIndex = undefined;
@@ -320,13 +323,13 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * @param {string} type 'video' or 'audio'
    * @returns {string} HTML
    */
-  C.createAdd = function (type, caller) {
+  C.createAdd = function (type, parent) {
     var inputPlaceholder = H5PEditor.t('core', type === 'audio' ? 'enterAudioUrl' : 'enterVideoUrl');
     var description = (type === 'audio' ? '' : '<div class="h5p-errors"></div><div class="h5peditor-field-description">' + H5PEditor.t('core', 'addVideoDescription') + '</div>');
 
-    // allow to set quality name for content type 'interactive video'
+    // allow to set quality name for content type 'interactive video' only
     var qualityNameInput = '';
-    if (caller !== undefined && caller === '/interactiveVideo/video') {
+    if (parent !== undefined && parent === '/interactiveVideo/video') {
       var inputPlaceholderQualityName = H5PEditor.t('core', 'enterQualityName');
       var descriptionQualityName = '<div class="h5p-errors"></div><div class="h5peditor-field-description">' + H5PEditor.t('core', 'addQualityNameDescription') + '</div>';
       qualityNameInput = '<div class="h5p-or"><span>' + H5PEditor.t('core', 'and') + '</span></div>' +
