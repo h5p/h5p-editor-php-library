@@ -269,7 +269,6 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
 
       if (files !== undefined) {
         $file.prop('files', files);
-        //upload();
       } else if (data !== undefined) {
         // Upload given data
         $data.val(data);
