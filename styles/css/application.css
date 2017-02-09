@@ -1548,8 +1548,8 @@ a {
 .h5peditor-field-important-description .important-description-close:before {
   font-family: "H5P";
   content: "\e894";
-  vertical-align: middle;
-  font-size: 1.9em;
+  vertical-align: top;
+  font-size: 1.6em;
 }
 /* line 807, ../scss/application.scss */
 .h5peditor-field-important-description .h5p-info-icon {
@@ -1559,29 +1559,30 @@ a {
 .h5peditor-field-important-description .h5p-info-icon:before {
   font-family: "H5P";
   content: "\e909";
-  font-size: 3em;
+  font-size: 2.3em;
+  line-height: 0.94em;
   margin-left: -0.3em;
   vertical-align: middle;
 }
-/* line 819, ../scss/application.scss */
+/* line 820, ../scss/application.scss */
 .h5peditor-field-important-description .important-description-title {
   font-weight: bold;
   font-size: 1.2em;
-  vertical-align: middle;
+  vertical-align: bottom;
 }
-/* line 825, ../scss/application.scss */
+/* line 826, ../scss/application.scss */
 .h5peditor-field-important-description .important-description-list {
   list-style: none;
   padding: 0;
   line-height: 2em;
   margin-top: 20px;
 }
-/* line 831, ../scss/application.scss */
+/* line 832, ../scss/application.scss */
 .h5peditor-field-important-description .important-description-list .important-description-list-item {
   line-height: 1.8em;
   margin-left: 20px;
 }
-/* line 835, ../scss/application.scss */
+/* line 836, ../scss/application.scss */
 .h5peditor-field-important-description .important-description-list .important-description-list-item:before {
   content: "• ";
   color: #adacac;
@@ -1590,26 +1591,26 @@ a {
   margin-left: -19px;
   margin-right: 5px;
 }
-/* line 846, ../scss/application.scss */
+/* line 847, ../scss/application.scss */
 .h5peditor-field-important-description .important-description-example {
   border: 1px solid #bbde98;
   background-color: #d9fac3;
   display: flex;
   margin-top: 20px;
 }
-/* line 852, ../scss/application.scss */
+/* line 853, ../scss/application.scss */
 .h5peditor-field-important-description .important-description-example .important-description-example-title {
   padding: 15px;
   font-weight: bold;
 }
-/* line 857, ../scss/application.scss */
+/* line 858, ../scss/application.scss */
 .h5peditor-field-important-description .important-description-example .important-description-example-text {
   padding: 15px;
   width: 100%;
   background-color: #f6fef1;
 }
 
-/* line 865, ../scss/application.scss */
+/* line 866, ../scss/application.scss */
 .h5peditor-form {
   position: relative;
   padding: 20px;
@@ -1617,7 +1618,7 @@ a {
   border: 1px solid #d0d0d1;
 }
 
-/* line 872, ../scss/application.scss */
+/* line 873, ../scss/application.scss */
 .h5peditor-label {
   display: block;
   margin-bottom: 6px;
@@ -1626,7 +1627,7 @@ a {
   color: #454347;
 }
 
-/* line 880, ../scss/application.scss */
+/* line 881, ../scss/application.scss */
 #h5peditor-uploader {
   position: absolute;
   width: 1px;
@@ -1636,12 +1637,12 @@ a {
   overflow: hidden;
 }
 
-/* line 889, ../scss/application.scss */
+/* line 890, ../scss/application.scss */
 .h5p-tutorial-url {
   font-size: 0.875em;
 }
 
-/* line 893, ../scss/application.scss */
+/* line 894, ../scss/application.scss */
 .h5p-tutorial-url:before {
   font-family: "H5P";
   content: "\e889";
@@ -1651,7 +1652,7 @@ a {
   left: .2em;
 }
 
-/* line 902, ../scss/application.scss */
+/* line 903, ../scss/application.scss */
 .h5peditor-widget-select {
   overflow: hidden;
   margin: 0 0 -1px;
@@ -1659,7 +1660,7 @@ a {
   list-style: none;
 }
 
-/* line 908, ../scss/application.scss */
+/* line 909, ../scss/application.scss */
 .h5peditor-widget-option {
   float: right;
   border: 1px solid #ccc;
@@ -1674,42 +1675,42 @@ a {
   outline: none;
 }
 
-/* line 921, ../scss/application.scss */
+/* line 922, ../scss/application.scss */
 .h5peditor-widget-option:hover {
   color: #000;
 }
 
-/* line 924, ../scss/application.scss */
+/* line 925, ../scss/application.scss */
 .h5peditor-widget-option:active {
   color: #8e636a;
   /* Pink chocolate */
 }
 
-/* line 927, ../scss/application.scss */
+/* line 928, ../scss/application.scss */
 .h5peditor-widget-active {
   background: #fff;
   line-height: 1.357142857em;
 }
 
-/* line 931, ../scss/application.scss */
+/* line 932, ../scss/application.scss */
 .h5peditor-widgets > .h5peditor-widget-wrapper {
   border: 1px solid #ccc;
   margin: 0 0 0.25em;
   padding: 0.5em;
 }
 
-/* line 936, ../scss/application.scss */
+/* line 937, ../scss/application.scss */
 .h5peditor-widgets > .h5peditor-label {
   float: left;
   margin-top: 5px;
 }
 
-/* line 940, ../scss/application.scss */
+/* line 941, ../scss/application.scss */
 .h5p-editor-iframe {
   margin-bottom: 1em;
 }
 
-/* line 943, ../scss/application.scss */
+/* line 944, ../scss/application.scss */
 .h5peditor-required:after {
   content: "*";
   color: #da0001;
@@ -1717,26 +1718,26 @@ a {
 }
 
 /* Help CKEditor blend into the H5PEditor */
-/* line 950, ../scss/application.scss */
+/* line 951, ../scss/application.scss */
 .h5peditor .cke_bottom,
 .h5peditor .cke_top {
   background: #d0d0d1;
 }
 
-/* line 954, ../scss/application.scss */
+/* line 955, ../scss/application.scss */
 .h5peditor .cke_chrome {
   border: 1px solid #f5f5f5;
   background: #d0d0d1;
 }
 
-/* line 958, ../scss/application.scss */
+/* line 959, ../scss/application.scss */
 .h5peditor .cke_contents,
 .h5peditor .cke_toolgroup,
 .h5peditor .cke_combo_button {
   border: 1px solid #f5f5f5;
 }
 
-/* line 964, ../scss/application.scss */
+/* line 965, ../scss/application.scss */
 .icon-important-desc {
   font-family: "H5P";
   font-size: 2em;
@@ -1746,17 +1747,22 @@ a {
   line-height: 1.25em;
   cursor: pointer;
 }
-/* line 973, ../scss/application.scss */
+/* line 974, ../scss/application.scss */
 .icon-important-desc .path1:before {
   content: "\e908";
   color: #f3d55a;
   vertical-align: middle;
   font-size: 1.6em;
 }
-/* line 979, ../scss/application.scss */
+/* line 980, ../scss/application.scss */
+.icon-important-desc .path2 {
+  position: relative;
+  top: -1px;
+}
+/* line 984, ../scss/application.scss */
 .icon-important-desc .path2:before {
   content: "\e909";
-  margin-left: -1.37em;
-  font-size: 0.9em;
+  margin-left: -1.44em;
+  font-size: 0.85em;
   vertical-align: middle;
 }

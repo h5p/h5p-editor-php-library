@@ -799,8 +799,8 @@ a {
     &:before {
       font-family: $icon-font-family;
       content: "\e894";
-      vertical-align: middle;
-      font-size: 1.9em;
+      vertical-align: top;
+      font-size: 1.6em;
     }
   }
 
@@ -810,7 +810,8 @@ a {
     &:before {
       font-family: $icon-font-family;
       content: "\e909";
-      font-size: 3em;
+      font-size: 2.3em;
+      line-height: 0.94em;
       margin-left: -0.3em;
       vertical-align: middle;
     }
@@ -819,7 +820,7 @@ a {
   .important-description-title {
     font-weight: bold;
     font-size: 1.2em;
-    vertical-align: middle;
+    vertical-align: bottom;
   }
 
   .important-description-list {
@@ -976,10 +977,15 @@ a {
     vertical-align: middle;
     font-size: 1.6em;
   }
-  .path2:before {
-    content: "\e909";
-    margin-left: -1.37em;
-    font-size: 0.9em;
-    vertical-align: middle;
+  .path2 {
+    position: relative;
+    top: -1px;
+
+    &:before {
+      content: "\e909";
+      margin-left: -1.44em;
+      font-size: 0.85em;
+      vertical-align: middle;
+    }
   }
 }
