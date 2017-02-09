@@ -65,11 +65,9 @@ ns.Textarea.prototype.createHtml = function () {
   }
   input += '</textarea>';
 
-  var label = ns.createLabel(this.field);
-  var description = ns.createDescription(this.field.description);
   var importantDescription = ns.createImportantDescription(this.field.importantDescription, ns.$('.h5peditor').attr('class').replace(/(\s|-)/g, '_'));
 
-  return ns.createFieldMarkup(this.field, label + description + importantDescription + input + importantDescriptionIcon);
+  return ns.createFieldMarkup(this.field, importantDescription + input + importantDescriptionIcon);
 };
 
 /**

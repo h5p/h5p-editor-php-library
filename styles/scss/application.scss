@@ -778,13 +778,13 @@ a {
     display: block;
     position: absolute;
     bottom: -8px;
-    right:26px;
+    right: 20px;
     width: 14px;
     height: 14px; 
     background: #f9f9d8;
-    border-right:1px solid #ffde78;
-    border-bottom:1px solid #ffde78;
-    -webkit-transform:rotate(45deg);
+    border-right: 1px solid #ffde78;
+    border-bottom: 1px solid #ffde78;
+    -webkit-transform: rotate(45deg);
   }
 
   .important-description-close {
@@ -972,10 +972,14 @@ a {
 
   .path1:before {
     content: "\e908";
-    color: rgb(243, 213, 90);
+    color: #f3d55a;
+    vertical-align: middle;
+    font-size: 1.6em;
   }
   .path2:before {
     content: "\e909";
-    margin-left: -1em;
+    margin-left: -1.37em;
+    font-size: 0.9em;
+    vertical-align: middle;
   }
 }

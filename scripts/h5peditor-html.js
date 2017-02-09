@@ -420,11 +420,6 @@ ns.Html.prototype.createHtml = function () {
   var html = '';
   var extraClasses = '';
 
-  if (this.field.label !== undefined) {
-    html += '<label class="h5peditor-label' + (this.field.optional ? '' : ' h5peditor-required') + '">' + this.field.label + '</label>';
-  }
-
-  html += ns.createDescription(this.field.description);
   html += ns.createImportantDescription(this.field.importantDescription, ns.$('.h5peditor').attr('class').replace(/(\s|-)/g, '_'));
 
   if (this.field.importantDescription !== undefined) {
