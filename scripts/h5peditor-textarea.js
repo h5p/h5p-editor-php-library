@@ -55,10 +55,7 @@ ns.Textarea.prototype.createHtml = function () {
   }
   input += '</textarea>';
 
-  var label = ns.createLabel(this.field);
-  var description = ns.createDescription(this.field.description);
-
-  return ns.createItem(this.field.type, label + description + input);
+  return ns.createFieldMarkup(this.field, input);
 };
 
 /**
@@ -66,6 +63,13 @@ ns.Textarea.prototype.createHtml = function () {
  */
 ns.Textarea.prototype.validate = function () {
   var value = H5P.trim(this.$input.val());
+
+  if (this.$errors.html().length > 0) {
+    this.$input.addClass('error');
+  }
+
+  // Clear errors before showing new ones
+  this.$errors.html('');
 
   if ((this.field.optional === undefined || !this.field.optional) && !value.length) {
     this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': ns.t('core', 'textField')})));

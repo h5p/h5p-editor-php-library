@@ -75,7 +75,7 @@ H5PEditor.SemanticStructure = (function ($) {
 
       // Create inner wrapper
       $inner = $('<div/>', {
-        'class': 'h5peditor-widget-wrapper',
+        'class': 'h5peditor-widget-wrapper' + (widgets.length > 1 ? ' content' : ' '),
         appendTo: $wrapper
       });
 
@@ -196,7 +196,13 @@ H5PEditor.SemanticStructure = (function ($) {
       if ($description !== undefined) {
         $description.appendTo($inner);
       }
-      $helpText.html(self.widget.helpText !== undefined ? self.widget.helpText : '').appendTo($inner);
+
+      if (self.widget.helpText !== undefined) {
+        $helpText.html(self.widget.helpText).appendTo($inner);
+      }
+      else {
+        $helpText.detach();
+      }
     };
 
     /**
