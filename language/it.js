@@ -8,7 +8,9 @@ H5PEditor.language.core = {
   requiredProperty: ":property è richiesta e deve avere un valore.",
   onlyNumbers: "Il valore di :property può contenere solo numeri.",
   exceedsMax: "Il valore di :property eccede il massimo di :max.",
+  listExceedsMax: 'The list exceeds the maximum of :max items.',
   belowMin: "Il valore di :property eccede il minimo di :min.",
+  listBelowMin: 'The list needs at least :min items for the content to function properly.',
   outOfStep: "Il valore di :property può essere modificato solo negli step di :step.",
   add: 'Add',
   addFile: "Aggiungi file",
@@ -37,6 +39,7 @@ H5PEditor.language.core = {
   listLabel: "Lista",
   uploadError: 'File Upload Error',
   fileToLarge: 'The file you are trying to upload might be too large.',
+  unknownFileUploadError: 'Unknown file upload error',
   noSemantics: 'Error, could not load the content type form.',
   editImage: 'Edit image',
   saveLabel: 'Save',
@@ -53,5 +56,8 @@ H5PEditor.language.core = {
   height: 'height',
   width: 'width',
   textField: 'text field',
-  numberField: 'number field'
+  numberField: 'number field',
+  orderItemUp: 'Order item up',
+  orderItemDown: 'Order item down',
+  removeItem: 'Remove item'
 };

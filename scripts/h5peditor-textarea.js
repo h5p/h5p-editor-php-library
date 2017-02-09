@@ -51,11 +51,11 @@ ns.Textarea.prototype.createHtml = function () {
   if (this.field.importantDescription !== undefined) {
     extraClasses = ' hasImportantDescription';
     importantDescriptionIcon += '<span class="icon-important-desc" onclick="ns.$(this).parent().find(\'.h5peditor-field-important-description\').toggleClass(\'show\');">';
-    importantDescriptionIcon += '<span class="path1"></span><span class="path2"></span><span class="path3"></span>';
+    importantDescriptionIcon += '<span class="path1"></span><span class="path2"></span>';
     importantDescriptionIcon += '</span>';
   }
 
-  var input = '<textarea class="' + extraClasses + '" cols="25" rows="4"';
+  var input = '<textarea class="' + extraClasses + '" cols="30" rows="4"';
   if (this.field.placeholder !== undefined) {
     input += ' placeholder="' + this.field.placeholder + '"';
   }
@@ -69,7 +69,7 @@ ns.Textarea.prototype.createHtml = function () {
   var description = ns.createDescription(this.field.description);
   var importantDescription = ns.createImportantDescription(this.field.importantDescription, ns.$('.h5peditor').attr('class').replace(/(\s|-)/g, '_'));
 
-  return ns.createItem(this.field.type, label + description + importantDescription + input + importantDescriptionIcon);
+  return ns.createFieldMarkup(this.field, label + description + importantDescription + input + importantDescriptionIcon);
 };
 
 /**
@@ -77,6 +77,13 @@ ns.Textarea.prototype.createHtml = function () {
  */
 ns.Textarea.prototype.validate = function () {
   var value = H5P.trim(this.$input.val());
+
+  if (this.$errors.html().length > 0) {
+    this.$input.addClass('error');
+  }
+
+  // Clear errors before showing new ones
+  this.$errors.html('');
 
   if ((this.field.optional === undefined || !this.field.optional) && !value.length) {
     this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': ns.t('core', 'textField')})));
