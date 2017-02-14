@@ -352,9 +352,11 @@
 .listgroup > .group.field {
   margin: 0;
   padding: 0;
+  min-width: 0;
+  display: table-column;
 }
 
-/* line 319, ../scss/_form-groups.scss */
+/* line 321, ../scss/_form-groups.scss */
 .content {
   display: block;
   margin: 0;
@@ -364,36 +366,36 @@
   background: #FFFFFF;
 }
 
-/* line 328, ../scss/_form-groups.scss */
+/* line 330, ../scss/_form-groups.scss */
 .common {
   margin-top: 20px;
 }
-/* line 331, ../scss/_form-groups.scss */
+/* line 333, ../scss/_form-groups.scss */
 .common > .h5peditor-label {
   margin: 0;
   padding: 0 10px;
   cursor: pointer;
   font-size: 1em;
 }
-/* line 340, ../scss/_form-groups.scss */
+/* line 342, ../scss/_form-groups.scss */
 .common > .h5peditor-label > .icon:before {
   content: "\e565";
   font-family: "H5P";
   margin-right: 5px;
 }
-/* line 345, ../scss/_form-groups.scss */
+/* line 347, ../scss/_form-groups.scss */
 .common > .h5peditor-label:hover > .icon {
   opacity: 1;
 }
-/* line 349, ../scss/_form-groups.scss */
+/* line 351, ../scss/_form-groups.scss */
 .common > .h5peditor-label:focus {
   outline: none;
 }
-/* line 353, ../scss/_form-groups.scss */
+/* line 355, ../scss/_form-groups.scss */
 .common > .h5peditor-label:focus > .icon:before {
   outline: 1px dashed;
 }
-/* line 357, ../scss/_form-groups.scss */
+/* line 359, ../scss/_form-groups.scss */
 .common > .fields {
   min-height: 2em;
   padding: 20px;
@@ -401,30 +403,30 @@
   border-top: none;
   background: #FFFFFF;
 }
-/* line 364, ../scss/_form-groups.scss */
+/* line 366, ../scss/_form-groups.scss */
 .common > .fields > .desc {
   margin: 0;
   font-size: 0.875em;
   color: #666;
 }
-/* line 370, ../scss/_form-groups.scss */
+/* line 372, ../scss/_form-groups.scss */
 .common > .fields p:first-child {
   margin-bottom: 20px;
 }
-/* line 376, ../scss/_form-groups.scss */
+/* line 378, ../scss/_form-groups.scss */
 .common.collapsed > .h5peditor-label > .icon:before {
   content: "\e566";
 }
-/* line 379, ../scss/_form-groups.scss */
+/* line 381, ../scss/_form-groups.scss */
 .common.collapsed > .fields {
   display: none;
 }
-/* line 384, ../scss/_form-groups.scss */
+/* line 386, ../scss/_form-groups.scss */
 .common.hidden {
   display: none;
 }
 
-/* line 391, ../scss/_form-groups.scss */
+/* line 393, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label]:before {
   content: attr(aria-label);
   visibility: hidden;
@@ -440,11 +442,11 @@
   line-height: 1.5;
   box-shadow: 0 0 0.5em #858585;
 }
-/* line 409, ../scss/_form-groups.scss */
+/* line 411, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label]:hover:before {
   visibility: visible;
 }
-/* line 413, ../scss/_form-groups.scss */
+/* line 415, ../scss/_form-groups.scss */
 .h5peditor-button[aria-label][aria-disabled="true"]:before {
   display: none;
 }
