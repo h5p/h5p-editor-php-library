@@ -239,13 +239,13 @@ a {
           position: relative;
 
           &:before {
-            font-family: 'H5PFontAwesome4';
-            content: "\f144";
+            font-family: 'h5pFontIcons';
+            content: "\e907";
             position: absolute;
-            font-size: 2.3em;
-            line-height: 1.1em;
             color: #dd0505;
-            left: 15px;
+            left: 0;
+            top: 0.075em;
+            font-size: 3.8em;
           }
 
           input {
@@ -276,11 +276,10 @@ a {
             right: 3px;
 
             &:after {
-              font-family: 'H5PFontAwesome4';
-              content: "\f1c8";
-              top: 25%;
-              position: relative;
-              font-size: 2.3em;
+              font-family: "h5pFontIcons";
+              content: "\e909";
+              line-height: 1.4em;
+              font-size: 3.5em;
               color: #bbb;
             }
           }
