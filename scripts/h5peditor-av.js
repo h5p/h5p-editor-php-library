@@ -122,14 +122,10 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     this.$add = $file.children('.h5p-add-file').click(function () {
       self.$addDialog.addClass('h5p-open');
     });
+
     this.$addDialog = this.$add.next();
     var $url = this.$addDialog.find('.h5p-file-url');
-
-    // get quality Name if already set, but for 'interactiveVideo' only
-    var $qualityName;
-    if (parent !== undefined && parent === '/interactiveVideo/video') {
-      $qualityName = this.$addDialog.find('.h5p-quality-name');
-    }
+    var $qualityName = this.$addDialog.find('.h5p-quality-name');
 
     this.$addDialog.find('.h5p-cancel').click(function () {
       self.updateIndex = undefined;
@@ -137,9 +133,27 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       $qualityName.val('');
       self.$addDialog.removeClass('h5p-open');
     });
-    this.$addDialog.find('.h5p-file-upload').click(function () {
-      self.openFileSelector();
-    });
+
+    this.$addDialog.find('.h5p-file-drop-upload')
+      .addClass('has-advanced-upload')
+      .on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      })
+      .on('dragover dragenter', function(e) {
+        $(this).addClass('over');
+        e.originalEvent.dataTransfer.dropEffect = 'copy';
+      })
+      .on('dragleave', function(e) {
+        $(this).removeClass('over');
+      })
+      .on('drop', function(e) {
+        self.uploadFiles(e.originalEvent.dataTransfer.files);
+      })
+      .click(function () {
+        self.openFileSelector();
+      });
+
     this.$addDialog.find('.h5p-insert').click(function () {
       self.useUrl($url.val().trim(), $qualityName.val().trim());
       self.$addDialog.removeClass('h5p-open');
@@ -325,11 +339,13 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    */
   C.createAdd = function (type, parent) {
     var inputPlaceholder = H5PEditor.t('core', type === 'audio' ? 'enterAudioUrl' : 'enterVideoUrl');
+    var inputTitle = H5PEditor.t('core', type === 'audio' ? 'enterAudioTitle' : 'enterVideoTitle');
+    var uploadTitle = H5PEditor.t('core', type === 'audio' ? 'uploadAudioTitle' : 'uploadVideoTitle')
     var description = (type === 'audio' ? '' : '<div class="h5p-errors"></div><div class="h5peditor-field-description">' + H5PEditor.t('core', 'addVideoDescription') + '</div>');
 
     // allow to set quality name for content type 'interactive video' only
     var qualityNameInput = '';
-    if (parent !== undefined && parent === '/interactiveVideo/video') {
+    if ((parent !== undefined) && (parent === '/interactiveVideo/video')) {
       var inputPlaceholderQualityName = H5PEditor.t('core', 'enterQualityName');
       var descriptionQualityName = '<div class="h5p-errors"></div><div class="h5peditor-field-description">' + H5PEditor.t('core', 'addQualityNameDescription') + '</div>';
       qualityNameInput = '<div class="h5p-or"><span>' + H5PEditor.t('core', 'and') + '</span></div>' +
@@ -340,13 +356,25 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     }
 
     return '<div role="button" tabindex="1" class="h5p-add-file" title="' + H5PEditor.t('core', 'addFile') + '"></div>' +
-        '<div class="h5p-add-dialog">' +
+      '<div class="h5p-add-dialog">' +
+        '<div class="h5p-add-dialog-table">' +
           '<div class="h5p-dialog-box">' +
-            '<button class="h5peditor-button-textual h5p-file-upload">' + H5PEditor.t('core', 'selectFiletoUpload') + '</button>' +
+            '<h3>' + uploadTitle + '</h3>' +
+            '<div class="h5p-file-drop-upload">' +
+              '<div class="h5p-file-drop-upload-inner"/>' +
+            '</div>' +
           '</div>' +
-          '<div class="h5p-or"><span>' + H5PEditor.t('core', 'or') + '</span></div>' +
+          '<div class="h5p-or-vertical">' +
+            '<div class="h5p-or-vertical-line"></div>' +
+            '<div class="h5p-or-vertical-word-wrapper">' +
+              '<div class="h5p-or-vertical-word">' + H5PEditor.t('core', 'or') + '</div>' +
+            '</div>' +
+          '</div>' +
           '<div class="h5p-dialog-box">' +
-            '<input type="text" placeholder="' + inputPlaceholder + '" class="h5p-file-url h5peditor-text"/>' +
+            '<h3>' + inputTitle + '</h3>' +
+            '<div class="h5p-file-url-wrapper">' +
+              '<input type="text" placeholder="' + inputPlaceholder + '" class="h5p-file-url h5peditor-text"/>' +
+            '</div>' +
             description +
           '</div>' +
           qualityNameInput +
