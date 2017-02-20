@@ -62,6 +62,7 @@ H5PEditor.language.core = {
   orderItemDown: 'Order item down',
   removeItem: 'Remove item',
   and: 'and',
+  titleQualityName: 'Enter quality name',
   enterQualityName: 'Enter optional quality name',
   addQualityNameDescription: 'If you have the same video in different qualities, give each one a name, for instance "4K", "HD", "Mobile".'
 };
