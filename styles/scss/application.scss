@@ -823,23 +823,25 @@ a {
     vertical-align: bottom;
   }
 
-  .important-description-list {
-    list-style: none;
-    padding: 0;
-    line-height: 2em;
-    margin-top: 20px;
+  .important-description-content {
+    ul {
+      list-style: none;
+      padding: 0;
+      line-height: 2em;
+      margin-top: 20px;
 
-    .important-description-list-item {
-      line-height: 1.8em;
-      margin-left: 20px;
+      li {
+        line-height: 1.8em;
+        margin-left: 20px;
 
-      &:before {
-        content: "• ";
-        color: #adacac;
-        font-size: 1.5em;
-        vertical-align: middle;
-        margin-left: -19px;
-        margin-right: 5px;
+        &:before {
+          content: "• ";
+          color: #adacac;
+          font-size: 1.5em;
+          vertical-align: middle;
+          margin-left: -19px;
+          margin-right: 5px;
+        }
       }
     }
   }

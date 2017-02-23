@@ -420,9 +420,9 @@ ns.Html.prototype.createHtml = function () {
   var html = '';
   var extraClasses = '';
 
-  html += ns.createImportantDescription(this.field.importantDescription, ns.$('.h5peditor').attr('class').replace(/(\s|-)/g, '_'));
+  html += ns.createImportantDescription(this.field.important, ns.$('.h5peditor').attr('class').replace(/(\s|-)/g, '_'));
 
-  if (this.field.importantDescription !== undefined) {
+  if (this.field.important !== undefined) {
     extraClasses = ' hasImportantDescription';
     html += '<span class="icon-important-desc" onclick="ns.$(this).parent().find(\'.h5peditor-field-important-description\').toggleClass(\'show\');">';
     html += '<span class="path1"></span><span class="path2"></span><span class="path3"></span>';

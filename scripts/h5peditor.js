@@ -617,23 +617,21 @@ ns.createImportantDescription = function (importantDescription, context) {
     html += '<div class="h5peditor-field-important-description' + dialogClass + '">';
     html += '<div class="important-description-tail"></div>';
     html += '<div class="important-description-close" onclick="' + closeButtonScript + '">';
-    html += '<span>' + importantDescription.button + '</span>';
+    html += '<span>' + ns.t('core', 'hide') + '</span>';
     html += '</div>';
 
-    html += '<span class="h5p-info-icon"></span><span class="important-description-title">' + importantDescription.title + '</span>';
+    html += '<span class="h5p-info-icon"></span><span class="important-description-title">' + ns.t('core', 'importantInstructions') + '</span>';
 
-    if (importantDescription.listItems !== undefined && importantDescription.listItems.length > 0) {
-      html += '<ul class="important-description-list">';
-      for (var key in importantDescription.listItems) {
-        html += '<li class="important-description-list-item">' + importantDescription.listItems[key] + '</li>';
-      }
-      html += '</ul>';
+    if (importantDescription.description !== undefined) {
+      html += '<div class="important-description-content">';
+      html += importantDescription.description;
+      html += '</div>';
     }
 
     if (importantDescription.example !== undefined) {
       html += '<div class="important-description-example">';
-      html += '<div class="important-description-example-title"><span>' + importantDescription.example.title + ':</span></div>';
-      html += '<div class="important-description-example-text"><span>' + importantDescription.example.text + '</span></div>';
+      html += '<div class="important-description-example-title"><span>' + ns.t('core', 'example') + ':</span></div>';
+      html += '<div class="important-description-example-text"><span>' + importantDescription.example + '</span></div>';
       html += '</div>';
     }
 

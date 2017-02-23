@@ -48,7 +48,7 @@ ns.Textarea.prototype.createHtml = function () {
   var importantDescriptionIcon = '';
   var extraClasses = '';
 
-  if (this.field.importantDescription !== undefined) {
+  if (this.field.important !== undefined) {
     extraClasses = ' hasImportantDescription';
     importantDescriptionIcon += '<span class="icon-important-desc" onclick="ns.$(this).parent().find(\'.h5peditor-field-important-description\').toggleClass(\'show\');">';
     importantDescriptionIcon += '<span class="path1"></span><span class="path2"></span>';
@@ -65,7 +65,7 @@ ns.Textarea.prototype.createHtml = function () {
   }
   input += '</textarea>';
 
-  var importantDescription = ns.createImportantDescription(this.field.importantDescription, ns.$('.h5peditor').attr('class').replace(/(\s|-)/g, '_'));
+  var importantDescription = ns.createImportantDescription(this.field.important, ns.$('.h5peditor').attr('class').replace(/(\s|-)/g, '_'));
 
   return ns.createFieldMarkup(this.field, importantDescription + input + importantDescriptionIcon);
 };
