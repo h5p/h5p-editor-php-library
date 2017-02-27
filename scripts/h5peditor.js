@@ -614,28 +614,40 @@ ns.createImportantDescription = function (importantDescription, context) {
 
     ns.editorImportantDescriptionSeenArray.push(context);
 
-    html += '<div class="h5peditor-field-important-description' + dialogClass + '">';
-    html += '<div class="important-description-tail"></div>';
-    html += '<div class="important-description-close" onclick="' + closeButtonScript + '">';
-    html += '<span>' + ns.t('core', 'hide') + '</span>';
-    html += '</div>';
-
-    html += '<span class="h5p-info-icon"></span><span class="important-description-title">' + ns.t('core', 'importantInstructions') + '</span>';
+    html += '<div class="h5peditor-field-important-description' + dialogClass + '">' +
+              '<div class="important-description-tail">' +
+              '</div>' +
+              '<div class="important-description-close" onclick="' + closeButtonScript + '">' +
+                '<span>' + ns.t('core', 'hide') + '</span>' +
+              '</div>' +
+              '<span class="h5p-info-icon">' +
+              '</span>' +
+              '<span class="important-description-title">' +
+                 ns.t('core', 'importantInstructions') +
+              '</span>';
 
     if (importantDescription.description !== undefined) {
-      html += '<div class="important-description-content">';
-      html += importantDescription.description;
-      html += '</div>';
+      html += '<div class="important-description-content">' +
+                 importantDescription.description +
+              '</div>';
     }
 
     if (importantDescription.example !== undefined) {
-      html += '<div class="important-description-example">';
-      html += '<div class="important-description-example-title"><span>' + ns.t('core', 'example') + ':</span></div>';
-      html += '<div class="important-description-example-text"><span>' + importantDescription.example + '</span></div>';
-      html += '</div>';
+      html += '<div class="important-description-example">' +
+                '<div class="important-description-example-title">' +
+                  '<span>' + ns.t('core', 'example') + ':</span>' +
+                '</div>' +
+                '<div class="important-description-example-text">' +
+                  '<span>' + importantDescription.example + '</span>' +
+                '</div>' +
+              '</div>';
     }
 
-    html += '</div>';
+    html += '</div>' +
+            '<span class="icon-important-desc" role="button" aria-label="' + ns.t('core', 'importantInstructions') + '" tabindex="0">' +
+              '<span class="path1"></span>' +
+              '<span class="path2"></span>' +
+            '</span>';
   }
   return html;
 };

@@ -28,8 +28,9 @@ ns.Textarea.prototype.appendTo = function ($wrapper) {
 
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$input = this.$item.find('textarea');
+  this.$importantIcon = this.$item.find('.icon-important-desc');
   this.$errors = this.$item.find('.h5p-errors');
-
+  
   this.$input.change(function () {
     // Validate
     var value = that.validate();
@@ -39,20 +40,23 @@ ns.Textarea.prototype.appendTo = function ($wrapper) {
       that.setValue(that.field, ns.htmlspecialchars(value));
     }
   });
+
+  if (this.field.important !== undefined) {
+    this.$importantIcon.click(function () {
+      ns.$(this).siblings('.h5peditor-field-important-description').toggleClass('show');
+    });
+  }
 };
 
 /**
  * Create HTML for the text field.
  */
 ns.Textarea.prototype.createHtml = function () {
-  var importantDescriptionIcon = '';
   var extraClasses = '';
 
   if (this.field.important !== undefined) {
     extraClasses = ' hasImportantDescription';
-    importantDescriptionIcon += '<span class="icon-important-desc" onclick="ns.$(this).parent().find(\'.h5peditor-field-important-description\').toggleClass(\'show\');">';
-    importantDescriptionIcon += '<span class="path1"></span><span class="path2"></span>';
-    importantDescriptionIcon += '</span>';
+    var importantDescription = ns.createImportantDescription(this.field.important, ns.$('.h5peditor').attr('class').replace(/(\s|-)/g, '_'));
   }
 
   var input = '<textarea class="' + extraClasses + '" cols="30" rows="4"';
@@ -65,9 +69,7 @@ ns.Textarea.prototype.createHtml = function () {
   }
   input += '</textarea>';
 
-  var importantDescription = ns.createImportantDescription(this.field.important, ns.$('.h5peditor').attr('class').replace(/(\s|-)/g, '_'));
-
-  return ns.createFieldMarkup(this.field, importantDescription + input + importantDescriptionIcon);
+  return ns.createFieldMarkup(this.field, importantDescription + input);
 };
 
 /**

@@ -291,6 +291,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
   this.$item = ns.$(ns.createFieldMarkup(this.field, this.createHtml())).appendTo($wrapper);
 
   this.$input = this.$item.children('.ckeditor');
+  this.$importantIcon = this.$item.find('.icon-important-desc');
   this.$errors = this.$item.children('.h5p-errors');
 
   var ckConfig = {
@@ -411,6 +412,12 @@ ns.Html.prototype.appendTo = function ($wrapper) {
       ns.Html.first = false;
     }
   });
+
+  if (this.field.important !== undefined) {
+    this.$importantIcon.click(function () {
+      ns.$(this).siblings('.h5peditor-field-important-description').toggleClass('show');
+    });
+  }
 };
 
 /**
@@ -420,13 +427,9 @@ ns.Html.prototype.createHtml = function () {
   var html = '';
   var extraClasses = '';
 
-  html += ns.createImportantDescription(this.field.important, ns.$('.h5peditor').attr('class').replace(/(\s|-)/g, '_'));
-
   if (this.field.important !== undefined) {
     extraClasses = ' hasImportantDescription';
-    html += '<span class="icon-important-desc" onclick="ns.$(this).parent().find(\'.h5peditor-field-important-description\').toggleClass(\'show\');">';
-    html += '<span class="path1"></span><span class="path2"></span><span class="path3"></span>';
-    html += '</span>';
+    html += ns.createImportantDescription(this.field.important, ns.$('.h5peditor').attr('class').replace(/(\s|-)/g, '_'));
   }
 
   html += '<div class="ckeditor' + extraClasses + '" tabindex="0" contenteditable="true">';
