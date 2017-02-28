@@ -413,7 +413,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
   });
 
   if (this.field.important !== undefined) {
-    this.$item.addClass('hasImportantDescription');
+    this.$item.addClass('has-important-description');
     this.$importantIcon.click(function () {
       var $field = ns.$(this).siblings('.h5peditor-field-important-description');
       $field.toggleClass('show');

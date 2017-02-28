@@ -45,11 +45,10 @@ a {
     resize: vertical;
   }
 
-  .hasImportantDescription {
+  .has-important-description {
     .h5peditor-field-description {
       display: none;
     }
-
     textarea {
       width: calc(100% - 70px);
     }
