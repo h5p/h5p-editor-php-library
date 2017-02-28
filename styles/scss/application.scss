@@ -43,13 +43,17 @@ a {
   }
   textarea {
     resize: vertical;
+  }
 
-    &.hasImportantDescription {
+  .hasImportantDescription {
+    .h5peditor-field-description {
+      display: none;
+    }
+
+    textarea {
       width: calc(100% - 70px);
     }
-  }
-  .ckeditor {
-    &.hasImportantDescription {
+    .ckeditor {
       margin-right: 70px;
     }
   }
@@ -763,7 +767,7 @@ a {
   position: relative;
   padding: 1.5em 2.2em 2em 2.2em;
   font-size: 0.9em;
-  margin: 10px 0;
+  margin: 10px 0 20px 0;
   border: 1px solid #ffde78;
   background-color: #f9f9d8;
   color: #000;
@@ -970,7 +974,7 @@ a {
   float: right;
   width: 70px;
   text-align: center;
-  line-height: 1.25em;
+  line-height: 1em;
   cursor: pointer;
 
   .path1:before {

@@ -42,6 +42,7 @@ ns.Textarea.prototype.appendTo = function ($wrapper) {
   });
 
   if (this.field.important !== undefined) {
+    this.$item.addClass('hasImportantDescription');
     this.$importantIcon.click(function () {
       var $field = ns.$(this).siblings('.h5peditor-field-important-description');
       $field.toggleClass('show');
@@ -54,16 +55,13 @@ ns.Textarea.prototype.appendTo = function ($wrapper) {
  * Create HTML for the text field.
  */
 ns.Textarea.prototype.createHtml = function () {
-  var extraClasses = '';
   var importantDescription = '';
 
   if (this.field.important !== undefined) {
-    console.log('asd');
-    extraClasses = ' hasImportantDescription';
     importantDescription = ns.createImportantDescription(this.field.important, ns.$('.h5peditor').attr('class').replace(/(\s|-)/g, '_'));
   }
 
-  var input = '<textarea class="' + extraClasses + '" cols="30" rows="4"';
+  var input = '<textarea cols="30" rows="4"';
   if (this.field.placeholder !== undefined) {
     input += ' placeholder="' + this.field.placeholder + '"';
   }

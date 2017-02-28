@@ -289,7 +289,6 @@ ns.Html.prototype.appendTo = function ($wrapper) {
   var that = this;
 
   this.$item = ns.$(ns.createFieldMarkup(this.field, this.createHtml())).appendTo($wrapper);
-
   this.$input = this.$item.children('.ckeditor');
   this.$importantIcon = this.$item.find('.icon-important-desc');
   this.$errors = this.$item.children('.h5p-errors');
@@ -414,6 +413,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
   });
 
   if (this.field.important !== undefined) {
+    this.$item.addClass('hasImportantDescription');
     this.$importantIcon.click(function () {
       var $field = ns.$(this).siblings('.h5peditor-field-important-description');
       $field.toggleClass('show');
@@ -427,14 +427,12 @@ ns.Html.prototype.appendTo = function ($wrapper) {
  */
 ns.Html.prototype.createHtml = function () {
   var html = '';
-  var extraClasses = '';
 
   if (this.field.important !== undefined) {
-    extraClasses = ' hasImportantDescription';
     html += ns.createImportantDescription(this.field.important, ns.$('.h5peditor').attr('class').replace(/(\s|-)/g, '_'));
   }
 
-  html += '<div class="ckeditor' + extraClasses + '" tabindex="0" contenteditable="true">';
+  html += '<div class="ckeditor" tabindex="0" contenteditable="true">';
   if (this.value !== undefined) {
     html += this.value;
   }
