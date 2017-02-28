@@ -150,6 +150,7 @@ ns.LibrarySelector.prototype.loadSemantics = function (library) {
     else {
       that.form = new ns.Form();
       that.form.replace($loading);
+      that.form.currentLibrary = library;
       that.form.processSemantics(semantics, (library === that.defaultLibrary || library === that.defaultLibraryParameterized ? that.defaultParams : {}));
     }
 
