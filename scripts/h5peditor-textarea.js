@@ -12,6 +12,7 @@ var ns = H5PEditor;
  * @returns {ns.Textarea}
  */
 ns.Textarea = function (parent, field, params, setValue) {
+  this.parent = parent;
   this.field = field;
   this.value = params;
   this.setValue = setValue;
@@ -58,7 +59,13 @@ ns.Textarea.prototype.createHtml = function () {
   var importantDescription = '';
 
   if (this.field.important !== undefined) {
-    importantDescription = ns.createImportantDescription(this.field.important, ns.$('.h5peditor').attr('class').replace(/(\s|-)/g, '_'));
+    var context = '';
+    var librarySelector = ns.findLibraryAncestor(this.parent);
+    if (librarySelector.currentLibrary !== undefined) {
+      var lib = librarySelector.currentLibrary.split(' ')[0];
+      context = lib + '-' + this.field.name;
+    }
+    importantDescription = ns.createImportantDescription(this.field.important, context.replace(/\.|-/g,'_'));
   }
 
   var input = '<textarea cols="30" rows="4"';

@@ -11,6 +11,7 @@ var ns = H5PEditor;
  * @returns {undefined}
  */
 ns.Html = function (parent, field, params, setValue) {
+  this.parent = parent;
   this.field = field;
   this.value = params;
   this.setValue = setValue;
@@ -429,7 +430,14 @@ ns.Html.prototype.createHtml = function () {
   var html = '';
 
   if (this.field.important !== undefined) {
-    html += ns.createImportantDescription(this.field.important, ns.$('.h5peditor').attr('class').replace(/(\s|-)/g, '_'));
+    var context = '';
+    var librarySelector = ns.findLibraryAncestor(this.parent);
+    if (librarySelector.currentLibrary !== undefined) {
+      var lib = librarySelector.currentLibrary.split(' ')[0];
+      context = lib + '-' + this.field.name;
+    }
+
+    html += ns.createImportantDescription(this.field.important, context.replace(/\.|-/g,'_'));
   }
 
   html += '<div class="ckeditor" tabindex="0" contenteditable="true">';
