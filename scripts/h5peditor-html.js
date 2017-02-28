@@ -415,7 +415,9 @@ ns.Html.prototype.appendTo = function ($wrapper) {
 
   if (this.field.important !== undefined) {
     this.$importantIcon.click(function () {
-      ns.$(this).siblings('.h5peditor-field-important-description').toggleClass('show');
+      var $field = ns.$(this).siblings('.h5peditor-field-important-description');
+      $field.toggleClass('show');
+      ns.$(this).attr('aria-pressed', $field.hasClass('show'));
     });
   }
 };

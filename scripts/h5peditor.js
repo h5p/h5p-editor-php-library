@@ -607,8 +607,9 @@ ns.createImportantDescription = function (importantDescription, context) {
   var html = '';
 
   if (importantDescription !== undefined) {
-    var closeButtonScript = 'ns.$(this).parent().removeClass(\'show\');';
-    closeButtonScript += "sessionStorage." + context + " = '1'";
+    var closeScript = "ns.$(this).parent().removeClass('show');" +
+                      "ns.$(this).parent().siblings('.icon-important-desc').attr('aria-pressed', false);" +
+                      "sessionStorage." + context + " = '1'";
 
     var dialogClass = (sessionStorage[context] === undefined && ns.editorImportantDescriptionSeenArray.indexOf(context) === -1 ? ' show' : '')
 
@@ -617,8 +618,10 @@ ns.createImportantDescription = function (importantDescription, context) {
     html += '<div class="h5peditor-field-important-description' + dialogClass + '">' +
               '<div class="important-description-tail">' +
               '</div>' +
-              '<div class="important-description-close" onclick="' + closeButtonScript + '">' +
-                '<span>' + ns.t('core', 'hide') + '</span>' +
+              '<div class="important-description-close" role="button" tabindex="0" onclick="' + closeScript + '" aria-label="' + ns.t('core', 'hide') + '">' +
+                '<span>' +
+                   ns.t('core', 'hide') +
+                '</span>' +
               '</div>' +
               '<span class="h5p-info-icon">' +
               '</span>' +
@@ -635,16 +638,20 @@ ns.createImportantDescription = function (importantDescription, context) {
     if (importantDescription.example !== undefined) {
       html += '<div class="important-description-example">' +
                 '<div class="important-description-example-title">' +
-                  '<span>' + ns.t('core', 'example') + ':</span>' +
+                  '<span>' +
+                     ns.t('core', 'example') +
+                  ':</span>' +
                 '</div>' +
                 '<div class="important-description-example-text">' +
-                  '<span>' + importantDescription.example + '</span>' +
+                  '<span>' +
+                     importantDescription.example +
+                  '</span>' +
                 '</div>' +
               '</div>';
     }
 
     html += '</div>' +
-            '<span class="icon-important-desc" role="button" aria-label="' + ns.t('core', 'importantInstructions') + '" tabindex="0">' +
+            '<span class="icon-important-desc" role="button" aria-label="' + ns.t('core', 'importantInstructions') + '" tabindex="0" aria-pressed="' + (dialogClass !== '' ? 'true' : 'false' ) + '">' +
               '<span class="path1"></span>' +
               '<span class="path2"></span>' +
             '</span>';
