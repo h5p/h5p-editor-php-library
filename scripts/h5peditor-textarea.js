@@ -55,10 +55,12 @@ ns.Textarea.prototype.appendTo = function ($wrapper) {
  */
 ns.Textarea.prototype.createHtml = function () {
   var extraClasses = '';
+  var importantDescription = '';
 
   if (this.field.important !== undefined) {
+    console.log('asd');
     extraClasses = ' hasImportantDescription';
-    var importantDescription = ns.createImportantDescription(this.field.important, ns.$('.h5peditor').attr('class').replace(/(\s|-)/g, '_'));
+    importantDescription = ns.createImportantDescription(this.field.important, ns.$('.h5peditor').attr('class').replace(/(\s|-)/g, '_'));
   }
 
   var input = '<textarea class="' + extraClasses + '" cols="30" rows="4"';
