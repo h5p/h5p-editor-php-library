@@ -29,9 +29,10 @@ ns.Textarea.prototype.appendTo = function ($wrapper) {
 
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$input = this.$item.find('textarea');
-  this.$importantIcon = this.$item.find('.icon-important-desc');
   this.$errors = this.$item.find('.h5p-errors');
   
+  ns.bindImportantDescriptionEvents(this);
+
   this.$input.change(function () {
     // Validate
     var value = that.validate();
@@ -41,33 +42,12 @@ ns.Textarea.prototype.appendTo = function ($wrapper) {
       that.setValue(that.field, ns.htmlspecialchars(value));
     }
   });
-
-  if (this.field.important !== undefined) {
-    this.$item.addClass('has-important-description');
-    this.$importantIcon.click(function () {
-      var $field = ns.$(this).siblings('.h5peditor-field-important-description');
-      $field.toggleClass('show');
-      ns.$(this).attr('aria-pressed', $field.hasClass('show'));
-    });
-  }
 };
 
 /**
  * Create HTML for the text field.
  */
 ns.Textarea.prototype.createHtml = function () {
-  var importantDescription = '';
-
-  if (this.field.important !== undefined) {
-    var context = '';
-    var librarySelector = ns.findLibraryAncestor(this.parent);
-    if (librarySelector.currentLibrary !== undefined) {
-      var lib = librarySelector.currentLibrary.split(' ')[0];
-      context = lib + '-' + this.field.name;
-    }
-    importantDescription = ns.createImportantDescription(this.field.important, context.replace(/\.|-/g,'_'));
-  }
-
   var input = '<textarea cols="30" rows="4"';
   if (this.field.placeholder !== undefined) {
     input += ' placeholder="' + this.field.placeholder + '"';
@@ -78,7 +58,7 @@ ns.Textarea.prototype.createHtml = function () {
   }
   input += '</textarea>';
 
-  return ns.createFieldMarkup(this.field, importantDescription + input);
+  return ns.createFieldMarkup(this.field, ns.createImportantDescription(this.field.important, this.field.name, this.parent) + input);
 };
 
 /**

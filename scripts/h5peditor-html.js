@@ -289,10 +289,11 @@ ns.Html.prototype.createToolbar = function () {
 ns.Html.prototype.appendTo = function ($wrapper) {
   var that = this;
 
-  this.$item = ns.$(ns.createFieldMarkup(this.field, this.createHtml())).appendTo($wrapper);
+  this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$input = this.$item.children('.ckeditor');
-  this.$importantIcon = this.$item.find('.icon-important-desc');
   this.$errors = this.$item.children('.h5p-errors');
+
+  ns.bindImportantDescriptionEvents(this);
 
   var ckConfig = {
     extraPlugins: "",
@@ -412,44 +413,22 @@ ns.Html.prototype.appendTo = function ($wrapper) {
       ns.Html.first = false;
     }
   });
-
-  if (this.field.important !== undefined) {
-    this.$item.addClass('has-important-description');
-    this.$importantIcon.click(function () {
-      var $field = ns.$(this).siblings('.h5peditor-field-important-description');
-      $field.toggleClass('show');
-      ns.$(this).attr('aria-pressed', $field.hasClass('show'));
-    });
-  }
 };
 
 /**
  * Create HTML for the HTML field.
  */
 ns.Html.prototype.createHtml = function () {
-  var html = '';
-
-  if (this.field.important !== undefined) {
-    var context = '';
-    var librarySelector = ns.findLibraryAncestor(this.parent);
-    if (librarySelector.currentLibrary !== undefined) {
-      var lib = librarySelector.currentLibrary.split(' ')[0];
-      context = lib + '-' + this.field.name;
-    }
-
-    html += ns.createImportantDescription(this.field.important, context.replace(/\.|-/g,'_'));
-  }
-
-  html += '<div class="ckeditor" tabindex="0" contenteditable="true">';
+  var input = '<div class="ckeditor" tabindex="0" contenteditable="true">';
   if (this.value !== undefined) {
-    html += this.value;
+    input += this.value;
   }
   else if (this.field.placeholder !== undefined) {
-    html += '<span class="h5peditor-ckeditor-placeholder">' + this.field.placeholder + '</span>';
+    input += '<span class="h5peditor-ckeditor-placeholder">' + this.field.placeholder + '</span>';
   }
-  html += '</div>';
+  input += '</div>';
 
-  return html;
+  return ns.createFieldMarkup(this.field, ns.createImportantDescription(this.field.important, this.field.name, this.parent) + input);
 };
 
 /**

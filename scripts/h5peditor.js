@@ -603,15 +603,21 @@ ns.editorImportantDescriptionSeenArray = [];
  * @param {String} importantDescription
  * @returns {string}
  */
-ns.createImportantDescription = function (importantDescription, context) {
+ns.createImportantDescription = function (importantDescription, fieldName, parent) {
   var html = '';
 
   if (importantDescription !== undefined) {
+    var librarySelector = ns.findLibraryAncestor(parent);
+
+    if (librarySelector.currentLibrary !== undefined) {
+      var lib = librarySelector.currentLibrary.split(' ')[0];
+      context = (lib + '-' + fieldName).replace(/\.|-/g,'_');
+    }
+
+    var dialogClass = (sessionStorage[context] === undefined && ns.editorImportantDescriptionSeenArray.indexOf(context) === -1 ? ' show' : '')
     var closeScript = "ns.$(this).parent().removeClass('show');" +
                       "ns.$(this).parent().siblings('.icon-important-desc').attr('aria-pressed', false);" +
                       "sessionStorage." + context + " = '1'";
-
-    var dialogClass = (sessionStorage[context] === undefined && ns.editorImportantDescriptionSeenArray.indexOf(context) === -1 ? ' show' : '')
 
     ns.editorImportantDescriptionSeenArray.push(context);
 
@@ -656,7 +662,29 @@ ns.createImportantDescription = function (importantDescription, context) {
               '<span class="path2"></span>' +
             '</span>';
   }
+
   return html;
+};
+
+ns.bindImportantDescriptionEvents = function ($widget) {
+  if (!$widget.field.important) {
+    return;
+  }
+
+  $widget.$item.addClass('has-important-description');
+
+  $widget.$item.find('.icon-important-desc')
+    .click(function() {
+      var $field = ns.$(this).siblings('.h5peditor-field-important-description');
+      $field.toggleClass('show');
+      ns.$(this).attr('aria-pressed', $field.hasClass('show'));
+    })
+    .keydown(function() {
+      if (event.which == 13 || event.which == 32) {
+        ns.$(this).trigger('click');
+        event.preventDefault(); 
+      }
+    });
 };
 
 /**
