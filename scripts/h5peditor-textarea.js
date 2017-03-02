@@ -31,7 +31,7 @@ ns.Textarea.prototype.appendTo = function ($wrapper) {
   this.$input = this.$item.find('textarea');
   this.$errors = this.$item.find('.h5p-errors');
   
-  ns.bindImportantDescriptionEvents(this);
+  ns.bindImportantDescriptionEvents(this, this.field.name, this.parent);
 
   this.$input.change(function () {
     // Validate
@@ -58,7 +58,7 @@ ns.Textarea.prototype.createHtml = function () {
   }
   input += '</textarea>';
 
-  return ns.createFieldMarkup(this.field, ns.createImportantDescription(this.field.important, this.field.name, this.parent) + input);
+  return ns.createFieldMarkup(this.field, ns.createImportantDescription(this.field.important) + input);
 };
 
 /**

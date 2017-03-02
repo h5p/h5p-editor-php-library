@@ -603,28 +603,14 @@ ns.editorImportantDescriptionSeenArray = [];
  * @param {String} importantDescription
  * @returns {string}
  */
-ns.createImportantDescription = function (importantDescription, fieldName, parent) {
+ns.createImportantDescription = function (importantDescription) {
   var html = '';
 
   if (importantDescription !== undefined) {
-    var librarySelector = ns.findLibraryAncestor(parent);
-
-    if (librarySelector.currentLibrary !== undefined) {
-      var lib = librarySelector.currentLibrary.split(' ')[0];
-      context = (lib + '-' + fieldName).replace(/\.|-/g,'_');
-    }
-
-    var dialogClass = (sessionStorage[context] === undefined && ns.editorImportantDescriptionSeenArray.indexOf(context) === -1 ? ' show' : '')
-    var closeScript = "ns.$(this).parent().removeClass('show');" +
-                      "ns.$(this).parent().siblings('.icon-important-desc').attr('aria-pressed', false);" +
-                      "sessionStorage." + context + " = '1'";
-
-    ns.editorImportantDescriptionSeenArray.push(context);
-
-    html += '<div class="h5peditor-field-important-description' + dialogClass + '">' +
+    html += '<div class="h5peditor-field-important-description">' +
               '<div class="important-description-tail">' +
               '</div>' +
-              '<div class="important-description-close" role="button" tabindex="0" onclick="' + closeScript + '" aria-label="' + ns.t('core', 'hide') + '">' +
+              '<div class="important-description-close" role="button" tabindex="0" aria-label="' + ns.t('core', 'hide') + '">' +
                 '<span>' +
                    ns.t('core', 'hide') +
                 '</span>' +
@@ -657,7 +643,7 @@ ns.createImportantDescription = function (importantDescription, fieldName, paren
     }
 
     html += '</div>' +
-            '<span class="icon-important-desc" role="button" aria-label="' + ns.t('core', 'importantInstructions') + '" tabindex="0" aria-pressed="' + (dialogClass !== '' ? 'true' : 'false' ) + '">' +
+            '<span class="icon-important-desc" role="button" aria-label="' + ns.t('core', 'importantInstructions') + '" tabindex="0">' +
               '<span class="path1"></span>' +
               '<span class="path2"></span>' +
             '</span>';
@@ -666,25 +652,41 @@ ns.createImportantDescription = function (importantDescription, fieldName, paren
   return html;
 };
 
-ns.bindImportantDescriptionEvents = function ($widget) {
+ns.bindImportantDescriptionEvents = function ($widget, fieldName, parent) {
   if (!$widget.field.important) {
     return;
   }
 
+  var librarySelector = ns.findLibraryAncestor(parent);
+  if (librarySelector.currentLibrary !== undefined) {
+    var lib = librarySelector.currentLibrary.split(' ')[0];
+    var context = (lib + '-' + fieldName).replace(/\.|_/g,'-');
+  }
+
+  var $importantField = $widget.$item.find('.h5peditor-field-important-description');
+
+  hasImportantBeenSeen(context, $importantField);
   $widget.$item.addClass('has-important-description');
 
   $widget.$item.find('.icon-important-desc')
     .click(function() {
-      var $field = ns.$(this).siblings('.h5peditor-field-important-description');
-      $field.toggleClass('show');
-      ns.$(this).attr('aria-pressed', $field.hasClass('show'));
+      $importantField.toggleClass('show');
+      ns.$(this).attr('aria-pressed', $importantField.hasClass('show'));
     })
     .keydown(function() {
       if (event.which == 13 || event.which == 32) {
         ns.$(this).trigger('click');
-        event.preventDefault(); 
+        event.preventDefault();
       }
-    });
+    })
+    .attr('aria-pressed', $importantField.hasClass('show') ? 'true' : 'false' );
+
+  $widget.$item.find('.important-description-close').click(function() {
+    ns.$(this).parent()
+      .removeClass('show')
+      .siblings('.icon-important-desc').attr('aria-pressed', false);
+    setImportantSeen(context);
+  });
 };
 
 /**
@@ -797,4 +799,70 @@ ns.createButton = function (id, title, handler, displayTitle) {
   options[displayTitle ? 'html' : 'aria-label'] = title;
 
   return ns.$('<div/>', options);
+};
+
+// Factory for creating storage instance
+var storage = (function () {
+  var instance = {
+    get: function (key, next) {
+      var value;
+
+      // Get value from browser storage
+      if (window.localStorage !== undefined) {
+        value = !!window.localStorage.getItem(key);
+      }
+
+      // Try to get a better value from user data storage
+      try {
+        H5P.getUserData(0, key, function (err, result) {
+          if (!err) {
+            value = result;
+          }
+          next(value);
+        });
+      }
+      catch (err) {
+        next(value);
+      }
+    },
+    set: function (key, value) {
+
+      // Store in browser
+      if (window.localStorage !== undefined) {
+        window.localStorage.setItem(key, value);
+      }
+
+      // Try to store in user data storage
+      try {
+        H5P.setUserData(0, key, value);
+      }
+      catch (err) {}
+    },
+  };
+  return instance;
+})();
+
+/**
+ * Mark this important description as seen. This is persisted using localstorage. If not present, nothing is persisted.
+ *
+ * @method setImportantSeen
+ */
+self.setImportantSeen = function (id) {
+  storage.set(id + '-seen', true);
+};
+
+/**
+ * Check if this important description has been seen by user. Reads value from localstorage
+ *
+ * @method hasImportantBeenSeen
+ * @return {Boolean}
+ */
+
+self.hasImportantBeenSeen = function (id, $importantField) {
+  storage.get(id + '-seen', function (value) {
+    if (value !== true && ns.editorImportantDescriptionSeenArray.indexOf(id) === -1) {
+      $importantField.addClass('show');
+      ns.editorImportantDescriptionSeenArray.push(id);
+    }
+  });
 };

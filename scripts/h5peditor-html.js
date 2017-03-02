@@ -293,7 +293,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
   this.$input = this.$item.children('.ckeditor');
   this.$errors = this.$item.children('.h5p-errors');
 
-  ns.bindImportantDescriptionEvents(this);
+  ns.bindImportantDescriptionEvents(this, this.field.name, this.parent);
 
   var ckConfig = {
     extraPlugins: "",
@@ -428,7 +428,7 @@ ns.Html.prototype.createHtml = function () {
   }
   input += '</div>';
 
-  return ns.createFieldMarkup(this.field, ns.createImportantDescription(this.field.important, this.field.name, this.parent) + input);
+  return ns.createFieldMarkup(this.field, ns.createImportantDescription(this.field.important) + input);
 };
 
 /**
