@@ -327,14 +327,14 @@ class H5peditor {
     // the editor works.
 
     // Get list of JS and CSS files that belongs to the dependencies
-    $files = $this->h5p->getDependenciesFiles($libraries);
+    $files = $this->h5p->getDependenciesFiles($libraries, $prefix);
     $this->storage->alterLibraryFiles($files, $libraries);
 
     // Restore asset aggregation setting
     $this->h5p->aggregateAssets = $aggregateAssets;
 
     // Create base URL
-    $url = $this->h5p->url . $prefix;
+    $url = $this->h5p->url;
 
     // Javascripts
     if (!empty($files['scripts'])) {
