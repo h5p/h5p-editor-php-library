@@ -681,12 +681,19 @@ ns.bindImportantDescriptionEvents = function ($widget, fieldName, parent) {
     })
     .attr('aria-pressed', $importantField.hasClass('show') ? 'true' : 'false' );
 
-  $widget.$item.find('.important-description-close').click(function() {
-    ns.$(this).parent()
-      .removeClass('show')
-      .siblings('.icon-important-desc').attr('aria-pressed', false);
-    setImportantSeen(context);
-  });
+  $widget.$item.find('.important-description-close')
+    .click(function() {
+      ns.$(this).parent()
+        .removeClass('show')
+        .siblings('.icon-important-desc').attr('aria-pressed', false);
+      setImportantSeen(context);
+    })
+    .keydown(function() {
+      if (event.which == 13 || event.which == 32) {
+        ns.$(this).trigger('click');
+        event.preventDefault();
+      }
+    });
 };
 
 /**
