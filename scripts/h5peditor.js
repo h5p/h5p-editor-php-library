@@ -43,6 +43,7 @@ ns.loadLibrary = function (libraryName, callback) {
     default:
       // Get semantics from cache.
       callback(ns.loadedSemantics[libraryName]);
+      this.clearGlobalVariables();
       break;
 
     case 0:
@@ -881,5 +882,7 @@ ns.hasImportantBeenSeen = function (id, $importantField) {
  * Clears global variables so that they are reset when switching library
  */
 ns.clearGlobalVariables = function () {
-  ns.editorImportantDescriptionSeenArray = [];
+  if(ns.$('.h5peditor-field-important-description').length <= 1) {
+    ns.editorImportantDescriptionSeenArray = [];
+  }
 };
