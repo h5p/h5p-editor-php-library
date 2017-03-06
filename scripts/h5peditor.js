@@ -51,6 +51,7 @@ ns.loadLibrary = function (libraryName, callback) {
       break;
 
     case undefined:
+      this.clearGlobalVariables();
       // Load semantics.
       ns.loadedSemantics[libraryName] = 0; // Indicates that others should queue.
       ns.semanticsLoaded[libraryName] = []; // Other callbacks to run once loaded.
@@ -653,6 +654,8 @@ ns.createImportantDescription = function (importantDescription) {
 };
 
 ns.bindImportantDescriptionEvents = function ($widget, fieldName, parent) {
+  var that = this;
+
   if (!$widget.field.important) {
     return;
   }
@@ -665,7 +668,7 @@ ns.bindImportantDescriptionEvents = function ($widget, fieldName, parent) {
 
   var $importantField = $widget.$item.find('.h5peditor-field-important-description');
 
-  hasImportantBeenSeen(context, $importantField);
+  this.hasImportantBeenSeen(context, $importantField);
   $widget.$item.addClass('has-important-description');
 
   $widget.$item.find('.icon-important-desc')
@@ -686,7 +689,7 @@ ns.bindImportantDescriptionEvents = function ($widget, fieldName, parent) {
       ns.$(this).parent()
         .removeClass('show')
         .siblings('.icon-important-desc').attr('aria-pressed', false);
-      setImportantSeen(context);
+      that.setImportantSeen(context);
     })
     .keydown(function() {
       if (event.which == 13 || event.which == 32) {
@@ -854,7 +857,7 @@ var storage = (function () {
  *
  * @method setImportantSeen
  */
-self.setImportantSeen = function (id) {
+ns.setImportantSeen = function (id) {
   storage.set(id + '-seen', true);
 };
 
@@ -864,12 +867,19 @@ self.setImportantSeen = function (id) {
  * @method hasImportantBeenSeen
  * @return {Boolean}
  */
-
-self.hasImportantBeenSeen = function (id, $importantField) {
+ns.hasImportantBeenSeen = function (id, $importantField) {
+  var that = this;
   storage.get(id + '-seen', function (value) {
     if (value !== true && ns.editorImportantDescriptionSeenArray.indexOf(id) === -1) {
       $importantField.addClass('show');
       ns.editorImportantDescriptionSeenArray.push(id);
     }
   });
+};
+
+/**
+ * Clears global variables so that they are reset when switching library
+ */
+ns.clearGlobalVariables = function () {
+  ns.editorImportantDescriptionSeenArray = [];
 };
