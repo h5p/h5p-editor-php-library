@@ -943,8 +943,8 @@ a {
 }
 /* line 241, ../scss/application.scss */
 .h5peditor .h5p-add-dialog .h5p-add-dialog-table .h5p-dialog-box .h5p-file-url-wrapper:before {
-  font-family: 'h5pFontIcons';
-  content: "\e907";
+  font-family: 'H5P';
+  content: "\e904";
   position: absolute;
   color: #dd0505;
   left: 0;
@@ -981,8 +981,8 @@ a {
 }
 /* line 278, ../scss/application.scss */
 .h5peditor .h5p-add-dialog .h5p-add-dialog-table .h5p-dialog-box .h5p-file-drop-upload .h5p-file-drop-upload-inner:after {
-  font-family: "h5pFontIcons";
-  content: "\e909";
+  font-family: "H5P";
+  content: "\e903";
   line-height: 1.4em;
   font-size: 3.5em;
   color: #bbb;

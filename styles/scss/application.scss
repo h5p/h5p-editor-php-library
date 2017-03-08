@@ -239,8 +239,8 @@ a {
           position: relative;
 
           &:before {
-            font-family: 'h5pFontIcons';
-            content: "\e907";
+            font-family: 'H5P';
+            content: "\e904";
             position: absolute;
             color: #dd0505;
             left: 0;
@@ -276,8 +276,8 @@ a {
             right: 3px;
 
             &:after {
-              font-family: "h5pFontIcons";
-              content: "\e909";
+              font-family: "H5P";
+              content: "\e903";
               line-height: 1.4em;
               font-size: 3.5em;
               color: #bbb;
