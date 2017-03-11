@@ -36,6 +36,7 @@ class H5peditor {
     'ckeditor/ckeditor.js',
   );
   private $h5p, $storage;
+  public $ajax;
 
   /**
    * Constructor for the core editor library.
@@ -46,6 +47,7 @@ class H5peditor {
   function __construct($h5p, $storage) {
     $this->h5p = $h5p;
     $this->storage = $storage;
+    $this->ajax = new H5PEditorAjax($h5p, $this);
   }
 
   /**
@@ -103,7 +105,7 @@ class H5peditor {
       }
     }
 
-    return json_encode($libraries);
+    return $libraries;
   }
 
   /**
@@ -314,8 +316,9 @@ class H5peditor {
    * @param int $majorVersion
    * @param int $minorVersion
    * @param string $prefix Optional part to add between URL and asset path
+   * @param string $fileDir Optional file dir to read files from
    */
-  public function getLibraryData($machineName, $majorVersion, $minorVersion, $languageCode, $prefix = '') {
+  public function getLibraryData($machineName, $majorVersion, $minorVersion, $languageCode, $prefix = '', $fileDir = '') {
     $libraryData = new stdClass();
 
     $libraries = $this->findEditorLibraries($machineName, $majorVersion, $minorVersion);
