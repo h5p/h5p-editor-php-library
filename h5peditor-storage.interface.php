@@ -51,4 +51,25 @@ interface H5peditorStorage {
    *  have majorVersion and minorVersion as properties.
    */
   public function alterLibraryFiles(&$files, $libraries);
+
+  /**
+   * Saves a file or moves it temporarily. This is often necessary in order to
+   * validate and store uploaded or fetched H5Ps.
+   *
+   * @param string $data Uri of data that should be saved as a temporary file
+   * @param string $name Name that the data should be saved as in the temporary folder
+   * @param boolean $move_file Can be set to TRUE to move the data instead of saving it
+   *
+   * @return bool|string Returns false if saving failed or the path to the file
+   *  if saving succeeded
+   */
+  public static function saveFileTemporarily($data, $name, $move_file);
+
+  /**
+   * Marks a file for later cleanup, useful when files are not instantly cleaned
+   * up. E.g. for files that are uploaded through the editor.
+   *
+   * @param H5peditorFile $file
+   */
+  public static function markFileForCleanup($file);
 }
