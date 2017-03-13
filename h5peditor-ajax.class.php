@@ -98,10 +98,13 @@ class H5PEditorAjax {
         break;
 
       case H5PEditorEndpoints::LIBRARY_INSTALL:
-        $token = func_get_arg(1);
-        if (!$this->isPostRequest()) return;
-        if (!$this->isValidEditorToken($token)) return;
-        $this->libraryInstall();
+          if (!$this->isPostRequest()) return;
+
+          $token = func_get_arg(1);
+          if (!$this->isValidEditorToken($token)) return;
+
+          $machineName = func_get_arg(2);
+          $this->libraryInstall($machineName);
         break;
 
       case H5PEditorEndpoints::LIBRARY_UPLOAD:
@@ -132,7 +135,7 @@ class H5PEditorAjax {
   private function fileUpload($contentId = NULL) {
     $file = new H5peditorFile($this->core->h5pF);
     if (!$file->isLoaded()) {
-      H5PCore::ajaxError(t('File not found on server. Check file upload settings.'));
+      H5PCore::ajaxError($this->core->h5pF->t('File not found on server. Check file upload settings.'));
       return;
     }
 
@@ -182,7 +185,10 @@ class H5PEditorAjax {
    */
   private function isValidEditorToken($token) {
     if (!\H5PCore::validToken('editorajax', $token)) {
-      \H5PCore::ajaxError(t('Invalid security token.'), 'INVALID_TOKEN');
+      \H5PCore::ajaxError(
+        $this->core->h5pF->t('Invalid security token.'),
+        'INVALID_TOKEN'
+      );
       return FALSE;
     }
     return TRUE;
@@ -201,26 +207,27 @@ class H5PEditorAjax {
    *
    * Accepts a machine name and attempts to fetch and install it from the Hub if
    * it is valid. Will also install any dependencies to the requested library.
+   *
+   * @param string $machineName Name of library that should be installed
    */
-  private function libraryInstall() {
+  private function libraryInstall($machineName) {
 
     // Determine which content type to install from post data
-    $machineName = filter_input(INPUT_GET, 'id');
     if (!$machineName) {
-      H5PCore::ajaxError(t('No content type was specified.'), 'NO_CONTENT_TYPE');
+      H5PCore::ajaxError($this->core->h5pF->t('No content type was specified.'), 'NO_CONTENT_TYPE');
       return;
     }
 
     // Look up content type to ensure it's valid(and to check permissions)
     $contentType = $this->editor->ajaxInterface->getContentTypeCache($machineName);
     if (!$contentType) {
-      H5PCore::ajaxError(t('The chosen content type is invalid.'), 'INVALID_CONTENT_TYPE');
+      H5PCore::ajaxError($this->core->h5pF->t('The chosen content type is invalid.'), 'INVALID_CONTENT_TYPE');
       return;
     }
 
     // Check install permissions
     if (!$this->editor->canInstallContentType($contentType)) {
-      H5PCore::ajaxError(t('No permission to install content type.'), 'INSTALL_DENIED');
+      H5PCore::ajaxError($this->core->h5pF->t('No permission to install content type.'), 'INSTALL_DENIED');
       return;
     }
     else {
@@ -233,11 +240,11 @@ class H5PEditorAjax {
     if (!$endpointResponse) return;
 
     // Save file temporarily to verify validity
-    $tmpDir = $this->saveFileTemporarily($endpointResponse, 'libraries.h5p');
-    if (!$tmpDir) return;
+    $file = $this->saveFileTemporarily($endpointResponse);
+    if (!$file) return;
 
     // Session parameters has to be set for validation and saving of packages
-    $this->setSessionParameters($tmpDir, 'libraries.h5p');
+    $this->setSessionParameters($file->dir, $file->fileName);
     if (!$this->isValidPackage(TRUE)) return;
 
     // Save H5P
@@ -277,8 +284,8 @@ class H5PEditorAjax {
    * Set session parameters as these are required for validating H5Ps
    * and saving them
    *
-   * @param $tmpPath Path of temporarily stored files
-   * @param $fileName Name of the H5P that will be handled
+   * @param string $tmpPath Path of temporarily stored files
+   * @param string $fileName Name of the H5P that will be handled
    */
   private function setSessionParameters($tmpPath, $fileName) {
     $_SESSION['h5p_upload_folder'] = $tmpPath;
@@ -292,16 +299,18 @@ class H5PEditorAjax {
    * Sets error messages if saving fails.
    *
    * @param string $data Uri of data that should be saved as a temporary file
-   * @param string $name Name that the data should be saved as in the temporary folder
    * @param boolean $move_file Can be set to TRUE to move the data instead of saving it
    *
-   * @return bool|string Returns false if saving failed or the path to the file
+   * @return bool|object Returns false if saving failed or the path to the file
    *  if saving succeeded
    */
-  private function saveFileTemporarily($data, $name, $move_file = FALSE) {
-    $file = $this->storage->saveFileTemporarily($data, $name, $move_file);
+  private function saveFileTemporarily($data, $move_file = FALSE) {
+    $file = $this->storage->saveFileTemporarily($data, $move_file);
     if (!$file) {
-      H5PCore::ajaxError(t('Failed to download the requested H5P.'), 'DOWNLOAD_FAILED');
+      H5PCore::ajaxError(
+        $this->core->h5pF->t('Failed to download the requested H5P.'),
+        'DOWNLOAD_FAILED'
+      );
       return FALSE;
     }
 
@@ -320,7 +329,10 @@ class H5PEditorAjax {
     $response  = $this->core->h5pF->fetchExternalData("{$protocol}://{$endpoint}");
 
     if (!$response) {
-      H5PCore::ajaxError(t('Failed to download the requested H5P.'), 'DOWNLOAD_FAILED');
+      H5PCore::ajaxError(
+        $this->core->h5pF->t('Failed to download the requested H5P.'),
+        'DOWNLOAD_FAILED'
+      );
       return FALSE;
     }
 

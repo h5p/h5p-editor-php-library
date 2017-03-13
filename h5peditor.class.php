@@ -9,6 +9,7 @@ class H5peditor {
     'styles/css/application.css'
   );
   public static $scripts = array(
+    'scripts/h5p-hub-client.js',
     'scripts/h5peditor.js',
     'scripts/h5peditor-semantic-structure.js',
     'scripts/h5peditor-editor.js',
@@ -30,6 +31,7 @@ class H5peditor {
     'scripts/h5peditor-library.js',
     'scripts/h5peditor-library-list-cache.js',
     'scripts/h5peditor-select.js',
+    'scripts/h5peditor-selector-hub.js',
     'scripts/h5peditor-dimensions.js',
     'scripts/h5peditor-coordinates.js',
     'scripts/h5peditor-none.js',
@@ -435,7 +437,7 @@ class H5peditor {
     $canInstallAll         = $this->h5p->h5pF->hasPermission(H5PPermission::UPDATE_LIBRARIES);
     $canInstallRecommended = $this->h5p->h5pF->hasPermission(H5PPermission::INSTALL_RECOMMENDED);
 
-    return $canInstallAll || $content_type->is_recommended && $canInstallRecommended;
+    return $canInstallAll || $contentType->is_recommended && $canInstallRecommended;
   }
 
   /**

@@ -57,13 +57,12 @@ interface H5peditorStorage {
    * validate and store uploaded or fetched H5Ps.
    *
    * @param string $data Uri of data that should be saved as a temporary file
-   * @param string $name Name that the data should be saved as in the temporary folder
    * @param boolean $move_file Can be set to TRUE to move the data instead of saving it
    *
-   * @return bool|string Returns false if saving failed or the path to the file
+   * @return bool|object Returns false if saving failed or the path to the file
    *  if saving succeeded
    */
-  public static function saveFileTemporarily($data, $name, $move_file);
+  public static function saveFileTemporarily($data, $move_file);
 
   /**
    * Marks a file for later cleanup, useful when files are not instantly cleaned
