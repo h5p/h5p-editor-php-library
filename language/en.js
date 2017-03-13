@@ -65,6 +65,7 @@ H5PEditor.language.core = {
   orderItemDown: 'Order item down',
   removeItem: 'Remove item',
   importantInstructions: 'Important instructions',
+  hideImportantInstructions: 'Hide important instructions',
   hide: 'Hide',
   example: 'Example'
 };

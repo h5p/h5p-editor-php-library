@@ -602,8 +602,8 @@ ns.editorImportantDescriptionSeenArray = [];
 
 /**
  * Create an important description
- * @param {String} importantDescription
- * @returns {string}
+ * @param {Object} importantDescription
+ * @returns {String}
  */
 ns.createImportantDescription = function (importantDescription) {
   var html = '';
@@ -612,7 +612,7 @@ ns.createImportantDescription = function (importantDescription) {
     html += '<div class="h5peditor-field-important-description">' +
               '<div class="important-description-tail">' +
               '</div>' +
-              '<div class="important-description-close" role="button" tabindex="0" aria-label="' + ns.t('core', 'hide') + '">' +
+              '<div class="important-description-close" role="button" tabindex="0" aria-label="' + ns.t('core', 'hideImportantInstructions') + '">' +
                 '<span>' +
                    ns.t('core', 'hide') +
                 '</span>' +
@@ -654,25 +654,40 @@ ns.createImportantDescription = function (importantDescription) {
   return html;
 };
 
-ns.bindImportantDescriptionEvents = function ($widget, fieldName, parent) {
+/**
+ * Bind events to important description
+ * @param {Object} widget
+ * @param {String} fieldName
+ * @param {Object} parent
+ */
+ns.bindImportantDescriptionEvents = function (widget, fieldName, parent) {
   var that = this;
 
-  if (!$widget.field.important) {
+  if (!widget.field.important) {
     return;
   }
 
+  // Generate a context string for using as referance in ex. localStorage.
   var librarySelector = ns.findLibraryAncestor(parent);
   if (librarySelector.currentLibrary !== undefined) {
     var lib = librarySelector.currentLibrary.split(' ')[0];
     var context = (lib + '-' + fieldName).replace(/\.|_/g,'-');
   }
 
-  var $importantField = $widget.$item.find('.h5peditor-field-important-description');
+  var $importantField = widget.$item.find('.h5peditor-field-important-description');
 
-  this.hasImportantBeenSeen(context, $importantField);
-  $widget.$item.addClass('has-important-description');
+  // Set first occurance to visible and set it as seen in the array
+  this.storage.get(context + '-seen', function (value) {
+    if (value !== true && ns.editorImportantDescriptionSeenArray.indexOf(context) === -1) {
+      $importantField.addClass('show');
+      ns.editorImportantDescriptionSeenArray.push(context);
+    }
+  });
 
-  $widget.$item.find('.icon-important-desc')
+  widget.$item.addClass('has-important-description');
+
+  // Bind events to toggle button and update aria-pressed
+  widget.$item.find('.icon-important-desc')
     .click(function() {
       $importantField.toggleClass('show');
       ns.$(this).attr('aria-pressed', $importantField.hasClass('show'));
@@ -685,12 +700,13 @@ ns.bindImportantDescriptionEvents = function ($widget, fieldName, parent) {
     })
     .attr('aria-pressed', $importantField.hasClass('show') ? 'true' : 'false' );
 
-  $widget.$item.find('.important-description-close')
+  // Bind events to close button and update aria-pressed of toggle button
+  widget.$item.find('.important-description-close')
     .click(function() {
       ns.$(this).parent()
         .removeClass('show')
         .siblings('.icon-important-desc').attr('aria-pressed', false);
-      that.setImportantSeen(context);
+      this.storage.set(context + '-seen', true);
     })
     .keydown(function() {
       if (event.which == 13 || event.which == 32) {
@@ -813,7 +829,7 @@ ns.createButton = function (id, title, handler, displayTitle) {
 };
 
 // Factory for creating storage instance
-var storage = (function () {
+ns.storage = (function () {
   var instance = {
     get: function (key, next) {
       var value;
@@ -852,31 +868,6 @@ var storage = (function () {
   };
   return instance;
 })();
-
-/**
- * Mark this important description as seen. This is persisted using localstorage. If not present, nothing is persisted.
- *
- * @method setImportantSeen
- */
-ns.setImportantSeen = function (id) {
-  storage.set(id + '-seen', true);
-};
-
-/**
- * Check if this important description has been seen by user. Reads value from localstorage
- *
- * @method hasImportantBeenSeen
- * @return {Boolean}
- */
-ns.hasImportantBeenSeen = function (id, $importantField) {
-  var that = this;
-  storage.get(id + '-seen', function (value) {
-    if (value !== true && ns.editorImportantDescriptionSeenArray.indexOf(id) === -1) {
-      $importantField.addClass('show');
-      ns.editorImportantDescriptionSeenArray.push(id);
-    }
-  });
-};
 
 /**
  * Clears global variables so that they are reset when switching library

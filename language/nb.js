@@ -65,6 +65,7 @@ H5PEditor.language.core = {
   orderItemDown: 'Flytt element ned',
   removeItem: 'Fjern element',
   importantInstructions: 'Viktige instruksjoner',
+  hideImportantInstructions: 'Skjul viktige instruksjoner',
   hide: 'Skjul',
   example: 'Eksempel'
 };
