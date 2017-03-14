@@ -157,7 +157,7 @@ class H5PEditorAjax {
   private function libraryUpload() {
     // Verify h5p upload
     if (!$_FILES['h5p']) {
-      H5PCore::ajaxError(get_string('invalidh5ppost', 'hvp'), 'NO_CONTENT_TYPE');
+      H5PCore::ajaxError($this->core->h5pF->t('invalidh5ppost'), 'NO_CONTENT_TYPE');
       exit;
     }
 
@@ -192,7 +192,8 @@ class H5PEditorAjax {
    * @return bool
    */
   private function isValidEditorToken($token) {
-    if (!\H5PCore::validToken('editorajax', $token)) {
+    $isValidToken = $this->editor->ajaxInterface->validateEditorToken($token);
+    if (!$isValidToken) {
       \H5PCore::ajaxError(
         $this->core->h5pF->t('Invalid security token.'),
         'INVALID_TOKEN'

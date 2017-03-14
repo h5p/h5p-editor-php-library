@@ -32,4 +32,13 @@ interface H5PEditorAjaxInterface {
    */
   public function getAuthorsRecentlyUsedLibraries();
 
+  /**
+   * Checks if the provided token is valid for this endpoint
+   *
+   * @param string $token The token that will be validated for.
+   *
+   * @return bool True if successful validation
+   */
+  public function validateEditorToken($token);
+
 }
