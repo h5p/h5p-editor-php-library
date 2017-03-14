@@ -108,9 +108,11 @@ class H5PEditorAjax {
         break;
 
       case H5PEditorEndpoints::LIBRARY_UPLOAD:
-        $token = func_get_arg(1);
         if (!$this->isPostRequest()) return;
+
+        $token = func_get_arg(1);
         if (!$this->isValidEditorToken($token)) return;
+
         $this->libraryUpload();
         break;
 
@@ -130,7 +132,7 @@ class H5PEditorAjax {
    * Marks all uploaded files as
    * temporary so they can be cleaned up when we have finished using them.
    *
-   * @param $contentId Id of content if already existing content
+   * @param int $contentId Id of content if already existing content
    */
   private function fileUpload($contentId = NULL) {
     $file = new H5peditorFile($this->core->h5pF);
@@ -141,8 +143,8 @@ class H5PEditorAjax {
 
     // Make sure file is valid and mark it for cleanup at a later time
     if ($file->validate()) {
-      $this->core->fs->saveFile($file, $contentId);
-      $this->storage->markFileForCleanup($file);
+      $file_id = $this->core->fs->saveFile($file, $contentId);
+      $this->storage->markFileForCleanup($file_id);
     }
     $file->printResult();
   }
@@ -153,11 +155,17 @@ class H5PEditorAjax {
    * Validates and saves any dependencies, then exposes content to the editor.
    */
   private function libraryUpload() {
-    $file = $this->saveFileTemporarily($_FILES['h5p']['tmp_name'], $_FILES['h5p']['name'], TRUE);
+    // Verify h5p upload
+    if (!$_FILES['h5p']) {
+      H5PCore::ajaxError(get_string('invalidh5ppost', 'hvp'), 'NO_CONTENT_TYPE');
+      exit;
+    }
+
+    $file = $this->saveFileTemporarily($_FILES['h5p']['tmp_name'], TRUE);
     if (!$file) return;
 
     // These has to be set instead of sending parameteres to the validation function.
-    $this->setSessionParameters($file, $_FILES['h5p']['name']);
+    $this->setSessionParameters($file->dir, $file->fileName);
     if (!$this->isValidPackage()) return;
 
     // Install any required dependencies

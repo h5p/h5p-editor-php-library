@@ -68,7 +68,7 @@ interface H5peditorStorage {
    * Marks a file for later cleanup, useful when files are not instantly cleaned
    * up. E.g. for files that are uploaded through the editor.
    *
-   * @param H5peditorFile $file
+   * @param H5peditorFile
    */
   public static function markFileForCleanup($file);
 }
