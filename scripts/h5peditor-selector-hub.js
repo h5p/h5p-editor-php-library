@@ -40,10 +40,7 @@ ns.SelectorHub.prototype.onSelect = function(callback, scope) {
 
 ns.SelectorHub.prototype.onUpload = function(callback, scope) {
   this.client.on('upload', function (e) {
-    console.log("we ever get an upload event ???");
-
     // Retrieve the preloaded dependency that has the same machineName as h5p.json
-    debugger;
     const libraryVersion = e.data.h5p.preloadedDependencies
       .filter(function (dependency) {
         return dependency.machineName === e.data.h5p.mainLibrary;

@@ -90,18 +90,46 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
     that.$exampleUrl.attr('href', exampleUrl).toggle(exampleUrl !== undefined && exampleUrl !== null && exampleUrl.length !== 0);
   };
 
-  this.$selector = ns.$('<select name="h5peditor-library" title="' + ns.t('core', 'selectLibrary') + '">' + options + '</select>').change(function () {
-    // Use timeout to avoid bug in Chrome >44, when confirm is used inside change event.
-    // Ref. https://code.google.com/p/chromium/issues/detail?id=525629
-    setTimeout(function () {
-      if (!firstTime) {
-        changeLibraryDialog.show(that.$selector.offset().top);
-      }
-      else {
-        changeLibraryToSelector();
-      }
-    }, 0);
-  });
+  if(H5PIntegration.hubIsEnabled) {
+
+    /**
+     * @type {ContentTypeSelector}
+     */
+    var SelectorHub = ns.SelectorHub;
+
+    var selector = new SelectorHub();
+
+    // add hub to container
+    this.$selector = ns.$(selector.getElement());
+
+    // add editor to container on load
+    selector.onSelect(function(contentTypeId) {
+      var library = contentTypeId;
+      that.loadSemantics(library);
+      that.currentLibrary = library;
+    });
+
+    // Add editor when using an uploaded H5P
+    selector.onUpload(function (content) {
+      var library = content.libraryId;
+      that.loadSemantics(content.libraryId, content.contentJson);
+      that.currentLibrary = library;
+    });
+  }
+  else {
+    this.$selector = ns.$('<select name="h5peditor-library" title="' + ns.t('core', 'selectLibrary') + '">' + options + '</select>').change(function () {
+      // Use timeout to avoid bug in Chrome >44, when confirm is used inside change event.
+      // Ref. https://code.google.com/p/chromium/issues/detail?id=525629
+      setTimeout(function () {
+        if (!firstTime) {
+          changeLibraryDialog.show(that.$selector.offset().top);
+        }
+        else {
+          changeLibraryToSelector();
+        }
+      }, 0);
+    });
+  }
 };
 
 /**
@@ -124,9 +152,10 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
  * Display loading message and load library semantics.
  *
  * @param {String} library
+ * @param {Object} params Pass in params to semantics
  * @returns {unresolved}
  */
-ns.LibrarySelector.prototype.loadSemantics = function (library) {
+ns.LibrarySelector.prototype.loadSemantics = function (library, params) {
   var that = this;
 
   if (this.form !== undefined) {
@@ -155,14 +184,31 @@ ns.LibrarySelector.prototype.loadSemantics = function (library) {
       });
     }
     else {
+      var overrideParams = {};
+      if (params) {
+        overrideParams = params;
+      }
+      else if (library === that.defaultLibrary || library === that.defaultLibraryParameterized) {
+        overrideParams = that.defaultParams;
+      }
+
       that.form = new ns.Form();
       that.form.replace($loading);
-      that.form.processSemantics(semantics, (library === that.defaultLibrary || library === that.defaultLibraryParameterized ? that.defaultParams : {}));
+      that.form.processSemantics(semantics, overrideParams);
     }
 
     that.$selector.attr('disabled', false);
     $loading.remove();
   });
+};
+
+/**
+ * Returns currently selected library
+ *
+ * @returns {string} Currently selected library
+ */
+ns.LibrarySelector.prototype.getCurrentLibrary = function () {
+  return this.currentLibrary;
 };
 
 /**

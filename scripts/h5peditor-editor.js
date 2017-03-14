@@ -51,50 +51,24 @@ ns.Editor = function (library, defaultParams, replace) {
     'class': 'h5p-editor-iframe',
     frameBorder: '0'
   }).replaceAll(replace).load(function () {
-    var SelectorHub = this.contentWindow.H5PEditor.SelectorHub;
     var LibrarySelector = this.contentWindow.H5PEditor.LibrarySelector;
 
     var $ = this.contentWindow.H5P.jQuery;
     this.contentWindow.H5P.$body = $(this.contentDocument.body);
     var $container = $('body > .h5p-editor');
 
-    if(H5PIntegration.hubIsEnabled) {
-      /**
-       * @type {ContentTypeSelector}
-       */
-      var selector = new SelectorHub();
-
-      // add hub to container
-      $(selector.getElement()).prependTo($container.html(''));
-
-      // add editor to container on load
-      selector.onSelect(function(contentTypeId) {
-        var $element = self.handleLoadLibrary(contentTypeId, library);
-        $element.appendTo($container);
-        self.selectedContentTypeId = contentTypeId;
-      });
-
-      // Add editor when using an uploaded H5P
-      selector.onUpload(function (content) {
-        var $element = self.handleLoadLibrary(content.libraryId, content.contentJson);
-        $element.appendTo($container);
-        self.selectedContentTypeId = content.libraryId;
-      });
-    }
-    else {
-      $.ajax({
-        dataType: 'json',
-        url: ns.getAjaxUrl('libraries')
-      }).fail(function () {
-        $container.html('Error, unable to load libraries.');
-      }).done(function (data) {
-        self.selector = new LibrarySelector(data, library, defaultParams);
-        self.selector.appendTo($container.html(''));
-        if (library) {
-          self.selector.$selector.change();
-        }
-      });
-    }
+    $.ajax({
+      dataType: 'json',
+      url: ns.getAjaxUrl('libraries')
+    }).fail(function () {
+      $container.html('Error, unable to load libraries.');
+    }).done(function (data) {
+      self.selector = new LibrarySelector(data, library, defaultParams);
+      self.selector.appendTo($container.html(''));
+      if (library) {
+        // self.selector.$selector.change();
+      }
+    });
 
     // Start resizing the iframe
     if (iframe.contentWindow.MutationObserver !== undefined) {
@@ -173,10 +147,11 @@ ns.Editor = function (library, defaultParams, replace) {
  *
  * @param {string} id
  * @param {string} library
+ * @param {Object} params
  *
  * @return {HTMLElement}
  */
-ns.Editor.prototype.handleLoadLibrary = function (id, library) {
+ns.Editor.prototype.handleLoadLibrary = function (id, library, params) {
   var self = this;
 
   // add loading throbber
@@ -189,7 +164,7 @@ ns.Editor.prototype.handleLoadLibrary = function (id, library) {
       this.form.remove();
     }
 
-    self.form = self.createAndLoadForm(semantics, library);
+    self.form = self.createAndLoadForm(semantics, library, params);
     $loading.replaceWith(self.form.$form);
   });
 
@@ -199,14 +174,15 @@ ns.Editor.prototype.handleLoadLibrary = function (id, library) {
 /**
  * Creates the form and loads it
  *
- * @param {object} semantics
+ * @param {Array} semantics
  * @param {string} library
+ * @param {Object} params
  *
  * @return {H5PEditor.Form}
  */
-ns.Editor.prototype.createAndLoadForm = function(semantics, library) {
+ns.Editor.prototype.createAndLoadForm = function(semantics, library, params) {
   var form = new H5PEditor.Form();
-  form.processSemantics(semantics, library);
+  form.processSemantics(semantics, (params ? params : {}));
   return form;
 };
 
@@ -219,7 +195,7 @@ ns.Editor.prototype.createAndLoadForm = function(semantics, library) {
  */
 ns.Editor.prototype.getLibrary = function () {
   if (this.selector !== undefined) {
-    return this.selector.$selector.val();
+    return this.selector.getCurrentLibrary();
   }
   else if(this.selectedContentTypeId) {
     return this.selectedContentTypeId;
