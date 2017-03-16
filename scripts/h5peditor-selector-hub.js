@@ -9,7 +9,7 @@ var ns = H5PEditor;
 ns.SelectorHub = function () {
   this.client = new H5P.HubClient({
     apiRootUrl: H5PEditor.ajaxPath
-  });
+  }, H5PEditor.language.hub);
 };
 
 /**

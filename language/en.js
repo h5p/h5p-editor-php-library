@@ -66,3 +66,8 @@ H5PEditor.language.core = {
   orderItemDown: 'Order item down',
   removeItem: 'Remove item'
 };
+H5PEditor.language.hub = {
+  installButtonLabel: 'Install',
+  useButtonLabel: 'Use',
+  getButtonLabel: 'Get'
+};
