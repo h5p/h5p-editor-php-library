@@ -43,9 +43,6 @@ ns.loadLibrary = function (libraryName, callback) {
     default:
       // Get semantics from cache.
       callback(ns.loadedSemantics[libraryName]);
-      if (libraryName.indexOf('CoursePresentation') != -1) {
-        this.clearGlobalVariables();
-      }
       break;
 
     case 0:
@@ -597,11 +594,6 @@ ns.createDescription = function (description) {
 };
 
 /**
- * Create an array to keep what important description has been seen
- */
-ns.editorImportantDescriptionSeenArray = [];
-
-/**
  * Create an important description
  * @param {Object} importantDescription
  * @returns {String}
@@ -663,6 +655,7 @@ ns.createImportantDescription = function (importantDescription) {
  */
 ns.bindImportantDescriptionEvents = function (widget, fieldName, parent) {
   var that = this;
+  var context;
 
   if (!widget.field.important) {
     return;
@@ -672,16 +665,15 @@ ns.bindImportantDescriptionEvents = function (widget, fieldName, parent) {
   var librarySelector = ns.findLibraryAncestor(parent);
   if (librarySelector.currentLibrary !== undefined) {
     var lib = librarySelector.currentLibrary.split(' ')[0];
-    var context = (lib + '-' + fieldName).replace(/\.|_/g,'-');
+    context = (lib + '-' + fieldName).replace(/\.|_/g,'-');
   }
 
   var $importantField = widget.$item.find('.h5peditor-field-important-description');
 
-  // Set first occurance to visible and set it as seen in the array
+  // Set first occurance to visible
   ns.storage.get(context + '-seen', function (value) {
-    if (value !== true && ns.editorImportantDescriptionSeenArray.indexOf(context) === -1) {
+    if (value !== true) {
       $importantField.addClass('show');
-      ns.editorImportantDescriptionSeenArray.push(context);
     }
   });
 
@@ -869,12 +861,3 @@ ns.storage = (function () {
   };
   return instance;
 })();
-
-/**
- * Clears global variables so that they are reset when switching library
- */
-ns.clearGlobalVariables = function () {
-  if(ns.$('.h5peditor-field-important-description').length <= 1) {
-    ns.editorImportantDescriptionSeenArray = [];
-  }
-};
