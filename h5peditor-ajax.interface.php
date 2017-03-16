@@ -22,7 +22,7 @@ interface H5PEditorAjaxInterface {
    *
    * @return array|object|null Returns results from querying the database
    */
-  public function getContentTypeCache($machineName);
+  public function getContentTypeCache($machineName = NULL);
 
   /**
    * Gets recently used libraries for the current author

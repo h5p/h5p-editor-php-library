@@ -179,7 +179,7 @@ class H5PEditorAjax {
     $content = $this->core->fs->moveContentDirectory($this->core->h5pF->getUploadedH5pFolderPath());
 
     // Clean up
-    $this->removeUploadeFiles();
+    $this->storage->removeTmpUploadedFiles();
 
     H5PCore::ajaxSuccess((object) array(
       'h5p' => json_decode($content->h5pJson),
@@ -204,14 +204,6 @@ class H5PEditorAjax {
       return FALSE;
     }
     return TRUE;
-  }
-
-  /**
-   * Clean up temporary files and delete session variables
-   */
-  private function removeUploadeFiles() {
-    H5PCore::deleteFileTree($_SESSION['h5p_upload_folder']);
-    unset($_SESSION['h5p_upload'], $_SESSION['h5p_upload_folder']);
   }
 
   /**

@@ -423,11 +423,12 @@ class H5peditor {
   public function getUserSpecificContentTypeCache() {
     $cached_libraries = $this->ajaxInterface->getContentTypeCache();
 
-    // Check if user has access to install libraries and format to json
+    // Check if user has access to install libraries
     $libraries = array();
     foreach ($cached_libraries as &$result) {
       $result->restricted = !$this->canInstallContentType($result);
-      $libraries[]        = $this->getCachedLibsMap($result);
+      // Formats json
+      $libraries[] = $this->getCachedLibsMap($result);
     }
 
     return $libraries;
@@ -524,6 +525,7 @@ class H5peditor {
     // Add local libraries to supplement content type cache
     foreach ($local_libraries as $local_lib) {
       $is_local_only = TRUE;
+      $icon_path = NULL;
 
       // Check if icon is available locally:
       if($local_lib->has_icon) {
