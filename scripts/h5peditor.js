@@ -706,7 +706,7 @@ ns.bindImportantDescriptionEvents = function (widget, fieldName, parent) {
       ns.$(this).parent()
         .removeClass('show')
         .siblings('.icon-important-desc').attr('aria-pressed', false);
-      this.storage.set(context + '-seen', true);
+      that.storage.set(context + '-seen', true);
     })
     .keydown(function() {
       if (event.which == 13 || event.which == 32) {
