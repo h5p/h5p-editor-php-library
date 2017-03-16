@@ -168,7 +168,6 @@ class H5PEditorAjax {
     if (!$file) return;
 
     // These has to be set instead of sending parameteres to the validation function.
-    $this->setSessionParameters($file->dir, $file->fileName);
     if (!$this->isValidPackage()) return;
 
     // Install any required dependencies
@@ -179,7 +178,7 @@ class H5PEditorAjax {
     $content = $this->core->fs->moveContentDirectory($this->core->h5pF->getUploadedH5pFolderPath());
 
     // Clean up
-    $this->storage->removeTmpUploadedFiles();
+    $this->storage->removeTemporarilySavedFiles($file->dir);
 
     H5PCore::ajaxSuccess((object) array(
       'h5p' => json_decode($content->h5pJson),
@@ -248,7 +247,6 @@ class H5PEditorAjax {
     if (!$file) return;
 
     // Session parameters has to be set for validation and saving of packages
-    $this->setSessionParameters($file->dir, $file->fileName);
     if (!$this->isValidPackage(TRUE)) return;
 
     // Save H5P
@@ -256,7 +254,7 @@ class H5PEditorAjax {
     $storage->savePackage(NULL, NULL, TRUE);
 
     // Clean up
-    $this->removeUploadeFiles();
+    $this->storage->removeTemporarilySavedFiles($file->dir);
 
     // Successfully installed.
     H5PCore::ajaxSuccess();
@@ -272,7 +270,7 @@ class H5PEditorAjax {
   private function isValidPackage($skipContent = FALSE) {
     $validator = new H5PValidator($this->core->h5pF, $this->core);
     if (!$validator->isValidPackage($skipContent, FALSE)) {
-      $this->removeUploadeFiles();
+      $this->storage->removeTemporarilySavedFiles($this->core->h5pF->getUploadedH5pPath());
 
       H5PCore::ajaxError(
         $this->core->h5pF->t('Validating h5p package failed.'),
@@ -282,18 +280,6 @@ class H5PEditorAjax {
     }
 
     return TRUE;
-  }
-
-  /**
-   * Set session parameters as these are required for validating H5Ps
-   * and saving them
-   *
-   * @param string $tmpPath Path of temporarily stored files
-   * @param string $fileName Name of the H5P that will be handled
-   */
-  private function setSessionParameters($tmpPath, $fileName) {
-    $_SESSION['h5p_upload_folder'] = $tmpPath;
-    $_SESSION['h5p_upload'] = $tmpPath . DIRECTORY_SEPARATOR . $fileName;
   }
 
   /**

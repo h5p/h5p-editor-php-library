@@ -74,6 +74,8 @@ interface H5peditorStorage {
 
   /**
    * Clean up temporary files
+   *
+   * @param string $filePath Path to file or directory
    */
-  public static function removeTmpUploadedFiles();
+  public static function removeTemporarilySavedFiles($filePath);
 }
