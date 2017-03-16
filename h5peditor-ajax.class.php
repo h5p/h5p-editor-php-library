@@ -178,7 +178,7 @@ class H5PEditorAjax {
     $content = $this->core->fs->moveContentDirectory($this->core->h5pF->getUploadedH5pFolderPath());
 
     // Clean up
-    $this->storage->removeTemporarilySavedFiles($file->dir);
+    $this->storage->removeTemporarilySavedFiles($this->core->h5pF->getUploadedH5pFolderPath());
 
     H5PCore::ajaxSuccess((object) array(
       'h5p' => json_decode($content->h5pJson),
@@ -254,7 +254,7 @@ class H5PEditorAjax {
     $storage->savePackage(NULL, NULL, TRUE);
 
     // Clean up
-    $this->storage->removeTemporarilySavedFiles($file->dir);
+    $this->storage->removeTemporarilySavedFiles($this->core->h5pF->getUploadedH5pFolderPath());
 
     // Successfully installed.
     H5PCore::ajaxSuccess();
