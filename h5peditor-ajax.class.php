@@ -113,7 +113,8 @@ class H5PEditorAjax {
         $token = func_get_arg(1);
         if (!$this->isValidEditorToken($token)) return;
 
-        $this->libraryUpload();
+        $uploadPath = func_get_arg(2);
+        $this->libraryUpload($uploadPath);
         break;
 
       case H5PEditorEndpoints::FILES:
@@ -153,15 +154,17 @@ class H5PEditorAjax {
    * Handles uploading libraries so they are ready to be modified or directly saved.
    *
    * Validates and saves any dependencies, then exposes content to the editor.
+   *
+   * @param {string} $uploadFilePath Path to the file that should be uploaded
    */
-  private function libraryUpload() {
+  private function libraryUpload($uploadFilePath) {
     // Verify h5p upload
-    if (!$_FILES['h5p']) {
+    if (!$uploadFilePath) {
       H5PCore::ajaxError($this->core->h5pF->t('Could not get posted H5P.'), 'NO_CONTENT_TYPE');
       exit;
     }
 
-    $file = $this->saveFileTemporarily($_FILES['h5p']['tmp_name'], TRUE);
+    $file = $this->saveFileTemporarily($uploadFilePath, TRUE);
     if (!$file) return;
 
     // These has to be set instead of sending parameteres to the validation function.
