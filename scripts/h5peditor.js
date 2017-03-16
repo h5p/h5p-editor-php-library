@@ -45,7 +45,6 @@ ns.loadLibrary = function (libraryName, callback) {
       callback(ns.loadedSemantics[libraryName]);
       if (libraryName.indexOf('CoursePresentation') != -1) {
         this.clearGlobalVariables();
-        console.log('cleared by 1');
       }
       break;
 
