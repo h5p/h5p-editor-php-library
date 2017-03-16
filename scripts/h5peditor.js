@@ -43,7 +43,10 @@ ns.loadLibrary = function (libraryName, callback) {
     default:
       // Get semantics from cache.
       callback(ns.loadedSemantics[libraryName]);
-      this.clearGlobalVariables();
+      if (libraryName.indexOf('CoursePresentation') != -1) {
+        this.clearGlobalVariables();
+        console.log('cleared by 1');
+      }
       break;
 
     case 0:
@@ -52,7 +55,6 @@ ns.loadLibrary = function (libraryName, callback) {
       break;
 
     case undefined:
-      this.clearGlobalVariables();
       // Load semantics.
       ns.loadedSemantics[libraryName] = 0; // Indicates that others should queue.
       ns.semanticsLoaded[libraryName] = []; // Other callbacks to run once loaded.
