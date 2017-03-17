@@ -4,6 +4,29 @@
 var H5PEditor = (H5PEditor || {});
 var ns = H5PEditor;
 
+
+/**
+ * Interface for classes can select a content type
+ *
+ * @interface ContentTypeSelector
+ */
+/**
+ * Returns an element to apply to the dom
+ *
+ * @function
+ * @name ContentTypeSelector#getElement
+ * @returns {HTMLElement}
+ */
+/**
+ * Calls a callback when a Content Type is selected
+ *
+ * @function
+ * @name ContentTypeSelector#onSelect
+ * @param {function} callback
+ * @param {object} [scope]
+ */
+
+
 /**
  * Construct the editor.
  *
@@ -28,12 +51,12 @@ ns.Editor = function (library, defaultParams, replace) {
     'class': 'h5p-editor-iframe',
     frameBorder: '0'
   }).replaceAll(replace).load(function () {
-    var $ = this.contentWindow.H5P.jQuery;
     var LibrarySelector = this.contentWindow.H5PEditor.LibrarySelector;
+
+    var $ = this.contentWindow.H5P.jQuery;
     this.contentWindow.H5P.$body = $(this.contentDocument.body);
     var $container = $('body > .h5p-editor');
 
-    // Load libraries list
     $.ajax({
       dataType: 'json',
       url: ns.getAjaxUrl('libraries')
@@ -43,7 +66,7 @@ ns.Editor = function (library, defaultParams, replace) {
       self.selector = new LibrarySelector(data, library, defaultParams);
       self.selector.appendTo($container.html(''));
       if (library) {
-        self.selector.$selector.change();
+        // self.selector.$selector.change();
       }
     });
 
@@ -68,9 +91,11 @@ ns.Editor = function (library, defaultParams, replace) {
         attributeOldValue: false,
         characterDataOldValue: false
       });
+
       H5P.$window.resize(limitedResize);
+      resize();
     }
-    else {
+     else {
       // Use an interval for resizing the iframe
       (function resizeInterval() {
         resize();
@@ -82,10 +107,10 @@ ns.Editor = function (library, defaultParams, replace) {
   iframe.contentDocument.write(
     '<!doctype html><html>' +
     '<head>' +
-      ns.wrap('<link rel="stylesheet" href="', ns.assets.css, '">') +
-      ns.wrap('<script src="', ns.assets.js, '"></script>') +
+    ns.wrap('<link rel="stylesheet" href="', ns.assets.css, '">') +
+    ns.wrap('<script src="', ns.assets.js, '"></script>') +
     '</head><body>' +
-      '<div class="h5p-editor">' + ns.t('core', 'loading') + '</div>' +
+    '<div class="h5p-editor">' + ns.t('core', 'loading') + '</div>' +
     '</body></html>');
   iframe.contentDocument.close();
   iframe.contentDocument.documentElement.style.overflow = 'hidden';
@@ -97,7 +122,7 @@ ns.Editor = function (library, defaultParams, replace) {
    */
   var resize = function () {
     if (iframe.clientHeight === iframe.contentDocument.body.scrollHeight &&
-        iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight) {
+      iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight) {
       return; // Do not resize unless page and scrolling differs
     }
 
@@ -116,6 +141,52 @@ ns.Editor = function (library, defaultParams, replace) {
   };
 };
 
+
+/**
+ * Handles loading the library
+ *
+ * @param {string} id
+ * @param {string} library
+ * @param {Object} params
+ *
+ * @return {HTMLElement}
+ */
+ns.Editor.prototype.handleLoadLibrary = function (id, library, params) {
+  var self = this;
+
+  // add loading throbber
+  var $loading = ns.$('<div class="h5peditor-loading h5p-throbber">' + ns.t('core', 'loading') + '</div>');
+
+  // load the library
+  ns.loadLibrary(id, function(semantics) {
+    if (this.form !== undefined) {
+      // Remove old form.
+      this.form.remove();
+    }
+
+    self.form = self.createAndLoadForm(semantics, library, params);
+    $loading.replaceWith(self.form.$form);
+  });
+
+  return $loading;
+};
+
+/**
+ * Creates the form and loads it
+ *
+ * @param {Array} semantics
+ * @param {string} library
+ * @param {Object} params
+ *
+ * @return {H5PEditor.Form}
+ */
+ns.Editor.prototype.createAndLoadForm = function(semantics, library, params) {
+  var form = new H5PEditor.Form();
+  form.processSemantics(semantics, (params ? params : {}));
+  return form;
+};
+
+
 /**
  * Find out which library is used/selected.
  *
@@ -124,7 +195,13 @@ ns.Editor = function (library, defaultParams, replace) {
  */
 ns.Editor.prototype.getLibrary = function () {
   if (this.selector !== undefined) {
-    return this.selector.$selector.val();
+    return this.selector.getCurrentLibrary();
+  }
+  else if(this.selectedContentTypeId) {
+    return this.selectedContentTypeId;
+  }
+  else {
+    console.warn('no selector defined for "getLibrary"');
   }
 };
 
@@ -137,6 +214,12 @@ ns.Editor.prototype.getLibrary = function () {
 ns.Editor.prototype.getParams = function () {
   if (this.selector !== undefined) {
     return this.selector.getParams();
+  }
+  else if(this.form){
+    return this.form.params;
+  }
+  else {
+    console.warn('no selector defined for "getParams"');
   }
 };
 

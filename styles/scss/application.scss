@@ -252,13 +252,13 @@ a {
           position: relative;
 
           &:before {
-            font-family: 'H5PFontAwesome4';
-            content: "\f144";
+            font-family: 'H5P';
+            content: "\e904";
             position: absolute;
-            font-size: 2.3em;
-            line-height: 1.1em;
             color: #dd0505;
-            left: 15px;
+            left: 0;
+            top: 0.075em;
+            font-size: 3.8em;
           }
 
           input {
@@ -289,11 +289,10 @@ a {
             right: 3px;
 
             &:after {
-              font-family: 'H5PFontAwesome4';
-              content: "\f1c8";
-              top: 25%;
-              position: relative;
-              font-size: 2.3em;
+              font-family: "H5P";
+              content: "\e903";
+              line-height: 1.4em;
+              font-size: 3.5em;
               color: #bbb;
             }
           }
@@ -892,17 +891,31 @@ a {
   overflow: hidden;
 }
 
-.h5p-tutorial-url {
-  font-size: 0.875em;
+.h5p-tutorial-url,
+.h5p-example-url {
+  font-size: 0.9em;
+  color: rgb(34, 132, 205);
+  margin-left: 20px;
 }
 
 .h5p-tutorial-url:before {
   font-family: $icon-font-family;
-  content: "\e889";
+  content: "\e907";
   font-size: 1.5em;
   position: relative;
   top: .2em;
   left: .2em;
+  margin-right: 10px;
+}
+
+.h5p-example-url:before {
+  font-family: $icon-font-family;
+  content: "\e906";
+  font-size: 1.5em;
+  position: relative;
+  top: .2em;
+  left: .2em;
+  margin-right: 10px;
 }
 
 .h5peditor-widget-select {

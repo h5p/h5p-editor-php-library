@@ -34,7 +34,8 @@ H5PEditor.language.core = {
   noFollow: 'Cannot follow field ":path".',
   editCopyright: 'Edit copyright',
   close: 'Close',
-  tutorialAvailable: 'Tutorial available',
+  tutorial: 'Tutorial',
+  example: 'Example',
   editMode: 'Editing mode',
   listLabel: 'List',
   uploadError: 'File Upload Error',
@@ -68,4 +69,9 @@ H5PEditor.language.core = {
   hideImportantInstructions: 'Hide important instructions',
   hide: 'Hide',
   example: 'Example'
+};
+H5PEditor.language.hub = {
+  installButtonLabel: 'Install',
+  useButtonLabel: 'Use',
+  getButtonLabel: 'Get'
 };

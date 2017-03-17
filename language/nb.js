@@ -1,3 +1,5 @@
+//H5PEditor = window.H5PEditor || {};
+//H5PEditor.language = H5PEditor.language || {};
 H5PEditor.language.core = {
   missingTranslation: '[Mangler oversettelse :key]',
   loading: 'Laster, vennligst vent...',
@@ -34,7 +36,8 @@ H5PEditor.language.core = {
   noFollow: 'Kunne ikke følge feltet ":path".',
   editCopyright: 'Rediger opphavsrett',
   close: 'Lukk',
-  tutorialAvailable: 'Veiledning tilgjengelig',
+  tutorial: 'Veiledning',
+  example: 'Eksempel',
   editMode: 'Redigeringsmodus',
   listLabel: 'Liste',
   uploadError: 'Filopplasting feilet',
@@ -68,4 +71,9 @@ H5PEditor.language.core = {
   hideImportantInstructions: 'Skjul viktige instruksjoner',
   hide: 'Skjul',
   example: 'Eksempel'
+};
+H5PEditor.language.hub = {
+  installButtonLabel: 'Installer',
+  useButtonLabel: 'Bruk',
+  getButtonLabel: 'Hent'
 };
