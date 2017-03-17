@@ -322,16 +322,18 @@ class H5peditor {
    * @param int $minorVersion
    * @param string $prefix Optional part to add between URL and asset path
    * @param string $fileDir Optional file dir to read files from
+   *
+   * @return array Libraries that was requested
    */
   public function getLibraryData($machineName, $majorVersion, $minorVersion, $languageCode, $prefix = '', $fileDir = '') {
     $libraryData = new stdClass();
 
-    $libraries = $this->findEditorLibraries($machineName, $majorVersion, $minorVersion);
+    $libraries              = $this->findEditorLibraries($machineName, $majorVersion, $minorVersion);
     $libraryData->semantics = $this->h5p->loadLibrarySemantics($machineName, $majorVersion, $minorVersion);
-    $libraryData->language = $this->getLibraryLanguage($machineName, $majorVersion, $minorVersion, $languageCode);
+    $libraryData->language  = $this->getLibraryLanguage($machineName, $majorVersion, $minorVersion, $languageCode);
 
     // Temporarily disable asset aggregation
-    $aggregateAssets = $this->h5p->aggregateAssets;
+    $aggregateAssets            = $this->h5p->aggregateAssets;
     $this->h5p->aggregateAssets = FALSE;
     // This is done to prevent files being loaded multiple times due to how
     // the editor works.
@@ -349,13 +351,13 @@ class H5peditor {
     // Javascripts
     if (!empty($files['scripts'])) {
       foreach ($files['scripts'] as $script) {
-        if (preg_match ('/:\/\//', $script->path) === 1) {
+        if (preg_match('/:\/\//', $script->path) === 1) {
           // External file
           $libraryData->javascript[$script->path . $script->version] = "\n" . file_get_contents($script->path);
         }
         else {
           // Local file
-          $libraryData->javascript[$url . $script->path . $script->version] = "\n" . $this->h5p->fs->getContent($script->path);
+          $libraryData->javascript[$url . $script->path . $script->version] = "\n" . $this->h5p->fs->getContent($fileDir . $script->path);
         }
       }
     }
@@ -363,14 +365,14 @@ class H5peditor {
     // Stylesheets
     if (!empty($files['styles'])) {
       foreach ($files['styles'] as $css) {
-        if (preg_match ('/:\/\//', $css->path) === 1) {
+        if (preg_match('/:\/\//', $css->path) === 1) {
           // External file
-          $libraryData->css[$css->path. $css->version] = file_get_contents($css->path);
+          $libraryData->css[$css->path . $css->version] = file_get_contents($css->path);
         }
         else {
           // Local file
           H5peditor::buildCssPath(NULL, $url . dirname($css->path) . '/');
-          $libraryData->css[$url . $css->path . $css->version] = preg_replace_callback('/url\([\'"]?(?![a-z]+:|\/+)([^\'")]+)[\'"]?\)/i', 'H5peditor::buildCssPath', $this->h5p->fs->getContent($css->path));
+          $libraryData->css[$url . $css->path . $css->version] = preg_replace_callback('/url\([\'"]?(?![a-z]+:|\/+)([^\'")]+)[\'"]?\)/i', 'H5peditor::buildCssPath', $this->h5p->fs->getContent($fileDir . $css->path));
         }
       }
     }
@@ -379,7 +381,7 @@ class H5peditor {
     foreach ($libraries as $library) {
       $language = $this->getLibraryLanguage($library['machineName'], $library['majorVersion'], $library['minorVersion'], $languageCode);
       if ($language !== NULL) {
-        $lang = '; H5PEditor.language["' . $library['machineName'] . '"] = ' . $language . ';';
+        $lang                                = '; H5PEditor.language["' . $library['machineName'] . '"] = ' . $language . ';';
         $libraryData->javascript[md5($lang)] = $lang;
       }
     }
