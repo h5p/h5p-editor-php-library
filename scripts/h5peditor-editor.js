@@ -4,29 +4,6 @@
 var H5PEditor = (H5PEditor || {});
 var ns = H5PEditor;
 
-
-/**
- * Interface for classes can select a content type
- *
- * @interface ContentTypeSelector
- */
-/**
- * Returns an element to apply to the dom
- *
- * @function
- * @name ContentTypeSelector#getElement
- * @returns {HTMLElement}
- */
-/**
- * Calls a callback when a Content Type is selected
- *
- * @function
- * @name ContentTypeSelector#onSelect
- * @param {function} callback
- * @param {object} [scope]
- */
-
-
 /**
  * Construct the editor.
  *
@@ -36,6 +13,8 @@ var ns = H5PEditor;
  */
 ns.Editor = function (library, defaultParams, replace) {
   var self = this;
+  // Library may return "0", make sure this doesn't return true in checks
+  library = library && library != 0 ? library : '';
 
   // Create iframe and replace the given element with it
   var iframe = ns.$('<iframe/>', {
@@ -63,10 +42,13 @@ ns.Editor = function (library, defaultParams, replace) {
     }).fail(function () {
       $container.html('Error, unable to load libraries.');
     }).done(function (data) {
+      // Create library selector
       self.selector = new LibrarySelector(data, library, defaultParams);
       self.selector.appendTo($container.html(''));
+
+      // Set library if editing
       if (library) {
-        // self.selector.$selector.change();
+        self.selector.setLibrary(library);
       }
     });
 
@@ -140,52 +122,6 @@ ns.Editor = function (library, defaultParams, replace) {
     iframe.parentElement.style.height = parentHeight;
   };
 };
-
-
-/**
- * Handles loading the library
- *
- * @param {string} id
- * @param {string} library
- * @param {Object} params
- *
- * @return {HTMLElement}
- */
-ns.Editor.prototype.handleLoadLibrary = function (id, library, params) {
-  var self = this;
-
-  // add loading throbber
-  var $loading = ns.$('<div class="h5peditor-loading h5p-throbber">' + ns.t('core', 'loading') + '</div>');
-
-  // load the library
-  ns.loadLibrary(id, function(semantics) {
-    if (this.form !== undefined) {
-      // Remove old form.
-      this.form.remove();
-    }
-
-    self.form = self.createAndLoadForm(semantics, library, params);
-    $loading.replaceWith(self.form.$form);
-  });
-
-  return $loading;
-};
-
-/**
- * Creates the form and loads it
- *
- * @param {Array} semantics
- * @param {string} library
- * @param {Object} params
- *
- * @return {H5PEditor.Form}
- */
-ns.Editor.prototype.createAndLoadForm = function(semantics, library, params) {
-  var form = new H5PEditor.Form();
-  form.processSemantics(semantics, (params ? params : {}));
-  return form;
-};
-
 
 /**
  * Find out which library is used/selected.
