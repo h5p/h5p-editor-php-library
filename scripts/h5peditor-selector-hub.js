@@ -12,9 +12,12 @@ ns.SelectorHub = function (selectedLibrary, changeLibraryDialog) {
 
   // Initialize hub client
   this.client = new H5P.HubClient({
-    title: selectedLibrary.split(' ')[0],
     apiRootUrl: H5PEditor.ajaxPath
   }, H5PEditor.language.hub);
+
+  if (selectedLibrary) {
+    this.client.setPanelTitle(selectedLibrary.split(' ')[0]);
+  }
 
   // Default to nothing selected and empty params
   this.currentLibrary = selectedLibrary;
