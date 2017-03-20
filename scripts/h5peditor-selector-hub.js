@@ -16,7 +16,7 @@ ns.SelectorHub = function (selectedLibrary, changeLibraryDialog) {
   }, H5PEditor.language.hub);
 
   if (selectedLibrary) {
-    this.client.setPanelTitle(selectedLibrary.split(' ')[0]);
+    this.client.setPanelTitle({id: selectedLibrary.split(' ')[0]});
   }
 
   // Default to nothing selected and empty params
