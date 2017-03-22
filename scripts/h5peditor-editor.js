@@ -13,6 +13,8 @@ var ns = H5PEditor;
  */
 ns.Editor = function (library, defaultParams, replace) {
   var self = this;
+  // Library may return "0", make sure this doesn't return true in checks
+  library = library && library != 0 ? library : '';
 
   // Create iframe and replace the given element with it
   var iframe = ns.$('<iframe/>', {
@@ -28,22 +30,25 @@ ns.Editor = function (library, defaultParams, replace) {
     'class': 'h5p-editor-iframe',
     frameBorder: '0'
   }).replaceAll(replace).load(function () {
-    var $ = this.contentWindow.H5P.jQuery;
     var LibrarySelector = this.contentWindow.H5PEditor.LibrarySelector;
+
+    var $ = this.contentWindow.H5P.jQuery;
     this.contentWindow.H5P.$body = $(this.contentDocument.body);
     var $container = $('body > .h5p-editor');
 
-    // Load libraries list
     $.ajax({
       dataType: 'json',
       url: ns.getAjaxUrl('libraries')
     }).fail(function () {
       $container.html('Error, unable to load libraries.');
     }).done(function (data) {
+      // Create library selector
       self.selector = new LibrarySelector(data, library, defaultParams);
       self.selector.appendTo($container.html(''));
+
+      // Set library if editing
       if (library) {
-        self.selector.$selector.change();
+        self.selector.setLibrary(library);
       }
     });
 
@@ -68,9 +73,11 @@ ns.Editor = function (library, defaultParams, replace) {
         attributeOldValue: false,
         characterDataOldValue: false
       });
+
       H5P.$window.resize(limitedResize);
+      resize();
     }
-    else {
+     else {
       // Use an interval for resizing the iframe
       (function resizeInterval() {
         resize();
@@ -82,10 +89,10 @@ ns.Editor = function (library, defaultParams, replace) {
   iframe.contentDocument.write(
     '<!doctype html><html>' +
     '<head>' +
-      ns.wrap('<link rel="stylesheet" href="', ns.assets.css, '">') +
-      ns.wrap('<script src="', ns.assets.js, '"></script>') +
+    ns.wrap('<link rel="stylesheet" href="', ns.assets.css, '">') +
+    ns.wrap('<script src="', ns.assets.js, '"></script>') +
     '</head><body>' +
-      '<div class="h5p-editor">' + ns.t('core', 'loading') + '</div>' +
+    '<div class="h5p-editor">' + ns.t('core', 'loading') + '</div>' +
     '</body></html>');
   iframe.contentDocument.close();
   iframe.contentDocument.documentElement.style.overflow = 'hidden';
@@ -97,7 +104,7 @@ ns.Editor = function (library, defaultParams, replace) {
    */
   var resize = function () {
     if (iframe.clientHeight === iframe.contentDocument.body.scrollHeight &&
-        iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight) {
+      iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight) {
       return; // Do not resize unless page and scrolling differs
     }
 
@@ -124,7 +131,13 @@ ns.Editor = function (library, defaultParams, replace) {
  */
 ns.Editor.prototype.getLibrary = function () {
   if (this.selector !== undefined) {
-    return this.selector.$selector.val();
+    return this.selector.getCurrentLibrary();
+  }
+  else if(this.selectedContentTypeId) {
+    return this.selectedContentTypeId;
+  }
+  else {
+    console.warn('no selector defined for "getLibrary"');
   }
 };
 
@@ -137,6 +150,12 @@ ns.Editor.prototype.getLibrary = function () {
 ns.Editor.prototype.getParams = function () {
   if (this.selector !== undefined) {
     return this.selector.getParams();
+  }
+  else if(this.form){
+    return this.form.params;
+  }
+  else {
+    console.warn('no selector defined for "getParams"');
   }
 };
 

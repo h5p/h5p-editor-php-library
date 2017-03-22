@@ -1,3 +1,5 @@
+//H5PEditor = window.H5PEditor || {};
+//H5PEditor.language = H5PEditor.language || {};
 H5PEditor.language.core = {
   missingTranslation: '[Mangler oversettelse :key]',
   loading: 'Laster, vennligst vent...',
@@ -68,5 +70,14 @@ H5PEditor.language.core = {
   and: 'and',
   titleQualityName: 'Enter quality name',
   enterQualityName: 'Enter optional quality name',
-  addQualityNameDescription: 'If you have the same video in different qualities, give each one a name, for instance "4K", "HD", "Mobile".'
+  addQualityNameDescription: 'If you have the same video in different qualities, give each one a name, for instance "4K", "HD", "Mobile".',
+  importantInstructions: 'Viktige instruksjoner',
+  hideImportantInstructions: 'Skjul viktige instruksjoner',
+  hide: 'Skjul',
+  example: 'Eksempel'
+};
+H5PEditor.language.hub = {
+  installButtonLabel: 'Installer',
+  useButtonLabel: 'Bruk',
+  getButtonLabel: 'Hent'
 };

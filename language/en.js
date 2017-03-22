@@ -68,5 +68,14 @@ H5PEditor.language.core = {
   and: 'and',
   titleQualityName: 'Enter quality name',
   enterQualityName: 'Enter optional quality name',
-  addQualityNameDescription: 'If you have the same video in different qualities, give each one a name, for instance "4K", "HD", "Mobile".'
+  addQualityNameDescription: 'If you have the same video in different qualities, give each one a name, for instance "4K", "HD", "Mobile".',
+  importantInstructions: 'Important instructions',
+  hideImportantInstructions: 'Hide important instructions',
+  hide: 'Hide',
+  example: 'Example'
+};
+H5PEditor.language.hub = {
+  installButtonLabel: 'Install',
+  useButtonLabel: 'Use',
+  getButtonLabel: 'Get'
 };
