@@ -9,6 +9,7 @@ class H5peditor {
     'styles/css/application.css'
   );
   public static $scripts = array(
+    'scripts/h5p-hub-client.js',
     'scripts/h5peditor.js',
     'scripts/h5peditor-semantic-structure.js',
     'scripts/h5peditor-editor.js',
@@ -30,22 +31,29 @@ class H5peditor {
     'scripts/h5peditor-library.js',
     'scripts/h5peditor-library-list-cache.js',
     'scripts/h5peditor-select.js',
+    'scripts/h5peditor-selector-hub.js',
+    'scripts/h5peditor-selector-legacy.js',
     'scripts/h5peditor-dimensions.js',
     'scripts/h5peditor-coordinates.js',
     'scripts/h5peditor-none.js',
     'ckeditor/ckeditor.js',
   );
   private $h5p, $storage;
+  public $ajax, $ajaxInterface;
 
   /**
    * Constructor for the core editor library.
    *
    * @param \H5PCore $h5p Instance of core
-   * @param \H5peditorStorage $storage Instance of h5peditor storage
+   * @param \H5peditorStorage $storage Instance of h5peditor storage interface
+   * @param \H5PEditorAjaxInterface $ajaxInterface Instance of h5peditor ajax
+   * interface
    */
-  function __construct($h5p, $storage) {
+  function __construct($h5p, $storage, $ajaxInterface) {
     $this->h5p = $h5p;
     $this->storage = $storage;
+    $this->ajaxInterface = $ajaxInterface;
+    $this->ajax = new H5PEditorAjax($h5p, $this, $storage);
   }
 
   /**
@@ -103,7 +111,7 @@ class H5peditor {
       }
     }
 
-    return json_encode($libraries);
+    return $libraries;
   }
 
   /**
@@ -314,16 +322,19 @@ class H5peditor {
    * @param int $majorVersion
    * @param int $minorVersion
    * @param string $prefix Optional part to add between URL and asset path
+   * @param string $fileDir Optional file dir to read files from
+   *
+   * @return array Libraries that was requested
    */
-  public function getLibraryData($machineName, $majorVersion, $minorVersion, $languageCode, $prefix = '') {
+  public function getLibraryData($machineName, $majorVersion, $minorVersion, $languageCode, $prefix = '', $fileDir = '') {
     $libraryData = new stdClass();
 
-    $libraries = $this->findEditorLibraries($machineName, $majorVersion, $minorVersion);
+    $libraries              = $this->findEditorLibraries($machineName, $majorVersion, $minorVersion);
     $libraryData->semantics = $this->h5p->loadLibrarySemantics($machineName, $majorVersion, $minorVersion);
-    $libraryData->language = $this->getLibraryLanguage($machineName, $majorVersion, $minorVersion, $languageCode);
+    $libraryData->language  = $this->getLibraryLanguage($machineName, $majorVersion, $minorVersion, $languageCode);
 
     // Temporarily disable asset aggregation
-    $aggregateAssets = $this->h5p->aggregateAssets;
+    $aggregateAssets            = $this->h5p->aggregateAssets;
     $this->h5p->aggregateAssets = FALSE;
     // This is done to prevent files being loaded multiple times due to how
     // the editor works.
@@ -341,13 +352,13 @@ class H5peditor {
     // Javascripts
     if (!empty($files['scripts'])) {
       foreach ($files['scripts'] as $script) {
-        if (preg_match ('/:\/\//', $script->path) === 1) {
+        if (preg_match('/:\/\//', $script->path) === 1) {
           // External file
           $libraryData->javascript[$script->path . $script->version] = "\n" . file_get_contents($script->path);
         }
         else {
           // Local file
-          $libraryData->javascript[$url . $script->path . $script->version] = "\n" . $this->h5p->fs->getContent($script->path);
+          $libraryData->javascript[$url . $script->path . $script->version] = "\n" . $this->h5p->fs->getContent($fileDir . $script->path);
         }
       }
     }
@@ -355,14 +366,14 @@ class H5peditor {
     // Stylesheets
     if (!empty($files['styles'])) {
       foreach ($files['styles'] as $css) {
-        if (preg_match ('/:\/\//', $css->path) === 1) {
+        if (preg_match('/:\/\//', $css->path) === 1) {
           // External file
-          $libraryData->css[$css->path. $css->version] = file_get_contents($css->path);
+          $libraryData->css[$css->path . $css->version] = file_get_contents($css->path);
         }
         else {
           // Local file
           H5peditor::buildCssPath(NULL, $url . dirname($css->path) . '/');
-          $libraryData->css[$url . $css->path . $css->version] = preg_replace_callback('/url\([\'"]?(?![a-z]+:|\/+)([^\'")]+)[\'"]?\)/i', 'H5peditor::buildCssPath', $this->h5p->fs->getContent($css->path));
+          $libraryData->css[$url . $css->path . $css->version] = preg_replace_callback('/url\([\'"]?(?![a-z]+:|\/+)([^\'")]+)[\'"]?\)/i', 'H5peditor::buildCssPath', $this->h5p->fs->getContent($fileDir . $css->path));
         }
       }
     }
@@ -371,12 +382,12 @@ class H5peditor {
     foreach ($libraries as $library) {
       $language = $this->getLibraryLanguage($library['machineName'], $library['majorVersion'], $library['minorVersion'], $languageCode);
       if ($language !== NULL) {
-        $lang = '; H5PEditor.language["' . $library['machineName'] . '"] = ' . $language . ';';
+        $lang                                = '; H5PEditor.language["' . $library['machineName'] . '"] = ' . $language . ';';
         $libraryData->javascript[md5($lang)] = $lang;
       }
     }
 
-    return json_encode($libraryData);
+    return $libraryData;
   }
 
   /**
@@ -403,5 +414,189 @@ class H5peditor {
       $path = preg_replace('`(^|/)(?!\.\./)([^/]+)/\.\./`', '$1', $path);
     }
     return 'url('. $path .')';
+  }
+
+  /**
+   * Gets content type cache, applies user specific properties and formats
+   * as camelCase.
+   *
+   * @return array $libraries Cached libraries from the H5P Hub with user specific
+   * permission properties
+   */
+  public function getUserSpecificContentTypeCache() {
+    $cached_libraries = $this->ajaxInterface->getContentTypeCache();
+
+    // Check if user has access to install libraries
+    $libraries = array();
+    foreach ($cached_libraries as &$result) {
+      $result->restricted = !$this->canInstallContentType($result);
+      // Formats json
+      $libraries[] = $this->getCachedLibsMap($result);
+    }
+
+    return $libraries;
+  }
+
+  public function canInstallContentType($contentType) {
+    $canInstallAll         = $this->h5p->h5pF->hasPermission(H5PPermission::UPDATE_LIBRARIES);
+    $canInstallRecommended = $this->h5p->h5pF->hasPermission(H5PPermission::INSTALL_RECOMMENDED);
+
+    return $canInstallAll || $contentType->is_recommended && $canInstallRecommended;
+  }
+
+  /**
+   * Gets local and external libraries data with metadata to display
+   * all libraries that are currently available for the user.
+   *
+   * @return array $libraries Latest local and external libraries data with
+   * user specific permissions
+   */
+  public function getLatestGlobalLibrariesData() {
+    $latest_local_libraries = $this->ajaxInterface->getLatestLibraryVersions();
+    $cached_libraries       = $this->getUserSpecificContentTypeCache();
+    $this->mergeLocalLibsIntoCachedLibs($latest_local_libraries, $cached_libraries);
+    return $cached_libraries;
+  }
+
+
+  /**
+   * Extract library properties from cached library so they are ready to be
+   * returned as JSON
+   *
+   * @param object $cached_library A single library from the content type cache
+   *
+   * @return array A map containing the necessary properties for a cached
+   * library to send to the front-end
+   */
+  public function getCachedLibsMap($cached_library) {
+    // Add mandatory fields
+    $lib = array(
+      'id'              => intval($cached_library->id),
+      'machineName'     => $cached_library->machine_name,
+      'majorVersion'    => intval( $cached_library->major_version),
+      'minorVersion'    => intval($cached_library->minor_version),
+      'patchVersion'    => intval($cached_library->patch_version),
+      'h5pMajorVersion' => intval($cached_library->h5p_major_version),
+      'h5pMinorVersion' => intval($cached_library->h5p_minor_version),
+      'title'           => $cached_library->title,
+      'summary'         => $cached_library->summary,
+      'description'     => $cached_library->description,
+      'icon'            => $cached_library->icon,
+      'createdAt'       => intval($cached_library->created_at),
+      'updatedAt'       => intval($cached_library->updated_at),
+      'isRecommended'   => $cached_library->is_recommended != 0,
+      'popularity'      => intval($cached_library->popularity),
+      'screenshots'     => json_decode($cached_library->screenshots),
+      'license'         => $cached_library->license,
+      'owner'           => $cached_library->owner,
+      'installed'       => FALSE,
+      'isUpToDate'      => FALSE,
+      'restricted'      => isset($cached_library->restricted) ? $cached_library->restricted : FALSE
+    );
+
+    // Add optional fields
+    if (!empty($cached_library->categories)) {
+      $lib['categories'] = json_decode($cached_library->categories);
+    }
+    if (!empty($cached_library->keywords)) {
+      $lib['keywords'] = json_decode($cached_library->keywords);
+    }
+    if (!empty($cached_library->tutorial)) {
+      $lib['tutorial'] = $cached_library->tutorial;
+    }
+    if (!empty($cached_library->example)) {
+      $lib['example'] = $cached_library->example;
+    }
+
+    return $lib;
+  }
+
+
+  /**
+   * Merge local libraries into cached libraries so that local libraries will
+   * get supplemented with the additional info from externally cached libraries.
+   *
+   * Also sets whether a given cached library is installed and up to date with
+   * the locally installed libraries
+   *
+   * @param array $local_libraries Locally installed libraries
+   * @param array $cached_libraries Cached libraries from the H5P hub
+   */
+  public function mergeLocalLibsIntoCachedLibs($local_libraries, &$cached_libraries) {
+    $can_create_restricted = $this->h5p->h5pF->hasPermission(H5PPermission::CREATE_RESTRICTED);
+
+    // Add local libraries to supplement content type cache
+    foreach ($local_libraries as $local_lib) {
+      $is_local_only = TRUE;
+      $icon_path = NULL;
+
+      // Check if icon is available locally:
+      if($local_lib->has_icon) {
+        // Create path to icon:
+        $library_folder = H5PCore::libraryToString(array(
+          'machineName' => $local_lib->machine_name,
+          'majorVersion' => $local_lib->major_version,
+          'minorVersion' => $local_lib->minor_version
+        ), TRUE);
+        $icon_path = $this->h5p->h5pF->getLibraryFileUrl($library_folder, 'icon.svg');
+      }
+
+      foreach ($cached_libraries as &$cached_lib) {
+        // Determine if library is local
+        $is_matching_library = $cached_lib['machineName'] === $local_lib->machine_name;
+        if ($is_matching_library) {
+          $is_local_only = FALSE;
+
+          // Set icon if it exists locally
+          if(isset($icon_path)) {
+            $cached_lib['icon'] = $icon_path;
+          }
+
+          // Set local properties
+          $cached_lib['installed']  = TRUE;
+          $cached_lib['restricted'] = $can_create_restricted ? FALSE
+            : $local_lib->restricted;
+
+          // Determine if library is the same as ct cache
+          $is_updated_library =
+            $cached_lib['majorVersion'] === $local_lib->major_version &&
+            $cached_lib['minorVersion'] === $local_lib->minor_version &&
+            $cached_lib['patchVersion'] === $local_lib->patch_version;
+
+          if ($is_updated_library) {
+            $cached_lib['isUpToDate'] = TRUE;
+          }
+        }
+      }
+
+      // Add minimal data to display local only libraries
+      if ($is_local_only) {
+        $local_only_lib = array(
+          'id'           => $local_lib->id,
+          'machineName'  => $local_lib->machine_name,
+          'majorVersion' => $local_lib->major_version,
+          'minorVersion' => $local_lib->minor_version,
+          'patchVersion' => $local_lib->patch_version,
+          'installed'    => TRUE,
+          'isUpToDate'   => TRUE,
+          'restricted'   => $can_create_restricted ? FALSE : $local_lib->restricted
+        );
+
+        if (isset($icon_path)) {
+          $local_only_lib['icon'] = $icon_path;
+        }
+
+        $cached_libraries[] = $local_only_lib;
+      }
+    }
+
+    // Restrict LRS dependent content
+    if (!$this->h5p->h5pF->getOption('enable_lrs_content_types')) {
+      foreach ($cached_libraries as &$lib) {
+        if ($lib['machineName'] === 'H5P.Questionnaire') {
+          $lib['restricted'] = TRUE;
+        }
+      }
+    }
   }
 }

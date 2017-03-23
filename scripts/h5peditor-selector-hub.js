@@ -4,9 +4,13 @@ var ns = H5PEditor;
 /**
  * @class
  * @alias H5PEditor.SelectorHub
- * @implements {ContentTypeSelector}
  */
-ns.SelectorHub = function () {
+ns.SelectorHub = function (selectedLibrary, changeLibraryDialog) {
+  var self = this;
+
+  H5P.EventDispatcher.call(this);
+
+  // Initialize hub client
   this.client = new H5P.HubClient({
     apiRootUrl: H5PEditor.ajaxPath,
     apiVersion: {
@@ -14,7 +18,73 @@ ns.SelectorHub = function () {
       minor: H5PEditor.apiVersion.minorVersion,
     }
   }, H5PEditor.language.hub);
+
+  if (selectedLibrary) {
+    this.client.setPanelTitle({id: selectedLibrary.split(' ')[0]});
+  }
+
+  // Default to nothing selected and empty params
+  this.currentLibrary = selectedLibrary;
+
+  // Listen for content type selection
+  this.client.on('select', function (event) {
+    // Already selected library
+    if (event.id === self.currentLibrary.split(' ')[0]) {
+      return;
+    }
+    this.client.getContentType(event.id)
+      .then(function (contentType) {
+        if (!self.currentLibrary) {
+          self.currentLibrary = self.createContentTypeId(contentType);
+          self.trigger('selected');
+          return;
+        }
+
+        self.currentLibrary = self.createContentTypeId(contentType);
+        delete self.currentParams;
+        changeLibraryDialog.show(ns.$(self.getElement()).offset().top);
+      });
+  }, this);
+
+  // Listen for uploads
+  this.client.on('upload', function (e) {
+    this.client.getContentType(e.data.h5p.mainLibrary)
+      .then(function (contentType) {
+        self.currentLibrary = self.createContentTypeId(contentType);
+        self.currentParams = e.data.content;
+        changeLibraryDialog.show(ns.$(self.getElement()).offset().top);
+      });
+  }, this);
 };
+
+/**
+ * Reset current library to the provided library.
+ *
+ * @param {string} library Full library name
+ */
+ns.SelectorHub.prototype.resetSelection = function (library) {
+  this.currentLibrary = library;
+  var machineName = library.split(' ')[0];
+  this.client.setPanelTitle({id: machineName});
+}
+
+/**
+ * Get currently selected library
+ *
+ * @returns {string} Selected library
+ */
+ns.SelectorHub.prototype.getSelectedLibrary = function () {
+  return this.currentLibrary;
+}
+
+/**
+ * Get params connected with the currently selected library
+ *
+ * @returns {string} Parameters connected to the selected library
+ */
+ns.SelectorHub.prototype.getParams = function () {
+  return this.currentParams;
+}
 
 /**
  * Returns the html element for the hub
@@ -25,41 +95,6 @@ ns.SelectorHub = function () {
 ns.SelectorHub.prototype.getElement = function(){
   return this.client.getElement();
 };
-
-/**
- * Registers a listener for select events
- *
- * @param {function} callback
- * @param {object} scope
- */
-ns.SelectorHub.prototype.onSelect = function(callback, scope) {
-  this.client.on('select', function (event) {
-    this.client.getContentType(event.id)
-      .then(this.createContentTypeId)
-      .then(function(contentTypeId){
-        callback.call(scope || this, contentTypeId)
-      });
-  }, this);
-};
-
-ns.SelectorHub.prototype.onUpload = function(callback, scope) {
-  this.client.on('upload', function (e) {
-    console.log("we ever get an upload event ???");
-
-    // Retrieve the preloaded dependency that has the same machineName as h5p.json
-    debugger;
-    const libraryVersion = e.data.h5p.preloadedDependencies
-      .filter(function (dependency) {
-        return dependency.machineName === e.data.h5p.mainLibrary;
-      })[0];
-    const libraryId = this.createContentTypeId(libraryVersion);
-    callback({
-      libraryId: libraryId,
-      contentJson: e.data.content
-    });
-  }, this);
-}
-
 
 /**
  * Takes a content type, and extracts the full id (ubername)

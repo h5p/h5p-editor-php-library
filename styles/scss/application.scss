@@ -44,6 +44,19 @@ a {
   textarea {
     resize: vertical;
   }
+
+  .has-important-description {
+    .h5peditor-field-description {
+      display: none;
+    }
+    textarea {
+      width: calc(100% - 70px);
+    }
+    .ckeditor {
+      margin-right: 70px;
+    }
+  }
+
   textarea,
   .h5peditor-text,
   .ckeditor {
@@ -683,6 +696,16 @@ a {
     color: $white;
   }
 
+  .h5p-editing-image-button:before {
+    font-family: $icon-font-family;
+    content: "\e900";
+    color: #666;
+    padding-right: 0.25em;
+    vertical-align: middle;
+    font-size: 1.5em;
+    line-height: 0.9;
+  }
+
   &:hover {
     @include button-background(
       $form-item-importance-medium-background-hover,
@@ -736,6 +759,112 @@ a {
   color: #434446;
   line-height: 15px;
   letter-spacing: 0.5px;
+}
+
+.h5peditor-field-important-description {
+  position: relative;
+  padding: 1.5em 2.2em 2em 2.2em;
+  font-size: 0.9em;
+  margin: 0 0 20px 0;
+  border: 1px solid #ffde78;
+  background-color: #f9f9d8;
+  color: #000;
+  display: none;
+
+  &.show {
+    display: block;
+  }
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: -8px;
+    right: 20px;
+    width: 14px;
+    height: 14px; 
+    background: #f9f9d8;
+    border-right: 1px solid #ffde78;
+    border-bottom: 1px solid #ffde78;
+    -webkit-transform: rotate(45deg);
+  }
+
+  .important-description-close {
+    position: absolute;
+    font-size: 0.9em;
+    line-height: 2em;
+    right: 1.5em;
+    top: 1em;
+    user-select: none;
+    cursor: pointer;
+
+    &:before {
+      font-family: $icon-font-family;
+      content: "\e894";
+      vertical-align: top;
+      font-size: 1.6em;
+    }
+  }
+
+  .h5p-info-icon {
+    font-size: 0.75em; 
+
+    &:before {
+      font-family: $icon-font-family;
+      content: "\e909";
+      font-size: 2.3em;
+      line-height: 0.94em;
+      margin-left: -0.3em;
+      vertical-align: middle;
+    }
+  }
+
+  .important-description-title {
+    font-weight: bold;
+    font-size: 1.2em;
+    vertical-align: bottom;
+  }
+
+  .important-description-content {
+    ul {
+      list-style: none;
+      padding: 0;
+      line-height: 2em;
+      margin-top: 20px;
+
+      li {
+        line-height: 1.8em;
+        margin-left: 20px;
+
+        &:before {
+          content: "• ";
+          color: #adacac;
+          font-size: 1.5em;
+          vertical-align: middle;
+          margin-left: -19px;
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+
+  .important-description-example {
+    border: 1px solid #bbde98;
+    background-color: #d9fac3;
+    display: flex;
+    margin-top: 20px;
+
+    .important-description-example-title {
+      padding: 15px;
+      font-weight: bold;
+    }
+
+    .important-description-example-text {
+      padding: 15px;
+      width: 100%;
+      background-color: #f6fef1;
+    }
+  }
 }
 
 .h5peditor-form {
@@ -849,4 +978,32 @@ a {
 .h5peditor .cke_toolgroup,
 .h5peditor .cke_combo_button {
   border: 1px solid #f5f5f5;
+}
+
+.icon-important-desc {
+  font-family: $icon-font-family; 
+  font-size: 2em;
+  float: right;
+  width: 70px;
+  text-align: center;
+  line-height: 1em;
+  cursor: pointer;
+
+  .path1:before {
+    content: "\e908";
+    color: #f3d55a;
+    vertical-align: middle;
+    font-size: 1.6em;
+  }
+  .path2 {
+    position: relative;
+    top: -1px;
+
+    &:before {
+      content: "\e909";
+      margin-left: -1.44em;
+      font-size: 0.85em;
+      vertical-align: middle;
+    }
+  }
 }

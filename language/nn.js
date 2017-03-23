@@ -64,5 +64,9 @@ H5PEditor.language.core = {
   numberField: 'Nummerfelt',
   orderItemUp: 'Flytt element opp',
   orderItemDown: 'Flytt element ned',
-  removeItem: 'Fjern element'
+  removeItem: 'Fjern element',
+  importantInstructions: 'Viktige instruksjonar',
+  hideImportantInstructions: 'Skjul viktige instruksjonar',
+  hide: 'Skjul',
+  example: 'Eksempel'
 };

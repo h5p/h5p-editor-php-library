@@ -66,7 +66,11 @@ H5PEditor.language.core = {
   numberField: 'Nummerfelt',
   orderItemUp: 'Flytt element opp',
   orderItemDown: 'Flytt element ned',
-  removeItem: 'Fjern element'
+  removeItem: 'Fjern element',
+  importantInstructions: 'Viktige instruksjoner',
+  hideImportantInstructions: 'Skjul viktige instruksjoner',
+  hide: 'Skjul',
+  example: 'Eksempel'
 };
 H5PEditor.language.hub = {
   installButtonLabel: 'Installer',
