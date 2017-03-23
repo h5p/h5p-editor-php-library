@@ -69,5 +69,7 @@ H5PEditor.language.core = {
 H5PEditor.language.hub = {
   installButtonLabel: 'Install',
   useButtonLabel: 'Use',
-  getButtonLabel: 'Get'
+  getButtonLabel: 'Get',
+  contentTypeUnsupportedApiVersionTitle: 'This content type requires a newer core version',
+  contentTypeUnsupportedApiVersionContent: 'Contact you system administrator to provide you with the necessary updates'
 };

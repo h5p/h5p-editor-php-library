@@ -8,7 +8,11 @@ var ns = H5PEditor;
  */
 ns.SelectorHub = function () {
   this.client = new H5P.HubClient({
-    apiRootUrl: H5PEditor.ajaxPath
+    apiRootUrl: H5PEditor.ajaxPath,
+    apiVersion: {
+      major: H5PEditor.apiVersion.majorVersion,
+      minor: H5PEditor.apiVersion.minorVersion,
+    }
   }, H5PEditor.language.hub);
 };
 

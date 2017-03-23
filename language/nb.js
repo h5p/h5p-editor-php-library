@@ -71,5 +71,7 @@ H5PEditor.language.core = {
 H5PEditor.language.hub = {
   installButtonLabel: 'Installer',
   useButtonLabel: 'Bruk',
-  getButtonLabel: 'Hent'
+  getButtonLabel: 'Hent',
+  contentTypeUnsupportedApiVersionTitle: 'Denne inholdstypen krever en nyere versjon av H5P',
+  contentTypeUnsupportedApiVersionContent: 'Be systemadministratoren om å oppdatere H5P på denne nettsiden'
 };
