@@ -74,7 +74,7 @@ H5PEditor.language.hub = {
   createContentTabLabel: 'Create Content',
   uploadTabLabel: 'Upload',
   uploadPlaceholder: 'No file chosen',
-  uploadInstructions: '<h3>Upload an H5P file.</h3><h4>You may start with examples from <a href="https://h5p.org/content-types-and-applications" target="blank">H5P.org</a>.</h4>',
+  uploadInstructions: '<h3>Upload an H5P file.</h3><h4>You can start with examples from <a href="https://h5p.org/content-types-and-applications" target="blank">H5P.org</a>.</h4>',
   uploadFileButtonLabel: 'Upload a file',
   h5pFileWrongExtensionTitle: '.h5p file not found',
   h5pFileWrongExtensionContent: 'You need to upload a file that ends in .h5p',
@@ -91,7 +91,7 @@ H5PEditor.language.hub = {
   contentTypeCloseButtonLabel: 'Close',
   contentTypeIconAltText: 'Icon',
   contentTypeInstallSuccess: ':contentType successfully installed!',
-  contentTypeInstallError: ':contentType could not be installed! Contact your administrator.',
+  contentTypeInstallError: ':contentType could not be installed. Contact your administrator.',
   contentTypeLicensePanelTitle: 'License',
   contentTypeDemoButtonLabel: 'Content Demo',
   contentTypeReadMore: 'Read more',
@@ -99,5 +99,5 @@ H5PEditor.language.hub = {
   contentTypeUnsupportedApiVersionTitle: 'This content type requires a newer core version',
   contentTypeUnsupportedApiVersionContent: 'Contact your system administrator to provide you with the necessary updates',
   errorCommunicatingHubTitle: 'Not able to communicate with hub.',
-  errorCommunicatingHubContent: 'Error occured. Please try again.'
+  errorCommunicatingHubContent: 'An error occured. Please try again.'
 };
