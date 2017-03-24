@@ -71,9 +71,33 @@ H5PEditor.language.core = {
   example: 'Example'
 };
 H5PEditor.language.hub = {
-  installButtonLabel: 'Install',
-  useButtonLabel: 'Use',
-  getButtonLabel: 'Get',
+  createContentTabLabel: 'Create Content',
+  uploadTabLabel: 'Upload',
+  uploadPlaceholder: 'No file chosen',
+  uploadInstructions: '<h3>Upload an H5P file.</h3><h4>You may start with examples from <a href="https://h5p.org/content-types-and-applications" target="blank">H5P.org</a>.</h4>',
+  uploadFileButtonLabel: 'Upload a file',
+  h5pFileWrongExtensionTitle: '.h5p file not found',
+  h5pFileWrongExtensionContent: 'You need to upload a file that ends in .h5p',
+  contentTypeSectionAll: 'All',
+  contentTypeSectionMine: 'My Content Types',
+  contentTypeSectionPopular: 'Most Popular',
+  contentTypeSectionTitle: 'Browse content types',
+  contentTypeSearchFieldPlaceholder: 'Search for Content Types',
+  contentTypeInstallButtonLabel: 'Install',
+  contentTypeInstallingButtonLabel: 'Installing',
+  contentTypeUseButtonLabel: 'Use',
+  contentTypeGetButtonLabel: 'Get',
+  contentTypeBackButtonLabel: 'Back',
+  contentTypeCloseButtonLabel: 'Close',
+  contentTypeIconAltText: 'Icon',
+  contentTypeInstallSuccess: ':contentType successfully installed!',
+  contentTypeInstallError: ':contentType could not be installed! Contact your administrator.',
+  contentTypeLicensePanelTitle: 'License',
+  contentTypeDemoButtonLabel: 'Content Demo',
+  contentTypeReadMore: 'Read more',
+  contentTypeOwner: 'By :owner',
   contentTypeUnsupportedApiVersionTitle: 'This content type requires a newer core version',
-  contentTypeUnsupportedApiVersionContent: 'Contact you system administrator to provide you with the necessary updates'
+  contentTypeUnsupportedApiVersionContent: 'Contact your system administrator to provide you with the necessary updates',
+  errorCommunicatingHubTitle: 'Not able to communicate with hub.',
+  errorCommunicatingHubContent: 'Error occured. Please try again.'
 };
