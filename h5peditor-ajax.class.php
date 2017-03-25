@@ -230,7 +230,7 @@ class H5PEditorAjax {
 
     // Check install permissions
     if (!$this->editor->canInstallContentType($contentType)) {
-      H5PCore::ajaxError($this->core->h5pF->t('No permission to install content type.'), 'INSTALL_DENIED');
+      H5PCore::ajaxError($this->core->h5pF->t('You do not have permission to install content types.'), 'INSTALL_DENIED');
       return;
     }
     else {
