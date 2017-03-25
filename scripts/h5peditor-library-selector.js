@@ -54,13 +54,13 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
 
   // Revert selector on cancel
   changeLibraryDialog.on('canceled', function () {
-    that.selector.resetSelection(that.currentLibrary);
+    that.selector.resetSelection(that.currentLibrary, that.defaultParams);
   });
 
   // First time a library is selected in the editor
   this.selector.on('selected', function () {
     that.currentLibrary = that.selector.getSelectedLibrary();
-    that.loadSemantics(that.currentLibrary);
+    that.loadSemantics(that.currentLibrary, that.selector.getParams());
   });
 };
 
@@ -124,6 +124,7 @@ ns.LibrarySelector.prototype.loadSemantics = function (library, params) {
       var overrideParams = {};
       if (params) {
         overrideParams = params;
+        that.defaultParams = overrideParams;
       }
       else if (library === that.defaultLibrary || library === that.defaultLibraryParameterized) {
         overrideParams = that.defaultParams;

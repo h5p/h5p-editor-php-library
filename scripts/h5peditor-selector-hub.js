@@ -50,20 +50,43 @@ ns.SelectorHub = function (selectedLibrary, changeLibraryDialog) {
   this.client.on('upload', function (e) {
     this.client.getContentType(e.data.h5p.mainLibrary)
       .then(function (contentType) {
+        var previousLibrary = self.currentLibrary;
         self.currentLibrary = self.createContentTypeId(contentType);
+        self.client.setPanelTitle({id: self.currentLibrary.split(' ')[0]})
         self.currentParams = e.data.content;
-        changeLibraryDialog.show(ns.$(self.getElement()).offset().top);
+
+        // Change library immediately or show confirmation dialog
+        if (!previousLibrary) {
+          self.trigger('selected');
+          self.clearUploadForm();
+        }
+        else {
+          changeLibraryDialog.show(ns.$(self.getElement()).offset().top);
+        }
       });
   }, this);
+
+  // Clear upload field when changing library
+  changeLibraryDialog.on('confirmed', function () {
+    self.clearUploadForm();
+  })
 };
+
+/**
+ * Clears the upload form in the hub client
+ */
+ns.SelectorHub.prototype.clearUploadForm = function () {
+  this.client.trigger('clear-upload-form');
+}
 
 /**
  * Reset current library to the provided library.
  *
  * @param {string} library Full library name
  */
-ns.SelectorHub.prototype.resetSelection = function (library) {
+ns.SelectorHub.prototype.resetSelection = function (library, params) {
   this.currentLibrary = library;
+  this.currentParams = params;
   var machineName = library.split(' ')[0];
   this.client.setPanelTitle({id: machineName});
 }
