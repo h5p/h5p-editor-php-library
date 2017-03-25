@@ -1,8 +1,6772 @@
-!function(e){function t(r){if(n[r])return n[r].exports;var i=n[r]={i:r,l:!1,exports:{}};return e[r].call(i.exports,i,i.exports,t),i.l=!0,i.exports}var n={};return t.m=e,t.c=n,t.i=function(e){return e},t.d=function(e,n,r){t.o(e,n)||Object.defineProperty(e,n,{configurable:!1,enumerable:!0,get:r})},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="",t(t.s=31)}([function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var r=t.curry=function(e){var t=e.length;return function n(){var r=Array.prototype.slice.call(arguments,0);return r.length>=t?e.apply(null,r):function(){var e=Array.prototype.slice.call(arguments,0);return n.apply(null,r.concat(e))}}},i=(t.compose=function(){for(var e=arguments.length,t=Array(e),n=0;n<e;n++)t[n]=arguments[n];return t.reduce(function(e,t){return function(){return e(t.apply(void 0,arguments))}})},t.forEach=r(function(e,t){t.forEach(e)}),t.map=r(function(e,t){return t.map(e)}),t.filter=r(function(e,t){return t.filter(e)})),o=(t.some=r(function(e,t){return t.some(e)}),t.contains=r(function(e,t){return t.indexOf(e)!=-1}));t.without=r(function(e,t){return i(function(t){return!o(t,e)},t)}),t.inverseBooleanString=function(e){return("true"!==e).toString()}},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.toggleClass=t.toggleVisibility=t.show=t.hide=t.classListContains=t.removeChild=t.querySelectorAll=t.nodeListToArray=t.querySelector=t.appendChild=t.toggleAttribute=t.attributeEquals=t.hasAttribute=t.removeAttribute=t.setAttribute=t.getAttribute=void 0;var r=n(0),i=t.getAttribute=(0,r.curry)(function(e,t){return t.getAttribute(e)}),o=t.setAttribute=(0,r.curry)(function(e,t,n){return n.setAttribute(e,t)}),a=(t.removeAttribute=(0,r.curry)(function(e,t){return t.removeAttribute(e)}),t.hasAttribute=(0,r.curry)(function(e,t){return t.hasAttribute(e)}),t.attributeEquals=(0,r.curry)(function(e,t,n){return n.getAttribute(e)===t}),t.toggleAttribute=(0,r.curry)(function(e,t){var n=i(e,t);o(e,(0,r.inverseBooleanString)(n),t)}),t.appendChild=(0,r.curry)(function(e,t){return e.appendChild(t)}),t.querySelector=(0,r.curry)(function(e,t){return t.querySelector(e)}),t.nodeListToArray=function(e){return Array.prototype.slice.call(e)}),s=(t.querySelectorAll=(0,r.curry)(function(e,t){return a(t.querySelectorAll(e))}),t.removeChild=(0,r.curry)(function(e,t){return e.removeChild(t)}),t.classListContains=(0,r.curry)(function(e,t){return t.classList.contains(e)}),t.hide=o("aria-hidden","true")),u=t.show=o("aria-hidden","false");t.toggleVisibility=(0,r.curry)(function(e,t){return(e?u:s)(t)}),t.toggleClass=(0,r.curry)(function(e,t,n){n.classList[t?"add":"remove"](e)})},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});t.Eventful=function(){return{listeners:{},on:function(e,t,n){var r={listener:t,scope:n};return this.listeners[e]=this.listeners[e]||[],this.listeners[e].push(r),this},trigger:function(e,t){return(this.listeners[e]||[]).every(function(e){return e.listener.call(e.scope||this,t)!==!1})},propagate:function(e,t,n){var r=this;e.forEach(function(e){return t.on(e,function(t){return r.trigger(n||e,t)})})}}}},function(e,t,n){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),o=function(){function e(){r(this,e)}return i(e,null,[{key:"init",value:function(t){e.dictionary=t}},{key:"get",value:function(t,n){var r=e.dictionary[t];if(void 0===r)return"Key not found in dictionary: "+t;for(var i in n)n[i]&&(r=r.replace(i,n[i]));return r}}]),e}();t.default=o},function(e,t,n){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),o=n(1),a=n(0),s=(0,o.setAttribute)("tabindex","0"),u=(0,o.removeAttribute)("tabindex"),l=(0,a.forEach)(u),c=(0,o.hasAttribute)("tabindex"),d=function(e,t){var n=e[t];n&&(l(e),s(n))},h=function(e,t){return e===t?0:e+1},f=function(e,t){return 0===e?t:e-1},p=function(){function e(){r(this,e),this.elements=[],this.boundHandleKeyDown=this.handleKeyDown.bind(this),this.boundHandleFocus=this.handleFocus.bind(this),this.selectedIndex=0}return i(e,[{key:"addElement",value:function(e){return this.elements.push(e),e.addEventListener("keydown",this.boundHandleKeyDown),e.addEventListener("focus",this.boundHandleFocus),1===this.elements.length&&s(e),e}},{key:"removeElement",value:function(e){return this.elements=(0,a.without)([e],this.elements),e.removeEventListener("keydown",this.boundHandleKeyDown),e.removeEventListener("focus",this.boundHandleFocus),c(e)&&(u(e),this.selectedIndex=0,d(this.elements,this.selectedIndex)),e}},{key:"handleKeyDown",value:function(e){var t=this.elements.length-1;switch(e.which){case 13:case 32:this.select(),e.preventDefault();break;case 35:this.selectedIndex=t,e.preventDefault();break;case 36:this.selectedIndex=0,e.preventDefault();break;case 37:case 38:this.selectedIndex=f(this.selectedIndex,t),e.preventDefault();break;case 39:case 40:this.selectedIndex=h(this.selectedIndex,t),e.preventDefault()}d(this.elements,this.selectedIndex),this.elements[this.selectedIndex].focus()}},{key:"handleFocus",value:function(e){this.selectedIndex=this.elements.indexOf(e.srcElement)}},{key:"forceSelectedIndex",value:function(e){this.selectedIndex=e,d(this.elements,this.selectedIndex)}},{key:"select",value:function(){void 0!=this.onSelect&&this.onSelect(this.elements[this.selectedIndex])}}]),e}();t.default=p},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.relayClickEventAs=void 0;var r=n(0);t.relayClickEventAs=(0,r.curry)(function(e,t,n){return n.addEventListener("click",function(r){t.trigger(e,{element:n,id:n.getAttribute("data-id")},!1),r.stopPropagation()}),n})},function(e,t,n){"use strict";(function(r,i,o){var a,s,u="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e};/*!
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+
+
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+
+/******/ 	// identity function for calling harmony imports with the correct context
+/******/ 	__webpack_require__.i = function(value) { return value; };
+
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 31);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Returns a curried version of a function
+ *
+ * @param {function} fn
+ *
+ * @public
+ *
+ * @return {function}
+ */
+var curry = exports.curry = function curry(fn) {
+  var arity = fn.length;
+
+  return function f1() {
+    var args = Array.prototype.slice.call(arguments, 0);
+    if (args.length >= arity) {
+      return fn.apply(null, args);
+    } else {
+      return function f2() {
+        var args2 = Array.prototype.slice.call(arguments, 0);
+        return f1.apply(null, args.concat(args2));
+      };
+    }
+  };
+};
+
+/**
+ * Compose functions together, executing from right to left
+ *
+ * @param {function...} fns
+ *
+ * @function
+ * @public
+ *
+ * @return {function}
+ */
+var compose = exports.compose = function compose() {
+  for (var _len = arguments.length, fns = Array(_len), _key = 0; _key < _len; _key++) {
+    fns[_key] = arguments[_key];
+  }
+
+  return fns.reduce(function (f, g) {
+    return function () {
+      return f(g.apply(undefined, arguments));
+    };
+  });
+};
+
+/**
+ * Applies a function to each element in an array
+ *
+ * @param {function} fn
+ * @param {Array} arr
+ *
+ * @function
+ * @public
+ *
+ * @return {function}
+ */
+var forEach = exports.forEach = curry(function (fn, arr) {
+  arr.forEach(fn);
+});
+
+/**
+ * Maps a function to an array
+ *
+ * @param {function} fn
+ * @param {Array} arr
+ *
+ * @function
+ * @public
+ *
+ * @return {function}
+ */
+var map = exports.map = curry(function (fn, arr) {
+  return arr.map(fn);
+});
+
+/**
+ * Applies a filter to an array
+ *
+ * @param {function} fn
+ * @param {Array} arr
+ *
+ * @function
+ * @public
+ *
+ * @return {function}
+ */
+var filter = exports.filter = curry(function (fn, arr) {
+  return arr.filter(fn);
+});
+
+/**
+ * Applies a some to an array
+ *
+ * @param {function} fn
+ * @param {Array} arr
+ *
+ * @function
+ * @public
+ *
+ * @return {function}
+ */
+var some = exports.some = curry(function (fn, arr) {
+  return arr.some(fn);
+});
+
+/**
+ * Returns true if an array contains a value
+ *
+ * @param {*} value
+ * @param {Array} arr
+ *
+ * @function
+ * @public
+ *
+ * @return {function}
+ */
+var contains = exports.contains = curry(function (value, arr) {
+  return arr.indexOf(value) != -1;
+});
+
+/**
+ * Returns an array without the supplied values
+ *
+ * @param {Array} values
+ * @param {Array} arr
+ *
+ * @function
+ * @public
+ *
+ * @return {function}
+ */
+var without = exports.without = curry(function (values, arr) {
+  return filter(function (value) {
+    return !contains(value, values);
+  }, arr);
+});
+
+/**
+ * Takes a string that is either 'true' or 'false' and returns the opposite
+ *
+ * @param {string} bool
+ *
+ * @public
+ * @return {string}
+ */
+var inverseBooleanString = exports.inverseBooleanString = function inverseBooleanString(bool) {
+  return (bool !== 'true').toString();
+};
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.toggleClass = exports.toggleVisibility = exports.show = exports.hide = exports.classListContains = exports.removeChild = exports.querySelectorAll = exports.nodeListToArray = exports.querySelector = exports.appendChild = exports.toggleAttribute = exports.attributeEquals = exports.hasAttribute = exports.removeAttribute = exports.setAttribute = exports.getAttribute = undefined;
+
+var _functional = __webpack_require__(0);
+
+/**
+ * Get an attribute value from element
+ *
+ * @param {string} name
+ * @param {HTMLElement} el
+ *
+ * @function
+ * @return {string}
+ */
+var getAttribute = exports.getAttribute = (0, _functional.curry)(function (name, el) {
+  return el.getAttribute(name);
+});
+
+/**
+ * Set an attribute on a html element
+ *
+ * @param {string} name
+ * @param {string} value
+ * @param {HTMLElement} el
+ *
+ * @function
+ */
+var setAttribute = exports.setAttribute = (0, _functional.curry)(function (name, value, el) {
+  return el.setAttribute(name, value);
+});
+
+/**
+ * Remove attribute from html element
+ *
+ * @param {string} name
+ * @param {HTMLElement} el
+ *
+ * @function
+ */
+var removeAttribute = exports.removeAttribute = (0, _functional.curry)(function (name, el) {
+  return el.removeAttribute(name);
+});
+
+/**
+ * Check if element has an attribute
+ *
+ * @param {string} name
+ * @param {HTMLElement} el
+ *
+ * @function
+ * @return {boolean}
+ */
+var hasAttribute = exports.hasAttribute = (0, _functional.curry)(function (name, el) {
+  return el.hasAttribute(name);
+});
+
+/**
+ * Check if element has an attribute that equals
+ *
+ * @param {string} name
+ * @param {string} value
+ * @param {HTMLElement} el
+ *
+ * @function
+ * @return {boolean}
+ */
+var attributeEquals = exports.attributeEquals = (0, _functional.curry)(function (name, value, el) {
+  return el.getAttribute(name) === value;
+});
+
+/**
+ * Toggles an attribute between 'true' and 'false';
+ *
+ * @param {string} name
+ * @param {HTMLElement} el
+ *
+ * @function
+ */
+var toggleAttribute = exports.toggleAttribute = (0, _functional.curry)(function (name, el) {
+  var value = getAttribute(name, el);
+  setAttribute(name, (0, _functional.inverseBooleanString)(value), el);
+});
+
+/**
+ * The appendChild() method adds a node to the end of the list of children of a specified parent node.
+ *
+ * @param {HTMLElement} parent
+ * @param {HTMLElement} child
+ *
+ * @function
+ * @return {HTMLElement}
+ */
+var appendChild = exports.appendChild = (0, _functional.curry)(function (parent, child) {
+  return parent.appendChild(child);
+});
+
+/**
+ * Returns the first element that is a descendant of the element on which it is invoked
+ * that matches the specified group of selectors.
+ *
+ * @param {string} selector
+ * @param {HTMLElement} el
+ *
+ * @function
+ * @return {HTMLElement}
+ */
+var querySelector = exports.querySelector = (0, _functional.curry)(function (selector, el) {
+  return el.querySelector(selector);
+});
+
+/**
+ * Transforms a NodeList to an Array
+ *
+ * @param {NodeList} nodeList
+ *
+ * @return {Node[]}
+ */
+var nodeListToArray = exports.nodeListToArray = function nodeListToArray(nodeList) {
+  return Array.prototype.slice.call(nodeList);
+};
+
+/**
+ * Returns a non-live NodeList of all elements descended from the element on which it
+ * is invoked that matches the specified group of CSS selectors.
+ *
+ * @param {string} selector
+ * @param {HTMLElement} el
+ *
+ * @function
+ * @return {Node[]}
+ */
+var querySelectorAll = exports.querySelectorAll = (0, _functional.curry)(function (selector, el) {
+  return nodeListToArray(el.querySelectorAll(selector));
+});
+
+/**
+ * The removeChild() method removes a child node from the DOM. Returns removed node.
+ *
+ * @param {Node} parent
+ * @param {Node} oldChild
+ *
+ * @return {Node}
+ */
+var removeChild = exports.removeChild = (0, _functional.curry)(function (parent, oldChild) {
+  return parent.removeChild(oldChild);
+});
+
+/**
+ * Returns true if a node has a class
+ *
+ * @param {string} cls
+ * @param {HTMLElement} el
+ *
+ * @function
+ */
+var classListContains = exports.classListContains = (0, _functional.curry)(function (cls, el) {
+  return el.classList.contains(cls);
+});
+
+/**
+ * Adds aria-hidden=true to an element
+ *
+ * @param {HTMLElement} element
+ * @function
+ */
+var hide = exports.hide = setAttribute('aria-hidden', 'true');
+
+/**
+ * Adds aria-hidden=false to an element
+ * @function
+ */
+var show = exports.show = setAttribute('aria-hidden', 'false');
+
+/**
+ * Toggles aria-hidden on an element
+ *
+ * @param {boolean} visible
+ * @param {HTMLElement} element
+ */
+var toggleVisibility = exports.toggleVisibility = (0, _functional.curry)(function (visible, element) {
+  return (visible ? show : hide)(element);
+});
+
+/**
+ * Toggles a class on an element
+ *
+ * @param {string} cls
+ * @param {boolean} add
+ * @param {HTMLElement} element
+ */
+var toggleClass = exports.toggleClass = (0, _functional.curry)(function (cls, add, element) {
+  element.classList[add ? 'add' : 'remove'](cls);
+});
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * @mixin
+ */
+var Eventful = exports.Eventful = function Eventful() {
+  return {
+    listeners: {},
+
+    /**
+     * Listen to event
+     *
+     * @param {string} type
+     * @param {function} listener
+     * @param {object} [scope]
+     *
+     * @function
+     * @return {Eventful}
+     */
+    on: function on(type, listener, scope) {
+      /**
+       * @typedef {object} Trigger
+       * @property {function} listener
+       * @property {object} scope
+       */
+      var trigger = {
+        'listener': listener,
+        'scope': scope
+      };
+
+      this.listeners[type] = this.listeners[type] || [];
+      this.listeners[type].push(trigger);
+
+      return this;
+    },
+
+    /**
+     * Triggers event. If any of the listeners returns false, return false
+     *
+     * @param {string} type
+     * @param {object} [event]
+     *
+     * @function
+     * @return {boolean}
+     */
+    trigger: function trigger(type, event) {
+      var triggers = this.listeners[type] || [];
+
+      return triggers.every(function (trigger) {
+        return trigger.listener.call(trigger.scope || this, event) !== false;
+      });
+    },
+
+    /**
+     * Listens for events on another Eventful, and propagate it trough this Eventful
+     *
+     * @param {string[]} types
+     * @param {Eventful} eventful
+     * @param {String} [eventName] the name of the event when propogated
+     */
+    propagate: function propagate(types, eventful, newType) {
+      var self = this;
+      types.forEach(function (type) {
+        return eventful.on(type, function (event) {
+          return self.trigger(newType || type, event);
+        });
+      });
+    }
+  };
+};
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Class responsible for providing translations
+ */
+var Dictionary = function () {
+  function Dictionary() {
+    _classCallCheck(this, Dictionary);
+  }
+
+  _createClass(Dictionary, null, [{
+    key: "init",
+
+
+    /**
+     * Initialize the dictionary
+     *
+     * @param {Object} dictionary - dictionary as key/value
+     */
+    value: function init(dictionary) {
+      Dictionary.dictionary = dictionary;
+    }
+
+    /**
+     * Get a string from the dictionary. Optionally replace variables
+     *
+     * @param {string} key
+     * @param {Object} replacements
+     * @returns {string}
+     */
+
+  }, {
+    key: "get",
+    value: function get(key, replacements) {
+      var translation = Dictionary.dictionary[key];
+
+      if (translation === undefined) {
+        return "Key not found in dictionary: " + key;
+      }
+
+      // Replace placeholder with variables.
+      for (var placeholder in replacements) {
+        if (!replacements[placeholder]) {
+          continue;
+        }
+        translation = translation.replace(placeholder, replacements[placeholder]);
+      }
+
+      return translation;
+    }
+  }]);
+
+  return Dictionary;
+}();
+
+exports.default = Dictionary;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _elements = __webpack_require__(1);
+
+var _functional = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @param {HTMLElement} element
+ * @function
+ */
+var addTabIndex = (0, _elements.setAttribute)('tabindex', '0');
+
+/**
+ * @param {HTMLElement} element
+ * @function
+ */
+var removeTabIndex = (0, _elements.removeAttribute)('tabindex');
+
+/**
+ * @param {HTMLElement[]} elements
+ * @function
+ */
+
+var removeTabIndexForAll = (0, _functional.forEach)(removeTabIndex);
+
+/**
+ * @param {HTMLElement} element
+ * @function
+ */
+var hasTabIndex = (0, _elements.hasAttribute)('tabindex');
+
+/**
+ * Sets tabindex and focus on an element, remove it from all others
+ *
+ * @param {HTMLElement[]} elements
+ * @param {number} index
+ */
+var updateTabbable = function updateTabbable(elements, index) {
+  var selectedElement = elements[index];
+
+  if (selectedElement) {
+    removeTabIndexForAll(elements);
+    addTabIndex(selectedElement);
+  }
+};
+
+/**
+ * Sets tabindex on an element, remove it from all others
+ *
+ * @param {number} currentIndex
+ * @param {number} lastIndex
+ *
+ * @return {number}
+ */
+var nextIndex = function nextIndex(currentIndex, lastIndex) {
+  return currentIndex === lastIndex ? 0 : currentIndex + 1;
+};
+
+/**
+ * Sets tabindex on an element, remove it from all others
+ *
+ * @param {number} currentIndex
+ * @param {number} lastIndex
+ *
+ * @return {number}
+ */
+var previousIndex = function previousIndex(currentIndex, lastIndex) {
+  return currentIndex === 0 ? lastIndex : currentIndex - 1;
+};
+
+/**
+ * @class
+ */
+
+var Keyboard = function () {
+  function Keyboard() {
+    _classCallCheck(this, Keyboard);
+
+    /**
+     * @property {HTMLElement[]} elements
+     */
+    this.elements = [];
+    /**
+     * Creates a bound key handler, that can be removed
+     * @property {function} boundHandleKeyDown
+     */
+    this.boundHandleKeyDown = this.handleKeyDown.bind(this);
+    this.boundHandleFocus = this.handleFocus.bind(this);
+    /**
+     * @property {number} selectedIndex
+     */
+    this.selectedIndex = 0;
+  }
+
+  /**
+   * Add keyboard support to an element
+   *
+   * @param {HTMLElement} element
+   *
+   * @public
+   * @return {HTMLElement}
+   */
+
+
+  _createClass(Keyboard, [{
+    key: 'addElement',
+    value: function addElement(element) {
+      this.elements.push(element);
+      element.addEventListener('keydown', this.boundHandleKeyDown);
+      element.addEventListener('focus', this.boundHandleFocus);
+
+      if (this.elements.length === 1) {
+        // if first
+        addTabIndex(element);
+      }
+
+      return element;
+    }
+  }, {
+    key: 'removeElement',
+
+
+    /**
+     * Add controls to an element
+     *
+     * @param {HTMLElement} element
+     *
+     * @public
+     * @return {HTMLElement}
+     */
+    value: function removeElement(element) {
+      this.elements = (0, _functional.without)([element], this.elements);
+
+      element.removeEventListener('keydown', this.boundHandleKeyDown);
+      element.removeEventListener('focus', this.boundHandleFocus);
+
+      // if removed element was selected
+      if (hasTabIndex(element)) {
+        removeTabIndex(element);
+
+        this.selectedIndex = 0;
+        updateTabbable(this.elements, this.selectedIndex);
+      }
+
+      return element;
+    }
+  }, {
+    key: 'handleKeyDown',
+
+
+    /**
+     * Handles key down, and updates the tab index
+     *
+     * @param {KeyboardEvent} event Keyboard event
+     *
+     * @private
+     */
+    value: function handleKeyDown(event) {
+      var lastIndex = this.elements.length - 1;
+
+      switch (event.which) {
+        case 13: // Enter
+        case 32:
+          // Space
+          this.select();
+          event.preventDefault();
+          break;
+        case 35:
+          // End
+          this.selectedIndex = lastIndex;
+          event.preventDefault();
+          break;
+        case 36:
+          // Home
+          this.selectedIndex = 0;
+          event.preventDefault();
+          break;
+        case 37: // Left Arrow
+        case 38:
+          // Up Arrow
+          this.selectedIndex = previousIndex(this.selectedIndex, lastIndex);
+          event.preventDefault();
+          break;
+        case 39: // Right Arrow
+        case 40:
+          // Down Arrow
+          this.selectedIndex = nextIndex(this.selectedIndex, lastIndex);
+          event.preventDefault();
+          break;
+      }
+
+      updateTabbable(this.elements, this.selectedIndex);
+      this.elements[this.selectedIndex].focus();
+    }
+  }, {
+    key: 'handleFocus',
+
+
+    /**
+     * Updates the selected index with the focused element
+     *
+     * @param {FocusEvent} event
+     */
+    value: function handleFocus(event) {
+      this.selectedIndex = this.elements.indexOf(event.srcElement);
+    }
+
+    /**
+     * Sets the selected index, and updates the tab index
+     *
+     * @param {number} index
+     */
+
+  }, {
+    key: 'forceSelectedIndex',
+    value: function forceSelectedIndex(index) {
+      this.selectedIndex = index;
+      updateTabbable(this.elements, this.selectedIndex);
+    }
+
+    /**
+     * Triggers 'onSelect' function if it exists
+     */
+
+  }, {
+    key: 'select',
+    value: function select() {
+      if (this.onSelect != undefined) {
+        this.onSelect(this.elements[this.selectedIndex]);
+      }
+    }
+  }]);
+
+  return Keyboard;
+}();
+
+exports.default = Keyboard;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.relayClickEventAs = undefined;
+
+var _functional = __webpack_require__(0);
+
+/**
+ *  Transforms a DOM click event into an Eventful's event
+ *  @see Eventful
+ *
+ * @param  {string | Object} type
+ * @param  {Eventful} eventful
+ * @param  {HTMLElement} element
+ * @return {HTMLElement}
+ */
+var relayClickEventAs = exports.relayClickEventAs = (0, _functional.curry)(function (type, eventful, element) {
+  element.addEventListener('click', function (event) {
+    eventful.trigger(type, {
+      element: element,
+      id: element.getAttribute('data-id')
+    }, false);
+
+    // don't bubble
+    event.stopPropagation();
+  });
+
+  return element;
+});
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process, Promise, global) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+/*!
  * @overview es6-promise - a tiny implementation of Promises/A+.
  * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
  * @license   Licensed under MIT license
  *            See https://raw.githubusercontent.com/stefanpenner/es6-promise/master/LICENSE
  * @version   3.3.1
  */
-!function(r,i){"object"===u(t)&&void 0!==e?e.exports=i():(a=i,s="function"==typeof a?a.call(t,n,t,e):a,void 0!==s&&(e.exports=s))}(void 0,function(){function e(e){return"function"==typeof e||"object"===(void 0===e?"undefined":u(e))&&null!==e}function t(e){return"function"==typeof e}function i(e){K=e}function a(e){X=e}function s(){return function(){return r.nextTick(f)}}function l(){return function(){W(f)}}function c(){var e=0,t=new ee(f),n=document.createTextNode("");return t.observe(n,{characterData:!0}),function(){n.data=e=++e%2}}function d(){var e=new MessageChannel;return e.port1.onmessage=f,function(){return e.port2.postMessage(0)}}function h(){var e=setTimeout;return function(){return e(f,1)}}function f(){for(var e=0;e<Z;e+=2){(0,re[e])(re[e+1]),re[e]=void 0,re[e+1]=void 0}Z=0}function p(){try{var e=n(30);return W=e.runOnLoop||e.runOnContext,l()}catch(e){return h()}}function y(e,t){var n=arguments,r=this,i=new this.constructor(b);void 0===i[oe]&&N(i);var o=r._state;return o?function(){var e=n[o-1];X(function(){return O(o,i,e,r._result)})}():L(r,i,e,t),i}function v(e){var t=this;if(e&&"object"===(void 0===e?"undefined":u(e))&&e.constructor===t)return e;var n=new t(b);return S(n,e),n}function b(){}function m(){return new TypeError("You cannot resolve a promise with itself")}function g(){return new TypeError("A promises callback cannot return that same promise.")}function w(e){try{return e.then}catch(e){return le.error=e,le}}function E(e,t,n,r){try{e.call(t,n,r)}catch(e){return e}}function T(e,t,n){X(function(e){var r=!1,i=E(n,t,function(n){r||(r=!0,t!==n?S(e,n):M(e,n))},function(t){r||(r=!0,k(e,t))},"Settle: "+(e._label||" unknown promise"));!r&&i&&(r=!0,k(e,i))},e)}function A(e,t){t._state===se?M(e,t._result):t._state===ue?k(e,t._result):L(t,void 0,function(t){return S(e,t)},function(t){return k(e,t)})}function I(e,n,r){n.constructor===e.constructor&&r===y&&n.constructor.resolve===v?A(e,n):r===le?k(e,le.error):void 0===r?M(e,n):t(r)?T(e,n,r):M(e,n)}function S(t,n){t===n?k(t,m()):e(n)?I(t,n,w(n)):M(t,n)}function C(e){e._onerror&&e._onerror(e._result),x(e)}function M(e,t){e._state===ae&&(e._result=t,e._state=se,0!==e._subscribers.length&&X(x,e))}function k(e,t){e._state===ae&&(e._state=ue,e._result=t,X(C,e))}function L(e,t,n,r){var i=e._subscribers,o=i.length;e._onerror=null,i[o]=t,i[o+se]=n,i[o+ue]=r,0===o&&e._state&&X(x,e)}function x(e){var t=e._subscribers,n=e._state;if(0!==t.length){for(var r=void 0,i=void 0,o=e._result,a=0;a<t.length;a+=3)r=t[a],i=t[a+n],r?O(n,r,i,o):i(o);e._subscribers.length=0}}function j(){this.error=null}function _(e,t){try{return e(t)}catch(e){return ce.error=e,ce}}function O(e,n,r,i){var o=t(r),a=void 0,s=void 0,u=void 0,l=void 0;if(o){if(a=_(r,i),a===ce?(l=!0,s=a.error,a=null):u=!0,n===a)return void k(n,g())}else a=i,u=!0;n._state!==ae||(o&&u?S(n,a):l?k(n,s):e===se?M(n,a):e===ue&&k(n,a))}function P(e,t){try{t(function(t){S(e,t)},function(t){k(e,t)})}catch(t){k(e,t)}}function D(){return de++}function N(e){e[oe]=de++,e._state=void 0,e._result=void 0,e._subscribers=[]}function B(e,t){this._instanceConstructor=e,this.promise=new e(b),this.promise[oe]||N(this.promise),Q(t)?(this._input=t,this.length=t.length,this._remaining=t.length,this._result=new Array(this.length),0===this.length?M(this.promise,this._result):(this.length=this.length||0,this._enumerate(),0===this._remaining&&M(this.promise,this._result))):k(this.promise,q())}function q(){return new Error("Array Methods must be provided an Array")}function F(e){return new B(this,e).promise}function R(e){var t=this;return new t(Q(e)?function(n,r){for(var i=e.length,o=0;o<i;o++)t.resolve(e[o]).then(n,r)}:function(e,t){return t(new TypeError("You must pass an array to race."))})}function H(e){var t=this,n=new t(b);return k(n,e),n}function U(){throw new TypeError("You must pass a resolver function as the first argument to the promise constructor")}function z(){throw new TypeError("Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.")}function G(e){this[oe]=D(),this._result=this._state=void 0,this._subscribers=[],b!==e&&("function"!=typeof e&&U(),this instanceof G?P(this,e):z())}function Y(){var e=void 0;if(void 0!==o)e=o;else if("undefined"!=typeof self)e=self;else try{e=Function("return this")()}catch(e){throw new Error("polyfill failed because global object is unavailable in this environment")}var t=e.Promise;if(t){var n=null;try{n=Object.prototype.toString.call(t.resolve())}catch(e){}if("[object Promise]"===n&&!t.cast)return}e.Promise=G}var V=void 0;V=Array.isArray?Array.isArray:function(e){return"[object Array]"===Object.prototype.toString.call(e)};var Q=V,Z=0,W=void 0,K=void 0,X=function(e,t){re[Z]=e,re[Z+1]=t,Z+=2,2===Z&&(K?K(f):ie())},J="undefined"!=typeof window?window:void 0,$=J||{},ee=$.MutationObserver||$.WebKitMutationObserver,te="undefined"==typeof self&&void 0!==r&&"[object process]"==={}.toString.call(r),ne="undefined"!=typeof Uint8ClampedArray&&"undefined"!=typeof importScripts&&"undefined"!=typeof MessageChannel,re=new Array(1e3),ie=void 0;ie=te?s():ee?c():ne?d():void 0===J?p():h();var oe=Math.random().toString(36).substring(16),ae=void 0,se=1,ue=2,le=new j,ce=new j,de=0;return B.prototype._enumerate=function(){for(var e=this.length,t=this._input,n=0;this._state===ae&&n<e;n++)this._eachEntry(t[n],n)},B.prototype._eachEntry=function(e,t){var n=this._instanceConstructor,r=n.resolve;if(r===v){var i=w(e);if(i===y&&e._state!==ae)this._settledAt(e._state,t,e._result);else if("function"!=typeof i)this._remaining--,this._result[t]=e;else if(n===G){var o=new n(b);I(o,e,i),this._willSettleAt(o,t)}else this._willSettleAt(new n(function(t){return t(e)}),t)}else this._willSettleAt(r(e),t)},B.prototype._settledAt=function(e,t,n){var r=this.promise;r._state===ae&&(this._remaining--,e===ue?k(r,n):this._result[t]=n),0===this._remaining&&M(r,this._result)},B.prototype._willSettleAt=function(e,t){var n=this;L(e,void 0,function(e){return n._settledAt(se,t,e)},function(e){return n._settledAt(ue,t,e)})},G.all=F,G.race=R,G.resolve=v,G.reject=H,G._setScheduler=i,G._setAsap=a,G._asap=X,G.prototype={constructor:G,then:y,catch:function(e){return this.then(null,e)}},Y(),G.polyfill=Y,G.Promise=G,G})}).call(t,n(13),n(6),n(14))},function(e,t,n){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var i=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},o=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),a=n(2),s=n(5),u=function(){function e(t){r(this,e),i(this,(0,a.Eventful)()),this.rootElement=this.createElement(t)}return o(e,[{key:"createElement",value:function(e){var t=document.createElement("div");if(t.className="message "+e.type+(e.dismissible?" dismissible":""),t.setAttribute("role","alert"),e.dismissible){var n=document.createElement("div");n.className="close",t.appendChild(n),(0,s.relayClickEventAs)("close",this,n)}var r=document.createElement("div");if(r.className="message-content",r.innerHTML="<h2>"+e.title+"</h2><p>"+e.content+"</p>",t.appendChild(r),void 0!==e.action){var i=document.createElement("button");i.className="button",i.innerHTML=e.action,t.appendChild(i),(0,s.relayClickEventAs)("action-clicked",this,i)}return t}},{key:"getElement",value:function(){return this.rootElement}}]),e}();t.default=u},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function i(e){var t=new s.default,n='[role="heading"] [aria-controls][aria-expanded]';t.onSelect=function(e){return(0,u.toggleAttribute)("aria-expanded",e)},(0,o.initCollapsible)(e,function(e,t){return(0,u.toggleVisibility)(e,t)},n),(0,u.querySelectorAll)(n,e).forEach(function(e){return t.addElement(e)})}Object.defineProperty(t,"__esModule",{value:!0}),t.default=i;var o=n(9),a=n(4),s=r(a),u=n(1)},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.initCollapsible=void 0;var r=n(1),i=(0,r.attributeEquals)("aria-expanded","true");t.initCollapsible=function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:r.toggleVisibility,n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:"[aria-controls][aria-expanded]";(0,r.querySelectorAll)(n,e).forEach(function(n){var o=n.getAttribute("aria-controls"),a=e.querySelector("#"+o);new MutationObserver(function(){return t(i(n),a)}).observe(n,{attributes:!0,attributeOldValue:!0,attributeFilter:["aria-expanded"]}),n.addEventListener("click",function(){return(0,r.toggleAttribute)("aria-expanded",n)}),t(i(n),a)})}},function(e,t){e.exports="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4NCiAgPGRlZnM+DQogICAgPHN0eWxlPg0KICAgICAgLmNscy0xIHsNCiAgICAgIGZpbGw6IG5vbmU7DQogICAgICB9DQoNCiAgICAgIC5jbHMtMiB7DQogICAgICBmaWxsOiAjYzZjNmM3Ow0KICAgICAgfQ0KDQogICAgICAuY2xzLTMsIC5jbHMtNCB7DQogICAgICBmaWxsOiAjZmZmOw0KICAgICAgfQ0KDQogICAgICAuY2xzLTMgew0KICAgICAgb3BhY2l0eTogMC43Ow0KICAgICAgfQ0KICAgIDwvc3R5bGU+DQogIDwvZGVmcz4NCiAgPHRpdGxlPmNvbnRlbnQgdHlwZSBwbGFjZWhvbGRlcl8yPC90aXRsZT4NCiAgPGcgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiI+DQogICAgPGcgaWQ9ImNvbnRlbnRfdHlwZV9wbGFjZWhvbGRlci0xX2NvcHkiIGRhdGEtbmFtZT0iY29udGVudCB0eXBlIHBsYWNlaG9sZGVyLTEgY29weSI+DQogICAgICA8cmVjdCBjbGFzcz0iY2xzLTEiIHdpZHRoPSI0MDAiIGhlaWdodD0iMjI1Ii8+DQogICAgICA8cmVjdCBjbGFzcz0iY2xzLTIiIHg9IjExMi41MSIgeT0iNDMuNDEiIHdpZHRoPSIxNzYuOTYiIGhlaWdodD0iMTM1LjQ1IiByeD0iMTAiIHJ5PSIxMCIvPg0KICAgICAgPGNpcmNsZSBjbGFzcz0iY2xzLTMiIGN4PSIxMzYuNjYiIGN5PSI2MS45OCIgcj0iNC44MSIvPg0KICAgICAgPGNpcmNsZSBjbGFzcz0iY2xzLTMiIGN4PSIxNTEuNDkiIGN5PSI2MS45OCIgcj0iNC44MSIvPg0KICAgICAgPGNpcmNsZSBjbGFzcz0iY2xzLTMiIGN4PSIxNjYuMSIgY3k9IjYxLjk4IiByPSI0LjgxIi8+DQogICAgICA8ZyBpZD0iX0dyb3VwXyIgZGF0YS1uYW1lPSImbHQ7R3JvdXAmZ3Q7Ij4NCiAgICAgICAgPGcgaWQ9Il9Hcm91cF8yIiBkYXRhLW5hbWU9IiZsdDtHcm91cCZndDsiPg0KICAgICAgICAgIDxwYXRoIGlkPSJfQ29tcG91bmRfUGF0aF8iIGRhdGEtbmFtZT0iJmx0O0NvbXBvdW5kIFBhdGgmZ3Q7IiBjbGFzcz0iY2xzLTQiIGQ9Ik0yNjMuMjgsOTUuMjFDMjYwLDkyLjA3LDI1NSw5MS41LDI0OC40Myw5MS41SDIyN3Y4SDE5OS41bC0yLjE3LDEwLjI0YTI1Ljg0LDI1Ljg0LDAsMCwxLDExLjQ4LTEuNjMsMTkuOTMsMTkuOTMsMCwwLDEsMTQuMzksNS41NywxOC4yNiwxOC4yNiwwLDAsMSw1LjUyLDEzLjYsMjMuMTEsMjMuMTEsMCwwLDEtMi44NCwxMS4wNSwxOC42NSwxOC42NSwwLDAsMS04LjA2LDcuNzksOSw5LDAsMCwxLTQuMTIsMS4zN0gyMzZ2LTIxaDEwLjQyYzcuMzYsMCwxMi44My0xLjYxLDE2LjQyLTVzNS4zOC03LjQ4LDUuMzgtMTMuNDRDMjY4LjIyLDEwMi4yOSwyNjYuNTcsOTguMzUsMjYzLjI4LDk1LjIxWm0tMTUsMTdjLTEuNDIsMS4yMi0zLjksMS4yNS03LjQxLDEuMjVIMjM2di0xNGg1LjYyYTkuNTcsOS41NywwLDAsMSw3LDIuOTMsNy4wNSw3LjA1LDAsMCwxLDEuODUsNC45MkE2LjMzLDYuMzMsMCwwLDEsMjQ4LjMxLDExMi4yNVoiLz4NCiAgICAgICAgICA8cGF0aCBpZD0iX1BhdGhfIiBkYXRhLW5hbWU9IiZsdDtQYXRoJmd0OyIgY2xhc3M9ImNscy00IiBkPSJNMjAyLjksMTE5LjExYTguMTIsOC4xMiwwLDAsMC03LjI4LDQuNTJsLTE2LTEuMjIsNy4yMi0zMC45MkgxNzR2MjJIMTUzdi0yMkgxMzZ2NTZoMTd2LTIxaDIxdjIxaDIwLjMxYy0yLjcyLDAtNS0xLjUzLTctM2ExOS4xOSwxOS4xOSwwLDAsMS00LjczLTQuODMsMjMuNTgsMjMuNTgsMCwwLDEtMy02LjZsMTYtMi4yNmE4LjExLDguMTEsMCwxLDAsNy4yNi0xMS43MloiLz4NCiAgICAgICAgPC9nPg0KICAgICAgPC9nPg0KICAgICAgPHJlY3QgY2xhc3M9ImNscy0zIiB4PSIxNzcuNjYiIHk9IjU3LjY2IiB3aWR0aD0iOTIuMjgiIGhlaWdodD0iOS4zOCIgcng9IjMuNSIgcnk9IjMuNSIvPg0KICAgIDwvZz4NCiAgPC9nPg0KPC9zdmc+DQo="},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var o=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},a=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),s=n(22),u=r(s),l=n(20),c=r(l),d=n(24),h=r(d),f=n(21),p=r(f),y=n(3),v=r(y),b=n(2),m=function(){function e(t,n){i(this,e),o(this,(0,b.Eventful)());var r=this;v.default.init(n),this.services=new p.default({apiRootUrl:t.apiRootUrl}),this.contentTypeSection=new c.default(t,this.services),this.uploadSection=new h.default(t,this.services),this.view=new u.default(t),this.propagate(["select"],this.contentTypeSection),this.propagate(["upload"],this.uploadSection),this.on("select",this.setPanelTitle,this),this.on("select",this.view.closePanel,this.view),this.view.on("tab-change",this.view.setSectionType,this.view),this.view.on("panel-change",this.view.togglePanelOpen.bind(this.view),this.view),this.contentTypeSection.on("reload",function(){r.services.setup(),r.contentTypeSection.initContentTypeList()}),this.on("clear-upload-form",function(){r.uploadSection.clearUploadForm()}),this.initTabPanel(t)}return a(e,[{key:"getContentType",value:function(e){return this.services.contentType(e)}},{key:"setPanelTitle",value:function(e){var t=this,n=e.id;this.getContentType(n).then(function(e){var r=e.title;return t.view.setTitle(r?r:n)})}},{key:"initTabPanel",value:function(e){var t=this,n=e.sectionId,r=void 0===n?"content-types":n,i=[{title:v.default.get("createContentTabLabel"),id:"content-types",content:this.contentTypeSection.getElement()},{title:v.default.get("uploadTabLabel"),id:"upload",content:this.uploadSection.getElement()}];i.filter(function(e){return e.id===r}).forEach(function(e){return e.selected=!0}),i.forEach(function(e){return t.view.addTab(e)}),this.view.addBottomBorder(),this.view.initTabPanel()}},{key:"getElement",value:function(){return this.view.getElement()}}]),e}();t.default=m},function(e,t){},function(e,t,n){"use strict";function r(){throw new Error("setTimeout has not been defined")}function i(){throw new Error("clearTimeout has not been defined")}function o(e){if(d===setTimeout)return setTimeout(e,0);if((d===r||!d)&&setTimeout)return d=setTimeout,setTimeout(e,0);try{return d(e,0)}catch(t){try{return d.call(null,e,0)}catch(t){return d.call(this,e,0)}}}function a(e){if(h===clearTimeout)return clearTimeout(e);if((h===i||!h)&&clearTimeout)return h=clearTimeout,clearTimeout(e);try{return h(e)}catch(t){try{return h.call(null,e)}catch(t){return h.call(this,e)}}}function s(){v&&p&&(v=!1,p.length?y=p.concat(y):b=-1,y.length&&u())}function u(){if(!v){var e=o(s);v=!0;for(var t=y.length;t;){for(p=y,y=[];++b<t;)p&&p[b].run();b=-1,t=y.length}p=null,v=!1,a(e)}}function l(e,t){this.fun=e,this.array=t}function c(){}var d,h,f=e.exports={};!function(){try{d="function"==typeof setTimeout?setTimeout:r}catch(e){d=r}try{h="function"==typeof clearTimeout?clearTimeout:i}catch(e){h=i}}();var p,y=[],v=!1,b=-1;f.nextTick=function(e){var t=new Array(arguments.length-1);if(arguments.length>1)for(var n=1;n<arguments.length;n++)t[n-1]=arguments[n];y.push(new l(e,t)),1!==y.length||v||o(u)},l.prototype.run=function(){this.fun.apply(null,this.array)},f.title="browser",f.browser=!0,f.env={},f.argv=[],f.version="",f.versions={},f.on=c,f.addListener=c,f.once=c,f.off=c,f.removeListener=c,f.removeAllListeners=c,f.emit=c,f.binding=function(e){throw new Error("process.binding is not supported")},f.cwd=function(){return"/"},f.chdir=function(e){throw new Error("process.chdir is not supported")},f.umask=function(){return 0}},function(e,t,n){"use strict";var r,i="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e};r=function(){return this}();try{r=r||Function("return this")()||(0,eval)("this")}catch(e){"object"===("undefined"==typeof window?"undefined":i(window))&&(r=window)}e.exports=r},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var o=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},a=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),s=n(1),u=n(0),l=n(2),c=n(8),d=r(c),h=n(27),f=r(h),p=n(26),y=r(p),v=n(5),b=n(10),m=r(b),g=n(3),w=r(g),E=n(7),T=r(E),A="data-id",I=285,S="imagelightbox",C=function(e,t){return(t?s.show:s.hide)(e)},M=function(e){return"string"==typeof e&&0===e.length},k=(0,u.forEach)(s.hide),L=(0,s.setAttribute)("disabled",""),x=(0,s.removeAttribute)("disabled"),j=(0,s.attributeEquals)("aria-hidden","true"),_=function(){function e(t){var n=this;i(this,e),o(this,(0,l.Eventful)()),this.rootElement=this.createView(),this.buttonBar=this.rootElement.querySelector(".button-bar"),this.useButton=this.buttonBar.querySelector(".button-use"),this.installButton=this.buttonBar.querySelector(".button-install"),this.buttons=this.buttonBar.querySelectorAll(".button"),this.image=this.rootElement.querySelector(".content-type-image"),this.title=this.rootElement.querySelector(".text-details .title"),this.owner=this.rootElement.querySelector(".owner"),this.description=this.rootElement.querySelector(".text-details .small"),this.demoButton=this.rootElement.querySelector(".demo-button"),this.carousel=this.rootElement.querySelector(".carousel"),this.carouselList=this.carousel.querySelector("ul");var r=this.rootElement.querySelector("#"+S+"-detail");this.imageLightboxList=r.querySelector("."+S+"-list"),this.panel=this.rootElement.querySelector(".panel"),this.licencePanelHeading=this.rootElement.querySelector(".licence-panel-heading"),this.licencePanelBody=this.rootElement.querySelector("#licence-panel"),this.installMessage=this.rootElement.querySelector(".install-message"),this.container=this.rootElement.querySelector(".container"),this.installMessage.querySelector(".message-close").addEventListener("click",function(){return n.resetInstallMessage()}),(0,d.default)(this.panel),(0,f.default)(this.carousel),(0,y.default)(r),(0,v.relayClickEventAs)("close",this,this.rootElement.querySelector(".back-button")),(0,v.relayClickEventAs)("select",this,this.useButton),(0,v.relayClickEventAs)("install",this,this.installButton)}return a(e,[{key:"createView",value:function(){var e={title:"Images",progress:":num of :total",next:"Next image",prev:"Previous image",close:"Close dialog"},t="content-type-detail-view-title",n=document.createElement("div");return n.className="content-type-detail",n.id="content-type-detail",n.setAttribute("role","region"),n.setAttribute("tabindex","-1"),n.setAttribute("aria-labelledby",t),n.setAttribute("aria-hidden","true"),n.innerHTML='\n      <button class="back-button icon-arrow-thick" aria-label="'+w.default.get("contentTypeBackButtonLabel")+'" tabindex="0"></button>\n      <div class="container">\n        <div class="image-wrapper"><img class="img-responsive content-type-image" src="'+m.default+'"></div>\n        <div class="text-details">\n          <h2 id="'+t+'" class="title"></h2>\n          <div class="owner"></div>\n          <p class="small"></p>\n          <a class="button demo-button" target="_blank" aria-hidden="false" href="#">'+w.default.get("contentTypeDemoButtonLabel")+'</a>\n        </div>\n      </div>\n      <div class="carousel" role="region" data-size="5">\n        <button class="carousel-button previous" aria-hidden="true" disabled><span class="icon-arrow-thick"></span></button>\n        <button class="carousel-button next" aria-hidden="true" disabled><span class="icon-arrow-thick"></span></button>\n        <nav class="scroller">\n          <ul></ul>\n        </nav>\n      </div>\n      <hr />\n      <div role="alert" class="install-message message dismissible simple info" aria-hidden="true">\n        <button aria-label="'+w.default.get("contentTypeCloseButtonLabel")+'" class="message-close icon-close"></button>\n        <h3 class="title"></h3>\n      </div>\n      <div class="button-bar">\n        <button class="button button-primary button-use" aria-hidden="false" data-id="">'+w.default.get("contentTypeUseButtonLabel")+'</button>\n        <button class="button button-inverse-primary button-install" aria-hidden="true" data-id=""><span class="icon-arrow-thick"></span>'+w.default.get("contentTypeInstallButtonLabel")+'</button>\n        <button class="button button-inverse-primary button-installing" aria-hidden="true"><span class="icon-loading-search icon-spin"></span>'+w.default.get("contentTypeInstallingButtonLabel")+'</button>\n      </div>\n      <dl class="panel">\n        <dt aria-level="2" role="heading" class="licence-panel-heading">\n          <a href="#" role="button" aria-expanded="false" aria-controls="licence-panel">\n            <span class="icon-accordion-arrow"></span> '+w.default.get("contentTypeLicensePanelTitle")+'\n          </a>\n        </dt>\n        <dl id="licence-panel" role="region" aria-hidden="true">\n          <div class="panel-body"></div>\n        </dl>\n      </dl>\n      <div id="'+S+'-detail" class="'+S+'" role="dialog" aria-label="'+e.title+'">\n        <ol class="'+S+'-list"></ol>\n        <div class="'+S+'-progress">'+e.progress+'</div>\n        <div class="'+S+'-button next" role="button" aria-disabled="true" aria-label="'+e.next+'"></div>\n        <div class="'+S+'-button previous" role="button" aria-disabled="true" aria-label="'+e.prev+'"></div>\n        <div class="'+S+'-button close" role="button" tabindex="0" aria-label="'+e.close+'"></div>\n      </div>',n}},{key:"setInstallMessage",value:function(e){var t=e.success,n=void 0===t||t,r=e.message;(0,s.show)(this.installMessage),this.installMessage.querySelector(".title").innerText=r,this.installMessage.querySelector(".title").innerText=r,this.installMessage.className="install-message dismissible message simple "+(n?"info":"error")}},{key:"resetInstallMessage",value:function(){(0,s.hide)(this.installMessage),this.installMessage.querySelector(".title").innerText=""}},{key:"removeAllImagesInCarousel",value:function(){this.carouselList.querySelectorAll("li").forEach((0,s.removeChild)(this.carouselList)),this.imageLightboxList.innerHTML=""}},{key:"addImageToCarousel",value:function(e){var t=document.createElement("li");t.classList.add(S+"-image"),t.innerHTML='<img class="img-responsive" src="'+e.url+'" alt="'+e.alt+'">',this.imageLightboxList.appendChild(t);var n=document.createElement("li");n.className="slide",n.innerHTML='<img src="'+e.url+'" alt="'+e.alt+'" class="img-responsive" aria-controls="'+S+'-detail" />',this.carouselList.appendChild(n)}},{key:"reset",value:function(){this.installButton.removeAttribute("disabled"),this.messageViewElement&&(this.container.removeChild(this.messageViewElement),delete this.messageViewElement),(0,s.hide)(this.installMessage)}},{key:"apiVersionUnsupported",value:function(){this.installButton.setAttribute("disabled","disabled");var e=new T.default({type:"warning",title:w.default.get("contentTypeUnsupportedApiVersionTitle"),content:w.default.get("contentTypeUnsupportedApiVersionContent")});this.messageViewElement=e.getElement(),this.container.insertBefore(this.messageViewElement,this.container.childNodes[0])}},{key:"setImage",value:function(e){this.image.setAttribute("src",e||m.default)}},{key:"setId",value:function(e){this.installButton.setAttribute(A,e),this.useButton.setAttribute(A,e)}},{key:"setTitle",value:function(e){this.title.innerHTML=""+e}},{key:"setDescription",value:function(){var e=this,t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"";t&&t.length>I?(this.description.innerHTML=this.ellipsis(I,t)+'<button class="read-more link">'+w.default.get("contentTypeReadMore")+"</button>",this.description.querySelector(".read-more, .read-less").addEventListener("click",function(){return e.toggleDescriptionExpanded(t)}),this.descriptionExpanded=!1):this.description.innerText=t}},{key:"toggleDescriptionExpanded",value:function(e){var t=this;this.descriptionExpanded=!this.descriptionExpanded,this.descriptionExpanded?this.description.innerHTML=e+'<button class="read-less link">'+w.default.get("contentTypeReadLess")+"</button>":this.description.innerHTML=this.ellipsis(I,e)+'<button class="read-more link">'+w.default.get("contentTypeReadMore")+"</button>",this.description.querySelector(".read-more, .read-less").addEventListener("click",function(){return t.toggleDescriptionExpanded(e)})}},{key:"ellipsis",value:function(e,t){return t.substr(0,e)+"..."}},{key:"setLicence",value:function(e,t){e&&("MIT"===e?this.licencePanelBody.querySelector(".panel-body").innerHTML='\n          <dl class="dl-horizontal">\n            <dt>Can</dt>\n            <dd>Use commercially</dd>\n            <dd>Modify</dd>\n            <dd>Distribute</dd>\n            <dd>Sublicense</dd>\n            <dd>Private use</dd>\n\n            <dt>Cannot</dt>\n            <dd>Hold liable</dd>\n\n            <dt>Must</dt>\n            <dd>Include copyright</dd>\n            <dd>Include license</dd>\n          </dl>\n        ':this.licencePanelBody.querySelector(".panel-body").innerText=e,(0,s.show)(this.licencePanelHeading)),(0,s.hide)(this.licencePanelBody)}},{key:"setOwner",value:function(e){this.owner.innerHTML=e?w.default.get("contentTypeOwner",{":owner":e}):""}},{key:"setExample",value:function(e){this.demoButton.setAttribute("href",e||"#"),C(this.demoButton,!M(e))}},{key:"setIsInstalled",value:function(e){this.showButtonBySelector(e?".button-use":".button-install")}},{key:"setIsRestricted",value:function(e){e?(L(this.useButton),L(this.installButton)):(x(this.useButton),x(this.installButton))}},{key:"showButtonBySelector",value:function(e){var t=this.buttonBar.querySelector(e);t&&(k(this.buttons),(0,s.show)(t))}},{key:"hide",value:function(){(0,s.hide)(this.rootElement)}},{key:"show",value:function(){(0,s.show)(this.rootElement)}},{key:"focus",value:function(){var e=this;setTimeout(function(){return e.rootElement.focus()},10)}},{key:"isHidden",value:function(){return j(this.rootElement)}},{key:"getElement",value:function(){return this.rootElement}}]),e}();t.default=_},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var o=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},a=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),s=n(15),u=r(s),l=n(2),c=n(3),d=r(c),h=function(){function e(t,n){i(this,e),o(this,(0,l.Eventful)()),this.services=n,this.apiVersion=t.apiVersion,this.view=new u.default(t),this.view.on("install",this.install,this),this.propagate(["close","select"],this.view)}return a(e,[{key:"hide",value:function(){this.view.hide()}},{key:"show",value:function(){this.view.show()}},{key:"focus",value:function(){this.view.focus()}},{key:"isHidden",value:function(){return this.view.isHidden()}},{key:"loadById",value:function(e){this.services.contentType(e).then(this.update.bind(this))}},{key:"install",value:function(e){var t=this,n=e.id;return this.view.showButtonBySelector(".button-installing"),this.services.installContentType(n).then(function(e){t.view.setIsInstalled(!0),t.view.showButtonBySelector(".button-get"),t.view.setInstallMessage({message:(0,d.default)("contentTypeInstallSuccess",{":contentType":$id})})}).catch(function(e){t.view.showButtonBySelector(".button-install");var n=e.errorCode?e:{success:!1,errorCode:"RESPONSE_FAILED",message:d.default.get("contentTypeInstallError",{":contentType":$id})};t.view.setInstallMessage(n),console.error("Installation error",e)})}},{key:"update",value:function(e){this.view.reset(),this.view.setId(e.machineName),this.view.setTitle(e.title||e.machineName),this.view.setDescription(e.description),this.view.setImage(e.icon),this.view.setExample(e.example),this.view.setOwner(e.owner),this.view.setIsInstalled(e.installed),this.view.setLicence(e.license,e.owner),this.view.setIsRestricted(e.restricted);var t=this.apiVersion.major>e.h5pMajorVersion||this.apiVersion.major==e.h5pMajorVersion&&this.apiVersion.minor>=e.h5pMinorVersion;e.installed||t||this.view.apiVersionUnsupported(),this.view.removeAllImagesInCarousel(),e.screenshots.forEach(this.view.addImageToCarousel,this.view)}},{key:"getElement",value:function(){return this.view.getElement()}}]),e}();t.default=h},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var o=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},a=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),s=(n(0),n(1)),u=n(2),l=n(5),c=n(10),d=r(c),h=n(4),f=r(h),p=n(3),y=r(p),v=(0,s.setAttribute)("aria-hidden","true"),b=(0,s.setAttribute)("aria-hidden","false"),m=(0,s.getAttribute)("data-id"),g=function(){function e(t){var n=this;i(this,e),this.state=t,o(this,(0,u.Eventful)()),this.keyboard=new f.default,this.keyboard.onSelect=function(e){n.trigger("row-selected",{element:e,id:m(e)})},this.rootElement=document.createElement("ul"),this.rootElement.setAttribute("role","list"),this.rootElement.className="content-type-list"}return a(e,[{key:"hide",value:function(){v(this.rootElement)}},{key:"show",value:function(){b(this.rootElement)}},{key:"focus",value:function(){var e=(0,s.querySelector)('li[tabindex="0"]',this.rootElement);e&&e.focus()}},{key:"removeAllRows",value:function(){for(;this.rootElement.hasChildNodes();){var e=this.rootElement.lastChild;this.keyboard.removeElement(e),this.rootElement.removeChild(e)}}},{key:"addRow",value:function(e){var t=this.createContentTypeRow(e,this);(0,l.relayClickEventAs)("row-selected",this,t),this.rootElement.appendChild(t),this.keyboard.addElement(t)}},{key:"createContentTypeRow",value:function(e,t){var n=this.rootElement.querySelectorAll("li").length,r="content-type-row-title-"+n,i="content-type-row-description-"+n,o={text:y.default.get("contentTypeUseButtonLabel"),cls:"button-primary",icon:""},a={text:y.default.get("contentTypeGetButtonLabel"),cls:"button-inverse-primary button-install",icon:"icon-arrow-thick"},s=e.installed?o:a,u=e.title||e.machineName,c=e.summary||"",h=e.icon||d.default,f=e.restricted?'disabled="disabled"':"",p=document.createElement("li");p.id="content-type-"+e.machineName,p.setAttribute("data-id",e.machineName),p.setAttribute("aria-labelledby",r),p.setAttribute("aria-describedby",i),p.innerHTML='\n      <img class="img-responsive" src="'+h+'" alt="'+u+" "+y.default.get("contentTypeIconAltText")+'" />\n\n      <div class="content-type-row-info">\n        <h4 id="'+r+'">'+u+'</h4>\n        <div id="'+i+'" class="description">'+c+'</div>\n      </div>\n\n      <div class="content-type-row-button">\n        <button aria-describedby="'+r+'" class="button '+s.cls+'" data-id="'+e.machineName+'" tabindex="0" '+f+'>\n          <span class="'+s.icon+'"></span>\n          '+s.text+"\n        </button>\n      </div>\n   ";var v=p.querySelector(".button-primary");return v&&(0,l.relayClickEventAs)("select",t,v),p}},{key:"getElement",value:function(){return this.rootElement}}]),e}();t.default=g},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var o=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},a=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),s=n(17),u=r(s),l=n(2),c=function(){function e(t){i(this,e),o(this,(0,l.Eventful)()),this.view=new u.default(t),this.propagate(["row-selected","select"],this.view)}return a(e,[{key:"hide",value:function(){this.view.hide()}},{key:"show",value:function(){this.view.show()}},{key:"focus",value:function(){this.view.focus()}},{key:"update",value:function(e){this.view.removeAllRows(),e.forEach(this.view.addRow,this.view),this.trigger("update-content-type-list",{})}},{key:"getElement",value:function(){return this.view.getElement()}}]),e}();t.default=c},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var o=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},a=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),s=n(7),u=r(s),l=n(1),c=n(0),d=(n(5),n(28)),h=r(d),f=n(2),p=n(3),y=r(p),v=(0,c.forEach)((0,l.removeAttribute)("aria-selected")),b=9,m=function(){function e(t){var n=this;i(this,e),o(this,(0,f.Eventful)()),this.typeAheadEnabled=!0,this.rootElement=this.createElement(t),this.menu=this.rootElement.querySelector("nav"),this.menubar=this.rootElement.querySelector(".navbar-nav"),this.inputField=this.rootElement.querySelector('[role="search"] input'),this.displaySelected=this.rootElement.querySelector(".navbar-toggler-selected");var r=this.rootElement.querySelector('[role="search"] .input-group-addon');this.inputField.addEventListener("keyup",function(e){if(e.keyCode!=b){var t=e.target.parentElement.querySelector("#hub-search-bar");(n.typeAheadEnabled||13==e.which||13==e.keyCode)&&n.trigger("search",{element:t,query:t.value})}}),r.addEventListener("click",function(e){var t=e.target.parentElement.querySelector("#hub-search-bar");n.trigger("search",{element:t,query:t.value}),t.focus()})}return a(e,[{key:"createElement",value:function(e){var t="content-type-filter",n=y.default.get("contentTypeSearchFieldPlaceholder"),r=document.createElement("div");return r.className="content-type-section-view",r.innerHTML='\n      <div class="menu-group">\n        <nav  role="menubar" class="navbar">\n          <div class="navbar-header">\n             <button class="navbar-toggler navbar-toggler-right" tabindex="0" aria-haspopup="true" aria-controls="'+t+'" aria-expanded="false">\n               <span class="icon-accordion-arrow"></span>\n             </button>\n            <span class="navbar-toggler-selected"></span>\n            <span class="navbar-brand">'+y.default.get("contentTypeSectionTitle")+'</span>\n          </div>\n\n          <ul id="'+t+'" class="navbar-nav"></ul>\n        </nav>\n\n        <div class="input-group" role="search">\n          <input id="hub-search-bar" class="form-control form-control-rounded" type="text" aria-label="'+n+'" placeholder="'+n+'" />\n          <div class="input-group-addon icon-search"></div>\n        </div>\n      </div>',r}},{key:"displayMessage",value:function(e){var t=this;e.action=y.default.get("reloadButtonLabel");var n=new u.default(e),r=n.getElement();n.on("action-clicked",function(){t.rootElement.classList.remove("error"),r.parentNode.removeChild(r),t.trigger("reload")}),this.rootElement.classList.add("error"),this.rootElement.appendChild(n.getElement())}},{key:"addMenuItem",value:function(e){var t=this,n=e.title,r=e.id,i=e.selected,o=e.eventName,a=document.createElement("li");return a.setAttribute("role","menuitem"),a.setAttribute("data-id",r),a.innerText=n,i&&(a.setAttribute("aria-selected","true"),this.displaySelected.innerText=n,this.trigger("menu-selected",{element:a,choice:o})),a.addEventListener("click",function(e){t.trigger("menu-selected",{element:e.target,choice:o})}),this.menubar.appendChild(a),a}},{key:"clearInputField",value:function(){this.inputField.value=""}},{key:"setDisplaySelected",value:function(e){this.displaySelected.innerText=e}},{key:"selectMenuItemById",value:function(e){var t=this.menubar.querySelectorAll('[role="menuitem"]'),n=this.menubar.querySelector('[role="menuitem"][data-id="'+e+'"]');n&&(v(t),n.setAttribute("aria-selected","true"),this.trigger("menu-selected",{element:n,id:n.getAttribute("data-id")}))}},{key:"initMenu",value:function(){var e=document.createElement("span");e.className="menuitem-underline",this.menubar.appendChild(e),(0,h.default)(this.menu)}},{key:"addDeactivatedStyleToMenu",value:function(){this.menu.classList.remove("deactivated")}},{key:"removeDeactivatedStyleFromMenu",value:function(){this.menu.classList.add("deactivated")}},{key:"getElement",value:function(){return this.rootElement}}]),e}();t.default=m},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var o=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},a=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),s=n(19),u=r(s),l=n(23),c=r(l),d=n(18),h=r(d),f=n(16),p=r(f),y=n(2),v=n(3),b=r(v),m=function(){function e(t,n){var r=this;i(this,e),o(this,(0,y.Eventful)()),e.Tabs={ALL:{id:"filter-all",title:b.default.get("contentTypeSectionAll"),eventName:"all"},MY_CONTENT_TYPES:{id:"filter-my-content-types",title:b.default.get("contentTypeSectionMine"),eventName:"my-content-types",selected:!0},MOST_POPULAR:{id:"filter-most-popular",title:b.default.get("contentTypeSectionPopular"),eventName:"most-popular"}},this.view=new u.default(t),this.searchService=new c.default(n),this.contentTypeList=new h.default,this.contentTypeDetail=new p.default(t,n);var a=document.createElement("div");a.classList.add("content-type-section"),this.rootElement=a,this.rootElement.appendChild(this.contentTypeList.getElement()),this.rootElement.appendChild(this.contentTypeDetail.getElement()),this.view.getElement().appendChild(this.rootElement),this.propagate(["select","update-content-type-list"],this.contentTypeList),this.propagate(["select"],this.contentTypeDetail),this.propagate(["reload"],this.view),this.view.on("search",this.search,this),this.view.on("search",this.view.selectMenuItemById.bind(this.view,e.Tabs.ALL.id)),this.view.on("menu-selected",this.closeDetailView,this),this.view.on("menu-selected",this.applySearchFilter,this),this.view.on("menu-selected",this.clearInputField,this),this.view.on("menu-selected",this.updateDisplaySelected,this),this.contentTypeList.on("row-selected",this.showDetailView,this),this.contentTypeDetail.on("close",this.closeDetailView,this),this.contentTypeDetail.on("select",this.closeDetailView,this),Object.keys(e.Tabs).forEach(function(t){return r.view.addMenuItem(e.Tabs[t])}),this.view.initMenu()}return a(e,[{key:"handleError",value:function(e){this.view.displayMessage({type:"error",title:b.default.get("errorCommunicatingHubTitle"),content:b.default.get("errorCommunicatingHubContent")})}},{key:"search",value:function(e){var t=this,n=e.query;e.keyCode;this.searchService.search(n).then(function(e){return t.contentTypeList.update(e)})}},{key:"updateDisplaySelected",value:function(e){this.view.setDisplaySelected(e.element.innerText)}},{key:"applySearchFilter",value:function(t){var n=this;switch(t.choice){case e.Tabs.ALL.eventName:this.searchService.sortOn("restricted").then(function(e){return n.contentTypeList.update(e)});break;case e.Tabs.MY_CONTENT_TYPES.eventName:this.searchService.filterOutRestricted().then(function(e){return n.searchService.sortOnRecent(e)}).then(function(e){return n.contentTypeList.update(e)});break;case e.Tabs.MOST_POPULAR.eventName:var r=["restricted","popularity"];this.searchService.sortOn(r).then(function(e){return n.contentTypeList.update(e)})}}},{key:"clearInputField",value:function(t){t.id!==e.Tabs.ALL.id&&this.view.clearInputField()}},{key:"showDetailView",value:function(e){var t=this,n=e.id;this.contentTypeList.hide(),this.contentTypeDetail.loadById(n),this.contentTypeDetail.show(),this.view.typeAheadEnabled=!1,this.view.removeDeactivatedStyleFromMenu(),setTimeout(function(){t.contentTypeDetail.focus()},300)}},{key:"closeDetailView",value:function(){this.contentTypeDetail.isHidden()||(this.contentTypeDetail.hide(),this.contentTypeList.show(),this.view.typeAheadEnabled=!0,this.view.addDeactivatedStyleToMenu(),this.contentTypeList.focus())}},{key:"getElement",value:function(){return this.view.getElement()}}]),e}();t.default=m},function(e,t,n){"use strict";(function(e){function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}();n(25);var o=function(){function t(e){var n=e.apiRootUrl;r(this,t),this.apiRootUrl=n,this.setup()}return i(t,[{key:"setup",value:function(){this.cachedContentTypes=fetch(this.apiRootUrl+"content-type-cache",{method:"GET",credentials:"include"}).then(function(e){return e.json()}).then(this.isValid)}},{key:"contentTypes",value:function(){return this.cachedContentTypes.then(function(e){return e.libraries})}},{key:"recentlyUsed",value:function(){return this.cachedContentTypes.then(function(e){return e.recentlyUsed})}},{key:"contentType",value:function(e){return this.contentTypes().then(function(t){return t.filter(function(t){return t.machineName===e})[0]})}},{key:"installContentType",value:function(e){return fetch(ns.getAjaxUrl("library-install",{id:e}),{method:"POST",credentials:"include",body:""}).then(function(e){return e.json()}).then(this.rejectIfNotSuccess)}},{key:"uploadContent",value:function(e){return fetch(this.apiRootUrl+"library-upload",{method:"POST",credentials:"include",body:e}).then(function(e){return e.json()})}},{key:"isValid",value:function(t){return t.messageCode?e.reject(t):e.resolve(t)}},{key:"rejectIfNotSuccess",value:function(t){return e[t.success?"resolve":"reject"](t)}}]),t}();t.default=o}).call(t,n(6))},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var o=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},a=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),s=n(8),u=r(s),l=n(29),c=r(l),d=(n(0),n(1)),h=n(2),f=n(5),p="data-id",y=(0,d.hasAttribute)("open"),v=function(){function e(t){i(this,e),o(this,(0,h.Eventful)()),this.rootElement=this.createPanel(t),this.panel=this.rootElement.querySelector(".panel"),this.toggler=this.rootElement.querySelector("[aria-expanded][aria-controls]"),this.selectedName=this.rootElement.querySelector(".h5p-hub-selected"),this.tablist=this.rootElement.querySelector('[role="tablist"]'),this.tabContainerElement=this.rootElement.querySelector(".tab-panel"),(0,u.default)(this.panel),(0,f.relayClickEventAs)("panel-change",this,this.toggler)}return a(e,[{key:"closePanel",value:function(){this.toggler.setAttribute("aria-expanded","false")}},{key:"setTitle",value:function(e){this.selectedName.innerText=e}},{key:"createPanel",value:function(e){var t=(e.title,e.sectionId),n=void 0===t?"content-types":t,r=e.expanded,i=void 0!==r&&r,o={h5pHub:"H5P Hub."},a=document.createElement("section");return a.className+="h5p-hub h5p-sdk",a.innerHTML='\n      <div class="panel">\n        <div aria-level="1" role="heading">\n          <span role="button" class="icon-hub-icon" aria-expanded="'+i+'" aria-controls="panel-body-'+n+'">\n          <span class="h5p-hub-description">'+o.h5pHub+'</span>\n          <span class="h5p-hub-selected"></span>\n        </span>\n        </div>\n        <div id="panel-body-'+n+'" role="region" aria-hidden="'+!i+'">\n          <div class="tab-panel">\n            <nav>\n              <ul role="tablist"></ul>\n            </nav>\n          </div>\n        </div>\n      </div>',a}},{key:"togglePanelOpen",value:function(){var e=this.panel;y(e)?e.removeAttribute("open"):(e.setAttribute("open",""),setTimeout(function(){e.querySelector("#hub-search-bar").focus()},20))}},{key:"addTab",value:function(e){var t=e.title,n=e.id,r=e.content,i=e.selected,o=void 0!==i&&i,a="tab-"+n,s="tab-panel-"+n,u=document.createElement("li");u.className+="tab",u.id=a,u.setAttribute("aria-controls",s),u.setAttribute("aria-selected",o.toString()),u.setAttribute(p,n),u.setAttribute("role","tab"),u.innerText=t,(0,f.relayClickEventAs)("tab-change",this,u);var l=document.createElement("div");l.id=s,l.className+="tabpanel",l.setAttribute("aria-labelledby",a),l.setAttribute("aria-hidden",(!o).toString()),l.setAttribute("role","tabpanel"),l.appendChild(r),this.tablist.appendChild(u),this.tabContainerElement.appendChild(l),o&&this.trigger("tab-change",{element:u,id:n})}},{key:"addBottomBorder",value:function(){this.tablist.appendChild(document.createElement("span"))}},{key:"initTabPanel",value:function(){(0,c.default)(this.tabContainerElement)}},{key:"setSectionType",value:function(e){var t=e.id;this.panel.className="h5p-section-"+t+" panel"}},{key:"getElement",value:function(){return this.rootElement}}]),e}();t.default=v},function(e,t,n){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),o=n(0),a=function(){function e(t){r(this,e),this.services=t}return i(e,[{key:"search",value:function(e){return this.services.contentTypes().then(d(e))}},{key:"sortOn",value:function(e){return this.services.contentTypes().then(function(t){return s(t,e)})}},{key:"sortOnRecent",value:function(e){return this.services.recentlyUsed().then(function(t){return b(e,t)})}},{key:"filterOutRestricted",value:function(){return this.services.contentTypes().then(function(e){return e.filter(function(e){return!e.restricted})})}}]),e}();t.default=a;var s=function(e,t){var n=e.map(function(e){return e.hasOwnProperty("score")&&e.hasOwnProperty("contentType")?e:{contentType:e,score:1}});return t=Array.isArray(t)?t:[t],n.sort(function(e,n){return u(e,n,t)}).map(function(e){return e.contentType})},u=function(e,t,n){switch(n[0]){case"restricted":return l(e,t,n.slice(1));case"popularity":return c(e,t,n[0],n.slice(1));default:return h(e,t)}},l=function(e,t,n){return!e.contentType.restricted==!t.contentType.restricted?n.length?u(e,t,n):0:e.contentType.restricted?1:t.contentType.restricted?-1:void 0},c=function(e,t,n,r){return e.contentType.hasOwnProperty(n)?t.contentType.hasOwnProperty(n)?e.contentType[n]>t.contentType[n]?1:e.contentType[n]<t.contentType[n]?-1:r.length?u(e,t,r):0:-1:1},d=(0,o.curry)(function(e,t){return""==e?t:s(t.map(function(t){return{contentType:t,score:f(e,t)}}).filter(function(e){return e.score>0}),["restricted","default"])}),h=function(e,t){return!e.contentType.installed&&t.contentType.installed?1:e.contentType.installed&&!t.contentType.installed?-1:t.score!==e.score?t.score-e.score:t.contentType.popularity-e.contentType.popularity},f=function(e,t){var n=e.split(" ").filter(function(e){return""!==e}),r=n.map(function(e){return p(e,t)});return r.indexOf(0)>-1?0:r.reduce(function(e,t){return e+t},0)},p=function(e,t){return e=e.trim(),y(e,t.title)?100:y(e,t.summary)?5:y(e,t.description)?5:v(e,t.keywords)?5:y(e,t.machineName)?1:0},y=function(e,t){return void 0!==t&&t.toLowerCase().indexOf(e.toLowerCase())!==-1},v=function(e,t){return void 0!==t&&""!==e&&t.some(function(t){return y(e,t)})},b=function(e,t){return e.sort(function(e,n){var r=t.indexOf(e.machineName.toString()),i=t.indexOf(n.machineName.toString());return r===-1&&i===-1?0:r!==-1&&i===-1?-1:r===-1&&i!==-1?1:r!==-1&&i!==-1?r<i?-1:1:void 0})}},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var o=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e},a=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),s=n(3),u=r(s),l=n(2),c=n(7),d=r(c),h=function(){function e(t,n){i(this,e),o(this,(0,l.Eventful)()),this.services=n;var r=this.renderUploadForm();this.initUploadForm(r),this.messageWrapper=document.createElement("div"),this.messageWrapper.className="message-wrapper";var a=document.createElement("div");a.appendChild(this.messageWrapper),a.appendChild(r),this.rootElement=a}return a(e,[{key:"renderUploadForm",value:function(){var e=document.createElement("div");return e.innerHTML='\n      <div class="upload-wrapper">\n        <div class="upload-form">\n          <input readonly class="upload-path" placeholder="'+u.default.get("uploadPlaceholder")+'"/>\n          <button class="button use-button">Use</button>\n          <div class="input-wrapper">\n            <input type="file" />\n            <button class="button upload-button" tabindex="0">'+u.default.get("uploadFileButtonLabel")+'</button>\n          </div>\n        </div>\n        <div class="upload-instructions">'+u.default.get("uploadInstructions")+"</div>\n      </div>\n    ",e}},{key:"initUploadForm",value:function(e){var t=this,n=e.querySelector('.upload-wrapper input[type="file"]'),r=e.querySelector(".upload-button"),i=e.querySelector(".upload-path"),o=e.querySelector(".use-button");n.onchange=function(){if(""!==this.value){t.clearUserMessages(),i.value=this.value.replace("C:\\fakepath\\",""),r.textContent=u.default.get("uploadFileButtonChangeLabel");"h5p"!==t.getFileExtension(this.value)?(t.renderMessage({type:"error",title:u.default.get("h5pFileWrongExtensionTitle"),content:u.default.get("h5pFileWrongExtensionContent")}),o.style.display="none"):o.style.display="inline-block"}},o.addEventListener("click",function(){var e=new FormData;e.append("h5p",n.files[0]),t.services.uploadContent(e).then(function(e){t.trigger("upload",e)})}),i.onclick=function(){n.click()},i.onkeydown=function(e){13!==e.which&&32!==e.which||n.click()},r.onclick=function(){n.click()},r.onkeydown=function(e){13!==e.which&&32!==e.which||n.click()},this.uploadInput=n,this.uploadPath=i,this.uploadButton=r,this.useButton=o}},{key:"clearUploadForm",value:function(){this.uploadInput.value="",this.uploadPath.value=u.default.get("uploadPlaceholder"),this.uploadButton.textContent=u.default.get("uploadFileButtonLabel"),this.useButton.style.display="none"}},{key:"clearUserMessages",value:function(){this.removeAllChildren(this.rootElement.querySelector(".message-wrapper"))}},{key:"getFileExtension",value:function(e){return e.replace(/^.*\./,"")}},{key:"renderMessage",value:function(e){var t=new d.default(e);this.prepend(this.messageWrapper,t.getElement())}},{key:"prepend",value:function(e,t){e.insertBefore(t,e.firstChild)}},{key:"removeAllChildren",value:function(e){for(;e.lastChild;)e.removeChild(e.lastChild)}},{key:"getElement",value:function(){return this.rootElement}}]),e}();t.default=h},function(e,t,n){"use strict";(function(e){!function(t){function n(e){if("string"!=typeof e&&(e=String(e)),/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(e))throw new TypeError("Invalid character in header field name");return e.toLowerCase()}function r(e){return"string"!=typeof e&&(e=String(e)),e}function i(e){var t={next:function(){var t=e.shift();return{done:void 0===t,value:t}}};return m.iterable&&(t[Symbol.iterator]=function(){return t}),t}function o(e){this.map={},e instanceof o?e.forEach(function(e,t){this.append(t,e)},this):Array.isArray(e)?e.forEach(function(e){this.append(e[0],e[1])},this):e&&Object.getOwnPropertyNames(e).forEach(function(t){this.append(t,e[t])},this)}function a(t){if(t.bodyUsed)return e.reject(new TypeError("Already read"));t.bodyUsed=!0}function s(t){return new e(function(e,n){t.onload=function(){e(t.result)},t.onerror=function(){n(t.error)}})}function u(e){var t=new FileReader,n=s(t);return t.readAsArrayBuffer(e),n}function l(e){var t=new FileReader,n=s(t);return t.readAsText(e),n}function c(e){for(var t=new Uint8Array(e),n=new Array(t.length),r=0;r<t.length;r++)n[r]=String.fromCharCode(t[r]);return n.join("")}function d(e){if(e.slice)return e.slice(0);var t=new Uint8Array(e.byteLength);return t.set(new Uint8Array(e)),t.buffer}function h(){return this.bodyUsed=!1,this._initBody=function(e){if(this._bodyInit=e,e)if("string"==typeof e)this._bodyText=e;else if(m.blob&&Blob.prototype.isPrototypeOf(e))this._bodyBlob=e;else if(m.formData&&FormData.prototype.isPrototypeOf(e))this._bodyFormData=e;else if(m.searchParams&&URLSearchParams.prototype.isPrototypeOf(e))this._bodyText=e.toString();else if(m.arrayBuffer&&m.blob&&w(e))this._bodyArrayBuffer=d(e.buffer),this._bodyInit=new Blob([this._bodyArrayBuffer]);else{if(!m.arrayBuffer||!ArrayBuffer.prototype.isPrototypeOf(e)&&!E(e))throw new Error("unsupported BodyInit type");this._bodyArrayBuffer=d(e)}else this._bodyText="";this.headers.get("content-type")||("string"==typeof e?this.headers.set("content-type","text/plain;charset=UTF-8"):this._bodyBlob&&this._bodyBlob.type?this.headers.set("content-type",this._bodyBlob.type):m.searchParams&&URLSearchParams.prototype.isPrototypeOf(e)&&this.headers.set("content-type","application/x-www-form-urlencoded;charset=UTF-8"))},m.blob&&(this.blob=function(){var t=a(this);if(t)return t;if(this._bodyBlob)return e.resolve(this._bodyBlob);if(this._bodyArrayBuffer)return e.resolve(new Blob([this._bodyArrayBuffer]));if(this._bodyFormData)throw new Error("could not read FormData body as blob");return e.resolve(new Blob([this._bodyText]))},this.arrayBuffer=function(){return this._bodyArrayBuffer?a(this)||e.resolve(this._bodyArrayBuffer):this.blob().then(u)}),this.text=function(){var t=a(this);if(t)return t;if(this._bodyBlob)return l(this._bodyBlob);if(this._bodyArrayBuffer)return e.resolve(c(this._bodyArrayBuffer));if(this._bodyFormData)throw new Error("could not read FormData body as text");return e.resolve(this._bodyText)},m.formData&&(this.formData=function(){return this.text().then(y)}),this.json=function(){return this.text().then(JSON.parse)},this}function f(e){var t=e.toUpperCase();return T.indexOf(t)>-1?t:e}function p(e,t){t=t||{};var n=t.body;if(e instanceof p){if(e.bodyUsed)throw new TypeError("Already read");this.url=e.url,this.credentials=e.credentials,t.headers||(this.headers=new o(e.headers)),this.method=e.method,this.mode=e.mode,n||null==e._bodyInit||(n=e._bodyInit,e.bodyUsed=!0)}else this.url=String(e);if(this.credentials=t.credentials||this.credentials||"omit",!t.headers&&this.headers||(this.headers=new o(t.headers)),this.method=f(t.method||this.method||"GET"),this.mode=t.mode||this.mode||null,this.referrer=null,("GET"===this.method||"HEAD"===this.method)&&n)throw new TypeError("Body not allowed for GET or HEAD requests");this._initBody(n)}function y(e){var t=new FormData;return e.trim().split("&").forEach(function(e){if(e){var n=e.split("="),r=n.shift().replace(/\+/g," "),i=n.join("=").replace(/\+/g," ");t.append(decodeURIComponent(r),decodeURIComponent(i))}}),t}function v(e){var t=new o;return e.replace(/\r?\n[\t ]+/," ").split(/\r?\n/).forEach(function(e){var n=e.split(":"),r=n.shift().trim();if(r){var i=n.join(":").trim();t.append(r,i)}}),t}function b(e,t){t||(t={}),this.type="default",this.status="status"in t?t.status:200,this.ok=this.status>=200&&this.status<300,this.statusText="statusText"in t?t.statusText:"OK",this.headers=new o(t.headers),this.url=t.url||"",this._initBody(e)}if(!t.fetch){var m={searchParams:"URLSearchParams"in t,iterable:"Symbol"in t&&"iterator"in Symbol,blob:"FileReader"in t&&"Blob"in t&&function(){try{return new Blob,!0}catch(e){return!1}}(),formData:"FormData"in t,arrayBuffer:"ArrayBuffer"in t};if(m.arrayBuffer)var g=["[object Int8Array]","[object Uint8Array]","[object Uint8ClampedArray]","[object Int16Array]","[object Uint16Array]","[object Int32Array]","[object Uint32Array]","[object Float32Array]","[object Float64Array]"],w=function(e){return e&&DataView.prototype.isPrototypeOf(e)},E=ArrayBuffer.isView||function(e){return e&&g.indexOf(Object.prototype.toString.call(e))>-1};o.prototype.append=function(e,t){e=n(e),t=r(t);var i=this.map[e];this.map[e]=i?i+","+t:t},o.prototype.delete=function(e){delete this.map[n(e)]},o.prototype.get=function(e){return e=n(e),this.has(e)?this.map[e]:null},o.prototype.has=function(e){return this.map.hasOwnProperty(n(e))},o.prototype.set=function(e,t){this.map[n(e)]=r(t)},o.prototype.forEach=function(e,t){for(var n in this.map)this.map.hasOwnProperty(n)&&e.call(t,this.map[n],n,this)},o.prototype.keys=function(){var e=[];return this.forEach(function(t,n){e.push(n)}),i(e)},o.prototype.values=function(){var e=[];return this.forEach(function(t){e.push(t)}),i(e)},o.prototype.entries=function(){var e=[];return this.forEach(function(t,n){e.push([n,t])}),i(e)},m.iterable&&(o.prototype[Symbol.iterator]=o.prototype.entries);var T=["DELETE","GET","HEAD","OPTIONS","POST","PUT"];p.prototype.clone=function(){return new p(this,{body:this._bodyInit})},h.call(p.prototype),h.call(b.prototype),b.prototype.clone=function(){return new b(this._bodyInit,{status:this.status,statusText:this.statusText,headers:new o(this.headers),url:this.url})},b.error=function(){var e=new b(null,{status:0,statusText:""});return e.type="error",e};var A=[301,302,303,307,308];b.redirect=function(e,t){if(A.indexOf(t)===-1)throw new RangeError("Invalid status code");return new b(null,{status:t,headers:{location:e}})},t.Headers=o,t.Request=p,t.Response=b,t.fetch=function(t,n){return new e(function(e,r){var i=new p(t,n),o=new XMLHttpRequest;o.onload=function(){var t={status:o.status,statusText:o.statusText,headers:v(o.getAllResponseHeaders()||"")};t.url="responseURL"in o?o.responseURL:t.headers.get("X-Request-URL"),e(new b("response"in o?o.response:o.responseText,t))},o.onerror=function(){r(new TypeError("Network request failed"))},o.ontimeout=function(){r(new TypeError("Network request failed"))},o.open(i.method,i.url,!0),"include"===i.credentials&&(o.withCredentials=!0),"responseType"in o&&m.blob&&(o.responseType="blob"),i.headers.forEach(function(e,t){o.setRequestHeader(t,e)}),o.send(void 0===i._bodyInit?null:i._bodyInit)})},t.fetch.polyfill=!0}}("undefined"!=typeof self?self:void 0)}).call(t,n(6))},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function i(e){var t=e.querySelector(".next"),n=e.querySelector(".previous"),r=e.querySelector(".close"),i=new l.default,o={currentImage:!1};return k(t,function(){return M(e,t,o.currentImage+1)}),x(t,h.BACKWARD,function(){return A(r)}),k(n,function(){return M(e,n,o.currentImage-1)}),x(n,h.BACKWARD,function(){return A(t,r)}),k(r,function(){return T(e)}),x(r,h.FORWARD,function(){return A(t,n)}),new MutationObserver((0,s.forEach)(j(e,o,i))).observe(e,{subtree:!1,childList:!1,attributes:!0,attributeOldValue:!0,attributeFilter:[c]}),e}Object.defineProperty(t,"__esModule",{value:!0});var o=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e};t.default=i;var a=n(1),s=n(0),u=n(4),l=r(u),c="data-show",d={TAB:9,ENTER:13,SHIFT:16,SPACE:32},h={FORWARD:0,BACKWARD:1},f=function(e){return e.classList.add("active")},p=function(e){e.classList.remove("active"),e.removeAttribute("aria-live")},y=(0,a.setAttribute)("aria-live","polite"),v=function(e){e.tabIndex=0,e.removeAttribute("aria-disabled")},b=function(e){e.tabIndex=-1,e.setAttribute("aria-disabled","true")},m=(0,a.hasAttribute)("aria-disabled"),g=function(e,t){return(t?b:v)(e)},w=function(e,t){return(t?p:f)(e)},E=(0,s.curry)(function(e,t){return(0,a.setAttribute)("data-show",t,e)}),T=(0,a.removeAttribute)(c),A=function(){for(var e=arguments.length,t=Array(e),n=0;n<e;n++)t[n]=arguments[n];for(var r=0;r<t.length;r++)if(t[r].tabIndex!==-1)return t[r].focus()},I=function(e,t){for(var n=e.parentNode.children,r=0;r<n.length;r++){var i=n[r];i!==e&&(t?i.removeAttribute("aria-hidden"):i.setAttribute("aria-hidden",!0))}},S=void 0,C=function(e,t){var n=e.querySelectorAll(".imagelightbox-image"),r=e.querySelector(".imagelightbox-progress"),i=e.querySelector(".previous"),o=e.querySelector(".next");if(n.forEach(function(e){return p(e)}),null!==t.currentImage){var a=e.querySelector(".imagelightbox-image:nth-child("+(t.currentImage+1)+")");f(a),y(a)}S||(S=r.innerText),r.innerText=S.replace(":num",t.currentImage+1).replace(":total",n.length),w(i,!n.length),w(o,!n.length),g(i,0===t.currentImage),g(o,t.currentImage===n.length-1),w(e,null===t.currentImage),I(e,null===t.currentImage)},M=function(e,t,n){m(t)||E(e,n)},k=function(e,t){e.addEventListener("click",t),e.addEventListener("keypress",function(e){e.which!==d.ENTER&&e.which!==d.SPACE||(t(),e.preventDefault())})},L={},x=function(e,t,n){e.addEventListener("keydown",function(e){L[e.which]=!0,e.which===d.TAB&&(L[d.SHIFT]?t===h.BACKWARD&&(n(),e.preventDefault()):t===h.FORWARD&&(n(),e.preventDefault()))}),e.addEventListener("keyup",function(e){delete L[e.which]})},j=(0,s.curry)(function(e,t,n,r){if("attributes"===r.type&&r.attributeName===c){var i=parseInt(r.target.getAttribute(c));C(e,o(t,{currentImage:isNaN(i)?null:i}))}})},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function i(e){var t=e.querySelector(".next"),n=e.querySelector(".previous"),r=new l.default,i={displayCount:e.getAttribute(c)||5,position:0};return t.addEventListener("click",function(){return m(e,i,t,function(e){return e.position--})}),n.addEventListener("click",function(){return m(e,i,n,function(e){return e.position++})}),(0,a.querySelectorAll)("[aria-controls]",e).forEach(g(e,r)),new MutationObserver((0,s.forEach)(w(e,i,r))).observe(e,{subtree:!0,childList:!0,attributes:!0,attributeOldValue:!0,attributeFilter:[c]}),b(e,i),e}Object.defineProperty(t,"__esModule",{value:!0});var o=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e};t.default=i;var a=n(1),s=n(0),u=n(4),l=r(u),c="data-size",d=(0,a.setAttribute)("disabled",""),h=(0,a.removeAttribute)("disabled"),f=function(e,t){return(t?h:d)(e)},p=(0,s.curry)(function(e,t){return(0,a.setAttribute)("aria-hidden",e.toString(),t)}),y=(0,a.hasAttribute)("disabled"),v=(0,s.curry)(function(e,t){return(0,a.setAttribute)("data-show",t,e)}),b=function(e,t){var n=e.querySelector(".previous"),r=e.querySelector(".next"),i=e.querySelector("ul"),o=i.childElementCount;i.style.width=100/t.displayCount*o+"%",i.style.marginLeft=t.position*(100/t.displayCount)+"%",(0,a.querySelectorAll)("li",e).forEach(function(e){return e.style.width=100/o+"%"}),[n,r].forEach(p(t.displayCount>=o)),f(r,t.position>t.displayCount-o),f(n,t.position<0)},m=function(e,t,n,r){y(n)||(r(t),b(e,t))},g=(0,s.curry)(function(e,t,n,r){var i=n.getAttribute("aria-controls"),o=document.querySelector("#"+i);return n.addEventListener("click",function(e){return v(o,r)}),t.addElement(n),n}),w=(0,s.curry)(function(e,t,n,r){"childList"===r.type&&(0,a.nodeListToArray)(r.addedNodes).filter((0,a.classListContains)("slide")).map((0,a.querySelector)("img")).filter(function(e){return null!==e}).forEach(g(e,n)),b(e,o(t,{displayCount:e.getAttribute(c)||5,position:0}))})},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function i(e){var t=(0,o.querySelectorAll)('[role="menuitem"]',e),n=e.querySelector("[aria-controls][aria-expanded]"),r=new l.default;r.onSelect=function(e){h(t,e),d(n)},t.forEach(function(e){e.addEventListener("click",function(e){var i=e.target,o=t.indexOf(i);h(t,i),d(n),r.forceSelectedIndex(o)}),r.addElement(e)}),(0,s.initCollapsible)(e,function(e,t){return(0,o.toggleClass)("collapsed",!e,t)})}Object.defineProperty(t,"__esModule",{value:!0}),t.default=i;var o=n(1),a=n(0),s=n(9),u=n(4),l=r(u),c=(0,a.forEach)((0,o.removeAttribute)("aria-selected")),d=(0,o.setAttribute)("aria-expanded","false"),h=function(e,t){c(e),t.setAttribute("aria-selected","true")}},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function i(e){var t=(0,o.querySelectorAll)('[role="tab"]',e),n=new u.default;n.onSelect=p(t),t.forEach(function(r){f(e,r),r.addEventListener("click",function(e){var r=e.target,i=t.indexOf(r);p(t,r),n.forceSelectedIndex(i)}),n.addElement(r)})}Object.defineProperty(t,"__esModule",{value:!0}),t.default=i;var o=n(1),a=n(0),s=n(4),u=r(s),l=(0,a.forEach)((0,o.setAttribute)("aria-hidden","true")),c=(0,o.setAttribute)("aria-hidden","false"),d=(0,o.attributeEquals)("aria-selected","true"),h=(0,a.forEach)((0,o.removeAttribute)("aria-selected")),f=function(e,t){new MutationObserver(function(){var n=t.getAttribute("aria-controls"),r=e.querySelector("#"+n),i=(0,o.querySelectorAll)('[role="tabpanel"]',e);d(t)&&(l(i),c(r))}).observe(t,{attributes:!0,attributeOldValue:!0,attributeFilter:["aria-selected"]})},p=(0,a.curry)(function(e,t){h(e),t.setAttribute("aria-selected","true")})},function(e,t){},function(e,t,n){"use strict";n(12),H5P=H5P||{},H5P.HubClient=n(11).default}]);
+
+(function (global, factory) {
+  ( false ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? module.exports = factory() :  true ? !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
+				__WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : global.ES6Promise = factory();
+})(undefined, function () {
+  'use strict';
+
+  function objectOrFunction(x) {
+    return typeof x === 'function' || (typeof x === 'undefined' ? 'undefined' : _typeof(x)) === 'object' && x !== null;
+  }
+
+  function isFunction(x) {
+    return typeof x === 'function';
+  }
+
+  var _isArray = undefined;
+  if (!Array.isArray) {
+    _isArray = function _isArray(x) {
+      return Object.prototype.toString.call(x) === '[object Array]';
+    };
+  } else {
+    _isArray = Array.isArray;
+  }
+
+  var isArray = _isArray;
+
+  var len = 0;
+  var vertxNext = undefined;
+  var customSchedulerFn = undefined;
+
+  var asap = function asap(callback, arg) {
+    queue[len] = callback;
+    queue[len + 1] = arg;
+    len += 2;
+    if (len === 2) {
+      // If len is 2, that means that we need to schedule an async flush.
+      // If additional callbacks are queued before the queue is flushed, they
+      // will be processed by this flush that we are scheduling.
+      if (customSchedulerFn) {
+        customSchedulerFn(flush);
+      } else {
+        scheduleFlush();
+      }
+    }
+  };
+
+  function setScheduler(scheduleFn) {
+    customSchedulerFn = scheduleFn;
+  }
+
+  function setAsap(asapFn) {
+    asap = asapFn;
+  }
+
+  var browserWindow = typeof window !== 'undefined' ? window : undefined;
+  var browserGlobal = browserWindow || {};
+  var BrowserMutationObserver = browserGlobal.MutationObserver || browserGlobal.WebKitMutationObserver;
+  var isNode = typeof self === 'undefined' && typeof process !== 'undefined' && {}.toString.call(process) === '[object process]';
+
+  // test for web worker but not in IE10
+  var isWorker = typeof Uint8ClampedArray !== 'undefined' && typeof importScripts !== 'undefined' && typeof MessageChannel !== 'undefined';
+
+  // node
+  function useNextTick() {
+    // node version 0.10.x displays a deprecation warning when nextTick is used recursively
+    // see https://github.com/cujojs/when/issues/410 for details
+    return function () {
+      return process.nextTick(flush);
+    };
+  }
+
+  // vertx
+  function useVertxTimer() {
+    return function () {
+      vertxNext(flush);
+    };
+  }
+
+  function useMutationObserver() {
+    var iterations = 0;
+    var observer = new BrowserMutationObserver(flush);
+    var node = document.createTextNode('');
+    observer.observe(node, { characterData: true });
+
+    return function () {
+      node.data = iterations = ++iterations % 2;
+    };
+  }
+
+  // web worker
+  function useMessageChannel() {
+    var channel = new MessageChannel();
+    channel.port1.onmessage = flush;
+    return function () {
+      return channel.port2.postMessage(0);
+    };
+  }
+
+  function useSetTimeout() {
+    // Store setTimeout reference so es6-promise will be unaffected by
+    // other code modifying setTimeout (like sinon.useFakeTimers())
+    var globalSetTimeout = setTimeout;
+    return function () {
+      return globalSetTimeout(flush, 1);
+    };
+  }
+
+  var queue = new Array(1000);
+  function flush() {
+    for (var i = 0; i < len; i += 2) {
+      var callback = queue[i];
+      var arg = queue[i + 1];
+
+      callback(arg);
+
+      queue[i] = undefined;
+      queue[i + 1] = undefined;
+    }
+
+    len = 0;
+  }
+
+  function attemptVertx() {
+    try {
+      var r = require;
+      var vertx = __webpack_require__(30);
+      vertxNext = vertx.runOnLoop || vertx.runOnContext;
+      return useVertxTimer();
+    } catch (e) {
+      return useSetTimeout();
+    }
+  }
+
+  var scheduleFlush = undefined;
+  // Decide what async method to use to triggering processing of queued callbacks:
+  if (isNode) {
+    scheduleFlush = useNextTick();
+  } else if (BrowserMutationObserver) {
+    scheduleFlush = useMutationObserver();
+  } else if (isWorker) {
+    scheduleFlush = useMessageChannel();
+  } else if (browserWindow === undefined && "function" === 'function') {
+    scheduleFlush = attemptVertx();
+  } else {
+    scheduleFlush = useSetTimeout();
+  }
+
+  function then(onFulfillment, onRejection) {
+    var _arguments = arguments;
+
+    var parent = this;
+
+    var child = new this.constructor(noop);
+
+    if (child[PROMISE_ID] === undefined) {
+      makePromise(child);
+    }
+
+    var _state = parent._state;
+
+    if (_state) {
+      (function () {
+        var callback = _arguments[_state - 1];
+        asap(function () {
+          return invokeCallback(_state, child, callback, parent._result);
+        });
+      })();
+    } else {
+      subscribe(parent, child, onFulfillment, onRejection);
+    }
+
+    return child;
+  }
+
+  /**
+    `Promise.resolve` returns a promise that will become resolved with the
+    passed `value`. It is shorthand for the following:
+  
+    ```javascript
+    let promise = new Promise(function(resolve, reject){
+      resolve(1);
+    });
+  
+    promise.then(function(value){
+      // value === 1
+    });
+    ```
+  
+    Instead of writing the above, your code now simply becomes the following:
+  
+    ```javascript
+    let promise = Promise.resolve(1);
+  
+    promise.then(function(value){
+      // value === 1
+    });
+    ```
+  
+    @method resolve
+    @static
+    @param {Any} value value that the returned promise will be resolved with
+    Useful for tooling.
+    @return {Promise} a promise that will become fulfilled with the given
+    `value`
+  */
+  function resolve(object) {
+    /*jshint validthis:true */
+    var Constructor = this;
+
+    if (object && (typeof object === 'undefined' ? 'undefined' : _typeof(object)) === 'object' && object.constructor === Constructor) {
+      return object;
+    }
+
+    var promise = new Constructor(noop);
+    _resolve(promise, object);
+    return promise;
+  }
+
+  var PROMISE_ID = Math.random().toString(36).substring(16);
+
+  function noop() {}
+
+  var PENDING = void 0;
+  var FULFILLED = 1;
+  var REJECTED = 2;
+
+  var GET_THEN_ERROR = new ErrorObject();
+
+  function selfFulfillment() {
+    return new TypeError("You cannot resolve a promise with itself");
+  }
+
+  function cannotReturnOwn() {
+    return new TypeError('A promises callback cannot return that same promise.');
+  }
+
+  function getThen(promise) {
+    try {
+      return promise.then;
+    } catch (error) {
+      GET_THEN_ERROR.error = error;
+      return GET_THEN_ERROR;
+    }
+  }
+
+  function tryThen(then, value, fulfillmentHandler, rejectionHandler) {
+    try {
+      then.call(value, fulfillmentHandler, rejectionHandler);
+    } catch (e) {
+      return e;
+    }
+  }
+
+  function handleForeignThenable(promise, thenable, then) {
+    asap(function (promise) {
+      var sealed = false;
+      var error = tryThen(then, thenable, function (value) {
+        if (sealed) {
+          return;
+        }
+        sealed = true;
+        if (thenable !== value) {
+          _resolve(promise, value);
+        } else {
+          fulfill(promise, value);
+        }
+      }, function (reason) {
+        if (sealed) {
+          return;
+        }
+        sealed = true;
+
+        _reject(promise, reason);
+      }, 'Settle: ' + (promise._label || ' unknown promise'));
+
+      if (!sealed && error) {
+        sealed = true;
+        _reject(promise, error);
+      }
+    }, promise);
+  }
+
+  function handleOwnThenable(promise, thenable) {
+    if (thenable._state === FULFILLED) {
+      fulfill(promise, thenable._result);
+    } else if (thenable._state === REJECTED) {
+      _reject(promise, thenable._result);
+    } else {
+      subscribe(thenable, undefined, function (value) {
+        return _resolve(promise, value);
+      }, function (reason) {
+        return _reject(promise, reason);
+      });
+    }
+  }
+
+  function handleMaybeThenable(promise, maybeThenable, then$$) {
+    if (maybeThenable.constructor === promise.constructor && then$$ === then && maybeThenable.constructor.resolve === resolve) {
+      handleOwnThenable(promise, maybeThenable);
+    } else {
+      if (then$$ === GET_THEN_ERROR) {
+        _reject(promise, GET_THEN_ERROR.error);
+      } else if (then$$ === undefined) {
+        fulfill(promise, maybeThenable);
+      } else if (isFunction(then$$)) {
+        handleForeignThenable(promise, maybeThenable, then$$);
+      } else {
+        fulfill(promise, maybeThenable);
+      }
+    }
+  }
+
+  function _resolve(promise, value) {
+    if (promise === value) {
+      _reject(promise, selfFulfillment());
+    } else if (objectOrFunction(value)) {
+      handleMaybeThenable(promise, value, getThen(value));
+    } else {
+      fulfill(promise, value);
+    }
+  }
+
+  function publishRejection(promise) {
+    if (promise._onerror) {
+      promise._onerror(promise._result);
+    }
+
+    publish(promise);
+  }
+
+  function fulfill(promise, value) {
+    if (promise._state !== PENDING) {
+      return;
+    }
+
+    promise._result = value;
+    promise._state = FULFILLED;
+
+    if (promise._subscribers.length !== 0) {
+      asap(publish, promise);
+    }
+  }
+
+  function _reject(promise, reason) {
+    if (promise._state !== PENDING) {
+      return;
+    }
+    promise._state = REJECTED;
+    promise._result = reason;
+
+    asap(publishRejection, promise);
+  }
+
+  function subscribe(parent, child, onFulfillment, onRejection) {
+    var _subscribers = parent._subscribers;
+    var length = _subscribers.length;
+
+    parent._onerror = null;
+
+    _subscribers[length] = child;
+    _subscribers[length + FULFILLED] = onFulfillment;
+    _subscribers[length + REJECTED] = onRejection;
+
+    if (length === 0 && parent._state) {
+      asap(publish, parent);
+    }
+  }
+
+  function publish(promise) {
+    var subscribers = promise._subscribers;
+    var settled = promise._state;
+
+    if (subscribers.length === 0) {
+      return;
+    }
+
+    var child = undefined,
+        callback = undefined,
+        detail = promise._result;
+
+    for (var i = 0; i < subscribers.length; i += 3) {
+      child = subscribers[i];
+      callback = subscribers[i + settled];
+
+      if (child) {
+        invokeCallback(settled, child, callback, detail);
+      } else {
+        callback(detail);
+      }
+    }
+
+    promise._subscribers.length = 0;
+  }
+
+  function ErrorObject() {
+    this.error = null;
+  }
+
+  var TRY_CATCH_ERROR = new ErrorObject();
+
+  function tryCatch(callback, detail) {
+    try {
+      return callback(detail);
+    } catch (e) {
+      TRY_CATCH_ERROR.error = e;
+      return TRY_CATCH_ERROR;
+    }
+  }
+
+  function invokeCallback(settled, promise, callback, detail) {
+    var hasCallback = isFunction(callback),
+        value = undefined,
+        error = undefined,
+        succeeded = undefined,
+        failed = undefined;
+
+    if (hasCallback) {
+      value = tryCatch(callback, detail);
+
+      if (value === TRY_CATCH_ERROR) {
+        failed = true;
+        error = value.error;
+        value = null;
+      } else {
+        succeeded = true;
+      }
+
+      if (promise === value) {
+        _reject(promise, cannotReturnOwn());
+        return;
+      }
+    } else {
+      value = detail;
+      succeeded = true;
+    }
+
+    if (promise._state !== PENDING) {
+      // noop
+    } else if (hasCallback && succeeded) {
+      _resolve(promise, value);
+    } else if (failed) {
+      _reject(promise, error);
+    } else if (settled === FULFILLED) {
+      fulfill(promise, value);
+    } else if (settled === REJECTED) {
+      _reject(promise, value);
+    }
+  }
+
+  function initializePromise(promise, resolver) {
+    try {
+      resolver(function resolvePromise(value) {
+        _resolve(promise, value);
+      }, function rejectPromise(reason) {
+        _reject(promise, reason);
+      });
+    } catch (e) {
+      _reject(promise, e);
+    }
+  }
+
+  var id = 0;
+  function nextId() {
+    return id++;
+  }
+
+  function makePromise(promise) {
+    promise[PROMISE_ID] = id++;
+    promise._state = undefined;
+    promise._result = undefined;
+    promise._subscribers = [];
+  }
+
+  function Enumerator(Constructor, input) {
+    this._instanceConstructor = Constructor;
+    this.promise = new Constructor(noop);
+
+    if (!this.promise[PROMISE_ID]) {
+      makePromise(this.promise);
+    }
+
+    if (isArray(input)) {
+      this._input = input;
+      this.length = input.length;
+      this._remaining = input.length;
+
+      this._result = new Array(this.length);
+
+      if (this.length === 0) {
+        fulfill(this.promise, this._result);
+      } else {
+        this.length = this.length || 0;
+        this._enumerate();
+        if (this._remaining === 0) {
+          fulfill(this.promise, this._result);
+        }
+      }
+    } else {
+      _reject(this.promise, validationError());
+    }
+  }
+
+  function validationError() {
+    return new Error('Array Methods must be provided an Array');
+  };
+
+  Enumerator.prototype._enumerate = function () {
+    var length = this.length;
+    var _input = this._input;
+
+    for (var i = 0; this._state === PENDING && i < length; i++) {
+      this._eachEntry(_input[i], i);
+    }
+  };
+
+  Enumerator.prototype._eachEntry = function (entry, i) {
+    var c = this._instanceConstructor;
+    var resolve$$ = c.resolve;
+
+    if (resolve$$ === resolve) {
+      var _then = getThen(entry);
+
+      if (_then === then && entry._state !== PENDING) {
+        this._settledAt(entry._state, i, entry._result);
+      } else if (typeof _then !== 'function') {
+        this._remaining--;
+        this._result[i] = entry;
+      } else if (c === Promise) {
+        var promise = new c(noop);
+        handleMaybeThenable(promise, entry, _then);
+        this._willSettleAt(promise, i);
+      } else {
+        this._willSettleAt(new c(function (resolve$$) {
+          return resolve$$(entry);
+        }), i);
+      }
+    } else {
+      this._willSettleAt(resolve$$(entry), i);
+    }
+  };
+
+  Enumerator.prototype._settledAt = function (state, i, value) {
+    var promise = this.promise;
+
+    if (promise._state === PENDING) {
+      this._remaining--;
+
+      if (state === REJECTED) {
+        _reject(promise, value);
+      } else {
+        this._result[i] = value;
+      }
+    }
+
+    if (this._remaining === 0) {
+      fulfill(promise, this._result);
+    }
+  };
+
+  Enumerator.prototype._willSettleAt = function (promise, i) {
+    var enumerator = this;
+
+    subscribe(promise, undefined, function (value) {
+      return enumerator._settledAt(FULFILLED, i, value);
+    }, function (reason) {
+      return enumerator._settledAt(REJECTED, i, reason);
+    });
+  };
+
+  /**
+    `Promise.all` accepts an array of promises, and returns a new promise which
+    is fulfilled with an array of fulfillment values for the passed promises, or
+    rejected with the reason of the first passed promise to be rejected. It casts all
+    elements of the passed iterable to promises as it runs this algorithm.
+  
+    Example:
+  
+    ```javascript
+    let promise1 = resolve(1);
+    let promise2 = resolve(2);
+    let promise3 = resolve(3);
+    let promises = [ promise1, promise2, promise3 ];
+  
+    Promise.all(promises).then(function(array){
+      // The array here would be [ 1, 2, 3 ];
+    });
+    ```
+  
+    If any of the `promises` given to `all` are rejected, the first promise
+    that is rejected will be given as an argument to the returned promises's
+    rejection handler. For example:
+  
+    Example:
+  
+    ```javascript
+    let promise1 = resolve(1);
+    let promise2 = reject(new Error("2"));
+    let promise3 = reject(new Error("3"));
+    let promises = [ promise1, promise2, promise3 ];
+  
+    Promise.all(promises).then(function(array){
+      // Code here never runs because there are rejected promises!
+    }, function(error) {
+      // error.message === "2"
+    });
+    ```
+  
+    @method all
+    @static
+    @param {Array} entries array of promises
+    @param {String} label optional string for labeling the promise.
+    Useful for tooling.
+    @return {Promise} promise that is fulfilled when all `promises` have been
+    fulfilled, or rejected if any of them become rejected.
+    @static
+  */
+  function all(entries) {
+    return new Enumerator(this, entries).promise;
+  }
+
+  /**
+    `Promise.race` returns a new promise which is settled in the same way as the
+    first passed promise to settle.
+  
+    Example:
+  
+    ```javascript
+    let promise1 = new Promise(function(resolve, reject){
+      setTimeout(function(){
+        resolve('promise 1');
+      }, 200);
+    });
+  
+    let promise2 = new Promise(function(resolve, reject){
+      setTimeout(function(){
+        resolve('promise 2');
+      }, 100);
+    });
+  
+    Promise.race([promise1, promise2]).then(function(result){
+      // result === 'promise 2' because it was resolved before promise1
+      // was resolved.
+    });
+    ```
+  
+    `Promise.race` is deterministic in that only the state of the first
+    settled promise matters. For example, even if other promises given to the
+    `promises` array argument are resolved, but the first settled promise has
+    become rejected before the other promises became fulfilled, the returned
+    promise will become rejected:
+  
+    ```javascript
+    let promise1 = new Promise(function(resolve, reject){
+      setTimeout(function(){
+        resolve('promise 1');
+      }, 200);
+    });
+  
+    let promise2 = new Promise(function(resolve, reject){
+      setTimeout(function(){
+        reject(new Error('promise 2'));
+      }, 100);
+    });
+  
+    Promise.race([promise1, promise2]).then(function(result){
+      // Code here never runs
+    }, function(reason){
+      // reason.message === 'promise 2' because promise 2 became rejected before
+      // promise 1 became fulfilled
+    });
+    ```
+  
+    An example real-world use case is implementing timeouts:
+  
+    ```javascript
+    Promise.race([ajax('foo.json'), timeout(5000)])
+    ```
+  
+    @method race
+    @static
+    @param {Array} promises array of promises to observe
+    Useful for tooling.
+    @return {Promise} a promise which settles in the same way as the first passed
+    promise to settle.
+  */
+  function race(entries) {
+    /*jshint validthis:true */
+    var Constructor = this;
+
+    if (!isArray(entries)) {
+      return new Constructor(function (_, reject) {
+        return reject(new TypeError('You must pass an array to race.'));
+      });
+    } else {
+      return new Constructor(function (resolve, reject) {
+        var length = entries.length;
+        for (var i = 0; i < length; i++) {
+          Constructor.resolve(entries[i]).then(resolve, reject);
+        }
+      });
+    }
+  }
+
+  /**
+    `Promise.reject` returns a promise rejected with the passed `reason`.
+    It is shorthand for the following:
+  
+    ```javascript
+    let promise = new Promise(function(resolve, reject){
+      reject(new Error('WHOOPS'));
+    });
+  
+    promise.then(function(value){
+      // Code here doesn't run because the promise is rejected!
+    }, function(reason){
+      // reason.message === 'WHOOPS'
+    });
+    ```
+  
+    Instead of writing the above, your code now simply becomes the following:
+  
+    ```javascript
+    let promise = Promise.reject(new Error('WHOOPS'));
+  
+    promise.then(function(value){
+      // Code here doesn't run because the promise is rejected!
+    }, function(reason){
+      // reason.message === 'WHOOPS'
+    });
+    ```
+  
+    @method reject
+    @static
+    @param {Any} reason value that the returned promise will be rejected with.
+    Useful for tooling.
+    @return {Promise} a promise rejected with the given `reason`.
+  */
+  function reject(reason) {
+    /*jshint validthis:true */
+    var Constructor = this;
+    var promise = new Constructor(noop);
+    _reject(promise, reason);
+    return promise;
+  }
+
+  function needsResolver() {
+    throw new TypeError('You must pass a resolver function as the first argument to the promise constructor');
+  }
+
+  function needsNew() {
+    throw new TypeError("Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.");
+  }
+
+  /**
+    Promise objects represent the eventual result of an asynchronous operation. The
+    primary way of interacting with a promise is through its `then` method, which
+    registers callbacks to receive either a promise's eventual value or the reason
+    why the promise cannot be fulfilled.
+  
+    Terminology
+    -----------
+  
+    - `promise` is an object or function with a `then` method whose behavior conforms to this specification.
+    - `thenable` is an object or function that defines a `then` method.
+    - `value` is any legal JavaScript value (including undefined, a thenable, or a promise).
+    - `exception` is a value that is thrown using the throw statement.
+    - `reason` is a value that indicates why a promise was rejected.
+    - `settled` the final resting state of a promise, fulfilled or rejected.
+  
+    A promise can be in one of three states: pending, fulfilled, or rejected.
+  
+    Promises that are fulfilled have a fulfillment value and are in the fulfilled
+    state.  Promises that are rejected have a rejection reason and are in the
+    rejected state.  A fulfillment value is never a thenable.
+  
+    Promises can also be said to *resolve* a value.  If this value is also a
+    promise, then the original promise's settled state will match the value's
+    settled state.  So a promise that *resolves* a promise that rejects will
+    itself reject, and a promise that *resolves* a promise that fulfills will
+    itself fulfill.
+  
+  
+    Basic Usage:
+    ------------
+  
+    ```js
+    let promise = new Promise(function(resolve, reject) {
+      // on success
+      resolve(value);
+  
+      // on failure
+      reject(reason);
+    });
+  
+    promise.then(function(value) {
+      // on fulfillment
+    }, function(reason) {
+      // on rejection
+    });
+    ```
+  
+    Advanced Usage:
+    ---------------
+  
+    Promises shine when abstracting away asynchronous interactions such as
+    `XMLHttpRequest`s.
+  
+    ```js
+    function getJSON(url) {
+      return new Promise(function(resolve, reject){
+        let xhr = new XMLHttpRequest();
+  
+        xhr.open('GET', url);
+        xhr.onreadystatechange = handler;
+        xhr.responseType = 'json';
+        xhr.setRequestHeader('Accept', 'application/json');
+        xhr.send();
+  
+        function handler() {
+          if (this.readyState === this.DONE) {
+            if (this.status === 200) {
+              resolve(this.response);
+            } else {
+              reject(new Error('getJSON: `' + url + '` failed with status: [' + this.status + ']'));
+            }
+          }
+        };
+      });
+    }
+  
+    getJSON('/posts.json').then(function(json) {
+      // on fulfillment
+    }, function(reason) {
+      // on rejection
+    });
+    ```
+  
+    Unlike callbacks, promises are great composable primitives.
+  
+    ```js
+    Promise.all([
+      getJSON('/posts'),
+      getJSON('/comments')
+    ]).then(function(values){
+      values[0] // => postsJSON
+      values[1] // => commentsJSON
+  
+      return values;
+    });
+    ```
+  
+    @class Promise
+    @param {function} resolver
+    Useful for tooling.
+    @constructor
+  */
+  function Promise(resolver) {
+    this[PROMISE_ID] = nextId();
+    this._result = this._state = undefined;
+    this._subscribers = [];
+
+    if (noop !== resolver) {
+      typeof resolver !== 'function' && needsResolver();
+      this instanceof Promise ? initializePromise(this, resolver) : needsNew();
+    }
+  }
+
+  Promise.all = all;
+  Promise.race = race;
+  Promise.resolve = resolve;
+  Promise.reject = reject;
+  Promise._setScheduler = setScheduler;
+  Promise._setAsap = setAsap;
+  Promise._asap = asap;
+
+  Promise.prototype = {
+    constructor: Promise,
+
+    /**
+      The primary way of interacting with a promise is through its `then` method,
+      which registers callbacks to receive either a promise's eventual value or the
+      reason why the promise cannot be fulfilled.
+    
+      ```js
+      findUser().then(function(user){
+        // user is available
+      }, function(reason){
+        // user is unavailable, and you are given the reason why
+      });
+      ```
+    
+      Chaining
+      --------
+    
+      The return value of `then` is itself a promise.  This second, 'downstream'
+      promise is resolved with the return value of the first promise's fulfillment
+      or rejection handler, or rejected if the handler throws an exception.
+    
+      ```js
+      findUser().then(function (user) {
+        return user.name;
+      }, function (reason) {
+        return 'default name';
+      }).then(function (userName) {
+        // If `findUser` fulfilled, `userName` will be the user's name, otherwise it
+        // will be `'default name'`
+      });
+    
+      findUser().then(function (user) {
+        throw new Error('Found user, but still unhappy');
+      }, function (reason) {
+        throw new Error('`findUser` rejected and we're unhappy');
+      }).then(function (value) {
+        // never reached
+      }, function (reason) {
+        // if `findUser` fulfilled, `reason` will be 'Found user, but still unhappy'.
+        // If `findUser` rejected, `reason` will be '`findUser` rejected and we're unhappy'.
+      });
+      ```
+      If the downstream promise does not specify a rejection handler, rejection reasons will be propagated further downstream.
+    
+      ```js
+      findUser().then(function (user) {
+        throw new PedagogicalException('Upstream error');
+      }).then(function (value) {
+        // never reached
+      }).then(function (value) {
+        // never reached
+      }, function (reason) {
+        // The `PedgagocialException` is propagated all the way down to here
+      });
+      ```
+    
+      Assimilation
+      ------------
+    
+      Sometimes the value you want to propagate to a downstream promise can only be
+      retrieved asynchronously. This can be achieved by returning a promise in the
+      fulfillment or rejection handler. The downstream promise will then be pending
+      until the returned promise is settled. This is called *assimilation*.
+    
+      ```js
+      findUser().then(function (user) {
+        return findCommentsByAuthor(user);
+      }).then(function (comments) {
+        // The user's comments are now available
+      });
+      ```
+    
+      If the assimliated promise rejects, then the downstream promise will also reject.
+    
+      ```js
+      findUser().then(function (user) {
+        return findCommentsByAuthor(user);
+      }).then(function (comments) {
+        // If `findCommentsByAuthor` fulfills, we'll have the value here
+      }, function (reason) {
+        // If `findCommentsByAuthor` rejects, we'll have the reason here
+      });
+      ```
+    
+      Simple Example
+      --------------
+    
+      Synchronous Example
+    
+      ```javascript
+      let result;
+    
+      try {
+        result = findResult();
+        // success
+      } catch(reason) {
+        // failure
+      }
+      ```
+    
+      Errback Example
+    
+      ```js
+      findResult(function(result, err){
+        if (err) {
+          // failure
+        } else {
+          // success
+        }
+      });
+      ```
+    
+      Promise Example;
+    
+      ```javascript
+      findResult().then(function(result){
+        // success
+      }, function(reason){
+        // failure
+      });
+      ```
+    
+      Advanced Example
+      --------------
+    
+      Synchronous Example
+    
+      ```javascript
+      let author, books;
+    
+      try {
+        author = findAuthor();
+        books  = findBooksByAuthor(author);
+        // success
+      } catch(reason) {
+        // failure
+      }
+      ```
+    
+      Errback Example
+    
+      ```js
+    
+      function foundBooks(books) {
+    
+      }
+    
+      function failure(reason) {
+    
+      }
+    
+      findAuthor(function(author, err){
+        if (err) {
+          failure(err);
+          // failure
+        } else {
+          try {
+            findBoooksByAuthor(author, function(books, err) {
+              if (err) {
+                failure(err);
+              } else {
+                try {
+                  foundBooks(books);
+                } catch(reason) {
+                  failure(reason);
+                }
+              }
+            });
+          } catch(error) {
+            failure(err);
+          }
+          // success
+        }
+      });
+      ```
+    
+      Promise Example;
+    
+      ```javascript
+      findAuthor().
+        then(findBooksByAuthor).
+        then(function(books){
+          // found books
+      }).catch(function(reason){
+        // something went wrong
+      });
+      ```
+    
+      @method then
+      @param {Function} onFulfilled
+      @param {Function} onRejected
+      Useful for tooling.
+      @return {Promise}
+    */
+    then: then,
+
+    /**
+      `catch` is simply sugar for `then(undefined, onRejection)` which makes it the same
+      as the catch block of a try/catch statement.
+    
+      ```js
+      function findAuthor(){
+        throw new Error('couldn't find that author');
+      }
+    
+      // synchronous
+      try {
+        findAuthor();
+      } catch(reason) {
+        // something went wrong
+      }
+    
+      // async with promises
+      findAuthor().catch(function(reason){
+        // something went wrong
+      });
+      ```
+    
+      @method catch
+      @param {Function} onRejection
+      Useful for tooling.
+      @return {Promise}
+    */
+    'catch': function _catch(onRejection) {
+      return this.then(null, onRejection);
+    }
+  };
+
+  function polyfill() {
+    var local = undefined;
+
+    if (typeof global !== 'undefined') {
+      local = global;
+    } else if (typeof self !== 'undefined') {
+      local = self;
+    } else {
+      try {
+        local = Function('return this')();
+      } catch (e) {
+        throw new Error('polyfill failed because global object is unavailable in this environment');
+      }
+    }
+
+    var P = local.Promise;
+
+    if (P) {
+      var promiseToString = null;
+      try {
+        promiseToString = Object.prototype.toString.call(P.resolve());
+      } catch (e) {
+        // silently ignored
+      }
+
+      if (promiseToString === '[object Promise]' && !P.cast) {
+        return;
+      }
+    }
+
+    local.Promise = Promise;
+  }
+
+  polyfill();
+  // Strange compat..
+  Promise.polyfill = polyfill;
+  Promise.Promise = Promise;
+
+  return Promise;
+});
+//# sourceMappingURL=es6-promise.map
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13), __webpack_require__(6), __webpack_require__(14)))
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _eventful = __webpack_require__(2);
+
+var _events = __webpack_require__(5);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @class MessageView
+ * @mixes Eventful
+ */
+var MessageView = function () {
+  /**
+   * @constructor
+   * @param {Object} state
+   * @param {string} state.type 'info', 'warning' or 'error'
+   * @param {string} state.title
+   * @param {string} state.content
+   * @param {string} [state.action]
+   * @param {string} [state.dismissable]
+   */
+  function MessageView(state) {
+    _classCallCheck(this, MessageView);
+
+    // add event system
+    _extends(this, (0, _eventful.Eventful)());
+
+    // create elements
+    this.rootElement = this.createElement(state);
+  }
+
+  _createClass(MessageView, [{
+    key: 'createElement',
+    value: function createElement(message) {
+      // Create wrapper:
+      var messageWrapper = document.createElement('div');
+      messageWrapper.className = 'message ' + message.type + (message.dismissible ? ' dismissible' : '');
+      messageWrapper.setAttribute('role', 'alert');
+
+      // Add close button if dismisable
+      if (message.dismissible) {
+        var closeButton = document.createElement('div');
+        closeButton.className = 'close';
+        //closeButton.innerHTML = '&#x2715';
+        // TODO
+        // - Add close label from translations
+        // - Add visuals in CSS (font icon)
+        messageWrapper.appendChild(closeButton);
+        (0, _events.relayClickEventAs)('close', this, closeButton);
+      }
+
+      var messageContent = document.createElement('div');
+      messageContent.className = 'message-content';
+      messageContent.innerHTML = '<h2>' + message.title + '</h2>' + '<p>' + message.content + '</p>';
+      messageWrapper.appendChild(messageContent);
+
+      if (message.action !== undefined) {
+        var messageButton = document.createElement('button');
+        messageButton.className = 'button';
+        messageButton.innerHTML = message.action;
+        messageWrapper.appendChild(messageButton);
+
+        (0, _events.relayClickEventAs)('action-clicked', this, messageButton);
+      }
+
+      return messageWrapper;
+    }
+
+    /**
+     * Returns the root element of the content browser
+     *
+     * @return {HTMLElement}
+     */
+
+  }, {
+    key: 'getElement',
+    value: function getElement() {
+      return this.rootElement;
+    }
+  }]);
+
+  return MessageView;
+}();
+
+exports.default = MessageView;
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = init;
+
+var _collapsible = __webpack_require__(9);
+
+var _keyboard = __webpack_require__(4);
+
+var _keyboard2 = _interopRequireDefault(_keyboard);
+
+var _elements = __webpack_require__(1);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Initializes a panel
+ *
+ * @param {HTMLElement} element
+ * @return {HTMLElement}
+ */
+function init(element) {
+  var keyboard = new _keyboard2.default();
+  var togglerSelector = '[role="heading"] [aria-controls][aria-expanded]';
+  keyboard.onSelect = function (el) {
+    return (0, _elements.toggleAttribute)('aria-expanded', el);
+  };
+
+  // collapse/expand on header press
+  (0, _collapsible.initCollapsible)(element, function (expanded, element) {
+    return (0, _elements.toggleVisibility)(expanded, element);
+  }, togglerSelector);
+
+  // Add keyboard support to expand collapse
+  (0, _elements.querySelectorAll)(togglerSelector, element).forEach(function (el) {
+    return keyboard.addElement(el);
+  });
+}
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.initCollapsible = undefined;
+
+var _elements = __webpack_require__(1);
+
+/**
+ * Returns true if aria-expanded=true on element
+ *
+ * @param {HTMLElement} element
+ * @function
+ */
+var isExpanded = (0, _elements.attributeEquals)("aria-expanded", 'true');
+
+/**
+ * Toggles aria-hidden on 'collapsible' when aria-expanded changes on 'toggler',
+ * and toggles aria-expanded on 'toggler' on click
+ *
+ * @param {HTMLElement} element
+ * @param {function} [targetHandler] falls back to toggleVisibility with aria-hidden
+ * @param {string} [togglerSelector]
+ */
+var initCollapsible = exports.initCollapsible = function initCollapsible(element) {
+  var targetHandler = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _elements.toggleVisibility;
+  var togglerSelector = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '[aria-controls][aria-expanded]';
+
+  // elements
+  var togglers = (0, _elements.querySelectorAll)(togglerSelector, element);
+
+  togglers.forEach(function (toggler) {
+    var collapsibleId = toggler.getAttribute('aria-controls');
+    var collapsible = element.querySelector('#' + collapsibleId);
+
+    // set observer on title for aria-expanded
+    var observer = new MutationObserver(function () {
+      return targetHandler(isExpanded(toggler), collapsible);
+    });
+
+    observer.observe(toggler, {
+      attributes: true,
+      attributeOldValue: true,
+      attributeFilter: ["aria-expanded"]
+    });
+
+    // Set click listener that toggles aria-expanded
+    toggler.addEventListener('click', function () {
+      return (0, _elements.toggleAttribute)("aria-expanded", toggler);
+    });
+
+    // initialize
+    targetHandler(isExpanded(toggler), collapsible);
+  });
+};
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4NCiAgPGRlZnM+DQogICAgPHN0eWxlPg0KICAgICAgLmNscy0xIHsNCiAgICAgIGZpbGw6IG5vbmU7DQogICAgICB9DQoNCiAgICAgIC5jbHMtMiB7DQogICAgICBmaWxsOiAjYzZjNmM3Ow0KICAgICAgfQ0KDQogICAgICAuY2xzLTMsIC5jbHMtNCB7DQogICAgICBmaWxsOiAjZmZmOw0KICAgICAgfQ0KDQogICAgICAuY2xzLTMgew0KICAgICAgb3BhY2l0eTogMC43Ow0KICAgICAgfQ0KICAgIDwvc3R5bGU+DQogIDwvZGVmcz4NCiAgPHRpdGxlPmNvbnRlbnQgdHlwZSBwbGFjZWhvbGRlcl8yPC90aXRsZT4NCiAgPGcgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiI+DQogICAgPGcgaWQ9ImNvbnRlbnRfdHlwZV9wbGFjZWhvbGRlci0xX2NvcHkiIGRhdGEtbmFtZT0iY29udGVudCB0eXBlIHBsYWNlaG9sZGVyLTEgY29weSI+DQogICAgICA8cmVjdCBjbGFzcz0iY2xzLTEiIHdpZHRoPSI0MDAiIGhlaWdodD0iMjI1Ii8+DQogICAgICA8cmVjdCBjbGFzcz0iY2xzLTIiIHg9IjExMi41MSIgeT0iNDMuNDEiIHdpZHRoPSIxNzYuOTYiIGhlaWdodD0iMTM1LjQ1IiByeD0iMTAiIHJ5PSIxMCIvPg0KICAgICAgPGNpcmNsZSBjbGFzcz0iY2xzLTMiIGN4PSIxMzYuNjYiIGN5PSI2MS45OCIgcj0iNC44MSIvPg0KICAgICAgPGNpcmNsZSBjbGFzcz0iY2xzLTMiIGN4PSIxNTEuNDkiIGN5PSI2MS45OCIgcj0iNC44MSIvPg0KICAgICAgPGNpcmNsZSBjbGFzcz0iY2xzLTMiIGN4PSIxNjYuMSIgY3k9IjYxLjk4IiByPSI0LjgxIi8+DQogICAgICA8ZyBpZD0iX0dyb3VwXyIgZGF0YS1uYW1lPSImbHQ7R3JvdXAmZ3Q7Ij4NCiAgICAgICAgPGcgaWQ9Il9Hcm91cF8yIiBkYXRhLW5hbWU9IiZsdDtHcm91cCZndDsiPg0KICAgICAgICAgIDxwYXRoIGlkPSJfQ29tcG91bmRfUGF0aF8iIGRhdGEtbmFtZT0iJmx0O0NvbXBvdW5kIFBhdGgmZ3Q7IiBjbGFzcz0iY2xzLTQiIGQ9Ik0yNjMuMjgsOTUuMjFDMjYwLDkyLjA3LDI1NSw5MS41LDI0OC40Myw5MS41SDIyN3Y4SDE5OS41bC0yLjE3LDEwLjI0YTI1Ljg0LDI1Ljg0LDAsMCwxLDExLjQ4LTEuNjMsMTkuOTMsMTkuOTMsMCwwLDEsMTQuMzksNS41NywxOC4yNiwxOC4yNiwwLDAsMSw1LjUyLDEzLjYsMjMuMTEsMjMuMTEsMCwwLDEtMi44NCwxMS4wNSwxOC42NSwxOC42NSwwLDAsMS04LjA2LDcuNzksOSw5LDAsMCwxLTQuMTIsMS4zN0gyMzZ2LTIxaDEwLjQyYzcuMzYsMCwxMi44My0xLjYxLDE2LjQyLTVzNS4zOC03LjQ4LDUuMzgtMTMuNDRDMjY4LjIyLDEwMi4yOSwyNjYuNTcsOTguMzUsMjYzLjI4LDk1LjIxWm0tMTUsMTdjLTEuNDIsMS4yMi0zLjksMS4yNS03LjQxLDEuMjVIMjM2di0xNGg1LjYyYTkuNTcsOS41NywwLDAsMSw3LDIuOTMsNy4wNSw3LjA1LDAsMCwxLDEuODUsNC45MkE2LjMzLDYuMzMsMCwwLDEsMjQ4LjMxLDExMi4yNVoiLz4NCiAgICAgICAgICA8cGF0aCBpZD0iX1BhdGhfIiBkYXRhLW5hbWU9IiZsdDtQYXRoJmd0OyIgY2xhc3M9ImNscy00IiBkPSJNMjAyLjksMTE5LjExYTguMTIsOC4xMiwwLDAsMC03LjI4LDQuNTJsLTE2LTEuMjIsNy4yMi0zMC45MkgxNzR2MjJIMTUzdi0yMkgxMzZ2NTZoMTd2LTIxaDIxdjIxaDIwLjMxYy0yLjcyLDAtNS0xLjUzLTctM2ExOS4xOSwxOS4xOSwwLDAsMS00LjczLTQuODMsMjMuNTgsMjMuNTgsMCwwLDEtMy02LjZsMTYtMi4yNmE4LjExLDguMTEsMCwxLDAsNy4yNi0xMS43MloiLz4NCiAgICAgICAgPC9nPg0KICAgICAgPC9nPg0KICAgICAgPHJlY3QgY2xhc3M9ImNscy0zIiB4PSIxNzcuNjYiIHk9IjU3LjY2IiB3aWR0aD0iOTIuMjgiIGhlaWdodD0iOS4zOCIgcng9IjMuNSIgcnk9IjMuNSIvPg0KICAgIDwvZz4NCiAgPC9nPg0KPC9zdmc+DQo="
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _hubView = __webpack_require__(22);
+
+var _hubView2 = _interopRequireDefault(_hubView);
+
+var _contentTypeSection = __webpack_require__(20);
+
+var _contentTypeSection2 = _interopRequireDefault(_contentTypeSection);
+
+var _uploadSection = __webpack_require__(24);
+
+var _uploadSection2 = _interopRequireDefault(_uploadSection);
+
+var _hubServices = __webpack_require__(21);
+
+var _hubServices2 = _interopRequireDefault(_hubServices);
+
+var _dictionary = __webpack_require__(3);
+
+var _dictionary2 = _interopRequireDefault(_dictionary);
+
+var _eventful = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @typedef {object} HubState
+ * @property {string} title
+ * @property {string} sectionId
+ * @property {boolean} expanded
+ * @property {string} apiRootUrl
+ * @property {ApiVersion} apiVersion
+ */
+/**
+ * @typedef {object} ApiVersion
+ * @property {number} major
+ * @property {number} minor
+ */
+/**
+ * @typedef {object} ErrorMessage
+ * @property {string} message
+ * @property {string} errorCode
+ */
+/**
+ * @typedef {object} SelectedElement
+ * @property {HTMLElement} element
+ * @property {string} id
+ */
+/**
+ * Select event
+ * @event Hub#select
+ * @type {SelectedElement}
+ */
+/**
+ * Error event
+ * @event Hub#error
+ * @type {ErrorMessage}
+ */
+/**
+ * Upload event
+ * @event Hub#upload
+ * @type {Object}
+ */
+/**
+ * @class
+ * @mixes Eventful
+ * @fires Hub#select
+ * @fires Hub#error
+ * @fires Hub#upload
+ */
+var Hub = function () {
+  /**
+   * @param {HubState} state
+   */
+  function Hub(state, dictionary) {
+    _classCallCheck(this, Hub);
+
+    // add event system
+    _extends(this, (0, _eventful.Eventful)());
+    var self = this;
+
+    // Setting up Dictionary
+    _dictionary2.default.init(dictionary);
+
+    // services
+    this.services = new _hubServices2.default({
+      apiRootUrl: state.apiRootUrl
+    });
+
+    // controllers
+    this.contentTypeSection = new _contentTypeSection2.default(state, this.services);
+    this.uploadSection = new _uploadSection2.default(state, this.services);
+
+    // views
+    this.view = new _hubView2.default(state);
+
+    // propagate controller events
+    this.propagate(['select'], this.contentTypeSection);
+    this.propagate(['upload'], this.uploadSection);
+
+    // handle events
+    this.on('select', this.setPanelTitle, this);
+    this.on('select', this.view.closePanel, this.view);
+    this.view.on('tab-change', this.view.setSectionType, this.view);
+    this.view.on('panel-change', this.view.togglePanelOpen.bind(this.view), this.view);
+    this.contentTypeSection.on('reload', function () {
+      self.services.setup();
+      self.contentTypeSection.initContentTypeList();
+    });
+    this.on('clear-upload-form', function () {
+      self.uploadSection.clearUploadForm();
+    });
+
+    this.initTabPanel(state);
+  }
+
+  /**
+   * Returns the promise of a content type
+   * @param {string} machineName
+   * @return {Promise.<ContentType>}
+   */
+
+
+  _createClass(Hub, [{
+    key: 'getContentType',
+    value: function getContentType(machineName) {
+      return this.services.contentType(machineName);
+    }
+
+    /**
+     * Sets the title of the panel
+     *
+     * @param {string} id
+     */
+
+  }, {
+    key: 'setPanelTitle',
+    value: function setPanelTitle(_ref) {
+      var _this = this;
+
+      var id = _ref.id;
+
+      this.getContentType(id).then(function (_ref2) {
+        var title = _ref2.title;
+        return _this.view.setTitle(title ? title : id);
+      });
+    }
+
+    /**
+     * Initiates the tab panel
+     *
+     * @param {string} sectionId
+     */
+
+  }, {
+    key: 'initTabPanel',
+    value: function initTabPanel(_ref3) {
+      var _this2 = this;
+
+      var _ref3$sectionId = _ref3.sectionId,
+          sectionId = _ref3$sectionId === undefined ? 'content-types' : _ref3$sectionId;
+
+      var tabConfigs = [{
+        title: _dictionary2.default.get('createContentTabLabel'),
+        id: 'content-types',
+        content: this.contentTypeSection.getElement()
+      }, {
+        title: _dictionary2.default.get('uploadTabLabel'),
+        id: 'upload',
+        content: this.uploadSection.getElement()
+      }];
+
+      // sets the correct one selected
+      tabConfigs.filter(function (config) {
+        return config.id === sectionId;
+      }).forEach(function (config) {
+        return config.selected = true;
+      });
+
+      tabConfigs.forEach(function (tabConfig) {
+        return _this2.view.addTab(tabConfig);
+      });
+      this.view.addBottomBorder(); // Adds an animated bottom border to each tab
+      this.view.initTabPanel();
+    }
+
+    /**
+     * Returns the root element in the view
+     *
+     * @return {HTMLElement}
+     */
+
+  }, {
+    key: 'getElement',
+    value: function getElement() {
+      return this.view.getElement();
+    }
+  }]);
+
+  return Hub;
+}();
+
+exports.default = Hub;
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout() {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+})();
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch (e) {
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch (e) {
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e) {
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e) {
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while (len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () {
+    return '/';
+};
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function () {
+    return 0;
+};
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var g;
+
+// This works in non-strict mode
+g = function () {
+	return this;
+}();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1, eval)("this");
+} catch (e) {
+	// This works if the window reference is available
+	if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _elements = __webpack_require__(1);
+
+var _functional = __webpack_require__(0);
+
+var _eventful = __webpack_require__(2);
+
+var _panel = __webpack_require__(8);
+
+var _panel2 = _interopRequireDefault(_panel);
+
+var _imageScroller = __webpack_require__(27);
+
+var _imageScroller2 = _interopRequireDefault(_imageScroller);
+
+var _imageLightbox = __webpack_require__(26);
+
+var _imageLightbox2 = _interopRequireDefault(_imageLightbox);
+
+var _events = __webpack_require__(5);
+
+var _contentTypePlaceholder = __webpack_require__(10);
+
+var _contentTypePlaceholder2 = _interopRequireDefault(_contentTypePlaceholder);
+
+var _dictionary = __webpack_require__(3);
+
+var _dictionary2 = _interopRequireDefault(_dictionary);
+
+var _messageView = __webpack_require__(7);
+
+var _messageView2 = _interopRequireDefault(_messageView);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @constant {string}
+ */
+var ATTRIBUTE_CONTENT_TYPE_ID = 'data-id';
+
+/**
+ * @constant {number}
+ */
+var MAX_TEXT_SIZE_DESCRIPTION = 285;
+
+/**
+ * @constant {string}
+ */
+var IMAGELIGHTBOX = 'imagelightbox';
+
+/**
+ * Toggles the visibility if an element
+ *
+ * @param {HTMLElement} element
+ * @param {boolean} visible
+ */
+var toggleVisibility = function toggleVisibility(element, visible) {
+  return (visible ? _elements.show : _elements.hide)(element);
+};
+
+/**
+ * Checks if a string is empty
+ *
+ * @param {string} text
+ *
+ * @return {boolean}
+ */
+var isEmpty = function isEmpty(text) {
+  return typeof text === 'string' && text.length === 0;
+};
+
+/**
+ * Hides all elements in an array
+ *
+ * @param {HTMLElement[]} elements
+ *
+ * @function
+ */
+var hideAll = (0, _functional.forEach)(_elements.hide);
+
+/**
+ * Disables an HTMLElement
+ *
+ * @param {HTMLElement} element
+ *
+ * @function
+ */
+var disable = (0, _elements.setAttribute)('disabled', '');
+
+/**
+ * Disables an HTMLElement
+ *
+ * @param {HTMLElement} element
+ *
+ * @function
+ */
+var enable = (0, _elements.removeAttribute)('disabled');
+
+/**
+ * Returns true if attribute aria-hidden = 'true' on an element
+ *
+ * @param {HTMLElement} element
+ *
+ * @function
+ */
+var _isHidden = (0, _elements.attributeEquals)('aria-hidden', 'true');
+
+/**
+ * @class
+ * @mixes Eventful
+ */
+
+var ContentTypeDetailView = function () {
+  function ContentTypeDetailView(state) {
+    var _this = this;
+
+    _classCallCheck(this, ContentTypeDetailView);
+
+    // add event system
+    _extends(this, (0, _eventful.Eventful)());
+
+    // create view
+    this.rootElement = this.createView();
+
+    // grab references
+    this.buttonBar = this.rootElement.querySelector('.button-bar');
+    this.useButton = this.buttonBar.querySelector('.button-use');
+    this.installButton = this.buttonBar.querySelector('.button-install');
+    this.buttons = this.buttonBar.querySelectorAll('.button');
+
+    this.image = this.rootElement.querySelector('.content-type-image');
+    this.title = this.rootElement.querySelector('.text-details .title');
+    this.owner = this.rootElement.querySelector('.owner');
+    this.description = this.rootElement.querySelector('.text-details .small');
+    this.demoButton = this.rootElement.querySelector('.demo-button');
+    this.carousel = this.rootElement.querySelector('.carousel');
+    this.carouselList = this.carousel.querySelector('ul');
+    var imageLightbox = this.rootElement.querySelector("#" + IMAGELIGHTBOX + "-detail");
+    this.imageLightboxList = imageLightbox.querySelector("." + IMAGELIGHTBOX + "-list");
+    this.panel = this.rootElement.querySelector('.panel');
+    this.licencePanelHeading = this.rootElement.querySelector('.licence-panel-heading');
+    this.licencePanelBody = this.rootElement.querySelector('#licence-panel');
+    this.installMessage = this.rootElement.querySelector('.install-message');
+    this.container = this.rootElement.querySelector('.container');
+
+    // hide message on close button click
+    var installMessageClose = this.installMessage.querySelector('.message-close');
+    installMessageClose.addEventListener('click', function () {
+      return _this.resetInstallMessage();
+    });
+
+    // init interactive elements
+    (0, _panel2.default)(this.panel);
+    (0, _imageScroller2.default)(this.carousel);
+    (0, _imageLightbox2.default)(imageLightbox);
+
+    // fire events on button click
+    (0, _events.relayClickEventAs)('close', this, this.rootElement.querySelector('.back-button'));
+    (0, _events.relayClickEventAs)('select', this, this.useButton);
+    (0, _events.relayClickEventAs)('install', this, this.installButton);
+  }
+
+  /**
+   * Creates the view as a HTMLElement
+   *
+   * @return {HTMLElement}
+   */
+
+
+  _createClass(ContentTypeDetailView, [{
+    key: "createView",
+    value: function createView() {
+
+      // Localized text strings
+      var l10n = { // TODO: Translate
+        title: 'Images',
+        progress: ':num of :total',
+        next: 'Next image',
+        prev: 'Previous image',
+        close: 'Close dialog'
+      };
+
+      // ids
+      var titleId = 'content-type-detail-view-title';
+
+      // create element
+      var element = document.createElement('div');
+      element.className = 'content-type-detail';
+      element.id = 'content-type-detail';
+      element.setAttribute('role', 'region');
+      element.setAttribute('tabindex', '-1');
+      element.setAttribute('aria-labelledby', titleId);
+      element.setAttribute('aria-hidden', 'true');
+
+      element.innerHTML = "\n      <button class=\"back-button icon-arrow-thick\" aria-label=\"" + _dictionary2.default.get("contentTypeBackButtonLabel") + "\" tabindex=\"0\"></button>\n      <div class=\"container\">\n        <div class=\"image-wrapper\"><img class=\"img-responsive content-type-image\" src=\"" + _contentTypePlaceholder2.default + "\"></div>\n        <div class=\"text-details\">\n          <h2 id=\"" + titleId + "\" class=\"title\"></h2>\n          <div class=\"owner\"></div>\n          <p class=\"small\"></p>\n          <a class=\"button demo-button\" target=\"_blank\" aria-hidden=\"false\" href=\"#\">" + _dictionary2.default.get("contentTypeDemoButtonLabel") + "</a>\n        </div>\n      </div>\n      <div class=\"carousel\" role=\"region\" data-size=\"5\">\n        <button class=\"carousel-button previous\" aria-hidden=\"true\" disabled><span class=\"icon-arrow-thick\"></span></button>\n        <button class=\"carousel-button next\" aria-hidden=\"true\" disabled><span class=\"icon-arrow-thick\"></span></button>\n        <nav class=\"scroller\">\n          <ul></ul>\n        </nav>\n      </div>\n      <hr />\n      <div role=\"alert\" class=\"install-message message dismissible simple info\" aria-hidden=\"true\">\n        <button aria-label=\"" + _dictionary2.default.get("contentTypeCloseButtonLabel") + "\" class=\"message-close icon-close\"></button>\n        <h3 class=\"title\"></h3>\n      </div>\n      <div class=\"button-bar\">\n        <button class=\"button button-primary button-use\" aria-hidden=\"false\" data-id=\"\">" + _dictionary2.default.get("contentTypeUseButtonLabel") + "</button>\n        <button class=\"button button-inverse-primary button-install\" aria-hidden=\"true\" data-id=\"\"><span class=\"icon-arrow-thick\"></span>" + _dictionary2.default.get('contentTypeInstallButtonLabel') + "</button>\n        <button class=\"button button-inverse-primary button-installing\" aria-hidden=\"true\"><span class=\"icon-loading-search icon-spin\"></span>" + _dictionary2.default.get("contentTypeInstallingButtonLabel") + "</button>\n      </div>\n      <dl class=\"panel\">\n        <dt aria-level=\"2\" role=\"heading\" class=\"licence-panel-heading\">\n          <a href=\"#\" role=\"button\" aria-expanded=\"false\" aria-controls=\"licence-panel\">\n            <span class=\"icon-accordion-arrow\"></span> " + _dictionary2.default.get('contentTypeLicensePanelTitle') + "\n          </a>\n        </dt>\n        <dl id=\"licence-panel\" role=\"region\" aria-hidden=\"true\">\n          <div class=\"panel-body\"></div>\n        </dl>\n      </dl>\n      <div id=\"" + IMAGELIGHTBOX + "-detail\" class=\"" + IMAGELIGHTBOX + "\" role=\"dialog\" aria-label=\"" + l10n.title + "\">\n        <ol class=\"" + IMAGELIGHTBOX + "-list\"></ol>\n        <div class=\"" + IMAGELIGHTBOX + "-progress\">" + l10n.progress + "</div>\n        <div class=\"" + IMAGELIGHTBOX + "-button next\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.next + "\"></div>\n        <div class=\"" + IMAGELIGHTBOX + "-button previous\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.prev + "\"></div>\n        <div class=\"" + IMAGELIGHTBOX + "-button close\" role=\"button\" tabindex=\"0\" aria-label=\"" + l10n.close + "\"></div>\n      </div>";
+
+      return element;
+    }
+
+    /**
+     * Sets a message on install
+     *
+     * @param {boolean} success
+     * @param {string} message
+     */
+
+  }, {
+    key: "setInstallMessage",
+    value: function setInstallMessage(_ref) {
+      var _ref$success = _ref.success,
+          success = _ref$success === undefined ? true : _ref$success,
+          message = _ref.message;
+
+      (0, _elements.show)(this.installMessage);
+      this.installMessage.querySelector('.title').innerText = message;
+      this.installMessage.querySelector('.title').innerText = message;
+      this.installMessage.className = "install-message dismissible message simple " + (success ? 'info' : 'error');
+    }
+
+    /**
+     * Sets a message on install
+     *
+     * @param {boolean} success
+     * @param {string} message
+     */
+
+  }, {
+    key: "resetInstallMessage",
+    value: function resetInstallMessage() {
+      (0, _elements.hide)(this.installMessage);
+      this.installMessage.querySelector('.title').innerText = '';
+    }
+
+    /**
+     * Removes all images from the carousel
+     */
+
+  }, {
+    key: "removeAllImagesInCarousel",
+    value: function removeAllImagesInCarousel() {
+      this.carouselList.querySelectorAll('li').forEach((0, _elements.removeChild)(this.carouselList));
+      this.imageLightboxList.innerHTML = '';
+    }
+
+    /**
+     * Add image to the carousel
+     *
+     * @param {object} image
+     */
+
+  }, {
+    key: "addImageToCarousel",
+    value: function addImageToCarousel(image) {
+      // add lightbox
+      var item = document.createElement('li');
+      item.classList.add(IMAGELIGHTBOX + "-image");
+      item.innerHTML = "<img class=\"img-responsive\" src=\"" + image.url + "\" alt=\"" + image.alt + "\">";
+      this.imageLightboxList.appendChild(item);
+
+      // add thumbnail
+      var thumbnail = document.createElement('li');
+      thumbnail.className = 'slide';
+      thumbnail.innerHTML = "<img src=\"" + image.url + "\" alt=\"" + image.alt + "\" class=\"img-responsive\" aria-controls=\"" + IMAGELIGHTBOX + "-detail\" />";
+      this.carouselList.appendChild(thumbnail);
+    }
+
+    /**
+     * Resets the detail view
+     */
+
+  }, {
+    key: "reset",
+    value: function reset() {
+      this.installButton.removeAttribute('disabled');
+      if (this.messageViewElement) {
+        this.container.removeChild(this.messageViewElement);
+        delete this.messageViewElement;
+      }
+      (0, _elements.hide)(this.installMessage);
+    }
+
+    /**
+     * Informs view if api version required by content type is un supported. The view
+     * will disable the install-button and display a warning message.
+     */
+
+  }, {
+    key: "apiVersionUnsupported",
+    value: function apiVersionUnsupported() {
+      // Disable install button
+      this.installButton.setAttribute('disabled', 'disabled');
+
+      var messageView = new _messageView2.default({
+        type: 'warning',
+        title: _dictionary2.default.get('contentTypeUnsupportedApiVersionTitle'),
+        content: _dictionary2.default.get('contentTypeUnsupportedApiVersionContent')
+      });
+
+      this.messageViewElement = messageView.getElement();
+      this.container.insertBefore(this.messageViewElement, this.container.childNodes[0]);
+    }
+
+    /**
+     * Sets the image
+     *
+     * @param {string} src
+     */
+
+  }, {
+    key: "setImage",
+    value: function setImage(src) {
+      this.image.setAttribute('src', src || _contentTypePlaceholder2.default);
+    }
+
+    /**
+     * Sets the title
+     *
+     * @param {string} id
+     */
+
+  }, {
+    key: "setId",
+    value: function setId(id) {
+      this.installButton.setAttribute(ATTRIBUTE_CONTENT_TYPE_ID, id);
+      this.useButton.setAttribute(ATTRIBUTE_CONTENT_TYPE_ID, id);
+    }
+
+    /**
+     * Sets the title
+     *
+     * @param {string} title
+     */
+
+  }, {
+    key: "setTitle",
+    value: function setTitle(title) {
+      this.title.innerHTML = "" + title;
+    }
+
+    /**
+     * Sets the long description
+     *
+     * @param {string} text
+     */
+
+  }, {
+    key: "setDescription",
+    value: function setDescription() {
+      var _this2 = this;
+
+      var text = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+      if (text && text.length > MAX_TEXT_SIZE_DESCRIPTION) {
+        this.description.innerHTML = this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text) + "<button class=\"read-more link\">" + _dictionary2.default.get('contentTypeReadMore') + "</button>";
+        this.description.querySelector('.read-more, .read-less').addEventListener('click', function () {
+          return _this2.toggleDescriptionExpanded(text);
+        });
+        this.descriptionExpanded = false;
+      } else {
+        this.description.innerText = text;
+      }
+    }
+
+    /**
+     * Toggles Read less and Read more text
+     *
+     * @param {string} text
+     */
+
+  }, {
+    key: "toggleDescriptionExpanded",
+    value: function toggleDescriptionExpanded(text) {
+      var _this3 = this;
+
+      // flip boolean
+      this.descriptionExpanded = !this.descriptionExpanded;
+
+      if (this.descriptionExpanded) {
+        this.description.innerHTML = text + "<button class=\"read-less link\">" + _dictionary2.default.get('contentTypeReadLess') + "</button>";
+      } else {
+        this.description.innerHTML = this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text) + "<button class=\"read-more link\">" + _dictionary2.default.get('contentTypeReadMore') + "</button>";
+      }
+
+      this.description.querySelector('.read-more, .read-less').addEventListener('click', function () {
+        return _this3.toggleDescriptionExpanded(text);
+      });
+    }
+
+    /**
+     * Shortens a string, and puts an elipsis at the end
+     *
+     * @param {number} size
+     * @param {string} text
+     */
+
+  }, {
+    key: "ellipsis",
+    value: function ellipsis(size, text) {
+      return text.substr(0, size) + "...";
+    }
+
+    /**
+     * Sets the licence
+     *
+     * @param {string} type
+     * @param {string} owner
+     */
+
+  }, {
+    key: "setLicence",
+    value: function setLicence(type, owner) {
+      if (type) {
+        if (type === 'MIT') {
+          /*this.licencePanelBody.querySelector('.panel-body').innerHTML = `
+          <p>Copyright ${(new Date()).getFullYear()} ${owner}</p>
+            <p>Permission is hereby granted, free of charge, to any person obtaining a copy
+          of this software and associated documentation files (the "Software"), to deal
+          in the Software without restriction, including without limitation the rights
+          to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+          copies of the Software, and to permit persons to whom the Software is
+          furnished to do so, subject to the following conditions:</p>
+            <p>The above copyright notice and this permission notice shall be included in
+          all copies or substantial portions of the Software.</p>
+            <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+          IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+          FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+          AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+          LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+          OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+          THE SOFTWARE.</p>
+          `;*/
+
+          this.licencePanelBody.querySelector('.panel-body').innerHTML = "\n          <dl class=\"dl-horizontal\">\n            <dt>Can</dt>\n            <dd>Use commercially</dd>\n            <dd>Modify</dd>\n            <dd>Distribute</dd>\n            <dd>Sublicense</dd>\n            <dd>Private use</dd>\n\n            <dt>Cannot</dt>\n            <dd>Hold liable</dd>\n\n            <dt>Must</dt>\n            <dd>Include copyright</dd>\n            <dd>Include license</dd>\n          </dl>\n        ";
+        } else {
+          this.licencePanelBody.querySelector('.panel-body').innerText = type;
+        }
+
+        (0, _elements.show)(this.licencePanelHeading);
+      }
+
+      // Close licence panel body by default
+      (0, _elements.hide)(this.licencePanelBody);
+    }
+
+    /**
+     * Sets the long description
+     *
+     * @param {string} owner
+     */
+
+  }, {
+    key: "setOwner",
+    value: function setOwner(owner) {
+      if (owner) {
+        this.owner.innerHTML = _dictionary2.default.get('contentTypeOwner', { ':owner': owner });
+      } else {
+        this.owner.innerHTML = '';
+      }
+    }
+
+    /**
+     * Sets the example url
+     *
+     * @param {string} url
+     */
+
+  }, {
+    key: "setExample",
+    value: function setExample(url) {
+      this.demoButton.setAttribute('href', url || '#');
+      toggleVisibility(this.demoButton, !isEmpty(url));
+    }
+
+    /**
+     * Sets if the content type is installed
+     *
+     * @param {boolean} installed
+     */
+
+  }, {
+    key: "setIsInstalled",
+    value: function setIsInstalled(installed) {
+      this.showButtonBySelector(installed ? '.button-use' : '.button-install');
+    }
+
+    /**
+     * Marks content type as restricted, disabling installing and using the content type.
+     *
+     * @param {boolean} restricted True if content type is restricted
+     */
+
+  }, {
+    key: "setIsRestricted",
+    value: function setIsRestricted(restricted) {
+      if (restricted) {
+        disable(this.useButton);
+        disable(this.installButton);
+      } else {
+        enable(this.useButton);
+        enable(this.installButton);
+      }
+    }
+
+    /**
+     * Hides all buttons and shows the button on the selector again
+     *
+     * @param {string}selector
+     */
+
+  }, {
+    key: "showButtonBySelector",
+    value: function showButtonBySelector(selector) {
+      var button = this.buttonBar.querySelector(selector);
+
+      if (button) {
+        hideAll(this.buttons);
+        (0, _elements.show)(button);
+      }
+    }
+
+    /**
+     * Hides the root element
+     */
+
+  }, {
+    key: "hide",
+    value: function hide() {
+      (0, _elements.hide)(this.rootElement);
+    }
+
+    /**
+     * Shows the root element
+     */
+
+  }, {
+    key: "show",
+    value: function show() {
+      (0, _elements.show)(this.rootElement);
+    }
+
+    /**
+     * Focuses on the title
+     */
+
+  }, {
+    key: "focus",
+    value: function focus() {
+      var _this4 = this;
+
+      setTimeout(function () {
+        return _this4.rootElement.focus();
+      }, 10);
+    }
+
+    /**
+     * Returns whether the detailview is hidden
+     *
+     * @return {boolean}
+     */
+
+  }, {
+    key: "isHidden",
+    value: function isHidden() {
+      return _isHidden(this.rootElement);
+    }
+
+    /**
+     * Returns the root html element
+     * @return {HTMLElement}
+     */
+
+  }, {
+    key: "getElement",
+    value: function getElement() {
+      return this.rootElement;
+    }
+  }]);
+
+  return ContentTypeDetailView;
+}();
+
+exports.default = ContentTypeDetailView;
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _contentTypeDetailView = __webpack_require__(15);
+
+var _contentTypeDetailView2 = _interopRequireDefault(_contentTypeDetailView);
+
+var _eventful = __webpack_require__(2);
+
+var _dictionary = __webpack_require__(3);
+
+var _dictionary2 = _interopRequireDefault(_dictionary);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @class
+ * @mixes Eventful
+ */
+var ContentTypeDetail = function () {
+  function ContentTypeDetail(state, services) {
+    _classCallCheck(this, ContentTypeDetail);
+
+    // add event system
+    _extends(this, (0, _eventful.Eventful)());
+
+    // services
+    this.services = services;
+
+    this.apiVersion = state.apiVersion;
+
+    // views
+    this.view = new _contentTypeDetailView2.default(state);
+    this.view.on('install', this.install, this);
+
+    // propagate events
+    this.propagate(['close', 'select'], this.view);
+  }
+
+  /**
+   * Hides the detail view
+   */
+
+
+  _createClass(ContentTypeDetail, [{
+    key: 'hide',
+    value: function hide() {
+      this.view.hide();
+    }
+
+    /**
+     * Shows the detail view
+     */
+
+  }, {
+    key: 'show',
+    value: function show() {
+      this.view.show();
+    }
+
+    /**
+     * Focuses on the title
+     */
+
+  }, {
+    key: 'focus',
+    value: function focus() {
+      this.view.focus();
+    }
+
+    /**
+     * Returns whether the detailview is hidden
+     *
+     * @return {boolean}
+     */
+
+  }, {
+    key: 'isHidden',
+    value: function isHidden() {
+      return this.view.isHidden();
+    }
+
+    /**
+     * Loads a Content Type description
+     *
+     * @param {string} id
+     *
+     * @return {Promise.<ContentType>}
+     */
+
+  }, {
+    key: 'loadById',
+    value: function loadById(id) {
+      this.services.contentType(id).then(this.update.bind(this));
+    }
+
+    /**
+     * Loads a Content Type description
+     *
+     * @param {string} id
+     *
+     * @return {Promise.<ContentType>}
+     */
+
+  }, {
+    key: 'install',
+    value: function install(_ref) {
+      var _this = this;
+
+      var id = _ref.id;
+
+      // set spinner
+      this.view.showButtonBySelector('.button-installing');
+
+      return this.services.installContentType(id).then(function (response) {
+        _this.view.setIsInstalled(true);
+        _this.view.showButtonBySelector('.button-get');
+        _this.view.setInstallMessage({
+          message: _dictionary2.default.get('contentTypeInstallSuccess', { ':contentType': id })
+        });
+      }).catch(function (error) {
+        _this.view.showButtonBySelector('.button-install');
+
+        // print error message
+        var errorMessage = error.errorCode ? error : {
+          success: false,
+          errorCode: 'RESPONSE_FAILED',
+          message: _dictionary2.default.get('contentTypeInstallError', { ':contentType': id })
+        };
+        _this.view.setInstallMessage(errorMessage);
+
+        // log whole error message to console
+        console.error('Installation error', error);
+      });
+    }
+
+    /**
+     * Updates the view with the content type data
+     *
+     * @param {ContentType} contentType
+     */
+
+  }, {
+    key: 'update',
+    value: function update(contentType) {
+      this.view.reset();
+      this.view.setId(contentType.machineName);
+      this.view.setTitle(contentType.title || contentType.machineName);
+      this.view.setDescription(contentType.description);
+      this.view.setImage(contentType.icon);
+      this.view.setExample(contentType.example);
+      this.view.setOwner(contentType.owner);
+      this.view.setIsInstalled(contentType.installed);
+      this.view.setLicence(contentType.license, contentType.owner);
+      this.view.setIsRestricted(contentType.restricted);
+
+      // Check if api version is supported
+      var apiVersionSupported = this.apiVersion.major > contentType.h5pMajorVersion || this.apiVersion.major == contentType.h5pMajorVersion && this.apiVersion.minor >= contentType.h5pMinorVersion;
+
+      // If not installed and unsupported version - let view know
+      if (!contentType.installed && !apiVersionSupported) {
+        this.view.apiVersionUnsupported();
+      }
+
+      // update carousel
+      this.view.removeAllImagesInCarousel();
+      contentType.screenshots.forEach(this.view.addImageToCarousel, this.view);
+    }
+
+    /**
+     * Returns the root html element
+     *
+     * @return {HTMLElement}
+     */
+
+  }, {
+    key: 'getElement',
+    value: function getElement() {
+      return this.view.getElement();
+    }
+  }]);
+
+  return ContentTypeDetail;
+}();
+
+exports.default = ContentTypeDetail;
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _functional = __webpack_require__(0);
+
+var _elements = __webpack_require__(1);
+
+var _eventful = __webpack_require__(2);
+
+var _events = __webpack_require__(5);
+
+var _contentTypePlaceholder = __webpack_require__(10);
+
+var _contentTypePlaceholder2 = _interopRequireDefault(_contentTypePlaceholder);
+
+var _keyboard = __webpack_require__(4);
+
+var _keyboard2 = _interopRequireDefault(_keyboard);
+
+var _dictionary = __webpack_require__(3);
+
+var _dictionary2 = _interopRequireDefault(_dictionary);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @function
+ */
+var _hide = (0, _elements.setAttribute)('aria-hidden', 'true');
+
+/**
+ * @function
+ */
+var _show = (0, _elements.setAttribute)('aria-hidden', 'false');
+
+/**
+ * @function
+ */
+var getRowId = (0, _elements.getAttribute)('data-id');
+
+/**
+ * @class
+ * @mixes Eventful
+ * @fires Hub#select
+ * @fires ContentTypeList#row-selected
+ */
+
+var ContentTypeListView = function () {
+  function ContentTypeListView(state) {
+    var _this = this;
+
+    _classCallCheck(this, ContentTypeListView);
+
+    this.state = state;
+
+    // add event system
+    _extends(this, (0, _eventful.Eventful)());
+
+    // setup keyboard
+    this.keyboard = new _keyboard2.default();
+    this.keyboard.onSelect = function (element) {
+      _this.trigger('row-selected', {
+        element: element,
+        id: getRowId(element)
+      });
+    };
+
+    // create root element
+    this.rootElement = document.createElement('ul');
+    this.rootElement.setAttribute('role', 'list');
+    this.rootElement.className = 'content-type-list';
+  }
+
+  /**
+   * Hides the root element
+   */
+
+
+  _createClass(ContentTypeListView, [{
+    key: "hide",
+    value: function hide() {
+      _hide(this.rootElement);
+    }
+
+    /**
+     * Shows the root element
+     */
+
+  }, {
+    key: "show",
+    value: function show() {
+      _show(this.rootElement);
+    }
+
+    /**
+     * Focuses on the previously selected element
+     */
+
+  }, {
+    key: "focus",
+    value: function focus() {
+      var selectedElement = (0, _elements.querySelector)('li[tabindex="0"]', this.rootElement);
+
+      if (selectedElement) {
+        selectedElement.focus();
+      }
+    }
+
+    /**
+     * Removes all rows from root element
+     */
+
+  }, {
+    key: "removeAllRows",
+    value: function removeAllRows() {
+      while (this.rootElement.hasChildNodes()) {
+        var row = this.rootElement.lastChild;
+
+        this.keyboard.removeElement(row);
+        this.rootElement.removeChild(row);
+      }
+    }
+
+    /**
+     * Adds a row
+     *
+     * @param {ContentType} contentType
+     */
+
+  }, {
+    key: "addRow",
+    value: function addRow(contentType) {
+      var row = this.createContentTypeRow(contentType, this);
+      (0, _events.relayClickEventAs)('row-selected', this, row);
+      this.rootElement.appendChild(row);
+      this.keyboard.addElement(row);
+    }
+
+    /**
+     * Takes a Content Type configuration and creates a row dom
+     *
+     * @param {ContentType} contentType
+     * @param {Eventful} scope
+     *
+     * @return {HTMLElement}
+     */
+
+  }, {
+    key: "createContentTypeRow",
+    value: function createContentTypeRow(contentType, scope) {
+      // create ids
+      var index = this.rootElement.querySelectorAll('li').length;
+      var contentTypeRowTitleId = "content-type-row-title-" + index;
+      var contentTypeRowDescriptionId = "content-type-row-description-" + index;
+
+      // field configuration
+      var useButtonConfig = { text: _dictionary2.default.get('contentTypeUseButtonLabel'), cls: 'button-primary', icon: '' };
+      var installButtonConfig = { text: _dictionary2.default.get('contentTypeGetButtonLabel'), cls: 'button-inverse-primary button-install', icon: 'icon-arrow-thick' };
+      var button = contentType.installed ? useButtonConfig : installButtonConfig;
+      var title = contentType.title || contentType.machineName;
+      var description = contentType.summary || '';
+      var image = contentType.icon || _contentTypePlaceholder2.default;
+      var disabled = contentType.restricted ? 'disabled="disabled"' : '';
+
+      // row item
+      var element = document.createElement('li');
+      element.id = "content-type-" + contentType.machineName;
+      element.setAttribute('data-id', contentType.machineName);
+      element.setAttribute('aria-labelledby', contentTypeRowTitleId);
+      element.setAttribute('aria-describedby', contentTypeRowDescriptionId);
+
+      // create html
+      element.innerHTML = "\n      <img class=\"img-responsive\" src=\"" + image + "\" alt=\"" + title + " " + _dictionary2.default.get('contentTypeIconAltText') + "\" />\n\n      <div class=\"content-type-row-info\">\n        <h4 id=\"" + contentTypeRowTitleId + "\">" + title + "</h4>\n        <div id=\"" + contentTypeRowDescriptionId + "\" class=\"description\">" + description + "</div>\n      </div>\n\n      <div class=\"content-type-row-button\">\n        <button aria-describedby=\"" + contentTypeRowTitleId + "\" class=\"button " + button.cls + "\" data-id=\"" + contentType.machineName + "\" tabindex=\"0\" " + disabled + ">\n          <span class=\"" + button.icon + "\"></span>\n          " + button.text + "\n        </button>\n      </div>\n   ";
+
+      // handle use button
+      var useButton = element.querySelector('.button-primary');
+      if (useButton) {
+        (0, _events.relayClickEventAs)('select', scope, useButton);
+      }
+
+      return element;
+    }
+
+    /**
+     * Returns the root element
+     *
+     * @return {HTMLElement}
+     */
+
+  }, {
+    key: "getElement",
+    value: function getElement() {
+      return this.rootElement;
+    }
+  }]);
+
+  return ContentTypeListView;
+}();
+
+exports.default = ContentTypeListView;
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _contentTypeListView = __webpack_require__(17);
+
+var _contentTypeListView2 = _interopRequireDefault(_contentTypeListView);
+
+var _eventful = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Row selected event
+ * @event ContentTypeList#row-selected
+ * @type {SelectedElement}
+ */
+/**
+ * Update content type list event
+ * @event ContentTypeList#update-content-type-list
+ * @type {SelectedElement}
+ */
+/**
+ * @class
+ * @mixes Eventful
+ * @fires Hub#select
+ * @fires ContentTypeList#row-selected
+ * @fires ContentTypeList#update-content-type-list
+ */
+var ContentTypeList = function () {
+  function ContentTypeList(state) {
+    _classCallCheck(this, ContentTypeList);
+
+    // add event system
+    _extends(this, (0, _eventful.Eventful)());
+
+    // add the view
+    this.view = new _contentTypeListView2.default(state);
+    this.propagate(['row-selected', 'select'], this.view);
+  }
+
+  /**
+   * Hide this element
+   */
+
+
+  _createClass(ContentTypeList, [{
+    key: 'hide',
+    value: function hide() {
+      this.view.hide();
+    }
+
+    /**
+     * Show this element
+     */
+
+  }, {
+    key: 'show',
+    value: function show() {
+      this.view.show();
+    }
+  }, {
+    key: 'focus',
+    value: function focus() {
+      this.view.focus();
+    }
+
+    /**
+     * Update the list with new content types
+     *
+     * @param {ContentType[]} contentTypes
+     */
+
+  }, {
+    key: 'update',
+    value: function update(contentTypes) {
+      this.view.removeAllRows();
+      contentTypes.forEach(this.view.addRow, this.view);
+      this.trigger('update-content-type-list', {});
+    }
+
+    /**
+     * Returns the views root element
+     *
+     * @return {HTMLElement}
+     */
+
+  }, {
+    key: 'getElement',
+    value: function getElement() {
+      return this.view.getElement();
+    }
+  }]);
+
+  return ContentTypeList;
+}();
+
+exports.default = ContentTypeList;
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _messageView = __webpack_require__(7);
+
+var _messageView2 = _interopRequireDefault(_messageView);
+
+var _elements = __webpack_require__(1);
+
+var _functional = __webpack_require__(0);
+
+var _events = __webpack_require__(5);
+
+var _navbar = __webpack_require__(28);
+
+var _navbar2 = _interopRequireDefault(_navbar);
+
+var _eventful = __webpack_require__(2);
+
+var _dictionary = __webpack_require__(3);
+
+var _dictionary2 = _interopRequireDefault(_dictionary);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @param {HTMLElement[]} elements
+ * @function
+ */
+var unselectAll = (0, _functional.forEach)((0, _elements.removeAttribute)('aria-selected'));
+
+/**
+ * @constant {number}
+ */
+var KEY_CODE_TAB = 9;
+
+/**
+ * @class ContentBrowserView
+ * @mixes Eventful
+ */
+
+var ContentBrowserView = function () {
+  /**
+   * @constructor
+   * @param {object} state
+   */
+  function ContentBrowserView(state) {
+    var _this = this;
+
+    _classCallCheck(this, ContentBrowserView);
+
+    // add event system
+    _extends(this, (0, _eventful.Eventful)());
+
+    // general configuration
+    this.typeAheadEnabled = true;
+
+    // create elements
+    this.rootElement = this.createElement(state);
+
+    // pick elements
+    this.menu = this.rootElement.querySelector('nav');
+    this.menubar = this.rootElement.querySelector('.navbar-nav');
+    this.inputField = this.rootElement.querySelector('[role="search"] input');
+    this.displaySelected = this.rootElement.querySelector('.navbar-toggler-selected');
+    var inputButton = this.rootElement.querySelector('[role="search"] .input-group-addon');
+
+    // input field
+    this.inputField.addEventListener('keyup', function (event) {
+      if (event.keyCode != KEY_CODE_TAB) {
+        var searchbar = event.target.parentElement.querySelector('#hub-search-bar');
+
+        // Only searching if the enter key is pressed
+        if (_this.typeAheadEnabled || event.which == 13 || event.keyCode == 13) {
+          _this.trigger('search', {
+            element: searchbar,
+            query: searchbar.value
+          });
+        }
+      }
+    });
+
+    // input button
+    inputButton.addEventListener('click', function (event) {
+      var searchbar = event.target.parentElement.querySelector('#hub-search-bar');
+
+      _this.trigger('search', {
+        element: searchbar,
+        query: searchbar.value
+      });
+
+      searchbar.focus();
+    });
+  }
+
+  /**
+   * Creates the menu group element
+   *
+   * @param {object} state
+   *
+   * @return {HTMLElement}
+   */
+
+
+  _createClass(ContentBrowserView, [{
+    key: "createElement",
+    value: function createElement(state) {
+      var menuId = 'content-type-filter';
+      var searchText = _dictionary2.default.get('contentTypeSearchFieldPlaceholder');
+
+      // create element
+      var element = document.createElement('div');
+      element.className = 'content-type-section-view';
+      element.innerHTML = "\n      <div class=\"menu-group\">\n        <nav  role=\"menubar\" class=\"navbar\">\n          <div class=\"navbar-header\">\n             <button class=\"navbar-toggler navbar-toggler-right\" tabindex=\"0\" aria-haspopup=\"true\" aria-controls=\"" + menuId + "\" aria-expanded=\"false\">\n               <span class=\"icon-accordion-arrow\"></span>\n             </button>\n            <span class=\"navbar-toggler-selected\"></span>\n            <span class=\"navbar-brand\">" + _dictionary2.default.get("contentTypeSectionTitle") + "</span>\n          </div>\n\n          <ul id=\"" + menuId + "\" class=\"navbar-nav\"></ul>\n        </nav>\n\n        <div class=\"input-group\" role=\"search\">\n          <input id=\"hub-search-bar\" class=\"form-control form-control-rounded\" type=\"text\" aria-label=\"" + searchText + "\" placeholder=\"" + searchText + "\" />\n          <div class=\"input-group-addon icon-search\"></div>\n        </div>\n      </div>";
+
+      return element;
+    }
+  }, {
+    key: "displayMessage",
+    value: function displayMessage(config) {
+      var self = this;
+      // Set the action
+      // TODO - should be translatable
+      config.action = _dictionary2.default.get('reloadButtonLabel');
+
+      var messageView = new _messageView2.default(config);
+      var element = messageView.getElement();
+
+      messageView.on('action-clicked', function () {
+        self.rootElement.classList.remove('error');
+        element.parentNode.removeChild(element);
+        self.trigger('reload');
+      });
+
+      this.rootElement.classList.add('error');
+      this.rootElement.appendChild(messageView.getElement());
+    }
+
+    /**
+     * Adds a menu item
+     *
+     * @param {string} title
+     * @param {string} id
+     * @param {boolean} selected Determines if tab is already selected
+     * @param {string} eventName Name of event that tab will fire off
+     *
+     * @return {HTMLElement}
+     */
+
+  }, {
+    key: "addMenuItem",
+    value: function addMenuItem(_ref) {
+      var _this2 = this;
+
+      var title = _ref.title,
+          id = _ref.id,
+          selected = _ref.selected,
+          eventName = _ref.eventName;
+
+      var element = document.createElement('li');
+      element.setAttribute('role', 'menuitem');
+      element.setAttribute('data-id', id);
+      element.innerText = title;
+
+      // sets if this menuitem should be selected
+      if (selected) {
+        element.setAttribute('aria-selected', 'true');
+        this.displaySelected.innerText = title;
+        this.trigger('menu-selected', {
+          element: element,
+          choice: eventName
+        });
+      }
+
+      element.addEventListener('click', function (event) {
+        _this2.trigger('menu-selected', {
+          element: event.target,
+          choice: eventName
+        });
+      });
+
+      // add to menu bar
+      this.menubar.appendChild(element);
+      return element;
+    }
+
+    /**
+     * Clears the input field
+     */
+
+  }, {
+    key: "clearInputField",
+    value: function clearInputField() {
+      this.inputField.value = '';
+    }
+
+    /**
+     * Sets the name of the currently selected filter
+     *
+     * @param {string} selectedName
+     */
+
+  }, {
+    key: "setDisplaySelected",
+    value: function setDisplaySelected(selectedName) {
+      this.displaySelected.innerText = selectedName;
+    }
+
+    /**
+     * Selects a menu item by id
+     *
+     * @param {string} id
+     */
+
+  }, {
+    key: "selectMenuItemById",
+    value: function selectMenuItemById(id) {
+      var menuItems = this.menubar.querySelectorAll('[role="menuitem"]');
+      var selectedMenuItem = this.menubar.querySelector("[role=\"menuitem\"][data-id=\"" + id + "\"]");
+
+      if (selectedMenuItem) {
+        unselectAll(menuItems);
+        selectedMenuItem.setAttribute('aria-selected', 'true');
+
+        this.trigger('menu-selected', {
+          element: selectedMenuItem,
+          id: selectedMenuItem.getAttribute('data-id')
+        });
+      }
+    }
+  }, {
+    key: "initMenu",
+    value: function initMenu() {
+      // create the underline
+      var underline = document.createElement('span');
+      underline.className = 'menuitem-underline';
+      this.menubar.appendChild(underline);
+
+      // call init menu from sdk
+      (0, _navbar2.default)(this.menu);
+    }
+
+    /**
+     * Hides text styles and the menu underline
+     */
+
+  }, {
+    key: "addDeactivatedStyleToMenu",
+    value: function addDeactivatedStyleToMenu() {
+      this.menu.classList.remove('deactivated');
+    }
+    /**
+     * Restores text styles and the menu underline
+     */
+
+  }, {
+    key: "removeDeactivatedStyleFromMenu",
+    value: function removeDeactivatedStyleFromMenu() {
+      this.menu.classList.add("deactivated");
+    }
+
+    /**
+     * Returns the root element of the content browser
+     *
+     * @return {HTMLElement}
+     */
+
+  }, {
+    key: "getElement",
+    value: function getElement() {
+      return this.rootElement;
+    }
+  }]);
+
+  return ContentBrowserView;
+}();
+
+exports.default = ContentBrowserView;
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _contentTypeSectionView = __webpack_require__(19);
+
+var _contentTypeSectionView2 = _interopRequireDefault(_contentTypeSectionView);
+
+var _searchService = __webpack_require__(23);
+
+var _searchService2 = _interopRequireDefault(_searchService);
+
+var _contentTypeList = __webpack_require__(18);
+
+var _contentTypeList2 = _interopRequireDefault(_contentTypeList);
+
+var _contentTypeDetail = __webpack_require__(16);
+
+var _contentTypeDetail2 = _interopRequireDefault(_contentTypeDetail);
+
+var _eventful = __webpack_require__(2);
+
+var _dictionary = __webpack_require__(3);
+
+var _dictionary2 = _interopRequireDefault(_dictionary);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @class ContentTypeSection
+ * @mixes Eventful
+ *
+ * @fires Hub#select
+ */
+var ContentTypeSection = function () {
+
+  /**
+   * @param {object} state
+   * @param {HubServices} services
+   */
+  function ContentTypeSection(state, services) {
+    var _this = this;
+
+    _classCallCheck(this, ContentTypeSection);
+
+    // add event system
+    _extends(this, (0, _eventful.Eventful)());
+
+    /*
+     * Tab section constants
+     */
+    ContentTypeSection.Tabs = {
+      ALL: {
+        id: 'filter-all',
+        title: _dictionary2.default.get('contentTypeSectionAll'),
+        eventName: 'all'
+      },
+      MY_CONTENT_TYPES: {
+        id: 'filter-my-content-types',
+        title: _dictionary2.default.get('contentTypeSectionMine'),
+        eventName: 'my-content-types',
+        selected: true
+      },
+      MOST_POPULAR: {
+        id: 'filter-most-popular',
+        title: _dictionary2.default.get('contentTypeSectionPopular'),
+        eventName: 'most-popular'
+      }
+    };
+
+    // add view
+    this.view = new _contentTypeSectionView2.default(state);
+
+    // controller
+    this.searchService = new _searchService2.default(services);
+    this.contentTypeList = new _contentTypeList2.default();
+    this.contentTypeDetail = new _contentTypeDetail2.default(state, services);
+
+    // Element for holding list and details views
+    var section = document.createElement('div');
+    section.classList.add('content-type-section');
+
+    this.rootElement = section;
+    this.rootElement.appendChild(this.contentTypeList.getElement());
+    this.rootElement.appendChild(this.contentTypeDetail.getElement());
+
+    this.view.getElement().appendChild(this.rootElement);
+
+    // propagate events
+    this.propagate(['select', 'update-content-type-list'], this.contentTypeList);
+    this.propagate(['select'], this.contentTypeDetail);
+    this.propagate(['reload'], this.view);
+
+    // register listeners
+    this.view.on('search', this.search, this);
+    this.view.on('search', this.view.selectMenuItemById.bind(this.view, ContentTypeSection.Tabs.ALL.id));
+    // this.view.on('search', this.resetMenuOnEnter, this);
+    this.view.on('menu-selected', this.closeDetailView, this);
+    this.view.on('menu-selected', this.applySearchFilter, this);
+    this.view.on('menu-selected', this.clearInputField, this);
+    this.view.on('menu-selected', this.updateDisplaySelected, this);
+    this.contentTypeList.on('row-selected', this.showDetailView, this);
+    this.contentTypeDetail.on('close', this.closeDetailView, this);
+    this.contentTypeDetail.on('select', this.closeDetailView, this);
+
+    // add menu items
+    Object.keys(ContentTypeSection.Tabs).forEach(function (tab) {
+      return _this.view.addMenuItem(ContentTypeSection.Tabs[tab]);
+    });
+    this.view.initMenu();
+  }
+
+  /**
+   * Handle errors communicating with HUB
+   */
+
+
+  _createClass(ContentTypeSection, [{
+    key: "handleError",
+    value: function handleError(error) {
+      // TODO - use translation system:
+      this.view.displayMessage({
+        type: 'error',
+        title: _dictionary2.default.get('errorCommunicatingHubTitle'),
+        content: _dictionary2.default.get('errorCommunicatingHubContent')
+      });
+    }
+
+    /**
+     * Executes a search and updates the content type list
+     *
+     * @param {string} query
+     */
+
+  }, {
+    key: "search",
+    value: function search(_ref) {
+      var _this2 = this;
+
+      var query = _ref.query,
+          keyCode = _ref.keyCode;
+
+      this.searchService.search(query).then(function (contentTypes) {
+        return _this2.contentTypeList.update(contentTypes);
+      });
+    }
+
+    /**
+     * Updates the displayed name of the selected filter for mobile
+     *
+     * @param {SelectedElement} event
+     */
+
+  }, {
+    key: "updateDisplaySelected",
+    value: function updateDisplaySelected(event) {
+      this.view.setDisplaySelected(event.element.innerText);
+    }
+
+    /**
+     * Applies search filter depending on what event it receives
+     *
+     * @param {Object} e Event
+     * @param {string} e.choice Event name of chosen tab
+     */
+
+  }, {
+    key: "applySearchFilter",
+    value: function applySearchFilter(e) {
+      var _this3 = this;
+
+      switch (e.choice) {
+        case ContentTypeSection.Tabs.ALL.eventName:
+          this.searchService.sortOn('restricted').then(function (sortedContentTypes) {
+            return _this3.contentTypeList.update(sortedContentTypes);
+          });
+          break;
+
+        case ContentTypeSection.Tabs.MY_CONTENT_TYPES.eventName:
+          this.searchService.filterOutRestricted().then(function (filteredContentTypes) {
+            return _this3.searchService.sortOnRecent(filteredContentTypes);
+          }).then(function (sortedContentTypes) {
+            return _this3.contentTypeList.update(sortedContentTypes);
+          });
+          break;
+
+        case ContentTypeSection.Tabs.MOST_POPULAR.eventName:
+          var sortOrder = ['restricted', 'popularity'];
+          this.searchService.sortOn(sortOrder).then(function (sortedContentTypes) {
+            return _this3.contentTypeList.update(sortedContentTypes);
+          });
+          break;
+      }
+    }
+
+    /**
+     * Clears the input field
+     *
+     * @param {string} id
+     */
+
+  }, {
+    key: "clearInputField",
+    value: function clearInputField(_ref2) {
+      var id = _ref2.id;
+
+      if (id !== ContentTypeSection.Tabs.ALL.id) {
+        this.view.clearInputField();
+      }
+    }
+
+    /**
+     * Shows detail view
+     *
+     * @param {string} id
+     */
+
+  }, {
+    key: "showDetailView",
+    value: function showDetailView(_ref3) {
+      var _this4 = this;
+
+      var id = _ref3.id;
+
+      this.contentTypeList.hide();
+      this.contentTypeDetail.loadById(id);
+      this.contentTypeDetail.show();
+      this.view.typeAheadEnabled = false;
+      this.view.removeDeactivatedStyleFromMenu();
+
+      // Wait for transition before focusing since focusing an element will force the browser to
+      // put that element into view. Doing so before the element is in the correct position will
+      // skew all elements on the page.
+      setTimeout(function () {
+        _this4.contentTypeDetail.focus();
+      }, 300);
+    }
+
+    /**
+     * Close detail view
+     */
+
+  }, {
+    key: "closeDetailView",
+    value: function closeDetailView() {
+      if (!this.contentTypeDetail.isHidden()) {
+        this.contentTypeDetail.hide();
+        this.contentTypeList.show();
+        this.view.typeAheadEnabled = true;
+        this.view.addDeactivatedStyleToMenu();
+        this.contentTypeList.focus();
+      }
+    }
+
+    /**
+     * Returns the element
+     *
+     * @return {HTMLElement}
+     */
+
+  }, {
+    key: "getElement",
+    value: function getElement() {
+      return this.view.getElement();
+    }
+  }]);
+
+  return ContentTypeSection;
+}();
+
+exports.default = ContentTypeSection;
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(Promise) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+__webpack_require__(25);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @typedef {object} ContentType
+ * @property {string} machineName
+ * @property {string} majorVersion
+ * @property {string} minorVersion
+ * @property {string} patchVersion
+ * @property {string} h5pMajorVersion
+ * @property {string} h5pMinorVersion
+ * @property {string} summary
+ * @property {string} description
+ * @property {string} icon
+ * @property {string} createdAt
+ * @property {string} updated_At
+ * @property {string} isRecommended
+ * @property {string} popularity
+ * @property {object[]} screenshots
+ * @property {string} license
+ * @property {string} example
+ * @property {string} tutorial
+ * @property {string[]} keywords
+ * @property {string} owner
+ * @property {boolean} installed
+ * @property {boolean} restricted
+ */
+var HubServices = function () {
+  /**
+   * @param {string} apiRootUrl
+   */
+  function HubServices(_ref) {
+    var apiRootUrl = _ref.apiRootUrl;
+
+    _classCallCheck(this, HubServices);
+
+    this.apiRootUrl = apiRootUrl;
+    this.setup();
+  }
+
+  /**
+   * Fetch the content type metadata
+   */
+
+
+  _createClass(HubServices, [{
+    key: 'setup',
+    value: function setup() {
+      this.cachedContentTypes = fetch(this.apiRootUrl + 'content-type-cache', {
+        method: 'GET',
+        credentials: 'include'
+      }).then(function (result) {
+        return result.json();
+      }).then(this.isValid);
+    }
+
+    /**
+     * Returns a list of content types
+     *
+     * @return {Promise.<ContentType[]>}
+     */
+
+  }, {
+    key: 'contentTypes',
+    value: function contentTypes() {
+      return this.cachedContentTypes.then(function (json) {
+        return json.libraries;
+      });
+    }
+
+    /**
+     * Returns a list of H5P Machine names ordered by most recently used
+     *
+     * @return {string[]}  Machine names
+     */
+
+  }, {
+    key: 'recentlyUsed',
+    value: function recentlyUsed() {
+      return this.cachedContentTypes.then(function (json) {
+        return json.recentlyUsed;
+      });
+    }
+
+    /**
+     * Returns a Content Type
+     *
+     * @param {string} machineName
+     *
+     * @return {Promise.<ContentType>}
+     */
+
+  }, {
+    key: 'contentType',
+    value: function contentType(machineName) {
+      return this.contentTypes().then(function (contentTypes) {
+        return contentTypes.filter(function (contentType) {
+          return contentType.machineName === machineName;
+        })[0];
+      });
+
+      /*return fetch(`${this.apiRootUrl}content_type_cache/${id}`, {
+        method: 'GET',
+        credentials: 'include'
+      }).then(result => result.json());*/
+    }
+
+    /**
+     * Installs a content type on the server
+     *
+     * @param {string} id
+     *
+     * @return {Promise.<ContentType>}
+     */
+
+  }, {
+    key: 'installContentType',
+    value: function installContentType(id) {
+      return fetch(ns.getAjaxUrl('library-install', { id: id }), {
+        method: 'POST',
+        credentials: 'include',
+        body: ''
+      }).then(function (result) {
+        return result.json();
+      }).then(this.rejectIfNotSuccess);
+    }
+
+    // for testing with error
+    /*installContentType(id) {
+      return fetch(`${this.apiRootUrl}library-install`, {
+        method: 'GET',
+        credentials: 'include'
+      })
+        .then(result => result.json())
+        .then(this.rejectIfNotSuccess)
+        .then(result => {
+          return new Promise(function(resolve, reject) {
+            setTimeout(function() {
+              return resolve(result);
+            }, 1000);
+          });
+        });
+    }*/
+
+    /**
+     * Uploads a content type to the server for validation
+     *
+     * @param {FormData} formData Form containing the h5p that should be uploaded as 'h5p'
+     *
+     * @return {Promise} Returns the promise of a json containing the content json and the h5p json
+     */
+
+  }, {
+    key: 'uploadContent',
+    value: function uploadContent(formData) {
+      return fetch(this.apiRootUrl + 'library-upload', {
+        method: 'POST',
+        credentials: 'include',
+        body: formData
+      }).then(function (result) {
+        return result.json();
+      });
+    }
+
+    /**
+     *
+     * @param  {ContentType[]|ErrorMessage} response
+     *
+     * @return {Promise<ContentType[]|ErrorMessage>}
+     */
+
+  }, {
+    key: 'isValid',
+    value: function isValid(response) {
+      if (response.messageCode) {
+        return Promise.reject(response);
+      } else {
+        return Promise.resolve(response);
+      }
+    }
+
+    /**
+     * Rejects the Promise if response.success != true
+     *
+     * @param {object} response
+     *
+     * @return {Promise<ContentType[]|ErrorMessage>}
+     */
+
+  }, {
+    key: 'rejectIfNotSuccess',
+    value: function rejectIfNotSuccess(response) {
+      return Promise[response.success ? 'resolve' : 'reject'](response);
+    }
+  }]);
+
+  return HubServices;
+}();
+
+exports.default = HubServices;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _panel = __webpack_require__(8);
+
+var _panel2 = _interopRequireDefault(_panel);
+
+var _tabPanel = __webpack_require__(29);
+
+var _tabPanel2 = _interopRequireDefault(_tabPanel);
+
+var _functional = __webpack_require__(0);
+
+var _elements = __webpack_require__(1);
+
+var _eventful = __webpack_require__(2);
+
+var _events = __webpack_require__(5);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Tab change event
+ * @event HubView#tab-change
+ * @type {SelectedElement}
+ */
+/**
+ * Panel open or close event
+ * @event HubView#panel-change
+ * @type {SelectedElement}
+ */
+/**
+ * @constant {string}
+ */
+var ATTRIBUTE_DATA_ID = 'data-id';
+
+/**
+ * @function
+ */
+var isOpen = (0, _elements.hasAttribute)('open');
+
+/**
+ * @class
+ * @mixes Eventful
+ * @fires HubView#tab-change
+ */
+
+var HubView = function () {
+  /**
+   * @param {HubState} state
+   */
+  function HubView(state) {
+    _classCallCheck(this, HubView);
+
+    // add event system
+    _extends(this, (0, _eventful.Eventful)());
+
+    /**
+     * @type {HTMLElement}
+     */
+    this.rootElement = this.createPanel(state);
+
+    // select dynamic elements
+    this.panel = this.rootElement.querySelector('.panel');
+    this.toggler = this.rootElement.querySelector('[aria-expanded][aria-controls]');
+    this.selectedName = this.rootElement.querySelector('.h5p-hub-selected');
+    this.tablist = this.rootElement.querySelector('[role="tablist"]');
+    this.tabContainerElement = this.rootElement.querySelector('.tab-panel');
+
+    // initiates panel
+    (0, _panel2.default)(this.panel);
+
+    // relay events
+    (0, _events.relayClickEventAs)('panel-change', this, this.toggler);
+  }
+
+  /**
+   * Closes the panel
+   */
+
+
+  _createClass(HubView, [{
+    key: "closePanel",
+    value: function closePanel() {
+      this.toggler.setAttribute('aria-expanded', 'false');
+    }
+
+    /**
+     * Sets the title
+     *
+     * @param {string} title
+     */
+
+  }, {
+    key: "setTitle",
+    value: function setTitle(title) {
+      this.selectedName.innerText = title;
+    }
+
+    /**
+     * Creates the dom for the panel
+     *
+     * @param {string} title
+     * @param {string} sectionId
+     * @param {boolean} expanded
+     */
+
+  }, {
+    key: "createPanel",
+    value: function createPanel(_ref) {
+      var _ref$title = _ref.title,
+          title = _ref$title === undefined ? '' : _ref$title,
+          _ref$sectionId = _ref.sectionId,
+          sectionId = _ref$sectionId === undefined ? 'content-types' : _ref$sectionId,
+          _ref$expanded = _ref.expanded,
+          expanded = _ref$expanded === undefined ? false : _ref$expanded;
+
+      var labels = {
+        h5pHub: 'H5P Hub.'
+      };
+      var element = document.createElement('section');
+      element.className += "h5p-hub h5p-sdk";
+
+      element.innerHTML = "\n      <div class=\"panel\">\n        <div aria-level=\"1\" role=\"heading\">\n          <span role=\"button\" class=\"icon-hub-icon\" aria-expanded=\"" + expanded + "\" aria-controls=\"panel-body-" + sectionId + "\">\n          <span class=\"h5p-hub-description\">" + labels.h5pHub + "</span>\n          <span class=\"h5p-hub-selected\"></span>\n        </span>\n        </div>\n        <div id=\"panel-body-" + sectionId + "\" role=\"region\" aria-hidden=\"" + !expanded + "\">\n          <div class=\"tab-panel\">\n            <nav>\n              <ul role=\"tablist\"></ul>\n            </nav>\n          </div>\n        </div>\n      </div>";
+
+      return element;
+    }
+
+    /**
+     * Set if panel is open, this is used for outer border color
+     */
+
+  }, {
+    key: "togglePanelOpen",
+    value: function togglePanelOpen() {
+      var panel = this.panel;
+      if (isOpen(panel)) {
+        panel.removeAttribute('open');
+      } else {
+        panel.setAttribute('open', '');
+        setTimeout(function () {
+          panel.querySelector('#hub-search-bar').focus();
+        }, 20);
+      }
+    }
+
+    /**
+     * Adds a tab
+     *
+     * @param {string} title
+     * @param {string} id
+     * @param {HTMLElement} content
+     * @param {boolean} selected
+     */
+
+  }, {
+    key: "addTab",
+    value: function addTab(_ref2) {
+      var title = _ref2.title,
+          id = _ref2.id,
+          content = _ref2.content,
+          _ref2$selected = _ref2.selected,
+          selected = _ref2$selected === undefined ? false : _ref2$selected;
+
+      var tabId = "tab-" + id;
+      var tabPanelId = "tab-panel-" + id;
+
+      var tab = document.createElement('li');
+      tab.className += 'tab';
+      tab.id = tabId;
+      tab.setAttribute('aria-controls', tabPanelId);
+      tab.setAttribute('aria-selected', selected.toString());
+      tab.setAttribute(ATTRIBUTE_DATA_ID, id);
+      tab.setAttribute('role', 'tab');
+      tab.innerText = title;
+      (0, _events.relayClickEventAs)('tab-change', this, tab);
+
+      var tabPanel = document.createElement('div');
+      tabPanel.id = tabPanelId;
+      tabPanel.className += 'tabpanel';
+      tabPanel.setAttribute('aria-labelledby', tabId);
+      tabPanel.setAttribute('aria-hidden', (!selected).toString());
+      tabPanel.setAttribute('role', 'tabpanel');
+      tabPanel.appendChild(content);
+
+      this.tablist.appendChild(tab);
+      this.tabContainerElement.appendChild(tabPanel);
+
+      // fires the tab-change event when selected is created
+      if (selected) {
+        this.trigger('tab-change', {
+          element: tab,
+          id: id
+        });
+      }
+    }
+
+    /**
+     * Adds an animated border to the bottom of the tab
+     */
+
+  }, {
+    key: "addBottomBorder",
+    value: function addBottomBorder() {
+      this.tablist.appendChild(document.createElement('span'));
+    }
+  }, {
+    key: "initTabPanel",
+    value: function initTabPanel() {
+      (0, _tabPanel2.default)(this.tabContainerElement);
+    }
+
+    /**
+     * Sets the section
+     *
+     * @param {string} id
+     */
+
+  }, {
+    key: "setSectionType",
+    value: function setSectionType(_ref3) {
+      var id = _ref3.id;
+
+      this.panel.className = "h5p-section-" + id + " panel";
+    }
+
+    /**
+     * Returns the root html element
+     *
+     * @return {HTMLElement}
+     */
+
+  }, {
+    key: "getElement",
+    value: function getElement() {
+      return this.rootElement;
+    }
+  }]);
+
+  return HubView;
+}();
+
+exports.default = HubView;
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _functional = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @typedef {Object} MixedContentType
+ *
+ * @property {ContentType} contentType Original content type properties
+ * @property {number} score Indicates how well the content type matches the current search context
+ */
+
+/**
+ * @class
+ * The Search Service gets a content type from hub-services.js
+ * in the form of a promise. It then generates a score based
+ * on the different weightings of the content type fields and
+ * sorts the results based on the generated score.
+ */
+var SearchService = function () {
+  /**
+   * @param {HubServices} services
+   */
+  function SearchService(services) {
+    _classCallCheck(this, SearchService);
+
+    this.services = services;
+  }
+
+  /**
+   * Performs a search
+   *
+   * @param {String} query
+   *
+   * @return {Promise<ContentType[]>} A promise of an array of content types
+   */
+
+
+  _createClass(SearchService, [{
+    key: 'search',
+    value: function search(query) {
+      // Add content types to the search index
+      return this.services.contentTypes().then(filterByQuery(query));
+    }
+
+    /**
+     * Filter all content types by given property
+     *
+     * @param {string|Array} sortOrder One or more properties
+     *
+     * @return {Promise.<ContentType[]>|*}
+     */
+
+  }, {
+    key: 'sortOn',
+    value: function sortOn(sortOrder) {
+      return this.services.contentTypes().then(function (contentTypes) {
+        return multiSort(contentTypes, sortOrder);
+      });
+    }
+
+    /**
+     * Returns a list of content type objects sorted
+     * on most recently used
+     *
+     * @return {ContentType[]}  Content Types
+     */
+
+  }, {
+    key: 'sortOnRecent',
+    value: function sortOnRecent(contentTypes) {
+      return this.services.recentlyUsed().then(function (recentlyUsed) {
+        return sortContentTypesByMachineName(contentTypes, recentlyUsed);
+      });
+    }
+
+    /**
+     * Filter out restricted if it is defined and false
+     *
+     * @return {Promise.<ContentType[]>}
+     */
+
+  }, {
+    key: 'filterOutRestricted',
+    value: function filterOutRestricted() {
+      return this.services.contentTypes().then(function (contentTypes) {
+        return contentTypes.filter(function (contentType) {
+          return !contentType.restricted;
+        });
+      });
+    }
+  }]);
+
+  return SearchService;
+}();
+
+/**
+ * Sort on multiple properties
+ *
+ * @param {MixedContentType[]|ContentType[]} contentTypes Content types that should be sorted
+ * @param {string|string[]} sortOrder Order that sort properties should be applied
+ *
+ * @return {Array.<ContentType>} Content types sorted
+ */
+
+
+exports.default = SearchService;
+var multiSort = function multiSort(contentTypes, sortOrder) {
+  // Make sure all sorted instances are mixed content type
+  var mixedContentTypes = contentTypes.map(function (contentType) {
+    if (contentType.hasOwnProperty('score') && contentType.hasOwnProperty('contentType')) {
+      return contentType;
+    }
+
+    // Return a mixed content type with score 1 to survive filtering
+    return {
+      contentType: contentType,
+      score: 1
+    };
+  });
+
+  sortOrder = Array.isArray(sortOrder) ? sortOrder : [sortOrder];
+  return mixedContentTypes.sort(function (firstContentType, secondContentType) {
+    return handleSortType(firstContentType, secondContentType, sortOrder);
+  }).map(function (mixedContentType) {
+    return mixedContentType.contentType;
+  });
+};
+
+/**
+ * Compares two content types and returns a sortable value for them
+ *
+ * @param {MixedContentType} firstContentType
+ * @param {MixedContentType} secondContentType
+ * @param {string[]} sortOrder Order that sort properties should be applied in
+ *
+ * @return {number} A number indicating how to sort the two content types
+ */
+var handleSortType = function handleSortType(firstContentType, secondContentType, sortOrder) {
+  switch (sortOrder[0]) {
+    case 'restricted':
+      return sortOnRestricted(firstContentType, secondContentType, sortOrder.slice(1));
+    case 'popularity':
+      return sortOnProperty(firstContentType, secondContentType, sortOrder[0], sortOrder.slice(1));
+    default:
+      return sortSearchResults(firstContentType, secondContentType);
+  }
+};
+
+/**
+ * Sort restricted content types. Restricted content types will be moved to the bottom of the
+ * list. Content types with undefined restricted property are consider not restricted.
+ *
+ * @param {MixedContentType} firstContentType
+ * @param {MixedContentType} secondContentType
+ * @param {string[]} sortOrder Order to apply sort properties
+ *
+ * @return {number} A standard comparable value for the two content types
+ */
+var sortOnRestricted = function sortOnRestricted(firstContentType, secondContentType, sortOrder) {
+  if (!firstContentType.contentType.restricted === !secondContentType.contentType.restricted) {
+    if (sortOrder.length) {
+      return handleSortType(firstContentType, secondContentType, sortOrder);
+    } else {
+      return 0;
+    }
+  } else if (firstContentType.contentType.restricted) {
+    return 1;
+  } else if (secondContentType.contentType.restricted) {
+    return -1;
+  }
+};
+
+/**
+ * Sort on a property. Any valid property can be applied. If the content type does not have the
+ * supplied property it will get moved to the bottom.
+ *
+ * @param {MixedContentType} firstContentType
+ * @param {MixedContentType} secondContentType
+ * @param {string} property Property that the content types will be sorted on, either
+ * numerically or lexically
+ * @param {string[]} sortOrder Remaining sort order to apply if two content types have the same
+ * value
+ *
+ * @return {number} A value indicating the comparison between the two content types
+ */
+var sortOnProperty = function sortOnProperty(firstContentType, secondContentType, property, sortOrder) {
+  // Property does not exist, move to bottom
+  if (!firstContentType.contentType.hasOwnProperty(property)) {
+    return 1;
+  }
+  if (!secondContentType.contentType.hasOwnProperty(property)) {
+    return -1;
+  }
+
+  // Sort on property
+  if (firstContentType.contentType[property] > secondContentType.contentType[property]) {
+    return 1;
+  } else if (firstContentType.contentType[property] < secondContentType.contentType[property]) {
+    return -1;
+  } else {
+    if (sortOrder.length) {
+      return handleSortType(firstContentType, secondContentType, sortOrder);
+    } else {
+      return 0;
+    }
+  }
+};
+
+/**
+ * Filters a list of content types based on a query
+ * @type {Function}
+ *
+ * @param {string} query
+ * @param {ContentType[]} contentTypes
+ */
+var filterByQuery = (0, _functional.curry)(function (query, contentTypes) {
+  if (query == '') {
+    return contentTypes;
+  }
+
+  // Append a search score to each content type
+  var filtered = contentTypes.map(function (contentType) {
+    return {
+      contentType: contentType,
+      score: getSearchScore(query, contentType)
+    };
+  }).filter(function (result) {
+    return result.score > 0;
+  });
+
+  return multiSort(filtered, ['restricted', 'default']);
+});
+
+/**
+ * Callback for Array.sort()
+ * Compares two content types on different criteria
+ *
+ * @param {MixedContentType} a First content type
+ * @param {MixedContentType} b Second content type
+ * @return {number}
+ */
+var sortSearchResults = function sortSearchResults(a, b) {
+  if (!a.contentType.installed && b.contentType.installed) {
+    return 1;
+  }
+  if (a.contentType.installed && !b.contentType.installed) {
+    return -1;
+  } else if (b.score !== a.score) {
+    return b.score - a.score;
+  } else {
+    return b.contentType.popularity - a.contentType.popularity;
+  }
+};
+
+/**
+ * Calculates weighting for different search terms based
+ * on existence of substrings
+ *
+ * @param  {string}       query
+ * @param  {ContentType}  contentType
+ * @return {number}
+ */
+var getSearchScore = function getSearchScore(query, contentType) {
+  var queries = query.split(' ').filter(function (query) {
+    return query !== '';
+  });
+  var queryScores = queries.map(function (query) {
+    return getScoreForEachQuery(query, contentType);
+  });
+  if (queryScores.indexOf(0) > -1) {
+    return 0;
+  }
+  return queryScores.reduce(function (a, b) {
+    return a + b;
+  }, 0);
+};
+
+/**
+ * Generates a score for a query based on a content type's properties
+ *
+ * @param  {string}       query
+ * @param  {ContentType}  contentType
+ * @return {number}
+ */
+var getScoreForEachQuery = function getScoreForEachQuery(query, contentType) {
+  query = query.trim();
+  if (hasSubString(query, contentType.title)) {
+    return 100;
+  } else if (hasSubString(query, contentType.summary)) {
+    return 5;
+  } else if (hasSubString(query, contentType.description)) {
+    return 5;
+  } else if (arrayHasSubString(query, contentType.keywords)) {
+    return 5;
+  } else if (hasSubString(query, contentType.machineName)) {
+    return 1;
+  } else {
+    return 0;
+  }
+};
+
+/**
+ * Checks if a needle is found in the haystack.
+ * Not case sensitive
+ *
+ * @param {string} needle
+ * @param {string} haystack
+ * @return {boolean}
+ */
+var hasSubString = function hasSubString(needle, haystack) {
+  if (haystack === undefined) {
+    return false;
+  }
+
+  return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
+};
+
+/**
+ * Helper function, checks if array has contains a substring
+ *
+ * @param  {String} subString
+ * @param  {Array} arr
+ * @return {boolean}
+ */
+var arrayHasSubString = function arrayHasSubString(subString, arr) {
+  if (arr === undefined || subString === '') {
+    return false;
+  }
+
+  return arr.some(function (string) {
+    return hasSubString(subString, string);
+  });
+};
+
+/**
+ * Filters an array of content type objects based
+ * on an order specified by a array of machine names
+ *
+ * @param  {ContentType[]} contentTypes
+ * @param  {string[]}     machineNames
+ * @return {ContentType[]}              filtered content types
+ */
+var sortContentTypesByMachineName = function sortContentTypesByMachineName(contentTypes, machineNames) {
+  return contentTypes.sort(function (a, b) {
+
+    var aIndex = machineNames.indexOf(a.machineName.toString());
+    var bIndex = machineNames.indexOf(b.machineName.toString());
+
+    if (aIndex === -1 && bIndex === -1) {
+      // neither are recently used
+      return 0;
+    } else if (aIndex !== -1 && bIndex === -1) {
+      // b is not recently used
+      return -1;
+    } else if (aIndex === -1 && bIndex !== -1) {
+      // a is not recently used
+      return 1;
+    } else if (aIndex !== -1 && bIndex !== -1) {
+      // both are recently used
+      return aIndex < bIndex ? -1 : 1;
+    }
+  });
+};
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _dictionary = __webpack_require__(3);
+
+var _dictionary2 = _interopRequireDefault(_dictionary);
+
+var _eventful = __webpack_require__(2);
+
+var _messageView = __webpack_require__(7);
+
+var _messageView2 = _interopRequireDefault(_messageView);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @class
+ * @mixes Eventful
+ *
+ * @fires Hub#upload
+ */
+var UploadSection = function () {
+  function UploadSection(state, services) {
+    _classCallCheck(this, UploadSection);
+
+    _extends(this, (0, _eventful.Eventful)());
+    this.services = services;
+
+    // Create the upload form
+    var uploadForm = this.renderUploadForm();
+    this.initUploadForm(uploadForm);
+
+    // Create a wrapper to hold user messages
+    this.messageWrapper = document.createElement('div');
+    this.messageWrapper.className = 'message-wrapper';
+
+    // Create the container and attach children
+    var element = document.createElement('div');
+    element.appendChild(this.messageWrapper);
+    element.appendChild(uploadForm);
+    this.rootElement = element;
+  }
+
+  /**
+   * Generates HTML for the upload form
+   *
+   * returns {HTMLElement}
+   */
+
+
+  _createClass(UploadSection, [{
+    key: 'renderUploadForm',
+    value: function renderUploadForm() {
+      // Create the html
+      // TODO create variables for links to h5p.org so they can be changed easily
+      var uploadForm = document.createElement('div');
+      uploadForm.innerHTML = '\n      <div class="upload-wrapper">\n        <div class="upload-form">\n          <input readonly class="upload-path" placeholder="' + _dictionary2.default.get("uploadPlaceholder") + '"/>\n          <button class="button use-button">Use</button>\n          <div class="input-wrapper">\n            <input type="file" />\n            <button class="button upload-button" tabindex="0">' + _dictionary2.default.get('uploadFileButtonLabel') + '</button>\n          </div>\n        </div>\n        <div class="upload-instructions">' + _dictionary2.default.get('uploadInstructions') + '</div>\n      </div>\n    ';
+
+      return uploadForm;
+    }
+
+    /**
+     * Adds logic to bind the buttons to the form
+     * and to bind the form to the plugin
+     *
+     * @param  {HTMLElement} uploadForm
+     */
+
+  }, {
+    key: 'initUploadForm',
+    value: function initUploadForm(uploadForm) {
+      var self = this;
+      var uploadInput = uploadForm.querySelector('.upload-wrapper input[type="file"]');
+      var uploadButton = uploadForm.querySelector('.upload-button');
+      var uploadPath = uploadForm.querySelector('.upload-path');
+      var useButton = uploadForm.querySelector('.use-button');
+
+      // Handle errors and update styles when a file is selected
+      uploadInput.onchange = function () {
+
+        if (this.value === '') {
+          return;
+        }
+
+        // Reset styles
+        self.clearUserMessages();
+
+        // Replace the placeholder text with the selected filepath
+        uploadPath.value = this.value.replace('C:\\fakepath\\', '');
+
+        // Update the upload button
+        uploadButton.textContent = _dictionary2.default.get('uploadFileButtonChangeLabel');
+
+        // Check that it's a h5p file
+        var fileExtension = self.getFileExtension(this.value);
+        if (fileExtension !== 'h5p') {
+          self.renderMessage({
+            type: 'error',
+            title: _dictionary2.default.get('h5pFileWrongExtensionTitle'),
+            content: _dictionary2.default.get('h5pFileWrongExtensionContent')
+          });
+
+          // Hide the 'use' button for non-h5p files
+          useButton.style.display = 'none';
+        } else {
+          // Only show the 'use' button once a h5p file has been selected
+          useButton.style.display = 'inline-block';
+        }
+      };
+
+      // Send the file to the plugin
+      useButton.addEventListener('click', function () {
+
+        // Add the H5P file to a form, ready for transportation
+        var data = new FormData();
+        data.append('h5p', uploadInput.files[0]);
+
+        // Upload content to the plugin
+        self.services.uploadContent(data).then(function (json) {
+          // Fire the received data to any listeners
+          self.trigger('upload', json);
+        });
+      });
+
+      // Allow users to upload a file by clicking on path field
+      uploadPath.onclick = function () {
+        uploadInput.click();
+      };
+
+      // Allow users to upload a file by pressing enter or spacebar
+      uploadPath.onkeydown = function (e) {
+        if (e.which === 13 || e.which === 32) {
+          uploadInput.click();
+        }
+      };
+
+      // Reuse the upload input logic to upload a file
+      uploadButton.onclick = function () {
+        uploadInput.click();
+      };
+
+      // Allow users to upload a file by pressing enter or spacebar
+      uploadButton.onkeydown = function (e) {
+        if (e.which === 13 || e.which === 32) {
+          uploadInput.click();
+        }
+      };
+
+      this.uploadInput = uploadInput;
+      this.uploadPath = uploadPath;
+      this.uploadButton = uploadButton;
+      this.useButton = useButton;
+    }
+
+    /**
+     * Clear input of file upload form
+     */
+
+  }, {
+    key: 'clearUploadForm',
+    value: function clearUploadForm() {
+      this.uploadInput.value = '';
+      this.uploadPath.value = _dictionary2.default.get("uploadPlaceholder");
+      this.uploadButton.textContent = _dictionary2.default.get('uploadFileButtonLabel');
+      this.useButton.style.display = 'none';
+    }
+
+    /**
+     * Empties the message wrapper
+     */
+
+  }, {
+    key: 'clearUserMessages',
+    value: function clearUserMessages() {
+      this.removeAllChildren(this.rootElement.querySelector('.message-wrapper'));
+    }
+
+    /**
+     * Helper function to get a file extension from a filename
+     *
+     * @param  {string} fileName
+     * @return {string}
+     */
+
+  }, {
+    key: 'getFileExtension',
+    value: function getFileExtension(fileName) {
+      return fileName.replace(/^.*\./, '');
+    }
+
+    /**
+     * Creates a message based on a configuration and prepends it to the message wrapper
+     *
+     * @param  {Object} config
+     */
+
+  }, {
+    key: 'renderMessage',
+    value: function renderMessage(config) {
+      var messageView = new _messageView2.default(config);
+      this.prepend(this.messageWrapper, messageView.getElement());
+    }
+
+    /**
+     * Helper function. Prepends an element to another
+     */
+
+  }, {
+    key: 'prepend',
+    value: function prepend(parent, child) {
+      parent.insertBefore(child, parent.firstChild);
+    }
+
+    /**
+     * Helper function to remove all children from a node
+     */
+
+  }, {
+    key: 'removeAllChildren',
+    value: function removeAllChildren(node) {
+      while (node.lastChild) {
+        node.removeChild(node.lastChild);
+      }
+    }
+  }, {
+    key: 'getElement',
+    value: function getElement() {
+      return this.rootElement;
+    }
+  }]);
+
+  return UploadSection;
+}();
+
+exports.default = UploadSection;
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(Promise) {
+
+(function (self) {
+  'use strict';
+
+  if (self.fetch) {
+    return;
+  }
+
+  var support = {
+    searchParams: 'URLSearchParams' in self,
+    iterable: 'Symbol' in self && 'iterator' in Symbol,
+    blob: 'FileReader' in self && 'Blob' in self && function () {
+      try {
+        new Blob();
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }(),
+    formData: 'FormData' in self,
+    arrayBuffer: 'ArrayBuffer' in self
+  };
+
+  if (support.arrayBuffer) {
+    var viewClasses = ['[object Int8Array]', '[object Uint8Array]', '[object Uint8ClampedArray]', '[object Int16Array]', '[object Uint16Array]', '[object Int32Array]', '[object Uint32Array]', '[object Float32Array]', '[object Float64Array]'];
+
+    var isDataView = function isDataView(obj) {
+      return obj && DataView.prototype.isPrototypeOf(obj);
+    };
+
+    var isArrayBufferView = ArrayBuffer.isView || function (obj) {
+      return obj && viewClasses.indexOf(Object.prototype.toString.call(obj)) > -1;
+    };
+  }
+
+  function normalizeName(name) {
+    if (typeof name !== 'string') {
+      name = String(name);
+    }
+    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
+      throw new TypeError('Invalid character in header field name');
+    }
+    return name.toLowerCase();
+  }
+
+  function normalizeValue(value) {
+    if (typeof value !== 'string') {
+      value = String(value);
+    }
+    return value;
+  }
+
+  // Build a destructive iterator for the value list
+  function iteratorFor(items) {
+    var iterator = {
+      next: function next() {
+        var value = items.shift();
+        return { done: value === undefined, value: value };
+      }
+    };
+
+    if (support.iterable) {
+      iterator[Symbol.iterator] = function () {
+        return iterator;
+      };
+    }
+
+    return iterator;
+  }
+
+  function Headers(headers) {
+    this.map = {};
+
+    if (headers instanceof Headers) {
+      headers.forEach(function (value, name) {
+        this.append(name, value);
+      }, this);
+    } else if (Array.isArray(headers)) {
+      headers.forEach(function (header) {
+        this.append(header[0], header[1]);
+      }, this);
+    } else if (headers) {
+      Object.getOwnPropertyNames(headers).forEach(function (name) {
+        this.append(name, headers[name]);
+      }, this);
+    }
+  }
+
+  Headers.prototype.append = function (name, value) {
+    name = normalizeName(name);
+    value = normalizeValue(value);
+    var oldValue = this.map[name];
+    this.map[name] = oldValue ? oldValue + ',' + value : value;
+  };
+
+  Headers.prototype['delete'] = function (name) {
+    delete this.map[normalizeName(name)];
+  };
+
+  Headers.prototype.get = function (name) {
+    name = normalizeName(name);
+    return this.has(name) ? this.map[name] : null;
+  };
+
+  Headers.prototype.has = function (name) {
+    return this.map.hasOwnProperty(normalizeName(name));
+  };
+
+  Headers.prototype.set = function (name, value) {
+    this.map[normalizeName(name)] = normalizeValue(value);
+  };
+
+  Headers.prototype.forEach = function (callback, thisArg) {
+    for (var name in this.map) {
+      if (this.map.hasOwnProperty(name)) {
+        callback.call(thisArg, this.map[name], name, this);
+      }
+    }
+  };
+
+  Headers.prototype.keys = function () {
+    var items = [];
+    this.forEach(function (value, name) {
+      items.push(name);
+    });
+    return iteratorFor(items);
+  };
+
+  Headers.prototype.values = function () {
+    var items = [];
+    this.forEach(function (value) {
+      items.push(value);
+    });
+    return iteratorFor(items);
+  };
+
+  Headers.prototype.entries = function () {
+    var items = [];
+    this.forEach(function (value, name) {
+      items.push([name, value]);
+    });
+    return iteratorFor(items);
+  };
+
+  if (support.iterable) {
+    Headers.prototype[Symbol.iterator] = Headers.prototype.entries;
+  }
+
+  function consumed(body) {
+    if (body.bodyUsed) {
+      return Promise.reject(new TypeError('Already read'));
+    }
+    body.bodyUsed = true;
+  }
+
+  function fileReaderReady(reader) {
+    return new Promise(function (resolve, reject) {
+      reader.onload = function () {
+        resolve(reader.result);
+      };
+      reader.onerror = function () {
+        reject(reader.error);
+      };
+    });
+  }
+
+  function readBlobAsArrayBuffer(blob) {
+    var reader = new FileReader();
+    var promise = fileReaderReady(reader);
+    reader.readAsArrayBuffer(blob);
+    return promise;
+  }
+
+  function readBlobAsText(blob) {
+    var reader = new FileReader();
+    var promise = fileReaderReady(reader);
+    reader.readAsText(blob);
+    return promise;
+  }
+
+  function readArrayBufferAsText(buf) {
+    var view = new Uint8Array(buf);
+    var chars = new Array(view.length);
+
+    for (var i = 0; i < view.length; i++) {
+      chars[i] = String.fromCharCode(view[i]);
+    }
+    return chars.join('');
+  }
+
+  function bufferClone(buf) {
+    if (buf.slice) {
+      return buf.slice(0);
+    } else {
+      var view = new Uint8Array(buf.byteLength);
+      view.set(new Uint8Array(buf));
+      return view.buffer;
+    }
+  }
+
+  function Body() {
+    this.bodyUsed = false;
+
+    this._initBody = function (body) {
+      this._bodyInit = body;
+      if (!body) {
+        this._bodyText = '';
+      } else if (typeof body === 'string') {
+        this._bodyText = body;
+      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
+        this._bodyBlob = body;
+      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
+        this._bodyFormData = body;
+      } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+        this._bodyText = body.toString();
+      } else if (support.arrayBuffer && support.blob && isDataView(body)) {
+        this._bodyArrayBuffer = bufferClone(body.buffer);
+        // IE 10-11 can't handle a DataView body.
+        this._bodyInit = new Blob([this._bodyArrayBuffer]);
+      } else if (support.arrayBuffer && (ArrayBuffer.prototype.isPrototypeOf(body) || isArrayBufferView(body))) {
+        this._bodyArrayBuffer = bufferClone(body);
+      } else {
+        throw new Error('unsupported BodyInit type');
+      }
+
+      if (!this.headers.get('content-type')) {
+        if (typeof body === 'string') {
+          this.headers.set('content-type', 'text/plain;charset=UTF-8');
+        } else if (this._bodyBlob && this._bodyBlob.type) {
+          this.headers.set('content-type', this._bodyBlob.type);
+        } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+          this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+        }
+      }
+    };
+
+    if (support.blob) {
+      this.blob = function () {
+        var rejected = consumed(this);
+        if (rejected) {
+          return rejected;
+        }
+
+        if (this._bodyBlob) {
+          return Promise.resolve(this._bodyBlob);
+        } else if (this._bodyArrayBuffer) {
+          return Promise.resolve(new Blob([this._bodyArrayBuffer]));
+        } else if (this._bodyFormData) {
+          throw new Error('could not read FormData body as blob');
+        } else {
+          return Promise.resolve(new Blob([this._bodyText]));
+        }
+      };
+
+      this.arrayBuffer = function () {
+        if (this._bodyArrayBuffer) {
+          return consumed(this) || Promise.resolve(this._bodyArrayBuffer);
+        } else {
+          return this.blob().then(readBlobAsArrayBuffer);
+        }
+      };
+    }
+
+    this.text = function () {
+      var rejected = consumed(this);
+      if (rejected) {
+        return rejected;
+      }
+
+      if (this._bodyBlob) {
+        return readBlobAsText(this._bodyBlob);
+      } else if (this._bodyArrayBuffer) {
+        return Promise.resolve(readArrayBufferAsText(this._bodyArrayBuffer));
+      } else if (this._bodyFormData) {
+        throw new Error('could not read FormData body as text');
+      } else {
+        return Promise.resolve(this._bodyText);
+      }
+    };
+
+    if (support.formData) {
+      this.formData = function () {
+        return this.text().then(decode);
+      };
+    }
+
+    this.json = function () {
+      return this.text().then(JSON.parse);
+    };
+
+    return this;
+  }
+
+  // HTTP methods whose capitalization should be normalized
+  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT'];
+
+  function normalizeMethod(method) {
+    var upcased = method.toUpperCase();
+    return methods.indexOf(upcased) > -1 ? upcased : method;
+  }
+
+  function Request(input, options) {
+    options = options || {};
+    var body = options.body;
+
+    if (input instanceof Request) {
+      if (input.bodyUsed) {
+        throw new TypeError('Already read');
+      }
+      this.url = input.url;
+      this.credentials = input.credentials;
+      if (!options.headers) {
+        this.headers = new Headers(input.headers);
+      }
+      this.method = input.method;
+      this.mode = input.mode;
+      if (!body && input._bodyInit != null) {
+        body = input._bodyInit;
+        input.bodyUsed = true;
+      }
+    } else {
+      this.url = String(input);
+    }
+
+    this.credentials = options.credentials || this.credentials || 'omit';
+    if (options.headers || !this.headers) {
+      this.headers = new Headers(options.headers);
+    }
+    this.method = normalizeMethod(options.method || this.method || 'GET');
+    this.mode = options.mode || this.mode || null;
+    this.referrer = null;
+
+    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
+      throw new TypeError('Body not allowed for GET or HEAD requests');
+    }
+    this._initBody(body);
+  }
+
+  Request.prototype.clone = function () {
+    return new Request(this, { body: this._bodyInit });
+  };
+
+  function decode(body) {
+    var form = new FormData();
+    body.trim().split('&').forEach(function (bytes) {
+      if (bytes) {
+        var split = bytes.split('=');
+        var name = split.shift().replace(/\+/g, ' ');
+        var value = split.join('=').replace(/\+/g, ' ');
+        form.append(decodeURIComponent(name), decodeURIComponent(value));
+      }
+    });
+    return form;
+  }
+
+  function parseHeaders(rawHeaders) {
+    var headers = new Headers();
+    // Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
+    // https://tools.ietf.org/html/rfc7230#section-3.2
+    var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/, ' ');
+    preProcessedHeaders.split(/\r?\n/).forEach(function (line) {
+      var parts = line.split(':');
+      var key = parts.shift().trim();
+      if (key) {
+        var value = parts.join(':').trim();
+        headers.append(key, value);
+      }
+    });
+    return headers;
+  }
+
+  Body.call(Request.prototype);
+
+  function Response(bodyInit, options) {
+    if (!options) {
+      options = {};
+    }
+
+    this.type = 'default';
+    this.status = 'status' in options ? options.status : 200;
+    this.ok = this.status >= 200 && this.status < 300;
+    this.statusText = 'statusText' in options ? options.statusText : 'OK';
+    this.headers = new Headers(options.headers);
+    this.url = options.url || '';
+    this._initBody(bodyInit);
+  }
+
+  Body.call(Response.prototype);
+
+  Response.prototype.clone = function () {
+    return new Response(this._bodyInit, {
+      status: this.status,
+      statusText: this.statusText,
+      headers: new Headers(this.headers),
+      url: this.url
+    });
+  };
+
+  Response.error = function () {
+    var response = new Response(null, { status: 0, statusText: '' });
+    response.type = 'error';
+    return response;
+  };
+
+  var redirectStatuses = [301, 302, 303, 307, 308];
+
+  Response.redirect = function (url, status) {
+    if (redirectStatuses.indexOf(status) === -1) {
+      throw new RangeError('Invalid status code');
+    }
+
+    return new Response(null, { status: status, headers: { location: url } });
+  };
+
+  self.Headers = Headers;
+  self.Request = Request;
+  self.Response = Response;
+
+  self.fetch = function (input, init) {
+    return new Promise(function (resolve, reject) {
+      var request = new Request(input, init);
+      var xhr = new XMLHttpRequest();
+
+      xhr.onload = function () {
+        var options = {
+          status: xhr.status,
+          statusText: xhr.statusText,
+          headers: parseHeaders(xhr.getAllResponseHeaders() || '')
+        };
+        options.url = 'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL');
+        var body = 'response' in xhr ? xhr.response : xhr.responseText;
+        resolve(new Response(body, options));
+      };
+
+      xhr.onerror = function () {
+        reject(new TypeError('Network request failed'));
+      };
+
+      xhr.ontimeout = function () {
+        reject(new TypeError('Network request failed'));
+      };
+
+      xhr.open(request.method, request.url, true);
+
+      if (request.credentials === 'include') {
+        xhr.withCredentials = true;
+      }
+
+      if ('responseType' in xhr && support.blob) {
+        xhr.responseType = 'blob';
+      }
+
+      request.headers.forEach(function (value, name) {
+        xhr.setRequestHeader(name, value);
+      });
+
+      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit);
+    });
+  };
+  self.fetch.polyfill = true;
+})(typeof self !== 'undefined' ? self : undefined);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports.default = init;
+
+var _elements = __webpack_require__(1);
+
+var _functional = __webpack_require__(0);
+
+var _keyboard = __webpack_require__(4);
+
+var _keyboard2 = _interopRequireDefault(_keyboard);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @constant
+ */
+var ATTRIBUTE_SHOW = 'data-show';
+
+/**
+ * @constant
+ * @type Object.<string, number>
+ */
+var KEY = {
+  TAB: 9,
+  ENTER: 13,
+  SHIFT: 16,
+  SPACE: 32
+};
+
+/**
+ * @constant
+ * @type Object.<string, number>
+ */
+var TAB_DIRECTION = {
+  FORWARD: 0,
+  BACKWARD: 1
+};
+
+/**
+ * @function
+ * @param {HTMLElement} element
+ */
+var show = function show(element) {
+  return element.classList.add('active');
+};
+
+/**
+ * @function
+ * @param {HTMLElement} element
+ */
+var hide = function hide(element) {
+  element.classList.remove('active');
+  element.removeAttribute('aria-live');
+};
+
+/**
+ * @function
+ * @param {HTMLElement} element
+ */
+var live = (0, _elements.setAttribute)('aria-live', 'polite');
+
+/**
+ * @function
+ * @param {HTMLElement} element
+ */
+var enable = function enable(element) {
+  element.tabIndex = 0;
+  element.removeAttribute('aria-disabled');
+};
+
+/**
+ * @function
+ * @param {HTMLElement} element
+ */
+var disable = function disable(element) {
+  element.tabIndex = -1;
+  element.setAttribute('aria-disabled', 'true');
+};
+
+/**
+ * @function
+ * @param {HTMLElement} element
+ */
+var isDisabled = (0, _elements.hasAttribute)('aria-disabled');
+
+/**
+ * @function
+ * @param {HTMLElement} element
+ * @param {boolean} force
+ */
+var toggleDisabled = function toggleDisabled(element, force) {
+  return (force ? disable : enable)(element);
+};
+
+/**
+ * @function
+ * @param {HTMLElement} element
+ * @param {boolean} force
+ */
+var toggleHidden = function toggleHidden(element, force) {
+  return (force ? hide : show)(element);
+};
+
+/**
+ * @function
+ * @param {HTMLElement} element
+ * @param {number} imageIndex
+ */
+var showImageLightbox = (0, _functional.curry)(function (element, imageIndex) {
+  return (0, _elements.setAttribute)('data-show', imageIndex, element);
+});
+
+/**
+ * @function
+ * @param {HTMLElement} element
+ */
+var hideLightbox = (0, _elements.removeAttribute)(ATTRIBUTE_SHOW);
+
+/**
+ * Focus first element with tabindex from arguments
+ *
+ * @function
+ * @param {...HTMLElement} elements
+ */
+var focus = function focus() {
+  for (var _len = arguments.length, elements = Array(_len), _key = 0; _key < _len; _key++) {
+    elements[_key] = arguments[_key];
+  }
+
+  for (var i = 0; i < elements.length; i++) {
+    if (elements[i].tabIndex !== -1) {
+      return elements[i].focus();
+    }
+  }
+};
+
+/**
+ * Will toggle the siblings of the element visible or not.
+ *
+ * @function
+ * @param {HTMLElement} element
+ * @param {boolean} show
+ */
+var toggleSiblings = function toggleSiblings(element, show) {
+  var siblings = element.parentNode.children;
+
+  for (var i = 0; i < siblings.length; i++) {
+    var sibling = siblings[i];
+
+    if (sibling === element) {
+      continue; // Not this element
+    }
+
+    if (show) {
+      sibling.removeAttribute('aria-hidden');
+    } else {
+      sibling.setAttribute('aria-hidden', true);
+    }
+  }
+};
+
+/**
+ * @type string
+ */
+var progressTemplateText = void 0;
+
+/**
+ * Update the view
+ *
+ * @function
+ * @param {HTMLElement} element
+ * @param {ImageScrollerState} state
+ * @param {boolean} setDialogFocus
+ */
+var updateView = function updateView(element, state) {
+
+  var images = element.querySelectorAll('.imagelightbox-image');
+  var progress = element.querySelector('.imagelightbox-progress');
+  var prevButton = element.querySelector('.previous');
+  var nextButton = element.querySelector('.next');
+
+  // Hide all images
+  images.forEach(function (image) {
+    return hide(image);
+  });
+  if (state.currentImage !== null) {
+    // Show selected image
+    var image = element.querySelector('.imagelightbox-image:nth-child(' + (state.currentImage + 1) + ')');
+
+    show(image);
+    live(image);
+  }
+
+  // Update progress text
+  if (!progressTemplateText) {
+    // Keep template for future updates
+    progressTemplateText = progress.innerText;
+  }
+  progress.innerText = progressTemplateText.replace(':num', state.currentImage + 1).replace(':total', images.length);
+
+  // Determine if buttons should be shown or hidden
+  toggleHidden(prevButton, !images.length);
+  toggleHidden(nextButton, !images.length);
+
+  // Determine if buttons should be enabled or disabled
+  toggleDisabled(prevButton, state.currentImage === 0);
+  toggleDisabled(nextButton, state.currentImage === images.length - 1);
+
+  // Determine if lightbox should be shown or hidden
+  toggleHidden(element, state.currentImage === null);
+  toggleSiblings(element, state.currentImage === null);
+};
+
+/**
+ * Handles button clicked
+ *
+ * @function
+ * @param {HTMLElement} element
+ * @param {HTMLElement} button
+ * @param {number} imageIndex
+ */
+var onNavigationButtonClick = function onNavigationButtonClick(element, button, imageIndex) {
+  if (!isDisabled(button)) {
+    showImageLightbox(element, imageIndex);
+  }
+};
+
+/**
+ * @function
+ */
+var onButtonPress = function onButtonPress(button, handler) {
+  button.addEventListener('click', handler);
+  button.addEventListener('keypress', function (event) {
+    if (event.which === KEY.ENTER || event.which === KEY.SPACE) {
+      // Enter or space key pressed
+      handler();
+      event.preventDefault();
+    }
+  });
+};
+
+/**
+ * Keep track of which keys are currently pressed.
+ *
+ * @type Object.<number, boolean>
+ */
+var keysDown = {};
+
+/**
+ * Binds key listeners that traps focus when the lightbox is open.
+ *
+ * @function
+ */
+var onButtonTab = function onButtonTab(button, direction, handler) {
+  button.addEventListener('keydown', function (event) {
+    // Keep track of which keys are currently pressed
+    keysDown[event.which] = true;
+
+    if (event.which === KEY.TAB) {
+      // Tab key press
+
+      if (keysDown[KEY.SHIFT]) {
+        if (direction === TAB_DIRECTION.BACKWARD) {
+          // Shift is down, tab backward
+          handler();
+          event.preventDefault();
+        }
+      } else {
+        if (direction === TAB_DIRECTION.FORWARD) {
+          // Tab forward
+          handler();
+          event.preventDefault();
+        }
+      }
+    }
+  });
+  button.addEventListener('keyup', function (event) {
+    delete keysDown[event.which];
+  });
+};
+
+/**
+ * Callback for when the dom is updated
+ *
+ * @function
+ * @param {HTMLElement} element
+ * @param {ImageLightboxState} state
+ * @param {Keyboard} keyboard
+ * @param {MutationRecord} record
+ */
+var handleDomUpdate = (0, _functional.curry)(function (element, state, keyboard, record) {
+
+  if (record.type === 'attributes' && record.attributeName === ATTRIBUTE_SHOW) {
+
+    var showImage = parseInt(record.target.getAttribute(ATTRIBUTE_SHOW));
+
+    // update the view
+    updateView(element, _extends(state, {
+      currentImage: isNaN(showImage) ? null : showImage
+    }));
+  }
+});
+
+/**
+ * Initializes a panel
+ *
+ * @function
+ * @param {HTMLElement} element
+ * @return {HTMLElement}
+ */
+function init(element) {
+  // get button html elements
+  var nextButton = element.querySelector('.next');
+  var prevButton = element.querySelector('.previous');
+  var closeButton = element.querySelector('.close');
+  var keyboard = new _keyboard2.default();
+
+  /**
+   * @typedef {object} ImageLightboxState
+   * @property {number} currentImage Index of image to display
+   */
+  var state = {
+    currentImage: false
+  };
+
+  // initialize buttons
+  onButtonPress(nextButton, function () {
+    return onNavigationButtonClick(element, nextButton, state.currentImage + 1);
+  });
+  onButtonTab(nextButton, TAB_DIRECTION.BACKWARD, function () {
+    return focus(closeButton);
+  });
+
+  onButtonPress(prevButton, function () {
+    return onNavigationButtonClick(element, prevButton, state.currentImage - 1);
+  });
+  onButtonTab(prevButton, TAB_DIRECTION.BACKWARD, function () {
+    return focus(nextButton, closeButton);
+  });
+
+  onButtonPress(closeButton, function () {
+    return hideLightbox(element);
+  });
+  onButtonTab(closeButton, TAB_DIRECTION.FORWARD, function () {
+    return focus(nextButton, prevButton);
+  });
+
+  // listen for updates to data-size
+  var observer = new MutationObserver((0, _functional.forEach)(handleDomUpdate(element, state, keyboard)));
+
+  observer.observe(element, {
+    subtree: false,
+    childList: false,
+    attributes: true,
+    attributeOldValue: true,
+    attributeFilter: [ATTRIBUTE_SHOW]
+  });
+
+  return element;
+}
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports.default = init;
+
+var _elements = __webpack_require__(1);
+
+var _functional = __webpack_require__(0);
+
+var _keyboard = __webpack_require__(4);
+
+var _keyboard2 = _interopRequireDefault(_keyboard);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @constant
+ */
+var ATTRIBUTE_SIZE = 'data-size';
+
+/**
+ * @type {function}
+ */
+var disable = (0, _elements.setAttribute)('disabled', '');
+
+/**
+ * @type {function}
+ */
+var enable = (0, _elements.removeAttribute)('disabled');
+
+/**
+ * @param {HTMLElement} element
+ * @param {boolean} enabled
+ */
+var toggleEnabled = function toggleEnabled(element, enabled) {
+  return (enabled ? enable : disable)(element);
+};
+
+/**
+ * @param {HTMLElement} element
+ * @param {boolean} hidden
+ */
+var toggleVisibility = (0, _functional.curry)(function (hidden, element) {
+  return (0, _elements.setAttribute)('aria-hidden', hidden.toString(), element);
+});
+
+/**
+ * @type {function}
+ */
+var isDisabled = (0, _elements.hasAttribute)('disabled');
+
+/**
+ * @type {function}
+ */
+var showImageLightbox = (0, _functional.curry)(function (lightbox, imageIndex) {
+  return (0, _elements.setAttribute)('data-show', imageIndex, lightbox);
+});
+
+/**
+ * Update the view
+ *
+ * @param {HTMLElement} element
+ * @param {ImageScrollerState} state
+ */
+var updateView = function updateView(element, state) {
+  var prevButton = element.querySelector('.previous');
+  var nextButton = element.querySelector('.next');
+  var list = element.querySelector('ul');
+  var totalCount = list.childElementCount;
+
+  // update list sizes
+  list.style.width = 100 / state.displayCount * totalCount + '%';
+  list.style.marginLeft = state.position * (100 / state.displayCount) + '%';
+
+  // update image sizes
+  (0, _elements.querySelectorAll)('li', element).forEach(function (element) {
+    return element.style.width = 100 / totalCount + '%';
+  });
+
+  // toggle button visibility
+  [prevButton, nextButton].forEach(toggleVisibility(state.displayCount >= totalCount));
+
+  // toggle button enable, disabled
+  toggleEnabled(nextButton, state.position > state.displayCount - totalCount);
+  toggleEnabled(prevButton, state.position < 0);
+};
+
+/**
+ * Handles button clicked
+ *
+ * @param {HTMLElement} element
+ * @param {ImageScrollerState} state
+ * @param {HTMLElement} button
+ * @param {function} updateState
+ *
+ * @function
+ */
+var onNavigationButtonClick = function onNavigationButtonClick(element, state, button, updateState) {
+  if (!isDisabled(button)) {
+    updateState(state);
+    updateView(element, state);
+  }
+};
+
+/**
+ * Initializes an image
+ *
+ * @param {HTMLElement} element
+ * @param {HTMLElement} image
+ *
+ * @function
+ * @return {HTMLElement}
+ */
+var initImage = (0, _functional.curry)(function (element, keyboard, image, imageIndex) {
+  var targetId = image.getAttribute('aria-controls');
+  var lightBox = document.querySelector('#' + targetId);
+
+  image.addEventListener('click', function (event) {
+    return showImageLightbox(lightBox, imageIndex);
+  });
+
+  keyboard.addElement(image);
+
+  return image;
+});
+
+/**
+ * Callback for when the dom is updated
+ *
+ * @param {HTMLElement} element
+ * @param {ImageScrollerState} state
+ * @param {MutationRecord} record
+ * @function
+ */
+var handleDomUpdate = (0, _functional.curry)(function (element, state, keyboard, record) {
+  // on add image run initialization
+  if (record.type === 'childList') {
+    (0, _elements.nodeListToArray)(record.addedNodes).filter((0, _elements.classListContains)('slide')).map((0, _elements.querySelector)('img')).filter(function (image) {
+      return image !== null;
+    }).forEach(initImage(element, keyboard));
+  }
+
+  // update the view
+  updateView(element, _extends(state, {
+    displayCount: element.getAttribute(ATTRIBUTE_SIZE) || 5,
+    position: 0
+  }));
+});
+
+/**
+ * Initializes a panel
+ *
+ * @param {HTMLElement} element
+ * @return {HTMLElement}
+ */
+function init(element) {
+  // get button html elements
+  var nextButton = element.querySelector('.next');
+  var prevButton = element.querySelector('.previous');
+  var keyboard = new _keyboard2.default();
+
+  /**
+   * @typedef {object} ImageScrollerState
+   * @property {number} displayCount
+   * @property {number} position
+   */
+  var state = {
+    displayCount: element.getAttribute(ATTRIBUTE_SIZE) || 5,
+    position: 0
+  };
+
+  // initialize buttons
+  nextButton.addEventListener('click', function () {
+    return onNavigationButtonClick(element, state, nextButton, function (state) {
+      return state.position--;
+    });
+  });
+  prevButton.addEventListener('click', function () {
+    return onNavigationButtonClick(element, state, prevButton, function (state) {
+      return state.position++;
+    });
+  });
+
+  // initialize images
+  (0, _elements.querySelectorAll)('[aria-controls]', element).forEach(initImage(element, keyboard));
+
+  // listen for updates to data-size
+  var observer = new MutationObserver((0, _functional.forEach)(handleDomUpdate(element, state, keyboard)));
+
+  observer.observe(element, {
+    subtree: true,
+    childList: true,
+    attributes: true,
+    attributeOldValue: true,
+    attributeFilter: [ATTRIBUTE_SIZE]
+  });
+
+  // initialize position
+  updateView(element, state);
+
+  return element;
+}
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = init;
+
+var _elements = __webpack_require__(1);
+
+var _functional = __webpack_require__(0);
+
+var _collapsible = __webpack_require__(9);
+
+var _keyboard = __webpack_require__(4);
+
+var _keyboard2 = _interopRequireDefault(_keyboard);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Unselects all elements in an array
+ *
+ * @param {HTMLElement[]} elements
+ * @function
+ */
+var unSelectAll = (0, _functional.forEach)((0, _elements.removeAttribute)('aria-selected'));
+
+/**
+ * Sets the aria-expanded attribute on an element to false
+ *
+ * @param {HTMLElement} element
+ */
+var unExpand = (0, _elements.setAttribute)('aria-expanded', 'false');
+
+/**
+ * Selects an element, and un selects all other menu items
+ *
+ * @param {HTMLElement[]} menuItems
+ * @param {HTMLElement} element
+ * @function
+ */
+var onSelectMenuItem = function onSelectMenuItem(menuItems, element) {
+  unSelectAll(menuItems);
+  element.setAttribute('aria-selected', 'true');
+};
+
+/**
+ * Initiates a tab panel
+ *
+ * @param {HTMLElement} element
+ */
+function init(element) {
+  // elements
+  var menuItems = (0, _elements.querySelectorAll)('[role="menuitem"]', element);
+  var toggler = element.querySelector('[aria-controls][aria-expanded]');
+  var keyboard = new _keyboard2.default();
+
+  keyboard.onSelect = function (element) {
+    onSelectMenuItem(menuItems, element);
+    unExpand(toggler);
+  };
+
+  // move select
+  menuItems.forEach(function (menuItem) {
+    // add mouse click listener
+    menuItem.addEventListener('click', function (event) {
+      var element = event.target;
+      var elementIndex = menuItems.indexOf(element);
+
+      onSelectMenuItem(menuItems, element);
+      unExpand(toggler);
+      keyboard.forceSelectedIndex(elementIndex);
+    });
+
+    // add keyboard support
+    keyboard.addElement(menuItem);
+  });
+
+  // init collapse and open
+  (0, _collapsible.initCollapsible)(element, function (expanded, el) {
+    return (0, _elements.toggleClass)('collapsed', !expanded, el);
+  });
+}
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = init;
+
+var _elements = __webpack_require__(1);
+
+var _functional = __webpack_require__(0);
+
+var _keyboard = __webpack_require__(4);
+
+var _keyboard2 = _interopRequireDefault(_keyboard);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @function
+ */
+var hideAll = (0, _functional.forEach)((0, _elements.setAttribute)('aria-hidden', 'true'));
+
+/**
+ * @function
+ */
+var show = (0, _elements.setAttribute)('aria-hidden', 'false');
+
+/**
+ * @function
+ */
+var isSelected = (0, _elements.attributeEquals)('aria-selected', 'true');
+
+/**
+ * @function
+ */
+var unSelectAll = (0, _functional.forEach)((0, _elements.removeAttribute)('aria-selected'));
+
+/**
+ * Change tab panel when tab's aria-selected is changed
+ *
+ * @param {HTMLElement} element
+ * @param {HTMLElement} tab
+ */
+var addAriaSelectedObserver = function addAriaSelectedObserver(element, tab) {
+  // set observer on title for aria-expanded
+  var observer = new MutationObserver(function () {
+    var panelId = tab.getAttribute('aria-controls');
+    var panel = element.querySelector('#' + panelId);
+    var allPanels = (0, _elements.querySelectorAll)('[role="tabpanel"]', element);
+
+    if (isSelected(tab)) {
+      hideAll(allPanels);
+      show(panel);
+    }
+  });
+
+  observer.observe(tab, {
+    attributes: true,
+    attributeOldValue: true,
+    attributeFilter: ["aria-selected"]
+  });
+};
+
+/**
+ * Selects an element, and unselects all other tabs
+ *
+ * @param {HTMLElement[]} allTabs
+ * @param {HTMLElement} element
+ * @function
+ */
+var selectTab = (0, _functional.curry)(function (allTabs, element) {
+  unSelectAll(allTabs);
+  element.setAttribute('aria-selected', 'true');
+});
+
+/**
+ * Initiates a tab panel
+ *
+ * @param {HTMLElement} element
+ */
+function init(element) {
+  var tabs = (0, _elements.querySelectorAll)('[role="tab"]', element);
+  var keyboard = new _keyboard2.default();
+
+  // handle enter + space click
+  keyboard.onSelect = selectTab(tabs);
+
+  // init tabs
+  tabs.forEach(function (tab) {
+    addAriaSelectedObserver(element, tab);
+
+    tab.addEventListener('click', function (event) {
+      var element = event.target;
+      var elementIndex = tabs.indexOf(element);
+      selectTab(tabs, element);
+      keyboard.forceSelectedIndex(elementIndex);
+    });
+
+    keyboard.addElement(tab);
+  });
+}
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(12);
+
+// Load library
+H5P = H5P || {};
+H5P.HubClient = __webpack_require__(11).default;
+
+/***/ })
+/******/ ]);
+//# sourceMappingURL=h5p-hub-client.js.map
