@@ -872,6 +872,106 @@ var relayClickEventAs = exports.relayClickEventAs = (0, _functional.curry)(funct
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _eventful = __webpack_require__(2);
+
+var _events = __webpack_require__(5);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @class MessageView
+ * @mixes Eventful
+ */
+var MessageView = function () {
+  /**
+   * @constructor
+   * @param {Object} state
+   * @param {string} state.type 'info', 'warning' or 'error'
+   * @param {string} state.title
+   * @param {string} state.content
+   * @param {string} [state.action]
+   * @param {string} [state.dismissable]
+   */
+  function MessageView(state) {
+    _classCallCheck(this, MessageView);
+
+    // add event system
+    _extends(this, (0, _eventful.Eventful)());
+
+    // create elements
+    this.rootElement = this.createElement(state);
+  }
+
+  _createClass(MessageView, [{
+    key: 'createElement',
+    value: function createElement(message) {
+      // Create wrapper:
+      var messageWrapper = document.createElement('div');
+      messageWrapper.className = 'message ' + message.type + (message.dismissible ? ' dismissible' : '');
+      messageWrapper.setAttribute('role', 'alert');
+
+      // Add close button if dismisable
+      if (message.dismissible) {
+        var closeButton = document.createElement('div');
+        closeButton.className = 'close';
+        //closeButton.innerHTML = '&#x2715';
+        // TODO
+        // - Add close label from translations
+        // - Add visuals in CSS (font icon)
+        messageWrapper.appendChild(closeButton);
+        (0, _events.relayClickEventAs)('close', this, closeButton);
+      }
+
+      var messageContent = document.createElement('div');
+      messageContent.className = 'message-content';
+      messageContent.innerHTML = '<h2>' + message.title + '</h2>' + '<p>' + message.content + '</p>';
+      messageWrapper.appendChild(messageContent);
+
+      if (message.action !== undefined) {
+        var messageButton = document.createElement('button');
+        messageButton.className = 'button';
+        messageButton.innerHTML = message.action;
+        messageWrapper.appendChild(messageButton);
+
+        (0, _events.relayClickEventAs)('action-clicked', this, messageButton);
+      }
+
+      return messageWrapper;
+    }
+
+    /**
+     * Returns the root element of the content browser
+     *
+     * @return {HTMLElement}
+     */
+
+  }, {
+    key: 'getElement',
+    value: function getElement() {
+      return this.rootElement;
+    }
+  }]);
+
+  return MessageView;
+}();
+
+exports.default = MessageView;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 /* WEBPACK VAR INJECTION */(function(process, Promise, global) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -2032,10 +2132,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   return Promise;
 });
 //# sourceMappingURL=es6-promise.map
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13), __webpack_require__(6), __webpack_require__(14)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14), __webpack_require__(7), __webpack_require__(15)))
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2049,93 +2149,339 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _contentTypeSectionView = __webpack_require__(20);
+
+var _contentTypeSectionView2 = _interopRequireDefault(_contentTypeSectionView);
+
+var _searchService = __webpack_require__(23);
+
+var _searchService2 = _interopRequireDefault(_searchService);
+
+var _contentTypeList = __webpack_require__(19);
+
+var _contentTypeList2 = _interopRequireDefault(_contentTypeList);
+
+var _contentTypeDetail = __webpack_require__(17);
+
+var _contentTypeDetail2 = _interopRequireDefault(_contentTypeDetail);
+
 var _eventful = __webpack_require__(2);
 
-var _events = __webpack_require__(5);
+var _dictionary = __webpack_require__(3);
+
+var _dictionary2 = _interopRequireDefault(_dictionary);
+
+var _messageView = __webpack_require__(6);
+
+var _messageView2 = _interopRequireDefault(_messageView);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
- * @class MessageView
+ * @class ContentTypeSection
  * @mixes Eventful
+ *
+ * @fires Hub#select
  */
-var MessageView = function () {
+var ContentTypeSection = function () {
+
   /**
-   * @constructor
-   * @param {Object} state
-   * @param {string} state.type 'info', 'warning' or 'error'
-   * @param {string} state.title
-   * @param {string} state.content
-   * @param {string} [state.action]
-   * @param {string} [state.dismissable]
+   * @param {object} state
+   * @param {HubServices} services
    */
-  function MessageView(state) {
-    _classCallCheck(this, MessageView);
+  function ContentTypeSection(state, services) {
+    var _this = this;
+
+    _classCallCheck(this, ContentTypeSection);
+
+    var self = this;
 
     // add event system
     _extends(this, (0, _eventful.Eventful)());
 
-    // create elements
-    this.rootElement = this.createElement(state);
+    /*
+     * Tab section constants
+     */
+    ContentTypeSection.Tabs = {
+      ALL: {
+        id: 'filter-all',
+        title: _dictionary2.default.get('contentTypeSectionAll'),
+        eventName: 'all'
+      },
+      MY_CONTENT_TYPES: {
+        id: 'filter-my-content-types',
+        title: _dictionary2.default.get('contentTypeSectionMine'),
+        eventName: 'my-content-types'
+      },
+      MOST_POPULAR: {
+        id: 'filter-most-popular',
+        title: _dictionary2.default.get('contentTypeSectionPopular'),
+        eventName: 'most-popular'
+      }
+    };
+
+    // add view
+    this.view = new _contentTypeSectionView2.default(state);
+
+    // controller
+    this.searchService = new _searchService2.default(services);
+    this.contentTypeList = new _contentTypeList2.default();
+    this.contentTypeDetail = new _contentTypeDetail2.default(state, services);
+
+    // Element for holding list and details views
+    var section = document.createElement('div');
+    section.classList.add('content-type-section');
+
+    this.rootElement = section;
+    this.rootElement.appendChild(this.contentTypeList.getElement());
+    this.rootElement.appendChild(this.contentTypeDetail.getElement());
+
+    this.view.getElement().appendChild(this.rootElement);
+
+    // propagate events
+    this.propagate(['select', 'update-content-type-list'], this.contentTypeList);
+    this.propagate(['select'], this.contentTypeDetail);
+    this.propagate(['reload'], this.view);
+
+    // register listeners
+    this.view.on('search', this.search, this);
+    this.view.on('menu-selected', this.closeDetailView, this);
+    this.view.on('menu-selected', this.applySearchFilter, this);
+    this.view.on('menu-selected', this.clearInputField, this);
+    this.view.on('menu-selected', this.updateDisplaySelected, this);
+    this.view.on('menu-selected', this.removeMessages, this);
+    this.contentTypeList.on('row-selected', this.showDetailView, this);
+    this.contentTypeList.on('row-selected', this.view.clearSelection, this.view);
+    this.contentTypeDetail.on('close', this.closeDetailView, this);
+    this.contentTypeDetail.on('select', this.closeDetailView, this);
+    this.contentTypeDetail.on('installed-content-type', function () {
+      services.setup();
+      services.contentTypes().then(function (contentTypes) {
+        _this.contentTypeList.refreshContentTypes(contentTypes);
+      });
+    });
+
+    // add menu items
+    Object.keys(ContentTypeSection.Tabs).forEach(function (tab) {
+      return _this.view.addMenuItem(ContentTypeSection.Tabs[tab]);
+    });
+    this.view.initMenu();
+
+    // Determine which browsing category to show initially
+    services.contentTypes().then(function (contentTypes) {
+      // Show my content types if any is installed
+      var installed = contentTypes.filter(function (contentType) {
+        return contentType.installed;
+      });
+
+      self.view.selectMenuItem(installed.length ? ContentTypeSection.Tabs.MY_CONTENT_TYPES : ContentTypeSection.Tabs.ALL);
+    });
   }
 
-  _createClass(MessageView, [{
-    key: 'createElement',
-    value: function createElement(message) {
-      // Create wrapper:
-      var messageWrapper = document.createElement('div');
-      messageWrapper.className = 'message ' + message.type + (message.dismissible ? ' dismissible' : '');
-      messageWrapper.setAttribute('role', 'alert');
+  /**
+   * Handle errors communicating with HUB
+   */
 
-      // Add close button if dismisable
-      if (message.dismissible) {
-        var closeButton = document.createElement('div');
-        closeButton.className = 'close';
-        //closeButton.innerHTML = '&#x2715';
-        // TODO
-        // - Add close label from translations
-        // - Add visuals in CSS (font icon)
-        messageWrapper.appendChild(closeButton);
-        (0, _events.relayClickEventAs)('close', this, closeButton);
-      }
 
-      var messageContent = document.createElement('div');
-      messageContent.className = 'message-content';
-      messageContent.innerHTML = '<h2>' + message.title + '</h2>' + '<p>' + message.content + '</p>';
-      messageWrapper.appendChild(messageContent);
-
-      if (message.action !== undefined) {
-        var messageButton = document.createElement('button');
-        messageButton.className = 'button';
-        messageButton.innerHTML = message.action;
-        messageWrapper.appendChild(messageButton);
-
-        (0, _events.relayClickEventAs)('action-clicked', this, messageButton);
-      }
-
-      return messageWrapper;
+  _createClass(ContentTypeSection, [{
+    key: "handleError",
+    value: function handleError(error) {
+      // TODO - use translation system:
+      this.view.displayMessage({
+        type: 'error',
+        title: _dictionary2.default.get('errorCommunicatingHubTitle'),
+        content: _dictionary2.default.get('errorCommunicatingHubContent')
+      });
     }
 
     /**
-     * Returns the root element of the content browser
+     * Executes a search and updates the content type list
+     *
+     * @param {string} query
+     */
+
+  }, {
+    key: "search",
+    value: function search(_ref) {
+      var _this2 = this;
+
+      var query = _ref.query,
+          keyCode = _ref.keyCode;
+
+      // Always browse ALL when searching
+      this.view.selectMenuItem(ContentTypeSection.Tabs.ALL);
+      this.searchService.search(query).then(function (contentTypes) {
+        return _this2.contentTypeList.update(contentTypes);
+      });
+    }
+
+    /**
+     * Updates the displayed name of the selected filter for mobile
+     *
+     * @param {SelectedElement} event
+     */
+
+  }, {
+    key: "updateDisplaySelected",
+    value: function updateDisplaySelected(event) {
+      this.view.setDisplaySelected(event.element.innerText);
+    }
+
+    /**
+     * Applies search filter depending on what event it receives
+     *
+     * @param {Object} e Event
+     * @param {string} e.choice Event name of chosen tab
+     */
+
+  }, {
+    key: "applySearchFilter",
+    value: function applySearchFilter(e) {
+      var _this3 = this;
+
+      switch (e.choice) {
+        case ContentTypeSection.Tabs.ALL.eventName:
+          this.searchService.sortOn('restricted').then(function (sortedContentTypes) {
+            return _this3.contentTypeList.update(sortedContentTypes);
+          });
+          break;
+
+        case ContentTypeSection.Tabs.MY_CONTENT_TYPES.eventName:
+          this.searchService.applyFilters(['restricted', 'installed']).then(function (filteredContentTypes) {
+            return _this3.searchService.sortOnRecent(filteredContentTypes);
+          }).then(function (sortedContentTypes) {
+            _this3.contentTypeList.update(sortedContentTypes);
+
+            // Show warning if no local libraries
+            if (!sortedContentTypes.length) {
+              _this3.displayNoLibrariesWarning();
+            }
+          });
+          break;
+
+        case ContentTypeSection.Tabs.MOST_POPULAR.eventName:
+          var sortOrder = ['restricted', 'popularity'];
+          this.searchService.sortOn(sortOrder).then(function (sortedContentTypes) {
+            return _this3.contentTypeList.update(sortedContentTypes);
+          });
+          break;
+      }
+    }
+
+    /**
+     * Clears the input field
+     *
+     * @param {string} id
+     */
+
+  }, {
+    key: "clearInputField",
+    value: function clearInputField(_ref2) {
+      var id = _ref2.id;
+
+      if (id !== ContentTypeSection.Tabs.ALL.id) {
+        this.view.clearInputField();
+      }
+    }
+
+    /**
+     * Display no libraries warning
+     */
+
+  }, {
+    key: "displayNoLibrariesWarning",
+    value: function displayNoLibrariesWarning() {
+      if (!this.noLibrariesMessage) {
+        var messageView = new _messageView2.default({
+          type: 'warning',
+          title: _dictionary2.default.get('warningNoContentTypesInstalled'),
+          content: _dictionary2.default.get('warningChangeBrowsingToSeeResults')
+        });
+        var message = messageView.getElement();
+        message.classList.add('content-type-section-no-libraries-warning');
+        this.noLibrariesMessage = message;
+      }
+
+      this.rootElement.appendChild(this.noLibrariesMessage);
+    }
+
+    /**
+     * Remove messages if found
+     */
+
+  }, {
+    key: "removeMessages",
+    value: function removeMessages() {
+      if (this.noLibrariesMessage && this.noLibrariesMessage.parentNode) {
+        this.noLibrariesMessage.parentNode.removeChild(this.noLibrariesMessage);
+      }
+    }
+
+    /**
+     * Shows detail view
+     *
+     * @param {string} id
+     */
+
+  }, {
+    key: "showDetailView",
+    value: function showDetailView(_ref3) {
+      var _this4 = this;
+
+      var id = _ref3.id;
+
+      this.contentTypeList.hide();
+      this.contentTypeDetail.loadById(id);
+      this.contentTypeDetail.show();
+      this.view.typeAheadEnabled = false;
+      this.view.removeDeactivatedStyleFromMenu();
+
+      // Wait for transition before focusing since focusing an element will force the browser to
+      // put that element into view. Doing so before the element is in the correct position will
+      // skew all elements on the page.
+      setTimeout(function () {
+        _this4.contentTypeDetail.focus();
+      }, 300);
+    }
+
+    /**
+     * Close detail view
+     */
+
+  }, {
+    key: "closeDetailView",
+    value: function closeDetailView() {
+      if (!this.contentTypeDetail.isHidden()) {
+        this.contentTypeDetail.hide();
+        this.contentTypeList.show();
+        this.view.typeAheadEnabled = true;
+        this.view.addDeactivatedStyleToMenu();
+        this.contentTypeList.focus();
+      }
+    }
+
+    /**
+     * Returns the element
      *
      * @return {HTMLElement}
      */
 
   }, {
-    key: 'getElement',
+    key: "getElement",
     value: function getElement() {
-      return this.rootElement;
+      return this.view.getElement();
     }
   }]);
 
-  return MessageView;
+  return ContentTypeSection;
 }();
 
-exports.default = MessageView;
+exports.default = ContentTypeSection;
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2146,7 +2492,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = init;
 
-var _collapsible = __webpack_require__(9);
+var _collapsible = __webpack_require__(10);
 
 var _keyboard = __webpack_require__(4);
 
@@ -2181,7 +2527,7 @@ function init(element) {
 }
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2243,13 +2589,13 @@ var initCollapsible = exports.initCollapsible = function initCollapsible(element
 };
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4NCiAgPGRlZnM+DQogICAgPHN0eWxlPg0KICAgICAgLmNscy0xIHsNCiAgICAgIGZpbGw6IG5vbmU7DQogICAgICB9DQoNCiAgICAgIC5jbHMtMiB7DQogICAgICBmaWxsOiAjYzZjNmM3Ow0KICAgICAgfQ0KDQogICAgICAuY2xzLTMsIC5jbHMtNCB7DQogICAgICBmaWxsOiAjZmZmOw0KICAgICAgfQ0KDQogICAgICAuY2xzLTMgew0KICAgICAgb3BhY2l0eTogMC43Ow0KICAgICAgfQ0KICAgIDwvc3R5bGU+DQogIDwvZGVmcz4NCiAgPHRpdGxlPmNvbnRlbnQgdHlwZSBwbGFjZWhvbGRlcl8yPC90aXRsZT4NCiAgPGcgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiI+DQogICAgPGcgaWQ9ImNvbnRlbnRfdHlwZV9wbGFjZWhvbGRlci0xX2NvcHkiIGRhdGEtbmFtZT0iY29udGVudCB0eXBlIHBsYWNlaG9sZGVyLTEgY29weSI+DQogICAgICA8cmVjdCBjbGFzcz0iY2xzLTEiIHdpZHRoPSI0MDAiIGhlaWdodD0iMjI1Ii8+DQogICAgICA8cmVjdCBjbGFzcz0iY2xzLTIiIHg9IjExMi41MSIgeT0iNDMuNDEiIHdpZHRoPSIxNzYuOTYiIGhlaWdodD0iMTM1LjQ1IiByeD0iMTAiIHJ5PSIxMCIvPg0KICAgICAgPGNpcmNsZSBjbGFzcz0iY2xzLTMiIGN4PSIxMzYuNjYiIGN5PSI2MS45OCIgcj0iNC44MSIvPg0KICAgICAgPGNpcmNsZSBjbGFzcz0iY2xzLTMiIGN4PSIxNTEuNDkiIGN5PSI2MS45OCIgcj0iNC44MSIvPg0KICAgICAgPGNpcmNsZSBjbGFzcz0iY2xzLTMiIGN4PSIxNjYuMSIgY3k9IjYxLjk4IiByPSI0LjgxIi8+DQogICAgICA8ZyBpZD0iX0dyb3VwXyIgZGF0YS1uYW1lPSImbHQ7R3JvdXAmZ3Q7Ij4NCiAgICAgICAgPGcgaWQ9Il9Hcm91cF8yIiBkYXRhLW5hbWU9IiZsdDtHcm91cCZndDsiPg0KICAgICAgICAgIDxwYXRoIGlkPSJfQ29tcG91bmRfUGF0aF8iIGRhdGEtbmFtZT0iJmx0O0NvbXBvdW5kIFBhdGgmZ3Q7IiBjbGFzcz0iY2xzLTQiIGQ9Ik0yNjMuMjgsOTUuMjFDMjYwLDkyLjA3LDI1NSw5MS41LDI0OC40Myw5MS41SDIyN3Y4SDE5OS41bC0yLjE3LDEwLjI0YTI1Ljg0LDI1Ljg0LDAsMCwxLDExLjQ4LTEuNjMsMTkuOTMsMTkuOTMsMCwwLDEsMTQuMzksNS41NywxOC4yNiwxOC4yNiwwLDAsMSw1LjUyLDEzLjYsMjMuMTEsMjMuMTEsMCwwLDEtMi44NCwxMS4wNSwxOC42NSwxOC42NSwwLDAsMS04LjA2LDcuNzksOSw5LDAsMCwxLTQuMTIsMS4zN0gyMzZ2LTIxaDEwLjQyYzcuMzYsMCwxMi44My0xLjYxLDE2LjQyLTVzNS4zOC03LjQ4LDUuMzgtMTMuNDRDMjY4LjIyLDEwMi4yOSwyNjYuNTcsOTguMzUsMjYzLjI4LDk1LjIxWm0tMTUsMTdjLTEuNDIsMS4yMi0zLjksMS4yNS03LjQxLDEuMjVIMjM2di0xNGg1LjYyYTkuNTcsOS41NywwLDAsMSw3LDIuOTMsNy4wNSw3LjA1LDAsMCwxLDEuODUsNC45MkE2LjMzLDYuMzMsMCwwLDEsMjQ4LjMxLDExMi4yNVoiLz4NCiAgICAgICAgICA8cGF0aCBpZD0iX1BhdGhfIiBkYXRhLW5hbWU9IiZsdDtQYXRoJmd0OyIgY2xhc3M9ImNscy00IiBkPSJNMjAyLjksMTE5LjExYTguMTIsOC4xMiwwLDAsMC03LjI4LDQuNTJsLTE2LTEuMjIsNy4yMi0zMC45MkgxNzR2MjJIMTUzdi0yMkgxMzZ2NTZoMTd2LTIxaDIxdjIxaDIwLjMxYy0yLjcyLDAtNS0xLjUzLTctM2ExOS4xOSwxOS4xOSwwLDAsMS00LjczLTQuODMsMjMuNTgsMjMuNTgsMCwwLDEtMy02LjZsMTYtMi4yNmE4LjExLDguMTEsMCwxLDAsNy4yNi0xMS43MloiLz4NCiAgICAgICAgPC9nPg0KICAgICAgPC9nPg0KICAgICAgPHJlY3QgY2xhc3M9ImNscy0zIiB4PSIxNzcuNjYiIHk9IjU3LjY2IiB3aWR0aD0iOTIuMjgiIGhlaWdodD0iOS4zOCIgcng9IjMuNSIgcnk9IjMuNSIvPg0KICAgIDwvZz4NCiAgPC9nPg0KPC9zdmc+DQo="
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2267,7 +2613,7 @@ var _hubView = __webpack_require__(22);
 
 var _hubView2 = _interopRequireDefault(_hubView);
 
-var _contentTypeSection = __webpack_require__(20);
+var _contentTypeSection = __webpack_require__(8);
 
 var _contentTypeSection2 = _interopRequireDefault(_contentTypeSection);
 
@@ -2469,13 +2815,13 @@ var Hub = function () {
 exports.default = Hub;
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2662,7 +3008,7 @@ process.umask = function () {
 };
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2692,7 +3038,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2712,7 +3058,7 @@ var _functional = __webpack_require__(0);
 
 var _eventful = __webpack_require__(2);
 
-var _panel = __webpack_require__(8);
+var _panel = __webpack_require__(9);
 
 var _panel2 = _interopRequireDefault(_panel);
 
@@ -2726,7 +3072,7 @@ var _imageLightbox2 = _interopRequireDefault(_imageLightbox);
 
 var _events = __webpack_require__(5);
 
-var _contentTypePlaceholder = __webpack_require__(10);
+var _contentTypePlaceholder = __webpack_require__(11);
 
 var _contentTypePlaceholder2 = _interopRequireDefault(_contentTypePlaceholder);
 
@@ -2734,7 +3080,7 @@ var _dictionary = __webpack_require__(3);
 
 var _dictionary2 = _interopRequireDefault(_dictionary);
 
-var _messageView = __webpack_require__(7);
+var _messageView = __webpack_require__(6);
 
 var _messageView2 = _interopRequireDefault(_messageView);
 
@@ -3291,7 +3637,7 @@ var ContentTypeDetailView = function () {
 exports.default = ContentTypeDetailView;
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3305,7 +3651,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _contentTypeDetailView = __webpack_require__(15);
+var _contentTypeDetailView = __webpack_require__(16);
 
 var _contentTypeDetailView2 = _interopRequireDefault(_contentTypeDetailView);
 
@@ -3419,6 +3765,7 @@ var ContentTypeDetail = function () {
       this.view.showButtonBySelector('.button-installing');
 
       return this.services.installContentType(id).then(function (response) {
+        _this.trigger('installed-content-type');
         _this.view.setIsInstalled(true);
         _this.view.showButtonBySelector('.button-get');
         _this.view.setInstallMessage({
@@ -3492,7 +3839,7 @@ var ContentTypeDetail = function () {
 exports.default = ContentTypeDetail;
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3514,7 +3861,7 @@ var _eventful = __webpack_require__(2);
 
 var _events = __webpack_require__(5);
 
-var _contentTypePlaceholder = __webpack_require__(10);
+var _contentTypePlaceholder = __webpack_require__(11);
 
 var _contentTypePlaceholder2 = _interopRequireDefault(_contentTypePlaceholder);
 
@@ -3707,7 +4054,7 @@ var ContentTypeListView = function () {
 exports.default = ContentTypeListView;
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3721,7 +4068,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _contentTypeListView = __webpack_require__(17);
+var _contentTypeListView = __webpack_require__(18);
 
 var _contentTypeListView2 = _interopRequireDefault(_contentTypeListView);
 
@@ -3758,6 +4105,7 @@ var ContentTypeList = function () {
     // add the view
     this.view = new _contentTypeListView2.default(state);
     this.propagate(['row-selected', 'select'], this.view);
+    this.currentContentTypes = [];
   }
 
   /**
@@ -3798,6 +4146,26 @@ var ContentTypeList = function () {
       this.view.removeAllRows();
       contentTypes.forEach(this.view.addRow, this.view);
       this.trigger('update-content-type-list', {});
+      this.currentContentTypes = contentTypes;
+    }
+
+    /**
+     * Refreshes the currently displayed content types with updated data
+     *
+     * @param {ContentType[]} contentTypes New content type data
+     */
+
+  }, {
+    key: 'refreshContentTypes',
+    value: function refreshContentTypes(contentTypes) {
+      var _this = this;
+
+      var displayedContentTypes = contentTypes.filter(function (contentType) {
+        return _this.currentContentTypes.find(function (currentContentType) {
+          return currentContentType.machineName === contentType.machineName;
+        });
+      });
+      this.update(displayedContentTypes);
     }
 
     /**
@@ -3819,7 +4187,7 @@ var ContentTypeList = function () {
 exports.default = ContentTypeList;
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3833,7 +4201,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _messageView = __webpack_require__(7);
+var _messageView = __webpack_require__(6);
 
 var _messageView2 = _interopRequireDefault(_messageView);
 
@@ -3852,6 +4220,10 @@ var _eventful = __webpack_require__(2);
 var _dictionary = __webpack_require__(3);
 
 var _dictionary2 = _interopRequireDefault(_dictionary);
+
+var _contentTypeSection = __webpack_require__(8);
+
+var _contentTypeSection2 = _interopRequireDefault(_contentTypeSection);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3888,6 +4260,7 @@ var ContentBrowserView = function () {
 
     // general configuration
     this.typeAheadEnabled = true;
+    this.currentlySelected = {};
 
     // create elements
     this.rootElement = this.createElement(state);
@@ -3954,7 +4327,6 @@ var ContentBrowserView = function () {
     value: function displayMessage(config) {
       var self = this;
       // Set the action
-      // TODO - should be translatable
       config.action = _dictionary2.default.get('reloadButtonLabel');
 
       var messageView = new _messageView2.default(config);
@@ -3975,7 +4347,6 @@ var ContentBrowserView = function () {
      *
      * @param {string} title
      * @param {string} id
-     * @param {boolean} selected Determines if tab is already selected
      * @param {string} eventName Name of event that tab will fire off
      *
      * @return {HTMLElement}
@@ -3988,28 +4359,31 @@ var ContentBrowserView = function () {
 
       var title = _ref.title,
           id = _ref.id,
-          selected = _ref.selected,
           eventName = _ref.eventName;
 
+      var self = this;
       var element = document.createElement('li');
       element.setAttribute('role', 'menuitem');
       element.setAttribute('data-id', id);
       element.innerText = title;
 
-      // sets if this menuitem should be selected
-      if (selected) {
-        element.setAttribute('aria-selected', 'true');
-        this.displaySelected.innerText = title;
-        this.trigger('menu-selected', {
-          element: element,
-          choice: eventName
-        });
-      }
-
       element.addEventListener('click', function (event) {
+        // Skip if already selected
+        if (self.currentlySelected.eventName === eventName) {
+          return;
+        }
+
         _this2.trigger('menu-selected', {
           element: event.target,
           choice: eventName
+        });
+      });
+
+      this.on('menu-selected', function (event) {
+        self.currentlySelected = Object.keys(_contentTypeSection2.default.Tabs).map(function (menuItemName) {
+          return _contentTypeSection2.default.Tabs[menuItemName];
+        }).find(function (menu) {
+          return menu.eventName === event.choice;
         });
       });
 
@@ -4029,6 +4403,16 @@ var ContentBrowserView = function () {
     }
 
     /**
+     * Clears menu item selection
+     */
+
+  }, {
+    key: "clearSelection",
+    value: function clearSelection() {
+      this.currentlySelected = {};
+    }
+
+    /**
      * Sets the name of the currently selected filter
      *
      * @param {string} selectedName
@@ -4041,14 +4425,23 @@ var ContentBrowserView = function () {
     }
 
     /**
-     * Selects a menu item by id
+     * Selects a menu item
      *
-     * @param {string} id
+     * @param {string} id Id of menu
+     * @param {string} eventName Event name of menu
      */
 
   }, {
-    key: "selectMenuItemById",
-    value: function selectMenuItemById(id) {
+    key: "selectMenuItem",
+    value: function selectMenuItem(_ref2) {
+      var id = _ref2.id,
+          eventName = _ref2.eventName;
+
+      // Skip if already selected
+      if (this.currentlySelected.eventName === eventName) {
+        return;
+      }
+
       var menuItems = this.menubar.querySelectorAll('[role="menuitem"]');
       var selectedMenuItem = this.menubar.querySelector("[role=\"menuitem\"][data-id=\"" + id + "\"]");
 
@@ -4058,7 +4451,8 @@ var ContentBrowserView = function () {
 
         this.trigger('menu-selected', {
           element: selectedMenuItem,
-          id: selectedMenuItem.getAttribute('data-id')
+          id: id,
+          choice: eventName
         });
       }
     }
@@ -4110,291 +4504,6 @@ var ContentBrowserView = function () {
 }();
 
 exports.default = ContentBrowserView;
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _contentTypeSectionView = __webpack_require__(19);
-
-var _contentTypeSectionView2 = _interopRequireDefault(_contentTypeSectionView);
-
-var _searchService = __webpack_require__(23);
-
-var _searchService2 = _interopRequireDefault(_searchService);
-
-var _contentTypeList = __webpack_require__(18);
-
-var _contentTypeList2 = _interopRequireDefault(_contentTypeList);
-
-var _contentTypeDetail = __webpack_require__(16);
-
-var _contentTypeDetail2 = _interopRequireDefault(_contentTypeDetail);
-
-var _eventful = __webpack_require__(2);
-
-var _dictionary = __webpack_require__(3);
-
-var _dictionary2 = _interopRequireDefault(_dictionary);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * @class ContentTypeSection
- * @mixes Eventful
- *
- * @fires Hub#select
- */
-var ContentTypeSection = function () {
-
-  /**
-   * @param {object} state
-   * @param {HubServices} services
-   */
-  function ContentTypeSection(state, services) {
-    var _this = this;
-
-    _classCallCheck(this, ContentTypeSection);
-
-    // add event system
-    _extends(this, (0, _eventful.Eventful)());
-
-    /*
-     * Tab section constants
-     */
-    ContentTypeSection.Tabs = {
-      ALL: {
-        id: 'filter-all',
-        title: _dictionary2.default.get('contentTypeSectionAll'),
-        eventName: 'all'
-      },
-      MY_CONTENT_TYPES: {
-        id: 'filter-my-content-types',
-        title: _dictionary2.default.get('contentTypeSectionMine'),
-        eventName: 'my-content-types',
-        selected: true
-      },
-      MOST_POPULAR: {
-        id: 'filter-most-popular',
-        title: _dictionary2.default.get('contentTypeSectionPopular'),
-        eventName: 'most-popular'
-      }
-    };
-
-    // add view
-    this.view = new _contentTypeSectionView2.default(state);
-
-    // controller
-    this.searchService = new _searchService2.default(services);
-    this.contentTypeList = new _contentTypeList2.default();
-    this.contentTypeDetail = new _contentTypeDetail2.default(state, services);
-
-    // Element for holding list and details views
-    var section = document.createElement('div');
-    section.classList.add('content-type-section');
-
-    this.rootElement = section;
-    this.rootElement.appendChild(this.contentTypeList.getElement());
-    this.rootElement.appendChild(this.contentTypeDetail.getElement());
-
-    this.view.getElement().appendChild(this.rootElement);
-
-    // propagate events
-    this.propagate(['select', 'update-content-type-list'], this.contentTypeList);
-    this.propagate(['select'], this.contentTypeDetail);
-    this.propagate(['reload'], this.view);
-
-    // register listeners
-    this.view.on('search', this.search, this);
-    this.view.on('search', this.view.selectMenuItemById.bind(this.view, ContentTypeSection.Tabs.ALL.id));
-    // this.view.on('search', this.resetMenuOnEnter, this);
-    this.view.on('menu-selected', this.closeDetailView, this);
-    this.view.on('menu-selected', this.applySearchFilter, this);
-    this.view.on('menu-selected', this.clearInputField, this);
-    this.view.on('menu-selected', this.updateDisplaySelected, this);
-    this.contentTypeList.on('row-selected', this.showDetailView, this);
-    this.contentTypeDetail.on('close', this.closeDetailView, this);
-    this.contentTypeDetail.on('select', this.closeDetailView, this);
-
-    // add menu items
-    Object.keys(ContentTypeSection.Tabs).forEach(function (tab) {
-      return _this.view.addMenuItem(ContentTypeSection.Tabs[tab]);
-    });
-    this.view.initMenu();
-  }
-
-  /**
-   * Handle errors communicating with HUB
-   */
-
-
-  _createClass(ContentTypeSection, [{
-    key: "handleError",
-    value: function handleError(error) {
-      // TODO - use translation system:
-      this.view.displayMessage({
-        type: 'error',
-        title: _dictionary2.default.get('errorCommunicatingHubTitle'),
-        content: _dictionary2.default.get('errorCommunicatingHubContent')
-      });
-    }
-
-    /**
-     * Executes a search and updates the content type list
-     *
-     * @param {string} query
-     */
-
-  }, {
-    key: "search",
-    value: function search(_ref) {
-      var _this2 = this;
-
-      var query = _ref.query,
-          keyCode = _ref.keyCode;
-
-      this.searchService.search(query).then(function (contentTypes) {
-        return _this2.contentTypeList.update(contentTypes);
-      });
-    }
-
-    /**
-     * Updates the displayed name of the selected filter for mobile
-     *
-     * @param {SelectedElement} event
-     */
-
-  }, {
-    key: "updateDisplaySelected",
-    value: function updateDisplaySelected(event) {
-      this.view.setDisplaySelected(event.element.innerText);
-    }
-
-    /**
-     * Applies search filter depending on what event it receives
-     *
-     * @param {Object} e Event
-     * @param {string} e.choice Event name of chosen tab
-     */
-
-  }, {
-    key: "applySearchFilter",
-    value: function applySearchFilter(e) {
-      var _this3 = this;
-
-      switch (e.choice) {
-        case ContentTypeSection.Tabs.ALL.eventName:
-          this.searchService.sortOn('restricted').then(function (sortedContentTypes) {
-            return _this3.contentTypeList.update(sortedContentTypes);
-          });
-          break;
-
-        case ContentTypeSection.Tabs.MY_CONTENT_TYPES.eventName:
-          this.searchService.filterOutRestricted().then(function (filteredContentTypes) {
-            return _this3.searchService.sortOnRecent(filteredContentTypes);
-          }).then(function (sortedContentTypes) {
-            return _this3.contentTypeList.update(sortedContentTypes);
-          });
-          break;
-
-        case ContentTypeSection.Tabs.MOST_POPULAR.eventName:
-          var sortOrder = ['restricted', 'popularity'];
-          this.searchService.sortOn(sortOrder).then(function (sortedContentTypes) {
-            return _this3.contentTypeList.update(sortedContentTypes);
-          });
-          break;
-      }
-    }
-
-    /**
-     * Clears the input field
-     *
-     * @param {string} id
-     */
-
-  }, {
-    key: "clearInputField",
-    value: function clearInputField(_ref2) {
-      var id = _ref2.id;
-
-      if (id !== ContentTypeSection.Tabs.ALL.id) {
-        this.view.clearInputField();
-      }
-    }
-
-    /**
-     * Shows detail view
-     *
-     * @param {string} id
-     */
-
-  }, {
-    key: "showDetailView",
-    value: function showDetailView(_ref3) {
-      var _this4 = this;
-
-      var id = _ref3.id;
-
-      this.contentTypeList.hide();
-      this.contentTypeDetail.loadById(id);
-      this.contentTypeDetail.show();
-      this.view.typeAheadEnabled = false;
-      this.view.removeDeactivatedStyleFromMenu();
-
-      // Wait for transition before focusing since focusing an element will force the browser to
-      // put that element into view. Doing so before the element is in the correct position will
-      // skew all elements on the page.
-      setTimeout(function () {
-        _this4.contentTypeDetail.focus();
-      }, 300);
-    }
-
-    /**
-     * Close detail view
-     */
-
-  }, {
-    key: "closeDetailView",
-    value: function closeDetailView() {
-      if (!this.contentTypeDetail.isHidden()) {
-        this.contentTypeDetail.hide();
-        this.contentTypeList.show();
-        this.view.typeAheadEnabled = true;
-        this.view.addDeactivatedStyleToMenu();
-        this.contentTypeList.focus();
-      }
-    }
-
-    /**
-     * Returns the element
-     *
-     * @return {HTMLElement}
-     */
-
-  }, {
-    key: "getElement",
-    value: function getElement() {
-      return this.view.getElement();
-    }
-  }]);
-
-  return ContentTypeSection;
-}();
-
-exports.default = ContentTypeSection;
 
 /***/ }),
 /* 21 */
@@ -4610,7 +4719,7 @@ var HubServices = function () {
 }();
 
 exports.default = HubServices;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ }),
 /* 22 */
@@ -4627,7 +4736,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _panel = __webpack_require__(8);
+var _panel = __webpack_require__(9);
 
 var _panel2 = _interopRequireDefault(_panel);
 
@@ -4961,22 +5070,64 @@ var SearchService = function () {
     /**
      * Filter out restricted if it is defined and false
      *
+     * @param {string[]} filters Filters that should be applied
+     *
      * @return {Promise.<ContentType[]>}
      */
 
   }, {
-    key: 'filterOutRestricted',
-    value: function filterOutRestricted() {
+    key: 'applyFilters',
+    value: function applyFilters(filters) {
       return this.services.contentTypes().then(function (contentTypes) {
-        return contentTypes.filter(function (contentType) {
-          return !contentType.restricted;
-        });
+        return multiFilter(contentTypes, filters);
       });
     }
   }]);
 
   return SearchService;
 }();
+
+/**
+ * Apply multiple filters to content types
+ *
+ * @param {ContentType[]} contentTypes Content types that should be filtered
+ * @param {string[]} filters Filters that should be applied
+ *
+ * @return {ContentType[]} Remaining content types after filtering
+ */
+
+
+exports.default = SearchService;
+var multiFilter = function multiFilter(contentTypes, filters) {
+  // Finished filtering
+  if (!filters.length) {
+    return contentTypes;
+  }
+
+  // Apply filter
+  return multiFilter(handleFilter(contentTypes, filters.shift()), filters);
+};
+
+/**
+ * Applies a single filter to content types
+ *
+ * @param {ContentType[]} contentTypes Content types that should be filtered
+ * @param {string} filter Filter that should be applied
+ *
+ * @return {ContentType[]} Content types remaining after applying filter
+ */
+var handleFilter = function handleFilter(contentTypes, filter) {
+  switch (filter) {
+    case 'restricted':
+      return contentTypes.filter(function (contentType) {
+        return !contentType.restricted;
+      });
+    case 'installed':
+      return contentTypes.filter(function (contentType) {
+        return contentType.installed;
+      });
+  }
+};
 
 /**
  * Sort on multiple properties
@@ -4986,9 +5137,6 @@ var SearchService = function () {
  *
  * @return {Array.<ContentType>} Content types sorted
  */
-
-
-exports.default = SearchService;
 var multiSort = function multiSort(contentTypes, sortOrder) {
   // Make sure all sorted instances are mixed content type
   var mixedContentTypes = contentTypes.map(function (contentType) {
@@ -5268,7 +5416,7 @@ var _dictionary2 = _interopRequireDefault(_dictionary);
 
 var _eventful = __webpack_require__(2);
 
-var _messageView = __webpack_require__(7);
+var _messageView = __webpack_require__(6);
 
 var _messageView2 = _interopRequireDefault(_messageView);
 
@@ -5964,7 +6112,7 @@ exports.default = UploadSection;
   };
   self.fetch.polyfill = true;
 })(typeof self !== 'undefined' ? self : undefined);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ }),
 /* 26 */
@@ -6568,7 +6716,7 @@ var _elements = __webpack_require__(1);
 
 var _functional = __webpack_require__(0);
 
-var _collapsible = __webpack_require__(9);
+var _collapsible = __webpack_require__(10);
 
 var _keyboard = __webpack_require__(4);
 
@@ -6761,11 +6909,11 @@ function init(element) {
 "use strict";
 
 
-__webpack_require__(12);
+__webpack_require__(13);
 
 // Load library
 H5P = H5P || {};
-H5P.HubClient = __webpack_require__(11).default;
+H5P.HubClient = __webpack_require__(12).default;
 
 /***/ })
 /******/ ]);
