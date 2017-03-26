@@ -4271,19 +4271,14 @@ var ContentBrowserView = function () {
     this.inputField = this.rootElement.querySelector('[role="search"] input');
     this.displaySelected = this.rootElement.querySelector('.navbar-toggler-selected');
     var inputButton = this.rootElement.querySelector('[role="search"] .input-group-addon');
+    var searchBar = this.rootElement.querySelector('#hub-search-bar');
 
-    // input field
-    this.inputField.addEventListener('keyup', function (event) {
-      if (event.keyCode != KEY_CODE_TAB) {
-        var searchbar = event.target.parentElement.querySelector('#hub-search-bar');
-
-        // Only searching if the enter key is pressed
-        if (_this.typeAheadEnabled || event.which == 13 || event.keyCode == 13) {
-          _this.trigger('search', {
-            element: searchbar,
-            query: searchbar.value
-          });
-        }
+    this.inputField.addEventListener('input', function (event) {
+      if (_this.typeAheadEnabled || event.which === 13) {
+        _this.trigger('search', {
+          element: searchBar,
+          query: searchBar.value
+        });
       }
     });
 
@@ -4355,8 +4350,6 @@ var ContentBrowserView = function () {
   }, {
     key: "addMenuItem",
     value: function addMenuItem(_ref) {
-      var _this2 = this;
-
       var title = _ref.title,
           id = _ref.id,
           eventName = _ref.eventName;
@@ -4367,16 +4360,15 @@ var ContentBrowserView = function () {
       element.setAttribute('data-id', id);
       element.innerText = title;
 
-      element.addEventListener('click', function (event) {
-        // Skip if already selected
-        if (self.currentlySelected.eventName === eventName) {
-          return;
-        }
+      element.addEventListener('click', function () {
+        self.selectMenuItem({ id: id, eventName: eventName });
+      });
 
-        _this2.trigger('menu-selected', {
-          element: event.target,
-          choice: eventName
-        });
+      element.addEventListener('keyup', function (event) {
+        if (event.which === 13 || event.which === 32) {
+          self.selectMenuItem({ id: id, eventName: eventName });
+          event.stopPropagation();
+        }
       });
 
       this.on('menu-selected', function (event) {
@@ -5463,11 +5455,41 @@ var UploadSection = function () {
     key: 'renderUploadForm',
     value: function renderUploadForm() {
       // Create the html
-      // TODO create variables for links to h5p.org so they can be changed easily
       var uploadForm = document.createElement('div');
-      uploadForm.innerHTML = '\n      <div class="upload-wrapper">\n        <div class="upload-form">\n          <input readonly class="upload-path" placeholder="' + _dictionary2.default.get("uploadPlaceholder") + '"/>\n          <button class="button use-button">Use</button>\n          <div class="input-wrapper">\n            <input type="file" />\n            <button class="button upload-button" tabindex="0">' + _dictionary2.default.get('uploadFileButtonLabel') + '</button>\n          </div>\n        </div>\n        <div class="upload-instructions">' + _dictionary2.default.get('uploadInstructions') + '</div>\n      </div>\n    ';
+      uploadForm.innerHTML = '\n      <div class="upload-wrapper">\n        <div class="upload-form">\n          <input class="upload-path" placeholder="' + _dictionary2.default.get("uploadPlaceholder") + '" disabled/>\n          <button class="button use-button">Use</button>\n          <div class="input-wrapper">\n            <input type="file" />\n            <button class="button upload-button" tabindex="0">' + _dictionary2.default.get('uploadFileButtonLabel') + '</button>\n          </div>\n        </div>\n      </div>\n    ';
+
+      // Create the html for the upload instructions separately as it needs to be styled
+      var uploadInstructions = document.createElement('div');
+      uploadInstructions.className = 'upload-instructions';
+      this.renderUploadInstructions(uploadInstructions, _dictionary2.default.get('uploadInstructions'));
+      uploadForm.querySelector('.upload-wrapper').appendChild(uploadInstructions);
 
       return uploadForm;
+    }
+
+    /**
+     * Creates html for the upload instructions and appends them to a wrapping div.
+     * Splits the input text into sentences and styles the first sentence differently.
+     *
+     * @param  {HTMLElement} container
+     * @param  {string} text
+     */
+
+  }, {
+    key: 'renderUploadInstructions',
+    value: function renderUploadInstructions(container, text) {
+      var textElements = text.match(/\(?[^\.\?\!]+[\.!\?]\)?/g); // match on sentences
+
+      var header = document.createElement('p');
+      header.className = 'upload-instruction-header';
+      header.innerHTML = textElements.shift(); // grab the first sentence
+
+      var description = document.createElement('p');
+      description.className = 'upload-instruction-description';
+      description.innerHTML = textElements.join(''); // join the rest
+
+      container.appendChild(header);
+      container.appendChild(description);
     }
 
     /**
