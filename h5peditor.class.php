@@ -555,7 +555,7 @@ class H5peditor {
           // Set local properties
           $cached_lib['installed']  = TRUE;
           $cached_lib['restricted'] = $can_create_restricted ? FALSE
-            : $local_lib->restricted;
+            : ($local_lib->restricted ? TRUE : FALSE);
 
           // Determine if library is the same as ct cache
           $is_updated_library =
@@ -579,7 +579,8 @@ class H5peditor {
           'patchVersion' => $local_lib->patch_version,
           'installed'    => TRUE,
           'isUpToDate'   => TRUE,
-          'restricted'   => $can_create_restricted ? FALSE : $local_lib->restricted
+          'restricted'   => $can_create_restricted ? FALSE :
+            ($local_lib->restricted ? TRUE : FALSE)
         );
 
         if (isset($icon_path)) {
