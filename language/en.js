@@ -74,7 +74,7 @@ H5PEditor.language.hub = {
   createContentTabLabel: 'Create Content',
   uploadTabLabel: 'Upload',
   uploadPlaceholder: 'No file chosen',
-  uploadInstructions: '<h3>Upload an H5P file.</h3><h4>You can start with examples from <a href="https://h5p.org/content-types-and-applications" target="blank">H5P.org</a>.</h4>',
+  uploadInstructions: 'Upload an H5P file. You may start with examples from <a href="https://h5p.org/content-types-and-applications" target="blank">H5P.org</a>.',
   uploadFileButtonLabel: 'Upload a file',
   uploadFileButtonChangeLabel: 'Change file',
   h5pFileWrongExtensionTitle: '.h5p file not found',
