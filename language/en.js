@@ -101,5 +101,8 @@ H5PEditor.language.hub = {
   contentTypeUnsupportedApiVersionTitle: 'This content type requires a newer core version',
   contentTypeUnsupportedApiVersionContent: 'Contact your system administrator to provide you with the necessary updates',
   errorCommunicatingHubTitle: 'Not able to communicate with hub.',
-  errorCommunicatingHubContent: 'An error occured. Please try again.'
+  errorCommunicatingHubContent: 'An error occured. Please try again.',
+  warningNoContentTypesInstalled: 'You don\'t have any content types installed.',
+  warningChangeBrowsingToSeeResults:
+    'Click "All" to get the list of all the content types you can install.'
 };
