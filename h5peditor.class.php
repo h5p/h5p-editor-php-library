@@ -566,17 +566,23 @@ class H5peditor {
           if ($is_updated_library) {
             $cached_lib['isUpToDate'] = TRUE;
           }
+          else {
+            // Set local version
+            $cached_lib['localMajorVersion'] = (int) $local_lib->major_version;
+            $cached_lib['localMinorVersion'] = (int) $local_lib->minor_version;
+            $cached_lib['localPatchVersion'] = (int) $local_lib->patch_version;
+          }
         }
       }
 
       // Add minimal data to display local only libraries
       if ($is_local_only) {
         $local_only_lib = array(
-          'id'           => $local_lib->id,
+          'id'           => (int) $local_lib->id,
           'machineName'  => $local_lib->machine_name,
-          'majorVersion' => $local_lib->major_version,
-          'minorVersion' => $local_lib->minor_version,
-          'patchVersion' => $local_lib->patch_version,
+          'majorVersion' => (int) $local_lib->major_version,
+          'minorVersion' => (int) $local_lib->minor_version,
+          'patchVersion' => (int) $local_lib->patch_version,
           'installed'    => TRUE,
           'isUpToDate'   => TRUE,
           'restricted'   => $can_create_restricted ? FALSE :

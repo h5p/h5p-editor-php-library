@@ -35,12 +35,12 @@ ns.SelectorHub = function (selectedLibrary, changeLibraryDialog) {
     this.client.getContentType(event.id)
       .then(function (contentType) {
         if (!self.currentLibrary) {
-          self.currentLibrary = self.createContentTypeId(contentType);
+          self.currentLibrary = self.createContentTypeId(contentType, true);
           self.trigger('selected');
           return;
         }
 
-        self.currentLibrary = self.createContentTypeId(contentType);
+        self.currentLibrary = self.createContentTypeId(contentType, true);
         delete self.currentParams;
         changeLibraryDialog.show(ns.$(self.getElement()).offset().top);
       });
@@ -131,10 +131,19 @@ ns.SelectorHub.prototype.getElement = function(){
  * Takes a content type, and extracts the full id (ubername)
  *
  * @param {ContentType} contentType
+ * @param {boolean} [useLocalVersion] Decides if we should use local version or cached version
  *
  * @private
  * @return {string}
  */
-ns.SelectorHub.prototype.createContentTypeId = function (contentType) {
-  return contentType.machineName + ' ' + contentType.majorVersion + '.' + contentType.minorVersion;
+ns.SelectorHub.prototype.createContentTypeId = function (contentType, useLocalVersion) {
+  var id = contentType.machineName;
+  if (useLocalVersion) {
+    id += ' ' + contentType.localMajorVersion + '.' + contentType.localMinorVersion;
+  }
+  else {
+    id += ' ' + contentType.majorVersion + '.' + contentType.minorVersion;
+  }
+
+  return id;
 };
