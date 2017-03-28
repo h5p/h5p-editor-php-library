@@ -12,6 +12,8 @@ var ns = H5PEditor;
 ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   var that = this;
 
+  H5P.EventDispatcher.call(this);
+
   try {
     this.defaultParams = JSON.parse(defaultParams);
     if (!(this.defaultParams instanceof Object)) {
@@ -62,8 +64,21 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
     that.currentLibrary = that.selector.getSelectedLibrary();
     that.loadSemantics(that.currentLibrary, that.selector.getParams());
   });
+
+  this.selector.on('resized', function () {
+    that.trigger('resized');
+  })
 };
 
+// Extends the event dispatcher
+ns.LibrarySelector.prototype = Object.create(H5P.EventDispatcher.prototype);
+ns.LibrarySelector.prototype.constructor = ns.LibrarySelector;
+
+/**
+ * Sets the current library
+ *
+ * @param {string} library
+ */
 ns.LibrarySelector.prototype.setLibrary = function (library) {
   this.loadSemantics(library);
   this.currentLibrary = library;

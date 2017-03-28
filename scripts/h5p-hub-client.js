@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 31);
+/******/ 	return __webpack_require__(__webpack_require__.s = 32);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -76,170 +76,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-/**
- * Returns a curried version of a function
- *
- * @param {function} fn
- *
- * @public
- *
- * @return {function}
- */
-var curry = exports.curry = function curry(fn) {
-  var arity = fn.length;
-
-  return function f1() {
-    var args = Array.prototype.slice.call(arguments, 0);
-    if (args.length >= arity) {
-      return fn.apply(null, args);
-    } else {
-      return function f2() {
-        var args2 = Array.prototype.slice.call(arguments, 0);
-        return f1.apply(null, args.concat(args2));
-      };
-    }
-  };
-};
-
-/**
- * Compose functions together, executing from right to left
- *
- * @param {function...} fns
- *
- * @function
- * @public
- *
- * @return {function}
- */
-var compose = exports.compose = function compose() {
-  for (var _len = arguments.length, fns = Array(_len), _key = 0; _key < _len; _key++) {
-    fns[_key] = arguments[_key];
-  }
-
-  return fns.reduce(function (f, g) {
-    return function () {
-      return f(g.apply(undefined, arguments));
-    };
-  });
-};
-
-/**
- * Applies a function to each element in an array
- *
- * @param {function} fn
- * @param {Array} arr
- *
- * @function
- * @public
- *
- * @return {function}
- */
-var forEach = exports.forEach = curry(function (fn, arr) {
-  arr.forEach(fn);
-});
-
-/**
- * Maps a function to an array
- *
- * @param {function} fn
- * @param {Array} arr
- *
- * @function
- * @public
- *
- * @return {function}
- */
-var map = exports.map = curry(function (fn, arr) {
-  return arr.map(fn);
-});
-
-/**
- * Applies a filter to an array
- *
- * @param {function} fn
- * @param {Array} arr
- *
- * @function
- * @public
- *
- * @return {function}
- */
-var filter = exports.filter = curry(function (fn, arr) {
-  return arr.filter(fn);
-});
-
-/**
- * Applies a some to an array
- *
- * @param {function} fn
- * @param {Array} arr
- *
- * @function
- * @public
- *
- * @return {function}
- */
-var some = exports.some = curry(function (fn, arr) {
-  return arr.some(fn);
-});
-
-/**
- * Returns true if an array contains a value
- *
- * @param {*} value
- * @param {Array} arr
- *
- * @function
- * @public
- *
- * @return {function}
- */
-var contains = exports.contains = curry(function (value, arr) {
-  return arr.indexOf(value) != -1;
-});
-
-/**
- * Returns an array without the supplied values
- *
- * @param {Array} values
- * @param {Array} arr
- *
- * @function
- * @public
- *
- * @return {function}
- */
-var without = exports.without = curry(function (values, arr) {
-  return filter(function (value) {
-    return !contains(value, values);
-  }, arr);
-});
-
-/**
- * Takes a string that is either 'true' or 'false' and returns the opposite
- *
- * @param {string} bool
- *
- * @public
- * @return {string}
- */
-var inverseBooleanString = exports.inverseBooleanString = function inverseBooleanString(bool) {
-  return (bool !== 'true').toString();
-};
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 exports.toggleClass = exports.toggleVisibility = exports.show = exports.hide = exports.classListContains = exports.removeChild = exports.querySelectorAll = exports.nodeListToArray = exports.querySelector = exports.appendChild = exports.toggleAttribute = exports.attributeEquals = exports.hasAttribute = exports.removeAttribute = exports.setAttribute = exports.getAttribute = undefined;
 
-var _functional = __webpack_require__(0);
+var _functional = __webpack_require__(1);
 
 /**
  * Get an attribute value from element
@@ -431,6 +270,167 @@ var toggleClass = exports.toggleClass = (0, _functional.curry)(function (cls, ad
 });
 
 /***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Returns a curried version of a function
+ *
+ * @param {function} fn
+ *
+ * @public
+ *
+ * @return {function}
+ */
+var curry = exports.curry = function curry(fn) {
+  var arity = fn.length;
+
+  return function f1() {
+    var args = Array.prototype.slice.call(arguments, 0);
+    if (args.length >= arity) {
+      return fn.apply(null, args);
+    } else {
+      return function f2() {
+        var args2 = Array.prototype.slice.call(arguments, 0);
+        return f1.apply(null, args.concat(args2));
+      };
+    }
+  };
+};
+
+/**
+ * Compose functions together, executing from right to left
+ *
+ * @param {function...} fns
+ *
+ * @function
+ * @public
+ *
+ * @return {function}
+ */
+var compose = exports.compose = function compose() {
+  for (var _len = arguments.length, fns = Array(_len), _key = 0; _key < _len; _key++) {
+    fns[_key] = arguments[_key];
+  }
+
+  return fns.reduce(function (f, g) {
+    return function () {
+      return f(g.apply(undefined, arguments));
+    };
+  });
+};
+
+/**
+ * Applies a function to each element in an array
+ *
+ * @param {function} fn
+ * @param {Array} arr
+ *
+ * @function
+ * @public
+ *
+ * @return {function}
+ */
+var forEach = exports.forEach = curry(function (fn, arr) {
+  arr.forEach(fn);
+});
+
+/**
+ * Maps a function to an array
+ *
+ * @param {function} fn
+ * @param {Array} arr
+ *
+ * @function
+ * @public
+ *
+ * @return {function}
+ */
+var map = exports.map = curry(function (fn, arr) {
+  return arr.map(fn);
+});
+
+/**
+ * Applies a filter to an array
+ *
+ * @param {function} fn
+ * @param {Array} arr
+ *
+ * @function
+ * @public
+ *
+ * @return {function}
+ */
+var filter = exports.filter = curry(function (fn, arr) {
+  return arr.filter(fn);
+});
+
+/**
+ * Applies a some to an array
+ *
+ * @param {function} fn
+ * @param {Array} arr
+ *
+ * @function
+ * @public
+ *
+ * @return {function}
+ */
+var some = exports.some = curry(function (fn, arr) {
+  return arr.some(fn);
+});
+
+/**
+ * Returns true if an array contains a value
+ *
+ * @param {*} value
+ * @param {Array} arr
+ *
+ * @function
+ * @public
+ *
+ * @return {function}
+ */
+var contains = exports.contains = curry(function (value, arr) {
+  return arr.indexOf(value) != -1;
+});
+
+/**
+ * Returns an array without the supplied values
+ *
+ * @param {Array} values
+ * @param {Array} arr
+ *
+ * @function
+ * @public
+ *
+ * @return {function}
+ */
+var without = exports.without = curry(function (values, arr) {
+  return filter(function (value) {
+    return !contains(value, values);
+  }, arr);
+});
+
+/**
+ * Takes a string that is either 'true' or 'false' and returns the opposite
+ *
+ * @param {string} bool
+ *
+ * @public
+ * @return {string}
+ */
+var inverseBooleanString = exports.inverseBooleanString = function inverseBooleanString(bool) {
+  return (bool !== 'true').toString();
+};
+
+/***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -549,7 +549,8 @@ var Dictionary = function () {
      * Get a string from the dictionary. Optionally replace variables
      *
      * @param {string} key
-     * @param {Object} replacements
+     * @param {Object} [replacements]
+     *
      * @returns {string}
      */
 
@@ -592,9 +593,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _elements = __webpack_require__(1);
+var _elements = __webpack_require__(0);
 
-var _functional = __webpack_require__(0);
+var _functional = __webpack_require__(1);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -752,49 +753,65 @@ var Keyboard = function () {
     value: function handleKeyDown(event) {
       var lastIndex = this.elements.length - 1;
 
-      switch (event.which) {
-        case 13: // Enter
-        case 32:
-          // Space
-          this.select();
-          event.preventDefault();
-          break;
-        case 35:
-          // End
-          this.selectedIndex = lastIndex;
-          event.preventDefault();
-          break;
-        case 36:
-          // Home
-          this.selectedIndex = 0;
-          event.preventDefault();
-          break;
-        case 37: // Left Arrow
-        case 38:
-          // Up Arrow
-          this.selectedIndex = previousIndex(this.selectedIndex, lastIndex);
-          event.preventDefault();
-          break;
-        case 39: // Right Arrow
-        case 40:
-          // Down Arrow
-          this.selectedIndex = nextIndex(this.selectedIndex, lastIndex);
-          event.preventDefault();
-          break;
-      }
+      if (this.hasElement(event.target)) {
+        switch (event.which) {
+          case 13: // Enter
+          case 32:
+            // Space
+            this.select();
+            event.preventDefault();
+            break;
+          case 35:
+            // End
+            this.selectedIndex = lastIndex;
+            event.preventDefault();
+            break;
+          case 36:
+            // Home
+            this.selectedIndex = 0;
+            event.preventDefault();
+            break;
+          case 37: // Left Arrow
+          case 38:
+            // Up Arrow
+            this.selectedIndex = previousIndex(this.selectedIndex, lastIndex);
+            event.preventDefault();
+            break;
+          case 39: // Right Arrow
+          case 40:
+            // Down Arrow
+            this.selectedIndex = nextIndex(this.selectedIndex, lastIndex);
+            event.preventDefault();
+            break;
+        }
 
-      updateTabbable(this.elements, this.selectedIndex);
-      this.elements[this.selectedIndex].focus();
+        updateTabbable(this.elements, this.selectedIndex);
+        this.elements[this.selectedIndex].focus();
+      }
     }
   }, {
-    key: 'handleFocus',
+    key: 'hasElement',
 
+
+    /**
+     * Returns true if element is in list ov navigatable elements
+     *
+     * @param {Element|EventTarget} element
+     *
+     * @return {boolean}
+     */
+    value: function hasElement(element) {
+      return this.elements.indexOf(element) !== -1;
+    }
 
     /**
      * Updates the selected index with the focused element
      *
      * @param {FocusEvent} event
      */
+
+  }, {
+    key: 'handleFocus',
     value: function handleFocus(event) {
       this.selectedIndex = this.elements.indexOf(event.srcElement);
     }
@@ -842,7 +859,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.relayClickEventAs = undefined;
 
-var _functional = __webpack_require__(0);
+var _functional = __webpack_require__(1);
 
 /**
  *  Transforms a DOM click event into an Eventful's event
@@ -886,6 +903,12 @@ var _eventful = __webpack_require__(2);
 
 var _events = __webpack_require__(5);
 
+var _dictionary = __webpack_require__(3);
+
+var _dictionary2 = _interopRequireDefault(_dictionary);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
@@ -898,7 +921,8 @@ var MessageView = function () {
    * @param {Object} state
    * @param {string} state.type 'info', 'warning' or 'error'
    * @param {string} state.title
-   * @param {string} state.content
+   * @param {string} [state.content]
+   * @param {string} [state.name]
    * @param {string} [state.action]
    * @param {string} [state.dismissable]
    */
@@ -907,6 +931,8 @@ var MessageView = function () {
 
     // add event system
     _extends(this, (0, _eventful.Eventful)());
+
+    state.name = state.name || '';
 
     // create elements
     this.rootElement = this.createElement(state);
@@ -917,24 +943,22 @@ var MessageView = function () {
     value: function createElement(message) {
       // Create wrapper:
       var messageWrapper = document.createElement('div');
-      messageWrapper.className = 'message ' + message.type + (message.dismissible ? ' dismissible' : '');
+      messageWrapper.className = 'message ' + message.name + ' ' + message.type + (message.dismissible ? ' dismissible' : '');
       messageWrapper.setAttribute('role', 'alert');
 
       // Add close button if dismisable
       if (message.dismissible) {
-        var closeButton = document.createElement('div');
-        closeButton.className = 'close';
-        //closeButton.innerHTML = '&#x2715';
-        // TODO
-        // - Add close label from translations
-        // - Add visuals in CSS (font icon)
+        var closeButton = document.createElement('button');
+        closeButton.className = 'message-close';
+        closeButton.setAttribute('tabIndex', 0);
+        closeButton.setAttribute('aria-label', _dictionary2.default.get('closeButtonLabel'));
         messageWrapper.appendChild(closeButton);
         (0, _events.relayClickEventAs)('close', this, closeButton);
       }
 
       var messageContent = document.createElement('div');
       messageContent.className = 'message-content';
-      messageContent.innerHTML = '<h2>' + message.title + '</h2>' + '<p>' + message.content + '</p>';
+      messageContent.innerHTML = '<h2>' + message.title + '</h2>' + (message.content ? '<p>' + message.content + '</p>' : '');
       messageWrapper.appendChild(messageContent);
 
       if (message.action !== undefined) {
@@ -1111,7 +1135,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   function attemptVertx() {
     try {
       var r = require;
-      var vertx = __webpack_require__(30);
+      var vertx = __webpack_require__(31);
       vertxNext = vertx.runOnLoop || vertx.runOnContext;
       return useVertxTimer();
     } catch (e) {
@@ -2281,14 +2305,23 @@ var ContentTypeSection = function () {
   }
 
   /**
-   * Handle errors communicating with HUB
+   * Data has been loaded
    */
 
 
   _createClass(ContentTypeSection, [{
+    key: "loaded",
+    value: function loaded() {
+      this.view.loaded();
+    }
+
+    /**
+     * Handle errors communicating with HUB
+     */
+
+  }, {
     key: "handleError",
     value: function handleError(error) {
-      // TODO - use translation system:
       this.view.displayMessage({
         type: 'error',
         title: _dictionary2.default.get('errorCommunicatingHubTitle'),
@@ -2396,6 +2429,7 @@ var ContentTypeSection = function () {
       if (!this.noLibrariesMessage) {
         var messageView = new _messageView2.default({
           type: 'warning',
+          dismissible: true,
           title: _dictionary2.default.get('warningNoContentTypesInstalled'),
           content: _dictionary2.default.get('warningChangeBrowsingToSeeResults')
         });
@@ -2498,7 +2532,7 @@ var _keyboard = __webpack_require__(4);
 
 var _keyboard2 = _interopRequireDefault(_keyboard);
 
-var _elements = __webpack_require__(1);
+var _elements = __webpack_require__(0);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2538,7 +2572,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.initCollapsible = undefined;
 
-var _elements = __webpack_require__(1);
+var _elements = __webpack_require__(0);
 
 /**
  * Returns true if aria-expanded=true on element
@@ -2685,6 +2719,8 @@ var Hub = function () {
    * @param {HubState} state
    */
   function Hub(state, dictionary) {
+    var _this = this;
+
     _classCallCheck(this, Hub);
 
     // add event system
@@ -2698,6 +2734,7 @@ var Hub = function () {
     this.services = new _hubServices2.default({
       apiRootUrl: state.apiRootUrl
     });
+    this.setupServices();
 
     // controllers
     this.contentTypeSection = new _contentTypeSection2.default(state, this.services);
@@ -2714,11 +2751,16 @@ var Hub = function () {
     this.on('select', this.setPanelTitle, this);
     this.on('select', this.view.closePanel, this.view);
     this.view.on('tab-change', this.view.setSectionType, this.view);
-    this.view.on('panel-change', this.view.togglePanelOpen.bind(this.view), this.view);
-    this.contentTypeSection.on('reload', function () {
-      self.services.setup();
-      self.contentTypeSection.initContentTypeList();
+    this.view.on('panel-change', function () {
+      _this.view.togglePanelOpen();
+
+      // Tell listeners that hub has been resized
+      setTimeout(function () {
+        self.trigger('resized');
+      }, 150);
     });
+    this.contentTypeSection.on('reload', this.setupServices, this);
+
     this.on('clear-upload-form', function () {
       self.uploadSection.clearUploadForm();
     });
@@ -2727,13 +2769,29 @@ var Hub = function () {
   }
 
   /**
-   * Returns the promise of a content type
-   * @param {string} machineName
-   * @return {Promise.<ContentType>}
+   * Setup services and handle fetching data
    */
 
 
   _createClass(Hub, [{
+    key: 'setupServices',
+    value: function setupServices() {
+      var self = this;
+
+      this.services.setup().then(function () {
+        self.contentTypeSection.loaded();
+      }).catch(function (error) {
+        self.contentTypeSection.handleError(error);
+      });
+    }
+
+    /**
+     * Returns the promise of a content type
+     * @param {string} machineName
+     * @return {Promise.<ContentType>}
+     */
+
+  }, {
     key: 'getContentType',
     value: function getContentType(machineName) {
       return this.services.contentType(machineName);
@@ -2748,13 +2806,13 @@ var Hub = function () {
   }, {
     key: 'setPanelTitle',
     value: function setPanelTitle(_ref) {
-      var _this = this;
+      var _this2 = this;
 
       var id = _ref.id;
 
       this.getContentType(id).then(function (_ref2) {
         var title = _ref2.title;
-        return _this.view.setTitle(title ? title : id);
+        return _this2.view.setTitle(title ? title : id);
       });
     }
 
@@ -2767,7 +2825,7 @@ var Hub = function () {
   }, {
     key: 'initTabPanel',
     value: function initTabPanel(_ref3) {
-      var _this2 = this;
+      var _this3 = this;
 
       var _ref3$sectionId = _ref3.sectionId,
           sectionId = _ref3$sectionId === undefined ? 'content-types' : _ref3$sectionId;
@@ -2790,7 +2848,7 @@ var Hub = function () {
       });
 
       tabConfigs.forEach(function (tabConfig) {
-        return _this2.view.addTab(tabConfig);
+        return _this3.view.addTab(tabConfig);
       });
       this.view.addBottomBorder(); // Adds an animated bottom border to each tab
       this.view.initTabPanel();
@@ -3052,15 +3110,19 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _elements = __webpack_require__(1);
+var _elements = __webpack_require__(0);
 
-var _functional = __webpack_require__(0);
+var _functional = __webpack_require__(1);
 
 var _eventful = __webpack_require__(2);
 
 var _panel = __webpack_require__(9);
 
 var _panel2 = _interopRequireDefault(_panel);
+
+var _modal = __webpack_require__(28);
+
+var _modal2 = _interopRequireDefault(_modal);
 
 var _imageScroller = __webpack_require__(27);
 
@@ -3102,16 +3164,6 @@ var MAX_TEXT_SIZE_DESCRIPTION = 285;
  * @constant {string}
  */
 var IMAGELIGHTBOX = 'imagelightbox';
-
-/**
- * Toggles the visibility if an element
- *
- * @param {HTMLElement} element
- * @param {boolean} visible
- */
-var toggleVisibility = function toggleVisibility(element, visible) {
-  return (visible ? _elements.show : _elements.hide)(element);
-};
 
 /**
  * Checks if a string is empty
@@ -3160,6 +3212,16 @@ var enable = (0, _elements.removeAttribute)('disabled');
  */
 var _isHidden = (0, _elements.attributeEquals)('aria-hidden', 'true');
 
+var LICENCE_DATA = {
+  "MIT": {
+    title: 'MIT License',
+    short: "\n    <ul class=\"ul\">\n      <li>Can use comercially</li>\n      <li>Can modify</li>\n      <li>Can distribute</li>\n      <li>Can sublicense</li>\n      <li>Cannot hold liable</li>\n      <li>Must include copyright</li>\n      <li>Must include license</li>\n    </ul>",
+    full: function full(owner) {
+      return "<p>Copyright " + new Date().getFullYear() + " " + owner + "</p>\n\n      <p>Permission is hereby granted, free of charge, to any person obtaining a copy\n      of this software and associated documentation files (the \"Software\"), to deal\n      in the Software without restriction, including without limitation the rights\n      to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n      copies of the Software, and to permit persons to whom the Software is\n      furnished to do so, subject to the following conditions:</p>\n\n      <p>The above copyright notice and this permission notice shall be included in\n      all copies or substantial portions of the Software.</p>\n\n      <p>THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE\n      AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n      LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\n      THE SOFTWARE.</p>";
+    }
+  }
+};
+
 /**
  * @class
  * @mixes Eventful
@@ -3167,8 +3229,6 @@ var _isHidden = (0, _elements.attributeEquals)('aria-hidden', 'true');
 
 var ContentTypeDetailView = function () {
   function ContentTypeDetailView(state) {
-    var _this = this;
-
     _classCallCheck(this, ContentTypeDetailView);
 
     // add event system
@@ -3195,14 +3255,7 @@ var ContentTypeDetailView = function () {
     this.panel = this.rootElement.querySelector('.panel');
     this.licencePanelHeading = this.rootElement.querySelector('.licence-panel-heading');
     this.licencePanelBody = this.rootElement.querySelector('#licence-panel');
-    this.installMessage = this.rootElement.querySelector('.install-message');
     this.container = this.rootElement.querySelector('.container');
-
-    // hide message on close button click
-    var installMessageClose = this.installMessage.querySelector('.message-close');
-    installMessageClose.addEventListener('click', function () {
-      return _this.resetInstallMessage();
-    });
 
     // init interactive elements
     (0, _panel2.default)(this.panel);
@@ -3247,7 +3300,7 @@ var ContentTypeDetailView = function () {
       element.setAttribute('aria-labelledby', titleId);
       element.setAttribute('aria-hidden', 'true');
 
-      element.innerHTML = "\n      <button class=\"back-button icon-arrow-thick\" aria-label=\"" + _dictionary2.default.get("contentTypeBackButtonLabel") + "\" tabindex=\"0\"></button>\n      <div class=\"container\">\n        <div class=\"image-wrapper\"><img class=\"img-responsive content-type-image\" src=\"" + _contentTypePlaceholder2.default + "\"></div>\n        <div class=\"text-details\">\n          <h2 id=\"" + titleId + "\" class=\"title\"></h2>\n          <div class=\"owner\"></div>\n          <p class=\"small\"></p>\n          <a class=\"button demo-button\" target=\"_blank\" aria-hidden=\"false\" href=\"#\">" + _dictionary2.default.get("contentTypeDemoButtonLabel") + "</a>\n        </div>\n      </div>\n      <div class=\"carousel\" role=\"region\" data-size=\"5\">\n        <button class=\"carousel-button previous\" aria-hidden=\"true\" disabled><span class=\"icon-arrow-thick\"></span></button>\n        <button class=\"carousel-button next\" aria-hidden=\"true\" disabled><span class=\"icon-arrow-thick\"></span></button>\n        <nav class=\"scroller\">\n          <ul></ul>\n        </nav>\n      </div>\n      <hr />\n      <div role=\"alert\" class=\"install-message message dismissible simple info\" aria-hidden=\"true\">\n        <button aria-label=\"" + _dictionary2.default.get("contentTypeCloseButtonLabel") + "\" class=\"message-close icon-close\"></button>\n        <h3 class=\"title\"></h3>\n      </div>\n      <div class=\"button-bar\">\n        <button class=\"button button-primary button-use\" aria-hidden=\"false\" data-id=\"\">" + _dictionary2.default.get("contentTypeUseButtonLabel") + "</button>\n        <button class=\"button button-inverse-primary button-install\" aria-hidden=\"true\" data-id=\"\"><span class=\"icon-arrow-thick\"></span>" + _dictionary2.default.get('contentTypeInstallButtonLabel') + "</button>\n        <button class=\"button button-inverse-primary button-installing\" aria-hidden=\"true\"><span class=\"icon-loading-search icon-spin\"></span>" + _dictionary2.default.get("contentTypeInstallingButtonLabel") + "</button>\n      </div>\n      <dl class=\"panel\">\n        <dt aria-level=\"2\" role=\"heading\" class=\"licence-panel-heading\">\n          <a href=\"#\" role=\"button\" aria-expanded=\"false\" aria-controls=\"licence-panel\">\n            <span class=\"icon-accordion-arrow\"></span> " + _dictionary2.default.get('contentTypeLicensePanelTitle') + "\n          </a>\n        </dt>\n        <dl id=\"licence-panel\" role=\"region\" aria-hidden=\"true\">\n          <div class=\"panel-body\"></div>\n        </dl>\n      </dl>\n      <div id=\"" + IMAGELIGHTBOX + "-detail\" class=\"" + IMAGELIGHTBOX + "\" role=\"dialog\" aria-label=\"" + l10n.title + "\">\n        <ol class=\"" + IMAGELIGHTBOX + "-list\"></ol>\n        <div class=\"" + IMAGELIGHTBOX + "-progress\">" + l10n.progress + "</div>\n        <div class=\"" + IMAGELIGHTBOX + "-button next\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.next + "\"></div>\n        <div class=\"" + IMAGELIGHTBOX + "-button previous\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.prev + "\"></div>\n        <div class=\"" + IMAGELIGHTBOX + "-button close\" role=\"button\" tabindex=\"0\" aria-label=\"" + l10n.close + "\"></div>\n      </div>";
+      element.innerHTML = "\n      <button class=\"back-button icon-arrow-thick\" aria-label=\"" + _dictionary2.default.get("contentTypeBackButtonLabel") + "\" tabindex=\"0\"></button>\n      <div class=\"container\">\n        <div class=\"image-wrapper\"><img class=\"img-responsive content-type-image\" src=\"" + _contentTypePlaceholder2.default + "\"></div>\n        <div class=\"text-details\">\n          <h2 id=\"" + titleId + "\" class=\"title\"></h2>\n          <div class=\"owner\"></div>\n          <p class=\"small\"></p>\n          <a class=\"button demo-button\" target=\"_blank\" aria-hidden=\"false\" href=\"#\">" + _dictionary2.default.get("contentTypeDemoButtonLabel") + "</a>\n        </div>\n      </div>\n      <div class=\"carousel\" role=\"region\" data-size=\"5\">\n        <button class=\"carousel-button previous\" aria-hidden=\"true\" disabled><span class=\"icon-arrow-thick\"></span></button>\n        <button class=\"carousel-button next\" aria-hidden=\"true\" disabled><span class=\"icon-arrow-thick\"></span></button>\n        <nav class=\"scroller\">\n          <ul></ul>\n        </nav>\n      </div>\n      <hr />\n      <div class=\"button-bar\">\n        <button class=\"button button-primary button-use\" aria-hidden=\"false\" data-id=\"\">" + _dictionary2.default.get("contentTypeUseButtonLabel") + "</button>\n        <button class=\"button button-inverse-primary button-install\" aria-hidden=\"true\" data-id=\"\"><span class=\"icon-arrow-thick\"></span>" + _dictionary2.default.get('contentTypeInstallButtonLabel') + "</button>\n        <button class=\"button button-inverse-primary button-installing\" aria-hidden=\"true\"><span class=\"icon-loading-search icon-spin\"></span>" + _dictionary2.default.get("contentTypeInstallingButtonLabel") + "</button>\n      </div>\n      <dl class=\"panel\">\n        <dt aria-level=\"2\" role=\"heading\" class=\"licence-panel-heading\">\n          <a href=\"#\" role=\"button\" aria-expanded=\"false\" aria-controls=\"licence-panel\">\n            <span class=\"icon-accordion-arrow\"></span> " + _dictionary2.default.get('contentTypeLicensePanelTitle') + "\n          </a>\n        </dt>\n        <dl id=\"licence-panel\" role=\"region\" aria-hidden=\"true\">\n          <div class=\"panel-body\"></div>\n        </dl>\n      </dl>\n      <div id=\"" + IMAGELIGHTBOX + "-detail\" class=\"" + IMAGELIGHTBOX + "\" role=\"dialog\" aria-label=\"" + l10n.title + "\">\n        <ol class=\"" + IMAGELIGHTBOX + "-list\"></ol>\n        <div class=\"" + IMAGELIGHTBOX + "-progress\">" + l10n.progress + "</div>\n        <div class=\"" + IMAGELIGHTBOX + "-button next\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.next + "\"></div>\n        <div class=\"" + IMAGELIGHTBOX + "-button previous\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.prev + "\"></div>\n        <div class=\"" + IMAGELIGHTBOX + "-button close\" role=\"button\" tabindex=\"0\" aria-label=\"" + l10n.close + "\"></div>\n      </div>";
 
       return element;
     }
@@ -3266,10 +3319,14 @@ var ContentTypeDetailView = function () {
           success = _ref$success === undefined ? true : _ref$success,
           message = _ref.message;
 
-      (0, _elements.show)(this.installMessage);
-      this.installMessage.querySelector('.title').innerText = message;
-      this.installMessage.querySelector('.title').innerText = message;
-      this.installMessage.className = "install-message dismissible message simple " + (success ? 'info' : 'error');
+      this.installMessage = new _messageView2.default({
+        dismissible: true,
+        type: success ? 'info' : 'error',
+        name: 'install-message',
+        title: message
+      }).on('close', this.removeInstallMessage, this);
+
+      this.rootElement.insertBefore(this.installMessage.getElement(), this.buttonBar);
     }
 
     /**
@@ -3280,10 +3337,12 @@ var ContentTypeDetailView = function () {
      */
 
   }, {
-    key: "resetInstallMessage",
-    value: function resetInstallMessage() {
-      (0, _elements.hide)(this.installMessage);
-      this.installMessage.querySelector('.title').innerText = '';
+    key: "removeInstallMessage",
+    value: function removeInstallMessage() {
+      if (this.installMessage) {
+        this.rootElement.removeChild(this.installMessage.getElement());
+        delete this.installMessage;
+      }
     }
 
     /**
@@ -3331,7 +3390,7 @@ var ContentTypeDetailView = function () {
         this.container.removeChild(this.messageViewElement);
         delete this.messageViewElement;
       }
-      (0, _elements.hide)(this.installMessage);
+      this.removeInstallMessage();
     }
 
     /**
@@ -3401,14 +3460,14 @@ var ContentTypeDetailView = function () {
   }, {
     key: "setDescription",
     value: function setDescription() {
-      var _this2 = this;
+      var _this = this;
 
       var text = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
       if (text && text.length > MAX_TEXT_SIZE_DESCRIPTION) {
         this.description.innerHTML = this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text) + "<button class=\"read-more link\">" + _dictionary2.default.get('contentTypeReadMore') + "</button>";
         this.description.querySelector('.read-more, .read-less').addEventListener('click', function () {
-          return _this2.toggleDescriptionExpanded(text);
+          return _this.toggleDescriptionExpanded(text);
         });
         this.descriptionExpanded = false;
       } else {
@@ -3425,19 +3484,23 @@ var ContentTypeDetailView = function () {
   }, {
     key: "toggleDescriptionExpanded",
     value: function toggleDescriptionExpanded(text) {
-      var _this3 = this;
+      var _this2 = this;
 
       // flip boolean
       this.descriptionExpanded = !this.descriptionExpanded;
 
       if (this.descriptionExpanded) {
-        this.description.innerHTML = text + "<button class=\"read-less link\">" + _dictionary2.default.get('contentTypeReadLess') + "</button>";
+        this.description.innerHTML = this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text) + "\n                                    " + this.ellipsisRest(MAX_TEXT_SIZE_DESCRIPTION, text) + "\n                                    <button class=\"read-less link\">" + _dictionary2.default.get('contentTypeReadLess') + "</button>";
+
+        this.description.querySelector('.part-two').focus();
       } else {
-        this.description.innerHTML = this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text) + "<button class=\"read-more link\">" + _dictionary2.default.get('contentTypeReadMore') + "</button>";
+        this.description.innerHTML = this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text) + "\n                                    <button class=\"read-more link\">" + _dictionary2.default.get('contentTypeReadMore') + "</button>";
+
+        this.description.querySelector('.part-one').focus();
       }
 
       this.description.querySelector('.read-more, .read-less').addEventListener('click', function () {
-        return _this3.toggleDescriptionExpanded(text);
+        return _this2.toggleDescriptionExpanded(text);
       });
     }
 
@@ -3451,7 +3514,20 @@ var ContentTypeDetailView = function () {
   }, {
     key: "ellipsis",
     value: function ellipsis(size, text) {
-      return text.substr(0, size) + "...";
+      return "<span class=\"part-one\" tabindex=\"-1\">" + text.substr(0, size) + "...</span>";
+    }
+
+    /**
+     * Gets the text cut off by ellipsis
+     *
+     * @param {number} size
+     * @param {string} text
+     */
+
+  }, {
+    key: "ellipsisRest",
+    value: function ellipsisRest(size, text) {
+      return "<span class=\"part-two\" tabindex=\"-1\">" + text.substr(size) + "...</span>";
     }
 
     /**
@@ -3464,28 +3540,30 @@ var ContentTypeDetailView = function () {
   }, {
     key: "setLicence",
     value: function setLicence(type, owner) {
-      if (type) {
-        if (type === 'MIT') {
-          /*this.licencePanelBody.querySelector('.panel-body').innerHTML = `
-          <p>Copyright ${(new Date()).getFullYear()} ${owner}</p>
-            <p>Permission is hereby granted, free of charge, to any person obtaining a copy
-          of this software and associated documentation files (the "Software"), to deal
-          in the Software without restriction, including without limitation the rights
-          to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-          copies of the Software, and to permit persons to whom the Software is
-          furnished to do so, subject to the following conditions:</p>
-            <p>The above copyright notice and this permission notice shall be included in
-          all copies or substantial portions of the Software.</p>
-            <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-          IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-          FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-          AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-          LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-          OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-          THE SOFTWARE.</p>
-          `;*/
+      var details = LICENCE_DATA[type];
 
-          this.licencePanelBody.querySelector('.panel-body').innerHTML = "\n          <dl class=\"dl-horizontal\">\n            <dt>Can</dt>\n            <dd>Use commercially</dd>\n            <dd>Modify</dd>\n            <dd>Distribute</dd>\n            <dd>Sublicense</dd>\n            <dd>Private use</dd>\n\n            <dt>Cannot</dt>\n            <dd>Hold liable</dd>\n\n            <dt>Must</dt>\n            <dd>Include copyright</dd>\n            <dd>Include license</dd>\n          </dl>\n        ";
+      if (type && details) {
+
+        if (type === 'MIT') {
+          this.licencePanelBody.querySelector('.panel-body').innerHTML = "\n          <button class=\"read-more\">Read more</button>\n        ";
+
+          var shortLicence = document.createElement('div');
+          shortLicence.innerHTML = details.short;
+
+          this.licencePanelBody.appendChild(shortLicence);
+
+          var modal = this.createModal({
+            title: 'Content License info',
+            subtitle: 'Click on a specific license to get info about proper usage',
+            licences: [{
+              title: details.title,
+              body: details.full(owner)
+            }]
+          });
+
+          this.licencePanelBody.querySelector('.read-more').addEventListener('click', function () {
+            return (0, _elements.show)(modal);
+          });
         } else {
           this.licencePanelBody.querySelector('.panel-body').innerText = type;
         }
@@ -3495,6 +3573,43 @@ var ContentTypeDetailView = function () {
 
       // Close licence panel body by default
       (0, _elements.hide)(this.licencePanelBody);
+    }
+  }, {
+    key: "createModal",
+    value: function createModal(_ref2) {
+      var title = _ref2.title,
+          subtitle = _ref2.subtitle,
+          licences = _ref2.licences;
+
+      this.modal = document.createElement('div');
+      this.modal.innerHTML = "\n      <div class=\"modal fade show\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"dialog-title\">\n        <div class=\"modal-dialog\" role=\"document\">\n          <div class=\"modal-content\">\n            <div class=\"modal-header\">\n              <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n                <span>&#10006;</span>\n              </button>\n              <h5 class=\"modal-title\" id=\"dialog-title\">" + title + "</h5>\n              <h5 class=\"modal-subtitle\">" + subtitle + "</h5>\n            </div>\n            <div class=\"modal-body\">\n              <dl class=\"panel\"></dl>\n            </div>\n          </div>\n        </div>\n      </div>";
+
+      var panels = this.modal.querySelector('.panel');
+
+      licences.forEach(function (licence, index) {
+        var id = "content-type-detail-licence-" + index;
+
+        var title = document.createElement('dt');
+        title.setAttribute('role', 'heading');
+        title.setAttribute('aria-level', '2');
+        title.innerHTML = "<a href=\"#\" role=\"button\" aria-expanded=\"false\" aria-controls=\"" + id + "\">" + licence.title + "</a>";
+
+        var body = document.createElement('dd');
+        body.id = id;
+        body.setAttribute('role', 'region');
+        body.setAttribute('aria-hidden', 'true');
+        body.innerHTML = "<div class=\"panel-body\">" + licence.body + "</div>";
+
+        panels.appendChild(title);
+        panels.appendChild(body);
+      });
+
+      (0, _modal2.default)(this.modal);
+      (0, _panel2.default)(panels);
+
+      this.rootElement.appendChild(this.modal);
+
+      return this.modal;
     }
 
     /**
@@ -3523,7 +3638,7 @@ var ContentTypeDetailView = function () {
     key: "setExample",
     value: function setExample(url) {
       this.demoButton.setAttribute('href', url || '#');
-      toggleVisibility(this.demoButton, !isEmpty(url));
+      (0, _elements.toggleVisibility)(!isEmpty(url), this.demoButton);
     }
 
     /**
@@ -3600,10 +3715,10 @@ var ContentTypeDetailView = function () {
   }, {
     key: "focus",
     value: function focus() {
-      var _this4 = this;
+      var _this3 = this;
 
       setTimeout(function () {
-        return _this4.rootElement.focus();
+        return _this3.rootElement.focus();
       }, 10);
     }
 
@@ -3853,9 +3968,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _functional = __webpack_require__(0);
+var _functional = __webpack_require__(1);
 
-var _elements = __webpack_require__(1);
+var _elements = __webpack_require__(0);
 
 var _eventful = __webpack_require__(2);
 
@@ -3890,6 +4005,11 @@ var _show = (0, _elements.setAttribute)('aria-hidden', 'false');
 /**
  * @function
  */
+var hasTabindex = (0, _elements.hasAttribute)('tabindex');
+
+/**
+ * @function
+ */
 var getRowId = (0, _elements.getAttribute)('data-id');
 
 /**
@@ -3904,8 +4024,6 @@ var ContentTypeListView = function () {
     var _this = this;
 
     _classCallCheck(this, ContentTypeListView);
-
-    this.state = state;
 
     // add event system
     _extends(this, (0, _eventful.Eventful)());
@@ -4024,13 +4142,28 @@ var ContentTypeListView = function () {
       element.setAttribute('aria-describedby', contentTypeRowDescriptionId);
 
       // create html
-      element.innerHTML = "\n      <img class=\"img-responsive\" src=\"" + image + "\" alt=\"" + title + " " + _dictionary2.default.get('contentTypeIconAltText') + "\" />\n\n      <div class=\"content-type-row-info\">\n        <h4 id=\"" + contentTypeRowTitleId + "\">" + title + "</h4>\n        <div id=\"" + contentTypeRowDescriptionId + "\" class=\"description\">" + description + "</div>\n      </div>\n\n      <div class=\"content-type-row-button\">\n        <button aria-describedby=\"" + contentTypeRowTitleId + "\" class=\"button " + button.cls + "\" data-id=\"" + contentType.machineName + "\" tabindex=\"0\" " + disabled + ">\n          <span class=\"" + button.icon + "\"></span>\n          " + button.text + "\n        </button>\n      </div>\n   ";
+      element.innerHTML = "\n      <img class=\"img-responsive\" src=\"" + image + "\" alt=\"" + title + " " + _dictionary2.default.get('contentTypeIconAltText') + "\" />\n\n      <div class=\"content-type-row-info\">\n        <h4 id=\"" + contentTypeRowTitleId + "\">" + title + "</h4>\n        <div id=\"" + contentTypeRowDescriptionId + "\" class=\"description\">" + description + "</div>\n      </div>\n\n      <div class=\"content-type-row-button\">\n        <button aria-describedby=\"" + contentTypeRowTitleId + "\" class=\"button " + button.cls + "\" data-id=\"" + contentType.machineName + "\" tabindex=\"-1\" " + disabled + ">\n          <span class=\"" + button.icon + "\"></span>\n          " + button.text + "\n        </button>\n      </div>\n   ";
 
       // handle use button
       var useButton = element.querySelector('.button-primary');
       if (useButton) {
         (0, _events.relayClickEventAs)('select', scope, useButton);
       }
+
+      // listens for tabindex change, and update button too
+      var actionButton = element.querySelector('.button');
+      var observer = new MutationObserver(function (records) {
+        var el = records[0].target;
+
+        // use -1 since element is <button>
+        actionButton.setAttribute('tabindex', hasTabindex(el) ? '0' : '-1');
+      });
+
+      observer.observe(element, {
+        attributes: true,
+        attributeOldValue: true,
+        attributeFilter: ["tabindex"]
+      });
 
       return element;
     }
@@ -4205,13 +4338,13 @@ var _messageView = __webpack_require__(6);
 
 var _messageView2 = _interopRequireDefault(_messageView);
 
-var _elements = __webpack_require__(1);
+var _elements = __webpack_require__(0);
 
-var _functional = __webpack_require__(0);
+var _functional = __webpack_require__(1);
 
 var _events = __webpack_require__(5);
 
-var _navbar = __webpack_require__(28);
+var _navbar = __webpack_require__(29);
 
 var _navbar2 = _interopRequireDefault(_navbar);
 
@@ -4312,11 +4445,18 @@ var ContentBrowserView = function () {
 
       // create element
       var element = document.createElement('div');
-      element.className = 'content-type-section-view';
+      element.className = 'content-type-section-view loading';
       element.innerHTML = "\n      <div class=\"menu-group\">\n        <nav  role=\"menubar\" class=\"navbar\">\n          <div class=\"navbar-header\">\n             <button class=\"navbar-toggler navbar-toggler-right\" tabindex=\"0\" aria-haspopup=\"true\" aria-controls=\"" + menuId + "\" aria-expanded=\"false\">\n               <span class=\"icon-accordion-arrow\"></span>\n             </button>\n            <span class=\"navbar-toggler-selected\"></span>\n            <span class=\"navbar-brand\">" + _dictionary2.default.get("contentTypeSectionTitle") + "</span>\n          </div>\n\n          <ul id=\"" + menuId + "\" class=\"navbar-nav\"></ul>\n        </nav>\n\n        <div class=\"input-group\" role=\"search\">\n          <input id=\"hub-search-bar\" class=\"form-control form-control-rounded\" type=\"text\" aria-label=\"" + searchText + "\" placeholder=\"" + searchText + "\" />\n          <div class=\"input-group-addon icon-search\"></div>\n        </div>\n      </div>";
 
       return element;
     }
+
+    /**
+     * Display a message
+     *
+     * @param {object} config - parameters sent to MessageView constructor
+     */
+
   }, {
     key: "displayMessage",
     value: function displayMessage(config) {
@@ -4329,12 +4469,28 @@ var ContentBrowserView = function () {
 
       messageView.on('action-clicked', function () {
         self.rootElement.classList.remove('error');
+        self.rootElement.classList.add('loading');
         element.parentNode.removeChild(element);
-        self.trigger('reload');
+        // Give the user a chance to see that it's reloading 
+        setTimeout(function () {
+          return self.trigger('reload');
+        }, 1000);
       });
 
+      this.rootElement.classList.remove('loading');
       this.rootElement.classList.add('error');
       this.rootElement.appendChild(messageView.getElement());
+    }
+
+    /**
+     * Inform view data is loaded
+     */
+
+  }, {
+    key: "loaded",
+    value: function loaded() {
+      this.rootElement.classList.remove('loading');
+      this.rootElement.classList.add('loaded');
     }
 
     /**
@@ -4548,7 +4704,6 @@ var HubServices = function () {
     _classCallCheck(this, HubServices);
 
     this.apiRootUrl = apiRootUrl;
-    this.setup();
   }
 
   /**
@@ -4565,6 +4720,8 @@ var HubServices = function () {
       }).then(function (result) {
         return result.json();
       }).then(this.isValid);
+
+      return this.cachedContentTypes;
     }
 
     /**
@@ -4732,13 +4889,13 @@ var _panel = __webpack_require__(9);
 
 var _panel2 = _interopRequireDefault(_panel);
 
-var _tabPanel = __webpack_require__(29);
+var _tabPanel = __webpack_require__(30);
 
 var _tabPanel2 = _interopRequireDefault(_tabPanel);
 
-var _functional = __webpack_require__(0);
+var _functional = __webpack_require__(1);
 
-var _elements = __webpack_require__(1);
+var _elements = __webpack_require__(0);
 
 var _eventful = __webpack_require__(2);
 
@@ -4762,11 +4919,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @constant {string}
  */
 var ATTRIBUTE_DATA_ID = 'data-id';
-
-/**
- * @function
- */
-var isOpen = (0, _elements.hasAttribute)('open');
 
 /**
  * @class
@@ -4849,8 +5001,9 @@ var HubView = function () {
       };
       var element = document.createElement('section');
       element.className += "h5p-hub h5p-sdk";
+      var panelClasses = "panel" + (expanded ? ' open' : '');
 
-      element.innerHTML = "\n      <div class=\"panel\">\n        <div aria-level=\"1\" role=\"heading\">\n          <span role=\"button\" class=\"icon-hub-icon\" aria-expanded=\"" + expanded + "\" aria-controls=\"panel-body-" + sectionId + "\">\n          <span class=\"h5p-hub-description\">" + labels.h5pHub + "</span>\n          <span class=\"h5p-hub-selected\"></span>\n        </span>\n        </div>\n        <div id=\"panel-body-" + sectionId + "\" role=\"region\" aria-hidden=\"" + !expanded + "\">\n          <div class=\"tab-panel\">\n            <nav>\n              <ul role=\"tablist\"></ul>\n            </nav>\n          </div>\n        </div>\n      </div>";
+      element.innerHTML = "\n      <div class=\"" + panelClasses + "\">\n        <div aria-level=\"1\" role=\"heading\">\n          <span role=\"button\" class=\"icon-hub-icon\" aria-expanded=\"" + expanded + "\" aria-controls=\"panel-body-" + sectionId + "\">\n          <span class=\"h5p-hub-description\">" + labels.h5pHub + "</span>\n          <span class=\"h5p-hub-selected\"></span>\n        </span>\n        </div>\n        <div id=\"panel-body-" + sectionId + "\" role=\"region\" aria-hidden=\"" + !expanded + "\">\n          <div class=\"tab-panel\">\n            <nav>\n              <ul role=\"tablist\"></ul>\n            </nav>\n          </div>\n        </div>\n      </div>";
 
       return element;
     }
@@ -4863,10 +5016,10 @@ var HubView = function () {
     key: "togglePanelOpen",
     value: function togglePanelOpen() {
       var panel = this.panel;
-      if (isOpen(panel)) {
-        panel.removeAttribute('open');
+      if (!panel.classList.contains('open')) {
+        panel.classList.add('open');
       } else {
-        panel.setAttribute('open', '');
+        panel.classList.remove('open');
         setTimeout(function () {
           panel.querySelector('#hub-search-bar').focus();
         }, 20);
@@ -4940,6 +5093,53 @@ var HubView = function () {
     }
 
     /**
+     *
+     * @param {string} title
+     * @param {string} subtitle
+     * @param {HTMLElement} body
+     */
+
+  }, {
+    key: "updateModal",
+    value: function updateModal(_ref3) {
+      var title = _ref3.title,
+          subtitle = _ref3.subtitle,
+          body = _ref3.body;
+
+      if (!this.modal) {
+        this.modal = this.createModal();
+      }
+
+      this.modal.querySelector('.modal-title').innerText = title;
+      this.modal.querySelector('.modal-subtitle').innerText = subtitle;
+      this.modal.querySelector('.modal-body').appendChild(body);
+
+      (0, _elements.show)(this.modal);
+    }
+
+    /**
+     * Creates a element for displaying a modal dialog
+     *
+     * @return {Element}
+     */
+
+  }, {
+    key: "createModal",
+    value: function createModal() {
+      var dialogTitleId = 'dialog-title';
+
+      var modal = document.createElement('div');
+      modal.className = "modal";
+      modal.setAttribute('tabindex', '-1');
+      modal.setAttribute('role', 'dialog');
+      modal.setAttribute('aria-labelledby', dialogTitleId);
+
+      modal.innerHTML = "\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-header\">\n            <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n              <span>&#10006;</span>\n            </button>\n            <h5 class=\"modal-title\" id=\"" + dialogTitleId + "\"></h5>\n            <h6 class=\"modal-subtitle\"></h6>\n          </div>\n          <div class=\"modal-body\"></div>\n        </div>\n      </div>";
+
+      return modal;
+    }
+
+    /**
      * Sets the section
      *
      * @param {string} id
@@ -4947,10 +5147,10 @@ var HubView = function () {
 
   }, {
     key: "setSectionType",
-    value: function setSectionType(_ref3) {
-      var id = _ref3.id;
+    value: function setSectionType(_ref4) {
+      var id = _ref4.id;
 
-      this.panel.className = "h5p-section-" + id + " panel";
+      this.panel.classList.add('h5p-section-' + id, 'panel');
     }
 
     /**
@@ -4984,7 +5184,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _functional = __webpack_require__(0);
+var _functional = __webpack_require__(1);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -5456,12 +5656,12 @@ var UploadSection = function () {
     value: function renderUploadForm() {
       // Create the html
       var uploadForm = document.createElement('div');
-      uploadForm.innerHTML = '\n      <div class="upload-wrapper">\n        <div class="upload-form">\n          <input class="upload-path" placeholder="' + _dictionary2.default.get("uploadPlaceholder") + '" disabled/>\n          <button class="button use-button">Use</button>\n          <div class="input-wrapper">\n            <input type="file" />\n            <button class="button upload-button" tabindex="0">' + _dictionary2.default.get('uploadFileButtonLabel') + '</button>\n          </div>\n        </div>\n      </div>\n    ';
+      uploadForm.innerHTML = '\n      <div class="upload-wrapper">\n        <div class="upload-form">\n          <input class="upload-path" placeholder="' + _dictionary2.default.get("uploadPlaceholder") + '" disabled/>\n          <button class="button use-button" aria-hidden="true">Use</button>\n          <div class="input-wrapper">\n            <input type="file" />\n            <button class="button upload-button" tabindex="0">' + _dictionary2.default.get('uploadFileButtonLabel') + '</button>\n          </div>\n        </div>\n      </div>\n    ';
 
       // Create the html for the upload instructions separately as it needs to be styled
       var uploadInstructions = document.createElement('div');
       uploadInstructions.className = 'upload-instructions';
-      this.renderUploadInstructions(uploadInstructions, _dictionary2.default.get('uploadInstructions'));
+      this.renderUploadInstructions(uploadInstructions, _dictionary2.default.get('uploadInstructionsTitle'), _dictionary2.default.get('uploadInstructionsContent'));
       uploadForm.querySelector('.upload-wrapper').appendChild(uploadInstructions);
 
       return uploadForm;
@@ -5477,24 +5677,23 @@ var UploadSection = function () {
 
   }, {
     key: 'renderUploadInstructions',
-    value: function renderUploadInstructions(container, text) {
-      var textElements = text.match(/\(?[^\.\?\!]+[\.!\?]\)?/g); // match on sentences
+    value: function renderUploadInstructions(container, title, content) {
 
       var header = document.createElement('p');
       header.className = 'upload-instruction-header';
-      header.innerHTML = textElements.shift(); // grab the first sentence
+      header.innerHTML = title;
 
       var description = document.createElement('p');
       description.className = 'upload-instruction-description';
-      description.innerHTML = textElements.join(''); // join the rest
+      description.innerHTML = content;
 
       container.appendChild(header);
       container.appendChild(description);
     }
 
     /**
-     * Adds logic to bind the buttons to the form
-     * and to bind the form to the plugin
+     * Attach upload form elements to the DOM and initializes
+     * logic that binds them together
      *
      * @param  {HTMLElement} uploadForm
      */
@@ -5502,51 +5701,69 @@ var UploadSection = function () {
   }, {
     key: 'initUploadForm',
     value: function initUploadForm(uploadForm) {
+      this.uploadInput = uploadForm.querySelector('.upload-wrapper input[type="file"]');
+      this.uploadButton = uploadForm.querySelector('.upload-button');
+      this.uploadPath = uploadForm.querySelector('.upload-path');
+      this.useButton = uploadForm.querySelector('.use-button');
+
+      this.initUploadInput();
+      this.initUseButton();
+      this.initUploadButton();
+    }
+
+    /**
+     * Handle the main logic for the upload form.
+     */
+
+  }, {
+    key: 'initUploadInput',
+    value: function initUploadInput() {
       var self = this;
-      var uploadInput = uploadForm.querySelector('.upload-wrapper input[type="file"]');
-      var uploadButton = uploadForm.querySelector('.upload-button');
-      var uploadPath = uploadForm.querySelector('.upload-path');
-      var useButton = uploadForm.querySelector('.use-button');
-
       // Handle errors and update styles when a file is selected
-      uploadInput.onchange = function () {
-
+      this.uploadInput.onchange = function () {
         if (this.value === '') {
           return;
         }
-
-        // Reset styles
-        self.clearUserMessages();
+        // Clear messages
+        self.removeAllChildren(self.rootElement.querySelector('.message-wrapper'));
 
         // Replace the placeholder text with the selected filepath
-        uploadPath.value = this.value.replace('C:\\fakepath\\', '');
+        self.uploadPath.value = this.value.replace('C:\\fakepath\\', '');
 
         // Update the upload button
-        uploadButton.textContent = _dictionary2.default.get('uploadFileButtonChangeLabel');
+        self.uploadButton.textContent = _dictionary2.default.get('uploadFileButtonChangeLabel');
 
         // Check that it's a h5p file
-        var fileExtension = self.getFileExtension(this.value);
-        if (fileExtension !== 'h5p') {
-          self.renderMessage({
-            type: 'error',
-            title: _dictionary2.default.get('h5pFileWrongExtensionTitle'),
-            content: _dictionary2.default.get('h5pFileWrongExtensionContent')
-          });
+        if (self.getFileExtension(this.value) !== 'h5p') {
+
+          self.renderWrongExtensionMessage();
 
           // Hide the 'use' button for non-h5p files
-          useButton.style.display = 'none';
+          self.useButton.setAttribute('aria-hidden', 'true');
+          self.useButton.classList.remove('visible');
         } else {
           // Only show the 'use' button once a h5p file has been selected
-          useButton.style.display = 'inline-block';
+          self.useButton.removeAttribute('aria-hidden', 'true');
+          self.useButton.classList.add('visible');
         }
       };
+    }
+
+    /**
+     * Add logic to pass data from the upload input to the plugin
+     */
+
+  }, {
+    key: 'initUseButton',
+    value: function initUseButton() {
+      var self = this;
 
       // Send the file to the plugin
-      useButton.addEventListener('click', function () {
+      this.useButton.addEventListener('click', function () {
 
         // Add the H5P file to a form, ready for transportation
         var data = new FormData();
-        data.append('h5p', uploadInput.files[0]);
+        data.append('h5p', self.uploadInput.files[0]);
 
         // Upload content to the plugin
         self.services.uploadContent(data).then(function (json) {
@@ -5554,35 +5771,28 @@ var UploadSection = function () {
           self.trigger('upload', json);
         });
       });
+    }
 
-      // Allow users to upload a file by clicking on path field
-      uploadPath.onclick = function () {
-        uploadInput.click();
-      };
+    /**
+     * Initialize the upload button logic
+     * to be handled by the upload input element
+     */
 
-      // Allow users to upload a file by pressing enter or spacebar
-      uploadPath.onkeydown = function (e) {
-        if (e.which === 13 || e.which === 32) {
-          uploadInput.click();
-        }
-      };
-
+  }, {
+    key: 'initUploadButton',
+    value: function initUploadButton() {
+      var self = this;
       // Reuse the upload input logic to upload a file
-      uploadButton.onclick = function () {
-        uploadInput.click();
+      this.uploadButton.onclick = function () {
+        self.uploadInput.click();
       };
 
       // Allow users to upload a file by pressing enter or spacebar
-      uploadButton.onkeydown = function (e) {
+      this.uploadButton.onkeydown = function (e) {
         if (e.which === 13 || e.which === 32) {
-          uploadInput.click();
+          self.uploadInput.click();
         }
       };
-
-      this.uploadInput = uploadInput;
-      this.uploadPath = uploadPath;
-      this.uploadButton = uploadButton;
-      this.useButton = useButton;
     }
 
     /**
@@ -5599,16 +5809,6 @@ var UploadSection = function () {
     }
 
     /**
-     * Empties the message wrapper
-     */
-
-  }, {
-    key: 'clearUserMessages',
-    value: function clearUserMessages() {
-      this.removeAllChildren(this.rootElement.querySelector('.message-wrapper'));
-    }
-
-    /**
      * Helper function to get a file extension from a filename
      *
      * @param  {string} fileName
@@ -5619,6 +5819,20 @@ var UploadSection = function () {
     key: 'getFileExtension',
     value: function getFileExtension(fileName) {
       return fileName.replace(/^.*\./, '');
+    }
+
+    /**
+     * Renders a message notifying the user that an incorrect filetype was uploaded
+     */
+
+  }, {
+    key: 'renderWrongExtensionMessage',
+    value: function renderWrongExtensionMessage() {
+      this.renderMessage({
+        type: 'error',
+        title: _dictionary2.default.get('h5pFileWrongExtensionTitle'),
+        content: _dictionary2.default.get('h5pFileWrongExtensionContent')
+      });
     }
 
     /**
@@ -5655,6 +5869,13 @@ var UploadSection = function () {
         node.removeChild(node.lastChild);
       }
     }
+
+    /**
+     * Gets the upload section wrapper
+     *
+     * @return {HTMLElement} Wrapper for upload section
+     */
+
   }, {
     key: 'getElement',
     value: function getElement() {
@@ -6151,9 +6372,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 exports.default = init;
 
-var _elements = __webpack_require__(1);
+var _elements = __webpack_require__(0);
 
-var _functional = __webpack_require__(0);
+var _functional = __webpack_require__(1);
 
 var _keyboard = __webpack_require__(4);
 
@@ -6524,9 +6745,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 exports.default = init;
 
-var _elements = __webpack_require__(1);
+var _elements = __webpack_require__(0);
 
-var _functional = __webpack_require__(0);
+var _functional = __webpack_require__(1);
 
 var _keyboard = __webpack_require__(4);
 
@@ -6734,9 +6955,47 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = init;
 
-var _elements = __webpack_require__(1);
+var _elements = __webpack_require__(0);
 
-var _functional = __webpack_require__(0);
+/**
+ * Initiates a modal window
+ *
+ * @param {HTMLElement} element
+ */
+function init(element) {
+  var dismissButtons = element.querySelectorAll('[data-dismiss="modal"]');
+  (0, _elements.hide)(element);
+
+  dismissButtons.forEach(function (button) {
+    return button.addEventListener('click', function () {
+      return (0, _elements.hide)(element);
+    });
+  });
+
+  // hide modal on escape keypress
+  element.addEventListener('keydown', function (event) {
+    if (event.keyCode === 27) {
+      // escape
+      (0, _elements.hide)(element);
+    }
+  });
+}
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = init;
+
+var _elements = __webpack_require__(0);
+
+var _functional = __webpack_require__(1);
 
 var _collapsible = __webpack_require__(10);
 
@@ -6812,7 +7071,7 @@ function init(element) {
 }
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6823,9 +7082,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = init;
 
-var _elements = __webpack_require__(1);
+var _elements = __webpack_require__(0);
 
-var _functional = __webpack_require__(0);
+var _functional = __webpack_require__(1);
 
 var _keyboard = __webpack_require__(4);
 
@@ -6919,13 +7178,13 @@ function init(element) {
 }
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

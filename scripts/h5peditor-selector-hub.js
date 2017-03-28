@@ -66,11 +66,19 @@ ns.SelectorHub = function (selectedLibrary, changeLibraryDialog) {
       });
   }, this);
 
+  this.client.on('resized', function () {
+    self.trigger('resized');
+  });
+
   // Clear upload field when changing library
   changeLibraryDialog.on('confirmed', function () {
     self.clearUploadForm();
   })
 };
+
+// Extends the event dispatcher
+ns.SelectorHub.prototype = Object.create(H5P.EventDispatcher.prototype);
+ns.SelectorHub.prototype.constructor = ns.SelectorHub;
 
 /**
  * Clears the upload form in the hub client

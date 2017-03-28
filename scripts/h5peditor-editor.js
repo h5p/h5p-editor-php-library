@@ -46,6 +46,11 @@ ns.Editor = function (library, defaultParams, replace) {
       self.selector = new LibrarySelector(data, library, defaultParams);
       self.selector.appendTo($container.html(''));
 
+      // Resize iframe when selector resizes
+      self.selector.on('resized', function () {
+        resize();
+      });
+
       // Set library if editing
       if (library) {
         self.selector.setLibrary(library);
