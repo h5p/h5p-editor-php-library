@@ -109,5 +109,8 @@ H5PEditor.language.hub = {
   errorCommunicatingHubContent: 'An error occured. Please try again.',
   warningNoContentTypesInstalled: 'You don\'t have any content types installed.',
   warningChangeBrowsingToSeeResults:
-    'Click "All" to get the list of all the content types you can install.'
+    'Click "All" to get the list of all the content types you can install.',
+  warningUpdateAvailableTitle: 'A new version of :contentType is available.',
+  warningUpdateAvailableBody:
+    'Update to the latest version for an improved experience.'
 };

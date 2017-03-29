@@ -2290,7 +2290,7 @@ var ContentTypeSection = function () {
 
     // propagate events
     this.propagate(['select', 'update-content-type-list'], this.contentTypeList);
-    this.propagate(['select'], this.contentTypeDetail);
+    this.propagate(['select', 'modal'], this.contentTypeDetail);
     this.propagate(['reload'], this.view);
 
     // register listeners
@@ -2731,6 +2731,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @type {Object}
  */
 /**
+ * Attach modal event
+ * @event Hub#attachModal
+ * @type {object}
+ * @property {Element} element
+ */
+/**
  * @class
  * @mixes Eventful
  * @fires Hub#select
@@ -2740,6 +2746,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Hub = function () {
   /**
    * @param {HubState} state
+   * @param {object} dictionary
    */
   function Hub(state, dictionary) {
     var _this = this;
@@ -2748,7 +2755,6 @@ var Hub = function () {
 
     // add event system
     _extends(this, (0, _eventful.Eventful)());
-    var self = this;
 
     // Setting up Dictionary
     _dictionary2.default.init(dictionary);
@@ -2774,29 +2780,50 @@ var Hub = function () {
     this.on('select', this.setPanelTitle, this);
     this.on('select', this.view.closePanel, this.view);
     this.view.on('tab-change', this.view.setSectionType, this.view);
-    this.view.on('panel-change', function () {
-      _this.view.togglePanelOpen();
-
-      // Tell listeners that hub has been resized
-      setTimeout(function () {
-        self.trigger('resized');
-      }, 150);
-    });
+    this.view.on('panel-change', this.view.togglePanelOpen, this.view);
     this.contentTypeSection.on('reload', this.setupServices, this);
-
+    this.contentTypeSection.on('modal', this.showModal, this);
     this.on('clear-upload-form', function () {
-      self.uploadSection.clearUploadForm();
+      _this.uploadSection.clearUploadForm();
+      _this.postponedResize();
     });
 
     this.initTabPanel(state);
   }
 
   /**
-   * Setup services and handle fetching data
+   * Does a resize after 150ms
    */
 
 
   _createClass(Hub, [{
+    key: 'postponedResize',
+    value: function postponedResize() {
+      setTimeout(function () {
+        return self.trigger('resized');
+      }, 150);
+    }
+
+    /**
+     * Appends a modal to the root element and shows it
+     *
+     * @param {Element} element
+     */
+
+  }, {
+    key: 'showModal',
+    value: function showModal(_ref) {
+      var element = _ref.element;
+
+      this.view.appendChild(element);
+      element.classList.remove('hidden');
+    }
+
+    /**
+     * Setup services and handle fetching data
+     */
+
+  }, {
     key: 'setupServices',
     value: function setupServices() {
       var self = this;
@@ -2828,13 +2855,13 @@ var Hub = function () {
 
   }, {
     key: 'setPanelTitle',
-    value: function setPanelTitle(_ref) {
+    value: function setPanelTitle(_ref2) {
       var _this2 = this;
 
-      var id = _ref.id;
+      var id = _ref2.id;
 
-      this.getContentType(id).then(function (_ref2) {
-        var title = _ref2.title;
+      this.getContentType(id).then(function (_ref3) {
+        var title = _ref3.title;
         return _this2.view.setTitle(title ? title : id);
       });
     }
@@ -2847,11 +2874,11 @@ var Hub = function () {
 
   }, {
     key: 'initTabPanel',
-    value: function initTabPanel(_ref3) {
+    value: function initTabPanel(_ref4) {
       var _this3 = this;
 
-      var _ref3$sectionId = _ref3.sectionId,
-          sectionId = _ref3$sectionId === undefined ? 'content-types' : _ref3$sectionId;
+      var _ref4$sectionId = _ref4.sectionId,
+          sectionId = _ref4$sectionId === undefined ? 'content-types' : _ref4$sectionId;
 
       var tabConfigs = [{
         title: _dictionary2.default.get('createContentTabLabel'),
@@ -3174,6 +3201,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
+ * @event {ContentTypeDetailView#show-licence-dialog}
+ * @type {object}
+ * @property {string[]} types
+ */
+
+/**
  * @constant {string}
  */
 var ATTRIBUTE_CONTENT_TYPE_ID = 'data-id';
@@ -3217,16 +3250,6 @@ var disable = (0, _elements.setAttribute)('disabled', '');
  */
 var enable = (0, _elements.removeAttribute)('disabled');
 
-var LICENCE_DATA = {
-  "MIT": {
-    title: 'MIT License',
-    short: "\n    <ul class=\"ul\">\n      <li>Can use comercially</li>\n      <li>Can modify</li>\n      <li>Can distribute</li>\n      <li>Can sublicense</li>\n      <li>Cannot hold liable</li>\n      <li>Must include copyright</li>\n      <li>Must include license</li>\n    </ul>",
-    full: function full(owner) {
-      return "<p>Copyright " + new Date().getFullYear() + " " + owner + "</p>\n    \n      <p>Permission is hereby granted, free of charge, to any person obtaining a copy\n      of this software and associated documentation files (the \"Software\"), to deal\n      in the Software without restriction, including without limitation the rights\n      to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n      copies of the Software, and to permit persons to whom the Software is\n      furnished to do so, subject to the following conditions:</p>\n    \n      <p>The above copyright notice and this permission notice shall be included in\n      all copies or substantial portions of the Software.</p>\n    \n      <p>THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE\n      AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n      LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\n      THE SOFTWARE.</p>";
-    }
-  }
-};
-
 /**
  * @class
  * @mixes Eventful
@@ -3251,6 +3274,7 @@ var ContentTypeDetailView = function () {
     this.installingButton = this.buttonBar.querySelector('.button-installing');
     this.buttons = this.buttonBar.querySelectorAll('.button');
 
+    this.contentContainer = this.rootElement.querySelector('.container');
     this.image = this.rootElement.querySelector('.content-type-image');
     this.title = this.rootElement.querySelector('.text-details .title');
     this.owner = this.rootElement.querySelector('.owner');
@@ -3402,6 +3426,7 @@ var ContentTypeDetailView = function () {
       });
 
       this.removeInstallMessage();
+      this.resetLicenses();
     }
 
     /**
@@ -3543,64 +3568,65 @@ var ContentTypeDetailView = function () {
     }
 
     /**
+     * Removes the licences that are listed
+     */
+
+  }, {
+    key: "resetLicenses",
+    value: function resetLicenses() {
+      var container = this.licencePanelBody.querySelector('.panel-body');
+      container.querySelectorAll('dt,dl').forEach((0, _elements.removeChild)(container));
+    }
+
+    /**
      * Sets the licence
      *
-     * @param {string} type
-     * @param {string} owner
+     * @param {object} license
      */
 
   }, {
     key: "setLicence",
-    value: function setLicence(type, owner) {
+    value: function setLicence(license) {
+      var _this3 = this;
+
+      var panelContainer = this.licencePanelBody.querySelector('.panel-body');
       var l10n = {
         readMore: 'Read more'
       };
-      var licenseDetails = LICENCE_DATA[type];
 
-      // removes all children
-      var panelContainer = this.licencePanelBody.querySelector('.panel-body');
-      panelContainer.querySelectorAll('dt,dl').forEach((0, _elements.removeChild)(panelContainer));
-
-      if (type && licenseDetails) {
+      if (license) {
+        // Create short version for detail page
         var shortLicenceInfo = document.createElement('div');
         shortLicenceInfo.className = 'short-license-info';
-
-        shortLicenceInfo.innerHTML = "\n        <h3>" + licenseDetails.title + "</h3>\n        <button class=\"short-license-read-more icon-info-circle\" aria-label=\"" + l10n.readMore + "\"></button>\n        " + licenseDetails.short + "\n      ";
+        shortLicenceInfo.innerHTML = "\n        <h3>" + license.title + "</h3>\n        <button class=\"short-license-read-more icon-info-circle\" aria-label=\"" + l10n.readMore + "\"></button>\n        " + license.short;
 
         // add short version of licence
         panelContainer.innerText = '';
         panelContainer.appendChild(shortLicenceInfo);
 
-        var modal = this.createModal({
-          title: 'Content License info',
-          subtitle: 'Click on a specific license to get info about proper usage',
-          licences: [{
-            title: licenseDetails.title,
-            body: licenseDetails.full(owner)
-          }]
-        });
-
-        this.rootElement.appendChild(modal);
-
         // handle clicking read more
         var readMoreButton = this.licencePanelBody.querySelector('.short-license-read-more');
         readMoreButton.addEventListener('click', function () {
-          console.log('show licence', modal);
-          (0, _elements.show)(modal);
-          modal.querySelector('.modal-dialog').focus();
-          //modal.querySelector('.modal-dialog .close').focus();
+          return _this3.trigger('show-licence-dialog', { license: license });
         });
-
-        (0, _elements.show)(this.licencePanelHeading);
-      } else if (type) {
-        panelContainer.innerText = type;
       } else {
         panelContainer.innerText = 'Unspecified';
       }
     }
+
+    /**
+     * Creates a modal window for license details
+     *
+     * @param title
+     * @param subtitle
+     * @param licences
+     *
+     * @return {Element}
+     */
+
   }, {
-    key: "createModal",
-    value: function createModal(_ref2) {
+    key: "createLicenseDialog",
+    value: function createLicenseDialog(_ref2) {
       var title = _ref2.title,
           subtitle = _ref2.subtitle,
           licences = _ref2.licences;
@@ -3682,12 +3708,29 @@ var ContentTypeDetailView = function () {
      * Shows the update button if it is possible to update the content type
      *
      * @param {boolean} isUpdatePossible
+     * @param {string} [title] Used to display update message. Only required if
+     * update is possible
      */
 
   }, {
     key: "setIsUpdatePossible",
-    value: function setIsUpdatePossible(isUpdatePossible) {
+    value: function setIsUpdatePossible(isUpdatePossible, title) {
       this.updateButton.classList.toggle('hidden', !isUpdatePossible);
+
+      // Remove old warning message if in DOM
+      if (this.updateMessage && this.updateMessage.getElement().parentNode) {
+        this.updateMessage.getElement().parentNode.removeChild(this.updateMessage.getElement());
+      }
+
+      // Set warning message
+      if (isUpdatePossible) {
+        this.updateMessage = new _messageView2.default({
+          type: 'warning',
+          title: _dictionary2.default.get('warningUpdateAvailableTitle', { ':contentType': title || 'the content type' }),
+          content: _dictionary2.default.get('warningUpdateAvailableBody')
+        });
+        this.rootElement.insertBefore(this.updateMessage.getElement(), this.contentContainer);
+      }
     }
 
     /**
@@ -3755,10 +3798,10 @@ var ContentTypeDetailView = function () {
   }, {
     key: "focus",
     value: function focus() {
-      var _this3 = this;
+      var _this4 = this;
 
       setTimeout(function () {
-        return _this3.rootElement.focus();
+        return _this4.rootElement.focus();
       }, 10);
     }
 
@@ -3820,14 +3863,23 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var LICENCE_DATA = {
+  "MIT": function MIT(owner) {
+    return {
+      title: 'MIT License',
+      short: '\n    <ul class="ul">\n      <li>Can use comercially</li>\n      <li>Can modify</li>\n      <li>Can distribute</li>\n      <li>Can sublicense</li>\n      <li>Cannot hold liable</li>\n      <li>Must include copyright</li>\n      <li>Must include license</li>\n    </ul>',
+      full: '<p>Copyright ' + new Date().getFullYear() + ' ' + owner + '</p>\n    \n      <p>Permission is hereby granted, free of charge, to any person obtaining a copy\n      of this software and associated documentation files (the "Software"), to deal\n      in the Software without restriction, including without limitation the rights\n      to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n      copies of the Software, and to permit persons to whom the Software is\n      furnished to do so, subject to the following conditions:</p>\n    \n      <p>The above copyright notice and this permission notice shall be included in\n      all copies or substantial portions of the Software.</p>\n    \n      <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE\n      AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n      LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\n      THE SOFTWARE.</p>'
+    };
+  }
+};
+
 /**
  * @class
  * @mixes Eventful
  */
+
 var ContentTypeDetail = function () {
   function ContentTypeDetail(state, services) {
-    var _this = this;
-
     _classCallCheck(this, ContentTypeDetail);
 
     var self = this;
@@ -3842,22 +3894,11 @@ var ContentTypeDetail = function () {
 
     // views
     this.view = new _contentTypeDetailView2.default(state);
-    this.view.on('install', function (event) {
-      // Determine content type
-      _this.services.contentTypes().then(function (contentTypes) {
-        var install = contentTypes.find(function (contentType) {
-          return contentType.machineName === event.id;
-        });
-
-        return self.install({
-          id: install.machineName,
-          installed: install.installed
-        });
-      });
-    });
+    this.view.on('install', this.install, this);
+    this.view.on('show-licence-dialog', this.showLicenceDialog, this);
 
     // propagate events
-    this.propagate(['close', 'select'], this.view);
+    this.propagate(['close', 'select', 'modal'], this.view);
   }
 
   /**
@@ -3918,6 +3959,56 @@ var ContentTypeDetail = function () {
     }
 
     /**
+     * Displays the license dialog
+     *
+     * @param {object} license
+     */
+
+  }, {
+    key: 'showLicenceDialog',
+    value: function showLicenceDialog(_ref) {
+      var license = _ref.license;
+
+      var licenseDialog = this.view.createLicenseDialog({
+        title: 'Content License info',
+        subtitle: 'Click on a specific license to get info about proper usage',
+        licences: [{
+          title: license.title,
+          body: license.full
+        }]
+      });
+
+      this.trigger('modal', {
+        element: licenseDialog
+      });
+    }
+
+    /**
+     * Handle the install
+     *
+     * @param {string} id
+     */
+
+  }, {
+    key: 'install',
+    value: function install(_ref2) {
+      var _this = this;
+
+      var id = _ref2.id;
+
+      return this.services.contentTypes().then(function (contentTypes) {
+        var install = contentTypes.find(function (contentType) {
+          return contentType.machineName === id;
+        });
+
+        return _this.doInstall({
+          id: install.machineName,
+          installed: install.installed
+        });
+      });
+    }
+
+    /**
      * Loads a Content Type description
      *
      * @param {string} id
@@ -3927,12 +4018,12 @@ var ContentTypeDetail = function () {
      */
 
   }, {
-    key: 'install',
-    value: function install(_ref) {
+    key: 'doInstall',
+    value: function doInstall(_ref3) {
       var _this2 = this;
 
-      var id = _ref.id,
-          installed = _ref.installed;
+      var id = _ref3.id,
+          installed = _ref3.installed;
 
       // set spinner
       this.view.toggleSpinner(true);
@@ -3981,12 +4072,13 @@ var ContentTypeDetail = function () {
       this.view.setExample(contentType.example);
       this.view.setOwner(contentType.owner);
       this.view.setIsInstalled(contentType.installed);
-      this.view.setLicence(contentType.license, contentType.owner);
+      this.view.setLicence(LICENCE_DATA[contentType.license](contentType.owner));
       this.view.setIsRestricted(contentType.restricted);
-      this.view.setIsUpdatePossible(contentType.installed && !contentType.isUpToDate && !contentType.restricted);
+      var isUpdatePossible = contentType.installed && !contentType.isUpToDate && !contentType.restricted;
+      this.view.setIsUpdatePossible(isUpdatePossible, contentType.title || contentType.machineName);
 
       // Check if api version is supported
-      var apiVersionSupported = this.apiVersion.major > contentType.h5pMajorVersion || this.apiVersion.major == contentType.h5pMajorVersion && this.apiVersion.minor >= contentType.h5pMinorVersion;
+      var apiVersionSupported = this.apiVersion.major > contentType.h5pMajorVersion || this.apiVersion.major === contentType.h5pMajorVersion && this.apiVersion.minor >= contentType.h5pMinorVersion;
 
       // If not installed and unsupported version - let view know
       if (!contentType.installed && !apiVersionSupported) {
@@ -4734,6 +4826,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @property {string} patchVersion
  * @property {string} h5pMajorVersion
  * @property {string} h5pMinorVersion
+ * @property {string} title
  * @property {string} summary
  * @property {string} description
  * @property {string} icon
@@ -5020,7 +5113,7 @@ var HubView = function () {
   _createClass(HubView, [{
     key: "closePanel",
     value: function closePanel() {
-      this.toggler.setAttribute('aria-expanded', 'false');
+      this.panel.classList.remove('open');
     }
 
     /**
@@ -5060,7 +5153,7 @@ var HubView = function () {
       element.className += "h5p-hub h5p-sdk";
       var panelClasses = "panel" + (expanded ? ' open' : '');
 
-      element.innerHTML = "\n      <div class=\"" + panelClasses + "\">\n        <div aria-level=\"1\" role=\"heading\">\n          <span role=\"button\" class=\"icon-hub-icon\" aria-expanded=\"" + expanded + "\" aria-controls=\"panel-body-" + sectionId + "\">\n          <span class=\"h5p-hub-description\">" + labels.h5pHub + "</span>\n          <span class=\"h5p-hub-selected\"></span>\n        </span>\n        </div>\n        <div id=\"panel-body-" + sectionId + "\" role=\"region\" class=\"" + (expanded ? '' : 'hidden') + "\">\n          <div class=\"tab-panel\">\n            <nav>\n              <ul role=\"tablist\"></ul>\n            </nav>\n          </div>\n        </div>\n      </div>";
+      element.innerHTML = "\n      <div class=\"" + panelClasses + "\">\n        <div class=\"h5p-hub-client-drop-down\" aria-level=\"1\" role=\"heading\">\n          <span role=\"button\" class=\"icon-hub-icon\" aria-expanded=\"" + expanded + "\" aria-controls=\"panel-body-" + sectionId + "\">\n          <span class=\"h5p-hub-description\">" + labels.h5pHub + "</span>\n          <span class=\"h5p-hub-selected\"></span>\n        </span>\n        </div>\n        <div id=\"panel-body-" + sectionId + "\" role=\"region\" class=\"" + (expanded ? '' : 'hidden') + "\">\n          <div class=\"tab-panel\">\n            <nav>\n              <ul role=\"tablist\"></ul>\n            </nav>\n          </div>\n        </div>\n      </div>";
 
       return element;
     }
@@ -5075,11 +5168,11 @@ var HubView = function () {
       var panel = this.panel;
       if (!panel.classList.contains('open')) {
         panel.classList.add('open');
-      } else {
-        panel.classList.remove('open');
         setTimeout(function () {
           panel.querySelector('#hub-search-bar').focus();
         }, 20);
+      } else {
+        panel.classList.remove('open');
       }
     }
 
@@ -5135,6 +5228,19 @@ var HubView = function () {
     }
 
     /**
+     * Appends a child element to the root node
+     * @param {Element} element
+     *
+     * @return {Node}
+     */
+
+  }, {
+    key: "appendChild",
+    value: function appendChild(element) {
+      return this.rootElement.appendChild(element);
+    }
+
+    /**
      * Adds an animated border to the bottom of the tab
      */
 
@@ -5150,53 +5256,6 @@ var HubView = function () {
     }
 
     /**
-     *
-     * @param {string} title
-     * @param {string} subtitle
-     * @param {HTMLElement} body
-     */
-
-  }, {
-    key: "updateModal",
-    value: function updateModal(_ref3) {
-      var title = _ref3.title,
-          subtitle = _ref3.subtitle,
-          body = _ref3.body;
-
-      if (!this.modal) {
-        this.modal = this.createModal();
-      }
-
-      this.modal.querySelector('.modal-title').innerText = title;
-      this.modal.querySelector('.modal-subtitle').innerText = subtitle;
-      this.modal.querySelector('.modal-body').appendChild(body);
-
-      (0, _elements.show)(this.modal);
-    }
-
-    /**
-     * Creates a element for displaying a modal dialog
-     *
-     * @return {Element}
-     */
-
-  }, {
-    key: "createModal",
-    value: function createModal() {
-      var dialogTitleId = 'dialog-title';
-
-      var modal = document.createElement('div');
-      modal.className = "modal";
-      modal.setAttribute('tabindex', '-1');
-      modal.setAttribute('role', 'dialog');
-      modal.setAttribute('aria-labelledby', dialogTitleId);
-
-      modal.innerHTML = "\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-header\">\n            <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n              <span>&#10006;</span>\n            </button>\n            <h5 class=\"modal-title\" id=\"" + dialogTitleId + "\"></h5>\n            <h6 class=\"modal-subtitle\"></h6>\n          </div>\n          <div class=\"modal-body\"></div>\n        </div>\n      </div>";
-
-      return modal;
-    }
-
-    /**
      * Sets the section
      *
      * @param {string} id
@@ -5204,8 +5263,8 @@ var HubView = function () {
 
   }, {
     key: "setSectionType",
-    value: function setSectionType(_ref4) {
-      var id = _ref4.id;
+    value: function setSectionType(_ref3) {
+      var id = _ref3.id;
 
       this.panel.classList.add('h5p-section-' + id, 'panel');
     }
@@ -5715,7 +5774,7 @@ var UploadSection = function () {
     value: function renderUploadForm() {
       // Create the html
       var uploadForm = document.createElement('div');
-      uploadForm.innerHTML = '\n      <div class="upload-wrapper">\n        <div class="upload-form">\n          <input class="upload-path" placeholder="' + _dictionary2.default.get("uploadPlaceholder") + '" disabled/>\n          <button class="button use-button" aria-hidden="true">Use</button>\n          <div class="input-wrapper">\n            <input type="file" aria-hidden="true"/>\n            <button class="button upload-button" tabindex="0">' + _dictionary2.default.get('uploadFileButtonLabel') + '</button>\n          </div>\n        </div>\n      </div>\n    ';
+      uploadForm.innerHTML = '\n      <div class="upload-wrapper">\n        <div class="upload-form">\n          <input class="upload-path" placeholder="' + _dictionary2.default.get("uploadPlaceholder") + '" disabled/>\n          <button class="button use-button">Use</button>\n          <div class="input-wrapper">\n            <input type="file" aria-hidden="true"/>\n            <button class="button upload-button" tabindex="0">' + _dictionary2.default.get('uploadFileButtonLabel') + '</button>\n          </div>\n        </div>\n      </div>\n    ';
 
       // Create the html for the upload instructions separately as it needs to be styled
       var uploadInstructions = document.createElement('div');
@@ -5798,11 +5857,9 @@ var UploadSection = function () {
           self.renderWrongExtensionMessage();
 
           // Hide the 'use' button for non-h5p files
-          (0, _elements.hide)(self.useButton);
           self.useButton.classList.remove('visible');
         } else {
           // Only show the 'use' button once a h5p file has been selected
-          (0, _elements.show)(self.useButton);
           self.useButton.classList.add('visible');
           self.uploadPath.removeAttribute('placeholder');
         }
