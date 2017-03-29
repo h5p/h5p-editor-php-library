@@ -76,7 +76,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.toggleClass = exports.toggleVisibility = exports.show = exports.hide = exports.classListContains = exports.removeChild = exports.querySelectorAll = exports.nodeListToArray = exports.querySelector = exports.appendChild = exports.toggleAttribute = exports.attributeEquals = exports.hasAttribute = exports.removeAttribute = exports.setAttribute = exports.getAttribute = undefined;
+exports.toggleClass = exports.toggleVisibility = exports.show = exports.hide = exports.removeClass = exports.addClass = exports.classListContains = exports.removeChild = exports.querySelectorAll = exports.nodeListToArray = exports.querySelector = exports.appendChild = exports.toggleAttribute = exports.attributeEquals = exports.hasAttribute = exports.removeAttribute = exports.setAttribute = exports.getAttribute = undefined;
 
 var _functional = __webpack_require__(1);
 
@@ -235,21 +235,45 @@ var classListContains = exports.classListContains = (0, _functional.curry)(funct
 });
 
 /**
- * Adds aria-hidden=true to an element
+ * Adds a css class to an element
+ *
+ * @param {string} cls
+ * @param {Element} element
+ *
+ * @function
+ */
+var addClass = exports.addClass = (0, _functional.curry)(function (cls, element) {
+  return element.classList.add(cls);
+});
+
+/**
+ * Removes a css class from an element
+ *
+ * @param {string} cls
+ * @param {Element} element
+ *
+ * @function
+ */
+var removeClass = exports.removeClass = (0, _functional.curry)(function (cls, element) {
+  return element.classList.remove(cls);
+});
+
+/**
+ * Adds hidden class on an element
  *
  * @param {HTMLElement} element
  * @function
  */
-var hide = exports.hide = setAttribute('aria-hidden', 'true');
+var hide = exports.hide = addClass('hidden');
 
 /**
- * Adds aria-hidden=false to an element
+ * Removes hidden class from an element
  * @function
  */
-var show = exports.show = setAttribute('aria-hidden', 'false');
+var show = exports.show = removeClass('hidden');
 
 /**
- * Toggles aria-hidden on an element
+ * Toggles hidden class on an element
  *
  * @param {boolean} visible
  * @param {HTMLElement} element
@@ -2466,7 +2490,6 @@ var ContentTypeSection = function () {
 
       var id = _ref3.id;
 
-      this.contentTypeList.hide();
       this.contentTypeDetail.loadById(id);
       this.contentTypeDetail.show();
       this.view.typeAheadEnabled = false;
@@ -2583,11 +2606,11 @@ var _elements = __webpack_require__(0);
 var isExpanded = (0, _elements.attributeEquals)("aria-expanded", 'true');
 
 /**
- * Toggles aria-hidden on 'collapsible' when aria-expanded changes on 'toggler',
+ * Toggles hidden class on 'collapsible' when aria-expanded changes on 'toggler',
  * and toggles aria-expanded on 'toggler' on click
  *
  * @param {HTMLElement} element
- * @param {function} [targetHandler] falls back to toggleVisibility with aria-hidden
+ * @param {function} [targetHandler] falls back to toggleVisibility with hidden class
  * @param {string} [togglerSelector]
  */
 var initCollapsible = exports.initCollapsible = function initCollapsible(element) {
@@ -3177,15 +3200,6 @@ var isEmpty = function isEmpty(text) {
 };
 
 /**
- * Hides all elements in an array
- *
- * @param {HTMLElement[]} elements
- *
- * @function
- */
-var hideAll = (0, _functional.forEach)(_elements.hide);
-
-/**
  * Disables an HTMLElement
  *
  * @param {HTMLElement} element
@@ -3203,21 +3217,12 @@ var disable = (0, _elements.setAttribute)('disabled', '');
  */
 var enable = (0, _elements.removeAttribute)('disabled');
 
-/**
- * Returns true if attribute aria-hidden = 'true' on an element
- *
- * @param {HTMLElement} element
- *
- * @function
- */
-var _isHidden = (0, _elements.attributeEquals)('aria-hidden', 'true');
-
 var LICENCE_DATA = {
   "MIT": {
     title: 'MIT License',
     short: "\n    <ul class=\"ul\">\n      <li>Can use comercially</li>\n      <li>Can modify</li>\n      <li>Can distribute</li>\n      <li>Can sublicense</li>\n      <li>Cannot hold liable</li>\n      <li>Must include copyright</li>\n      <li>Must include license</li>\n    </ul>",
     full: function full(owner) {
-      return "<p>Copyright " + new Date().getFullYear() + " " + owner + "</p>\n\n      <p>Permission is hereby granted, free of charge, to any person obtaining a copy\n      of this software and associated documentation files (the \"Software\"), to deal\n      in the Software without restriction, including without limitation the rights\n      to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n      copies of the Software, and to permit persons to whom the Software is\n      furnished to do so, subject to the following conditions:</p>\n\n      <p>The above copyright notice and this permission notice shall be included in\n      all copies or substantial portions of the Software.</p>\n\n      <p>THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE\n      AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n      LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\n      THE SOFTWARE.</p>";
+      return "<p>Copyright " + new Date().getFullYear() + " " + owner + "</p>\n    \n      <p>Permission is hereby granted, free of charge, to any person obtaining a copy\n      of this software and associated documentation files (the \"Software\"), to deal\n      in the Software without restriction, including without limitation the rights\n      to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n      copies of the Software, and to permit persons to whom the Software is\n      furnished to do so, subject to the following conditions:</p>\n    \n      <p>The above copyright notice and this permission notice shall be included in\n      all copies or substantial portions of the Software.</p>\n    \n      <p>THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE\n      AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n      LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\n      THE SOFTWARE.</p>";
     }
   }
 };
@@ -3240,7 +3245,10 @@ var ContentTypeDetailView = function () {
     // grab references
     this.buttonBar = this.rootElement.querySelector('.button-bar');
     this.useButton = this.buttonBar.querySelector('.button-use');
+    this.updateButton = this.buttonBar.querySelector('.button-update');
+    this.updatingButton = this.buttonBar.querySelector('.button-updating');
     this.installButton = this.buttonBar.querySelector('.button-install');
+    this.installingButton = this.buttonBar.querySelector('.button-installing');
     this.buttons = this.buttonBar.querySelectorAll('.button');
 
     this.image = this.rootElement.querySelector('.content-type-image');
@@ -3265,6 +3273,7 @@ var ContentTypeDetailView = function () {
     // fire events on button click
     (0, _events.relayClickEventAs)('close', this, this.rootElement.querySelector('.back-button'));
     (0, _events.relayClickEventAs)('select', this, this.useButton);
+    (0, _events.relayClickEventAs)('install', this, this.updateButton);
     (0, _events.relayClickEventAs)('install', this, this.installButton);
   }
 
@@ -3298,9 +3307,8 @@ var ContentTypeDetailView = function () {
       element.setAttribute('role', 'region');
       element.setAttribute('tabindex', '-1');
       element.setAttribute('aria-labelledby', titleId);
-      element.setAttribute('aria-hidden', 'true');
 
-      element.innerHTML = "\n      <button class=\"back-button icon-arrow-thick\" aria-label=\"" + _dictionary2.default.get("contentTypeBackButtonLabel") + "\" tabindex=\"0\"></button>\n      <div class=\"container\">\n        <div class=\"image-wrapper\"><img class=\"img-responsive content-type-image\" src=\"" + _contentTypePlaceholder2.default + "\"></div>\n        <div class=\"text-details\">\n          <h2 id=\"" + titleId + "\" class=\"title\"></h2>\n          <div class=\"owner\"></div>\n          <p class=\"small\"></p>\n          <a class=\"button demo-button\" target=\"_blank\" aria-hidden=\"false\" href=\"#\">" + _dictionary2.default.get("contentTypeDemoButtonLabel") + "</a>\n        </div>\n      </div>\n      <div class=\"carousel\" role=\"region\" data-size=\"5\">\n        <button class=\"carousel-button previous\" aria-hidden=\"true\" disabled><span class=\"icon-arrow-thick\"></span></button>\n        <button class=\"carousel-button next\" aria-hidden=\"true\" disabled><span class=\"icon-arrow-thick\"></span></button>\n        <nav class=\"scroller\">\n          <ul></ul>\n        </nav>\n      </div>\n      <hr />\n      <div class=\"button-bar\">\n        <button class=\"button button-primary button-use\" aria-hidden=\"false\" data-id=\"\">" + _dictionary2.default.get("contentTypeUseButtonLabel") + "</button>\n        <button class=\"button button-inverse-primary button-install\" aria-hidden=\"true\" data-id=\"\"><span class=\"icon-arrow-thick\"></span>" + _dictionary2.default.get('contentTypeInstallButtonLabel') + "</button>\n        <button class=\"button button-inverse-primary button-installing\" aria-hidden=\"true\"><span class=\"icon-loading-search icon-spin\"></span>" + _dictionary2.default.get("contentTypeInstallingButtonLabel") + "</button>\n      </div>\n      <dl class=\"panel\">\n        <dt aria-level=\"2\" role=\"heading\" class=\"licence-panel-heading\">\n          <a href=\"#\" role=\"button\" aria-expanded=\"false\" aria-controls=\"licence-panel\">\n            <span class=\"icon-accordion-arrow\"></span> " + _dictionary2.default.get('contentTypeLicensePanelTitle') + "\n          </a>\n        </dt>\n        <dl id=\"licence-panel\" role=\"region\" aria-hidden=\"true\">\n          <div class=\"panel-body\"></div>\n        </dl>\n      </dl>\n      <div id=\"" + IMAGELIGHTBOX + "-detail\" class=\"" + IMAGELIGHTBOX + "\" role=\"dialog\" aria-label=\"" + l10n.title + "\">\n        <ol class=\"" + IMAGELIGHTBOX + "-list\"></ol>\n        <div class=\"" + IMAGELIGHTBOX + "-progress\">" + l10n.progress + "</div>\n        <div class=\"" + IMAGELIGHTBOX + "-button next\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.next + "\"></div>\n        <div class=\"" + IMAGELIGHTBOX + "-button previous\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.prev + "\"></div>\n        <div class=\"" + IMAGELIGHTBOX + "-button close\" role=\"button\" tabindex=\"0\" aria-label=\"" + l10n.close + "\"></div>\n      </div>";
+      element.innerHTML = "\n      <button class=\"back-button icon-arrow-thick\" aria-label=\"" + _dictionary2.default.get("contentTypeBackButtonLabel") + "\" tabindex=\"0\"></button>\n      <div class=\"container\">\n        <div class=\"image-wrapper\"><img class=\"img-responsive content-type-image\" src=\"" + _contentTypePlaceholder2.default + "\"></div>\n        <div class=\"text-details\">\n          <h2 id=\"" + titleId + "\" class=\"title\"></h2>\n          <div class=\"owner\"></div>\n          <p class=\"small\"></p>\n          <a class=\"button demo-button\" target=\"_blank\" href=\"#\">" + _dictionary2.default.get("contentTypeDemoButtonLabel") + "</a>\n        </div>\n      </div>\n      <div class=\"carousel\" role=\"region\" data-size=\"5\">\n        <button class=\"carousel-button previous hidden\" disabled><span class=\"icon-arrow-thick\"></span></button>\n        <button class=\"carousel-button next hidden\" disabled><span class=\"icon-arrow-thick\"></span></button>\n        <nav class=\"scroller\">\n          <ul></ul>\n        </nav>\n      </div>\n      <hr />\n      <div class=\"button-bar\">\n        <button class=\"button button-inverse-primary button-install\" class=\"hidden\" data-id=\"\"><span class=\"icon-arrow-thick\"></span>" + _dictionary2.default.get('contentTypeInstallButtonLabel') + "</button>\n        <button class=\"button button-inverse-primary button-installing\" class=\"hidden\"><span class=\"icon-loading-search icon-spin\"></span>" + _dictionary2.default.get("contentTypeInstallingButtonLabel") + "</button>\n        <button class=\"button button-inverse-primary button-update\">\n          " + _dictionary2.default.get("contentTypeUpdateButtonLabel") + "\n        </button>\n        <button class=\"button button-inverse-primary button-updating\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeUpdatingButtonLabel") + "\n        </button>\n        <button class=\"button button-primary button-use\" data-id=\"\">" + _dictionary2.default.get("contentTypeUseButtonLabel") + "</button>\n        <button class=\"button button-inverse-primary button-install\" class=\"hidden\" data-id=\"\">\n          <span class=\"icon-arrow-thick\"></span>\n          " + _dictionary2.default.get('contentTypeInstallButtonLabel') + "\n        </button>\n        <button class=\"button button-inverse-primary button-installing\" class=\"hidden\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeInstallingButtonLabel") + "\n        </button>\n      </div>\n      <dl class=\"panel licence-panel\">\n        <dt aria-level=\"2\" role=\"heading\" class=\"licence-panel-heading\">\n          <a href=\"#\" role=\"button\" aria-expanded=\"false\" aria-controls=\"licence-panel\">\n            <span class=\"icon-accordion-arrow\"></span> " + _dictionary2.default.get('contentTypeLicensePanelTitle') + "\n          </a>\n        </dt>\n        <dl id=\"licence-panel\" role=\"region\" class=\"hidden\">\n          <div class=\"panel-body\"></div>\n        </dl>\n      </dl>\n      <div id=\"" + IMAGELIGHTBOX + "-detail\" class=\"" + IMAGELIGHTBOX + "\" role=\"dialog\" aria-label=\"" + l10n.title + "\">\n        <ol class=\"" + IMAGELIGHTBOX + "-list\"></ol>\n        <div class=\"" + IMAGELIGHTBOX + "-progress\">" + l10n.progress + "</div>\n        <div class=\"" + IMAGELIGHTBOX + "-button next\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.next + "\"></div>\n        <div class=\"" + IMAGELIGHTBOX + "-button previous\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.prev + "\"></div>\n        <div class=\"" + IMAGELIGHTBOX + "-button close\" role=\"button\" tabindex=\"0\" aria-label=\"" + l10n.close + "\"></div>\n      </div>";
 
       return element;
     }
@@ -3330,10 +3338,7 @@ var ContentTypeDetailView = function () {
     }
 
     /**
-     * Sets a message on install
-     *
-     * @param {boolean} success
-     * @param {string} message
+     * Removes the install message
      */
 
   }, {
@@ -3390,6 +3395,12 @@ var ContentTypeDetailView = function () {
         this.container.removeChild(this.messageViewElement);
         delete this.messageViewElement;
       }
+
+      // Hide all buttons
+      this.buttons.forEach(function (button) {
+        button.classList.add('hidden');
+      });
+
       this.removeInstallMessage();
     }
 
@@ -3437,6 +3448,7 @@ var ContentTypeDetailView = function () {
     value: function setId(id) {
       this.installButton.setAttribute(ATTRIBUTE_CONTENT_TYPE_ID, id);
       this.useButton.setAttribute(ATTRIBUTE_CONTENT_TYPE_ID, id);
+      this.updateButton.setAttribute(ATTRIBUTE_CONTENT_TYPE_ID, id);
     }
 
     /**
@@ -3540,39 +3552,51 @@ var ContentTypeDetailView = function () {
   }, {
     key: "setLicence",
     value: function setLicence(type, owner) {
-      var details = LICENCE_DATA[type];
+      var l10n = {
+        readMore: 'Read more'
+      };
+      var licenseDetails = LICENCE_DATA[type];
 
-      if (type && details) {
+      // removes all children
+      var panelContainer = this.licencePanelBody.querySelector('.panel-body');
+      panelContainer.querySelectorAll('dt,dl').forEach((0, _elements.removeChild)(panelContainer));
 
-        if (type === 'MIT') {
-          this.licencePanelBody.querySelector('.panel-body').innerHTML = "\n          <button class=\"read-more\">Read more</button>\n        ";
+      if (type && licenseDetails) {
+        var shortLicenceInfo = document.createElement('div');
+        shortLicenceInfo.className = 'short-license-info';
 
-          var shortLicence = document.createElement('div');
-          shortLicence.innerHTML = details.short;
+        shortLicenceInfo.innerHTML = "\n        <h3>" + licenseDetails.title + "</h3>\n        <button class=\"short-license-read-more icon-info-circle\" aria-label=\"" + l10n.readMore + "\"></button>\n        " + licenseDetails.short + "\n      ";
 
-          this.licencePanelBody.appendChild(shortLicence);
+        // add short version of licence
+        panelContainer.innerText = '';
+        panelContainer.appendChild(shortLicenceInfo);
 
-          var modal = this.createModal({
-            title: 'Content License info',
-            subtitle: 'Click on a specific license to get info about proper usage',
-            licences: [{
-              title: details.title,
-              body: details.full(owner)
-            }]
-          });
+        var modal = this.createModal({
+          title: 'Content License info',
+          subtitle: 'Click on a specific license to get info about proper usage',
+          licences: [{
+            title: licenseDetails.title,
+            body: licenseDetails.full(owner)
+          }]
+        });
 
-          this.licencePanelBody.querySelector('.read-more').addEventListener('click', function () {
-            return (0, _elements.show)(modal);
-          });
-        } else {
-          this.licencePanelBody.querySelector('.panel-body').innerText = type;
-        }
+        this.rootElement.appendChild(modal);
+
+        // handle clicking read more
+        var readMoreButton = this.licencePanelBody.querySelector('.short-license-read-more');
+        readMoreButton.addEventListener('click', function () {
+          console.log('show licence', modal);
+          (0, _elements.show)(modal);
+          modal.querySelector('.modal-dialog').focus();
+          //modal.querySelector('.modal-dialog .close').focus();
+        });
 
         (0, _elements.show)(this.licencePanelHeading);
+      } else if (type) {
+        panelContainer.innerText = type;
+      } else {
+        panelContainer.innerText = 'Unspecified';
       }
-
-      // Close licence panel body by default
-      (0, _elements.hide)(this.licencePanelBody);
     }
   }, {
     key: "createModal",
@@ -3581,10 +3605,11 @@ var ContentTypeDetailView = function () {
           subtitle = _ref2.subtitle,
           licences = _ref2.licences;
 
-      this.modal = document.createElement('div');
-      this.modal.innerHTML = "\n      <div class=\"modal fade show\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"dialog-title\">\n        <div class=\"modal-dialog\" role=\"document\">\n          <div class=\"modal-content\">\n            <div class=\"modal-header\">\n              <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n                <span>&#10006;</span>\n              </button>\n              <h5 class=\"modal-title\" id=\"dialog-title\">" + title + "</h5>\n              <h5 class=\"modal-subtitle\">" + subtitle + "</h5>\n            </div>\n            <div class=\"modal-body\">\n              <dl class=\"panel\"></dl>\n            </div>\n          </div>\n        </div>\n      </div>";
+      var titleId = 'license-dialog-title';
+      var modal = document.createElement('div');
+      modal.innerHTML = "\n      <div class=\"modal fade show\" role=\"dialog\">\n        <div class=\"modal-dialog\" tabindex=\"-1\" role=\"document\" aria-labelledby=\"" + titleId + "\">\n          <div class=\"modal-content\">\n            <div class=\"modal-header\">\n              <button type=\"button\" class=\"close icon-close\" data-dismiss=\"modal\" aria-label=\"Close\"></button>\n              <h5 class=\"modal-title\" id=\"" + titleId + "\">" + title + "</h5>\n              <h5 class=\"modal-subtitle\">" + subtitle + "</h5>\n            </div>\n            <div class=\"modal-body\">\n              <dl class=\"panel\"></dl>\n            </div>\n          </div>\n        </div>\n      </div>";
 
-      var panels = this.modal.querySelector('.panel');
+      var panels = modal.querySelector('.panel');
 
       licences.forEach(function (licence, index) {
         var id = "content-type-detail-licence-" + index;
@@ -3592,24 +3617,23 @@ var ContentTypeDetailView = function () {
         var title = document.createElement('dt');
         title.setAttribute('role', 'heading');
         title.setAttribute('aria-level', '2');
-        title.innerHTML = "<a href=\"#\" role=\"button\" aria-expanded=\"false\" aria-controls=\"" + id + "\">" + licence.title + "</a>";
+        title.innerHTML = "<a href=\"#\" role=\"button\" aria-expanded=\"true\" aria-controls=\"" + id + "\">\n          <span class=\"icon-accordion-arrow\"></span> \n          " + licence.title + "\n        </a>";
 
         var body = document.createElement('dd');
         body.id = id;
+        body.className = 'hidden';
         body.setAttribute('role', 'region');
-        body.setAttribute('aria-hidden', 'true');
         body.innerHTML = "<div class=\"panel-body\">" + licence.body + "</div>";
+        (0, _elements.hide)(body);
 
         panels.appendChild(title);
         panels.appendChild(body);
       });
 
-      (0, _modal2.default)(this.modal);
+      (0, _modal2.default)(modal);
       (0, _panel2.default)(panels);
 
-      this.rootElement.appendChild(this.modal);
-
-      return this.modal;
+      return modal;
     }
 
     /**
@@ -3650,7 +3674,20 @@ var ContentTypeDetailView = function () {
   }, {
     key: "setIsInstalled",
     value: function setIsInstalled(installed) {
-      this.showButtonBySelector(installed ? '.button-use' : '.button-install');
+      this.useButton.classList.toggle('hidden', !installed);
+      this.installButton.classList.toggle('hidden', installed);
+    }
+
+    /**
+     * Shows the update button if it is possible to update the content type
+     *
+     * @param {boolean} isUpdatePossible
+     */
+
+  }, {
+    key: "setIsUpdatePossible",
+    value: function setIsUpdatePossible(isUpdatePossible) {
+      this.updateButton.classList.toggle('hidden', !isUpdatePossible);
     }
 
     /**
@@ -3672,19 +3709,22 @@ var ContentTypeDetailView = function () {
     }
 
     /**
-     * Hides all buttons and shows the button on the selector again
+     * Toggle spinner visibility for the currently showing install or update button
      *
-     * @param {string}selector
+     * @param {boolean} enable Set spinner state
      */
 
   }, {
-    key: "showButtonBySelector",
-    value: function showButtonBySelector(selector) {
-      var button = this.buttonBar.querySelector(selector);
-
-      if (button) {
-        hideAll(this.buttons);
-        (0, _elements.show)(button);
+    key: "toggleSpinner",
+    value: function toggleSpinner(enable) {
+      var buttonToCheck = enable ? 'updateButton' : 'updatingButton';
+      var isShowingInstallButton = this[buttonToCheck].classList.contains('hidden');
+      if (isShowingInstallButton) {
+        this.installButton.classList.toggle('hidden', enable);
+        this.installingButton.classList.toggle('hidden', !enable);
+      } else {
+        this.updateButton.classList.toggle('hidden', enable);
+        this.updatingButton.classList.toggle('hidden', !enable);
       }
     }
 
@@ -3695,7 +3735,7 @@ var ContentTypeDetailView = function () {
   }, {
     key: "hide",
     value: function hide() {
-      (0, _elements.hide)(this.rootElement);
+      this.rootElement.classList.remove('show');
     }
 
     /**
@@ -3705,7 +3745,7 @@ var ContentTypeDetailView = function () {
   }, {
     key: "show",
     value: function show() {
-      (0, _elements.show)(this.rootElement);
+      this.rootElement.classList.add('show');
     }
 
     /**
@@ -3731,7 +3771,7 @@ var ContentTypeDetailView = function () {
   }, {
     key: "isHidden",
     value: function isHidden() {
-      return _isHidden(this.rootElement);
+      return this.rootElement.classList.contains('hidden');
     }
 
     /**
@@ -3786,7 +3826,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  */
 var ContentTypeDetail = function () {
   function ContentTypeDetail(state, services) {
+    var _this = this;
+
     _classCallCheck(this, ContentTypeDetail);
+
+    var self = this;
 
     // add event system
     _extends(this, (0, _eventful.Eventful)());
@@ -3798,7 +3842,19 @@ var ContentTypeDetail = function () {
 
     // views
     this.view = new _contentTypeDetailView2.default(state);
-    this.view.on('install', this.install, this);
+    this.view.on('install', function (event) {
+      // Determine content type
+      _this.services.contentTypes().then(function (contentTypes) {
+        var install = contentTypes.find(function (contentType) {
+          return contentType.machineName === event.id;
+        });
+
+        return self.install({
+          id: install.machineName,
+          installed: install.installed
+        });
+      });
+    });
 
     // propagate events
     this.propagate(['close', 'select'], this.view);
@@ -3865,6 +3921,7 @@ var ContentTypeDetail = function () {
      * Loads a Content Type description
      *
      * @param {string} id
+     * @param {boolean} installed Whether the content type is already installed
      *
      * @return {Promise.<ContentType>}
      */
@@ -3872,22 +3929,27 @@ var ContentTypeDetail = function () {
   }, {
     key: 'install',
     value: function install(_ref) {
-      var _this = this;
+      var _this2 = this;
 
-      var id = _ref.id;
+      var id = _ref.id,
+          installed = _ref.installed;
 
       // set spinner
-      this.view.showButtonBySelector('.button-installing');
+      this.view.toggleSpinner(true);
 
       return this.services.installContentType(id).then(function (response) {
-        _this.trigger('installed-content-type');
-        _this.view.setIsInstalled(true);
-        _this.view.showButtonBySelector('.button-get');
-        _this.view.setInstallMessage({
-          message: _dictionary2.default.get('contentTypeInstallSuccess', { ':contentType': id })
+        _this2.trigger('installed-content-type');
+        _this2.view.toggleSpinner(false);
+        _this2.view.setIsInstalled(true);
+        _this2.view.setIsUpdatePossible(false);
+
+        var installMessageKey = installed ? 'contentTypeUpdateSuccess' : 'contentTypeInstallSuccess';
+
+        _this2.view.setInstallMessage({
+          message: _dictionary2.default.get(installMessageKey, { ':contentType': id })
         });
       }).catch(function (error) {
-        _this.view.showButtonBySelector('.button-install');
+        _this2.view.toggleSpinner(false);
 
         // print error message
         var errorMessage = error.errorCode ? error : {
@@ -3895,7 +3957,7 @@ var ContentTypeDetail = function () {
           errorCode: 'RESPONSE_FAILED',
           message: _dictionary2.default.get('contentTypeInstallError', { ':contentType': id })
         };
-        _this.view.setInstallMessage(errorMessage);
+        _this2.view.setInstallMessage(errorMessage);
 
         // log whole error message to console
         console.error('Installation error', error);
@@ -3921,6 +3983,7 @@ var ContentTypeDetail = function () {
       this.view.setIsInstalled(contentType.installed);
       this.view.setLicence(contentType.license, contentType.owner);
       this.view.setIsRestricted(contentType.restricted);
+      this.view.setIsUpdatePossible(contentType.installed && !contentType.isUpToDate && !contentType.restricted);
 
       // Check if api version is supported
       var apiVersionSupported = this.apiVersion.major > contentType.h5pMajorVersion || this.apiVersion.major == contentType.h5pMajorVersion && this.apiVersion.minor >= contentType.h5pMinorVersion;
@@ -3932,7 +3995,9 @@ var ContentTypeDetail = function () {
 
       // update carousel
       this.view.removeAllImagesInCarousel();
-      contentType.screenshots.forEach(this.view.addImageToCarousel, this.view);
+      if (contentType.screenshots) {
+        contentType.screenshots.forEach(this.view.addImageToCarousel, this.view);
+      }
     }
 
     /**
@@ -3995,16 +4060,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /**
  * @function
  */
-var _hide = (0, _elements.setAttribute)('aria-hidden', 'true');
-
-/**
- * @function
- */
-var _show = (0, _elements.setAttribute)('aria-hidden', 'false');
-
-/**
- * @function
- */
 var hasTabindex = (0, _elements.hasAttribute)('tabindex');
 
 /**
@@ -4051,7 +4106,7 @@ var ContentTypeListView = function () {
   _createClass(ContentTypeListView, [{
     key: "hide",
     value: function hide() {
-      _hide(this.rootElement);
+      (0, _elements.hide)(this.rootElement);
     }
 
     /**
@@ -4061,7 +4116,7 @@ var ContentTypeListView = function () {
   }, {
     key: "show",
     value: function show() {
-      _show(this.rootElement);
+      (0, _elements.show)(this.rootElement);
     }
 
     /**
@@ -4133,6 +4188,7 @@ var ContentTypeListView = function () {
       var description = contentType.summary || '';
       var image = contentType.icon || _contentTypePlaceholder2.default;
       var disabled = contentType.restricted ? 'disabled="disabled"' : '';
+      var updateAvailable = !contentType.isUpToDate && contentType.installed && !contentType.restricted;
 
       // row item
       var element = document.createElement('li');
@@ -4142,7 +4198,7 @@ var ContentTypeListView = function () {
       element.setAttribute('aria-describedby', contentTypeRowDescriptionId);
 
       // create html
-      element.innerHTML = "\n      <img class=\"img-responsive\" src=\"" + image + "\" alt=\"" + title + " " + _dictionary2.default.get('contentTypeIconAltText') + "\" />\n\n      <div class=\"content-type-row-info\">\n        <h4 id=\"" + contentTypeRowTitleId + "\">" + title + "</h4>\n        <div id=\"" + contentTypeRowDescriptionId + "\" class=\"description\">" + description + "</div>\n      </div>\n\n      <div class=\"content-type-row-button\">\n        <button aria-describedby=\"" + contentTypeRowTitleId + "\" class=\"button " + button.cls + "\" data-id=\"" + contentType.machineName + "\" tabindex=\"-1\" " + disabled + ">\n          <span class=\"" + button.icon + "\"></span>\n          " + button.text + "\n        </button>\n      </div>\n   ";
+      element.innerHTML = "\n      <img class=\"img-responsive\" src=\"" + image + "\" alt=\"" + title + " " + _dictionary2.default.get('contentTypeIconAltText') + "\" />\n\n      <div class=\"content-type-row-info\">\n        <div id=\"" + contentTypeRowTitleId + "\" class=\"h4\">" + title + "</div>\n        <div id=\"" + contentTypeRowDescriptionId + "\" class=\"description\">" + description + "</div>\n      </div>\n      \n      <div class=\"content-type-actions-info\">\n        <div class=\"content-type-update-info" + (updateAvailable ? '' : ' hidden') + "\">\n          " + _dictionary2.default.get('contentTypeUpdateAvailable') + "\n        </div>\n        <div class=\"content-type-row-button\">\n          <button aria-describedby=\"" + contentTypeRowTitleId + "\" class=\"button " + button.cls + "\" data-id=\"" + contentType.machineName + "\" tabindex=\"-1\" " + disabled + ">\n            <span class=\"" + button.icon + "\"></span>\n            " + button.text + "\n          </button>\n        </div>\n      </div>\n   ";
 
       // handle use button
       var useButton = element.querySelector('.button-primary');
@@ -4692,6 +4748,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @property {string[]} keywords
  * @property {string} owner
  * @property {boolean} installed
+ * @property {boolean} isUpToDate
  * @property {boolean} restricted
  */
 var HubServices = function () {
@@ -5003,7 +5060,7 @@ var HubView = function () {
       element.className += "h5p-hub h5p-sdk";
       var panelClasses = "panel" + (expanded ? ' open' : '');
 
-      element.innerHTML = "\n      <div class=\"" + panelClasses + "\">\n        <div aria-level=\"1\" role=\"heading\">\n          <span role=\"button\" class=\"icon-hub-icon\" aria-expanded=\"" + expanded + "\" aria-controls=\"panel-body-" + sectionId + "\">\n          <span class=\"h5p-hub-description\">" + labels.h5pHub + "</span>\n          <span class=\"h5p-hub-selected\"></span>\n        </span>\n        </div>\n        <div id=\"panel-body-" + sectionId + "\" role=\"region\" aria-hidden=\"" + !expanded + "\">\n          <div class=\"tab-panel\">\n            <nav>\n              <ul role=\"tablist\"></ul>\n            </nav>\n          </div>\n        </div>\n      </div>";
+      element.innerHTML = "\n      <div class=\"" + panelClasses + "\">\n        <div aria-level=\"1\" role=\"heading\">\n          <span role=\"button\" class=\"icon-hub-icon\" aria-expanded=\"" + expanded + "\" aria-controls=\"panel-body-" + sectionId + "\">\n          <span class=\"h5p-hub-description\">" + labels.h5pHub + "</span>\n          <span class=\"h5p-hub-selected\"></span>\n        </span>\n        </div>\n        <div id=\"panel-body-" + sectionId + "\" role=\"region\" class=\"" + (expanded ? '' : 'hidden') + "\">\n          <div class=\"tab-panel\">\n            <nav>\n              <ul role=\"tablist\"></ul>\n            </nav>\n          </div>\n        </div>\n      </div>";
 
       return element;
     }
@@ -5061,9 +5118,9 @@ var HubView = function () {
       tabPanel.id = tabPanelId;
       tabPanel.className += 'tabpanel';
       tabPanel.setAttribute('aria-labelledby', tabId);
-      tabPanel.setAttribute('aria-hidden', (!selected).toString());
       tabPanel.setAttribute('role', 'tabpanel');
       tabPanel.appendChild(content);
+      (0, _elements.toggleClass)('hidden', !selected, tabPanel);
 
       this.tablist.appendChild(tab);
       this.tabContainerElement.appendChild(tabPanel);
@@ -5612,6 +5669,8 @@ var _messageView = __webpack_require__(6);
 
 var _messageView2 = _interopRequireDefault(_messageView);
 
+var _elements = __webpack_require__(0);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -5656,7 +5715,7 @@ var UploadSection = function () {
     value: function renderUploadForm() {
       // Create the html
       var uploadForm = document.createElement('div');
-      uploadForm.innerHTML = '\n      <div class="upload-wrapper">\n        <div class="upload-form">\n          <input class="upload-path" placeholder="' + _dictionary2.default.get("uploadPlaceholder") + '" disabled/>\n          <button class="button use-button" aria-hidden="true">Use</button>\n          <div class="input-wrapper">\n            <input type="file" />\n            <button class="button upload-button" tabindex="0">' + _dictionary2.default.get('uploadFileButtonLabel') + '</button>\n          </div>\n        </div>\n      </div>\n    ';
+      uploadForm.innerHTML = '\n      <div class="upload-wrapper">\n        <div class="upload-form">\n          <input class="upload-path" placeholder="' + _dictionary2.default.get("uploadPlaceholder") + '" disabled/>\n          <button class="button use-button" aria-hidden="true">Use</button>\n          <div class="input-wrapper">\n            <input type="file" aria-hidden="true"/>\n            <button class="button upload-button" tabindex="0">' + _dictionary2.default.get('uploadFileButtonLabel') + '</button>\n          </div>\n        </div>\n      </div>\n    ';
 
       // Create the html for the upload instructions separately as it needs to be styled
       var uploadInstructions = document.createElement('div');
@@ -5739,12 +5798,13 @@ var UploadSection = function () {
           self.renderWrongExtensionMessage();
 
           // Hide the 'use' button for non-h5p files
-          self.useButton.setAttribute('aria-hidden', 'true');
+          (0, _elements.hide)(self.useButton);
           self.useButton.classList.remove('visible');
         } else {
           // Only show the 'use' button once a h5p file has been selected
-          self.useButton.removeAttribute('aria-hidden', 'true');
+          (0, _elements.show)(self.useButton);
           self.useButton.classList.add('visible');
+          self.uploadPath.removeAttribute('placeholder');
         }
       };
     }
@@ -6518,14 +6578,14 @@ var toggleSiblings = function toggleSiblings(element, show) {
   for (var i = 0; i < siblings.length; i++) {
     var sibling = siblings[i];
 
-    if (sibling === element) {
-      continue; // Not this element
-    }
-
-    if (show) {
-      sibling.removeAttribute('aria-hidden');
-    } else {
-      sibling.setAttribute('aria-hidden', true);
+    if (sibling !== element) {
+      if (show) {
+        // TODO This is dangerous, and will interfere with
+        // the aria-hidden state set by other compoents
+        sibling.removeAttribute('aria-hidden');
+      } else {
+        sibling.setAttribute('aria-hidden', 'true');
+      }
     }
   }
 };
@@ -6779,14 +6839,6 @@ var toggleEnabled = function toggleEnabled(element, enabled) {
 };
 
 /**
- * @param {HTMLElement} element
- * @param {boolean} hidden
- */
-var toggleVisibility = (0, _functional.curry)(function (hidden, element) {
-  return (0, _elements.setAttribute)('aria-hidden', hidden.toString(), element);
-});
-
-/**
  * @type {function}
  */
 var isDisabled = (0, _elements.hasAttribute)('disabled');
@@ -6820,7 +6872,7 @@ var updateView = function updateView(element, state) {
   });
 
   // toggle button visibility
-  [prevButton, nextButton].forEach(toggleVisibility(state.displayCount >= totalCount));
+  [prevButton, nextButton].forEach((0, _elements.toggleVisibility)(state.displayCount < totalCount));
 
   // toggle button enable, disabled
   toggleEnabled(nextButton, state.position > state.displayCount - totalCount);
@@ -6955,7 +7007,50 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = init;
 
+var _functional = __webpack_require__(1);
+
 var _elements = __webpack_require__(0);
+
+var getAllTabbableChildren = function getAllTabbableChildren(element) {
+  return element.querySelectorAll('a[href],link[href],button,input,select,textarea,[tabindex="0"]');
+};
+
+/**
+ * Handles key press inside modal
+ *
+ * @param {Element} element
+ * @param {KeyboardEvent} event
+ *
+ * @function
+ */
+var handleKeyPress = (0, _functional.curry)(function (element, event) {
+  var target = event.srcElement || event.target;
+
+  switch (event.which) {
+    case 27:
+      // ESC
+      (0, _elements.hide)(element);
+      event.preventDefault();
+      break;
+    case 9:
+      // TAB
+      var elements = getAllTabbableChildren(element);
+
+      // wrap around on tabbing
+      if (elements.length > 0) {
+        var lastIndex = elements.length - 1;
+
+        if (target === elements[0] && event.shiftKey) {
+          elements[lastIndex].focus();
+          event.preventDefault();
+        } else if (target === elements[lastIndex]) {
+          elements[0].focus();
+          event.preventDefault();
+        }
+      }
+      break;
+  }
+});
 
 /**
  * Initiates a modal window
@@ -6973,12 +7068,7 @@ function init(element) {
   });
 
   // hide modal on escape keypress
-  element.addEventListener('keydown', function (event) {
-    if (event.keyCode === 27) {
-      // escape
-      (0, _elements.hide)(element);
-    }
-  });
+  element.addEventListener('keydown', handleKeyPress(element));
 }
 
 /***/ }),
@@ -7095,12 +7185,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * @function
  */
-var hideAll = (0, _functional.forEach)((0, _elements.setAttribute)('aria-hidden', 'true'));
-
-/**
- * @function
- */
-var show = (0, _elements.setAttribute)('aria-hidden', 'false');
+var hideAll = (0, _functional.forEach)(_elements.hide);
 
 /**
  * @function
@@ -7127,7 +7212,7 @@ var addAriaSelectedObserver = function addAriaSelectedObserver(element, tab) {
 
     if (isSelected(tab)) {
       hideAll(allPanels);
-      show(panel);
+      (0, _elements.show)(panel);
     }
   });
 

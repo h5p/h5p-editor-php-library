@@ -50,10 +50,10 @@ class H5peditor {
    * interface
    */
   function __construct($h5p, $storage, $ajaxInterface) {
-    $this->h5p = $h5p;
-    $this->storage = $storage;
+    $this->h5p           = $h5p;
+    $this->storage       = $storage;
     $this->ajaxInterface = $ajaxInterface;
-    $this->ajax = new H5PEditorAjax($h5p, $this, $storage);
+    $this->ajax          = new H5PEditorAjax($h5p, $this, $storage);
   }
 
   /**
@@ -70,8 +70,8 @@ class H5peditor {
         preg_match_all('/(.+)\s(\d+)\.(\d+)$/', $libraryName, $matches);
         if ($matches) {
           $libraries[] = (object) array(
-            'uberName' => $libraryName,
-            'name' => $matches[1][0],
+            'uberName'     => $libraryName,
+            'name'         => $matches[1][0],
             'majorVersion' => $matches[2][0],
             'minorVersion' => $matches[3][0]
           );
@@ -91,22 +91,23 @@ class H5peditor {
         if (isset($devLibs[$lid])) {
           // Replace library with devlib
           $libraries[$i] = (object) array(
-            'uberName' => $lid,
-            'name' => $devLibs[$lid]['machineName'],
-            'title' => $devLibs[$lid]['title'],
+            'uberName'     => $lid,
+            'name'         => $devLibs[$lid]['machineName'],
+            'title'        => $devLibs[$lid]['title'],
             'majorVersion' => $devLibs[$lid]['majorVersion'],
             'minorVersion' => $devLibs[$lid]['minorVersion'],
-            'runnable' => $devLibs[$lid]['runnable'],
-            'restricted' => $libraries[$i]->restricted,
-            'tutorialUrl' => $libraries[$i]->tutorialUrl,
-            'isOld' => $libraries[$i]->isOld
+            'runnable'     => $devLibs[$lid]['runnable'],
+            'restricted'   => $libraries[$i]->restricted,
+            'tutorialUrl'  => $libraries[$i]->tutorialUrl,
+            'isOld'        => $libraries[$i]->isOld
           );
         }
       }
 
       // Some libraries rely on an LRS to work and must be enabled manually
       if ($libraries[$i]->name === 'H5P.Questionnaire' &&
-          !$this->h5p->h5pF->getOption('enable_lrs_content_types')) {
+          !$this->h5p->h5pF->getOption('enable_lrs_content_types')
+      ) {
         $libraries[$i]->restricted = TRUE;
       }
     }
@@ -132,12 +133,12 @@ class H5peditor {
 
     // Find new libraries/content dependencies and files.
     // Start by creating a fake library field to process. This way we get all the dependencies of the main library as well.
-    $field = (object) array(
+    $field         = (object) array(
       'type' => 'library'
     );
     $libraryParams = (object) array(
       'library' => H5PCore::libraryToString($newLibrary),
-      'params' => $newParameters
+      'params'  => $newParameters
     );
     $this->processField($field, $libraryParams, $newFiles);
 
@@ -148,7 +149,8 @@ class H5peditor {
       // Remove old files.
       for ($i = 0, $s = count($oldFiles); $i < $s; $i++) {
         if (!in_array($oldFiles[$i], $newFiles) &&
-            preg_match('/^(\w+:\/\/|\.\.\/)/i', $oldFiles[$i]) === 0) {
+            preg_match('/^(\w+:\/\/|\.\.\/)/i', $oldFiles[$i]) === 0
+        ) {
           $this->h5p->fs->removeContentFile($oldFiles[$i], $content);
           // (optionally we could just have marked them as tmp files)
         }
@@ -179,6 +181,7 @@ class H5peditor {
    * Process a single field.
    *
    * @staticvar string $h5peditor_path
+   *
    * @param object $field
    * @param mixed $params
    * @param array $files
@@ -208,7 +211,7 @@ class H5peditor {
 
       case 'library':
         if (isset($params->library) && isset($params->params)) {
-          $library = H5PCore::libraryFromString($params->library);
+          $library   = H5PCore::libraryFromString($params->library);
           $semantics = $this->h5p->loadLibrarySemantics($library['machineName'], $library['majorVersion'], $library['minorVersion']);
 
           // Process parameters for the library.
@@ -295,7 +298,7 @@ class H5peditor {
    * @param int $minorVersion Library identfier part 3
    */
   public function findEditorLibraries($machineName, $majorVersion, $minorVersion) {
-    $library = $this->h5p->loadLibrary($machineName, $majorVersion, $minorVersion);
+    $library      = $this->h5p->loadLibrary($machineName, $majorVersion, $minorVersion);
     $dependencies = array();
     $this->h5p->findLibraryDependencies($dependencies, $library);
 
@@ -305,7 +308,7 @@ class H5peditor {
       foreach ($dependencies as $dependency) {
         if ($dependency['weight'] === $i && $dependency['type'] === 'editor') {
           // Only load editor libraries.
-          $dependency['library']['id'] = $dependency['library']['libraryId'];
+          $dependency['library']['id']                              = $dependency['library']['libraryId'];
           $orderedDependencies[$dependency['library']['libraryId']] = $dependency['library'];
           break;
         }
@@ -395,8 +398,10 @@ class H5peditor {
    * Copied from Drupal 6.
    *
    * @staticvar type $_base
+   *
    * @param type $matches
    * @param type $base
+   *
    * @return type
    */
   public static function buildCssPath($matches, $base = NULL) {
@@ -413,7 +418,7 @@ class H5peditor {
       $last = $path;
       $path = preg_replace('`(^|/)(?!\.\./)([^/]+)/\.\./`', '$1', $path);
     }
-    return 'url('. $path .')';
+    return 'url(' . $path . ')';
   }
 
   /**
@@ -473,7 +478,7 @@ class H5peditor {
     $lib = array(
       'id'              => intval($cached_library->id),
       'machineName'     => $cached_library->machine_name,
-      'majorVersion'    => intval( $cached_library->major_version),
+      'majorVersion'    => intval($cached_library->major_version),
       'minorVersion'    => intval($cached_library->minor_version),
       'patchVersion'    => intval($cached_library->patch_version),
       'h5pMajorVersion' => intval($cached_library->h5p_major_version),
@@ -528,17 +533,17 @@ class H5peditor {
     // Add local libraries to supplement content type cache
     foreach ($local_libraries as $local_lib) {
       $is_local_only = TRUE;
-      $icon_path = NULL;
+      $icon_path     = NULL;
 
       // Check if icon is available locally:
-      if($local_lib->has_icon) {
+      if ($local_lib->has_icon) {
         // Create path to icon:
         $library_folder = H5PCore::libraryToString(array(
-          'machineName' => $local_lib->machine_name,
+          'machineName'  => $local_lib->machine_name,
           'majorVersion' => $local_lib->major_version,
           'minorVersion' => $local_lib->minor_version
         ), TRUE);
-        $icon_path = $this->h5p->h5pF->getLibraryFileUrl($library_folder, 'icon.svg');
+        $icon_path      = $this->h5p->h5pF->getLibraryFileUrl($library_folder, 'icon.svg');
       }
 
       foreach ($cached_libraries as &$cached_lib) {
@@ -548,7 +553,7 @@ class H5peditor {
           $is_local_only = FALSE;
 
           // Set icon if it exists locally
-          if(isset($icon_path)) {
+          if (isset($icon_path)) {
             $cached_lib['icon'] = $icon_path;
           }
 
@@ -557,20 +562,19 @@ class H5peditor {
           $cached_lib['restricted'] = $can_create_restricted ? FALSE
             : ($local_lib->restricted ? TRUE : FALSE);
 
+          // Set local version
+          $cached_lib['localMajorVersion'] = (int) $local_lib->major_version;
+          $cached_lib['localMinorVersion'] = (int) $local_lib->minor_version;
+          $cached_lib['localPatchVersion'] = (int) $local_lib->patch_version;
+
           // Determine if library is the same as ct cache
           $is_updated_library =
-            $cached_lib['majorVersion'] === $local_lib->major_version &&
-            $cached_lib['minorVersion'] === $local_lib->minor_version &&
-            $cached_lib['patchVersion'] === $local_lib->patch_version;
+            $cached_lib['majorVersion'] === (int) $local_lib->major_version &&
+            $cached_lib['minorVersion'] === (int) $local_lib->minor_version &&
+            $cached_lib['patchVersion'] === (int) $local_lib->patch_version;
 
           if ($is_updated_library) {
             $cached_lib['isUpToDate'] = TRUE;
-          }
-          else {
-            // Set local version
-            $cached_lib['localMajorVersion'] = (int) $local_lib->major_version;
-            $cached_lib['localMinorVersion'] = (int) $local_lib->minor_version;
-            $cached_lib['localPatchVersion'] = (int) $local_lib->patch_version;
           }
         }
       }
@@ -578,14 +582,17 @@ class H5peditor {
       // Add minimal data to display local only libraries
       if ($is_local_only) {
         $local_only_lib = array(
-          'id'           => (int) $local_lib->id,
-          'machineName'  => $local_lib->machine_name,
-          'majorVersion' => (int) $local_lib->major_version,
-          'minorVersion' => (int) $local_lib->minor_version,
-          'patchVersion' => (int) $local_lib->patch_version,
-          'installed'    => TRUE,
-          'isUpToDate'   => TRUE,
-          'restricted'   => $can_create_restricted ? FALSE :
+          'id'                => (int) $local_lib->id,
+          'machineName'       => $local_lib->machine_name,
+          'majorVersion'      => (int) $local_lib->major_version,
+          'minorVersion'      => (int) $local_lib->minor_version,
+          'patchVersion'      => (int) $local_lib->patch_version,
+          'localMajorVersion' => (int) $local_lib->major_version,
+          'localMinorVersion' => (int) $local_lib->minor_version,
+          'localPatchVersion' => (int) $local_lib->patch_version,
+          'installed'         => TRUE,
+          'isUpToDate'        => TRUE,
+          'restricted'        => $can_create_restricted ? FALSE :
             ($local_lib->restricted ? TRUE : FALSE)
         );
 
