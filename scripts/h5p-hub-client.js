@@ -76,7 +76,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.toggleClass = exports.toggleVisibility = exports.show = exports.hide = exports.removeClass = exports.addClass = exports.classListContains = exports.removeChild = exports.querySelectorAll = exports.nodeListToArray = exports.querySelector = exports.appendChild = exports.toggleAttribute = exports.attributeEquals = exports.hasAttribute = exports.removeAttribute = exports.setAttribute = exports.getAttribute = undefined;
+exports.createElement = exports.toggleClass = exports.toggleVisibility = exports.show = exports.hide = exports.removeClass = exports.addClass = exports.classListContains = exports.removeChild = exports.querySelectorAll = exports.nodeListToArray = exports.querySelector = exports.appendChild = exports.toggleAttribute = exports.attributeEquals = exports.hasAttribute = exports.removeAttribute = exports.setAttribute = exports.getAttribute = undefined;
 
 var _functional = __webpack_require__(1);
 
@@ -292,6 +292,43 @@ var toggleVisibility = exports.toggleVisibility = (0, _functional.curry)(functio
 var toggleClass = exports.toggleClass = (0, _functional.curry)(function (cls, add, element) {
   element.classList[add ? 'add' : 'remove'](cls);
 });
+
+/**
+ * Helper for creating a DOM element
+ *
+ * @function
+ *
+ * @param {string} tag
+ * @param {string} [id]
+ * @param {string[]} [classes] - array of strings
+ * @param {Object} [attributes]
+ *
+ * @return {HTMLElement}
+ */
+var createElement = exports.createElement = function createElement(_ref) {
+  var tag = _ref.tag,
+      id = _ref.id,
+      classes = _ref.classes,
+      attributes = _ref.attributes;
+
+  var element = document.createElement(tag);
+
+  if (id) {
+    element.id = id;
+  }
+  if (classes) {
+    classes.forEach(function (clazz) {
+      element.classList.add(clazz);
+    });
+  }
+  if (attributes) {
+    Object.keys(attributes).forEach(function (key) {
+      element.setAttribute(key, attributes[key]);
+    });
+  }
+
+  return element;
+};
 
 /***/ }),
 /* 1 */
@@ -3225,6 +3262,10 @@ var _messageView = __webpack_require__(6);
 
 var _messageView2 = _interopRequireDefault(_messageView);
 
+var _imageLightbox3 = __webpack_require__(43);
+
+var _imageLightbox4 = _interopRequireDefault(_imageLightbox3);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -3301,7 +3342,9 @@ var ContentTypeDetailView = function () {
     this.updatingButton = this.buttonBar.querySelector('.button-updating');
     this.installButton = this.buttonBar.querySelector('.button-install');
     this.installingButton = this.buttonBar.querySelector('.button-installing');
-    this.buttons = this.buttonBar.querySelectorAll('.button');
+    this.buttons = (0, _elements.querySelectorAll)('.button', this.buttonBar);
+
+    this.imageLightbox = new _imageLightbox4.default();
 
     this.contentContainer = this.rootElement.querySelector('.container');
     this.image = this.rootElement.querySelector('.content-type-image');
@@ -3311,8 +3354,7 @@ var ContentTypeDetailView = function () {
     this.demoButton = this.rootElement.querySelector('.demo-button');
     this.carousel = this.rootElement.querySelector('.carousel');
     this.carouselList = this.carousel.querySelector('ul');
-    var imageLightbox = this.rootElement.querySelector("#" + IMAGELIGHTBOX + "-detail");
-    this.imageLightboxList = imageLightbox.querySelector("." + IMAGELIGHTBOX + "-list");
+
     this.panel = this.rootElement.querySelector('.panel');
     this.licensePanelHeading = this.rootElement.querySelector('.license-panel-heading');
     this.licensePanelBody = this.rootElement.querySelector('#license-panel');
@@ -3321,7 +3363,6 @@ var ContentTypeDetailView = function () {
     // init interactive elements
     (0, _panel2.default)(this.panel);
     (0, _imageScroller2.default)(this.carousel);
-    (0, _imageLightbox2.default)(imageLightbox);
 
     // fire events on button click
     (0, _events.relayClickEventAs)('close', this, this.rootElement.querySelector('.back-button'));
@@ -3361,7 +3402,7 @@ var ContentTypeDetailView = function () {
       element.setAttribute('tabindex', '-1');
       element.setAttribute('aria-labelledby', titleId);
 
-      element.innerHTML = "\n      <button class=\"back-button icon-arrow-thick\" aria-label=\"" + _dictionary2.default.get("contentTypeBackButtonLabel") + "\" tabindex=\"0\"></button>\n      <div class=\"container\">\n        <div class=\"image-wrapper\">\n          <img class=\"img-responsive content-type-image\" src=\"" + _contentTypePlaceholder2.default + "\">\n        </div>\n        <div class=\"text-details\">\n          <h2 id=\"" + titleId + "\" class=\"title\"></h2>\n          <div class=\"owner\"></div>\n          <p class=\"small\"></p>\n          <a class=\"button demo-button\" target=\"_blank\" href=\"#\">\n            " + _dictionary2.default.get("contentTypeDemoButtonLabel") + "\n          </a>\n        </div>\n      </div>\n      <div class=\"carousel\" role=\"region\" data-size=\"5\">\n        <button class=\"carousel-button previous hidden\" disabled>\n          <span class=\"icon-arrow-thick\"></span>\n        </button>\n        <button class=\"carousel-button next hidden\" disabled>\n          <span class=\"icon-arrow-thick\"></span>\n        </button>\n        <nav class=\"scroller\">\n          <ul></ul>\n        </nav>\n      </div>\n      <hr />\n      <div class=\"button-bar\">\n        <button class=\"button button-inverse-primary button-install\" class=\"hidden\" data-id=\"\">\n          <span class=\"icon-arrow-thick\"></span>\n          " + _dictionary2.default.get('contentTypeInstallButtonLabel') + "\n        </button>\n        <button class=\"button button-inverse-primary button-installing\" class=\"hidden\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeInstallingButtonLabel") + "\n        </button>\n        <button class=\"button button-inverse-primary button-update\">\n          " + _dictionary2.default.get("contentTypeUpdateButtonLabel") + "\n        </button>\n        <button class=\"button button-inverse-primary button-updating\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeUpdatingButtonLabel") + "\n        </button>\n        <button class=\"button button-primary button-use\" data-id=\"\">\n          " + _dictionary2.default.get("contentTypeUseButtonLabel") + "\n        </button>\n        <button class=\"button button-inverse-primary button-install\" class=\"hidden\" data-id=\"\">\n          <span class=\"icon-arrow-thick\"></span>\n          " + _dictionary2.default.get('contentTypeInstallButtonLabel') + "\n        </button>\n        <button class=\"button button-inverse-primary button-installing\" class=\"hidden\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeInstallingButtonLabel") + "\n        </button>\n      </div>\n      <dl class=\"panel panel-default license-panel\">\n        <dt aria-level=\"2\" role=\"heading\" class=\"license-panel-heading\">\n          <a href=\"#\" role=\"button\" aria-expanded=\"false\" aria-controls=\"license-panel\">\n            <span class=\"icon-accordion-arrow\"></span>\n            <span>" + _dictionary2.default.get('contentTypeLicensePanelTitle') + "</span>\n          </a>\n        </dt>\n        <dl id=\"license-panel\" role=\"region\" class=\"hidden\">\n          <div class=\"panel-body\"></div>\n        </dl>\n      </dl>\n      <div id=\"" + IMAGELIGHTBOX + "-detail\" class=\"" + IMAGELIGHTBOX + "\" role=\"dialog\" aria-label=\"" + l10n.title + "\">\n        <ol class=\"" + IMAGELIGHTBOX + "-list\"></ol>\n        <div class=\"" + IMAGELIGHTBOX + "-progress\">" + l10n.progress + "</div>\n        <div class=\"" + IMAGELIGHTBOX + "-button next\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.next + "\"></div>\n        <div class=\"" + IMAGELIGHTBOX + "-button previous\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.prev + "\"></div>\n        <div class=\"" + IMAGELIGHTBOX + "-button close\" role=\"button\" tabindex=\"0\" aria-label=\"" + l10n.close + "\"></div>\n      </div>";
+      element.innerHTML = "\n      <button class=\"back-button icon-arrow-thick\" aria-label=\"" + _dictionary2.default.get("contentTypeBackButtonLabel") + "\" tabindex=\"0\"></button>\n      <div class=\"container\">\n        <div class=\"image-wrapper\">\n          <img class=\"img-responsive content-type-image\" src=\"" + _contentTypePlaceholder2.default + "\">\n        </div>\n        <div class=\"text-details\">\n          <h2 id=\"" + titleId + "\" class=\"title\" tabindex=\"-1\"></h2>\n          <div class=\"owner\"></div>\n          <p class=\"small\"></p>\n          <a class=\"button demo-button\" target=\"_blank\" href=\"#\">\n            " + _dictionary2.default.get("contentTypeDemoButtonLabel") + "\n          </a>\n        </div>\n      </div>\n      <div class=\"carousel\" role=\"region\" data-size=\"5\">\n        <button class=\"carousel-button previous hidden\" disabled>\n          <span class=\"icon-arrow-thick\"></span>\n        </button>\n        <button class=\"carousel-button next hidden\" disabled>\n          <span class=\"icon-arrow-thick\"></span>\n        </button>\n        <nav class=\"scroller\">\n          <ul></ul>\n        </nav>\n      </div>\n      <hr />\n      <div class=\"button-bar\">\n        <button class=\"button button-inverse-primary button-install\" class=\"hidden\" data-id=\"\">\n          <span class=\"icon-arrow-thick\"></span>\n          " + _dictionary2.default.get('contentTypeInstallButtonLabel') + "\n        </button>\n        <button class=\"button button-inverse-primary button-installing\" class=\"hidden\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeInstallingButtonLabel") + "\n        </button>\n        <button class=\"button button-inverse-primary button-update\">\n          " + _dictionary2.default.get("contentTypeUpdateButtonLabel") + "\n        </button>\n        <button class=\"button button-inverse-primary button-updating\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeUpdatingButtonLabel") + "\n        </button>\n        <button class=\"button button-primary button-use\" data-id=\"\">\n          " + _dictionary2.default.get("contentTypeUseButtonLabel") + "\n        </button>\n        <button class=\"button button-inverse-primary button-install\" class=\"hidden\" data-id=\"\">\n          <span class=\"icon-arrow-thick\"></span>\n          " + _dictionary2.default.get('contentTypeInstallButtonLabel') + "\n        </button>\n        <button class=\"button button-inverse-primary button-installing\" class=\"hidden\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeInstallingButtonLabel") + "\n        </button>\n      </div>\n      <dl class=\"panel panel-default license-panel\">\n        <dt aria-level=\"2\" role=\"heading\" class=\"license-panel-heading\">\n          <a href=\"#\" role=\"button\" aria-expanded=\"false\" aria-controls=\"license-panel\">\n            <span class=\"icon-accordion-arrow\"></span>\n            <span>" + _dictionary2.default.get('contentTypeLicensePanelTitle') + "</span>\n          </a>\n        </dt>\n        <dl id=\"license-panel\" role=\"region\" class=\"hidden\">\n          <div class=\"panel-body\"></div>\n        </dl>\n      </dl>";
 
       return element;
     }
@@ -3410,8 +3451,8 @@ var ContentTypeDetailView = function () {
   }, {
     key: "removeAllImagesInCarousel",
     value: function removeAllImagesInCarousel() {
-      this.carouselList.querySelectorAll('li').forEach((0, _elements.removeChild)(this.carouselList));
-      this.imageLightboxList.innerHTML = '';
+      (0, _elements.querySelectorAll)('li', this.carouselList).forEach((0, _elements.removeChild)(this.carouselList));
+      this.imageLightbox.reset();
     }
 
     /**
@@ -3422,17 +3463,23 @@ var ContentTypeDetailView = function () {
 
   }, {
     key: "addImageToCarousel",
-    value: function addImageToCarousel(image) {
+    value: function addImageToCarousel(image, index) {
+      var self = this;
+
       // add lightbox
-      var item = document.createElement('li');
-      item.classList.add(IMAGELIGHTBOX + "-image");
-      item.innerHTML = "<img class=\"img-responsive\" src=\"" + image.url + "\" alt=\"" + image.alt + "\">";
-      this.imageLightboxList.appendChild(item);
+      this.imageLightbox.addImage(image);
 
       // add thumbnail
       var thumbnail = document.createElement('li');
       thumbnail.className = 'slide';
-      thumbnail.innerHTML = "<img src=\"" + image.url + "\" alt=\"" + image.alt + "\" class=\"img-responsive\" aria-controls=\"" + IMAGELIGHTBOX + "-detail\" />";
+      thumbnail.innerHTML = "<img src=\"" + image.url + "\" alt=\"" + image.alt + "\" data-index=\"" + index + "\" class=\"img-responsive\" aria-controls=\"" + IMAGELIGHTBOX + "-detail\" />";
+
+      var img = thumbnail.querySelector('img');
+      img.addEventListener('click', function () {
+        self.imageLightbox.show(index);
+        self.trigger('modal', { element: self.imageLightbox.getElement() });
+      });
+
       this.carouselList.appendChild(thumbnail);
     }
 
@@ -3602,7 +3649,7 @@ var ContentTypeDetailView = function () {
   }, {
     key: "ellipsisRest",
     value: function ellipsisRest(size, text) {
-      return "<span class=\"part-two\" tabindex=\"-1\">" + text.substr(size) + "...</span>";
+      return "<span class=\"part-two\" tabindex=\"-1\">" + text.substr(size) + "</span>";
     }
 
     /**
@@ -3613,7 +3660,7 @@ var ContentTypeDetailView = function () {
     key: "resetLicenses",
     value: function resetLicenses() {
       var container = this.licensePanelBody.querySelector('.panel-body');
-      container.querySelectorAll('dt,dl').forEach((0, _elements.removeChild)(container));
+      (0, _elements.querySelectorAll)('dt,dl', container).forEach((0, _elements.removeChild)(container));
     }
 
     /**
@@ -3828,7 +3875,7 @@ var ContentTypeDetailView = function () {
       var _this4 = this;
 
       setTimeout(function () {
-        return _this4.rootElement.focus();
+        return _this4.title.focus();
       }, 10);
     }
 
@@ -4307,12 +4354,13 @@ var ContentTypeListView = function () {
       // row item
       var element = document.createElement('li');
       element.id = "content-type-" + contentType.machineName;
+      element.classList.add('media');
       element.setAttribute('data-id', contentType.machineName);
       element.setAttribute('aria-labelledby', contentTypeRowTitleId);
       element.setAttribute('aria-describedby', contentTypeRowDescriptionId);
 
       // create html
-      element.innerHTML = "\n      <img class=\"img-responsive\" src=\"" + image + "\" alt=\"" + title + " " + _dictionary2.default.get('contentTypeIconAltText') + "\" />\n\n      <div class=\"content-type-row-info\">\n        <div id=\"" + contentTypeRowTitleId + "\" class=\"h4\">" + title + "</div>\n        <div id=\"" + contentTypeRowDescriptionId + "\" class=\"description\">" + description + "</div>\n      </div>\n      \n      <div class=\"content-type-actions-info\">\n        <div class=\"content-type-update-info" + (updateAvailable ? '' : ' hidden') + "\">\n          " + _dictionary2.default.get('contentTypeUpdateAvailable') + "\n        </div>\n        <div class=\"content-type-row-button\">\n          <button aria-describedby=\"" + contentTypeRowTitleId + "\" class=\"button " + button.cls + "\" data-id=\"" + contentType.machineName + "\" tabindex=\"-1\" " + disabled + ">\n            <span class=\"" + button.icon + "\"></span>\n            " + button.text + "\n          </button>\n        </div>\n      </div>\n   ";
+      element.innerHTML = "\n      <div class=\"media-left\">\n        <img class=\"media-object\" src=\"" + image + "\" alt=\"" + title + " " + _dictionary2.default.get('contentTypeIconAltText') + "\" />\n      </div>\n\n      <div class=\"media-body\">\n        <div id=\"" + contentTypeRowTitleId + "\" class=\"h4 media-heading\">" + title + "</div>\n      \n        <button aria-describedby=\"" + contentTypeRowTitleId + "\" class=\"button " + button.cls + "\" data-id=\"" + contentType.machineName + "\" tabindex=\"-1\" " + disabled + ">\n          <span class=\"" + button.icon + "\"></span>\n          " + button.text + "\n        </button>\n        \n        <div class=\"content-type-update-info" + (updateAvailable ? '' : ' hidden') + "\">\n          " + _dictionary2.default.get('contentTypeUpdateAvailable') + "\n        </div>\n        \n        <div id=\"" + contentTypeRowDescriptionId + "\" class=\"description\">" + description + "</div>\n      </div>\n   ";
 
       // handle use button
       var useButton = element.querySelector('.button-primary');
@@ -4770,7 +4818,7 @@ var ContentBrowserView = function () {
         return;
       }
 
-      var menuItems = this.menubar.querySelectorAll('[role="menuitem"]');
+      var menuItems = (0, _elements.querySelectorAll)('[role="menuitem"]', this.menubar);
       var selectedMenuItem = this.menubar.querySelector("[role=\"menuitem\"][data-id=\"" + id + "\"]");
 
       if (selectedMenuItem) {
@@ -5145,7 +5193,8 @@ var HubView = function () {
   _createClass(HubView, [{
     key: "closePanel",
     value: function closePanel() {
-      this.panel.classList.remove('open');
+      this.panel.querySelector('[aria-expanded="true"]').setAttribute('aria-expanded', false);
+      this.trigger('panel-change');
     }
 
     /**
@@ -5296,8 +5345,26 @@ var HubView = function () {
     value: function setSectionType(_ref3) {
       var id = _ref3.id;
 
-      this.panel.className = 'panel open'; // TODO reset the panel classes in a less brittle way
-      this.panel.classList.add('h5p-section-' + id, 'panel');
+      var SECTION_PREFIX = 'h5p-section-';
+      this.panel.className = this.removeWordByPrefix(SECTION_PREFIX, this.panel.className);;
+      this.panel.classList.add(SECTION_PREFIX + id, 'panel');
+    }
+
+    /**
+     * Takes a string and removes words that start with prefix
+     *
+     * @param {string} prefix
+     * @param {string} classes
+     *
+     * @return {string}
+     */
+
+  }, {
+    key: "removeWordByPrefix",
+    value: function removeWordByPrefix(prefix, classes) {
+      return classes.split(/ +/).filter(function (cls) {
+        return cls.indexOf(prefix) !== 0;
+      }).join(' ');
     }
 
     /**
@@ -5870,7 +5937,8 @@ var UploadSection = function () {
       var self = this;
       // Handle errors and update styles when a file is selected
       this.uploadInput.onchange = function () {
-        if (this.value === '') {
+        if (this.value.length === 0) {
+          self.clearUploadForm();
           return;
         }
         // Clear messages
@@ -6815,7 +6883,6 @@ var onButtonTab = function onButtonTab(button, direction, handler) {
  * @param {MutationRecord} record
  */
 var handleDomUpdate = (0, _functional.curry)(function (element, state, keyboard, record) {
-
   if (record.type === 'attributes' && record.attributeName === ATTRIBUTE_SHOW) {
 
     var showImage = parseInt(record.target.getAttribute(ATTRIBUTE_SHOW));
@@ -6939,13 +7006,6 @@ var toggleEnabled = function toggleEnabled(element, enabled) {
 var isDisabled = (0, _elements.hasAttribute)('disabled');
 
 /**
- * @type {function}
- */
-var showImageLightbox = (0, _functional.curry)(function (lightbox, imageIndex) {
-  return (0, _elements.setAttribute)('data-show', imageIndex, lightbox);
-});
-
-/**
  * Update the view
  *
  * @param {HTMLElement} element
@@ -6992,28 +7052,6 @@ var onNavigationButtonClick = function onNavigationButtonClick(element, state, b
 };
 
 /**
- * Initializes an image
- *
- * @param {HTMLElement} element
- * @param {HTMLElement} image
- *
- * @function
- * @return {HTMLElement}
- */
-var initImage = (0, _functional.curry)(function (element, keyboard, image, imageIndex) {
-  var targetId = image.getAttribute('aria-controls');
-  var lightBox = document.querySelector('#' + targetId);
-
-  image.addEventListener('click', function (event) {
-    return showImageLightbox(lightBox, imageIndex);
-  });
-
-  keyboard.addElement(image);
-
-  return image;
-});
-
-/**
  * Callback for when the dom is updated
  *
  * @param {HTMLElement} element
@@ -7026,7 +7064,9 @@ var handleDomUpdate = (0, _functional.curry)(function (element, state, keyboard,
   if (record.type === 'childList') {
     (0, _elements.nodeListToArray)(record.addedNodes).filter((0, _elements.classListContains)('slide')).map((0, _elements.querySelector)('img')).filter(function (image) {
       return image !== null;
-    }).forEach(initImage(element, keyboard));
+    }).forEach(function (image) {
+      keyboard.addElement(image);
+    });
   }
 
   // update the view
@@ -7069,9 +7109,6 @@ function init(element) {
       return state.position++;
     });
   });
-
-  // initialize images
-  (0, _elements.querySelectorAll)('[aria-controls]', element).forEach(initImage(element, keyboard));
 
   // listen for updates to data-size
   var observer = new MutationObserver((0, _functional.forEach)(handleDomUpdate(element, state, keyboard)));
@@ -7375,6 +7412,164 @@ __webpack_require__(13);
 // Load library
 H5P = H5P || {};
 H5P.HubClient = __webpack_require__(12).default;
+
+/***/ }),
+/* 33 */,
+/* 34 */,
+/* 35 */,
+/* 36 */,
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _eventful = __webpack_require__(2);
+
+var _elements = __webpack_require__(0);
+
+var _imageLightbox = __webpack_require__(26);
+
+var _imageLightbox2 = _interopRequireDefault(_imageLightbox);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @constant {string}
+ */
+var IMAGELIGHTBOX = 'imagelightbox';
+
+/**
+ * @class
+ * @mixes Eventful
+ */
+
+var ImageLightBox = function () {
+  function ImageLightBox() {
+    _classCallCheck(this, ImageLightBox);
+
+    // add event system
+    _extends(this, (0, _eventful.Eventful)());
+
+    this.rootElement = this.createView();
+    this.imageLightboxList = this.rootElement.querySelector("." + IMAGELIGHTBOX + "-list");
+
+    (0, _imageLightbox2.default)(this.rootElement);
+  }
+
+  /**
+   * Create the DOM structure
+   *
+   * @function
+   * @returns {HTMLElement}
+   */
+
+
+  _createClass(ImageLightBox, [{
+    key: "createView",
+    value: function createView() {
+      var l10n = {
+        title: 'Images',
+        progress: ':num of :total',
+        next: 'Next image',
+        prev: 'Previous image',
+        close: 'Close dialog'
+      };
+
+      var rootElement = (0, _elements.createElement)({
+        tag: 'div',
+        id: IMAGELIGHTBOX + "-detail",
+        classes: [IMAGELIGHTBOX],
+        attributes: {
+          role: 'dialog',
+          'aria-label': l10n.title
+        }
+      });
+
+      rootElement.innerHTML = "\n      <div class=\"" + IMAGELIGHTBOX + "-inner\">\n        <div class=\"" + IMAGELIGHTBOX + "-button close\" role=\"button\" tabindex=\"0\" aria-label=\"" + l10n.close + "\"></div>\n        <ol class=\"" + IMAGELIGHTBOX + "-list\"></ol>\n        <div class=\"" + IMAGELIGHTBOX + "-progress\">" + l10n.progress + "</div>\n        <div class=\"" + IMAGELIGHTBOX + "-button next\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.next + "\"></div>\n        <div class=\"" + IMAGELIGHTBOX + "-button previous\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.prev + "\"></div>\n      </div>";
+
+      return rootElement;
+    }
+
+    /**
+     * Add an image
+     *
+     * @function
+     * @param {string} url
+     * @param {string} alt
+     */
+
+  }, {
+    key: "addImage",
+    value: function addImage(_ref) {
+      var url = _ref.url,
+          alt = _ref.alt;
+
+      var item = (0, _elements.createElement)({
+        tag: 'li',
+        classes: [IMAGELIGHTBOX + "-image"]
+      });
+      item.innerHTML = "<img class=\"img-responsive\" src=\"" + url + "\" alt=\"" + alt + "\">";
+      this.imageLightboxList.appendChild(item);
+    }
+
+    /**
+     * Show the lightbox
+     *
+     * @function
+     * @param {number} index - the image to show first
+     */
+
+  }, {
+    key: "show",
+    value: function show(index) {
+      this.rootElement.setAttribute('data-show', index);
+    }
+
+    /**
+     * Remove all images
+     * @function
+     */
+
+  }, {
+    key: "reset",
+    value: function reset() {
+      this.imageLightboxList.innerHTML = '';
+    }
+
+    /**
+     * Return the DOM element
+     *
+     * @returns {HTMLElement}
+     */
+
+  }, {
+    key: "getElement",
+    value: function getElement() {
+      return this.rootElement;
+    }
+  }]);
+
+  return ImageLightBox;
+}();
+
+exports.default = ImageLightBox;
 
 /***/ })
 /******/ ]);
