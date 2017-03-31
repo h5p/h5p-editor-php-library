@@ -487,7 +487,7 @@ class H5peditor {
       'isRecommended'   => $cached_library->is_recommended != 0,
       'popularity'      => intval($cached_library->popularity),
       'screenshots'     => json_decode($cached_library->screenshots),
-      'license'         => $cached_library->license,
+      'license'         => json_decode($cached_library->license),
       'owner'           => $cached_library->owner,
       'installed'       => FALSE,
       'isUpToDate'      => FALSE,
