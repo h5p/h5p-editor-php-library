@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 32);
+/******/ 	return __webpack_require__(__webpack_require__.s = 33);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1066,7 +1066,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
  * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
  * @license   Licensed under MIT license
  *            See https://raw.githubusercontent.com/stefanpenner/es6-promise/master/LICENSE
- * @version   3.3.1
+ * @version   4.1.0
  */
 
 (function (global, factory) {
@@ -1144,9 +1144,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   // vertx
   function useVertxTimer() {
-    return function () {
-      vertxNext(flush);
-    };
+    if (typeof vertxNext !== 'undefined') {
+      return function () {
+        vertxNext(flush);
+      };
+    }
+
+    return useSetTimeout();
   }
 
   function useMutationObserver() {
@@ -1196,7 +1200,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   function attemptVertx() {
     try {
       var r = require;
-      var vertx = __webpack_require__(31);
+      var vertx = __webpack_require__(32);
       vertxNext = vertx.runOnLoop || vertx.runOnContext;
       return useVertxTimer();
     } catch (e) {
@@ -1373,6 +1377,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     } else {
       if (then$$ === GET_THEN_ERROR) {
         _reject(promise, GET_THEN_ERROR.error);
+        GET_THEN_ERROR.error = null;
       } else if (then$$ === undefined) {
         fulfill(promise, maybeThenable);
       } else if (isFunction(then$$)) {
@@ -1493,7 +1498,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       if (value === TRY_CATCH_ERROR) {
         failed = true;
         error = value.error;
-        value = null;
+        value.error = null;
       } else {
         succeeded = true;
       }
@@ -2209,7 +2214,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     local.Promise = Promise;
   }
 
-  polyfill();
   // Strange compat..
   Promise.polyfill = polyfill;
   Promise.Promise = Promise;
@@ -2217,7 +2221,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   return Promise;
 });
 //# sourceMappingURL=es6-promise.map
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14), __webpack_require__(7), __webpack_require__(15)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15), __webpack_require__(7), __webpack_require__(16)))
 
 /***/ }),
 /* 8 */
@@ -2234,19 +2238,19 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _contentTypeSectionView = __webpack_require__(20);
+var _contentTypeSectionView = __webpack_require__(21);
 
 var _contentTypeSectionView2 = _interopRequireDefault(_contentTypeSectionView);
 
-var _searchService = __webpack_require__(23);
+var _searchService = __webpack_require__(25);
 
 var _searchService2 = _interopRequireDefault(_searchService);
 
-var _contentTypeList = __webpack_require__(19);
+var _contentTypeList = __webpack_require__(20);
 
 var _contentTypeList2 = _interopRequireDefault(_contentTypeList);
 
-var _contentTypeDetail = __webpack_require__(17);
+var _contentTypeDetail = __webpack_require__(18);
 
 var _contentTypeDetail2 = _interopRequireDefault(_contentTypeDetail);
 
@@ -2602,9 +2606,407 @@ exports.default = ContentTypeSection;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 exports.default = init;
 
-var _collapsible = __webpack_require__(10);
+var _elements = __webpack_require__(0);
+
+var _functional = __webpack_require__(1);
+
+var _keyboard = __webpack_require__(4);
+
+var _keyboard2 = _interopRequireDefault(_keyboard);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @constant
+ */
+var ATTRIBUTE_SHOW = 'data-show';
+
+/**
+ * @constant
+ * @type Object.<string, number>
+ */
+var KEY = {
+  TAB: 9,
+  ENTER: 13,
+  SHIFT: 16,
+  SPACE: 32,
+  ESC: 27,
+  LEFT_ARROW: 37,
+  RIGHT_ARROW: 39
+};
+
+/**
+ * @constant
+ * @type Object.<string, number>
+ */
+var TAB_DIRECTION = {
+  FORWARD: 0,
+  BACKWARD: 1
+};
+
+/**
+ * @function
+ * @param {HTMLElement} element
+ */
+var show = function show(element) {
+  return element.classList.add('active');
+};
+
+/**
+ * @function
+ * @param {HTMLElement} element
+ */
+var hide = function hide(element) {
+  element.classList.remove('active');
+  element.removeAttribute('aria-live');
+};
+
+/**
+ * @function
+ * @param {HTMLElement} element
+ */
+var live = (0, _elements.setAttribute)('aria-live', 'polite');
+
+/**
+ * @function
+ * @param {HTMLElement} element
+ */
+var enable = function enable(element) {
+  element.tabIndex = 0;
+  element.removeAttribute('aria-disabled');
+};
+
+/**
+ * @function
+ * @param {HTMLElement} element
+ */
+var disable = function disable(element) {
+  element.tabIndex = -1;
+  element.setAttribute('aria-disabled', 'true');
+};
+
+/**
+ * @function
+ * @param {HTMLElement} element
+ */
+var isDisabled = (0, _elements.hasAttribute)('aria-disabled');
+
+/**
+ * @function
+ * @param {HTMLElement} element
+ * @param {boolean} force
+ */
+var toggleDisabled = function toggleDisabled(element, force) {
+  return (force ? disable : enable)(element);
+};
+
+/**
+ * @function
+ * @param {HTMLElement} element
+ * @param {boolean} force
+ */
+var toggleHidden = function toggleHidden(element, force) {
+  return (force ? hide : show)(element);
+};
+
+/**
+ * @function
+ * @param {HTMLElement} element
+ * @param {number} imageIndex
+ */
+var showImageLightbox = (0, _functional.curry)(function (element, imageIndex) {
+  return (0, _elements.setAttribute)('data-show', imageIndex, element);
+});
+
+/**
+ * @function
+ * @param {HTMLElement} element
+ */
+var hideLightbox = (0, _elements.removeAttribute)(ATTRIBUTE_SHOW);
+
+/**
+ * Focus first element with tabindex from arguments
+ *
+ * @function
+ * @param {...HTMLElement} elements
+ */
+var focus = function focus() {
+  for (var _len = arguments.length, elements = Array(_len), _key = 0; _key < _len; _key++) {
+    elements[_key] = arguments[_key];
+  }
+
+  for (var i = 0; i < elements.length; i++) {
+    if (elements[i].tabIndex !== -1) {
+      return elements[i].focus();
+    }
+  }
+};
+
+/**
+ * Will toggle the siblings of the element visible or not.
+ *
+ * @function
+ * @param {HTMLElement} element
+ * @param {boolean} show
+ */
+var toggleSiblings = function toggleSiblings(element, show) {
+  var siblings = element.parentNode.children;
+
+  for (var i = 0; i < siblings.length; i++) {
+    var sibling = siblings[i];
+
+    if (sibling !== element) {
+      if (show) {
+        // TODO This is dangerous, and will interfere with
+        // the aria-hidden state set by other compoents
+        sibling.removeAttribute('aria-hidden');
+      } else {
+        sibling.setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+};
+
+/**
+ * @type string
+ */
+var progressTemplateText = void 0;
+
+/**
+ * Update the view
+ *
+ * @function
+ * @param {HTMLElement} element
+ * @param {ImageScrollerState} state
+ * @param {boolean} setDialogFocus
+ */
+var updateView = function updateView(element, state) {
+
+  var images = (0, _elements.querySelectorAll)('.imagelightbox-image', element);
+  var progress = element.querySelector('.imagelightbox-progress');
+  var prevButton = element.querySelector('.previous');
+  var nextButton = element.querySelector('.next');
+
+  // Hide all images
+  images.forEach(function (image) {
+    return hide(image);
+  });
+  if (state.currentImage !== null) {
+    // Show selected image
+    var image = element.querySelector('.imagelightbox-image:nth-child(' + (state.currentImage + 1) + ')');
+
+    show(image);
+    live(image);
+  }
+
+  // Update progress text
+  if (!progressTemplateText) {
+    // Keep template for future updates
+    progressTemplateText = progress.innerText;
+  }
+  progress.innerText = progressTemplateText.replace(':num', state.currentImage + 1).replace(':total', images.length);
+
+  // Determine if buttons should be shown or hidden
+  toggleHidden(prevButton, !images.length);
+  toggleHidden(nextButton, !images.length);
+
+  // Determine if buttons should be enabled or disabled
+  toggleDisabled(prevButton, state.currentImage === 0);
+  toggleDisabled(nextButton, state.currentImage === images.length - 1);
+
+  // Determine if lightbox should be shown or hidden
+  toggleHidden(element, state.currentImage === null);
+  toggleSiblings(element, state.currentImage === null);
+};
+
+/**
+ * Handles button clicked
+ *
+ * @function
+ * @param {HTMLElement} element
+ * @param {HTMLElement} button
+ * @param {number} imageIndex
+ */
+var onNavigationButtonClick = function onNavigationButtonClick(element, button, imageIndex) {
+  if (!isDisabled(button)) {
+    showImageLightbox(element, imageIndex);
+  }
+};
+
+/**
+ * Generic function for handling keydowns
+ *
+ * @function
+ * @param {HTMLElement} element
+ * @param {number[]}  keycodes
+ * @param {function} handler
+ */
+var onKeyDown = function onKeyDown(element, keycodes, handler) {
+  element.addEventListener('keydown', function (event) {
+    if (keycodes.indexOf(event.which) !== -1) {
+      handler();
+      event.preventDefault();
+    }
+  });
+};
+
+/**
+ * @function
+ */
+var onButtonPress = function onButtonPress(button, handler) {
+  button.addEventListener('click', handler);
+  onKeyDown(button, [KEY.ENTER, KEY.SPACE], handler);
+};
+
+/**
+ * Keep track of which keys are currently pressed.
+ *
+ * @type Object.<number, boolean>
+ */
+var keysDown = {};
+
+/**
+ * Binds key listeners that traps focus when the lightbox is open.
+ *
+ * @function
+ */
+var onButtonTab = function onButtonTab(button, direction, handler) {
+  button.addEventListener('keydown', function (event) {
+    // Keep track of which keys are currently pressed
+    keysDown[event.which] = true;
+
+    if (event.which === KEY.TAB) {
+      // Tab key press
+
+      if (keysDown[KEY.SHIFT]) {
+        if (direction === TAB_DIRECTION.BACKWARD) {
+          // Shift is down, tab backward
+          handler();
+          event.preventDefault();
+        }
+      } else {
+        if (direction === TAB_DIRECTION.FORWARD) {
+          // Tab forward
+          handler();
+          event.preventDefault();
+        }
+      }
+    }
+  });
+  button.addEventListener('keyup', function (event) {
+    delete keysDown[event.which];
+  });
+};
+
+/**
+ * Callback for when the dom is updated
+ *
+ * @function
+ * @param {HTMLElement} element
+ * @param {ImageLightboxState} state
+ * @param {Keyboard} keyboard
+ * @param {MutationRecord} record
+ */
+var handleDomUpdate = (0, _functional.curry)(function (element, state, keyboard, record) {
+  if (record.type === 'attributes' && record.attributeName === ATTRIBUTE_SHOW) {
+
+    var showImage = parseInt(record.target.getAttribute(ATTRIBUTE_SHOW));
+
+    // update the view
+    updateView(element, _extends(state, {
+      currentImage: isNaN(showImage) ? null : showImage
+    }));
+  }
+});
+
+/**
+ * Initializes a panel
+ *
+ * @function
+ * @param {HTMLElement} element
+ * @return {HTMLElement}
+ */
+function init(element) {
+  // get button html elements
+  var nextButton = element.querySelector('.next');
+  var prevButton = element.querySelector('.previous');
+  var closeButton = element.querySelector('.close');
+  var keyboard = new _keyboard2.default();
+
+  /**
+   * @typedef {object} ImageLightboxState
+   * @property {number} currentImage Index of image to display
+   */
+  var state = {
+    currentImage: false
+  };
+
+  // initialize buttons
+  onButtonPress(nextButton, function () {
+    return onNavigationButtonClick(element, nextButton, state.currentImage + 1);
+  });
+  onButtonTab(nextButton, TAB_DIRECTION.BACKWARD, function () {
+    return focus(closeButton);
+  });
+
+  onButtonPress(prevButton, function () {
+    return onNavigationButtonClick(element, prevButton, state.currentImage - 1);
+  });
+  onButtonTab(prevButton, TAB_DIRECTION.BACKWARD, function () {
+    return focus(nextButton, closeButton);
+  });
+
+  onButtonPress(closeButton, function () {
+    return hideLightbox(element);
+  });
+  onButtonTab(closeButton, TAB_DIRECTION.FORWARD, function () {
+    return focus(nextButton, prevButton);
+  });
+
+  // When clicking on the background, let's close it
+  element.addEventListener('click', function (event) {
+    if (event.target === element) {
+      hideLightbox(element);
+    }
+  });
+
+  // When escape is clicked, close me:
+  onKeyDown(document, [KEY.ESC], function () {
+    return hideLightbox(element);
+  });
+
+  // listen for updates to data-size
+  var observer = new MutationObserver((0, _functional.forEach)(handleDomUpdate(element, state, keyboard)));
+
+  observer.observe(element, {
+    subtree: false,
+    childList: false,
+    attributes: true,
+    attributeOldValue: true,
+    attributeFilter: [ATTRIBUTE_SHOW]
+  });
+
+  return element;
+}
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = init;
+
+var _collapsible = __webpack_require__(11);
 
 var _keyboard = __webpack_require__(4);
 
@@ -2639,7 +3041,7 @@ function init(element) {
 }
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2709,13 +3111,13 @@ var initCollapsible = exports.initCollapsible = function initCollapsible(element
 };
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4NCiAgPGRlZnM+DQogICAgPHN0eWxlPg0KICAgICAgLmNscy0xIHsNCiAgICAgIGZpbGw6IG5vbmU7DQogICAgICB9DQoNCiAgICAgIC5jbHMtMiB7DQogICAgICBmaWxsOiAjYzZjNmM3Ow0KICAgICAgfQ0KDQogICAgICAuY2xzLTMsIC5jbHMtNCB7DQogICAgICBmaWxsOiAjZmZmOw0KICAgICAgfQ0KDQogICAgICAuY2xzLTMgew0KICAgICAgb3BhY2l0eTogMC43Ow0KICAgICAgfQ0KICAgIDwvc3R5bGU+DQogIDwvZGVmcz4NCiAgPHRpdGxlPmNvbnRlbnQgdHlwZSBwbGFjZWhvbGRlcl8yPC90aXRsZT4NCiAgPGcgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiI+DQogICAgPGcgaWQ9ImNvbnRlbnRfdHlwZV9wbGFjZWhvbGRlci0xX2NvcHkiIGRhdGEtbmFtZT0iY29udGVudCB0eXBlIHBsYWNlaG9sZGVyLTEgY29weSI+DQogICAgICA8cmVjdCBjbGFzcz0iY2xzLTEiIHdpZHRoPSI0MDAiIGhlaWdodD0iMjI1Ii8+DQogICAgICA8cmVjdCBjbGFzcz0iY2xzLTIiIHg9IjExMi41MSIgeT0iNDMuNDEiIHdpZHRoPSIxNzYuOTYiIGhlaWdodD0iMTM1LjQ1IiByeD0iMTAiIHJ5PSIxMCIvPg0KICAgICAgPGNpcmNsZSBjbGFzcz0iY2xzLTMiIGN4PSIxMzYuNjYiIGN5PSI2MS45OCIgcj0iNC44MSIvPg0KICAgICAgPGNpcmNsZSBjbGFzcz0iY2xzLTMiIGN4PSIxNTEuNDkiIGN5PSI2MS45OCIgcj0iNC44MSIvPg0KICAgICAgPGNpcmNsZSBjbGFzcz0iY2xzLTMiIGN4PSIxNjYuMSIgY3k9IjYxLjk4IiByPSI0LjgxIi8+DQogICAgICA8ZyBpZD0iX0dyb3VwXyIgZGF0YS1uYW1lPSImbHQ7R3JvdXAmZ3Q7Ij4NCiAgICAgICAgPGcgaWQ9Il9Hcm91cF8yIiBkYXRhLW5hbWU9IiZsdDtHcm91cCZndDsiPg0KICAgICAgICAgIDxwYXRoIGlkPSJfQ29tcG91bmRfUGF0aF8iIGRhdGEtbmFtZT0iJmx0O0NvbXBvdW5kIFBhdGgmZ3Q7IiBjbGFzcz0iY2xzLTQiIGQ9Ik0yNjMuMjgsOTUuMjFDMjYwLDkyLjA3LDI1NSw5MS41LDI0OC40Myw5MS41SDIyN3Y4SDE5OS41bC0yLjE3LDEwLjI0YTI1Ljg0LDI1Ljg0LDAsMCwxLDExLjQ4LTEuNjMsMTkuOTMsMTkuOTMsMCwwLDEsMTQuMzksNS41NywxOC4yNiwxOC4yNiwwLDAsMSw1LjUyLDEzLjYsMjMuMTEsMjMuMTEsMCwwLDEtMi44NCwxMS4wNSwxOC42NSwxOC42NSwwLDAsMS04LjA2LDcuNzksOSw5LDAsMCwxLTQuMTIsMS4zN0gyMzZ2LTIxaDEwLjQyYzcuMzYsMCwxMi44My0xLjYxLDE2LjQyLTVzNS4zOC03LjQ4LDUuMzgtMTMuNDRDMjY4LjIyLDEwMi4yOSwyNjYuNTcsOTguMzUsMjYzLjI4LDk1LjIxWm0tMTUsMTdjLTEuNDIsMS4yMi0zLjksMS4yNS03LjQxLDEuMjVIMjM2di0xNGg1LjYyYTkuNTcsOS41NywwLDAsMSw3LDIuOTMsNy4wNSw3LjA1LDAsMCwxLDEuODUsNC45MkE2LjMzLDYuMzMsMCwwLDEsMjQ4LjMxLDExMi4yNVoiLz4NCiAgICAgICAgICA8cGF0aCBpZD0iX1BhdGhfIiBkYXRhLW5hbWU9IiZsdDtQYXRoJmd0OyIgY2xhc3M9ImNscy00IiBkPSJNMjAyLjksMTE5LjExYTguMTIsOC4xMiwwLDAsMC03LjI4LDQuNTJsLTE2LTEuMjIsNy4yMi0zMC45MkgxNzR2MjJIMTUzdi0yMkgxMzZ2NTZoMTd2LTIxaDIxdjIxaDIwLjMxYy0yLjcyLDAtNS0xLjUzLTctM2ExOS4xOSwxOS4xOSwwLDAsMS00LjczLTQuODMsMjMuNTgsMjMuNTgsMCwwLDEtMy02LjZsMTYtMi4yNmE4LjExLDguMTEsMCwxLDAsNy4yNi0xMS43MloiLz4NCiAgICAgICAgPC9nPg0KICAgICAgPC9nPg0KICAgICAgPHJlY3QgY2xhc3M9ImNscy0zIiB4PSIxNzcuNjYiIHk9IjU3LjY2IiB3aWR0aD0iOTIuMjgiIGhlaWdodD0iOS4zOCIgcng9IjMuNSIgcnk9IjMuNSIvPg0KICAgIDwvZz4NCiAgPC9nPg0KPC9zdmc+DQo="
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2729,7 +3131,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _hubView = __webpack_require__(22);
+var _hubView = __webpack_require__(23);
 
 var _hubView2 = _interopRequireDefault(_hubView);
 
@@ -2737,11 +3139,11 @@ var _contentTypeSection = __webpack_require__(8);
 
 var _contentTypeSection2 = _interopRequireDefault(_contentTypeSection);
 
-var _uploadSection = __webpack_require__(24);
+var _uploadSection = __webpack_require__(26);
 
 var _uploadSection2 = _interopRequireDefault(_uploadSection);
 
-var _hubServices = __webpack_require__(21);
+var _hubServices = __webpack_require__(22);
 
 var _hubServices2 = _interopRequireDefault(_hubServices);
 
@@ -2841,7 +3243,7 @@ var Hub = function () {
 
     // handle events
     this.on('select', this.setPanelTitle, this);
-    this.on('select', this.view.closePanel, this.view);
+    this.on('select', this.view.togglePanelOpen.bind(this.view, false));
     this.view.on('tab-change', this.view.setSectionType, this.view);
     this.view.on('panel-change', function () {
       _this.view.togglePanelOpen();
@@ -2989,13 +3391,13 @@ var Hub = function () {
 exports.default = Hub;
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3182,7 +3584,7 @@ process.umask = function () {
 };
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3212,7 +3614,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3232,25 +3634,25 @@ var _functional = __webpack_require__(1);
 
 var _eventful = __webpack_require__(2);
 
-var _panel = __webpack_require__(9);
+var _panel = __webpack_require__(10);
 
 var _panel2 = _interopRequireDefault(_panel);
 
-var _modal = __webpack_require__(28);
+var _modal = __webpack_require__(29);
 
 var _modal2 = _interopRequireDefault(_modal);
 
-var _imageScroller = __webpack_require__(27);
+var _imageScroller = __webpack_require__(28);
 
 var _imageScroller2 = _interopRequireDefault(_imageScroller);
 
-var _imageLightbox = __webpack_require__(26);
+var _imageLightbox = __webpack_require__(9);
 
 var _imageLightbox2 = _interopRequireDefault(_imageLightbox);
 
 var _events = __webpack_require__(5);
 
-var _contentTypePlaceholder = __webpack_require__(11);
+var _contentTypePlaceholder = __webpack_require__(12);
 
 var _contentTypePlaceholder2 = _interopRequireDefault(_contentTypePlaceholder);
 
@@ -3262,7 +3664,7 @@ var _messageView = __webpack_require__(6);
 
 var _messageView2 = _interopRequireDefault(_messageView);
 
-var _imageLightbox3 = __webpack_require__(43);
+var _imageLightbox3 = __webpack_require__(24);
 
 var _imageLightbox4 = _interopRequireDefault(_imageLightbox3);
 
@@ -3349,7 +3751,7 @@ var ContentTypeDetailView = function () {
     this.contentContainer = this.rootElement.querySelector('.container');
     this.image = this.rootElement.querySelector('.content-type-image');
     this.title = this.rootElement.querySelector('.text-details .title');
-    this.owner = this.rootElement.querySelector('.owner');
+    this.ownerElement = this.rootElement.querySelector('.owner');
     this.description = this.rootElement.querySelector('.text-details .small');
     this.demoButton = this.rootElement.querySelector('.demo-button');
     this.carousel = this.rootElement.querySelector('.carousel');
@@ -3402,7 +3804,7 @@ var ContentTypeDetailView = function () {
       element.setAttribute('tabindex', '-1');
       element.setAttribute('aria-labelledby', titleId);
 
-      element.innerHTML = "\n      <button class=\"back-button icon-arrow-thick\" aria-label=\"" + _dictionary2.default.get("contentTypeBackButtonLabel") + "\" tabindex=\"0\"></button>\n      <div class=\"container\">\n        <div class=\"image-wrapper\">\n          <img class=\"img-responsive content-type-image\" src=\"" + _contentTypePlaceholder2.default + "\">\n        </div>\n        <div class=\"text-details\">\n          <h2 id=\"" + titleId + "\" class=\"title\" tabindex=\"-1\"></h2>\n          <div class=\"owner\"></div>\n          <p class=\"small\"></p>\n          <a class=\"button demo-button\" target=\"_blank\" href=\"#\">\n            " + _dictionary2.default.get("contentTypeDemoButtonLabel") + "\n          </a>\n        </div>\n      </div>\n      <div class=\"carousel\" role=\"region\" data-size=\"5\">\n        <button class=\"carousel-button previous hidden\" disabled>\n          <span class=\"icon-arrow-thick\"></span>\n        </button>\n        <button class=\"carousel-button next hidden\" disabled>\n          <span class=\"icon-arrow-thick\"></span>\n        </button>\n        <nav class=\"scroller\">\n          <ul></ul>\n        </nav>\n      </div>\n      <hr />\n      <div class=\"button-bar\">\n        <button class=\"button button-inverse-primary button-install\" class=\"hidden\" data-id=\"\">\n          <span class=\"icon-arrow-thick\"></span>\n          " + _dictionary2.default.get('contentTypeInstallButtonLabel') + "\n        </button>\n        <button class=\"button button-inverse-primary button-installing\" class=\"hidden\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeInstallingButtonLabel") + "\n        </button>\n        <button class=\"button button-inverse-primary button-update\">\n          " + _dictionary2.default.get("contentTypeUpdateButtonLabel") + "\n        </button>\n        <button class=\"button button-inverse-primary button-updating\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeUpdatingButtonLabel") + "\n        </button>\n        <button class=\"button button-primary button-use\" data-id=\"\">\n          " + _dictionary2.default.get("contentTypeUseButtonLabel") + "\n        </button>\n        <button class=\"button button-inverse-primary button-install\" class=\"hidden\" data-id=\"\">\n          <span class=\"icon-arrow-thick\"></span>\n          " + _dictionary2.default.get('contentTypeInstallButtonLabel') + "\n        </button>\n        <button class=\"button button-inverse-primary button-installing\" class=\"hidden\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeInstallingButtonLabel") + "\n        </button>\n      </div>\n      <dl class=\"panel panel-default license-panel\">\n        <dt aria-level=\"2\" role=\"heading\" class=\"license-panel-heading\">\n          <a href=\"#\" role=\"button\" aria-expanded=\"false\" aria-controls=\"license-panel\">\n            <span class=\"icon-accordion-arrow\"></span>\n            <span>" + _dictionary2.default.get('contentTypeLicensePanelTitle') + "</span>\n          </a>\n        </dt>\n        <dl id=\"license-panel\" role=\"region\" class=\"hidden\">\n          <div class=\"panel-body\"></div>\n        </dl>\n      </dl>";
+      element.innerHTML = "\n      <button class=\"back-button icon-arrow-thick\" aria-label=\"" + _dictionary2.default.get("contentTypeBackButtonLabel") + "\" tabindex=\"0\"></button>\n      <div class=\"container\">\n        <div class=\"image-wrapper\">\n          <img class=\"img-responsive content-type-image\" src=\"" + _contentTypePlaceholder2.default + "\">\n        </div>\n        <div class=\"text-details\">\n          <h2 id=\"" + titleId + "\" class=\"title\" tabindex=\"-1\"></h2>\n          <div class=\"owner\"></div>\n          <p class=\"small\"></p>\n          <a class=\"button demo-button\" target=\"_blank\" href=\"#\">\n            " + _dictionary2.default.get("contentTypeDemoButtonLabel") + "\n          </a>\n        </div>\n      </div>\n      <div class=\"carousel\" role=\"region\" data-size=\"5\">\n        <button class=\"carousel-button previous hidden\" disabled>\n          <span class=\"icon-arrow-thick\"></span>\n        </button>\n        <button class=\"carousel-button next hidden\" disabled>\n          <span class=\"icon-arrow-thick\"></span>\n        </button>\n        <nav class=\"scroller\">\n          <ul></ul>\n        </nav>\n      </div>\n      <hr />\n      <div class=\"button-bar\">\n        <button class=\"button button-inverse-primary button-install hidden\" data-id=\"\">\n          <span class=\"icon-arrow-thick\"></span>\n          " + _dictionary2.default.get('contentTypeInstallButtonLabel') + "\n        </button>\n        <button class=\"button button-inverse-primary button-installing hidden\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeInstallingButtonLabel") + "\n        </button>\n        <button class=\"button button-inverse-primary button-update\">\n          " + _dictionary2.default.get("contentTypeUpdateButtonLabel") + "\n        </button>\n        <button class=\"button button-inverse-primary button-updating\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeUpdatingButtonLabel") + "\n        </button>\n        <button class=\"button button-primary button-use\" data-id=\"\">\n          " + _dictionary2.default.get("contentTypeUseButtonLabel") + "\n        </button>\n      </div>\n      <dl class=\"panel panel-default license-panel\">\n        <dt aria-level=\"2\" role=\"heading\" class=\"license-panel-heading\">\n          <a href=\"#\" role=\"button\" aria-expanded=\"false\" aria-controls=\"license-panel\">\n            <span class=\"icon-accordion-arrow\"></span>\n            <span>" + _dictionary2.default.get('contentTypeLicensePanelTitle') + "</span>\n          </a>\n        </dt>\n        <dl id=\"license-panel\" role=\"region\" class=\"hidden\">\n          <div class=\"panel-body\"></div>\n        </dl>\n      </dl>";
 
       return element;
     }
@@ -3583,7 +3985,7 @@ var ContentTypeDetailView = function () {
       var text = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
       if (text && text.length > MAX_TEXT_SIZE_DESCRIPTION) {
-        this.description.innerHTML = this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text, true) + "<button class=\"read-more link\">" + _dictionary2.default.get('contentTypeReadMore') + "</button>";
+        this.description.innerHTML = this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text, true) + "<button class=\"read-more link\">" + _dictionary2.default.get('readMore') + "</button>";
         this.description.querySelector('.read-more, .read-less').addEventListener('click', function () {
           return _this.toggleDescriptionExpanded(text);
         });
@@ -3608,11 +4010,11 @@ var ContentTypeDetailView = function () {
       this.descriptionExpanded = !this.descriptionExpanded;
 
       if (this.descriptionExpanded) {
-        this.description.innerHTML = "" + this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text) + this.ellipsisRest(MAX_TEXT_SIZE_DESCRIPTION, text) + "\n                                    <button class=\"read-less link\">" + _dictionary2.default.get('contentTypeReadLess') + "</button>";
+        this.description.innerHTML = "" + this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text) + this.ellipsisRest(MAX_TEXT_SIZE_DESCRIPTION, text) + "\n                                    <button class=\"read-less link\">" + _dictionary2.default.get('readLess') + "</button>";
 
         this.description.querySelector('.part-two').focus();
       } else {
-        this.description.innerHTML = this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text, true) + "\n                                    <button class=\"read-more link\">" + _dictionary2.default.get('contentTypeReadMore') + "</button>";
+        this.description.innerHTML = this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text, true) + "\n                                    <button class=\"read-more link\">" + _dictionary2.default.get('readMore') + "</button>";
 
         this.description.querySelector('.part-one').focus();
       }
@@ -3627,7 +4029,7 @@ var ContentTypeDetailView = function () {
      *
      * @param {number} size
      * @param {string} text
-     * @param {boolean} addEllipses whether ellipses should be added
+     * @param {boolean} [addEllipses] whether ellipses should be added
      */
 
   }, {
@@ -3667,6 +4069,8 @@ var ContentTypeDetailView = function () {
      * Sets the lisence
      *
      * @param {object} license
+     * @param {string} license.id
+     * @param {object} license.attributes
      */
 
   }, {
@@ -3674,16 +4078,15 @@ var ContentTypeDetailView = function () {
     value: function setLicense(license) {
       var _this3 = this;
 
+      this.license = license;
+
       var panelContainer = this.licensePanelBody.querySelector('.panel-body');
-      var l10n = {
-        readMore: 'Read more'
-      };
 
       if (license) {
         // Create short version for detail page
         var shortLicenseInfo = document.createElement('div');
         shortLicenseInfo.className = 'short-license-info';
-        shortLicenseInfo.innerHTML = "\n        <h3>" + license.title + "</h3>\n        <button class=\"short-license-read-more icon-info-circle\" aria-label=\"" + l10n.readMore + "\"></button>\n        " + license.short;
+        shortLicenseInfo.innerHTML = "\n        <h3>" + license.id + "</h3>\n        <button class=\"short-license-read-more icon-info-circle\" aria-label=\"" + _dictionary2.default.get('readMore') + "\"></button>\n        <ul class=\"ul small\">\n          <li>" + _dictionary2.default.get(license.attributes.useCommercially ? "licenseCanUseCommercially" : "licenseCannotUseCommercially") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.modifiable ? "licenseCanModify" : "licenseCannotModify") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.distributable ? "licenseCanDistribute" : "licenseCannotDistribute") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.sublicensable ? "licenseCanSublicense" : "licenseCannotSublicense") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.canHoldLiable ? "licenseCanHoldLiable" : "licenseCannotHoldLiable") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.mustIncludeCopyright ? "licenseMustIncludeCopyright" : "licenseMustNotIncludeCopyright") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.mustIncludeLicense ? "licenseMustIncludeLicense" : "licenseMustNotIncludeLicense") + "</li>\n        </ul>";
 
         // add short version of lisence
         panelContainer.innerText = '';
@@ -3692,51 +4095,61 @@ var ContentTypeDetailView = function () {
         // handle clicking read more
         var readMoreButton = this.licensePanelBody.querySelector('.short-license-read-more');
         readMoreButton.addEventListener('click', function () {
-          return _this3.trigger('show-license-dialog', { license: license });
+          return _this3.trigger('show-license-dialog', { licenseId: license.id });
         });
       } else {
-        panelContainer.innerText = 'Unspecified';
+        panelContainer.innerText = _dictionary2.default.get('licenseUnspecified');
       }
     }
 
     /**
      * Creates a modal window for license details
      *
-     * @param licenses
+     * @param {Promise} licenseDetails
      *
      * @return {Element}
      */
 
   }, {
     key: "createLicenseDialog",
-    value: function createLicenseDialog(licenses) {
+    value: function createLicenseDialog(licenseDetails) {
       var titleId = 'license-dialog-title';
       var modal = document.createElement('div');
-      modal.innerHTML = "\n      <div class=\"modal fade show\" role=\"dialog\">\n        <div class=\"modal-dialog\" tabindex=\"-1\" role=\"document\" aria-labelledby=\"" + titleId + "\">\n          <div class=\"modal-content\">\n            <div class=\"modal-header\">\n              <button type=\"button\" class=\"close icon-close\" data-dismiss=\"modal\" aria-label=\"Close\"></button>\n              <h5 class=\"modal-title\" id=\"" + titleId + "\">" + _dictionary2.default.get('contentTypeLicenseModalTitle') + "</h5>\n              <h5 class=\"modal-subtitle\">" + _dictionary2.default.get('contentTypeLicenseModalDescription') + "</h5>\n            </div>\n            <div class=\"modal-body\">\n              <dl class=\"panel panel-simple panel\"></dl>\n            </div>\n          </div>\n        </div>\n      </div>";
+      modal.innerHTML = "\n      <div class=\"modal fade show\" role=\"dialog\">\n        <div class=\"modal-dialog license-dialog\" tabindex=\"-1\" role=\"document\" aria-labelledby=\"" + titleId + "\">\n          <div class=\"modal-content\">\n            <div class=\"modal-header\">\n              <button type=\"button\" class=\"close icon-close\" data-dismiss=\"modal\" aria-label=\"" + _dictionary2.default.get('close') + "\"></button>\n              <h5 class=\"modal-title\" id=\"" + titleId + "\">" + _dictionary2.default.get('licenseModalTitle') + "</h5>\n              <h5 class=\"modal-subtitle\">" + _dictionary2.default.get('licenseModalSubtitle') + "</h5>\n            </div>\n            <div class=\"modal-body loading\">\n              <dl class=\"panel panel-simple\"></dl>\n            </div>\n          </div>\n        </div>\n      </div>";
 
-      var panels = modal.querySelector('.panel');
+      var modalBody = modal.querySelector('.modal-body');
+      var panel = modalBody.querySelector('.panel');
+      var id = "content-type-detail-license";
 
-      licenses.forEach(function (license, index) {
-        var id = "content-type-detail-license-" + index;
+      var header = document.createElement('dt');
+      header.setAttribute('role', 'heading');
+      header.setAttribute('aria-level', '2');
+      header.innerHTML = "<a href=\"#\" role=\"button\" aria-expanded=\"true\" aria-controls=\"" + id + "\">\n        <span class=\"icon-accordion-arrow\"></span>\n        <span class=\"license-title\">" + this.license.id + "</span>\n      </a>";
 
-        var title = document.createElement('dt');
-        title.setAttribute('role', 'heading');
-        title.setAttribute('aria-level', '2');
-        title.innerHTML = "<a href=\"#\" role=\"button\" aria-expanded=\"true\" aria-controls=\"" + id + "\">\n          <span class=\"icon-accordion-arrow\"></span>\n          <span class=\"h3\">" + license.title + "</span>\n        </a>";
+      var body = document.createElement('dd');
+      body.id = id;
+      body.className = 'hidden';
+      body.setAttribute('role', 'region');
+      body.innerHTML = "\n      <div class=\"panel-body\">\n        <div class=\"license-description\"></div>\n      </div>";
+      (0, _elements.hide)(body);
 
-        var body = document.createElement('dd');
-        body.id = id;
-        body.className = 'hidden';
-        body.setAttribute('role', 'region');
-        body.innerHTML = "\n        <div class=\"panel-body\">\n          <div class=\"small\">" + license.full + "</div>\n        </div>";
-        (0, _elements.hide)(body);
+      var title = header.querySelector('.license-title');
+      var description = body.querySelector('.license-description');
 
-        panels.appendChild(title);
-        panels.appendChild(body);
+      panel.appendChild(header);
+      panel.appendChild(body);
+
+      licenseDetails.then(function (details) {
+        title.innerHTML = details.id;
+        description.innerHTML = details.description;
+      }).catch(function (error) {
+        modalBody.innerHTML = _dictionary2.default.get('licenseFetchDetailsFailed');
+      }).then(function () {
+        return (0, _elements.removeClass)('loading', modalBody);
       });
 
       (0, _modal2.default)(modal);
-      (0, _panel2.default)(panels);
+      (0, _panel2.default)(panel);
 
       return modal;
     }
@@ -3750,10 +4163,12 @@ var ContentTypeDetailView = function () {
   }, {
     key: "setOwner",
     value: function setOwner(owner) {
+      this.owner = owner;
+
       if (owner) {
-        this.owner.innerHTML = _dictionary2.default.get('contentTypeOwner', { ':owner': owner });
+        this.ownerElement.innerHTML = _dictionary2.default.get('contentTypeOwner', { ':owner': owner });
       } else {
-        this.owner.innerHTML = '';
+        this.ownerElement.innerHTML = '';
       }
     }
 
@@ -3779,8 +4194,8 @@ var ContentTypeDetailView = function () {
   }, {
     key: "setIsInstalled",
     value: function setIsInstalled(installed) {
-      this.useButton.classList.toggle('hidden', !installed);
-      this.installButton.classList.toggle('hidden', installed);
+      this.useButton.classList[installed ? 'remove' : 'add']('hidden');
+      this.installButton.classList[installed ? 'add' : 'remove']('hidden');
     }
 
     /**
@@ -3794,7 +4209,7 @@ var ContentTypeDetailView = function () {
   }, {
     key: "setIsUpdatePossible",
     value: function setIsUpdatePossible(isUpdatePossible, title) {
-      this.updateButton.classList.toggle('hidden', !isUpdatePossible);
+      this.updateButton.classList[isUpdatePossible ? 'remove' : 'add']('hidden');
 
       // Set warning message
       if (isUpdatePossible) {
@@ -3837,11 +4252,11 @@ var ContentTypeDetailView = function () {
       var buttonToCheck = enable ? 'updateButton' : 'updatingButton';
       var isShowingInstallButton = this[buttonToCheck].classList.contains('hidden');
       if (isShowingInstallButton) {
-        this.installButton.classList.toggle('hidden', enable);
-        this.installingButton.classList.toggle('hidden', !enable);
+        this.installButton.classList[enable ? 'add' : 'remove']('hidden');
+        this.installingButton.classList[enable ? 'remove' : 'add']('hidden');
       } else {
-        this.updateButton.classList.toggle('hidden', enable);
-        this.updatingButton.classList.toggle('hidden', !enable);
+        this.updateButton.classList[enable ? 'add' : 'remove']('hidden');
+        this.updatingButton.classList[enable ? 'remove' : 'add']('hidden');
       }
     }
 
@@ -3876,7 +4291,7 @@ var ContentTypeDetailView = function () {
 
       setTimeout(function () {
         return _this4.title.focus();
-      }, 10);
+      }, 200);
     }
 
     /**
@@ -3909,7 +4324,7 @@ var ContentTypeDetailView = function () {
 exports.default = ContentTypeDetailView;
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3923,7 +4338,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _contentTypeDetailView = __webpack_require__(16);
+var _contentTypeDetailView = __webpack_require__(17);
 
 var _contentTypeDetailView2 = _interopRequireDefault(_contentTypeDetailView);
 
@@ -4034,15 +4449,16 @@ var ContentTypeDetail = function () {
     /**
      * Displays the license dialog
      *
-     * @param {object} license
+     * @param {string} licenseId
      */
 
   }, {
     key: 'showLicenseDialog',
     value: function showLicenseDialog(_ref2) {
-      var license = _ref2.license;
+      var licenseId = _ref2.licenseId;
 
-      var licenseDialog = this.view.createLicenseDialog([license]);
+
+      var licenseDialog = this.view.createLicenseDialog(this.services.getLicenseDetails(licenseId));
 
       // triggers the modal event
       this.trigger('modal', {
@@ -4119,7 +4535,7 @@ var ContentTypeDetail = function () {
       this.view.setExample(contentType.example);
       this.view.setOwner(contentType.owner);
       this.view.setIsInstalled(contentType.installed);
-      this.view.setLicense(this.getLicenseDetails(contentType.license, contentType.owner));
+      this.view.setLicense(contentType.license);
       this.view.setIsRestricted(contentType.restricted);
       var isUpdatePossible = contentType.installed && !contentType.isUpToDate && !contentType.restricted;
       this.view.setIsUpdatePossible(isUpdatePossible, contentType.title || contentType.machineName);
@@ -4150,28 +4566,6 @@ var ContentTypeDetail = function () {
     value: function getElement() {
       return this.view.getElement();
     }
-
-    /**
-     * Returns the license details
-     *
-     * @return {object}
-     */
-
-  }, {
-    key: 'getLicenseDetails',
-    value: function getLicenseDetails(type, owner) {
-      switch (type) {
-        case "MIT":
-          return {
-            title: _dictionary2.default.get('MITLicenseTitle'),
-            short: '\n            <ul class="ul small">\n              <li>' + _dictionary2.default.get("licenseCanUseCommercially") + '</li>\n              <li>' + _dictionary2.default.get("licenseCanModify") + '</li>\n              <li>' + _dictionary2.default.get("licenseCanDistribute") + '</li>\n              <li>' + _dictionary2.default.get("licenseCanSublicense") + '</li>\n              <li>' + _dictionary2.default.get("licenseCannotHoldLiable") + '</li>\n              <li>' + _dictionary2.default.get("licenseMustIncludeCopyright") + '</li>\n              <li>' + _dictionary2.default.get("licenseMustIncludeLicense") + '</li>\n            </ul>',
-            full: _dictionary2.default.get("MITLicenseFull", {
-              ':year': new Date().getFullYear(),
-              ':owner': owner
-            })
-          };
-      }
-    }
   }]);
 
   return ContentTypeDetail;
@@ -4180,7 +4574,7 @@ var ContentTypeDetail = function () {
 exports.default = ContentTypeDetail;
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4202,7 +4596,7 @@ var _eventful = __webpack_require__(2);
 
 var _events = __webpack_require__(5);
 
-var _contentTypePlaceholder = __webpack_require__(11);
+var _contentTypePlaceholder = __webpack_require__(12);
 
 var _contentTypePlaceholder2 = _interopRequireDefault(_contentTypePlaceholder);
 
@@ -4405,7 +4799,7 @@ var ContentTypeListView = function () {
 exports.default = ContentTypeListView;
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4419,7 +4813,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _contentTypeListView = __webpack_require__(18);
+var _contentTypeListView = __webpack_require__(19);
 
 var _contentTypeListView2 = _interopRequireDefault(_contentTypeListView);
 
@@ -4512,9 +4906,11 @@ var ContentTypeList = function () {
       var _this = this;
 
       var displayedContentTypes = contentTypes.filter(function (contentType) {
-        return _this.currentContentTypes.find(function (currentContentType) {
-          return currentContentType.machineName === contentType.machineName;
-        });
+        for (var i = 0; i < _this.currentContentTypes.length; i++) {
+          if (_this.currentContentTypes[i].machineName === contentType.machineName) {
+            return true;
+          }
+        }
       });
       this.update(displayedContentTypes);
     }
@@ -4538,7 +4934,7 @@ var ContentTypeList = function () {
 exports.default = ContentTypeList;
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4558,11 +4954,9 @@ var _messageView2 = _interopRequireDefault(_messageView);
 
 var _elements = __webpack_require__(0);
 
-var _functional = __webpack_require__(1);
-
 var _events = __webpack_require__(5);
 
-var _navbar = __webpack_require__(29);
+var _navbar = __webpack_require__(30);
 
 var _navbar2 = _interopRequireDefault(_navbar);
 
@@ -4579,12 +4973,6 @@ var _contentTypeSection2 = _interopRequireDefault(_contentTypeSection);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * @param {HTMLElement[]} elements
- * @function
- */
-var unselectAll = (0, _functional.forEach)((0, _elements.removeAttribute)('aria-selected'));
 
 /**
  * @constant {number}
@@ -4612,6 +5000,8 @@ var ContentBrowserView = function () {
     // general configuration
     this.typeAheadEnabled = true;
     this.currentlySelected = {};
+    this.menuId = 'content-type-filter';
+    this.currentMenuId = this.menuId + '-a11y-desc-current';
 
     // create elements
     this.rootElement = this.createElement(state);
@@ -4647,10 +5037,10 @@ var ContentBrowserView = function () {
     });
 
     // Search button
-    inputButton.addEventListener('click', function (event) {
+    inputButton.addEventListener('click', function () {
       _this.trigger('search', {
-        element: searchbar,
-        query: searchbar.value
+        element: searchBar,
+        query: searchBar.value
       });
       searchBar.focus();
     });
@@ -4668,13 +5058,12 @@ var ContentBrowserView = function () {
   _createClass(ContentBrowserView, [{
     key: "createElement",
     value: function createElement(state) {
-      var menuId = 'content-type-filter';
       var searchText = _dictionary2.default.get('contentTypeSearchFieldPlaceholder');
 
       // create element
       var element = document.createElement('div');
       element.className = 'content-type-section-view loading';
-      element.innerHTML = "\n      <div class=\"menu-group\">\n        <nav  role=\"menubar\" class=\"navbar\">\n          <div class=\"navbar-header\">\n            <span class=\"navbar-toggler-selected\" tabindex=\"0\" aria-haspopup=\"true\" role=\"button\" aria-controls=\"" + menuId + "\" aria-expanded=\"false\"></span>\n            <span class=\"navbar-brand\">" + _dictionary2.default.get("contentTypeSectionTitle") + "</span>\n          </div>\n\n          <ul id=\"" + menuId + "\" class=\"navbar-nav\"></ul>\n        </nav>\n\n        <div class=\"input-group\" role=\"search\">\n          <input id=\"hub-search-bar\" class=\"form-control form-control-rounded\" type=\"text\" aria-label=\"" + searchText + "\" placeholder=\"" + searchText + "\" />\n          <div class=\"input-group-addon icon-search\"></div>\n        </div>\n      </div>";
+      element.innerHTML = "\n      <div class=\"menu-group\">\n        <nav  role=\"menubar\" class=\"navbar\">\n          <div class=\"navbar-header\">\n            <span class=\"navbar-toggler-selected\" tabindex=\"0\" aria-haspopup=\"true\" role=\"button\" aria-controls=\"" + this.menuId + "\" aria-expanded=\"false\"></span>\n            <span class=\"navbar-brand\">" + _dictionary2.default.get("contentTypeSectionTitle") + "</span>\n          </div>\n\n          <ul id=\"" + this.menuId + "\" class=\"navbar-nav\">\n            <span id=\"" + this.currentMenuId + "\" style=\"display: none\">" + _dictionary2.default.get("currentMenuSelected") + "</span>\n          </ul>\n        </nav>\n\n        <div class=\"input-group\" role=\"search\">\n          <input id=\"hub-search-bar\" class=\"form-control form-control-rounded\" type=\"text\" aria-label=\"" + searchText + "\" placeholder=\"" + searchText + "\" />\n          <div class=\"input-group-addon icon-search\"></div>\n        </div>\n      </div>";
 
       return element;
     }
@@ -4756,11 +5145,17 @@ var ContentBrowserView = function () {
       });
 
       this.on('menu-selected', function (event) {
-        self.currentlySelected = Object.keys(_contentTypeSection2.default.Tabs).map(function (menuItemName) {
+        var myArray = Object.keys(_contentTypeSection2.default.Tabs).map(function (menuItemName) {
           return _contentTypeSection2.default.Tabs[menuItemName];
-        }).find(function (menu) {
-          return menu.eventName === event.choice;
         });
+
+        // Get the currently selected menu item
+        for (var i = 0; i < myArray.length; i++) {
+          if (myArray[i].eventName === event.choice) {
+            self.currentlySelected = myArray[i];
+            return;
+          }
+        }
       });
 
       // add to menu bar
@@ -4822,8 +5217,16 @@ var ContentBrowserView = function () {
       var selectedMenuItem = this.menubar.querySelector("[role=\"menuitem\"][data-id=\"" + id + "\"]");
 
       if (selectedMenuItem) {
-        unselectAll(menuItems);
-        selectedMenuItem.setAttribute('aria-selected', 'true');
+        // Manually set the classes and aria attributes upon initialisation - toggling logic is handled in the h5p-sdk
+
+        // Set readspeaker information for the current menu item
+        menuItems.forEach(function (menuitem) {
+          menuitem.classList.remove('selected');
+          menuitem.removeAttribute('aria-describedby');
+        });
+
+        selectedMenuItem.classList.add('selected');
+        selectedMenuItem.setAttribute('aria-describedby', this.currentMenuId);
 
         this.trigger('menu-selected', {
           element: selectedMenuItem,
@@ -4834,7 +5237,7 @@ var ContentBrowserView = function () {
     }
 
     /*
-     * Initialize the menu from the controller 
+     * Initialize the menu from the controller
      */
 
   }, {
@@ -4882,7 +5285,7 @@ var ContentBrowserView = function () {
 exports.default = ContentBrowserView;
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4894,7 +5297,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-__webpack_require__(25);
+__webpack_require__(27);
+
+var _browserStorage = __webpack_require__(44);
+
+var _browserStorage2 = _interopRequireDefault(_browserStorage);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -4934,6 +5343,7 @@ var HubServices = function () {
     _classCallCheck(this, HubServices);
 
     this.apiRootUrl = apiRootUrl;
+    this.browserStorage = new _browserStorage2.default('h5p-hub-services');
   }
 
   /**
@@ -5063,6 +5473,33 @@ var HubServices = function () {
     }
 
     /**
+     * Get license info from h5p.org. Cache it, so that it is only fetched once.
+     *
+     * @param {string} licenseId
+     * @return {Promise}
+     */
+
+  }, {
+    key: 'getLicenseDetails',
+    value: function getLicenseDetails(licenseId) {
+      var _this = this;
+
+      // Check if already cached:
+      var cacheKey = 'license-details-' + licenseId;
+      var cachedLicense = this.browserStorage.getObj(cacheKey);
+
+      if (cachedLicense) {
+        return Promise.resolve(cachedLicense);
+      }
+
+      return fetch('https://api.h5p.org/v1/licenses/' + licenseId).then(function (result) {
+        return result.json();
+      }).then(function (result) {
+        return _this.browserStorage.setObj(cacheKey, result);
+      });
+    }
+
+    /**
      *
      * @param  {ContentType[]|ErrorMessage} response
      *
@@ -5101,7 +5538,7 @@ exports.default = HubServices;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5115,11 +5552,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _panel = __webpack_require__(9);
+var _panel = __webpack_require__(10);
 
 var _panel2 = _interopRequireDefault(_panel);
 
-var _tabPanel = __webpack_require__(30);
+var _tabPanel = __webpack_require__(31);
 
 var _tabPanel2 = _interopRequireDefault(_tabPanel);
 
@@ -5161,6 +5598,8 @@ var HubView = function () {
    * @param {HubState} state
    */
   function HubView(state) {
+    var _this = this;
+
     _classCallCheck(this, HubView);
 
     // add event system
@@ -5183,27 +5622,28 @@ var HubView = function () {
 
     // relay events
     (0, _events.relayClickEventAs)('panel-change', this, this.toggler);
+
+    // relay keyboard events
+    this.toggler.addEventListener('keyup', function (event) {
+      if (event.which === 32 || event.which === 13) {
+        _this.trigger('panel-change', {
+          element: _this.toggler,
+          id: _this.toggler.getAttribute('data-id')
+        }, false);
+
+        event.preventDefault();
+      }
+    });
   }
 
   /**
-   * Closes the panel
+   * Sets the title
+   *
+   * @param {string} title
    */
 
 
   _createClass(HubView, [{
-    key: "closePanel",
-    value: function closePanel() {
-      this.panel.querySelector('[aria-expanded="true"]').setAttribute('aria-expanded', false);
-      this.trigger('panel-change');
-    }
-
-    /**
-     * Sets the title
-     *
-     * @param {string} title
-     */
-
-  }, {
     key: "setTitle",
     value: function setTitle(title) {
       this.selectedName.innerText = title;
@@ -5242,22 +5682,25 @@ var HubView = function () {
     /**
      * Set if panel is open, this is used for outer border color
      *
-     * @return {boolean} if the panel has the open class now
+     * @param {boolean} [forceOpen] Forces the state of the panel
+     *
+     * @return {boolean} if the panel is open now
      */
 
   }, {
     key: "togglePanelOpen",
-    value: function togglePanelOpen() {
-      var panel = this.panel;
-      var isOpen = panel.classList.contains('open');
+    value: function togglePanelOpen(forceOpen) {
 
-      if (isOpen) {
-        panel.classList.remove('open');
-      } else {
-        panel.classList.add('open');
+      // If no argument set forceOpen to opposite of what it is now
+      if (forceOpen === undefined) {
+        forceOpen = !this.panel.classList.contains('open');
       }
 
-      return !isOpen;
+      // Set open class and aria-expanded attribute
+      this.panel.classList[forceOpen ? 'add' : 'remove']('open');
+      this.toggler.setAttribute('aria-expanded', "" + forceOpen);
+
+      return !forceOpen;
     }
 
     /**
@@ -5386,7 +5829,155 @@ var HubView = function () {
 exports.default = HubView;
 
 /***/ }),
-/* 23 */
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _eventful = __webpack_require__(2);
+
+var _elements = __webpack_require__(0);
+
+var _imageLightbox = __webpack_require__(9);
+
+var _imageLightbox2 = _interopRequireDefault(_imageLightbox);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @constant {string}
+ */
+var IMAGELIGHTBOX = 'imagelightbox';
+
+/**
+ * @class
+ * @mixes Eventful
+ */
+
+var ImageLightBox = function () {
+  function ImageLightBox() {
+    _classCallCheck(this, ImageLightBox);
+
+    // add event system
+    _extends(this, (0, _eventful.Eventful)());
+
+    this.rootElement = this.createView();
+    this.imageLightboxList = this.rootElement.querySelector("." + IMAGELIGHTBOX + "-list");
+
+    (0, _imageLightbox2.default)(this.rootElement);
+  }
+
+  /**
+   * Create the DOM structure
+   *
+   * @function
+   * @returns {HTMLElement}
+   */
+
+
+  _createClass(ImageLightBox, [{
+    key: "createView",
+    value: function createView() {
+      var l10n = {
+        title: 'Images',
+        progress: ':num of :total',
+        next: 'Next image',
+        prev: 'Previous image',
+        close: 'Close dialog'
+      };
+
+      var rootElement = (0, _elements.createElement)({
+        tag: 'div',
+        id: IMAGELIGHTBOX + "-detail",
+        classes: [IMAGELIGHTBOX],
+        attributes: {
+          role: 'dialog',
+          'aria-label': l10n.title
+        }
+      });
+
+      rootElement.innerHTML = "\n      <div class=\"" + IMAGELIGHTBOX + "-inner\">\n        <div class=\"" + IMAGELIGHTBOX + "-button close\" role=\"button\" tabindex=\"0\" aria-label=\"" + l10n.close + "\"></div>\n        <ol class=\"" + IMAGELIGHTBOX + "-list\"></ol>\n        <div class=\"" + IMAGELIGHTBOX + "-progress\">" + l10n.progress + "</div>\n        <div class=\"" + IMAGELIGHTBOX + "-button next\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.next + "\"></div>\n        <div class=\"" + IMAGELIGHTBOX + "-button previous\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.prev + "\"></div>\n      </div>";
+
+      return rootElement;
+    }
+
+    /**
+     * Add an image
+     *
+     * @function
+     * @param {string} url
+     * @param {string} alt
+     */
+
+  }, {
+    key: "addImage",
+    value: function addImage(_ref) {
+      var url = _ref.url,
+          alt = _ref.alt;
+
+      var item = (0, _elements.createElement)({
+        tag: 'li',
+        classes: [IMAGELIGHTBOX + "-image"]
+      });
+      item.innerHTML = "<img class=\"img-responsive\" src=\"" + url + "\" alt=\"" + alt + "\">";
+      this.imageLightboxList.appendChild(item);
+    }
+
+    /**
+     * Show the lightbox
+     *
+     * @function
+     * @param {number} index - the image to show first
+     */
+
+  }, {
+    key: "show",
+    value: function show(index) {
+      this.rootElement.setAttribute('data-show', index);
+    }
+
+    /**
+     * Remove all images
+     * @function
+     */
+
+  }, {
+    key: "reset",
+    value: function reset() {
+      this.imageLightboxList.innerHTML = '';
+    }
+
+    /**
+     * Return the DOM element
+     *
+     * @returns {HTMLElement}
+     */
+
+  }, {
+    key: "getElement",
+    value: function getElement() {
+      return this.rootElement;
+    }
+  }]);
+
+  return ImageLightBox;
+}();
+
+exports.default = ImageLightBox;
+
+/***/ }),
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5802,7 +6393,7 @@ var sortContentTypesByMachineName = function sortContentTypesByMachineName(conte
 };
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5872,39 +6463,8 @@ var UploadSection = function () {
     value: function renderUploadForm() {
       // Create the html
       var uploadForm = document.createElement('div');
-      uploadForm.innerHTML = '\n      <div class="upload-wrapper">\n        <div class="upload-form">\n          <input class="upload-path" placeholder="' + _dictionary2.default.get("uploadPlaceholder") + '" disabled/>\n          <button class="button use-button">Use</button>\n          <div class="input-wrapper">\n            <input type="file" aria-hidden="true"/>\n            <button class="button upload-button" tabindex="0">' + _dictionary2.default.get('uploadFileButtonLabel') + '</button>\n          </div>\n        </div>\n      </div>\n    ';
-
-      // Create the html for the upload instructions separately as it needs to be styled
-      var uploadInstructions = document.createElement('div');
-      uploadInstructions.className = 'upload-instructions';
-      this.renderUploadInstructions(uploadInstructions, _dictionary2.default.get('uploadInstructionsTitle'), _dictionary2.default.get('uploadInstructionsContent'));
-      uploadForm.querySelector('.upload-wrapper').appendChild(uploadInstructions);
-
+      uploadForm.innerHTML = '\n      <div class="upload-wrapper">\n        <h1 class="upload-instruction-header">' + _dictionary2.default.get('uploadInstructionsTitle') + '</h1>\n        <div class="upload-form">\n          <input class="upload-path" placeholder="' + _dictionary2.default.get("uploadPlaceholder") + '" disabled/>\n          <button class="button use-button">Use</button>\n          <div class="input-wrapper">\n            <input type="file" aria-hidden="true"/>\n            <button class="button upload-button" tabindex="0">' + _dictionary2.default.get('uploadFileButtonLabel') + '</button>\n          </div>\n        </div>\n        <p class="upload-instruction-description">' + _dictionary2.default.get('uploadInstructionsContent') + '</p>\n      </div>\n    ';
       return uploadForm;
-    }
-
-    /**
-     * Creates html for the upload instructions and appends them to a wrapping div.
-     * Splits the input text into sentences and styles the first sentence differently.
-     *
-     * @param  {HTMLElement} container
-     * @param  {string} text
-     */
-
-  }, {
-    key: 'renderUploadInstructions',
-    value: function renderUploadInstructions(container, title, content) {
-
-      var header = document.createElement('p');
-      header.className = 'upload-instruction-header';
-      header.innerHTML = title;
-
-      var description = document.createElement('p');
-      description.className = 'upload-instruction-description';
-      description.innerHTML = content;
-
-      container.appendChild(header);
-      container.appendChild(description);
     }
 
     /**
@@ -6112,7 +6672,7 @@ var UploadSection = function () {
 exports.default = UploadSection;
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6581,379 +7141,7 @@ exports.default = UploadSection;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ }),
-/* 26 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-exports.default = init;
-
-var _elements = __webpack_require__(0);
-
-var _functional = __webpack_require__(1);
-
-var _keyboard = __webpack_require__(4);
-
-var _keyboard2 = _interopRequireDefault(_keyboard);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * @constant
- */
-var ATTRIBUTE_SHOW = 'data-show';
-
-/**
- * @constant
- * @type Object.<string, number>
- */
-var KEY = {
-  TAB: 9,
-  ENTER: 13,
-  SHIFT: 16,
-  SPACE: 32
-};
-
-/**
- * @constant
- * @type Object.<string, number>
- */
-var TAB_DIRECTION = {
-  FORWARD: 0,
-  BACKWARD: 1
-};
-
-/**
- * @function
- * @param {HTMLElement} element
- */
-var show = function show(element) {
-  return element.classList.add('active');
-};
-
-/**
- * @function
- * @param {HTMLElement} element
- */
-var hide = function hide(element) {
-  element.classList.remove('active');
-  element.removeAttribute('aria-live');
-};
-
-/**
- * @function
- * @param {HTMLElement} element
- */
-var live = (0, _elements.setAttribute)('aria-live', 'polite');
-
-/**
- * @function
- * @param {HTMLElement} element
- */
-var enable = function enable(element) {
-  element.tabIndex = 0;
-  element.removeAttribute('aria-disabled');
-};
-
-/**
- * @function
- * @param {HTMLElement} element
- */
-var disable = function disable(element) {
-  element.tabIndex = -1;
-  element.setAttribute('aria-disabled', 'true');
-};
-
-/**
- * @function
- * @param {HTMLElement} element
- */
-var isDisabled = (0, _elements.hasAttribute)('aria-disabled');
-
-/**
- * @function
- * @param {HTMLElement} element
- * @param {boolean} force
- */
-var toggleDisabled = function toggleDisabled(element, force) {
-  return (force ? disable : enable)(element);
-};
-
-/**
- * @function
- * @param {HTMLElement} element
- * @param {boolean} force
- */
-var toggleHidden = function toggleHidden(element, force) {
-  return (force ? hide : show)(element);
-};
-
-/**
- * @function
- * @param {HTMLElement} element
- * @param {number} imageIndex
- */
-var showImageLightbox = (0, _functional.curry)(function (element, imageIndex) {
-  return (0, _elements.setAttribute)('data-show', imageIndex, element);
-});
-
-/**
- * @function
- * @param {HTMLElement} element
- */
-var hideLightbox = (0, _elements.removeAttribute)(ATTRIBUTE_SHOW);
-
-/**
- * Focus first element with tabindex from arguments
- *
- * @function
- * @param {...HTMLElement} elements
- */
-var focus = function focus() {
-  for (var _len = arguments.length, elements = Array(_len), _key = 0; _key < _len; _key++) {
-    elements[_key] = arguments[_key];
-  }
-
-  for (var i = 0; i < elements.length; i++) {
-    if (elements[i].tabIndex !== -1) {
-      return elements[i].focus();
-    }
-  }
-};
-
-/**
- * Will toggle the siblings of the element visible or not.
- *
- * @function
- * @param {HTMLElement} element
- * @param {boolean} show
- */
-var toggleSiblings = function toggleSiblings(element, show) {
-  var siblings = element.parentNode.children;
-
-  for (var i = 0; i < siblings.length; i++) {
-    var sibling = siblings[i];
-
-    if (sibling !== element) {
-      if (show) {
-        // TODO This is dangerous, and will interfere with
-        // the aria-hidden state set by other compoents
-        sibling.removeAttribute('aria-hidden');
-      } else {
-        sibling.setAttribute('aria-hidden', 'true');
-      }
-    }
-  }
-};
-
-/**
- * @type string
- */
-var progressTemplateText = void 0;
-
-/**
- * Update the view
- *
- * @function
- * @param {HTMLElement} element
- * @param {ImageScrollerState} state
- * @param {boolean} setDialogFocus
- */
-var updateView = function updateView(element, state) {
-
-  var images = element.querySelectorAll('.imagelightbox-image');
-  var progress = element.querySelector('.imagelightbox-progress');
-  var prevButton = element.querySelector('.previous');
-  var nextButton = element.querySelector('.next');
-
-  // Hide all images
-  images.forEach(function (image) {
-    return hide(image);
-  });
-  if (state.currentImage !== null) {
-    // Show selected image
-    var image = element.querySelector('.imagelightbox-image:nth-child(' + (state.currentImage + 1) + ')');
-
-    show(image);
-    live(image);
-  }
-
-  // Update progress text
-  if (!progressTemplateText) {
-    // Keep template for future updates
-    progressTemplateText = progress.innerText;
-  }
-  progress.innerText = progressTemplateText.replace(':num', state.currentImage + 1).replace(':total', images.length);
-
-  // Determine if buttons should be shown or hidden
-  toggleHidden(prevButton, !images.length);
-  toggleHidden(nextButton, !images.length);
-
-  // Determine if buttons should be enabled or disabled
-  toggleDisabled(prevButton, state.currentImage === 0);
-  toggleDisabled(nextButton, state.currentImage === images.length - 1);
-
-  // Determine if lightbox should be shown or hidden
-  toggleHidden(element, state.currentImage === null);
-  toggleSiblings(element, state.currentImage === null);
-};
-
-/**
- * Handles button clicked
- *
- * @function
- * @param {HTMLElement} element
- * @param {HTMLElement} button
- * @param {number} imageIndex
- */
-var onNavigationButtonClick = function onNavigationButtonClick(element, button, imageIndex) {
-  if (!isDisabled(button)) {
-    showImageLightbox(element, imageIndex);
-  }
-};
-
-/**
- * @function
- */
-var onButtonPress = function onButtonPress(button, handler) {
-  button.addEventListener('click', handler);
-  button.addEventListener('keypress', function (event) {
-    if (event.which === KEY.ENTER || event.which === KEY.SPACE) {
-      // Enter or space key pressed
-      handler();
-      event.preventDefault();
-    }
-  });
-};
-
-/**
- * Keep track of which keys are currently pressed.
- *
- * @type Object.<number, boolean>
- */
-var keysDown = {};
-
-/**
- * Binds key listeners that traps focus when the lightbox is open.
- *
- * @function
- */
-var onButtonTab = function onButtonTab(button, direction, handler) {
-  button.addEventListener('keydown', function (event) {
-    // Keep track of which keys are currently pressed
-    keysDown[event.which] = true;
-
-    if (event.which === KEY.TAB) {
-      // Tab key press
-
-      if (keysDown[KEY.SHIFT]) {
-        if (direction === TAB_DIRECTION.BACKWARD) {
-          // Shift is down, tab backward
-          handler();
-          event.preventDefault();
-        }
-      } else {
-        if (direction === TAB_DIRECTION.FORWARD) {
-          // Tab forward
-          handler();
-          event.preventDefault();
-        }
-      }
-    }
-  });
-  button.addEventListener('keyup', function (event) {
-    delete keysDown[event.which];
-  });
-};
-
-/**
- * Callback for when the dom is updated
- *
- * @function
- * @param {HTMLElement} element
- * @param {ImageLightboxState} state
- * @param {Keyboard} keyboard
- * @param {MutationRecord} record
- */
-var handleDomUpdate = (0, _functional.curry)(function (element, state, keyboard, record) {
-  if (record.type === 'attributes' && record.attributeName === ATTRIBUTE_SHOW) {
-
-    var showImage = parseInt(record.target.getAttribute(ATTRIBUTE_SHOW));
-
-    // update the view
-    updateView(element, _extends(state, {
-      currentImage: isNaN(showImage) ? null : showImage
-    }));
-  }
-});
-
-/**
- * Initializes a panel
- *
- * @function
- * @param {HTMLElement} element
- * @return {HTMLElement}
- */
-function init(element) {
-  // get button html elements
-  var nextButton = element.querySelector('.next');
-  var prevButton = element.querySelector('.previous');
-  var closeButton = element.querySelector('.close');
-  var keyboard = new _keyboard2.default();
-
-  /**
-   * @typedef {object} ImageLightboxState
-   * @property {number} currentImage Index of image to display
-   */
-  var state = {
-    currentImage: false
-  };
-
-  // initialize buttons
-  onButtonPress(nextButton, function () {
-    return onNavigationButtonClick(element, nextButton, state.currentImage + 1);
-  });
-  onButtonTab(nextButton, TAB_DIRECTION.BACKWARD, function () {
-    return focus(closeButton);
-  });
-
-  onButtonPress(prevButton, function () {
-    return onNavigationButtonClick(element, prevButton, state.currentImage - 1);
-  });
-  onButtonTab(prevButton, TAB_DIRECTION.BACKWARD, function () {
-    return focus(nextButton, closeButton);
-  });
-
-  onButtonPress(closeButton, function () {
-    return hideLightbox(element);
-  });
-  onButtonTab(closeButton, TAB_DIRECTION.FORWARD, function () {
-    return focus(nextButton, prevButton);
-  });
-
-  // listen for updates to data-size
-  var observer = new MutationObserver((0, _functional.forEach)(handleDomUpdate(element, state, keyboard)));
-
-  observer.observe(element, {
-    subtree: false,
-    childList: false,
-    attributes: true,
-    attributeOldValue: true,
-    attributeFilter: [ATTRIBUTE_SHOW]
-  });
-
-  return element;
-}
-
-/***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7128,7 +7316,7 @@ function init(element) {
 }
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7204,7 +7392,7 @@ function init(element) {
 }
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7219,7 +7407,7 @@ var _elements = __webpack_require__(0);
 
 var _functional = __webpack_require__(1);
 
-var _collapsible = __webpack_require__(10);
+var _collapsible = __webpack_require__(11);
 
 var _keyboard = __webpack_require__(4);
 
@@ -7233,7 +7421,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {HTMLElement[]} elements
  * @function
  */
-var unSelectAll = (0, _functional.forEach)((0, _elements.removeAttribute)('aria-selected'));
+var unselectAll = (0, _functional.forEach)(function (item) {
+  item.classList.remove('selected');
+  //  item.removeAttribute('aria-describedby');
+});
 
 /**
  * Sets the aria-expanded attribute on an element to false
@@ -7250,8 +7441,9 @@ var unExpand = (0, _elements.setAttribute)('aria-expanded', 'false');
  * @function
  */
 var onSelectMenuItem = function onSelectMenuItem(menuItems, element) {
-  unSelectAll(menuItems);
-  element.setAttribute('aria-selected', 'true');
+  unselectAll(menuItems);
+  element.classList.add('selected');
+  // element.setAttribute('aria-describedby', 'a11y-desc-current');
 };
 
 /**
@@ -7293,7 +7485,7 @@ function init(element) {
 }
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7395,26 +7587,25 @@ function init(element) {
 }
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(13);
+__webpack_require__(14);
 
 // Load library
 H5P = H5P || {};
-H5P.HubClient = __webpack_require__(12).default;
+H5P.HubClient = __webpack_require__(13).default;
 
 /***/ }),
-/* 33 */,
 /* 34 */,
 /* 35 */,
 /* 36 */,
@@ -7424,7 +7615,8 @@ H5P.HubClient = __webpack_require__(12).default;
 /* 40 */,
 /* 41 */,
 /* 42 */,
-/* 43 */
+/* 43 */,
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7434,142 +7626,81 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _eventful = __webpack_require__(2);
-
-var _elements = __webpack_require__(0);
-
-var _imageLightbox = __webpack_require__(26);
-
-var _imageLightbox2 = _interopRequireDefault(_imageLightbox);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
- * @constant {string}
+ * Class responsible for providing access to browser's storage
  */
-var IMAGELIGHTBOX = 'imagelightbox';
+var BrowserStorage = function () {
+  /**
+   * Constructor
+   *
+   * @param {string} prefix - used for all keys
+   */
+  function BrowserStorage(prefix) {
+    _classCallCheck(this, BrowserStorage);
 
-/**
- * @class
- * @mixes Eventful
- */
-
-var ImageLightBox = function () {
-  function ImageLightBox() {
-    _classCallCheck(this, ImageLightBox);
-
-    // add event system
-    _extends(this, (0, _eventful.Eventful)());
-
-    this.rootElement = this.createView();
-    this.imageLightboxList = this.rootElement.querySelector("." + IMAGELIGHTBOX + "-list");
-
-    (0, _imageLightbox2.default)(this.rootElement);
+    this.prefix = prefix;
   }
 
   /**
-   * Create the DOM structure
+   * Generates the key
    *
-   * @function
-   * @returns {HTMLElement}
+   * @param {string} key
    */
 
 
-  _createClass(ImageLightBox, [{
-    key: "createView",
-    value: function createView() {
-      var l10n = {
-        title: 'Images',
-        progress: ':num of :total',
-        next: 'Next image',
-        prev: 'Previous image',
-        close: 'Close dialog'
-      };
-
-      var rootElement = (0, _elements.createElement)({
-        tag: 'div',
-        id: IMAGELIGHTBOX + "-detail",
-        classes: [IMAGELIGHTBOX],
-        attributes: {
-          role: 'dialog',
-          'aria-label': l10n.title
-        }
-      });
-
-      rootElement.innerHTML = "\n      <div class=\"" + IMAGELIGHTBOX + "-inner\">\n        <div class=\"" + IMAGELIGHTBOX + "-button close\" role=\"button\" tabindex=\"0\" aria-label=\"" + l10n.close + "\"></div>\n        <ol class=\"" + IMAGELIGHTBOX + "-list\"></ol>\n        <div class=\"" + IMAGELIGHTBOX + "-progress\">" + l10n.progress + "</div>\n        <div class=\"" + IMAGELIGHTBOX + "-button next\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.next + "\"></div>\n        <div class=\"" + IMAGELIGHTBOX + "-button previous\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.prev + "\"></div>\n      </div>";
-
-      return rootElement;
+  _createClass(BrowserStorage, [{
+    key: "_key",
+    value: function _key(key) {
+      return this.prefix + "-" + key;
     }
 
     /**
-     * Add an image
+     * Save an item
      *
-     * @function
-     * @param {string} url
-     * @param {string} alt
+     * @param {string} key
+     * @param {object} value
      */
 
   }, {
-    key: "addImage",
-    value: function addImage(_ref) {
-      var url = _ref.url,
-          alt = _ref.alt;
-
-      var item = (0, _elements.createElement)({
-        tag: 'li',
-        classes: [IMAGELIGHTBOX + "-image"]
-      });
-      item.innerHTML = "<img class=\"img-responsive\" src=\"" + url + "\" alt=\"" + alt + "\">";
-      this.imageLightboxList.appendChild(item);
+    key: "setObj",
+    value: function setObj(key, value) {
+      localStorage.setItem(this._key(key), JSON.stringify(value));
+      return value;
     }
 
     /**
-     * Show the lightbox
+     * Get an item
      *
-     * @function
-     * @param {number} index - the image to show first
+     * @param {string} key
      */
 
   }, {
-    key: "show",
-    value: function show(index) {
-      this.rootElement.setAttribute('data-show', index);
+    key: "getObj",
+    value: function getObj(key) {
+      return JSON.parse(localStorage.getItem(this._key(key)));
     }
 
     /**
-     * Remove all images
-     * @function
-     */
-
-  }, {
-    key: "reset",
-    value: function reset() {
-      this.imageLightboxList.innerHTML = '';
-    }
-
-    /**
-     * Return the DOM element
+     * Remove an item
      *
-     * @returns {HTMLElement}
+     * @param {string} key
      */
 
   }, {
-    key: "getElement",
-    value: function getElement() {
-      return this.rootElement;
+    key: "remove",
+    value: function remove(key) {
+      localStorage.removeItem(this._key(key));
     }
   }]);
 
-  return ImageLightBox;
+  return BrowserStorage;
 }();
 
-exports.default = ImageLightBox;
+exports.default = BrowserStorage;
 
 /***/ })
 /******/ ]);

@@ -17,7 +17,7 @@ ns.SelectorHub = function (selectedLibrary, changeLibraryDialog) {
       major: H5PEditor.apiVersion.majorVersion,
       minor: H5PEditor.apiVersion.minorVersion,
     }
-  }, H5PEditor.language.hub);
+  }, H5PEditor.language.core);
 
   if (selectedLibrary) {
     this.client.setPanelTitle({id: selectedLibrary.split(' ')[0]});
