@@ -106,6 +106,7 @@ H5PEditor.language.hub = {
   contentTypeUnsupportedApiVersionContent: 'Contact your system administrator to provide you with the necessary updates',
   contentTypeUpdateAvailable: 'Update available',
   theContentType: 'the content type',
+  currentMenuSelected: 'current selection', 
   errorCommunicatingHubTitle: 'Not able to communicate with hub.',
   errorCommunicatingHubContent: 'An error occured. Please try again.',
   warningNoContentTypesInstalled: 'You don\'t have any content types installed.',
