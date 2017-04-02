@@ -2727,7 +2727,10 @@ var showImageLightbox = (0, _functional.curry)(function (element, imageIndex) {
  * @function
  * @param {HTMLElement} element
  */
-var hideLightbox = (0, _elements.removeAttribute)(ATTRIBUTE_SHOW);
+var hideLightbox = function hideLightbox(element) {
+  element.removeAttribute(ATTRIBUTE_SHOW);
+  element.dispatchEvent(new Event('lightbox-hidden'));
+};
 
 /**
  * Focus first element with tabindex from arguments
@@ -2791,6 +2794,7 @@ var updateView = function updateView(element, state) {
   var progress = element.querySelector('.imagelightbox-progress');
   var prevButton = element.querySelector('.previous');
   var nextButton = element.querySelector('.next');
+  var closeButton = element.querySelector('.close');
 
   // Hide all images
   images.forEach(function (image) {
@@ -2820,8 +2824,16 @@ var updateView = function updateView(element, state) {
   toggleDisabled(nextButton, state.currentImage === images.length - 1);
 
   // Determine if lightbox should be shown or hidden
+  var isAlreadyShowing = element.classList.contains('active');
   toggleHidden(element, state.currentImage === null);
   toggleSiblings(element, state.currentImage === null);
+
+  // Set focus to close button if not already showing
+  if (!isAlreadyShowing) {
+    setTimeout(function () {
+      closeButton.focus();
+    }, 20);
+  }
 };
 
 /**
@@ -2951,7 +2963,10 @@ function init(element) {
     return onNavigationButtonClick(element, nextButton, state.currentImage + 1);
   });
   onButtonTab(nextButton, TAB_DIRECTION.BACKWARD, function () {
-    return focus(closeButton);
+    return focus(closeButton, prevButton);
+  });
+  onButtonTab(nextButton, TAB_DIRECTION.FORWARD, function () {
+    return focus(prevButton, closeButton);
   });
 
   onButtonPress(prevButton, function () {
@@ -2960,9 +2975,15 @@ function init(element) {
   onButtonTab(prevButton, TAB_DIRECTION.BACKWARD, function () {
     return focus(nextButton, closeButton);
   });
+  onButtonTab(prevButton, TAB_DIRECTION.FORWARD, function () {
+    return focus(closeButton, nextButton);
+  });
 
   onButtonPress(closeButton, function () {
     return hideLightbox(element);
+  });
+  onButtonTab(closeButton, TAB_DIRECTION.BACKWARD, function () {
+    return focus(prevButton, nextButton);
   });
   onButtonTab(closeButton, TAB_DIRECTION.FORWARD, function () {
     return focus(nextButton, prevButton);
@@ -2975,9 +2996,21 @@ function init(element) {
     }
   });
 
-  // When escape is clicked, close me:
-  onKeyDown(document, [KEY.ESC], function () {
-    return hideLightbox(element);
+  // Initialize keyboard navigation
+  element.addEventListener('keyup', function (event) {
+    if (event.which === KEY.ESC) {
+      event.preventDefault();
+      hideLightbox(element);
+    } else if (event.which === KEY.LEFT_ARROW) {
+      if (state.currentImage !== 0) {
+        showImageLightbox(element, state.currentImage - 1);
+      }
+    } else if (event.which === KEY.RIGHT_ARROW) {
+      var images = (0, _elements.querySelectorAll)('.imagelightbox-image', element);
+      if (state.currentImage !== images.length - 1) {
+        showImageLightbox(element, state.currentImage + 1);
+      }
+    }
   });
 
   // listen for updates to data-size
@@ -3729,6 +3762,8 @@ var enable = (0, _elements.removeAttribute)('disabled');
 
 var ContentTypeDetailView = function () {
   function ContentTypeDetailView(state) {
+    var _this = this;
+
     _classCallCheck(this, ContentTypeDetailView);
 
     // add event system
@@ -3747,6 +3782,14 @@ var ContentTypeDetailView = function () {
     this.buttons = (0, _elements.querySelectorAll)('.button', this.buttonBar);
 
     this.imageLightbox = new _imageLightbox4.default();
+
+    // Restore focus to image when lightbox is hidden
+    this.imageLightbox.on('lightbox-hidden', function () {
+      if (_this.focusedImage) {
+        _this.focusedImage.focus();
+        delete _this.focusedImage;
+      }
+    });
 
     this.contentContainer = this.rootElement.querySelector('.container');
     this.image = this.rootElement.querySelector('.content-type-image');
@@ -3870,6 +3913,16 @@ var ContentTypeDetailView = function () {
       img.addEventListener('click', function () {
         self.imageLightbox.show(index);
         self.trigger('modal', { element: self.imageLightbox.getElement() });
+        self.focusedImage = img;
+      });
+
+      img.addEventListener('keydown', function (event) {
+        if (event.which === 32 || event.which === 13) {
+          self.imageLightbox.show(index);
+          self.trigger('modal', { element: self.imageLightbox.getElement() });
+          self.focusedImage = img;
+          event.preventDefault();
+        }
       });
 
       this.carouselList.appendChild(thumbnail);
@@ -3970,14 +4023,14 @@ var ContentTypeDetailView = function () {
   }, {
     key: "setDescription",
     value: function setDescription() {
-      var _this = this;
+      var _this2 = this;
 
       var text = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
       if (text && text.length > MAX_TEXT_SIZE_DESCRIPTION) {
         this.description.innerHTML = this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text, true) + "<button class=\"read-more link\">" + _dictionary2.default.get('readMore') + "</button>";
         this.description.querySelector('.read-more, .read-less').addEventListener('click', function () {
-          return _this.toggleDescriptionExpanded(text);
+          return _this2.toggleDescriptionExpanded(text);
         });
         this.descriptionExpanded = false;
       } else {
@@ -3994,7 +4047,7 @@ var ContentTypeDetailView = function () {
   }, {
     key: "toggleDescriptionExpanded",
     value: function toggleDescriptionExpanded(text) {
-      var _this2 = this;
+      var _this3 = this;
 
       // flip boolean
       this.descriptionExpanded = !this.descriptionExpanded;
@@ -4010,7 +4063,7 @@ var ContentTypeDetailView = function () {
       }
 
       this.description.querySelector('.read-more, .read-less').addEventListener('click', function () {
-        return _this2.toggleDescriptionExpanded(text);
+        return _this3.toggleDescriptionExpanded(text);
       });
     }
 
@@ -4066,7 +4119,7 @@ var ContentTypeDetailView = function () {
   }, {
     key: "setLicense",
     value: function setLicense(license) {
-      var _this3 = this;
+      var _this4 = this;
 
       this.license = license;
 
@@ -4085,7 +4138,7 @@ var ContentTypeDetailView = function () {
         // handle clicking read more
         var readMoreButton = this.licensePanelBody.querySelector('.short-license-read-more');
         readMoreButton.addEventListener('click', function () {
-          return _this3.trigger('show-license-dialog', { licenseId: license.id });
+          return _this4.trigger('show-license-dialog', { licenseId: license.id });
         });
       } else {
         panelContainer.innerText = _dictionary2.default.get('licenseUnspecified');
@@ -4277,10 +4330,10 @@ var ContentTypeDetailView = function () {
   }, {
     key: "focus",
     value: function focus() {
-      var _this4 = this;
+      var _this5 = this;
 
       setTimeout(function () {
-        return _this4.title.focus();
+        return _this5.title.focus();
       }, 200);
     }
 
@@ -5861,6 +5914,8 @@ var IMAGELIGHTBOX = 'imagelightbox';
 
 var ImageLightBox = function () {
   function ImageLightBox() {
+    var _this = this;
+
     _classCallCheck(this, ImageLightBox);
 
     // add event system
@@ -5870,6 +5925,10 @@ var ImageLightBox = function () {
     this.imageLightboxList = this.rootElement.querySelector('.' + IMAGELIGHTBOX + '-list');
 
     (0, _imageLightbox2.default)(this.rootElement);
+
+    this.rootElement.addEventListener('lightbox-hidden', function () {
+      _this.trigger('lightbox-hidden');
+    });
   }
 
   /**
@@ -5893,7 +5952,7 @@ var ImageLightBox = function () {
         }
       });
 
-      rootElement.innerHTML = '\n      <div class="' + IMAGELIGHTBOX + '-inner">\n        <div class="' + IMAGELIGHTBOX + '-button close" role="button" tabindex="0" aria-label="' + _dictionary2.default.get('close') + '"></div>\n        <ol class="' + IMAGELIGHTBOX + '-list"></ol>\n        <div class="' + IMAGELIGHTBOX + '-progress">' + _dictionary2.default.get('imageLightboxTitle') + '</div>\n        <div class="' + IMAGELIGHTBOX + '-button next" role="button" aria-disabled="true" aria-label="' + _dictionary2.default.get('nextImage') + '"></div>\n        <div class="' + IMAGELIGHTBOX + '-button previous" role="button" aria-disabled="true" aria-label="' + _dictionary2.default.get('previousImage') + '"></div>\n      </div>';
+      rootElement.innerHTML = '\n      <div class="' + IMAGELIGHTBOX + '-inner">\n        <div class="' + IMAGELIGHTBOX + '-button close" role="button" tabindex="0" aria-label="' + _dictionary2.default.get('close') + '"></div>\n        <ol class="' + IMAGELIGHTBOX + '-list"></ol>\n        <div class="' + IMAGELIGHTBOX + '-progress">' + _dictionary2.default.get('imageLightBoxProgress') + '</div>\n        <div class="' + IMAGELIGHTBOX + '-button next" role="button" aria-disabled="true" aria-label="' + _dictionary2.default.get('nextImage') + '"></div>\n        <div class="' + IMAGELIGHTBOX + '-button previous" role="button" aria-disabled="true" aria-label="' + _dictionary2.default.get('previousImage') + '"></div>\n      </div>';
 
       return rootElement;
     }
@@ -7236,6 +7295,14 @@ var onNavigationButtonClick = function onNavigationButtonClick(element, state, b
 var handleDomUpdate = (0, _functional.curry)(function (element, state, keyboard, record) {
   // on add image run initialization
   if (record.type === 'childList') {
+    // Remove keyboard events for removed nodes
+    (0, _elements.nodeListToArray)(record.removedNodes).filter((0, _elements.classListContains)('slide')).map((0, _elements.querySelector)('img')).filter(function (image) {
+      return image !== null;
+    }).forEach(function (image) {
+      keyboard.removeElement(image);
+    });
+
+    // Add keyboard events for new nodes
     (0, _elements.nodeListToArray)(record.addedNodes).filter((0, _elements.classListContains)('slide')).map((0, _elements.querySelector)('img')).filter(function (image) {
       return image !== null;
     }).forEach(function (image) {
