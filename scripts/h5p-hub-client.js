@@ -3783,16 +3783,6 @@ var ContentTypeDetailView = function () {
   _createClass(ContentTypeDetailView, [{
     key: "createView",
     value: function createView() {
-
-      // Localized text strings
-      var l10n = { // TODO: Translate
-        title: 'Images',
-        progress: ':num of :total',
-        next: 'Next image',
-        prev: 'Previous image',
-        close: 'Close dialog'
-      };
-
       // ids
       var titleId = 'content-type-detail-view-title';
 
@@ -5851,6 +5841,10 @@ var _imageLightbox = __webpack_require__(9);
 
 var _imageLightbox2 = _interopRequireDefault(_imageLightbox);
 
+var _dictionary = __webpack_require__(3);
+
+var _dictionary2 = _interopRequireDefault(_dictionary);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -5873,7 +5867,7 @@ var ImageLightBox = function () {
     _extends(this, (0, _eventful.Eventful)());
 
     this.rootElement = this.createView();
-    this.imageLightboxList = this.rootElement.querySelector("." + IMAGELIGHTBOX + "-list");
+    this.imageLightboxList = this.rootElement.querySelector('.' + IMAGELIGHTBOX + '-list');
 
     (0, _imageLightbox2.default)(this.rootElement);
   }
@@ -5887,27 +5881,19 @@ var ImageLightBox = function () {
 
 
   _createClass(ImageLightBox, [{
-    key: "createView",
+    key: 'createView',
     value: function createView() {
-      var l10n = {
-        title: 'Images',
-        progress: ':num of :total',
-        next: 'Next image',
-        prev: 'Previous image',
-        close: 'Close dialog'
-      };
-
       var rootElement = (0, _elements.createElement)({
         tag: 'div',
-        id: IMAGELIGHTBOX + "-detail",
+        id: IMAGELIGHTBOX + '-detail',
         classes: [IMAGELIGHTBOX],
         attributes: {
           role: 'dialog',
-          'aria-label': l10n.title
+          'aria-label': _dictionary2.default.get('imageLightboxTitle')
         }
       });
 
-      rootElement.innerHTML = "\n      <div class=\"" + IMAGELIGHTBOX + "-inner\">\n        <div class=\"" + IMAGELIGHTBOX + "-button close\" role=\"button\" tabindex=\"0\" aria-label=\"" + l10n.close + "\"></div>\n        <ol class=\"" + IMAGELIGHTBOX + "-list\"></ol>\n        <div class=\"" + IMAGELIGHTBOX + "-progress\">" + l10n.progress + "</div>\n        <div class=\"" + IMAGELIGHTBOX + "-button next\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.next + "\"></div>\n        <div class=\"" + IMAGELIGHTBOX + "-button previous\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.prev + "\"></div>\n      </div>";
+      rootElement.innerHTML = '\n      <div class="' + IMAGELIGHTBOX + '-inner">\n        <div class="' + IMAGELIGHTBOX + '-button close" role="button" tabindex="0" aria-label="' + _dictionary2.default.get('close') + '"></div>\n        <ol class="' + IMAGELIGHTBOX + '-list"></ol>\n        <div class="' + IMAGELIGHTBOX + '-progress">' + _dictionary2.default.get('imageLightboxTitle') + '</div>\n        <div class="' + IMAGELIGHTBOX + '-button next" role="button" aria-disabled="true" aria-label="' + _dictionary2.default.get('nextImage') + '"></div>\n        <div class="' + IMAGELIGHTBOX + '-button previous" role="button" aria-disabled="true" aria-label="' + _dictionary2.default.get('previousImage') + '"></div>\n      </div>';
 
       return rootElement;
     }
@@ -5921,16 +5907,16 @@ var ImageLightBox = function () {
      */
 
   }, {
-    key: "addImage",
+    key: 'addImage',
     value: function addImage(_ref) {
       var url = _ref.url,
           alt = _ref.alt;
 
       var item = (0, _elements.createElement)({
         tag: 'li',
-        classes: [IMAGELIGHTBOX + "-image"]
+        classes: [IMAGELIGHTBOX + '-image']
       });
-      item.innerHTML = "<img class=\"img-responsive\" src=\"" + url + "\" alt=\"" + alt + "\">";
+      item.innerHTML = '<img class="img-responsive" src="' + url + '" alt="' + alt + '">';
       this.imageLightboxList.appendChild(item);
     }
 
@@ -5942,7 +5928,7 @@ var ImageLightBox = function () {
      */
 
   }, {
-    key: "show",
+    key: 'show',
     value: function show(index) {
       this.rootElement.setAttribute('data-show', index);
     }
@@ -5953,7 +5939,7 @@ var ImageLightBox = function () {
      */
 
   }, {
-    key: "reset",
+    key: 'reset',
     value: function reset() {
       this.imageLightboxList.innerHTML = '';
     }
@@ -5965,7 +5951,7 @@ var ImageLightBox = function () {
      */
 
   }, {
-    key: "getElement",
+    key: 'getElement',
     value: function getElement() {
       return this.rootElement;
     }

@@ -126,5 +126,9 @@ H5PEditor.language.core = {
   licenseMustIncludeCopyright: 'Must include copyright',
   licenseMustNotIncludeCopyright: 'Must not include copyright',
   licenseMustIncludeLicense: 'Must not include copyright',
-  licenseFetchDetailsFailed: 'Failed fetching license details'
+  licenseFetchDetailsFailed: 'Failed fetching license details',
+  imageLightboxTitle: 'Images',
+  imageLightBoxProgress: ':num of :total',
+  nextImage: 'Next image',
+  previousImage: 'Previous image'
 };
