@@ -2882,7 +2882,9 @@ var Hub = function () {
     value: function showModal(_ref) {
       var element = _ref.element;
 
-      this.view.appendChild(element);
+      // Prepend to catch and trap focus
+      var parent = this.view.getElement();
+      parent.insertBefore(element, parent.firstChild);
       element.classList.remove('hidden');
     }
 
