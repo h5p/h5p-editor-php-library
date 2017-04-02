@@ -27,7 +27,6 @@ H5PEditor.language.core = {
   tooLong: 'El valor del campo es demasiado largo, debería contener un máximo de :max lettras.',
   invalidFormat: 'El valor del campo contiene un formato no válido o caracteres prohibidos.',
   confirmChangeLibrary: 'Al hacer esto perderás todo el trabajo realizado con el tipo de contenido actual. ¿Estás seguro de que quieres cambiar el tipo de contenido?',
-  moreLibraries: 'Accede a <a href="http://h5p.org/content-types-and-applications" target="_blank">más tipos de contenido</a> en h5p.org',
   commonFields: 'Parámetros y textos',
   commonFieldsDescription: 'Aquí puedes editar parámetros o traducir textos utilizados en este contenido.',
   uploading: 'Subiendo, por favor espera...',
