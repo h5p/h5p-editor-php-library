@@ -96,8 +96,6 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
   this.$selector.appendTo($element);
   this.$tutorialUrl.appendTo($element);
   this.$exampleUrl.appendTo($element);
-
-  $element.append('<div class="h5p-more-libraries">' + ns.t('core', 'moreLibraries') + '</div>');
 };
 
 /**

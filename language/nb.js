@@ -29,7 +29,6 @@ H5PEditor.language.core = {
   tooLong: 'Feltets verdi er for lang, den må være på :max tegn eller mindre.',
   invalidFormat: 'Feltets verdi er på et ugyldig format eller bruker ulovlige tegn.',
   confirmChangeLibrary: 'Ved å gjøre dette mister du alt arbeid gjort med nåværende innholdstype. Er du sikker på at du ønsker å bytte innholdstype?',
-  moreLibraries: 'Se etter <a href="http://h5p.org/content-types-and-applications" target="_blank">flere innholdstyper</a> på h5p.org',
   commonFields: 'Innstillinger og tekster',
   commonFieldsDescription: 'Her kan du redigere innstillinger eller oversette tekster som brukes i dette innholdet.',
   uploading: 'Laster opp fil, vennligst vent...',
