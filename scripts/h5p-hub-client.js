@@ -2841,7 +2841,7 @@ var Hub = function () {
 
     // handle events
     this.on('select', this.setPanelTitle, this);
-    this.on('select', this.view.closePanel, this.view);
+    this.on('select', this.view.togglePanelOpen.bind(this.view, false));
     this.view.on('tab-change', this.view.setSectionType, this.view);
     this.view.on('panel-change', function () {
       _this.view.togglePanelOpen();
@@ -3327,6 +3327,8 @@ var enable = (0, _elements.removeAttribute)('disabled');
 
 var ContentTypeDetailView = function () {
   function ContentTypeDetailView(state) {
+    var _this = this;
+
     _classCallCheck(this, ContentTypeDetailView);
 
     // add event system
@@ -3346,10 +3348,18 @@ var ContentTypeDetailView = function () {
 
     this.imageLightbox = new _imageLightbox4.default();
 
+    // Restore focus to image when lightbox is hidden
+    this.imageLightbox.on('lightbox-hidden', function () {
+      if (_this.focusedImage) {
+        _this.focusedImage.focus();
+        delete _this.focusedImage;
+      }
+    });
+
     this.contentContainer = this.rootElement.querySelector('.container');
     this.image = this.rootElement.querySelector('.content-type-image');
     this.title = this.rootElement.querySelector('.text-details .title');
-    this.owner = this.rootElement.querySelector('.owner');
+    this.ownerElement = this.rootElement.querySelector('.owner');
     this.description = this.rootElement.querySelector('.text-details .small');
     this.demoButton = this.rootElement.querySelector('.demo-button');
     this.carousel = this.rootElement.querySelector('.carousel');
@@ -3381,16 +3391,6 @@ var ContentTypeDetailView = function () {
   _createClass(ContentTypeDetailView, [{
     key: "createView",
     value: function createView() {
-
-      // Localized text strings
-      var l10n = { // TODO: Translate
-        title: 'Images',
-        progress: ':num of :total',
-        next: 'Next image',
-        prev: 'Previous image',
-        close: 'Close dialog'
-      };
-
       // ids
       var titleId = 'content-type-detail-view-title';
 
@@ -3402,7 +3402,7 @@ var ContentTypeDetailView = function () {
       element.setAttribute('tabindex', '-1');
       element.setAttribute('aria-labelledby', titleId);
 
-      element.innerHTML = "\n      <button class=\"back-button icon-arrow-thick\" aria-label=\"" + _dictionary2.default.get("contentTypeBackButtonLabel") + "\" tabindex=\"0\"></button>\n      <div class=\"container\">\n        <div class=\"image-wrapper\">\n          <img class=\"img-responsive content-type-image\" src=\"" + _contentTypePlaceholder2.default + "\">\n        </div>\n        <div class=\"text-details\">\n          <h2 id=\"" + titleId + "\" class=\"title\" tabindex=\"-1\"></h2>\n          <div class=\"owner\"></div>\n          <p class=\"small\"></p>\n          <a class=\"button demo-button\" target=\"_blank\" href=\"#\">\n            " + _dictionary2.default.get("contentTypeDemoButtonLabel") + "\n          </a>\n        </div>\n      </div>\n      <div class=\"carousel\" role=\"region\" data-size=\"5\">\n        <button class=\"carousel-button previous hidden\" disabled>\n          <span class=\"icon-arrow-thick\"></span>\n        </button>\n        <button class=\"carousel-button next hidden\" disabled>\n          <span class=\"icon-arrow-thick\"></span>\n        </button>\n        <nav class=\"scroller\">\n          <ul></ul>\n        </nav>\n      </div>\n      <hr />\n      <div class=\"button-bar\">\n        <button class=\"button button-inverse-primary button-install\" class=\"hidden\" data-id=\"\">\n          <span class=\"icon-arrow-thick\"></span>\n          " + _dictionary2.default.get('contentTypeInstallButtonLabel') + "\n        </button>\n        <button class=\"button button-inverse-primary button-installing\" class=\"hidden\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeInstallingButtonLabel") + "\n        </button>\n        <button class=\"button button-inverse-primary button-update\">\n          " + _dictionary2.default.get("contentTypeUpdateButtonLabel") + "\n        </button>\n        <button class=\"button button-inverse-primary button-updating\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeUpdatingButtonLabel") + "\n        </button>\n        <button class=\"button button-primary button-use\" data-id=\"\">\n          " + _dictionary2.default.get("contentTypeUseButtonLabel") + "\n        </button>\n        <button class=\"button button-inverse-primary button-install\" class=\"hidden\" data-id=\"\">\n          <span class=\"icon-arrow-thick\"></span>\n          " + _dictionary2.default.get('contentTypeInstallButtonLabel') + "\n        </button>\n        <button class=\"button button-inverse-primary button-installing\" class=\"hidden\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeInstallingButtonLabel") + "\n        </button>\n      </div>\n      <dl class=\"panel panel-default license-panel\">\n        <dt aria-level=\"2\" role=\"heading\" class=\"license-panel-heading\">\n          <a href=\"#\" role=\"button\" aria-expanded=\"false\" aria-controls=\"license-panel\">\n            <span class=\"icon-accordion-arrow\"></span>\n            <span>" + _dictionary2.default.get('contentTypeLicensePanelTitle') + "</span>\n          </a>\n        </dt>\n        <dl id=\"license-panel\" role=\"region\" class=\"hidden\">\n          <div class=\"panel-body\"></div>\n        </dl>\n      </dl>";
+      element.innerHTML = "\n      <button class=\"back-button icon-arrow-thick\" aria-label=\"" + _dictionary2.default.get("contentTypeBackButtonLabel") + "\" tabindex=\"0\"></button>\n      <div class=\"container\">\n        <div class=\"image-wrapper\">\n          <img class=\"img-responsive content-type-image\" src=\"" + _contentTypePlaceholder2.default + "\">\n        </div>\n        <div class=\"text-details\">\n          <h2 id=\"" + titleId + "\" class=\"title\" tabindex=\"-1\"></h2>\n          <div class=\"owner\"></div>\n          <p class=\"small\"></p>\n          <a class=\"button demo-button\" target=\"_blank\" href=\"#\">\n            " + _dictionary2.default.get("contentTypeDemoButtonLabel") + "\n          </a>\n        </div>\n      </div>\n      <div class=\"carousel\" role=\"region\" data-size=\"5\">\n        <button class=\"carousel-button previous hidden\" disabled>\n          <span class=\"icon-arrow-thick\"></span>\n        </button>\n        <button class=\"carousel-button next hidden\" disabled>\n          <span class=\"icon-arrow-thick\"></span>\n        </button>\n        <nav class=\"scroller\">\n          <ul></ul>\n        </nav>\n      </div>\n      <hr />\n      <div class=\"button-bar\">\n        <button class=\"button button-inverse-primary button-install hidden\" data-id=\"\">\n          <span class=\"icon-arrow-thick\"></span>\n          " + _dictionary2.default.get('contentTypeInstallButtonLabel') + "\n        </button>\n        <button class=\"button button-inverse-primary button-installing hidden\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeInstallingButtonLabel") + "\n        </button>\n        <button class=\"button button-inverse-primary button-update\">\n          " + _dictionary2.default.get("contentTypeUpdateButtonLabel") + "\n        </button>\n        <button class=\"button button-inverse-primary button-updating\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeUpdatingButtonLabel") + "\n        </button>\n        <button class=\"button button-primary button-use\" data-id=\"\">\n          " + _dictionary2.default.get("contentTypeUseButtonLabel") + "\n        </button>\n      </div>\n      <dl class=\"panel panel-default license-panel\">\n        <dt aria-level=\"2\" role=\"heading\" class=\"license-panel-heading\">\n          <a href=\"#\" role=\"button\" aria-expanded=\"false\" aria-controls=\"license-panel\">\n            <span class=\"icon-accordion-arrow\"></span>\n            <span>" + _dictionary2.default.get('contentTypeLicensePanelTitle') + "</span>\n          </a>\n        </dt>\n        <dl id=\"license-panel\" role=\"region\" class=\"hidden\">\n          <div class=\"panel-body\"></div>\n        </dl>\n      </dl>";
 
       return element;
     }
@@ -3478,6 +3478,16 @@ var ContentTypeDetailView = function () {
       img.addEventListener('click', function () {
         self.imageLightbox.show(index);
         self.trigger('modal', { element: self.imageLightbox.getElement() });
+        self.focusedImage = img;
+      });
+
+      img.addEventListener('keydown', function (event) {
+        if (event.which === 32 || event.which === 13) {
+          self.imageLightbox.show(index);
+          self.trigger('modal', { element: self.imageLightbox.getElement() });
+          self.focusedImage = img;
+          event.preventDefault();
+        }
       });
 
       this.carouselList.appendChild(thumbnail);
@@ -3578,14 +3588,14 @@ var ContentTypeDetailView = function () {
   }, {
     key: "setDescription",
     value: function setDescription() {
-      var _this = this;
+      var _this2 = this;
 
       var text = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
       if (text && text.length > MAX_TEXT_SIZE_DESCRIPTION) {
-        this.description.innerHTML = this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text, true) + "<button class=\"read-more link\">" + _dictionary2.default.get('contentTypeReadMore') + "</button>";
+        this.description.innerHTML = this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text, true) + "<button class=\"read-more link\">" + _dictionary2.default.get('readMore') + "</button>";
         this.description.querySelector('.read-more, .read-less').addEventListener('click', function () {
-          return _this.toggleDescriptionExpanded(text);
+          return _this2.toggleDescriptionExpanded(text);
         });
         this.descriptionExpanded = false;
       } else {
@@ -3602,23 +3612,23 @@ var ContentTypeDetailView = function () {
   }, {
     key: "toggleDescriptionExpanded",
     value: function toggleDescriptionExpanded(text) {
-      var _this2 = this;
+      var _this3 = this;
 
       // flip boolean
       this.descriptionExpanded = !this.descriptionExpanded;
 
       if (this.descriptionExpanded) {
-        this.description.innerHTML = "" + this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text) + this.ellipsisRest(MAX_TEXT_SIZE_DESCRIPTION, text) + "\n                                    <button class=\"read-less link\">" + _dictionary2.default.get('contentTypeReadLess') + "</button>";
+        this.description.innerHTML = "" + this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text) + this.ellipsisRest(MAX_TEXT_SIZE_DESCRIPTION, text) + "\n                                    <button class=\"read-less link\">" + _dictionary2.default.get('readLess') + "</button>";
 
         this.description.querySelector('.part-two').focus();
       } else {
-        this.description.innerHTML = this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text, true) + "\n                                    <button class=\"read-more link\">" + _dictionary2.default.get('contentTypeReadMore') + "</button>";
+        this.description.innerHTML = this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text, true) + "\n                                    <button class=\"read-more link\">" + _dictionary2.default.get('readMore') + "</button>";
 
         this.description.querySelector('.part-one').focus();
       }
 
       this.description.querySelector('.read-more, .read-less').addEventListener('click', function () {
-        return _this2.toggleDescriptionExpanded(text);
+        return _this3.toggleDescriptionExpanded(text);
       });
     }
 
@@ -3627,7 +3637,7 @@ var ContentTypeDetailView = function () {
      *
      * @param {number} size
      * @param {string} text
-     * @param {boolean} addEllipses whether ellipses should be added
+     * @param {boolean} [addEllipses] whether ellipses should be added
      */
 
   }, {
@@ -3667,23 +3677,24 @@ var ContentTypeDetailView = function () {
      * Sets the lisence
      *
      * @param {object} license
+     * @param {string} license.id
+     * @param {object} license.attributes
      */
 
   }, {
     key: "setLicense",
     value: function setLicense(license) {
-      var _this3 = this;
+      var _this4 = this;
+
+      this.license = license;
 
       var panelContainer = this.licensePanelBody.querySelector('.panel-body');
-      var l10n = {
-        readMore: 'Read more'
-      };
 
       if (license) {
         // Create short version for detail page
         var shortLicenseInfo = document.createElement('div');
         shortLicenseInfo.className = 'short-license-info';
-        shortLicenseInfo.innerHTML = "\n        <h3>" + license.title + "</h3>\n        <button class=\"short-license-read-more icon-info-circle\" aria-label=\"" + l10n.readMore + "\"></button>\n        " + license.short;
+        shortLicenseInfo.innerHTML = "\n        <h3>" + license.id + "</h3>\n        <button class=\"short-license-read-more icon-info-circle\" aria-label=\"" + _dictionary2.default.get('readMore') + "\"></button>\n        <ul class=\"ul small\">\n          <li>" + _dictionary2.default.get(license.attributes.useCommercially ? "licenseCanUseCommercially" : "licenseCannotUseCommercially") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.modifiable ? "licenseCanModify" : "licenseCannotModify") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.distributable ? "licenseCanDistribute" : "licenseCannotDistribute") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.sublicensable ? "licenseCanSublicense" : "licenseCannotSublicense") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.canHoldLiable ? "licenseCanHoldLiable" : "licenseCannotHoldLiable") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.mustIncludeCopyright ? "licenseMustIncludeCopyright" : "licenseMustNotIncludeCopyright") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.mustIncludeLicense ? "licenseMustIncludeLicense" : "licenseMustNotIncludeLicense") + "</li>\n        </ul>";
 
         // add short version of lisence
         panelContainer.innerText = '';
@@ -3692,51 +3703,63 @@ var ContentTypeDetailView = function () {
         // handle clicking read more
         var readMoreButton = this.licensePanelBody.querySelector('.short-license-read-more');
         readMoreButton.addEventListener('click', function () {
-          return _this3.trigger('show-license-dialog', { license: license });
+          return _this4.trigger('show-license-dialog', { licenseId: license.id });
         });
       } else {
-        panelContainer.innerText = 'Unspecified';
+        panelContainer.innerText = _dictionary2.default.get('licenseUnspecified');
       }
     }
 
     /**
      * Creates a modal window for license details
      *
-     * @param licenses
+     * @param {Promise} licenseDetails
      *
      * @return {Element}
      */
 
   }, {
     key: "createLicenseDialog",
-    value: function createLicenseDialog(licenses) {
+    value: function createLicenseDialog(licenseDetails) {
+      var _this5 = this;
+
       var titleId = 'license-dialog-title';
       var modal = document.createElement('div');
-      modal.innerHTML = "\n      <div class=\"modal fade show\" role=\"dialog\">\n        <div class=\"modal-dialog\" tabindex=\"-1\" role=\"document\" aria-labelledby=\"" + titleId + "\">\n          <div class=\"modal-content\">\n            <div class=\"modal-header\">\n              <button type=\"button\" class=\"close icon-close\" data-dismiss=\"modal\" aria-label=\"Close\"></button>\n              <h5 class=\"modal-title\" id=\"" + titleId + "\">" + _dictionary2.default.get('contentTypeLicenseModalTitle') + "</h5>\n              <h5 class=\"modal-subtitle\">" + _dictionary2.default.get('contentTypeLicenseModalDescription') + "</h5>\n            </div>\n            <div class=\"modal-body\">\n              <dl class=\"panel panel-simple panel\"></dl>\n            </div>\n          </div>\n        </div>\n      </div>";
+      modal.innerHTML = "\n      <div class=\"modal fade show\" role=\"dialog\">\n        <div class=\"modal-dialog license-dialog\" tabindex=\"-1\" role=\"document\" aria-labelledby=\"" + titleId + "\">\n          <div class=\"modal-content\">\n            <div class=\"modal-header\">\n              <button type=\"button\" class=\"close icon-close\" data-dismiss=\"modal\" aria-label=\"" + _dictionary2.default.get('close') + "\"></button>\n              <h5 class=\"modal-title\" id=\"" + titleId + "\">" + _dictionary2.default.get('licenseModalTitle') + "</h5>\n              <h5 class=\"modal-subtitle\">" + _dictionary2.default.get('licenseModalSubtitle') + "</h5>\n            </div>\n            <div class=\"modal-body loading\">\n              <dl class=\"panel panel-simple\"></dl>\n            </div>\n          </div>\n        </div>\n      </div>";
 
-      var panels = modal.querySelector('.panel');
+      var modalBody = modal.querySelector('.modal-body');
+      var panel = modalBody.querySelector('.panel');
+      var id = "content-type-detail-license";
 
-      licenses.forEach(function (license, index) {
-        var id = "content-type-detail-license-" + index;
+      var header = document.createElement('dt');
+      header.setAttribute('role', 'heading');
+      header.setAttribute('aria-level', '2');
+      header.innerHTML = "<a href=\"#\" role=\"button\" aria-expanded=\"true\" aria-controls=\"" + id + "\">\n        <span class=\"icon-accordion-arrow\"></span>\n        <span class=\"license-title\">" + this.license.id + "</span>\n      </a>";
 
-        var title = document.createElement('dt');
-        title.setAttribute('role', 'heading');
-        title.setAttribute('aria-level', '2');
-        title.innerHTML = "<a href=\"#\" role=\"button\" aria-expanded=\"true\" aria-controls=\"" + id + "\">\n          <span class=\"icon-accordion-arrow\"></span>\n          <span class=\"h3\">" + license.title + "</span>\n        </a>";
+      var body = document.createElement('dd');
+      body.id = id;
+      body.className = 'hidden';
+      body.setAttribute('role', 'region');
+      body.innerHTML = "\n      <div class=\"panel-body\">\n        <div class=\"license-description\"></div>\n      </div>";
+      (0, _elements.hide)(body);
 
-        var body = document.createElement('dd');
-        body.id = id;
-        body.className = 'hidden';
-        body.setAttribute('role', 'region');
-        body.innerHTML = "\n        <div class=\"panel-body\">\n          <div class=\"small\">" + license.full + "</div>\n        </div>";
-        (0, _elements.hide)(body);
+      var title = header.querySelector('.license-title');
+      var description = body.querySelector('.license-description');
 
-        panels.appendChild(title);
-        panels.appendChild(body);
+      panel.appendChild(header);
+      panel.appendChild(body);
+
+      licenseDetails.then(function (details) {
+        title.innerHTML = details.id;
+        description.innerHTML = details.description.replace(':year', new Date().getFullYear()).replace(':owner', _this5.owner);
+      }).catch(function (error) {
+        modalBody.innerHTML = _dictionary2.default.get('licenseFetchDetailsFailed');
+      }).then(function () {
+        return (0, _elements.removeClass)('loading', modalBody);
       });
 
       (0, _modal2.default)(modal);
-      (0, _panel2.default)(panels);
+      (0, _panel2.default)(panel);
 
       return modal;
     }
@@ -3750,10 +3773,12 @@ var ContentTypeDetailView = function () {
   }, {
     key: "setOwner",
     value: function setOwner(owner) {
+      this.owner = owner;
+
       if (owner) {
-        this.owner.innerHTML = _dictionary2.default.get('contentTypeOwner', { ':owner': owner });
+        this.ownerElement.innerHTML = _dictionary2.default.get('contentTypeOwner', { ':owner': owner });
       } else {
-        this.owner.innerHTML = '';
+        this.ownerElement.innerHTML = '';
       }
     }
 
@@ -3779,8 +3804,8 @@ var ContentTypeDetailView = function () {
   }, {
     key: "setIsInstalled",
     value: function setIsInstalled(installed) {
-      this.useButton.classList.toggle('hidden', !installed);
-      this.installButton.classList.toggle('hidden', installed);
+      this.useButton.classList[installed ? 'remove' : 'add']('hidden');
+      this.installButton.classList[installed ? 'add' : 'remove']('hidden');
     }
 
     /**
@@ -3794,7 +3819,7 @@ var ContentTypeDetailView = function () {
   }, {
     key: "setIsUpdatePossible",
     value: function setIsUpdatePossible(isUpdatePossible, title) {
-      this.updateButton.classList.toggle('hidden', !isUpdatePossible);
+      this.updateButton.classList[isUpdatePossible ? 'remove' : 'add']('hidden');
 
       // Set warning message
       if (isUpdatePossible) {
@@ -3837,11 +3862,11 @@ var ContentTypeDetailView = function () {
       var buttonToCheck = enable ? 'updateButton' : 'updatingButton';
       var isShowingInstallButton = this[buttonToCheck].classList.contains('hidden');
       if (isShowingInstallButton) {
-        this.installButton.classList.toggle('hidden', enable);
-        this.installingButton.classList.toggle('hidden', !enable);
+        this.installButton.classList[enable ? 'add' : 'remove']('hidden');
+        this.installingButton.classList[enable ? 'remove' : 'add']('hidden');
       } else {
-        this.updateButton.classList.toggle('hidden', enable);
-        this.updatingButton.classList.toggle('hidden', !enable);
+        this.updateButton.classList[enable ? 'add' : 'remove']('hidden');
+        this.updatingButton.classList[enable ? 'remove' : 'add']('hidden');
       }
     }
 
@@ -3872,11 +3897,11 @@ var ContentTypeDetailView = function () {
   }, {
     key: "focus",
     value: function focus() {
-      var _this4 = this;
+      var _this6 = this;
 
       setTimeout(function () {
-        return _this4.title.focus();
-      }, 10);
+        return _this6.title.focus();
+      }, 200);
     }
 
     /**
@@ -4034,15 +4059,16 @@ var ContentTypeDetail = function () {
     /**
      * Displays the license dialog
      *
-     * @param {object} license
+     * @param {string} licenseId
      */
 
   }, {
     key: 'showLicenseDialog',
     value: function showLicenseDialog(_ref2) {
-      var license = _ref2.license;
+      var licenseId = _ref2.licenseId;
 
-      var licenseDialog = this.view.createLicenseDialog([license]);
+
+      var licenseDialog = this.view.createLicenseDialog(this.services.getLicenseDetails(licenseId));
 
       // triggers the modal event
       this.trigger('modal', {
@@ -4119,7 +4145,7 @@ var ContentTypeDetail = function () {
       this.view.setExample(contentType.example);
       this.view.setOwner(contentType.owner);
       this.view.setIsInstalled(contentType.installed);
-      this.view.setLicense(this.getLicenseDetails(contentType.license, contentType.owner));
+      this.view.setLicense(contentType.license);
       this.view.setIsRestricted(contentType.restricted);
       var isUpdatePossible = contentType.installed && !contentType.isUpToDate && !contentType.restricted;
       this.view.setIsUpdatePossible(isUpdatePossible, contentType.title || contentType.machineName);
@@ -4149,28 +4175,6 @@ var ContentTypeDetail = function () {
     key: 'getElement',
     value: function getElement() {
       return this.view.getElement();
-    }
-
-    /**
-     * Returns the license details
-     *
-     * @return {object}
-     */
-
-  }, {
-    key: 'getLicenseDetails',
-    value: function getLicenseDetails(type, owner) {
-      switch (type) {
-        case "MIT":
-          return {
-            title: _dictionary2.default.get('MITLicenseTitle'),
-            short: '\n            <ul class="ul small">\n              <li>' + _dictionary2.default.get("licenseCanUseCommercially") + '</li>\n              <li>' + _dictionary2.default.get("licenseCanModify") + '</li>\n              <li>' + _dictionary2.default.get("licenseCanDistribute") + '</li>\n              <li>' + _dictionary2.default.get("licenseCanSublicense") + '</li>\n              <li>' + _dictionary2.default.get("licenseCannotHoldLiable") + '</li>\n              <li>' + _dictionary2.default.get("licenseMustIncludeCopyright") + '</li>\n              <li>' + _dictionary2.default.get("licenseMustIncludeLicense") + '</li>\n            </ul>',
-            full: _dictionary2.default.get("MITLicenseFull", {
-              ':year': new Date().getFullYear(),
-              ':owner': owner
-            })
-          };
-      }
     }
   }]);
 
@@ -4512,9 +4516,11 @@ var ContentTypeList = function () {
       var _this = this;
 
       var displayedContentTypes = contentTypes.filter(function (contentType) {
-        return _this.currentContentTypes.find(function (currentContentType) {
-          return currentContentType.machineName === contentType.machineName;
-        });
+        for (var i = 0; i < _this.currentContentTypes.length; i++) {
+          if (_this.currentContentTypes[i].machineName === contentType.machineName) {
+            return true;
+          }
+        }
       });
       this.update(displayedContentTypes);
     }
@@ -4558,8 +4564,6 @@ var _messageView2 = _interopRequireDefault(_messageView);
 
 var _elements = __webpack_require__(0);
 
-var _functional = __webpack_require__(1);
-
 var _events = __webpack_require__(5);
 
 var _navbar = __webpack_require__(29);
@@ -4579,12 +4583,6 @@ var _contentTypeSection2 = _interopRequireDefault(_contentTypeSection);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * @param {HTMLElement[]} elements
- * @function
- */
-var unselectAll = (0, _functional.forEach)((0, _elements.removeAttribute)('aria-selected'));
 
 /**
  * @constant {number}
@@ -4612,6 +4610,8 @@ var ContentBrowserView = function () {
     // general configuration
     this.typeAheadEnabled = true;
     this.currentlySelected = {};
+    this.menuId = 'content-type-filter';
+    this.currentMenuId = this.menuId + '-a11y-desc-current';
 
     // create elements
     this.rootElement = this.createElement(state);
@@ -4647,10 +4647,10 @@ var ContentBrowserView = function () {
     });
 
     // Search button
-    inputButton.addEventListener('click', function (event) {
+    inputButton.addEventListener('click', function () {
       _this.trigger('search', {
-        element: searchbar,
-        query: searchbar.value
+        element: searchBar,
+        query: searchBar.value
       });
       searchBar.focus();
     });
@@ -4668,13 +4668,12 @@ var ContentBrowserView = function () {
   _createClass(ContentBrowserView, [{
     key: "createElement",
     value: function createElement(state) {
-      var menuId = 'content-type-filter';
       var searchText = _dictionary2.default.get('contentTypeSearchFieldPlaceholder');
 
       // create element
       var element = document.createElement('div');
       element.className = 'content-type-section-view loading';
-      element.innerHTML = "\n      <div class=\"menu-group\">\n        <nav  role=\"menubar\" class=\"navbar\">\n          <div class=\"navbar-header\">\n            <span class=\"navbar-toggler-selected\" tabindex=\"0\" aria-haspopup=\"true\" role=\"button\" aria-controls=\"" + menuId + "\" aria-expanded=\"false\"></span>\n            <span class=\"navbar-brand\">" + _dictionary2.default.get("contentTypeSectionTitle") + "</span>\n          </div>\n\n          <ul id=\"" + menuId + "\" class=\"navbar-nav\"></ul>\n        </nav>\n\n        <div class=\"input-group\" role=\"search\">\n          <input id=\"hub-search-bar\" class=\"form-control form-control-rounded\" type=\"text\" aria-label=\"" + searchText + "\" placeholder=\"" + searchText + "\" />\n          <div class=\"input-group-addon icon-search\"></div>\n        </div>\n      </div>";
+      element.innerHTML = "\n      <div class=\"menu-group\">\n        <nav  role=\"menubar\" class=\"navbar\">\n          <div class=\"navbar-header\">\n            <span class=\"navbar-toggler-selected\" tabindex=\"0\" aria-haspopup=\"true\" role=\"button\" aria-controls=\"" + this.menuId + "\" aria-expanded=\"false\"></span>\n            <span class=\"navbar-brand\">" + _dictionary2.default.get("contentTypeSectionTitle") + "</span>\n          </div>\n\n          <ul id=\"" + this.menuId + "\" class=\"navbar-nav\">\n            <span id=\"" + this.currentMenuId + "\" style=\"display: none\">" + _dictionary2.default.get("currentMenuSelected") + "</span>\n          </ul>\n        </nav>\n\n        <div class=\"input-group\" role=\"search\">\n          <input id=\"hub-search-bar\" class=\"form-control form-control-rounded\" type=\"text\" aria-label=\"" + searchText + "\" placeholder=\"" + searchText + "\" />\n          <div class=\"input-group-addon icon-search\"></div>\n        </div>\n      </div>";
 
       return element;
     }
@@ -4756,11 +4755,17 @@ var ContentBrowserView = function () {
       });
 
       this.on('menu-selected', function (event) {
-        self.currentlySelected = Object.keys(_contentTypeSection2.default.Tabs).map(function (menuItemName) {
+        var myArray = Object.keys(_contentTypeSection2.default.Tabs).map(function (menuItemName) {
           return _contentTypeSection2.default.Tabs[menuItemName];
-        }).find(function (menu) {
-          return menu.eventName === event.choice;
         });
+
+        // Get the currently selected menu item
+        for (var i = 0; i < myArray.length; i++) {
+          if (myArray[i].eventName === event.choice) {
+            self.currentlySelected = myArray[i];
+            return;
+          }
+        }
       });
 
       // add to menu bar
@@ -4822,8 +4827,16 @@ var ContentBrowserView = function () {
       var selectedMenuItem = this.menubar.querySelector("[role=\"menuitem\"][data-id=\"" + id + "\"]");
 
       if (selectedMenuItem) {
-        unselectAll(menuItems);
-        selectedMenuItem.setAttribute('aria-selected', 'true');
+        // Manually set the classes and aria attributes upon initialisation - toggling logic is handled in the h5p-sdk
+
+        // Set readspeaker information for the current menu item
+        menuItems.forEach(function (menuitem) {
+          menuitem.classList.remove('selected');
+          menuitem.removeAttribute('aria-describedby');
+        });
+
+        selectedMenuItem.classList.add('selected');
+        selectedMenuItem.setAttribute('aria-describedby', this.currentMenuId);
 
         this.trigger('menu-selected', {
           element: selectedMenuItem,
@@ -4834,7 +4847,7 @@ var ContentBrowserView = function () {
     }
 
     /*
-     * Initialize the menu from the controller 
+     * Initialize the menu from the controller
      */
 
   }, {
@@ -4896,6 +4909,12 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 __webpack_require__(25);
 
+var _browserStorage = __webpack_require__(44);
+
+var _browserStorage2 = _interopRequireDefault(_browserStorage);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
@@ -4934,6 +4953,7 @@ var HubServices = function () {
     _classCallCheck(this, HubServices);
 
     this.apiRootUrl = apiRootUrl;
+    this.browserStorage = new _browserStorage2.default('h5p-hub-services');
   }
 
   /**
@@ -5063,6 +5083,33 @@ var HubServices = function () {
     }
 
     /**
+     * Get license info from h5p.org. Cache it, so that it is only fetched once.
+     *
+     * @param {string} licenseId
+     * @return {Promise}
+     */
+
+  }, {
+    key: 'getLicenseDetails',
+    value: function getLicenseDetails(licenseId) {
+      var _this = this;
+
+      // Check if already cached:
+      var cacheKey = 'license-details-' + licenseId;
+      var cachedLicense = this.browserStorage.getObj(cacheKey);
+
+      if (cachedLicense) {
+        return Promise.resolve(cachedLicense);
+      }
+
+      return fetch('https://api.h5p.org/v1/licenses/' + licenseId).then(function (result) {
+        return result.json();
+      }).then(function (result) {
+        return _this.browserStorage.setObj(cacheKey, result);
+      });
+    }
+
+    /**
      *
      * @param  {ContentType[]|ErrorMessage} response
      *
@@ -5161,6 +5208,8 @@ var HubView = function () {
    * @param {HubState} state
    */
   function HubView(state) {
+    var _this = this;
+
     _classCallCheck(this, HubView);
 
     // add event system
@@ -5183,27 +5232,28 @@ var HubView = function () {
 
     // relay events
     (0, _events.relayClickEventAs)('panel-change', this, this.toggler);
+
+    // relay keyboard events
+    this.toggler.addEventListener('keyup', function (event) {
+      if (event.which === 32 || event.which === 13) {
+        _this.trigger('panel-change', {
+          element: _this.toggler,
+          id: _this.toggler.getAttribute('data-id')
+        }, false);
+
+        event.preventDefault();
+      }
+    });
   }
 
   /**
-   * Closes the panel
+   * Sets the title
+   *
+   * @param {string} title
    */
 
 
   _createClass(HubView, [{
-    key: "closePanel",
-    value: function closePanel() {
-      this.panel.querySelector('[aria-expanded="true"]').setAttribute('aria-expanded', false);
-      this.trigger('panel-change');
-    }
-
-    /**
-     * Sets the title
-     *
-     * @param {string} title
-     */
-
-  }, {
     key: "setTitle",
     value: function setTitle(title) {
       this.selectedName.innerText = title;
@@ -5242,22 +5292,25 @@ var HubView = function () {
     /**
      * Set if panel is open, this is used for outer border color
      *
-     * @return {boolean} if the panel has the open class now
+     * @param {boolean} [forceOpen] Forces the state of the panel
+     *
+     * @return {boolean} if the panel is open now
      */
 
   }, {
     key: "togglePanelOpen",
-    value: function togglePanelOpen() {
-      var panel = this.panel;
-      var isOpen = panel.classList.contains('open');
+    value: function togglePanelOpen(forceOpen) {
 
-      if (isOpen) {
-        panel.classList.remove('open');
-      } else {
-        panel.classList.add('open');
+      // If no argument set forceOpen to opposite of what it is now
+      if (forceOpen === undefined) {
+        forceOpen = !this.panel.classList.contains('open');
       }
 
-      return !isOpen;
+      // Set open class and aria-expanded attribute
+      this.panel.classList[forceOpen ? 'add' : 'remove']('open');
+      this.toggler.setAttribute('aria-expanded', "" + forceOpen);
+
+      return !forceOpen;
     }
 
     /**
@@ -5872,39 +5925,8 @@ var UploadSection = function () {
     value: function renderUploadForm() {
       // Create the html
       var uploadForm = document.createElement('div');
-      uploadForm.innerHTML = '\n      <div class="upload-wrapper">\n        <div class="upload-form">\n          <input class="upload-path" placeholder="' + _dictionary2.default.get("uploadPlaceholder") + '" disabled/>\n          <button class="button use-button">Use</button>\n          <div class="input-wrapper">\n            <input type="file" aria-hidden="true"/>\n            <button class="button upload-button" tabindex="0">' + _dictionary2.default.get('uploadFileButtonLabel') + '</button>\n          </div>\n        </div>\n      </div>\n    ';
-
-      // Create the html for the upload instructions separately as it needs to be styled
-      var uploadInstructions = document.createElement('div');
-      uploadInstructions.className = 'upload-instructions';
-      this.renderUploadInstructions(uploadInstructions, _dictionary2.default.get('uploadInstructionsTitle'), _dictionary2.default.get('uploadInstructionsContent'));
-      uploadForm.querySelector('.upload-wrapper').appendChild(uploadInstructions);
-
+      uploadForm.innerHTML = '\n      <div class="upload-wrapper">\n        <h1 class="upload-instruction-header">' + _dictionary2.default.get('uploadInstructionsTitle') + '</h1>\n        <div class="upload-form">\n          <input class="upload-path" placeholder="' + _dictionary2.default.get("uploadPlaceholder") + '" disabled/>\n          <button class="button use-button">Use</button>\n          <div class="input-wrapper">\n            <input type="file" aria-hidden="true"/>\n            <button class="button upload-button" tabindex="0">' + _dictionary2.default.get('uploadFileButtonLabel') + '</button>\n          </div>\n        </div>\n        <p class="upload-instruction-description">' + _dictionary2.default.get('uploadInstructionsContent') + '</p>\n      </div>\n    ';
       return uploadForm;
-    }
-
-    /**
-     * Creates html for the upload instructions and appends them to a wrapping div.
-     * Splits the input text into sentences and styles the first sentence differently.
-     *
-     * @param  {HTMLElement} container
-     * @param  {string} text
-     */
-
-  }, {
-    key: 'renderUploadInstructions',
-    value: function renderUploadInstructions(container, title, content) {
-
-      var header = document.createElement('p');
-      header.className = 'upload-instruction-header';
-      header.innerHTML = title;
-
-      var description = document.createElement('p');
-      description.className = 'upload-instruction-description';
-      description.innerHTML = content;
-
-      container.appendChild(header);
-      container.appendChild(description);
     }
 
     /**
@@ -6618,7 +6640,10 @@ var KEY = {
   TAB: 9,
   ENTER: 13,
   SHIFT: 16,
-  SPACE: 32
+  SPACE: 32,
+  ESC: 27,
+  LEFT_ARROW: 37,
+  RIGHT_ARROW: 39
 };
 
 /**
@@ -6708,7 +6733,10 @@ var showImageLightbox = (0, _functional.curry)(function (element, imageIndex) {
  * @function
  * @param {HTMLElement} element
  */
-var hideLightbox = (0, _elements.removeAttribute)(ATTRIBUTE_SHOW);
+var hideLightbox = function hideLightbox(element) {
+  element.removeAttribute(ATTRIBUTE_SHOW);
+  element.dispatchEvent(new Event('lightbox-hidden'));
+};
 
 /**
  * Focus first element with tabindex from arguments
@@ -6768,10 +6796,11 @@ var progressTemplateText = void 0;
  */
 var updateView = function updateView(element, state) {
 
-  var images = element.querySelectorAll('.imagelightbox-image');
+  var images = (0, _elements.querySelectorAll)('.imagelightbox-image', element);
   var progress = element.querySelector('.imagelightbox-progress');
   var prevButton = element.querySelector('.previous');
   var nextButton = element.querySelector('.next');
+  var closeButton = element.querySelector('.close');
 
   // Hide all images
   images.forEach(function (image) {
@@ -6801,8 +6830,16 @@ var updateView = function updateView(element, state) {
   toggleDisabled(nextButton, state.currentImage === images.length - 1);
 
   // Determine if lightbox should be shown or hidden
+  var isAlreadyShowing = element.classList.contains('active');
   toggleHidden(element, state.currentImage === null);
   toggleSiblings(element, state.currentImage === null);
+
+  // Set focus to close button if not already showing
+  if (!isAlreadyShowing) {
+    setTimeout(function () {
+      closeButton.focus();
+    }, 20);
+  }
 };
 
 /**
@@ -6820,17 +6857,28 @@ var onNavigationButtonClick = function onNavigationButtonClick(element, button, 
 };
 
 /**
+ * Generic function for handling keydowns
+ *
  * @function
+ * @param {HTMLElement} element
+ * @param {number[]}  keycodes
+ * @param {function} handler
  */
-var onButtonPress = function onButtonPress(button, handler) {
-  button.addEventListener('click', handler);
-  button.addEventListener('keypress', function (event) {
-    if (event.which === KEY.ENTER || event.which === KEY.SPACE) {
-      // Enter or space key pressed
+var onKeyDown = function onKeyDown(element, keycodes, handler) {
+  element.addEventListener('keydown', function (event) {
+    if (keycodes.indexOf(event.which) !== -1) {
       handler();
       event.preventDefault();
     }
   });
+};
+
+/**
+ * @function
+ */
+var onButtonPress = function onButtonPress(button, handler) {
+  button.addEventListener('click', handler);
+  onKeyDown(button, [KEY.ENTER, KEY.SPACE], handler);
 };
 
 /**
@@ -6921,7 +6969,10 @@ function init(element) {
     return onNavigationButtonClick(element, nextButton, state.currentImage + 1);
   });
   onButtonTab(nextButton, TAB_DIRECTION.BACKWARD, function () {
-    return focus(closeButton);
+    return focus(closeButton, prevButton);
+  });
+  onButtonTab(nextButton, TAB_DIRECTION.FORWARD, function () {
+    return focus(prevButton, closeButton);
   });
 
   onButtonPress(prevButton, function () {
@@ -6930,12 +6981,42 @@ function init(element) {
   onButtonTab(prevButton, TAB_DIRECTION.BACKWARD, function () {
     return focus(nextButton, closeButton);
   });
+  onButtonTab(prevButton, TAB_DIRECTION.FORWARD, function () {
+    return focus(closeButton, nextButton);
+  });
 
   onButtonPress(closeButton, function () {
     return hideLightbox(element);
   });
+  onButtonTab(closeButton, TAB_DIRECTION.BACKWARD, function () {
+    return focus(prevButton, nextButton);
+  });
   onButtonTab(closeButton, TAB_DIRECTION.FORWARD, function () {
     return focus(nextButton, prevButton);
+  });
+
+  // When clicking on the background, let's close it
+  element.addEventListener('click', function (event) {
+    if (event.target === element) {
+      hideLightbox(element);
+    }
+  });
+
+  // Initialize keyboard navigation
+  element.addEventListener('keyup', function (event) {
+    if (event.which === KEY.ESC) {
+      event.preventDefault();
+      hideLightbox(element);
+    } else if (event.which === KEY.LEFT_ARROW) {
+      if (state.currentImage !== 0) {
+        showImageLightbox(element, state.currentImage - 1);
+      }
+    } else if (event.which === KEY.RIGHT_ARROW) {
+      var images = (0, _elements.querySelectorAll)('.imagelightbox-image', element);
+      if (state.currentImage !== images.length - 1) {
+        showImageLightbox(element, state.currentImage + 1);
+      }
+    }
   });
 
   // listen for updates to data-size
@@ -7062,6 +7143,14 @@ var onNavigationButtonClick = function onNavigationButtonClick(element, state, b
 var handleDomUpdate = (0, _functional.curry)(function (element, state, keyboard, record) {
   // on add image run initialization
   if (record.type === 'childList') {
+    // Remove keyboard events for removed nodes
+    (0, _elements.nodeListToArray)(record.removedNodes).filter((0, _elements.classListContains)('slide')).map((0, _elements.querySelector)('img')).filter(function (image) {
+      return image !== null;
+    }).forEach(function (image) {
+      keyboard.removeElement(image);
+    });
+
+    // Add keyboard events for new nodes
     (0, _elements.nodeListToArray)(record.addedNodes).filter((0, _elements.classListContains)('slide')).map((0, _elements.querySelector)('img')).filter(function (image) {
       return image !== null;
     }).forEach(function (image) {
@@ -7233,7 +7322,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {HTMLElement[]} elements
  * @function
  */
-var unSelectAll = (0, _functional.forEach)((0, _elements.removeAttribute)('aria-selected'));
+var unselectAll = (0, _functional.forEach)(function (item) {
+  item.classList.remove('selected');
+  //  item.removeAttribute('aria-describedby');
+});
 
 /**
  * Sets the aria-expanded attribute on an element to false
@@ -7250,8 +7342,9 @@ var unExpand = (0, _elements.setAttribute)('aria-expanded', 'false');
  * @function
  */
 var onSelectMenuItem = function onSelectMenuItem(menuItems, element) {
-  unSelectAll(menuItems);
-  element.setAttribute('aria-selected', 'true');
+  unselectAll(menuItems);
+  element.classList.add('selected');
+  // element.setAttribute('aria-describedby', 'a11y-desc-current');
 };
 
 /**
@@ -7446,6 +7539,10 @@ var _imageLightbox = __webpack_require__(26);
 
 var _imageLightbox2 = _interopRequireDefault(_imageLightbox);
 
+var _dictionary = __webpack_require__(3);
+
+var _dictionary2 = _interopRequireDefault(_dictionary);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -7462,15 +7559,21 @@ var IMAGELIGHTBOX = 'imagelightbox';
 
 var ImageLightBox = function () {
   function ImageLightBox() {
+    var _this = this;
+
     _classCallCheck(this, ImageLightBox);
 
     // add event system
     _extends(this, (0, _eventful.Eventful)());
 
     this.rootElement = this.createView();
-    this.imageLightboxList = this.rootElement.querySelector("." + IMAGELIGHTBOX + "-list");
+    this.imageLightboxList = this.rootElement.querySelector('.' + IMAGELIGHTBOX + '-list');
 
     (0, _imageLightbox2.default)(this.rootElement);
+
+    this.rootElement.addEventListener('lightbox-hidden', function () {
+      _this.trigger('lightbox-hidden');
+    });
   }
 
   /**
@@ -7482,27 +7585,19 @@ var ImageLightBox = function () {
 
 
   _createClass(ImageLightBox, [{
-    key: "createView",
+    key: 'createView',
     value: function createView() {
-      var l10n = {
-        title: 'Images',
-        progress: ':num of :total',
-        next: 'Next image',
-        prev: 'Previous image',
-        close: 'Close dialog'
-      };
-
       var rootElement = (0, _elements.createElement)({
         tag: 'div',
-        id: IMAGELIGHTBOX + "-detail",
+        id: IMAGELIGHTBOX + '-detail',
         classes: [IMAGELIGHTBOX],
         attributes: {
           role: 'dialog',
-          'aria-label': l10n.title
+          'aria-label': _dictionary2.default.get('imageLightboxTitle')
         }
       });
 
-      rootElement.innerHTML = "\n      <div class=\"" + IMAGELIGHTBOX + "-inner\">\n        <div class=\"" + IMAGELIGHTBOX + "-button close\" role=\"button\" tabindex=\"0\" aria-label=\"" + l10n.close + "\"></div>\n        <ol class=\"" + IMAGELIGHTBOX + "-list\"></ol>\n        <div class=\"" + IMAGELIGHTBOX + "-progress\">" + l10n.progress + "</div>\n        <div class=\"" + IMAGELIGHTBOX + "-button next\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.next + "\"></div>\n        <div class=\"" + IMAGELIGHTBOX + "-button previous\" role=\"button\" aria-disabled=\"true\" aria-label=\"" + l10n.prev + "\"></div>\n      </div>";
+      rootElement.innerHTML = '\n      <div class="' + IMAGELIGHTBOX + '-inner">\n        <div class="' + IMAGELIGHTBOX + '-button close" role="button" tabindex="0" aria-label="' + _dictionary2.default.get('close') + '"></div>\n        <ol class="' + IMAGELIGHTBOX + '-list"></ol>\n        <div class="' + IMAGELIGHTBOX + '-progress">' + _dictionary2.default.get('imageLightBoxProgress') + '</div>\n        <div class="' + IMAGELIGHTBOX + '-button next" role="button" aria-disabled="true" aria-label="' + _dictionary2.default.get('nextImage') + '"></div>\n        <div class="' + IMAGELIGHTBOX + '-button previous" role="button" aria-disabled="true" aria-label="' + _dictionary2.default.get('previousImage') + '"></div>\n      </div>';
 
       return rootElement;
     }
@@ -7516,16 +7611,16 @@ var ImageLightBox = function () {
      */
 
   }, {
-    key: "addImage",
+    key: 'addImage',
     value: function addImage(_ref) {
       var url = _ref.url,
           alt = _ref.alt;
 
       var item = (0, _elements.createElement)({
         tag: 'li',
-        classes: [IMAGELIGHTBOX + "-image"]
+        classes: [IMAGELIGHTBOX + '-image']
       });
-      item.innerHTML = "<img class=\"img-responsive\" src=\"" + url + "\" alt=\"" + alt + "\">";
+      item.innerHTML = '<img class="img-responsive" src="' + url + '" alt="' + alt + '">';
       this.imageLightboxList.appendChild(item);
     }
 
@@ -7537,7 +7632,7 @@ var ImageLightBox = function () {
      */
 
   }, {
-    key: "show",
+    key: 'show',
     value: function show(index) {
       this.rootElement.setAttribute('data-show', index);
     }
@@ -7548,7 +7643,7 @@ var ImageLightBox = function () {
      */
 
   }, {
-    key: "reset",
+    key: 'reset',
     value: function reset() {
       this.imageLightboxList.innerHTML = '';
     }
@@ -7560,7 +7655,7 @@ var ImageLightBox = function () {
      */
 
   }, {
-    key: "getElement",
+    key: 'getElement',
     value: function getElement() {
       return this.rootElement;
     }
@@ -7570,6 +7665,93 @@ var ImageLightBox = function () {
 }();
 
 exports.default = ImageLightBox;
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Class responsible for providing access to browser's storage
+ */
+var BrowserStorage = function () {
+  /**
+   * Constructor
+   *
+   * @param {string} prefix - used for all keys
+   */
+  function BrowserStorage(prefix) {
+    _classCallCheck(this, BrowserStorage);
+
+    this.prefix = prefix;
+  }
+
+  /**
+   * Generates the key
+   *
+   * @param {string} key
+   */
+
+
+  _createClass(BrowserStorage, [{
+    key: "_key",
+    value: function _key(key) {
+      return this.prefix + "-" + key;
+    }
+
+    /**
+     * Save an item
+     *
+     * @param {string} key
+     * @param {object} value
+     */
+
+  }, {
+    key: "setObj",
+    value: function setObj(key, value) {
+      localStorage.setItem(this._key(key), JSON.stringify(value));
+      return value;
+    }
+
+    /**
+     * Get an item
+     *
+     * @param {string} key
+     */
+
+  }, {
+    key: "getObj",
+    value: function getObj(key) {
+      return JSON.parse(localStorage.getItem(this._key(key)));
+    }
+
+    /**
+     * Remove an item
+     *
+     * @param {string} key
+     */
+
+  }, {
+    key: "remove",
+    value: function remove(key) {
+      localStorage.removeItem(this._key(key));
+    }
+  }]);
+
+  return BrowserStorage;
+}();
+
+exports.default = BrowserStorage;
 
 /***/ })
 /******/ ]);
