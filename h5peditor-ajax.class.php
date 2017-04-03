@@ -239,12 +239,8 @@ class H5PEditorAjax {
     }
 
     // Retrieve content type from hub endpoint
-    $endpointResponse = $this->callHubEndpoint(H5PHubEndpoints::CONTENT_TYPES . $machineName);
-    if (!$endpointResponse) return;
-
-    // Save file temporarily to verify validity
-    $file = $this->saveFileTemporarily($endpointResponse);
-    if (!$file) return;
+    $response = $this->callHubEndpoint(H5PHubEndpoints::CONTENT_TYPES . $machineName);
+    if (!$response) return;
 
     // Session parameters has to be set for validation and saving of packages
     if (!$this->isValidPackage(TRUE)) return;
@@ -308,16 +304,16 @@ class H5PEditorAjax {
   }
 
   /**
-   * Calls provided hub endpoint and returns any found response data.
+   * Calls provided hub endpoint and downloads the response to a .h5p file.
    *
    * @param string $endpoint Endpoint without protocol
    *
-   * @return bool|string Returns the response if found
+   * @return bool
    */
   private function callHubEndpoint($endpoint) {
+    $path = $this->core->h5pF->getUploadedH5pPath();
     $protocol = (extension_loaded('openssl') ? 'https' : 'http');
-    $response  = $this->core->h5pF->fetchExternalData("{$protocol}://{$endpoint}");
-
+    $response = $this->core->h5pF->fetchExternalData("{$protocol}://{$endpoint}", NULL, TRUE, $path);
     if (!$response) {
       H5PCore::ajaxError(
         $this->core->h5pF->t('Failed to download the requested H5P.'),
@@ -326,7 +322,7 @@ class H5PEditorAjax {
       return FALSE;
     }
 
-    return $response;
+    return TRUE;
   }
 
   /**
