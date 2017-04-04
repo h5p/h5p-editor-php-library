@@ -562,11 +562,23 @@ class H5peditor {
           $cached_lib['localMinorVersion'] = (int) $local_lib->minor_version;
           $cached_lib['localPatchVersion'] = (int) $local_lib->patch_version;
 
-          // Determine if library is the same as ct cache
+          // Determine if library is newer or same as cache
+          $major_is_updated =
+            $cached_lib['majorVersion'] < $cached_lib['localMajorVersion'];
+
+          $minor_is_updated =
+            $cached_lib['majorVersion'] === $cached_lib['localMajorVersion'] &&
+            $cached_lib['minorVersion'] < $cached_lib['localMinorVersion'];
+
+          $patch_is_updated =
+            $cached_lib['majorVersion'] === $cached_lib['localMajorVersion'] &&
+            $cached_lib['minorVersion'] === $cached_lib['localMinorVersion'] &&
+            $cached_lib['patchVersion'] <= $cached_lib['localPatchVersion'];
+
           $is_updated_library =
-            $cached_lib['majorVersion'] === (int) $local_lib->major_version &&
-            $cached_lib['minorVersion'] === (int) $local_lib->minor_version &&
-            $cached_lib['patchVersion'] === (int) $local_lib->patch_version;
+            $major_is_updated ||
+            $minor_is_updated ||
+            $patch_is_updated;
 
           if ($is_updated_library) {
             $cached_lib['isUpToDate'] = TRUE;
