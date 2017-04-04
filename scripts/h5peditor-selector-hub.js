@@ -10,14 +10,17 @@ ns.SelectorHub = function (selectedLibrary, changeLibraryDialog) {
 
   H5P.EventDispatcher.call(this);
 
+  var hubServices = new H5P.HubServices({
+    apiRootUrl: H5PEditor.ajaxPath
+  });
+
   // Initialize hub client
   this.client = new H5P.HubClient({
-    apiRootUrl: H5PEditor.ajaxPath,
     apiVersion: {
       major: H5PEditor.apiVersion.majorVersion,
       minor: H5PEditor.apiVersion.minorVersion,
     }
-  }, H5PEditor.language.core);
+  }, hubServices, H5PEditor.language.core);
 
   if (selectedLibrary) {
     this.client.setPanelTitle({id: selectedLibrary.split(' ')[0]});
