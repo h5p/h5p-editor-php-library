@@ -460,7 +460,7 @@ a {
     .add {
       display: inline-block;
       cursor: pointer;
-      padding: 0.5em 1.5em 0.5em 1.2em;
+      padding: 0.5em 1.5em 0.5em 3em;
       background: linear-gradient(to bottom, #fbfbfb 0, #f2f2f2 100%);
       border: 1px solid #d0d0d1;
       border-radius: 0.25em;
@@ -479,7 +479,10 @@ a {
         font-family: $icon-font-family;
         content: "\e902";
         color: #39c943;
-        margin-right: 1em;
+        font-size: 2em;
+        position: absolute;
+        left: .3em;
+        top: .08em;
       }
     }
     .remove {
