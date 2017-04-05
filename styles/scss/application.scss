@@ -454,6 +454,9 @@ a {
       border: 1px solid #fff;
       cursor: pointer;
     }
+    .thumbnail:focus {
+      @include box-shadow(0 0 10px 0 #222);
+    }
     .add {
       display: inline-block;
       cursor: pointer;
@@ -485,6 +488,9 @@ a {
       top: 7px;
       right: 7px;
       cursor: pointer;
+    }
+    .remove:focus:before {
+      @include opacity(1);
     }
     .remove:before {
       font-family: $icon-font-family;
@@ -600,6 +606,10 @@ a {
     }
   }
 
+  .h5p-copyright-button:focus {
+    box-shadow: 0 0 16px 0 rgba(133, 188, 255, 0.84);
+  }
+
   /* Copyright button for video & audio */
   .field.file > .h5p-copyright-button,
   .field.video > .h5p-copyright-button,
@@ -690,6 +700,10 @@ a {
   font-weight: 600;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  &:focus {
+    box-shadow: 0 0 16px 0 rgba(133, 188, 255, 0.84);
+  }
 
   &:before,
   &:after {
@@ -782,7 +796,7 @@ a {
     bottom: -8px;
     right: 20px;
     width: 14px;
-    height: 14px; 
+    height: 14px;
     background: #f9f9d8;
     border-right: 1px solid #ffde78;
     border-bottom: 1px solid #ffde78;
@@ -807,7 +821,7 @@ a {
   }
 
   .h5p-info-icon {
-    font-size: 0.75em; 
+    font-size: 0.75em;
 
     &:before {
       font-family: $icon-font-family;
@@ -981,7 +995,7 @@ a {
 }
 
 .icon-important-desc {
-  font-family: $icon-font-family; 
+  font-family: $icon-font-family;
   font-size: 2em;
   float: right;
   width: 70px;
