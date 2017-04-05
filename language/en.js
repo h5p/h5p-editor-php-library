@@ -109,8 +109,8 @@ H5PEditor.language.core = {
   warningChangeBrowsingToSeeResults: 'Click <em>All</em> to get the list of all the content types you can install.',
   warningUpdateAvailableTitle: 'A new version of :contentType is available.',
   warningUpdateAvailableBody: 'Update to the latest version for an improved experience.',
-  licenseModalTitle: 'Translate me - licenseModalTitle',
-  licenseModalSubtitle: 'Translate me - licenseModalSubtitle',
+  licenseModalTitle: 'License Details',
+  licenseModalSubtitle: 'Select a license to view information about proper usage',
   licenseUnspecified: 'Unspecified',
   licenseCanUseCommercially: 'Can use commercially',
   licenseCannotUseCommercially: 'Can not use commercially',
@@ -129,5 +129,6 @@ H5PEditor.language.core = {
   imageLightboxTitle: 'Images',
   imageLightBoxProgress: ':num of :total',
   nextImage: 'Next image',
-  previousImage: 'Previous image'
+  previousImage: 'Previous image',
+  screenhots: 'Screenshots'
 };
