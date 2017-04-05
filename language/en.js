@@ -75,8 +75,15 @@ H5PEditor.language.core = {
   uploadInstructionsContent: 'You may start with examples from <a href="https://h5p.org/content-types-and-applications" target="blank">H5P.org</a>.',
   uploadFileButtonLabel: 'Upload a file',
   uploadFileButtonChangeLabel: 'Change file',
-  h5pFileWrongExtensionTitle: '.h5p file not found',
-  h5pFileWrongExtensionContent: 'You need to upload a file that ends in .h5p',
+  uploadingThrobber: 'Now uploading...',
+  h5pFileWrongExtensionTitle: 'The selected file could not be uploaded',
+  h5pFileWrongExtensionContent: 'Only files with the .h5p extension is allowed.',
+  h5pFileValidationFailedTitle: 'Could not validate H5P file',
+  h5pFileValidationFailedContent: 'Make sure the uploaded H5P contains valid H5P content. H5P' +
+  ' files with only libraries should be uploaded through the H5P Libraries page.',
+  h5pFileUploadServerErrorTitle: 'The H5P file could not be uploaded',
+  h5pFileUploadServerErrorContent: 'An unexpected error occured. Check your server error log for' +
+  ' more details.',
   contentTypeSectionAll: 'All',
   contentTypeSectionMine: 'My Content Types',
   contentTypeSectionPopular: 'Most Popular',
