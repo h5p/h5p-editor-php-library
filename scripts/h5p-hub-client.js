@@ -2328,6 +2328,12 @@ var HubServices = function () {
         credentials: 'include'
       }).then(function (result) {
         return result.json();
+      }).catch(function (err) {
+        return {
+          messageCode: 'SERVER_ERROR',
+          err: err,
+          success: false
+        };
       }).then(this.isValid);
 
       return this.cachedContentTypes;
@@ -2546,6 +2552,7 @@ var ContentTypeSection = function () {
     _classCallCheck(this, ContentTypeSection);
 
     var self = this;
+    this.services = services;
 
     // add event system
     _extends(this, (0, _eventful.Eventful)());
@@ -2575,9 +2582,9 @@ var ContentTypeSection = function () {
     this.view = new _contentTypeSectionView2.default(state);
 
     // controller
-    this.searchService = new _searchService2.default(services);
+    this.searchService = new _searchService2.default(this.services);
     this.contentTypeList = new _contentTypeList2.default();
-    this.contentTypeDetail = new _contentTypeDetail2.default(state, services);
+    this.contentTypeDetail = new _contentTypeDetail2.default(state, this.services);
 
     // Element for holding list and details views
     var section = document.createElement('div');
@@ -2606,8 +2613,8 @@ var ContentTypeSection = function () {
     this.contentTypeDetail.on('close', this.goBackToListView, this);
     this.contentTypeDetail.on('select', this.closeDetailView, this);
     this.contentTypeDetail.on('installed-content-type', function () {
-      services.setup();
-      services.contentTypes().then(function (contentTypes) {
+      _this.services.setup();
+      _this.services.contentTypes().then(function (contentTypes) {
         _this.contentTypeList.refreshContentTypes(contentTypes);
       });
     });
@@ -2617,16 +2624,7 @@ var ContentTypeSection = function () {
       return _this.view.addMenuItem(ContentTypeSection.Tabs[tab]);
     });
     this.view.initMenu();
-
-    // Determine which browsing category to show initially
-    services.contentTypes().then(function (contentTypes) {
-      // Show my content types if any is installed
-      var installed = contentTypes.filter(function (contentType) {
-        return contentType.installed;
-      });
-
-      self.view.selectMenuItem(installed.length ? ContentTypeSection.Tabs.MY_CONTENT_TYPES : ContentTypeSection.Tabs.ALL);
-    });
+    this.selectDefaultMenuItem();
   }
 
   /**
@@ -2651,6 +2649,25 @@ var ContentTypeSection = function () {
         type: 'error',
         title: _dictionary2.default.get('errorCommunicatingHubTitle'),
         content: _dictionary2.default.get('errorCommunicatingHubContent')
+      });
+    }
+
+    /**
+     * Determine which browsing category to show initially
+     */
+
+  }, {
+    key: "selectDefaultMenuItem",
+    value: function selectDefaultMenuItem() {
+      var self = this;
+
+      this.services.contentTypes().then(function (contentTypes) {
+        // Show my content types if any is installed
+        var installed = contentTypes.filter(function (contentType) {
+          return contentType.installed;
+        });
+
+        self.view.selectMenuItem(installed.length ? ContentTypeSection.Tabs.MY_CONTENT_TYPES : ContentTypeSection.Tabs.ALL);
       });
     }
 
@@ -3233,30 +3250,30 @@ function init(element) {
     return onNavigationButtonClick(element, nextButton, state.currentImage + 1);
   });
   onButtonTab(nextButton, TAB_DIRECTION.BACKWARD, function () {
-    return focus(closeButton, prevButton);
+    return focus(prevButton, closeButton);
   });
   onButtonTab(nextButton, TAB_DIRECTION.FORWARD, function () {
-    return focus(prevButton, closeButton);
+    return focus(closeButton, prevButton);
   });
 
   onButtonPress(prevButton, function () {
     return onNavigationButtonClick(element, prevButton, state.currentImage - 1);
   });
   onButtonTab(prevButton, TAB_DIRECTION.BACKWARD, function () {
-    return focus(nextButton, closeButton);
+    return focus(closeButton, nextButton);
   });
   onButtonTab(prevButton, TAB_DIRECTION.FORWARD, function () {
-    return focus(closeButton, nextButton);
+    return focus(nextButton, closeButton);
   });
 
   onButtonPress(closeButton, function () {
     return hideLightbox(element);
   });
   onButtonTab(closeButton, TAB_DIRECTION.BACKWARD, function () {
-    return focus(prevButton, nextButton);
+    return focus(nextButton, prevButton);
   });
   onButtonTab(closeButton, TAB_DIRECTION.FORWARD, function () {
-    return focus(nextButton, prevButton);
+    return focus(prevButton, nextButton);
   });
 
   // When clicking on the background, let's close it
@@ -3557,6 +3574,7 @@ var Hub = function () {
       }
     }, this);
     this.contentTypeSection.on('reload', this.setupServices, this);
+    this.contentTypeSection.on('reload', this.contentTypeSection.selectDefaultMenuItem.bind(this.contentTypeSection, false));
     this.contentTypeSection.on('modal', this.showModal, this);
     this.on('clear-upload-form', function () {
       _this.uploadSection.clearUploadForm();
@@ -4032,6 +4050,29 @@ var disable = (0, _elements.setAttribute)('disabled', '');
 var enable = (0, _elements.removeAttribute)('disabled');
 
 /**
+ * Focuses an HTMLElement
+ *
+ * @param {HTMLElement} element
+ *
+ * @function
+ */
+var focus = function focus(element) {
+  return element.focus();
+};
+
+/**
+ * Registers a click handler on an HTMLElement
+ *
+ * @param {HTMLElement} element
+ * @param {Function} handler
+ *
+ * @function
+ */
+var onClick = function onClick(element, handler) {
+  return element.addEventListener('click', handler);
+};
+
+/**
  * @class
  * @mixes Eventful
  */
@@ -4081,6 +4122,24 @@ var ContentTypeDetailView = function () {
     this.licensePanelBody = this.rootElement.querySelector('#license-panel');
     this.container = this.rootElement.querySelector('.container');
 
+    /**
+     * Finds the license button for us
+     *
+     * @return {HTMLElement}
+     */
+    this.licenseButton = function () {
+      return _this.licensePanelBody.querySelector('.short-license-read-more');
+    };
+
+    /**
+     * Generates an event handler for showing the license
+     *
+     * @function
+     */
+    this.showLicense = (0, _functional.curry)(function (licenseId, event) {
+      return _this.trigger('show-license-dialog', { licenseId: licenseId });
+    });
+
     // init interactive elements
     (0, _panel2.default)(this.panel);
     (0, _imageScroller2.default)(this.carousel);
@@ -4113,7 +4172,7 @@ var ContentTypeDetailView = function () {
       element.setAttribute('tabindex', '-1');
       element.setAttribute('aria-labelledby', titleId);
 
-      element.innerHTML = "\n      <button class=\"back-button icon-arrow-thick\" aria-label=\"" + _dictionary2.default.get("contentTypeBackButtonLabel") + "\" tabindex=\"0\"></button>\n      <div class=\"container\">\n        <div class=\"image-wrapper\">\n          <img class=\"img-responsive content-type-image\" src=\"" + _contentTypePlaceholder2.default + "\">\n        </div>\n        <div class=\"text-details\">\n          <h2 id=\"" + titleId + "\" class=\"title\" tabindex=\"-1\"></h2>\n          <div class=\"owner\"></div>\n          <p class=\"small\"></p>\n          <a class=\"button demo-button\" target=\"_blank\" href=\"#\">\n            " + _dictionary2.default.get("contentTypeDemoButtonLabel") + "\n          </a>\n        </div>\n      </div>\n      <div class=\"carousel\" role=\"region\" data-size=\"5\">\n        <button class=\"carousel-button previous hidden\" disabled>\n          <span class=\"icon-arrow-thick\"></span>\n        </button>\n        <button class=\"carousel-button next hidden\" disabled>\n          <span class=\"icon-arrow-thick\"></span>\n        </button>\n        <nav class=\"scroller\">\n          <ul></ul>\n        </nav>\n      </div>\n      <hr />\n      <div class=\"button-bar\">\n        <button class=\"button button-inverse-primary button-install hidden\" data-id=\"\">\n          <span class=\"icon-arrow-thick\"></span>\n          " + _dictionary2.default.get('contentTypeInstallButtonLabel') + "\n        </button>\n        <button class=\"button button-inverse-primary button-installing hidden\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeInstallingButtonLabel") + "\n        </button>\n        <button class=\"button button-inverse-primary button-update\">\n          " + _dictionary2.default.get("contentTypeUpdateButtonLabel") + "\n        </button>\n        <button class=\"button button-inverse-primary button-updating\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeUpdatingButtonLabel") + "\n        </button>\n        <button class=\"button button-primary button-use\" data-id=\"\">\n          " + _dictionary2.default.get("contentTypeUseButtonLabel") + "\n        </button>\n      </div>\n      <dl class=\"panel panel-default license-panel\">\n        <dt aria-level=\"2\" role=\"heading\" class=\"license-panel-heading\">\n          <a role=\"button\" aria-expanded=\"false\" aria-controls=\"license-panel\">\n            <span class=\"icon-accordion-arrow\"></span>\n            <span>" + _dictionary2.default.get('contentTypeLicensePanelTitle') + "</span>\n          </a>\n        </dt>\n        <dl id=\"license-panel\" role=\"region\" class=\"hidden\">\n          <div class=\"panel-body\"></div>\n        </dl>\n      </dl>";
+      element.innerHTML = "\n      <button type=\"button\" class=\"back-button icon-arrow-thick\" aria-label=\"" + _dictionary2.default.get("contentTypeBackButtonLabel") + "\" tabindex=\"0\"></button>\n      <div class=\"container\">\n        <div class=\"image-wrapper\">\n          <img class=\"img-responsive content-type-image\" src=\"" + _contentTypePlaceholder2.default + "\">\n        </div>\n        <div class=\"text-details\">\n          <h2 id=\"" + titleId + "\" class=\"title\" tabindex=\"-1\"></h2>\n          <div class=\"owner\"></div>\n          <p class=\"small\"></p>\n          <a class=\"button demo-button\" target=\"_blank\" href=\"#\">\n            " + _dictionary2.default.get("contentTypeDemoButtonLabel") + "\n          </a>\n        </div>\n      </div>\n      <div class=\"carousel\" role=\"region\" data-size=\"5\" data-prevent-resize-loop=\"true\" aria-label=\"" + _dictionary2.default.get('screenshots') + "\">\n        <nav class=\"scroller\">\n          <ul></ul>\n        </nav>\n        <button type=\"button\" class=\"carousel-button next hidden\" disabled aria-label=\"" + _dictionary2.default.get('nextImage') + "\">\n          <span class=\"icon-arrow-thick\"></span>\n        </button>\n        <button type=\"button\" class=\"carousel-button previous hidden\" disabled aria-label=\"" + _dictionary2.default.get('previousImage') + "\">\n          <span class=\"icon-arrow-thick\"></span>\n        </button>\n      </div>\n      <hr />\n      <div class=\"button-bar\">\n        <button type=\"button\" class=\"button button-inverse-primary button-install hidden\" data-id=\"\">\n          <span class=\"icon-arrow-thick\"></span>\n          " + _dictionary2.default.get('contentTypeInstallButtonLabel') + "\n        </button>\n        <button type=\"button\" class=\"button button-inverse-primary button-installing hidden\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeInstallingButtonLabel") + "\n        </button>\n        <button type=\"button\" class=\"button button-inverse-primary button-update\">\n          " + _dictionary2.default.get("contentTypeUpdateButtonLabel") + "\n        </button>\n        <button type=\"button\" class=\"button button-inverse-primary button-updating\">\n          <span class=\"icon-loading-search icon-spin\"></span>\n          " + _dictionary2.default.get("contentTypeUpdatingButtonLabel") + "\n        </button>\n        <button type=\"button\" class=\"button button-primary button-use\" data-id=\"\">\n          " + _dictionary2.default.get("contentTypeUseButtonLabel") + "\n        </button>\n      </div>\n      <dl class=\"panel panel-default license-panel\">\n        <dt aria-level=\"2\" role=\"heading\" class=\"license-panel-heading\">\n          <div role=\"button\" aria-expanded=\"false\" aria-controls=\"license-panel\">\n            <span class=\"icon-accordion-arrow\"></span>\n            <span>" + _dictionary2.default.get('contentTypeLicensePanelTitle') + "</span>\n          </div>\n        </dt>\n        <dl id=\"license-panel\" role=\"region\" class=\"hidden\">\n          <div class=\"panel-body\"></div>\n        </dl>\n      </dl>";
 
       return element;
     }
@@ -4304,7 +4363,7 @@ var ContentTypeDetailView = function () {
       var text = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
       if (text && text.length > MAX_TEXT_SIZE_DESCRIPTION) {
-        this.description.innerHTML = this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text, true) + "<button class=\"read-more link\">" + _dictionary2.default.get('readMore') + "</button>";
+        this.description.innerHTML = this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text, true) + "<button type=\"button\" class=\"read-more link\">" + _dictionary2.default.get('readMore') + "</button>";
         this.description.querySelector('.read-more, .read-less').addEventListener('click', function () {
           return _this2.toggleDescriptionExpanded(text);
         });
@@ -4329,11 +4388,11 @@ var ContentTypeDetailView = function () {
       this.descriptionExpanded = !this.descriptionExpanded;
 
       if (this.descriptionExpanded) {
-        this.description.innerHTML = "" + this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text) + this.ellipsisRest(MAX_TEXT_SIZE_DESCRIPTION, text) + "\n                                    <button class=\"read-less link\">" + _dictionary2.default.get('readLess') + "</button>";
+        this.description.innerHTML = "" + this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text) + this.ellipsisRest(MAX_TEXT_SIZE_DESCRIPTION, text) + "\n                                    <button type=\"button\" class=\"read-less link\">" + _dictionary2.default.get('readLess') + "</button>";
 
         this.description.querySelector('.part-two').focus();
       } else {
-        this.description.innerHTML = this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text, true) + "\n                                    <button class=\"read-more link\">" + _dictionary2.default.get('readMore') + "</button>";
+        this.description.innerHTML = this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text, true) + "\n                                    <button type=\"button\" class=\"read-more link\">" + _dictionary2.default.get('readMore') + "</button>";
 
         this.description.querySelector('.part-one').focus();
       }
@@ -4395,8 +4454,6 @@ var ContentTypeDetailView = function () {
   }, {
     key: "setLicense",
     value: function setLicense(license) {
-      var _this4 = this;
-
       this.license = license;
 
       var panelContainer = this.licensePanelBody.querySelector('.panel-body');
@@ -4405,17 +4462,14 @@ var ContentTypeDetailView = function () {
         // Create short version for detail page
         var shortLicenseInfo = document.createElement('div');
         shortLicenseInfo.className = 'short-license-info';
-        shortLicenseInfo.innerHTML = "\n        <h3>" + license.id + "</h3>\n        <button class=\"short-license-read-more icon-info-circle\" aria-label=\"" + _dictionary2.default.get('readMore') + "\"></button>\n        <ul class=\"ul small\">\n          <li>" + _dictionary2.default.get(license.attributes.useCommercially ? "licenseCanUseCommercially" : "licenseCannotUseCommercially") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.modifiable ? "licenseCanModify" : "licenseCannotModify") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.distributable ? "licenseCanDistribute" : "licenseCannotDistribute") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.sublicensable ? "licenseCanSublicense" : "licenseCannotSublicense") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.canHoldLiable ? "licenseCanHoldLiable" : "licenseCannotHoldLiable") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.mustIncludeCopyright ? "licenseMustIncludeCopyright" : "licenseMustNotIncludeCopyright") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.mustIncludeLicense ? "licenseMustIncludeLicense" : "licenseMustNotIncludeLicense") + "</li>\n        </ul>";
+        shortLicenseInfo.innerHTML = "\n        <h3>" + license.id + "</h3>\n        <button type=\"button\" class=\"short-license-read-more icon-info-circle\" aria-label=\"" + _dictionary2.default.get('readMore') + "\"></button>\n        <ul class=\"ul small\">\n          <li>" + _dictionary2.default.get(license.attributes.useCommercially ? "licenseCanUseCommercially" : "licenseCannotUseCommercially") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.modifiable ? "licenseCanModify" : "licenseCannotModify") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.distributable ? "licenseCanDistribute" : "licenseCannotDistribute") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.sublicensable ? "licenseCanSublicense" : "licenseCannotSublicense") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.canHoldLiable ? "licenseCanHoldLiable" : "licenseCannotHoldLiable") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.mustIncludeCopyright ? "licenseMustIncludeCopyright" : "licenseMustNotIncludeCopyright") + "</li>\n          <li>" + _dictionary2.default.get(license.attributes.mustIncludeLicense ? "licenseMustIncludeLicense" : "licenseMustNotIncludeLicense") + "</li>\n        </ul>";
 
         // add short version of lisence
         panelContainer.innerText = '';
         panelContainer.appendChild(shortLicenseInfo);
 
         // handle clicking read more
-        var readMoreButton = this.licensePanelBody.querySelector('.short-license-read-more');
-        readMoreButton.addEventListener('click', function () {
-          return _this4.trigger('show-license-dialog', { licenseId: license.id });
-        });
+        onClick(this.licenseButton(), this.showLicense(license.id));
       } else {
         panelContainer.innerText = _dictionary2.default.get('licenseUnspecified');
       }
@@ -4432,7 +4486,7 @@ var ContentTypeDetailView = function () {
   }, {
     key: "createLicenseDialog",
     value: function createLicenseDialog(licenseDetails) {
-      var _this5 = this;
+      var _this4 = this;
 
       var titleId = 'license-dialog-title';
       var modal = document.createElement('div');
@@ -4445,7 +4499,7 @@ var ContentTypeDetailView = function () {
       var header = document.createElement('dt');
       header.setAttribute('role', 'heading');
       header.setAttribute('aria-level', '2');
-      header.innerHTML = "<a role=\"button\" aria-expanded=\"true\" aria-controls=\"" + id + "\">\n        <span class=\"icon-accordion-arrow\"></span>\n        <span class=\"license-title\">" + this.license.id + "</span>\n      </a>";
+      header.innerHTML = "<div role=\"button\" aria-expanded=\"true\" aria-controls=\"" + id + "\">\n        <span class=\"icon-accordion-arrow\"></span>\n        <span class=\"license-title\">" + this.license.id + "</span>\n      </div>";
 
       var body = document.createElement('dd');
       body.id = id;
@@ -4462,17 +4516,29 @@ var ContentTypeDetailView = function () {
 
       licenseDetails.then(function (details) {
         title.innerHTML = details.id;
-        description.innerHTML = details.description.replace(':year', new Date().getFullYear()).replace(':owner', _this5.owner);
+        description.innerHTML = details.description.replace(':year', new Date().getFullYear()).replace(':owner', _this4.owner);
       }).catch(function (error) {
         modalBody.innerHTML = _dictionary2.default.get('licenseFetchDetailsFailed');
       }).then(function () {
         return (0, _elements.removeClass)('loading', modalBody);
       });
 
-      (0, _modal2.default)(modal);
+      (0, _modal2.default)(modal, function () {
+        return _this4.trigger('hide-license-dialog');
+      });
       (0, _panel2.default)(panel);
 
       return modal;
+    }
+
+    /**
+     *
+     */
+
+  }, {
+    key: "focusLicenseDetailsButton",
+    value: function focusLicenseDetailsButton() {
+      focus(this.licenseButton());
     }
 
     /**
@@ -4608,10 +4674,10 @@ var ContentTypeDetailView = function () {
   }, {
     key: "focus",
     value: function focus() {
-      var _this6 = this;
+      var _this5 = this;
 
       setTimeout(function () {
-        return _this6.title.focus();
+        return _this5.title.focus();
       }, 200);
     }
 
@@ -4705,6 +4771,9 @@ var ContentTypeDetail = function () {
       });
     }, this);
     this.view.on('show-license-dialog', this.showLicenseDialog, this);
+    this.view.on('hide-license-dialog', function () {
+      return _this.view.focusLicenseDetailsButton();
+    });
 
     // propagate events
     this.propagate(['close', 'select', 'modal'], this.view);
@@ -5074,7 +5143,7 @@ var ContentTypeListView = function () {
       element.setAttribute('aria-describedby', contentTypeRowDescriptionId);
 
       // create html
-      element.innerHTML = "\n      <div class=\"media-left\">\n        <img class=\"media-object\" src=\"" + image + "\" alt=\"" + title + " " + _dictionary2.default.get('contentTypeIconAltText') + "\" />\n      </div>\n\n      <div class=\"media-body\">\n        <div id=\"" + contentTypeRowTitleId + "\" class=\"h4 media-heading\">" + title + "</div>\n      \n        <button aria-describedby=\"" + contentTypeRowTitleId + "\" class=\"button " + button.cls + "\" data-id=\"" + contentType.machineName + "\" tabindex=\"-1\" " + disabled + ">\n          <span class=\"" + button.icon + "\"></span>\n          " + button.text + "\n        </button>\n        \n        <div class=\"content-type-update-info" + (updateAvailable ? '' : ' hidden') + "\">\n          " + _dictionary2.default.get('contentTypeUpdateAvailable') + "\n        </div>\n        \n        <div id=\"" + contentTypeRowDescriptionId + "\" class=\"description\">" + description + "</div>\n      </div>\n   ";
+      element.innerHTML = "\n      <div class=\"media-left\">\n        <img class=\"media-object\" src=\"" + image + "\" alt=\"" + title + " " + _dictionary2.default.get('contentTypeIconAltText') + "\" />\n      </div>\n\n      <div class=\"media-body\">\n        <div id=\"" + contentTypeRowTitleId + "\" class=\"h4 media-heading\">" + title + "</div>\n\n        <button type=\"button\" aria-describedby=\"" + contentTypeRowTitleId + "\" class=\"button " + button.cls + "\" data-id=\"" + contentType.machineName + "\" tabindex=\"-1\" " + disabled + ">\n          <span class=\"" + button.icon + "\"></span>\n          " + button.text + "\n        </button>\n\n        <div class=\"content-type-update-info" + (updateAvailable ? '' : ' hidden') + "\">\n          " + _dictionary2.default.get('contentTypeUpdateAvailable') + "\n        </div>\n\n        <div id=\"" + contentTypeRowDescriptionId + "\" class=\"description\">" + description + "</div>\n      </div>\n   ";
 
       // handle use button
       var useButton = element.querySelector('.button-primary');
@@ -5341,7 +5410,6 @@ var ContentBrowserView = function () {
           element: _this.searchBar,
           query: _this.searchBar.value
         });
-        _this.searchBar.focus();
       }
     });
 
@@ -5352,7 +5420,6 @@ var ContentBrowserView = function () {
           element: _this.searchBar,
           query: _this.searchBar.value
         });
-        _this.searchBar.focus();
       }
     });
 
@@ -5362,7 +5429,6 @@ var ContentBrowserView = function () {
         element: _this.searchBar,
         query: _this.searchBar.value
       });
-      _this.searchBar.focus();
     });
   }
 
@@ -6546,7 +6612,7 @@ var UploadSection = function () {
     value: function renderUploadForm() {
       // Create the html
       var uploadForm = document.createElement('div');
-      uploadForm.innerHTML = '\n      <div class="upload-wrapper">\n        <div class="upload-throbber hidden" aria-label="' + _dictionary2.default.get('uploadingThrobber') + '" tabindex="-1"></div>\n        <h1 class="upload-instruction-header">' + _dictionary2.default.get('uploadInstructionsTitle') + '</h1>\n        <div class="upload-form">\n          <input class="upload-path" placeholder="' + _dictionary2.default.get("uploadPlaceholder") + '" tabindex="-1" readonly/>\n          <button class="button use-button">Use</button>\n          <div class="input-wrapper">\n            <input type="file" accept=".h5p" aria-hidden="true"/>\n            <button class="button upload-button" tabindex="0">' + _dictionary2.default.get('uploadFileButtonLabel') + '</button>\n          </div>\n        </div>\n        <p class="upload-instruction-description">' + _dictionary2.default.get('uploadInstructionsContent') + '</p>\n      </div>\n    ';
+      uploadForm.innerHTML = '\n      <div class="upload-wrapper">\n        <div class="upload-throbber hidden" aria-label="' + _dictionary2.default.get('uploadingThrobber') + '" tabindex="-1"></div>\n        <h1 class="upload-instruction-header">' + _dictionary2.default.get('uploadInstructionsTitle') + '</h1>\n        <div class="upload-form">\n          <input class="upload-path" placeholder="' + _dictionary2.default.get("uploadPlaceholder") + '" tabindex="-1" readonly/>\n          <button type="button" class="button use-button">Use</button>\n          <div class="input-wrapper">\n            <input type="file" accept=".h5p" aria-hidden="true"/>\n            <button type="button" class="button upload-button" tabindex="0">' + _dictionary2.default.get('uploadFileButtonLabel') + '</button>\n          </div>\n        </div>\n        <p class="upload-instruction-description">' + _dictionary2.default.get('uploadInstructionsContent') + '</p>\n      </div>\n    ';
       return uploadForm;
     }
 
@@ -7432,6 +7498,10 @@ var updateView = function updateView(element, state) {
   // toggle button enable, disabled
   toggleEnabled(nextButton, state.position > state.displayCount - totalCount);
   toggleEnabled(prevButton, state.position < 0);
+
+  if (element.dataset.preventResizeLoop === 'true') {
+    element.ignoreResize = true;
+  }
 };
 
 /**
@@ -7618,7 +7688,13 @@ function init(element) {
 
   // on screen resize calculate number of images to show
   window.addEventListener('resize', function () {
-    return onResize(element, state);
+    if (element.ignoreResize) {
+      // If resize is triggered by resize we don't want to continue resizing
+      element.ignoreResize = false;
+      return;
+    }
+
+    onResize(element, state);
   });
 
   // initialize position
@@ -7655,13 +7731,13 @@ var getAllTabbableChildren = function getAllTabbableChildren(element) {
  *
  * @function
  */
-var handleKeyPress = (0, _functional.curry)(function (element, event) {
+var handleKeyPress = (0, _functional.curry)(function (element, closeModal, event) {
   var target = event.srcElement || event.target;
 
   switch (event.which) {
     case 27:
       // ESC
-      (0, _elements.hide)(element);
+      closeModal();
       event.preventDefault();
       break;
     case 9:
@@ -7689,18 +7765,20 @@ var handleKeyPress = (0, _functional.curry)(function (element, event) {
  *
  * @param {HTMLElement} element
  */
-function init(element) {
+function init(element, closeHandler) {
   var dismissButtons = (0, _elements.querySelectorAll)('[data-dismiss="modal"]', element);
   (0, _elements.hide)(element);
 
+  var closeModal = function closeModal() {
+    (0, _elements.hide)(element);
+    closeHandler();
+  };
   dismissButtons.forEach(function (button) {
-    return button.addEventListener('click', function () {
-      return (0, _elements.hide)(element);
-    });
+    return button.addEventListener('click', closeModal);
   });
 
   // hide modal on escape keypress
-  element.addEventListener('keydown', handleKeyPress(element));
+  element.addEventListener('keydown', handleKeyPress(element, closeModal));
 }
 
 /***/ }),
