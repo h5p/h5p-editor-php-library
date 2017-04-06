@@ -2305,12 +2305,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var HubServices = function () {
   /**
    * @param {string} apiRootUrl
+   * @param {number} contentId
    */
   function HubServices(_ref) {
-    var apiRootUrl = _ref.apiRootUrl;
+    var apiRootUrl = _ref.apiRootUrl,
+        contentId = _ref.contentId;
 
     _classCallCheck(this, HubServices);
 
+    this.contentId = contentId || 0;
     this.apiRootUrl = apiRootUrl;
     this.licenseCache = {};
   }
@@ -2416,6 +2419,8 @@ var HubServices = function () {
   }, {
     key: 'uploadContent',
     value: function uploadContent(formData) {
+      formData.append('contentId', this.contentId);
+
       return fetch(this.apiRootUrl + 'library-upload', {
         method: 'POST',
         credentials: 'include',
