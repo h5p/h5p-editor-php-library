@@ -137,5 +137,5 @@ H5PEditor.language.core = {
   imageLightBoxProgress: ':num of :total',
   nextImage: 'Next image',
   previousImage: 'Previous image',
-  screenhots: 'Screenshots'
+  screenshots: 'Screenshots'
 };
