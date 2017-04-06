@@ -11,6 +11,7 @@ ns.SelectorHub = function (selectedLibrary, changeLibraryDialog) {
   H5P.EventDispatcher.call(this);
 
   var hubServices = new H5P.HubServices({
+    contentId: H5PEditor.contentId || 0,
     apiRootUrl: H5PEditor.ajaxPath
   });
 
