@@ -114,7 +114,8 @@ class H5PEditorAjax {
         if (!$this->isValidEditorToken($token)) return;
 
         $uploadPath = func_get_arg(2);
-        $this->libraryUpload($uploadPath);
+        $contentId = func_get_arg(3);
+        $this->libraryUpload($uploadPath, $contentId);
         break;
 
       case H5PEditorEndpoints::FILES:
@@ -156,8 +157,9 @@ class H5PEditorAjax {
    * Validates and saves any dependencies, then exposes content to the editor.
    *
    * @param {string} $uploadFilePath Path to the file that should be uploaded
+   * @param {int} $contentId Content id of library
    */
-  private function libraryUpload($uploadFilePath) {
+  private function libraryUpload($uploadFilePath, $contentId) {
     // Verify h5p upload
     if (!$uploadFilePath) {
       H5PCore::ajaxError($this->core->h5pF->t('Could not get posted H5P.'), 'NO_CONTENT_TYPE');
@@ -174,8 +176,11 @@ class H5PEditorAjax {
     $storage = new H5PStorage($this->core->h5pF, $this->core);
     $storage->savePackage(NULL, NULL, TRUE);
 
-    // Since package has been validated, make content assets available to editor
-    $content = $this->core->fs->moveContentDirectory($this->core->h5pF->getUploadedH5pFolderPath());
+    // Make content available to editor
+    $content = $this->core->fs->moveContentDirectory(
+      $this->core->h5pF->getUploadedH5pFolderPath(),
+      $contentId
+    );
 
     // Clean up
     $this->storage->removeTemporarilySavedFiles($this->core->h5pF->getUploadedH5pFolderPath());
