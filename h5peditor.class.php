@@ -487,7 +487,7 @@ class H5peditor {
       'isRecommended'   => $cached_library->is_recommended != 0,
       'popularity'      => intval($cached_library->popularity),
       'screenshots'     => json_decode($cached_library->screenshots),
-      'license'         => $cached_library->license,
+      'license'         => json_decode($cached_library->license),
       'owner'           => $cached_library->owner,
       'installed'       => FALSE,
       'isUpToDate'      => FALSE,
@@ -531,7 +531,7 @@ class H5peditor {
       $icon_path = NULL;
 
       // Check if icon is available locally:
-      if($local_lib->has_icon) {
+      if ($local_lib->has_icon) {
         // Create path to icon:
         $library_folder = H5PCore::libraryToString(array(
           'machineName' => $local_lib->machine_name,
@@ -548,20 +548,37 @@ class H5peditor {
           $is_local_only = FALSE;
 
           // Set icon if it exists locally
-          if(isset($icon_path)) {
+          if (isset($icon_path)) {
             $cached_lib['icon'] = $icon_path;
           }
 
           // Set local properties
           $cached_lib['installed']  = TRUE;
           $cached_lib['restricted'] = $can_create_restricted ? FALSE
-            : $local_lib->restricted;
+            : ($local_lib->restricted ? TRUE : FALSE);
 
-          // Determine if library is the same as ct cache
+          // Set local version
+          $cached_lib['localMajorVersion'] = (int) $local_lib->major_version;
+          $cached_lib['localMinorVersion'] = (int) $local_lib->minor_version;
+          $cached_lib['localPatchVersion'] = (int) $local_lib->patch_version;
+
+          // Determine if library is newer or same as cache
+          $major_is_updated =
+            $cached_lib['majorVersion'] < $cached_lib['localMajorVersion'];
+
+          $minor_is_updated =
+            $cached_lib['majorVersion'] === $cached_lib['localMajorVersion'] &&
+            $cached_lib['minorVersion'] < $cached_lib['localMinorVersion'];
+
+          $patch_is_updated =
+            $cached_lib['majorVersion'] === $cached_lib['localMajorVersion'] &&
+            $cached_lib['minorVersion'] === $cached_lib['localMinorVersion'] &&
+            $cached_lib['patchVersion'] <= $cached_lib['localPatchVersion'];
+
           $is_updated_library =
-            $cached_lib['majorVersion'] === $local_lib->major_version &&
-            $cached_lib['minorVersion'] === $local_lib->minor_version &&
-            $cached_lib['patchVersion'] === $local_lib->patch_version;
+            $major_is_updated ||
+            $minor_is_updated ||
+            $patch_is_updated;
 
           if ($is_updated_library) {
             $cached_lib['isUpToDate'] = TRUE;
@@ -572,14 +589,18 @@ class H5peditor {
       // Add minimal data to display local only libraries
       if ($is_local_only) {
         $local_only_lib = array(
-          'id'           => $local_lib->id,
-          'machineName'  => $local_lib->machine_name,
-          'majorVersion' => $local_lib->major_version,
-          'minorVersion' => $local_lib->minor_version,
-          'patchVersion' => $local_lib->patch_version,
-          'installed'    => TRUE,
-          'isUpToDate'   => TRUE,
-          'restricted'   => $can_create_restricted ? FALSE : $local_lib->restricted
+          'id'                => (int) $local_lib->id,
+          'machineName'       => $local_lib->machine_name,
+          'majorVersion'      => (int) $local_lib->major_version,
+          'minorVersion'      => (int) $local_lib->minor_version,
+          'patchVersion'      => (int) $local_lib->patch_version,
+          'localMajorVersion' => (int) $local_lib->major_version,
+          'localMinorVersion' => (int) $local_lib->minor_version,
+          'localPatchVersion' => (int) $local_lib->patch_version,
+          'installed'         => TRUE,
+          'isUpToDate'        => TRUE,
+          'restricted'        => $can_create_restricted ? FALSE :
+            ($local_lib->restricted ? TRUE : FALSE)
         );
 
         if (isset($icon_path)) {

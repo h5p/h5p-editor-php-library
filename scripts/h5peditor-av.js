@@ -208,7 +208,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       return;
     }
 
-    var $file = $('<div class="h5p-thumbnail"><div class="h5p-type" title="' + file.mime + '">' + file.mime.split('/')[1] + '</div><div role="button" tabindex="1" class="h5p-remove" title="' + H5PEditor.t('core', 'removeFile') + '"></div></div>')
+    var $file = $('<div class="h5p-thumbnail"><div class="h5p-type" title="' + file.mime + '">' + file.mime.split('/')[1] + '</div><div role="button" tabindex="0" class="h5p-remove" title="' + H5PEditor.t('core', 'removeFile') + '"></div></div>')
       .insertBefore(this.$add)
       .click(function () {
         if (!that.$add.is(':visible')) {
@@ -378,7 +378,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         '</div>';
     }
 
-    return '<div role="button" tabindex="1" class="h5p-add-file" title="' + H5PEditor.t('core', 'addFile') + '"></div>' +
+    return '<div role="button" tabindex="0" class="h5p-add-file" title="' + H5PEditor.t('core', 'addFile') + '"></div>' +
       '<div class="h5p-add-dialog">' +
         '<div class="h5p-add-dialog-table">' +
           '<div class="h5p-dialog-box">' +

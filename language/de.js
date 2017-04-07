@@ -27,7 +27,6 @@ H5PEditor.language.core = {
   "tooLong": "Wert des Feldes ist zu lang. Es sollte :max Buchstaben oder weniger beinhalten.",
   "invalidFormat": "Der Feldwert beinhaltet ein ung\u00fcltiges Format oder verbotene Zeichen.",
   "confirmChangeLibrary": "Wenn dies ausgef\u00fchrt wird, dann geht alles verloren, was mit dem aktuellen Inhaltstyp erstellt wurde. Ganz sicher den Inhaltstyp wechseln?",
-  "moreLibraries": "Nach <a href=\"http:\/\/h5p.org\/content-types-and-applications\" target=\"_blank\">more content types<\/a> auf h5p.org Ausschau halten",
   "commonFields": "Einstellungen und Texte",
   "commonFieldsDescription": "Hier k\u00f6nnen Einstellungen bearbeitet oder Texte \u00fcbersetzt werden, die in diesem Inhalt Verwendung finden.",
   "uploading": "L\u00e4dt hoch, bitte warten...",

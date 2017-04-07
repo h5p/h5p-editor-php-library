@@ -12,6 +12,8 @@ var ns = H5PEditor;
 ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   var that = this;
 
+  H5P.EventDispatcher.call(this);
+
   try {
     this.defaultParams = JSON.parse(defaultParams);
     if (!(this.defaultParams instanceof Object)) {
@@ -54,16 +56,29 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
 
   // Revert selector on cancel
   changeLibraryDialog.on('canceled', function () {
-    that.selector.resetSelection(that.currentLibrary);
+    that.selector.resetSelection(that.currentLibrary, that.defaultParams);
   });
 
   // First time a library is selected in the editor
   this.selector.on('selected', function () {
     that.currentLibrary = that.selector.getSelectedLibrary();
-    that.loadSemantics(that.currentLibrary);
+    that.loadSemantics(that.currentLibrary, that.selector.getParams());
   });
+
+  this.selector.on('resized', function () {
+    that.trigger('resized');
+  })
 };
 
+// Extends the event dispatcher
+ns.LibrarySelector.prototype = Object.create(H5P.EventDispatcher.prototype);
+ns.LibrarySelector.prototype.constructor = ns.LibrarySelector;
+
+/**
+ * Sets the current library
+ *
+ * @param {string} library
+ */
 ns.LibrarySelector.prototype.setLibrary = function (library) {
   this.loadSemantics(library);
   this.currentLibrary = library;
@@ -81,8 +96,6 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
   this.$selector.appendTo($element);
   this.$tutorialUrl.appendTo($element);
   this.$exampleUrl.appendTo($element);
-
-  $element.append('<div class="h5p-more-libraries">' + ns.t('core', 'moreLibraries') + '</div>');
 };
 
 /**
@@ -124,6 +137,7 @@ ns.LibrarySelector.prototype.loadSemantics = function (library, params) {
       var overrideParams = {};
       if (params) {
         overrideParams = params;
+        that.defaultParams = overrideParams;
       }
       else if (library === that.defaultLibrary || library === that.defaultLibraryParameterized) {
         overrideParams = that.defaultParams;

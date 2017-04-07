@@ -114,7 +114,8 @@ class H5PEditorAjax {
         if (!$this->isValidEditorToken($token)) return;
 
         $uploadPath = func_get_arg(2);
-        $this->libraryUpload($uploadPath);
+        $contentId = func_get_arg(3);
+        $this->libraryUpload($uploadPath, $contentId);
         break;
 
       case H5PEditorEndpoints::FILES:
@@ -145,7 +146,7 @@ class H5PEditorAjax {
     // Make sure file is valid and mark it for cleanup at a later time
     if ($file->validate()) {
       $file_id = $this->core->fs->saveFile($file, $contentId);
-      $this->storage->markFileForCleanup($file_id);
+      $this->storage->markFileForCleanup($file_id, $contentId);
     }
     $file->printResult();
   }
@@ -156,8 +157,9 @@ class H5PEditorAjax {
    * Validates and saves any dependencies, then exposes content to the editor.
    *
    * @param {string} $uploadFilePath Path to the file that should be uploaded
+   * @param {int} $contentId Content id of library
    */
-  private function libraryUpload($uploadFilePath) {
+  private function libraryUpload($uploadFilePath, $contentId) {
     // Verify h5p upload
     if (!$uploadFilePath) {
       H5PCore::ajaxError($this->core->h5pF->t('Could not get posted H5P.'), 'NO_CONTENT_TYPE');
@@ -174,8 +176,11 @@ class H5PEditorAjax {
     $storage = new H5PStorage($this->core->h5pF, $this->core);
     $storage->savePackage(NULL, NULL, TRUE);
 
-    // Since package has been validated, make content assets available to editor
-    $content = $this->core->fs->moveContentDirectory($this->core->h5pF->getUploadedH5pFolderPath());
+    // Make content available to editor
+    $content = $this->core->fs->moveContentDirectory(
+      $this->core->h5pF->getUploadedH5pFolderPath(),
+      $contentId
+    );
 
     // Clean up
     $this->storage->removeTemporarilySavedFiles($this->core->h5pF->getUploadedH5pFolderPath());
@@ -230,7 +235,7 @@ class H5PEditorAjax {
 
     // Check install permissions
     if (!$this->editor->canInstallContentType($contentType)) {
-      H5PCore::ajaxError($this->core->h5pF->t('No permission to install content type.'), 'INSTALL_DENIED');
+      H5PCore::ajaxError($this->core->h5pF->t('You do not have permission to install content types. Contact the administrator of your site.'), 'INSTALL_DENIED');
       return;
     }
     else {
@@ -239,12 +244,8 @@ class H5PEditorAjax {
     }
 
     // Retrieve content type from hub endpoint
-    $endpointResponse = $this->callHubEndpoint(H5PHubEndpoints::CONTENT_TYPES . $machineName);
-    if (!$endpointResponse) return;
-
-    // Save file temporarily to verify validity
-    $file = $this->saveFileTemporarily($endpointResponse);
-    if (!$file) return;
+    $response = $this->callHubEndpoint(H5PHubEndpoints::CONTENT_TYPES . $machineName);
+    if (!$response) return;
 
     // Session parameters has to be set for validation and saving of packages
     if (!$this->isValidPackage(TRUE)) return;
@@ -308,16 +309,16 @@ class H5PEditorAjax {
   }
 
   /**
-   * Calls provided hub endpoint and returns any found response data.
+   * Calls provided hub endpoint and downloads the response to a .h5p file.
    *
    * @param string $endpoint Endpoint without protocol
    *
-   * @return bool|string Returns the response if found
+   * @return bool
    */
   private function callHubEndpoint($endpoint) {
+    $path = $this->core->h5pF->getUploadedH5pPath();
     $protocol = (extension_loaded('openssl') ? 'https' : 'http');
-    $response  = $this->core->h5pF->fetchExternalData("{$protocol}://{$endpoint}");
-
+    $response = $this->core->h5pF->fetchExternalData("{$protocol}://{$endpoint}", NULL, TRUE, empty($path) ? TRUE : $path);
     if (!$response) {
       H5PCore::ajaxError(
         $this->core->h5pF->t('Failed to download the requested H5P.'),
@@ -326,7 +327,7 @@ class H5PEditorAjax {
       return FALSE;
     }
 
-    return $response;
+    return TRUE;
   }
 
   /**

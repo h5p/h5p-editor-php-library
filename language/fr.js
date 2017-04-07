@@ -27,7 +27,6 @@ H5PEditor.language.core = {
   tooLong: 'Ce mot est trop long, il ne peut comporter que :max lettres ou moins.',
   invalidFormat: 'Ce champ contient un format ou un caractère invalide.',
   confirmChangeLibrary: 'Etes-vous certain de vouloir passer à une autre activité&nbsp;?',
-  moreLibraries: 'Visitez <a href="http://h5p.org/content-types-and-applications" target="_blank"> h5p.org pour plus de contenus</a>',
   commonFields: 'Options et textes',
   commonFieldsDescription: 'Vous pouvez ici éditer les options et les textes.',
   uploading: 'Chargement en cours...',
