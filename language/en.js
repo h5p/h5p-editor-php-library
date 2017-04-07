@@ -35,6 +35,7 @@ H5PEditor.language.core = {
   close: 'Close',
   tutorial: 'Tutorial',
   example: 'Example',
+  PanelDefaultLabel: 'Select content type',
   editMode: 'Editing mode',
   listLabel: 'List',
   uploadError: 'File Upload Error',
