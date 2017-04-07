@@ -876,6 +876,8 @@ var Keyboard = function () {
             this.selectedIndex = nextIndex(this.selectedIndex, lastIndex);
             event.preventDefault();
             break;
+          default:
+            return;
         }
 
         // move tabindex to currently selected
@@ -4000,6 +4002,8 @@ var _imageLightbox3 = __webpack_require__(24);
 
 var _imageLightbox4 = _interopRequireDefault(_imageLightbox3);
 
+var _media = __webpack_require__(44);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -4220,52 +4224,48 @@ var ContentTypeDetailView = function () {
     }
 
     /**
-     * Removes all images from the carousel
-     */
-
-  }, {
-    key: "removeAllImagesInCarousel",
-    value: function removeAllImagesInCarousel() {
-      (0, _elements.querySelectorAll)('li', this.carouselList).forEach((0, _elements.removeChild)(this.carouselList));
-      this.imageLightbox.reset();
-    }
-
-    /**
-     * Add image to the carousel
+     * Set screenshots
      *
-     * @param {object} image
+     * @param {{url: string, alt:string}[]} screenshots
      */
 
   }, {
-    key: "addImageToCarousel",
-    value: function addImageToCarousel(image, index) {
+    key: "setScreenshots",
+    value: function setScreenshots(screenshots) {
+      var _this2 = this;
+
       var self = this;
+      (0, _media.preloadImages)(screenshots).then(function (screenshots) {
+        screenshots.filter(function (image) {
+          return image.valid === true;
+        }).forEach(function (image, index) {
+          // add lightbox
+          _this2.imageLightbox.addImage(image);
 
-      // add lightbox
-      this.imageLightbox.addImage(image);
+          // add thumbnail
+          var thumbnail = document.createElement('li');
+          thumbnail.className = 'slide';
+          thumbnail.innerHTML = "<img src=\"" + image.url + "\" alt=\"" + image.alt + "\" data-index=\"" + index + "\" class=\"img-responsive\" aria-controls=\"" + IMAGELIGHTBOX + "-detail\" />";
 
-      // add thumbnail
-      var thumbnail = document.createElement('li');
-      thumbnail.className = 'slide';
-      thumbnail.innerHTML = "<img src=\"" + image.url + "\" alt=\"" + image.alt + "\" data-index=\"" + index + "\" class=\"img-responsive\" aria-controls=\"" + IMAGELIGHTBOX + "-detail\" />";
+          var img = thumbnail.querySelector('img');
+          img.addEventListener('click', function () {
+            self.imageLightbox.show(index);
+            self.trigger('modal', { element: self.imageLightbox.getElement() });
+            self.focusedImage = img;
+          });
 
-      var img = thumbnail.querySelector('img');
-      img.addEventListener('click', function () {
-        self.imageLightbox.show(index);
-        self.trigger('modal', { element: self.imageLightbox.getElement() });
-        self.focusedImage = img;
+          img.addEventListener('keydown', function (event) {
+            if (event.which === 32 || event.which === 13) {
+              self.imageLightbox.show(index);
+              self.trigger('modal', { element: self.imageLightbox.getElement() });
+              self.focusedImage = img;
+              event.preventDefault();
+            }
+          });
+
+          _this2.carouselList.appendChild(thumbnail);
+        });
       });
-
-      img.addEventListener('keydown', function (event) {
-        if (event.which === 32 || event.which === 13) {
-          self.imageLightbox.show(index);
-          self.trigger('modal', { element: self.imageLightbox.getElement() });
-          self.focusedImage = img;
-          event.preventDefault();
-        }
-      });
-
-      this.carouselList.appendChild(thumbnail);
     }
 
     /**
@@ -4293,6 +4293,10 @@ var ContentTypeDetailView = function () {
 
       this.removeInstallMessage();
       this.resetLicenses();
+
+      // Remove images:
+      (0, _elements.querySelectorAll)('li', this.carouselList).forEach((0, _elements.removeChild)(this.carouselList));
+      this.imageLightbox.reset();
     }
 
     /**
@@ -4363,14 +4367,14 @@ var ContentTypeDetailView = function () {
   }, {
     key: "setDescription",
     value: function setDescription() {
-      var _this2 = this;
+      var _this3 = this;
 
       var text = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
       if (text && text.length > MAX_TEXT_SIZE_DESCRIPTION) {
         this.description.innerHTML = this.ellipsis(MAX_TEXT_SIZE_DESCRIPTION, text, true) + "<button type=\"button\" class=\"read-more link\">" + _dictionary2.default.get('readMore') + "</button>";
         this.description.querySelector('.read-more, .read-less').addEventListener('click', function () {
-          return _this2.toggleDescriptionExpanded(text);
+          return _this3.toggleDescriptionExpanded(text);
         });
         this.descriptionExpanded = false;
       } else {
@@ -4387,7 +4391,7 @@ var ContentTypeDetailView = function () {
   }, {
     key: "toggleDescriptionExpanded",
     value: function toggleDescriptionExpanded(text) {
-      var _this3 = this;
+      var _this4 = this;
 
       // flip boolean
       this.descriptionExpanded = !this.descriptionExpanded;
@@ -4403,7 +4407,7 @@ var ContentTypeDetailView = function () {
       }
 
       this.description.querySelector('.read-more, .read-less').addEventListener('click', function () {
-        return _this3.toggleDescriptionExpanded(text);
+        return _this4.toggleDescriptionExpanded(text);
       });
     }
 
@@ -4491,7 +4495,7 @@ var ContentTypeDetailView = function () {
   }, {
     key: "createLicenseDialog",
     value: function createLicenseDialog(licenseDetails) {
-      var _this4 = this;
+      var _this5 = this;
 
       var titleId = 'license-dialog-title';
       var modal = document.createElement('div');
@@ -4521,7 +4525,7 @@ var ContentTypeDetailView = function () {
 
       licenseDetails.then(function (details) {
         title.innerHTML = details.id;
-        description.innerHTML = details.description.replace(':year', new Date().getFullYear()).replace(':owner', _this4.owner);
+        description.innerHTML = details.description.replace(':year', new Date().getFullYear()).replace(':owner', _this5.owner);
       }).catch(function (error) {
         modalBody.innerHTML = _dictionary2.default.get('licenseFetchDetailsFailed');
       }).then(function () {
@@ -4529,7 +4533,7 @@ var ContentTypeDetailView = function () {
       });
 
       (0, _modal2.default)(modal, function () {
-        return _this4.trigger('hide-license-dialog');
+        return _this5.trigger('hide-license-dialog');
       });
       (0, _panel2.default)(panel);
 
@@ -4679,10 +4683,10 @@ var ContentTypeDetailView = function () {
   }, {
     key: "focus",
     value: function focus() {
-      var _this5 = this;
+      var _this6 = this;
 
       setTimeout(function () {
-        return _this5.title.focus();
+        return _this6.title.focus();
       }, 200);
     }
 
@@ -4922,6 +4926,7 @@ var ContentTypeDetail = function () {
     key: 'update',
     value: function update(contentType) {
       this.view.reset();
+
       this.view.setId(contentType.machineName);
       this.view.setTitle(contentType.title || contentType.machineName);
       this.view.setDescription(contentType.description);
@@ -4943,9 +4948,8 @@ var ContentTypeDetail = function () {
       }
 
       // update carousel
-      this.view.removeAllImagesInCarousel();
       if (contentType.screenshots) {
-        contentType.screenshots.forEach(this.view.addImageToCarousel, this.view);
+        this.view.setScreenshots(contentType.screenshots);
       }
     }
 
@@ -5720,6 +5724,10 @@ var _eventful = __webpack_require__(2);
 
 var _events = __webpack_require__(5);
 
+var _dictionary = __webpack_require__(3);
+
+var _dictionary2 = _interopRequireDefault(_dictionary);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -5771,6 +5779,7 @@ var HubView = function () {
 
     // initiates panel
     (0, _panel2.default)(this.panel);
+    this.setTitle(_dictionary2.default.get("PanelDefaultLabel"));
 
     // relay events
     (0, _events.relayClickEventAs)('panel-change', this, this.toggler);
@@ -7467,8 +7476,17 @@ var enable = (0, _elements.removeAttribute)('disabled');
  * @param {HTMLElement} element
  * @param {boolean} enabled
  */
-var toggleEnabled = function toggleEnabled(element, enabled) {
-  return (enabled ? enable : disable)(element);
+var toggleEnabled = function toggleEnabled(element, force, nextElement) {
+  if (force) {
+    if (isDisabled(element)) {
+      enable(element);
+    }
+  } else {
+    if (!isDisabled(element)) {
+      disable(element);
+      nextElement.focus();
+    }
+  }
 };
 
 /**
@@ -7501,8 +7519,8 @@ var updateView = function updateView(element, state) {
   [prevButton, nextButton].forEach((0, _elements.toggleVisibility)(state.displayCount < totalCount));
 
   // toggle button enable, disabled
-  toggleEnabled(nextButton, state.position > state.displayCount - totalCount);
-  toggleEnabled(prevButton, state.position < 0);
+  toggleEnabled(nextButton, state.position > state.displayCount - totalCount, prevButton);
+  toggleEnabled(prevButton, state.position < 0, nextButton);
 
   if (element.dataset.preventResizeLoop === 'true') {
     element.ignoreResize = true;
@@ -7590,7 +7608,7 @@ var handleFocus = (0, _functional.curry)(function (element, state, event) {
     state.position = focusedIndex * -1;
     updateView(element, state);
   } else if (moveRight) {
-    state.position = state.position - 1;
+    state.position = state.position - (focusedIndex - lastVisibleElementIndex);
     updateView(element, state);
   }
 
@@ -8008,6 +8026,69 @@ __webpack_require__(15);
 H5P = H5P || {};
 H5P.HubClient = __webpack_require__(14).default;
 H5P.HubServices = __webpack_require__(8).default;
+
+/***/ }),
+/* 34 */,
+/* 35 */,
+/* 36 */,
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(Promise) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.preloadImage = preloadImage;
+exports.preloadImages = preloadImages;
+/**
+ * Check whether an image exists at a specified URL
+ *
+ * @param  {object} image
+ * @return {Promise}
+ */
+function preloadImage(image) {
+  return new Promise(function (resolve, reject) {
+    var imageData = new Image();
+    imageData.src = image.url;
+    image.valid = true;
+
+    imageData.onload = function () {
+      return resolve(image);
+    };
+    imageData.onerror = function () {
+      image.valid = false;
+      resolve(image);
+    };
+
+    if (imageData.complete) {
+      resolve(image);
+    }
+  });
+}
+
+/**
+ * Preload images
+ *
+ * @param {object[]} images
+ * @return {Promise}
+ */
+function preloadImages(images) {
+  var promises = [];
+  images.forEach(function (image) {
+    return promises.push(preloadImage(image));
+  });
+  return Promise.all(promises);
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ })
 /******/ ]);
