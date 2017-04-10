@@ -55,7 +55,12 @@ ns.SelectorHub = function (selectedLibrary, changeLibraryDialog) {
     this.client.getContentType(e.data.h5p.mainLibrary)
       .then(function (contentType) {
         var previousLibrary = self.currentLibrary;
-        self.currentLibrary = self.createContentTypeId(contentType);
+        // Use version from event data
+        const uploadedVersion = e.data.h5p.preloadedDependencies
+          .filter(dependency => {
+            return dependency.machineName === e.data.h5p.mainLibrary;
+          });
+        self.currentLibrary = self.createContentTypeId(uploadedVersion[0]);
         self.client.setPanelTitle({id: self.currentLibrary.split(' ')[0]})
         self.currentParams = e.data.content;
 
