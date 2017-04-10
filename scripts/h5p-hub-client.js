@@ -2208,9 +2208,19 @@ var MessageView = function () {
     this.rootElement = this.createElement(state);
   }
 
+  /**
+   * Create the DOM element
+   *
+   * @param {object} message
+   * @return {HTMLElement}
+   */
+
+
   _createClass(MessageView, [{
     key: 'createElement',
     value: function createElement(message) {
+      var _this = this;
+
       // Create wrapper:
       var messageWrapper = document.createElement('div');
       messageWrapper.className = 'message ' + message.name + ' ' + message.type + (message.dismissible ? ' dismissible' : '');
@@ -2223,7 +2233,9 @@ var MessageView = function () {
         closeButton.setAttribute('tabIndex', 0);
         closeButton.setAttribute('aria-label', _dictionary2.default.get('closeButtonLabel'));
         messageWrapper.appendChild(closeButton);
-        (0, _events.relayClickEventAs)('close', this, closeButton);
+        closeButton.addEventListener('click', function () {
+          return _this.remove();
+        });
       }
 
       var messageContent = document.createElement('div');
@@ -2241,6 +2253,19 @@ var MessageView = function () {
       }
 
       return messageWrapper;
+    }
+
+    /**
+     * Remove element from parent DOM element
+     */
+
+  }, {
+    key: 'remove',
+    value: function remove() {
+      var parent = this.rootElement.parentNode;
+      if (parent) {
+        parent.removeChild(this.rootElement);
+      }
     }
 
     /**
@@ -2721,7 +2746,7 @@ var ContentTypeSection = function () {
 
       switch (e.choice) {
         case ContentTypeSection.Tabs.ALL.eventName:
-          var sortOrder = ['popularity'];
+          var sortOrder = ['restricted', 'popularity'];
           this.searchService.sortOn(sortOrder).then(function (sortedContentTypes) {
             return _this3.contentTypeList.update(sortedContentTypes);
           });
@@ -2729,7 +2754,7 @@ var ContentTypeSection = function () {
 
         case ContentTypeSection.Tabs.MY_CONTENT_TYPES.eventName:
           this.searchService.applyFilters(['restricted', 'installed']).then(function (filteredContentTypes) {
-            return _this3.searchService.sortOn(['title']);
+            return _this3.searchService.multiSort(filteredContentTypes, ['title']);
           }).then(function (sortedContentTypes) {
             return _this3.searchService.sortOnRecent(sortedContentTypes);
           }).then(function (sortedContentTypes) {
@@ -4195,22 +4220,9 @@ var ContentTypeDetailView = function () {
         type: success ? 'info' : 'error',
         name: 'install-message',
         title: message
-      }).on('close', this.removeInstallMessage, this);
+      });
 
       this.rootElement.insertBefore(this.installMessage.getElement(), this.buttonBar);
-    }
-
-    /**
-     * Removes the install message
-     */
-
-  }, {
-    key: "removeInstallMessage",
-    value: function removeInstallMessage() {
-      if (this.installMessage) {
-        this.rootElement.removeChild(this.installMessage.getElement());
-        delete this.installMessage;
-      }
     }
 
     /**
@@ -4231,7 +4243,7 @@ var ContentTypeDetailView = function () {
         // add thumbnail
         var thumbnail = document.createElement('li');
         thumbnail.className = 'slide';
-        thumbnail.innerHTML = "<img src=\"" + image.url + "\" \n              alt=\"" + image.alt + "\" \n              data-index=\"" + index + "\" \n              class=\"img-responsive\" \n              aria-controls=\"" + IMAGELIGHTBOX + "-detail\" \n        />";
+        thumbnail.innerHTML = "<img src=\"" + image.url + "\"\n              alt=\"" + image.alt + "\"\n              data-index=\"" + index + "\"\n              class=\"img-responsive\"\n              aria-controls=\"" + IMAGELIGHTBOX + "-detail\"\n        />";
 
         var img = thumbnail.querySelector('img');
         img.addEventListener('click', function () {
@@ -4272,8 +4284,7 @@ var ContentTypeDetailView = function () {
       });
 
       // Remove messages
-      this.removeUpdateMessage();
-      this.removeInstallMessage();
+      this.removeMessages();
       this.resetLicenses();
 
       // Remove images:
@@ -4597,25 +4608,22 @@ var ContentTypeDetailView = function () {
           content: _dictionary2.default.get('warningUpdateAvailableBody')
         });
         this.rootElement.insertBefore(this.updateMessage.getElement(), this.contentContainer);
-      } else {
-        this.removeUpdateMessage();
       }
     }
 
     /**
-     * Remove update message
+     * Removes all install/update messages
      */
 
   }, {
-    key: "removeUpdateMessage",
-    value: function removeUpdateMessage() {
-      if (!this.updateMessage) return;
+    key: "removeMessages",
+    value: function removeMessages() {
+      if (this.updateMessage) {
+        this.updateMessage.remove();
+      }
 
-      // If inserted into DOM, remove it
-      var updateElement = this.updateMessage.getElement();
-      var parent = updateElement.parentNode;
-      if (parent) {
-        parent.removeChild(updateElement);
+      if (this.installMessage) {
+        this.installMessage.remove();
       }
     }
 
@@ -4778,6 +4786,7 @@ var ContentTypeDetail = function () {
       _this.services.contentType(id).then(function (contentType) {
         return _this.install({
           id: contentType.machineName,
+          title: contentType.title,
           installed: contentType.installed
         });
       });
@@ -4887,13 +4896,15 @@ var ContentTypeDetail = function () {
       var _this2 = this;
 
       var id = _ref3.id,
-          installed = _ref3.installed;
+          installed = _ref3.installed,
+          title = _ref3.title;
 
       // set spinner
       this.view.toggleSpinner(true);
 
       return this.services.installContentType(id).then(function (response) {
         _this2.trigger('installed-content-type');
+        _this2.view.removeMessages();
         _this2.view.toggleSpinner(false);
         _this2.view.setIsInstalled(true);
         _this2.view.setIsUpdatePossible(false);
@@ -4901,7 +4912,7 @@ var ContentTypeDetail = function () {
         var installMessageKey = installed ? 'contentTypeUpdateSuccess' : 'contentTypeInstallSuccess';
 
         _this2.view.setInstallMessage({
-          message: _dictionary2.default.get(installMessageKey, { ':contentType': id })
+          message: _dictionary2.default.get(installMessageKey, { ':contentType': title })
         });
       }).catch(function (error) {
         _this2.view.toggleSpinner(false);
@@ -4910,7 +4921,7 @@ var ContentTypeDetail = function () {
         var errorMessage = error.errorCode ? error : {
           success: false,
           errorCode: 'RESPONSE_FAILED',
-          message: _dictionary2.default.get('contentTypeInstallError', { ':contentType': id })
+          message: _dictionary2.default.get('contentTypeInstallError', { ':contentType': title })
         };
         _this2.view.setInstallMessage(errorMessage);
 
@@ -5449,7 +5460,7 @@ var ContentBrowserView = function () {
 
     // general configuration
     this.typeAheadEnabled = true;
-    this.currentlySelected = {};
+    this.currentlySelected = '';
     this.menuId = 'content-type-filter';
     this.currentMenuId = this.menuId + '-a11y-desc-current';
 
@@ -5591,20 +5602,6 @@ var ContentBrowserView = function () {
         }
       });
 
-      this.on('menu-selected', function (event) {
-        var myArray = Object.keys(_contentTypeSection2.default.Tabs).map(function (menuItemName) {
-          return _contentTypeSection2.default.Tabs[menuItemName];
-        });
-
-        // Get the currently selected menu item
-        for (var i = 0; i < myArray.length; i++) {
-          if (myArray[i].eventName === event.choice) {
-            self.currentlySelected = myArray[i];
-            return;
-          }
-        }
-      });
-
       // add to menu bar
       this.menubar.appendChild(element);
       return element;
@@ -5627,7 +5624,7 @@ var ContentBrowserView = function () {
   }, {
     key: "clearSelection",
     value: function clearSelection() {
-      this.currentlySelected = {};
+      this.currentlySelected = '';
     }
 
     /**
@@ -5656,7 +5653,7 @@ var ContentBrowserView = function () {
           eventName = _ref2.eventName;
 
       // Skip if already selected
-      if (this.currentlySelected.eventName === eventName) {
+      if (this.currentlySelected === eventName) {
         return;
       }
 
@@ -5690,6 +5687,17 @@ var ContentBrowserView = function () {
   }, {
     key: "initMenu",
     value: function initMenu() {
+      var _this2 = this;
+
+      this.on('menu-selected', function (event) {
+        // Focus on search bar if in most popular tab (labeled All)
+        if (event.choice === 'most-popular') {
+          _this2.focusSearchBar();
+        }
+
+        _this2.currentlySelected = event.choice;
+      }, this);
+
       // call init menu from sdk
       (0, _navbar2.default)(this.menu);
     }
@@ -5720,10 +5728,10 @@ var ContentBrowserView = function () {
   }, {
     key: "focusSearchBar",
     value: function focusSearchBar() {
-      var _this2 = this;
+      var _this3 = this;
 
       setTimeout(function () {
-        return _this2.searchBar.focus();
+        return _this3.searchBar.focus();
       }, 200);
     }
 
@@ -6256,8 +6264,10 @@ var SearchService = function () {
   }, {
     key: 'sortOn',
     value: function sortOn(sortOrder) {
+      var _this = this;
+
       return this.services.contentTypes().then(function (contentTypes) {
-        return multiSort(contentTypes, sortOrder);
+        return _this.multiSort(contentTypes, sortOrder);
       });
     }
 
@@ -6293,6 +6303,39 @@ var SearchService = function () {
     value: function applyFilters(filters) {
       return this.services.contentTypes().then(function (contentTypes) {
         return multiFilter(contentTypes, filters);
+      });
+    }
+
+    /**
+     * Sort on multiple properties
+     *
+     * @param {MixedContentType[]|ContentType[]} contentTypes Content types that should be sorted
+     * @param {string|string[]} sortOrder Order that sort properties should be applied
+     *
+     * @return {Array.<ContentType>} Content types sorted
+     */
+
+  }, {
+    key: 'multiSort',
+    value: function multiSort(contentTypes, sortOrder) {
+      // Make sure all sorted instances are mixed content type
+      var mixedContentTypes = contentTypes.map(function (contentType) {
+        if (contentType.hasOwnProperty('score') && contentType.hasOwnProperty('contentType')) {
+          return contentType;
+        }
+
+        // Return a mixed content type with score 1 to survive filtering
+        return {
+          contentType: contentType,
+          score: 1
+        };
+      });
+
+      sortOrder = Array.isArray(sortOrder) ? sortOrder : [sortOrder];
+      return mixedContentTypes.sort(function (firstContentType, secondContentType) {
+        return handleSortType(firstContentType, secondContentType, sortOrder);
+      }).map(function (mixedContentType) {
+        return mixedContentType.contentType;
       });
     }
   }]);
@@ -6340,36 +6383,6 @@ var handleFilter = function handleFilter(contentTypes, filter) {
         return contentType.installed;
       });
   }
-};
-
-/**
- * Sort on multiple properties
- *
- * @param {MixedContentType[]|ContentType[]} contentTypes Content types that should be sorted
- * @param {string|string[]} sortOrder Order that sort properties should be applied
- *
- * @return {Array.<ContentType>} Content types sorted
- */
-var multiSort = function multiSort(contentTypes, sortOrder) {
-  // Make sure all sorted instances are mixed content type
-  var mixedContentTypes = contentTypes.map(function (contentType) {
-    if (contentType.hasOwnProperty('score') && contentType.hasOwnProperty('contentType')) {
-      return contentType;
-    }
-
-    // Return a mixed content type with score 1 to survive filtering
-    return {
-      contentType: contentType,
-      score: 1
-    };
-  });
-
-  sortOrder = Array.isArray(sortOrder) ? sortOrder : [sortOrder];
-  return mixedContentTypes.sort(function (firstContentType, secondContentType) {
-    return handleSortType(firstContentType, secondContentType, sortOrder);
-  }).map(function (mixedContentType) {
-    return mixedContentType.contentType;
-  });
 };
 
 /**
