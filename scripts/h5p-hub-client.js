@@ -2569,19 +2569,14 @@ var ContentTypeSection = function () {
      */
     ContentTypeSection.Tabs = {
       ALL: {
-        id: 'filter-all',
+        id: 'filter-most-popular',
         title: _dictionary2.default.get('contentTypeSectionAll'),
-        eventName: 'all'
+        eventName: 'most-popular'
       },
       MY_CONTENT_TYPES: {
         id: 'filter-my-content-types',
         title: _dictionary2.default.get('contentTypeSectionMine'),
         eventName: 'my-content-types'
-      },
-      MOST_POPULAR: {
-        id: 'filter-most-popular',
-        title: _dictionary2.default.get('contentTypeSectionPopular'),
-        eventName: 'most-popular'
       }
     };
 
@@ -2726,14 +2721,17 @@ var ContentTypeSection = function () {
 
       switch (e.choice) {
         case ContentTypeSection.Tabs.ALL.eventName:
-          this.searchService.sortOn('restricted').then(function (sortedContentTypes) {
+          var sortOrder = ['popularity'];
+          this.searchService.sortOn(sortOrder).then(function (sortedContentTypes) {
             return _this3.contentTypeList.update(sortedContentTypes);
           });
           break;
 
         case ContentTypeSection.Tabs.MY_CONTENT_TYPES.eventName:
           this.searchService.applyFilters(['restricted', 'installed']).then(function (filteredContentTypes) {
-            return _this3.searchService.sortOnRecent(filteredContentTypes);
+            return _this3.searchService.sortOn(['title']);
+          }).then(function (sortedContentTypes) {
+            return _this3.searchService.sortOnRecent(sortedContentTypes);
           }).then(function (sortedContentTypes) {
             _this3.contentTypeList.update(sortedContentTypes);
 
@@ -2741,13 +2739,6 @@ var ContentTypeSection = function () {
             if (!sortedContentTypes.length) {
               _this3.displayNoLibrariesWarning();
             }
-          });
-          break;
-
-        case ContentTypeSection.Tabs.MOST_POPULAR.eventName:
-          var sortOrder = ['restricted', 'popularity'];
-          this.searchService.sortOn(sortOrder).then(function (sortedContentTypes) {
-            return _this3.contentTypeList.update(sortedContentTypes);
           });
           break;
       }
@@ -3729,7 +3720,7 @@ exports.default = Hub;
 /* 15 */
 /***/ (function(module, exports) {
 
-// removed by extract-text-webpack-plugin
+throw new Error("Module build failed: ModuleBuildError: Module build failed: \r\n        border-bottom: 1px solid $separator-color;\r\n                                ^\r\n      Undefined variable: \"$separator-color\".\r\n      in C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\src\\styles\\components\\_content-type-list.scss (line 44, column 34)\n    at C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\node_modules\\webpack\\lib\\NormalModule.js:141:35\n    at C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\node_modules\\loader-runner\\lib\\LoaderRunner.js:364:11\n    at C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\node_modules\\loader-runner\\lib\\LoaderRunner.js:230:18\n    at context.callback (C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\node_modules\\loader-runner\\lib\\LoaderRunner.js:111:13)\n    at Object.asyncSassJobQueue.push [as callback] (C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\node_modules\\sass-loader\\lib\\loader.js:51:13)\n    at Object.<anonymous> (C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\node_modules\\async\\dist\\async.js:2237:31)\n    at apply (C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\node_modules\\async\\dist\\async.js:20:25)\n    at Object.<anonymous> (C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\node_modules\\async\\dist\\async.js:56:12)\n    at Object.callback (C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\node_modules\\async\\dist\\async.js:843:16)\n    at options.error (C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\node_modules\\node-sass\\lib\\index.js:294:32)");
 
 /***/ }),
 /* 16 */
@@ -4240,7 +4231,7 @@ var ContentTypeDetailView = function () {
         // add thumbnail
         var thumbnail = document.createElement('li');
         thumbnail.className = 'slide';
-        thumbnail.innerHTML = "<img src=\"" + image.url + "\" alt=\"" + image.alt + "\" data-index=\"" + index + "\" class=\"img-responsive\" aria-controls=\"" + IMAGELIGHTBOX + "-detail\" />";
+        thumbnail.innerHTML = "<img src=\"" + image.url + "\" \n              alt=\"" + image.alt + "\" \n              data-index=\"" + index + "\" \n              class=\"img-responsive\" \n              aria-controls=\"" + IMAGELIGHTBOX + "-detail\" \n        />";
 
         var img = thumbnail.querySelector('img');
         img.addEventListener('click', function () {
@@ -4280,11 +4271,8 @@ var ContentTypeDetailView = function () {
         button.classList.add('hidden');
       });
 
-      // Remove old warning message if in DOM
-      if (this.updateMessage && this.updateMessage.getElement().parentNode) {
-        this.updateMessage.getElement().parentNode.removeChild(this.updateMessage.getElement());
-      }
-
+      // Remove messages
+      this.removeUpdateMessage();
       this.removeInstallMessage();
       this.resetLicenses();
 
@@ -4609,6 +4597,25 @@ var ContentTypeDetailView = function () {
           content: _dictionary2.default.get('warningUpdateAvailableBody')
         });
         this.rootElement.insertBefore(this.updateMessage.getElement(), this.contentContainer);
+      } else {
+        this.removeUpdateMessage();
+      }
+    }
+
+    /**
+     * Remove update message
+     */
+
+  }, {
+    key: "removeUpdateMessage",
+    value: function removeUpdateMessage() {
+      if (!this.updateMessage) return;
+
+      // If inserted into DOM, remove it
+      var updateElement = this.updateMessage.getElement();
+      var parent = updateElement.parentNode;
+      if (parent) {
+        parent.removeChild(updateElement);
       }
     }
 
@@ -6123,7 +6130,6 @@ var ImageLightBox = function () {
     /**
      * Add an image
      *
-     * @function
      * @param {string} url
      * @param {string} alt
      */
@@ -6145,7 +6151,6 @@ var ImageLightBox = function () {
     /**
      * Show the lightbox
      *
-     * @function
      * @param {number} index - the image to show first
      */
 
@@ -6157,7 +6162,6 @@ var ImageLightBox = function () {
 
     /**
      * Remove all images
-     * @function
      */
 
   }, {
@@ -6259,7 +6263,7 @@ var SearchService = function () {
 
     /**
      * Returns a list of content type objects sorted
-     * on most recently used
+     * on most recently used.
      *
      * @return {ContentType[]}  Content Types
      */
@@ -6268,7 +6272,11 @@ var SearchService = function () {
     key: 'sortOnRecent',
     value: function sortOnRecent(contentTypes) {
       return this.services.recentlyUsed().then(function (recentlyUsed) {
-        return sortContentTypesByMachineName(contentTypes, recentlyUsed);
+        if (recentlyUsed.length !== 0) {
+          return sortContentTypesByMachineName(contentTypes, recentlyUsed);
+        } else {
+          return contentTypes;
+        }
       });
     }
 
@@ -6378,6 +6386,8 @@ var handleSortType = function handleSortType(firstContentType, secondContentType
     case 'restricted':
       return sortOnRestricted(firstContentType, secondContentType, sortOrder.slice(1));
     case 'popularity':
+      return sortOnProperty(firstContentType, secondContentType, sortOrder[0], sortOrder.slice(1));
+    case 'title':
       return sortOnProperty(firstContentType, secondContentType, sortOrder[0], sortOrder.slice(1));
     default:
       return sortSearchResults(firstContentType, secondContentType);
@@ -6572,15 +6582,25 @@ var arrayHasSubString = function arrayHasSubString(subString, arr) {
 
 /**
  * Filters an array of content type objects based
- * on an order specified by a array of machine names
+ * on an order specified by an array of machine names
  *
  * @param  {ContentType[]} contentTypes
  * @param  {string[]}     machineNames
  * @return {ContentType[]}              filtered content types
  */
 var sortContentTypesByMachineName = function sortContentTypesByMachineName(contentTypes, machineNames) {
-  return contentTypes.sort(function (a, b) {
+  var sortables = [];
 
+  // Find all the content types that need to be sorted move them to a new array
+  contentTypes.forEach(function (contentType) {
+    var index = machineNames.indexOf(contentType.machineName.toString());
+    if (index > -1) {
+      sortables.push(contentType);
+      contentTypes.splice(contentTypes.indexOf(contentType), 1);
+    }
+  });
+
+  sortables.sort(function (a, b) {
     var aIndex = machineNames.indexOf(a.machineName.toString());
     var bIndex = machineNames.indexOf(b.machineName.toString());
 
@@ -6598,6 +6618,8 @@ var sortContentTypesByMachineName = function sortContentTypesByMachineName(conte
       return aIndex < bIndex ? -1 : 1;
     }
   });
+
+  return sortables.concat(contentTypes);
 };
 
 /***/ }),
@@ -7584,7 +7606,9 @@ var toggleEnabled = function toggleEnabled(element, force, nextElement) {
   } else {
     if (!isDisabled(element)) {
       disable(element);
-      nextElement.focus();
+      if (nextElement) {
+        nextElement.focus();
+      }
     }
   }
 };
@@ -7600,7 +7624,7 @@ var isDisabled = (0, _elements.hasAttribute)('disabled');
  * @param {HTMLElement} element
  * @param {ImageScrollerState} state
  */
-var updateView = function updateView(element, state) {
+var updateView = function updateView(element, state, clickChange) {
   var prevButton = element.querySelector('.previous');
   var nextButton = element.querySelector('.next');
   var list = element.querySelector('ul');
@@ -7619,8 +7643,8 @@ var updateView = function updateView(element, state) {
   [prevButton, nextButton].forEach((0, _elements.toggleVisibility)(state.displayCount < totalCount));
 
   // toggle button enable, disabled
-  toggleEnabled(nextButton, state.position > state.displayCount - totalCount, prevButton);
-  toggleEnabled(prevButton, state.position < 0, nextButton);
+  toggleEnabled(nextButton, state.position > state.displayCount - totalCount, clickChange ? prevButton : null);
+  toggleEnabled(prevButton, state.position < 0, clickChange ? nextButton : null);
 
   if (element.dataset.preventResizeLoop === 'true') {
     element.ignoreResize = true;
@@ -7640,7 +7664,7 @@ var updateView = function updateView(element, state) {
 var onNavigationButtonClick = function onNavigationButtonClick(element, state, button, updateState) {
   if (!isDisabled(button)) {
     updateState(state);
-    updateView(element, state);
+    updateView(element, state, true);
   }
 };
 
@@ -7710,6 +7734,8 @@ var handleFocus = (0, _functional.curry)(function (element, state, event) {
   } else if (moveRight) {
     state.position = state.position - (focusedIndex - lastVisibleElementIndex);
     updateView(element, state);
+  } else if (element.dataset.preventResizeLoop === 'true') {
+    element.ignoreResize = true;
   }
 
   if (!doAnimation) {
