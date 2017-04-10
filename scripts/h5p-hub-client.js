@@ -2569,19 +2569,14 @@ var ContentTypeSection = function () {
      */
     ContentTypeSection.Tabs = {
       ALL: {
-        id: 'filter-all',
+        id: 'filter-most-popular',
         title: _dictionary2.default.get('contentTypeSectionAll'),
-        eventName: 'all'
+        eventName: 'most-popular'
       },
       MY_CONTENT_TYPES: {
         id: 'filter-my-content-types',
         title: _dictionary2.default.get('contentTypeSectionMine'),
         eventName: 'my-content-types'
-      },
-      MOST_POPULAR: {
-        id: 'filter-most-popular',
-        title: _dictionary2.default.get('contentTypeSectionPopular'),
-        eventName: 'most-popular'
       }
     };
 
@@ -4240,7 +4235,7 @@ var ContentTypeDetailView = function () {
         // add thumbnail
         var thumbnail = document.createElement('li');
         thumbnail.className = 'slide';
-        thumbnail.innerHTML = "<img src=\"" + image.url + "\" alt=\"" + image.alt + "\" data-index=\"" + index + "\" class=\"img-responsive\" aria-controls=\"" + IMAGELIGHTBOX + "-detail\" />";
+        thumbnail.innerHTML = "<img src=\"" + image.url + "\" \n              alt=\"" + image.alt + "\" \n              data-index=\"" + index + "\" \n              class=\"img-responsive\" \n              aria-controls=\"" + IMAGELIGHTBOX + "-detail\" \n        />";
 
         var img = thumbnail.querySelector('img');
         img.addEventListener('click', function () {
@@ -4609,6 +4604,9 @@ var ContentTypeDetailView = function () {
           content: _dictionary2.default.get('warningUpdateAvailableBody')
         });
         this.rootElement.insertBefore(this.updateMessage.getElement(), this.contentContainer);
+      } else if (this.updateMessage.getElement() && this.updateMessage.getElement().parentNode) {
+        // Remove message
+        this.updateMessage.getElement().parentNode.removeChild(this.updateMessage.getElement());
       }
     }
 
@@ -6123,7 +6121,6 @@ var ImageLightBox = function () {
     /**
      * Add an image
      *
-     * @function
      * @param {string} url
      * @param {string} alt
      */
@@ -6145,7 +6142,6 @@ var ImageLightBox = function () {
     /**
      * Show the lightbox
      *
-     * @function
      * @param {number} index - the image to show first
      */
 
@@ -6157,7 +6153,6 @@ var ImageLightBox = function () {
 
     /**
      * Remove all images
-     * @function
      */
 
   }, {
@@ -7584,7 +7579,9 @@ var toggleEnabled = function toggleEnabled(element, force, nextElement) {
   } else {
     if (!isDisabled(element)) {
       disable(element);
-      nextElement.focus();
+      if (nextElement) {
+        nextElement.focus();
+      }
     }
   }
 };
@@ -7600,7 +7597,7 @@ var isDisabled = (0, _elements.hasAttribute)('disabled');
  * @param {HTMLElement} element
  * @param {ImageScrollerState} state
  */
-var updateView = function updateView(element, state) {
+var updateView = function updateView(element, state, clickChange) {
   var prevButton = element.querySelector('.previous');
   var nextButton = element.querySelector('.next');
   var list = element.querySelector('ul');
@@ -7619,8 +7616,8 @@ var updateView = function updateView(element, state) {
   [prevButton, nextButton].forEach((0, _elements.toggleVisibility)(state.displayCount < totalCount));
 
   // toggle button enable, disabled
-  toggleEnabled(nextButton, state.position > state.displayCount - totalCount, prevButton);
-  toggleEnabled(prevButton, state.position < 0, nextButton);
+  toggleEnabled(nextButton, state.position > state.displayCount - totalCount, clickChange ? prevButton : null);
+  toggleEnabled(prevButton, state.position < 0, clickChange ? nextButton : null);
 
   if (element.dataset.preventResizeLoop === 'true') {
     element.ignoreResize = true;
@@ -7640,7 +7637,7 @@ var updateView = function updateView(element, state) {
 var onNavigationButtonClick = function onNavigationButtonClick(element, state, button, updateState) {
   if (!isDisabled(button)) {
     updateState(state);
-    updateView(element, state);
+    updateView(element, state, true);
   }
 };
 
@@ -7710,6 +7707,8 @@ var handleFocus = (0, _functional.curry)(function (element, state, event) {
   } else if (moveRight) {
     state.position = state.position - (focusedIndex - lastVisibleElementIndex);
     updateView(element, state);
+  } else if (element.dataset.preventResizeLoop === 'true') {
+    element.ignoreResize = true;
   }
 
   if (!doAnimation) {
