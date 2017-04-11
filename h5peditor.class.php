@@ -242,6 +242,10 @@ class H5peditor {
    * @param array $files
    */
   private function processFile(&$params, &$files) {
+    if (preg_match('/^https?:\/\//', $params->path)) {
+      return; // Skip external files
+    }
+
     // File could be copied from another content folder.
     $matches = array();
     if (preg_match($this->h5p->relativePathRegExp, $params->path, $matches)) {
