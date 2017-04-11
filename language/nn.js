@@ -69,7 +69,7 @@ H5PEditor.language.core = {
   hide: 'Skjul',
   example: 'Eksempel'
   removeItem: 'Remove item',
-  PanelDefaultLabel: 'Select content type',
+  hubPanelLabel: 'Select content type',
   importantInstructions: 'Important instructions',
   hideImportantInstructions: 'Hide important instructions',
   hide: 'Hide',

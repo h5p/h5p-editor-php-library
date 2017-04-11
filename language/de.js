@@ -64,7 +64,7 @@ H5PEditor.language.core = {
   "orderItemUp": "Element nach vorne sortieren",
   "orderItemDown": "Element nach hinten sortieren",
   "removeItem": "Element entfernen",
-  "PanelDefaultLabel": "Select content type",
+  "hubPanelLabel": "Select content type",
   "importantInstructions": "Important instructions",
   "hideImportantInstructions": "Hide important instructions",
   "hide": "Hide",
