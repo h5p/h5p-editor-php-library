@@ -4256,17 +4256,6 @@ var MAX_TEXT_SIZE_DESCRIPTION = 285;
 var IMAGELIGHTBOX = 'imagelightbox';
 
 /**
- * Checks if a string is empty
- *
- * @param {string} text
- *
- * @return {boolean}
- */
-var isEmpty = function isEmpty(text) {
-  return typeof text === 'string' && text.length === 0;
-};
-
-/**
  * Disables an HTMLElement
  *
  * @param {HTMLElement} element
@@ -4672,7 +4661,7 @@ var ContentTypeDetailView = function () {
         // Create short version for detail page
         var shortLicenseInfo = document.createElement('div');
         shortLicenseInfo.className = 'short-license-info';
-        shortLicenseInfo.innerHTML = "\n        <h3>" + license.id + "</h3>\n        <button type=\"button\" class=\"short-license-read-more icon-info-circle\" aria-label=\"" + _dictionary2.default.get('readMore') + "\"></button>\n        <p>" + _dictionary2.default.get("licenseDescription") + "</p>\n        <ul class=\"ul small\">\n          " + (license.attributes.useCommercially ? '<li>' + _dictionary2.default.get("licenseCanUseCommercially") + '</li>' : '') + "\n          " + (license.attributes.modifiable ? '<li>' + _dictionary2.default.get("licenseCanModify") + '</li>' : '') + "\n          " + (license.attributes.distributable ? '<li>' + _dictionary2.default.get("licenseCanDistribute") + '</li>' : '') + "\n          " + (license.attributes.sublicensable ? '<li>' + _dictionary2.default.get("licenseCanSublicense") + '</li>' : '') + "\n          " + (license.attributes.canHoldLiable ? '<li>' + _dictionary2.default.get("licenseCanHoldLiable") + '</li>' : '') + "\n          " + (license.attributes.mustIncludeCopyright ? '<li>' + _dictionary2.default.get("licenseMustIncludeCopyright") + '</li>' : '') + "\n          " + (license.attributes.mustIncludeLicense ? '<li>' + _dictionary2.default.get("licenseMustIncludeLicense") + '</li>' : '') + "\n        </ul>";
+        shortLicenseInfo.innerHTML = "\n        <h3>" + license.id + "</h3>\n        <button type=\"button\" class=\"short-license-read-more icon-info-circle\" aria-label=\"" + _dictionary2.default.get('readMore') + "\"></button>\n        <p>" + _dictionary2.default.get("licenseDescription") + "</p>\n        <ul class=\"ul small\">\n          <li>" + _dictionary2.default.get(license.attributes.canHoldLiable ? "licenseCanHoldLiable" : "licenseCannotHoldLiable") + "</li>\n          " + (license.attributes.useCommercially ? '<li>' + _dictionary2.default.get("licenseCanUseCommercially") + '</li>' : '') + "\n          " + (license.attributes.modifiable ? '<li>' + _dictionary2.default.get("licenseCanModify") + '</li>' : '') + "\n          " + (license.attributes.distributable ? '<li>' + _dictionary2.default.get("licenseCanDistribute") + '</li>' : '') + "\n          " + (license.attributes.sublicensable ? '<li>' + _dictionary2.default.get("licenseCanSublicense") + '</li>' : '') + "\n          " + (license.attributes.mustIncludeCopyright ? '<li>' + _dictionary2.default.get("licenseMustIncludeCopyright") + '</li>' : '') + "\n          " + (license.attributes.mustIncludeLicense ? '<li>' + _dictionary2.default.get("licenseMustIncludeLicense") + '</li>' : '') + "\n        </ul>";
 
         // add short version of lisence
         panelContainer.innerText = '';
@@ -4779,7 +4768,7 @@ var ContentTypeDetailView = function () {
     key: "setExample",
     value: function setExample(url) {
       this.demoButton.setAttribute('href', url || '#');
-      (0, _elements.toggleVisibility)(!isEmpty(url), this.demoButton);
+      (0, _elements.toggleVisibility)(!!url, this.demoButton);
     }
 
     /**
