@@ -8077,7 +8077,6 @@ function init(element) {
         if (state.ignoreResize) {
           state.ignoreResize = false;
         } else {
-          console.log('resizing');
           onResize(element, state);
         }
         resizing = null;
