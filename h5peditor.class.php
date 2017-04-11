@@ -595,6 +595,7 @@ class H5peditor {
         $local_only_lib = array(
           'id'                => (int) $local_lib->id,
           'machineName'       => $local_lib->machine_name,
+          'title'             => $local_lib->title,
           'majorVersion'      => (int) $local_lib->major_version,
           'minorVersion'      => (int) $local_lib->minor_version,
           'patchVersion'      => (int) $local_lib->patch_version,
