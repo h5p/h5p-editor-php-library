@@ -2612,7 +2612,7 @@ var ContentTypeSection = function () {
 
     // controller
     this.searchService = new _searchService.SearchService(this.services);
-    this.contentTypeList = new _contentTypeList2.default();
+    this.contentTypeList = new _contentTypeList2.default(state);
     this.contentTypeDetail = new _contentTypeDetail2.default(state, this.services);
 
     // Element for holding list and details views
@@ -4518,7 +4518,7 @@ var ContentTypeDetailView = function () {
       // Disable install button
       this.installButton.setAttribute('disabled', 'disabled');
 
-      this.setMessage('contentTypeUnsupportedApiVersionTitle', 'ontentTypeUnsupportedApiVersionContent');
+      this.setMessage('contentTypeUnsupportedApiVersionTitle', 'contentTypeUnsupportedApiVersionContent');
     }
 
     /**
@@ -4672,7 +4672,7 @@ var ContentTypeDetailView = function () {
         // Create short version for detail page
         var shortLicenseInfo = document.createElement('div');
         shortLicenseInfo.className = 'short-license-info';
-        shortLicenseInfo.innerHTML = "\n        <h3>" + license.id + "</h3>\n        <button type=\"button\" class=\"short-license-read-more icon-info-circle\" aria-label=\"" + _dictionary2.default.get('readMore') + "\"></button>\n        <p>" + _dictionary2.default.get("licenseDescription") + "</p>\n        <ul class=\"ul small\">\n          " + (license.attributes.useCommercially ? '<li>' + _dictionary2.default.get("licenseCanUseCommercially") + '</li>' : '') + "\n          " + (license.attributes.useCommercially ? '<li>' + _dictionary2.default.get("licenseCanModify") + '</li>' : '') + "\n          " + (license.attributes.useCommercially ? '<li>' + _dictionary2.default.get("licenseCanDistribute") + '</li>' : '') + "\n          " + (license.attributes.useCommercially ? '<li>' + _dictionary2.default.get("licenseCanSublicense") + '</li>' : '') + "\n          " + (license.attributes.useCommercially ? '<li>' + _dictionary2.default.get("licenseCanHoldLiable") + '</li>' : '') + "\n          " + (license.attributes.useCommercially ? '<li>' + _dictionary2.default.get("licenseMustIncludeCopyright") + '</li>' : '') + "\n          " + (license.attributes.useCommercially ? '<li>' + _dictionary2.default.get("licenseMustIncludeLicense") + '</li>' : '') + "\n        </ul>";
+        shortLicenseInfo.innerHTML = "\n        <h3>" + license.id + "</h3>\n        <button type=\"button\" class=\"short-license-read-more icon-info-circle\" aria-label=\"" + _dictionary2.default.get('readMore') + "\"></button>\n        <p>" + _dictionary2.default.get("licenseDescription") + "</p>\n        <ul class=\"ul small\">\n          " + (license.attributes.useCommercially ? '<li>' + _dictionary2.default.get("licenseCanUseCommercially") + '</li>' : '') + "\n          " + (license.attributes.modifiable ? '<li>' + _dictionary2.default.get("licenseCanModify") + '</li>' : '') + "\n          " + (license.attributes.distributable ? '<li>' + _dictionary2.default.get("licenseCanDistribute") + '</li>' : '') + "\n          " + (license.attributes.sublicensable ? '<li>' + _dictionary2.default.get("licenseCanSublicense") + '</li>' : '') + "\n          " + (license.attributes.canHoldLiable ? '<li>' + _dictionary2.default.get("licenseCanHoldLiable") + '</li>' : '') + "\n          " + (license.attributes.mustIncludeCopyright ? '<li>' + _dictionary2.default.get("licenseMustIncludeCopyright") + '</li>' : '') + "\n          " + (license.attributes.mustIncludeLicense ? '<li>' + _dictionary2.default.get("licenseMustIncludeLicense") + '</li>' : '') + "\n        </ul>";
 
         // add short version of lisence
         panelContainer.innerText = '';
@@ -5288,6 +5288,8 @@ var ContentTypeListView = function () {
     // add event system
     _extends(this, (0, _eventful.Eventful)());
 
+    this.apiVersion = state.apiVersion;
+
     // setup keyboard
     this.keyboard = new _keyboard2.default();
     this.keyboard.onSelect = function (element) {
@@ -5421,7 +5423,7 @@ var ContentTypeListView = function () {
       var title = contentType.title || contentType.machineName;
       var description = contentType.summary || '';
       var image = contentType.icon || _contentTypePlaceholder2.default;
-      var disabled = contentType.restricted ? 'disabled="disabled"' : '';
+      var disabled = contentType.restricted || !contentType.installed && !(this.apiVersion.major > contentType.h5pMajorVersion || this.apiVersion.major === contentType.h5pMajorVersion && this.apiVersion.minor >= contentType.h5pMinorVersion) ? 'disabled="disabled"' : '';
       var updateAvailable = !contentType.isUpToDate && contentType.installed && !contentType.restricted;
 
       // row item
