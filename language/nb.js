@@ -132,6 +132,7 @@ H5PEditor.language.core = {
   licenseCanDistribute: 'Can distribute',
   licenseCanSublicense: 'Can sublicense',
   licenseCanHoldLiable: 'Can hold liable',
+  licenseCannotHoldLiable: 'Cannot hold liable',
   licenseMustIncludeCopyright: 'Must include copyright',
   licenseMustIncludeLicense: 'Must include license',
   licenseFetchDetailsFailed: 'Failed fetching license details',

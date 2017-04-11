@@ -122,6 +122,7 @@ H5PEditor.language.core = {
   licenseCanDistribute: 'Darf weitergegeben werden',
   licenseCanSublicense: 'Unterlizenzvertrag ist m\u00f6glich',
   licenseCanHoldLiable: 'Haftung wird \u00fcbernommen',
+  licenseCannotHoldLiable: 'Haftung wird nicht \u00fcbernommen',
   licenseMustIncludeCopyright: 'Muss Urheberrechtshinweis enthalten',
   licenseMustIncludeLicense: 'Muss Lizenztext enthalten',
   licenseFetchDetailsFailed: 'Lizenzdetails konnten nicht geladen werden',
