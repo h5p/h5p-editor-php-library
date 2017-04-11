@@ -2756,7 +2756,11 @@ var ContentTypeSection = function () {
 
         case ContentTypeSection.Tabs.MY_CONTENT_TYPES.eventName:
           this.searchService.applyFilters(['restricted', 'installed']).then(function (filteredContentTypes) {
+<<<<<<< HEAD
             return (0, _searchService.multiSort)(filteredContentTypes, ['title']);
+=======
+            return _this3.searchService.multiSort(filteredContentTypes, ['title']);
+>>>>>>> 2a9e8387afd4f87e9d73c4adf3eb46d0882a73fa
           }).then(function (sortedContentTypes) {
             return _this3.searchService.sortOnRecent(sortedContentTypes);
           }).then(function (sortedContentTypes) {
@@ -3888,6 +3892,7 @@ var HubServicesFailUploadingValidation = function (_HubServices4) {
   return HubServicesFailUploadingValidation;
 }(_hubServices2.default);
 
+<<<<<<< HEAD
 var HubServicesFailUploading = function (_HubServices5) {
   _inherits(HubServicesFailUploading, _HubServices5);
 
@@ -3936,6 +3941,9 @@ var HubServicesFactory = function () {
 
 exports.default = HubServicesFactory;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+=======
+// removed by extract-text-webpack-plugin
+>>>>>>> 2a9e8387afd4f87e9d73c4adf3eb46d0882a73fa
 
 /***/ }),
 /* 16 */
@@ -4836,6 +4844,10 @@ var ContentTypeDetailView = function () {
       if (this.updateMessage) {
         this.updateMessage.remove();
       }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2a9e8387afd4f87e9d73c4adf3eb46d0882a73fa
       if (this.installMessage) {
         this.installMessage.remove();
       }
@@ -6479,8 +6491,10 @@ var SearchService = exports.SearchService = function () {
   }, {
     key: 'sortOn',
     value: function sortOn(sortOrder) {
+      var _this = this;
+
       return this.services.contentTypes().then(function (contentTypes) {
-        return multiSort(contentTypes, sortOrder);
+        return _this.multiSort(contentTypes, sortOrder);
       });
     }
 
@@ -6516,6 +6530,39 @@ var SearchService = exports.SearchService = function () {
     value: function applyFilters(filters) {
       return this.services.contentTypes().then(function (contentTypes) {
         return multiFilter(contentTypes, filters);
+      });
+    }
+
+    /**
+     * Sort on multiple properties
+     *
+     * @param {MixedContentType[]|ContentType[]} contentTypes Content types that should be sorted
+     * @param {string|string[]} sortOrder Order that sort properties should be applied
+     *
+     * @return {Array.<ContentType>} Content types sorted
+     */
+
+  }, {
+    key: 'multiSort',
+    value: function multiSort(contentTypes, sortOrder) {
+      // Make sure all sorted instances are mixed content type
+      var mixedContentTypes = contentTypes.map(function (contentType) {
+        if (contentType.hasOwnProperty('score') && contentType.hasOwnProperty('contentType')) {
+          return contentType;
+        }
+
+        // Return a mixed content type with score 1 to survive filtering
+        return {
+          contentType: contentType,
+          score: 1
+        };
+      });
+
+      sortOrder = Array.isArray(sortOrder) ? sortOrder : [sortOrder];
+      return mixedContentTypes.sort(function (firstContentType, secondContentType) {
+        return handleSortType(firstContentType, secondContentType, sortOrder);
+      }).map(function (mixedContentType) {
+        return mixedContentType.contentType;
       });
     }
   }]);
