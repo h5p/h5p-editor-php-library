@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 19);
+/******/ 	return __webpack_require__(__webpack_require__.s = 35);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -964,7 +964,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
  * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
  * @license   Licensed under MIT license
  *            See https://raw.githubusercontent.com/stefanpenner/es6-promise/master/LICENSE
- * @version   4.1.0
+ * @version   3.3.1
  */
 
 (function (global, factory) {
@@ -1042,13 +1042,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   // vertx
   function useVertxTimer() {
-    if (typeof vertxNext !== 'undefined') {
-      return function () {
-        vertxNext(flush);
-      };
-    }
-
-    return useSetTimeout();
+    return function () {
+      vertxNext(flush);
+    };
   }
 
   function useMutationObserver() {
@@ -1098,7 +1094,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   function attemptVertx() {
     try {
       var r = require;
-      var vertx = __webpack_require__(35);
+      var vertx = __webpack_require__(34);
       vertxNext = vertx.runOnLoop || vertx.runOnContext;
       return useVertxTimer();
     } catch (e) {
@@ -1150,27 +1146,27 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   /**
     `Promise.resolve` returns a promise that will become resolved with the
     passed `value`. It is shorthand for the following:
-  
+
     ```javascript
     let promise = new Promise(function(resolve, reject){
       resolve(1);
     });
-  
+
     promise.then(function(value){
       // value === 1
     });
     ```
-  
+
     Instead of writing the above, your code now simply becomes the following:
-  
+
     ```javascript
     let promise = Promise.resolve(1);
-  
+
     promise.then(function(value){
       // value === 1
     });
     ```
-  
+
     @method resolve
     @static
     @param {Any} value value that the returned promise will be resolved with
@@ -1275,7 +1271,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     } else {
       if (then$$ === GET_THEN_ERROR) {
         _reject(promise, GET_THEN_ERROR.error);
-        GET_THEN_ERROR.error = null;
       } else if (then$$ === undefined) {
         fulfill(promise, maybeThenable);
       } else if (isFunction(then$$)) {
@@ -1396,7 +1391,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       if (value === TRY_CATCH_ERROR) {
         failed = true;
         error = value.error;
-        value.error = null;
+        value = null;
       } else {
         succeeded = true;
       }
@@ -1548,39 +1543,39 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     is fulfilled with an array of fulfillment values for the passed promises, or
     rejected with the reason of the first passed promise to be rejected. It casts all
     elements of the passed iterable to promises as it runs this algorithm.
-  
+
     Example:
-  
+
     ```javascript
     let promise1 = resolve(1);
     let promise2 = resolve(2);
     let promise3 = resolve(3);
     let promises = [ promise1, promise2, promise3 ];
-  
+
     Promise.all(promises).then(function(array){
       // The array here would be [ 1, 2, 3 ];
     });
     ```
-  
+
     If any of the `promises` given to `all` are rejected, the first promise
     that is rejected will be given as an argument to the returned promises's
     rejection handler. For example:
-  
+
     Example:
-  
+
     ```javascript
     let promise1 = resolve(1);
     let promise2 = reject(new Error("2"));
     let promise3 = reject(new Error("3"));
     let promises = [ promise1, promise2, promise3 ];
-  
+
     Promise.all(promises).then(function(array){
       // Code here never runs because there are rejected promises!
     }, function(error) {
       // error.message === "2"
     });
     ```
-  
+
     @method all
     @static
     @param {Array} entries array of promises
@@ -1597,47 +1592,47 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   /**
     `Promise.race` returns a new promise which is settled in the same way as the
     first passed promise to settle.
-  
+
     Example:
-  
+
     ```javascript
     let promise1 = new Promise(function(resolve, reject){
       setTimeout(function(){
         resolve('promise 1');
       }, 200);
     });
-  
+
     let promise2 = new Promise(function(resolve, reject){
       setTimeout(function(){
         resolve('promise 2');
       }, 100);
     });
-  
+
     Promise.race([promise1, promise2]).then(function(result){
       // result === 'promise 2' because it was resolved before promise1
       // was resolved.
     });
     ```
-  
+
     `Promise.race` is deterministic in that only the state of the first
     settled promise matters. For example, even if other promises given to the
     `promises` array argument are resolved, but the first settled promise has
     become rejected before the other promises became fulfilled, the returned
     promise will become rejected:
-  
+
     ```javascript
     let promise1 = new Promise(function(resolve, reject){
       setTimeout(function(){
         resolve('promise 1');
       }, 200);
     });
-  
+
     let promise2 = new Promise(function(resolve, reject){
       setTimeout(function(){
         reject(new Error('promise 2'));
       }, 100);
     });
-  
+
     Promise.race([promise1, promise2]).then(function(result){
       // Code here never runs
     }, function(reason){
@@ -1645,13 +1640,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       // promise 1 became fulfilled
     });
     ```
-  
+
     An example real-world use case is implementing timeouts:
-  
+
     ```javascript
     Promise.race([ajax('foo.json'), timeout(5000)])
     ```
-  
+
     @method race
     @static
     @param {Array} promises array of promises to observe
@@ -1680,31 +1675,31 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   /**
     `Promise.reject` returns a promise rejected with the passed `reason`.
     It is shorthand for the following:
-  
+
     ```javascript
     let promise = new Promise(function(resolve, reject){
       reject(new Error('WHOOPS'));
     });
-  
+
     promise.then(function(value){
       // Code here doesn't run because the promise is rejected!
     }, function(reason){
       // reason.message === 'WHOOPS'
     });
     ```
-  
+
     Instead of writing the above, your code now simply becomes the following:
-  
+
     ```javascript
     let promise = Promise.reject(new Error('WHOOPS'));
-  
+
     promise.then(function(value){
       // Code here doesn't run because the promise is rejected!
     }, function(reason){
       // reason.message === 'WHOOPS'
     });
     ```
-  
+
     @method reject
     @static
     @param {Any} reason value that the returned promise will be rejected with.
@@ -1732,66 +1727,66 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     primary way of interacting with a promise is through its `then` method, which
     registers callbacks to receive either a promise's eventual value or the reason
     why the promise cannot be fulfilled.
-  
+
     Terminology
     -----------
-  
+
     - `promise` is an object or function with a `then` method whose behavior conforms to this specification.
     - `thenable` is an object or function that defines a `then` method.
     - `value` is any legal JavaScript value (including undefined, a thenable, or a promise).
     - `exception` is a value that is thrown using the throw statement.
     - `reason` is a value that indicates why a promise was rejected.
     - `settled` the final resting state of a promise, fulfilled or rejected.
-  
+
     A promise can be in one of three states: pending, fulfilled, or rejected.
-  
+
     Promises that are fulfilled have a fulfillment value and are in the fulfilled
     state.  Promises that are rejected have a rejection reason and are in the
     rejected state.  A fulfillment value is never a thenable.
-  
+
     Promises can also be said to *resolve* a value.  If this value is also a
     promise, then the original promise's settled state will match the value's
     settled state.  So a promise that *resolves* a promise that rejects will
     itself reject, and a promise that *resolves* a promise that fulfills will
     itself fulfill.
-  
-  
+
+
     Basic Usage:
     ------------
-  
+
     ```js
     let promise = new Promise(function(resolve, reject) {
       // on success
       resolve(value);
-  
+
       // on failure
       reject(reason);
     });
-  
+
     promise.then(function(value) {
       // on fulfillment
     }, function(reason) {
       // on rejection
     });
     ```
-  
+
     Advanced Usage:
     ---------------
-  
+
     Promises shine when abstracting away asynchronous interactions such as
     `XMLHttpRequest`s.
-  
+
     ```js
     function getJSON(url) {
       return new Promise(function(resolve, reject){
         let xhr = new XMLHttpRequest();
-  
+
         xhr.open('GET', url);
         xhr.onreadystatechange = handler;
         xhr.responseType = 'json';
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.send();
-  
+
         function handler() {
           if (this.readyState === this.DONE) {
             if (this.status === 200) {
@@ -1803,16 +1798,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         };
       });
     }
-  
+
     getJSON('/posts.json').then(function(json) {
       // on fulfillment
     }, function(reason) {
       // on rejection
     });
     ```
-  
+
     Unlike callbacks, promises are great composable primitives.
-  
+
     ```js
     Promise.all([
       getJSON('/posts'),
@@ -1820,11 +1815,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     ]).then(function(values){
       values[0] // => postsJSON
       values[1] // => commentsJSON
-  
+
       return values;
     });
     ```
-  
+
     @class Promise
     @param {function} resolver
     Useful for tooling.
@@ -1856,7 +1851,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       The primary way of interacting with a promise is through its `then` method,
       which registers callbacks to receive either a promise's eventual value or the
       reason why the promise cannot be fulfilled.
-    
+
       ```js
       findUser().then(function(user){
         // user is available
@@ -1864,14 +1859,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // user is unavailable, and you are given the reason why
       });
       ```
-    
+
       Chaining
       --------
-    
+
       The return value of `then` is itself a promise.  This second, 'downstream'
       promise is resolved with the return value of the first promise's fulfillment
       or rejection handler, or rejected if the handler throws an exception.
-    
+
       ```js
       findUser().then(function (user) {
         return user.name;
@@ -1881,7 +1876,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // If `findUser` fulfilled, `userName` will be the user's name, otherwise it
         // will be `'default name'`
       });
-    
+
       findUser().then(function (user) {
         throw new Error('Found user, but still unhappy');
       }, function (reason) {
@@ -1894,7 +1889,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       });
       ```
       If the downstream promise does not specify a rejection handler, rejection reasons will be propagated further downstream.
-    
+
       ```js
       findUser().then(function (user) {
         throw new PedagogicalException('Upstream error');
@@ -1906,15 +1901,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // The `PedgagocialException` is propagated all the way down to here
       });
       ```
-    
+
       Assimilation
       ------------
-    
+
       Sometimes the value you want to propagate to a downstream promise can only be
       retrieved asynchronously. This can be achieved by returning a promise in the
       fulfillment or rejection handler. The downstream promise will then be pending
       until the returned promise is settled. This is called *assimilation*.
-    
+
       ```js
       findUser().then(function (user) {
         return findCommentsByAuthor(user);
@@ -1922,9 +1917,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // The user's comments are now available
       });
       ```
-    
+
       If the assimliated promise rejects, then the downstream promise will also reject.
-    
+
       ```js
       findUser().then(function (user) {
         return findCommentsByAuthor(user);
@@ -1934,15 +1929,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // If `findCommentsByAuthor` rejects, we'll have the reason here
       });
       ```
-    
+
       Simple Example
       --------------
-    
+
       Synchronous Example
-    
+
       ```javascript
       let result;
-    
+
       try {
         result = findResult();
         // success
@@ -1950,9 +1945,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // failure
       }
       ```
-    
+
       Errback Example
-    
+
       ```js
       findResult(function(result, err){
         if (err) {
@@ -1962,9 +1957,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
       });
       ```
-    
+
       Promise Example;
-    
+
       ```javascript
       findResult().then(function(result){
         // success
@@ -1972,15 +1967,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // failure
       });
       ```
-    
+
       Advanced Example
       --------------
-    
+
       Synchronous Example
-    
+
       ```javascript
       let author, books;
-    
+
       try {
         author = findAuthor();
         books  = findBooksByAuthor(author);
@@ -1989,19 +1984,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // failure
       }
       ```
-    
+
       Errback Example
-    
+
       ```js
-    
+
       function foundBooks(books) {
-    
+
       }
-    
+
       function failure(reason) {
-    
+
       }
-    
+
       findAuthor(function(author, err){
         if (err) {
           failure(err);
@@ -2026,9 +2021,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
       });
       ```
-    
+
       Promise Example;
-    
+
       ```javascript
       findAuthor().
         then(findBooksByAuthor).
@@ -2038,7 +2033,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // something went wrong
       });
       ```
-    
+
       @method then
       @param {Function} onFulfilled
       @param {Function} onRejected
@@ -2050,25 +2045,25 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     /**
       `catch` is simply sugar for `then(undefined, onRejection)` which makes it the same
       as the catch block of a try/catch statement.
-    
+
       ```js
       function findAuthor(){
         throw new Error('couldn't find that author');
       }
-    
+
       // synchronous
       try {
         findAuthor();
       } catch(reason) {
         // something went wrong
       }
-    
+
       // async with promises
       findAuthor().catch(function(reason){
         // something went wrong
       });
       ```
-    
+
       @method catch
       @param {Function} onRejection
       Useful for tooling.
@@ -2112,6 +2107,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     local.Promise = Promise;
   }
 
+  polyfill();
   // Strange compat..
   Promise.polyfill = polyfill;
   Promise.Promise = Promise;
@@ -2303,7 +2299,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-__webpack_require__(29);
+__webpack_require__(28);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2540,17 +2536,17 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _contentTypeSectionView = __webpack_require__(24);
+var _contentTypeSectionView = __webpack_require__(23);
 
 var _contentTypeSectionView2 = _interopRequireDefault(_contentTypeSectionView);
 
-var _searchService = __webpack_require__(27);
+var _searchService = __webpack_require__(26);
 
-var _contentTypeList = __webpack_require__(23);
+var _contentTypeList = __webpack_require__(22);
 
 var _contentTypeList2 = _interopRequireDefault(_contentTypeList);
 
-var _contentTypeDetail = __webpack_require__(21);
+var _contentTypeDetail = __webpack_require__(20);
 
 var _contentTypeDetail2 = _interopRequireDefault(_contentTypeDetail);
 
@@ -3469,7 +3465,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _hubView = __webpack_require__(25);
+var _hubView = __webpack_require__(24);
 
 var _hubView2 = _interopRequireDefault(_hubView);
 
@@ -3477,7 +3473,7 @@ var _contentTypeSection = __webpack_require__(9);
 
 var _contentTypeSection2 = _interopRequireDefault(_contentTypeSection);
 
-var _uploadSection = __webpack_require__(28);
+var _uploadSection = __webpack_require__(27);
 
 var _uploadSection2 = _interopRequireDefault(_uploadSection);
 
@@ -4167,21 +4163,6 @@ module.exports = g;
 "use strict";
 
 
-__webpack_require__(16);
-
-// Load library
-H5P = H5P || {};
-H5P.HubClient = __webpack_require__(14).default;
-H5P.HubServices = __webpack_require__(8).default;
-H5P.HubServicesFactory = __webpack_require__(15).default;
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -4200,11 +4181,11 @@ var _panel = __webpack_require__(11);
 
 var _panel2 = _interopRequireDefault(_panel);
 
-var _modal = __webpack_require__(32);
+var _modal = __webpack_require__(31);
 
 var _modal2 = _interopRequireDefault(_modal);
 
-var _imageScroller = __webpack_require__(31);
+var _imageScroller = __webpack_require__(30);
 
 var _imageScroller2 = _interopRequireDefault(_imageScroller);
 
@@ -4226,7 +4207,7 @@ var _messageView = __webpack_require__(7);
 
 var _messageView2 = _interopRequireDefault(_messageView);
 
-var _imageLightbox3 = __webpack_require__(26);
+var _imageLightbox3 = __webpack_require__(25);
 
 var _imageLightbox4 = _interopRequireDefault(_imageLightbox3);
 
@@ -4943,7 +4924,7 @@ var ContentTypeDetailView = function () {
 exports.default = ContentTypeDetailView;
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4957,7 +4938,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _contentTypeDetailView = __webpack_require__(20);
+var _contentTypeDetailView = __webpack_require__(19);
 
 var _contentTypeDetailView2 = _interopRequireDefault(_contentTypeDetailView);
 
@@ -4967,7 +4948,7 @@ var _dictionary = __webpack_require__(3);
 
 var _dictionary2 = _interopRequireDefault(_dictionary);
 
-var _media = __webpack_require__(30);
+var _media = __webpack_require__(29);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5205,7 +5186,7 @@ var ContentTypeDetail = function () {
 exports.default = ContentTypeDetail;
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5459,7 +5440,7 @@ var ContentTypeListView = function () {
 exports.default = ContentTypeListView;
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5473,7 +5454,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _contentTypeListView = __webpack_require__(22);
+var _contentTypeListView = __webpack_require__(21);
 
 var _contentTypeListView2 = _interopRequireDefault(_contentTypeListView);
 
@@ -5609,7 +5590,7 @@ var ContentTypeList = function () {
 exports.default = ContentTypeList;
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5631,7 +5612,7 @@ var _elements = __webpack_require__(0);
 
 var _events = __webpack_require__(6);
 
-var _navbar = __webpack_require__(33);
+var _navbar = __webpack_require__(32);
 
 var _navbar2 = _interopRequireDefault(_navbar);
 
@@ -5968,7 +5949,7 @@ var ContentBrowserView = function () {
 exports.default = ContentBrowserView;
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5986,7 +5967,7 @@ var _panel = __webpack_require__(11);
 
 var _panel2 = _interopRequireDefault(_panel);
 
-var _tabPanel = __webpack_require__(34);
+var _tabPanel = __webpack_require__(33);
 
 var _tabPanel2 = _interopRequireDefault(_tabPanel);
 
@@ -6053,7 +6034,7 @@ var HubView = function () {
 
     // initiates panel
     (0, _panel2.default)(this.panel);
-    this.setTitle(_dictionary2.default.get("PanelDefaultLabel"));
+    this.setTitle(_dictionary2.default.get("hubPanelLabel"));
 
     // relay events
     (0, _events.relayClickEventAs)('panel-change', this, this.toggler);
@@ -6264,7 +6245,7 @@ var HubView = function () {
 exports.default = HubView;
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6411,7 +6392,7 @@ var ImageLightBox = function () {
 exports.default = ImageLightBox;
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6845,7 +6826,7 @@ var sortContentTypesByMachineName = function sortContentTypesByMachineName(conte
 };
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7228,7 +7209,7 @@ var UploadSection = function () {
 exports.default = UploadSection;
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7697,7 +7678,7 @@ exports.default = UploadSection;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7756,7 +7737,7 @@ function preloadImages(images) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7869,7 +7850,7 @@ var updateView = function updateView(element, state, clickChange) {
   toggleEnabled(prevButton, state.position < 0, clickChange ? nextButton : null);
 
   if (element.dataset.preventResizeLoop === 'true') {
-    state.ignoreResize = true;
+    element.ignoreResize = true;
   }
 };
 
@@ -7883,17 +7864,9 @@ var updateView = function updateView(element, state, clickChange) {
  *
  * @function
  */
-var onNavigationButtonClick = function onNavigationButtonClick(element, state, button, direction) {
+var onNavigationButtonClick = function onNavigationButtonClick(element, state, button, updateState) {
   if (!isDisabled(button)) {
-    state.position += direction;
-
-    // Move tabindex to our cousin
-    var selectedImage = element.querySelector('[aria-controls][tabindex="0"]');
-    selectedImage.removeAttribute('tabindex');
-
-    var uncle = selectedImage.parentElement[direction < 0 ? 'nextSibling' : 'previousSibling'];
-    uncle.firstChild.setAttribute('tabindex', '0');
-
+    updateState(state);
     updateView(element, state, true);
   }
 };
@@ -7965,7 +7938,7 @@ var handleFocus = (0, _functional.curry)(function (element, state, event) {
     state.position = state.position - (focusedIndex - lastVisibleElementIndex);
     updateView(element, state);
   } else if (element.dataset.preventResizeLoop === 'true') {
-    state.ignoreResize = true;
+    element.ignoreResize = true;
   }
 
   if (!doAnimation) {
@@ -7982,14 +7955,6 @@ var handleFocus = (0, _functional.curry)(function (element, state, event) {
 var onResize = function onResize(element, state) {
   var defaultSize = parseInt(element.getAttribute(ATTRIBUTE_SIZE)) || 5;
   var displayCount = calculateDisplayCount(window.innerWidth, defaultSize);
-
-  // Move tabindex to our cousin
-  var selectedImage = element.querySelector('[aria-controls][tabindex="0"]');
-  if (selectedImage) {
-    selectedImage.removeAttribute('tabindex');
-    var topUncle = selectedImage.parentElement.parentElement.firstChild;
-    topUncle.firstChild.setAttribute('tabindex', '0');
-  }
 
   updateView(element, _extends(state, {
     displayCount: displayCount,
@@ -8044,10 +8009,14 @@ function init(element) {
 
   // initialize buttons
   nextButton.addEventListener('click', function () {
-    return onNavigationButtonClick(element, state, nextButton, -1);
+    return onNavigationButtonClick(element, state, nextButton, function (state) {
+      return state.position--;
+    });
   });
   prevButton.addEventListener('click', function () {
-    return onNavigationButtonClick(element, state, prevButton, 1);
+    return onNavigationButtonClick(element, state, prevButton, function (state) {
+      return state.position++;
+    });
   });
 
   // stop keyboard from setting focus
@@ -8070,18 +8039,14 @@ function init(element) {
   });
 
   // on screen resize calculate number of images to show
-  var resizing = void 0;
-  window.addEventListener('resize', function (event) {
-    if (!resizing) {
-      resizing = setTimeout(function () {
-        if (state.ignoreResize) {
-          state.ignoreResize = false;
-        } else {
-          onResize(element, state);
-        }
-        resizing = null;
-      }, 40); // 25 fps cap
+  window.addEventListener('resize', function () {
+    if (element.ignoreResize) {
+      // If resize is triggered by resize we don't want to continue resizing
+      element.ignoreResize = false;
+      return;
     }
+
+    onResize(element, state);
   });
 
   // initialize position
@@ -8091,7 +8056,7 @@ function init(element) {
 }
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8169,7 +8134,7 @@ function init(element, closeHandler) {
 }
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8270,7 +8235,7 @@ function init(element) {
 }
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8372,10 +8337,25 @@ function init(element) {
 }
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(16);
+
+// Load library
+H5P = H5P || {};
+H5P.HubClient = __webpack_require__(14).default;
+H5P.HubServices = __webpack_require__(8).default;
+H5P.HubServicesFactory = __webpack_require__(15).default;
 
 /***/ })
 /******/ ]);
