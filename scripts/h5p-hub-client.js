@@ -1,41 +1,41 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
 /******/ 			l: false,
 /******/ 			exports: {}
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.l = true;
-
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
 /******/ 	// identity function for calling harmony imports with the correct context
 /******/ 	__webpack_require__.i = function(value) { return value; };
-
+/******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
@@ -46,7 +46,7 @@
 /******/ 			});
 /******/ 		}
 /******/ 	};
-
+/******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
 /******/ 	__webpack_require__.n = function(module) {
 /******/ 		var getter = module && module.__esModule ?
@@ -55,15 +55,15 @@
 /******/ 		__webpack_require__.d(getter, 'a', getter);
 /******/ 		return getter;
 /******/ 	};
-
+/******/
 /******/ 	// Object.prototype.hasOwnProperty.call
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 34);
+/******/ 	return __webpack_require__(__webpack_require__.s = 19);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -955,43 +955,6 @@ exports.default = Keyboard;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.relayClickEventAs = undefined;
-
-var _functional = __webpack_require__(1);
-
-/**
- *  Transforms a DOM click event into an Eventful's event
- *  @see Eventful
- *
- * @param  {string | Object} type
- * @param  {Eventful} eventful
- * @param  {HTMLElement} element
- * @return {HTMLElement}
- */
-var relayClickEventAs = exports.relayClickEventAs = (0, _functional.curry)(function (type, eventful, element) {
-  element.addEventListener('click', function (event) {
-    eventful.trigger(type, {
-      element: element,
-      id: element.getAttribute('data-id')
-    }, false);
-
-    // don't bubble
-    event.stopPropagation();
-  });
-
-  return element;
-});
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
 /* WEBPACK VAR INJECTION */(function(process, Promise, global) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -1001,7 +964,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
  * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
  * @license   Licensed under MIT license
  *            See https://raw.githubusercontent.com/stefanpenner/es6-promise/master/LICENSE
- * @version   3.3.1
+ * @version   4.1.0
  */
 
 (function (global, factory) {
@@ -1079,9 +1042,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   // vertx
   function useVertxTimer() {
-    return function () {
-      vertxNext(flush);
-    };
+    if (typeof vertxNext !== 'undefined') {
+      return function () {
+        vertxNext(flush);
+      };
+    }
+
+    return useSetTimeout();
   }
 
   function useMutationObserver() {
@@ -1131,7 +1098,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   function attemptVertx() {
     try {
       var r = require;
-      var vertx = __webpack_require__(33);
+      var vertx = __webpack_require__(35);
       vertxNext = vertx.runOnLoop || vertx.runOnContext;
       return useVertxTimer();
     } catch (e) {
@@ -1308,6 +1275,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     } else {
       if (then$$ === GET_THEN_ERROR) {
         _reject(promise, GET_THEN_ERROR.error);
+        GET_THEN_ERROR.error = null;
       } else if (then$$ === undefined) {
         fulfill(promise, maybeThenable);
       } else if (isFunction(then$$)) {
@@ -1428,7 +1396,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       if (value === TRY_CATCH_ERROR) {
         failed = true;
         error = value.error;
-        value = null;
+        value.error = null;
       } else {
         succeeded = true;
       }
@@ -2144,7 +2112,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     local.Promise = Promise;
   }
 
-  polyfill();
   // Strange compat..
   Promise.polyfill = polyfill;
   Promise.Promise = Promise;
@@ -2152,7 +2119,44 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   return Promise;
 });
 //# sourceMappingURL=es6-promise.map
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16), __webpack_require__(6), __webpack_require__(17)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17), __webpack_require__(5), __webpack_require__(18)))
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.relayClickEventAs = undefined;
+
+var _functional = __webpack_require__(1);
+
+/**
+ *  Transforms a DOM click event into an Eventful's event
+ *  @see Eventful
+ *
+ * @param  {string | Object} type
+ * @param  {Eventful} eventful
+ * @param  {HTMLElement} element
+ * @return {HTMLElement}
+ */
+var relayClickEventAs = exports.relayClickEventAs = (0, _functional.curry)(function (type, eventful, element) {
+  element.addEventListener('click', function (event) {
+    eventful.trigger(type, {
+      element: element,
+      id: element.getAttribute('data-id')
+    }, false);
+
+    // don't bubble
+    event.stopPropagation();
+  });
+
+  return element;
+});
 
 /***/ }),
 /* 7 */
@@ -2171,7 +2175,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _eventful = __webpack_require__(2);
 
-var _events = __webpack_require__(5);
+var _events = __webpack_require__(6);
 
 var _dictionary = __webpack_require__(3);
 
@@ -2208,9 +2212,19 @@ var MessageView = function () {
     this.rootElement = this.createElement(state);
   }
 
+  /**
+   * Create the DOM element
+   *
+   * @param {object} message
+   * @return {HTMLElement}
+   */
+
+
   _createClass(MessageView, [{
     key: 'createElement',
     value: function createElement(message) {
+      var _this = this;
+
       // Create wrapper:
       var messageWrapper = document.createElement('div');
       messageWrapper.className = 'message ' + message.name + ' ' + message.type + (message.dismissible ? ' dismissible' : '');
@@ -2223,7 +2237,9 @@ var MessageView = function () {
         closeButton.setAttribute('tabIndex', 0);
         closeButton.setAttribute('aria-label', _dictionary2.default.get('closeButtonLabel'));
         messageWrapper.appendChild(closeButton);
-        (0, _events.relayClickEventAs)('close', this, closeButton);
+        closeButton.addEventListener('click', function () {
+          return _this.remove();
+        });
       }
 
       var messageContent = document.createElement('div');
@@ -2241,6 +2257,19 @@ var MessageView = function () {
       }
 
       return messageWrapper;
+    }
+
+    /**
+     * Remove element from parent DOM element
+     */
+
+  }, {
+    key: 'remove',
+    value: function remove() {
+      var parent = this.rootElement.parentNode;
+      if (parent) {
+        parent.removeChild(this.rootElement);
+      }
     }
 
     /**
@@ -2274,7 +2303,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-__webpack_require__(27);
+__webpack_require__(29);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2494,7 +2523,7 @@ var HubServices = function () {
 }();
 
 exports.default = HubServices;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
 /* 9 */
@@ -2511,19 +2540,17 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _contentTypeSectionView = __webpack_require__(22);
+var _contentTypeSectionView = __webpack_require__(24);
 
 var _contentTypeSectionView2 = _interopRequireDefault(_contentTypeSectionView);
 
-var _searchService = __webpack_require__(25);
+var _searchService = __webpack_require__(27);
 
-var _searchService2 = _interopRequireDefault(_searchService);
-
-var _contentTypeList = __webpack_require__(21);
+var _contentTypeList = __webpack_require__(23);
 
 var _contentTypeList2 = _interopRequireDefault(_contentTypeList);
 
-var _contentTypeDetail = __webpack_require__(19);
+var _contentTypeDetail = __webpack_require__(21);
 
 var _contentTypeDetail2 = _interopRequireDefault(_contentTypeDetail);
 
@@ -2584,7 +2611,7 @@ var ContentTypeSection = function () {
     this.view = new _contentTypeSectionView2.default(state);
 
     // controller
-    this.searchService = new _searchService2.default(this.services);
+    this.searchService = new _searchService.SearchService(this.services);
     this.contentTypeList = new _contentTypeList2.default();
     this.contentTypeDetail = new _contentTypeDetail2.default(state, this.services);
 
@@ -2721,7 +2748,7 @@ var ContentTypeSection = function () {
 
       switch (e.choice) {
         case ContentTypeSection.Tabs.ALL.eventName:
-          var sortOrder = ['popularity'];
+          var sortOrder = ['restricted', 'popularity'];
           this.searchService.sortOn(sortOrder).then(function (sortedContentTypes) {
             return _this3.contentTypeList.update(sortedContentTypes);
           });
@@ -2729,7 +2756,7 @@ var ContentTypeSection = function () {
 
         case ContentTypeSection.Tabs.MY_CONTENT_TYPES.eventName:
           this.searchService.applyFilters(['restricted', 'installed']).then(function (filteredContentTypes) {
-            return _this3.searchService.sortOn(['title']);
+            return (0, _searchService.multiSort)(filteredContentTypes, ['title']);
           }).then(function (sortedContentTypes) {
             return _this3.searchService.sortOnRecent(sortedContentTypes);
           }).then(function (sortedContentTypes) {
@@ -3442,7 +3469,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _hubView = __webpack_require__(23);
+var _hubView = __webpack_require__(25);
 
 var _hubView2 = _interopRequireDefault(_hubView);
 
@@ -3450,7 +3477,7 @@ var _contentTypeSection = __webpack_require__(9);
 
 var _contentTypeSection2 = _interopRequireDefault(_contentTypeSection);
 
-var _uploadSection = __webpack_require__(26);
+var _uploadSection = __webpack_require__(28);
 
 var _uploadSection2 = _interopRequireDefault(_uploadSection);
 
@@ -3555,6 +3582,7 @@ var Hub = function () {
     // handle events
     this.on('select', this.setPanelTitle, this);
     this.on('select', this.view.togglePanelOpen.bind(this.view, false));
+    this.on('upload', this.view.togglePanelOpen.bind(this.view, false));
     this.view.on('tab-change', function (event) {
       if (event.id === 'upload' && !event.element.getAttribute('aria-selected')) {
         // Clean up messages
@@ -3718,12 +3746,205 @@ exports.default = Hub;
 
 /***/ }),
 /* 15 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-throw new Error("Module build failed: ModuleBuildError: Module build failed: \r\n        border-bottom: 1px solid $separator-color;\r\n                                ^\r\n      Undefined variable: \"$separator-color\".\r\n      in C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\src\\styles\\components\\_content-type-list.scss (line 44, column 34)\n    at C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\node_modules\\webpack\\lib\\NormalModule.js:141:35\n    at C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\node_modules\\loader-runner\\lib\\LoaderRunner.js:364:11\n    at C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\node_modules\\loader-runner\\lib\\LoaderRunner.js:230:18\n    at context.callback (C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\node_modules\\loader-runner\\lib\\LoaderRunner.js:111:13)\n    at Object.asyncSassJobQueue.push [as callback] (C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\node_modules\\sass-loader\\lib\\loader.js:51:13)\n    at Object.<anonymous> (C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\node_modules\\async\\dist\\async.js:2237:31)\n    at apply (C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\node_modules\\async\\dist\\async.js:20:25)\n    at Object.<anonymous> (C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\node_modules\\async\\dist\\async.js:56:12)\n    at Object.callback (C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\node_modules\\async\\dist\\async.js:843:16)\n    at options.error (C:\\dev\\nginxContainers\\simpleFileServer\\h5p-hub-client\\node_modules\\node-sass\\lib\\index.js:294:32)");
+"use strict";
+/* WEBPACK VAR INJECTION */(function(Promise) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _hubServices = __webpack_require__(8);
+
+var _hubServices2 = _interopRequireDefault(_hubServices);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function createDelayedPromise(rejectMe, data) {
+  data = data || 'no-data';
+  return new Promise(function (resolve, reject) {
+    setTimeout(function () {
+      if (rejectMe) {
+        reject(data);
+      } else {
+        resolve(data);
+      }
+    }, 3000);
+  });
+}
+
+var HubServicesFailInit = function (_HubServices) {
+  _inherits(HubServicesFailInit, _HubServices);
+
+  function HubServicesFailInit(state) {
+    _classCallCheck(this, HubServicesFailInit);
+
+    return _possibleConstructorReturn(this, (HubServicesFailInit.__proto__ || Object.getPrototypeOf(HubServicesFailInit)).call(this, state));
+  }
+
+  _createClass(HubServicesFailInit, [{
+    key: 'setup',
+    value: function setup() {
+      this.counter = (this.counter || 0) + 1;
+
+      if (this.counter === 1) {
+        this.cachedContentTypes = Promise.reject({
+          messageCode: 'SERVER_ERROR'
+        });
+        return this.cachedContentTypes;
+      }
+
+      if (this.counter === 2) {
+        this.cachedContentTypes = Promise.reject('failed');
+        return this.cachedContentTypes;
+      }
+
+      return _get(HubServicesFailInit.prototype.__proto__ || Object.getPrototypeOf(HubServicesFailInit.prototype), 'setup', this).call(this);
+    }
+  }]);
+
+  return HubServicesFailInit;
+}(_hubServices2.default);
+
+var HubServicesFailInstalling = function (_HubServices2) {
+  _inherits(HubServicesFailInstalling, _HubServices2);
+
+  function HubServicesFailInstalling() {
+    _classCallCheck(this, HubServicesFailInstalling);
+
+    return _possibleConstructorReturn(this, (HubServicesFailInstalling.__proto__ || Object.getPrototypeOf(HubServicesFailInstalling)).apply(this, arguments));
+  }
+
+  _createClass(HubServicesFailInstalling, [{
+    key: 'installContentType',
+    value: function installContentType(id) {
+      this.counter = (this.counter || 0) + 1;
+      return createDelayedPromise(this.counter < 3);
+    }
+  }]);
+
+  return HubServicesFailInstalling;
+}(_hubServices2.default);
+
+var HubServicesFailFetchLicense = function (_HubServices3) {
+  _inherits(HubServicesFailFetchLicense, _HubServices3);
+
+  function HubServicesFailFetchLicense() {
+    _classCallCheck(this, HubServicesFailFetchLicense);
+
+    return _possibleConstructorReturn(this, (HubServicesFailFetchLicense.__proto__ || Object.getPrototypeOf(HubServicesFailFetchLicense)).apply(this, arguments));
+  }
+
+  _createClass(HubServicesFailFetchLicense, [{
+    key: 'getLicenseDetails',
+    value: function getLicenseDetails(licenseId) {
+      this.counter = (this.counter || 0) + 1;
+
+      return createDelayedPromise(this.counter == 1, {
+        id: licenseId,
+        description: 'Here comes the license'
+      });
+    }
+  }]);
+
+  return HubServicesFailFetchLicense;
+}(_hubServices2.default);
+
+var HubServicesFailUploadingValidation = function (_HubServices4) {
+  _inherits(HubServicesFailUploadingValidation, _HubServices4);
+
+  function HubServicesFailUploadingValidation() {
+    _classCallCheck(this, HubServicesFailUploadingValidation);
+
+    return _possibleConstructorReturn(this, (HubServicesFailUploadingValidation.__proto__ || Object.getPrototypeOf(HubServicesFailUploadingValidation)).apply(this, arguments));
+  }
+
+  _createClass(HubServicesFailUploadingValidation, [{
+    key: 'uploadContent',
+    value: function uploadContent(formData) {
+      return new Promise(function (resolve) {
+        setTimeout(function () {
+          return resolve({
+            errorCode: "VALIDATION_FAILED",
+            message: "Validating h5p package failed.",
+            success: false
+          });
+        }, 5000);
+      });
+    }
+  }]);
+
+  return HubServicesFailUploadingValidation;
+}(_hubServices2.default);
+
+var HubServicesFailUploading = function (_HubServices5) {
+  _inherits(HubServicesFailUploading, _HubServices5);
+
+  function HubServicesFailUploading() {
+    _classCallCheck(this, HubServicesFailUploading);
+
+    return _possibleConstructorReturn(this, (HubServicesFailUploading.__proto__ || Object.getPrototypeOf(HubServicesFailUploading)).apply(this, arguments));
+  }
+
+  _createClass(HubServicesFailUploading, [{
+    key: 'uploadContent',
+    value: function uploadContent(formData) {
+      return createDelayedPromise(true, 'failed');
+    }
+  }]);
+
+  return HubServicesFailUploading;
+}(_hubServices2.default);
+
+var HubServicesFactory = function () {
+  function HubServicesFactory() {
+    _classCallCheck(this, HubServicesFactory);
+  }
+
+  _createClass(HubServicesFactory, null, [{
+    key: 'get',
+    value: function get(mode, state) {
+      switch (mode) {
+        case 'fail-fetch-content-types':
+          return new HubServicesFailInit(state);
+        case 'fail-installing':
+        case 'fail-updating':
+          return new HubServicesFailInstalling(state);
+        case 'fail-fetch-license':
+          return new HubServicesFailFetchLicense(state);
+        case 'fail-uploading':
+          return new HubServicesFailUploading(state);
+        case 'fail-uploading-validation':
+          return new HubServicesFailUploadingValidation(state);
+      }
+    }
+  }]);
+
+  return HubServicesFactory;
+}();
+
+exports.default = HubServicesFactory;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
 /* 16 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3910,7 +4131,7 @@ process.umask = function () {
 };
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3940,7 +4161,22 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 18 */
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(16);
+
+// Load library
+H5P = H5P || {};
+H5P.HubClient = __webpack_require__(14).default;
+H5P.HubServices = __webpack_require__(8).default;
+H5P.HubServicesFactory = __webpack_require__(15).default;
+
+/***/ }),
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3964,11 +4200,11 @@ var _panel = __webpack_require__(11);
 
 var _panel2 = _interopRequireDefault(_panel);
 
-var _modal = __webpack_require__(30);
+var _modal = __webpack_require__(32);
 
 var _modal2 = _interopRequireDefault(_modal);
 
-var _imageScroller = __webpack_require__(29);
+var _imageScroller = __webpack_require__(31);
 
 var _imageScroller2 = _interopRequireDefault(_imageScroller);
 
@@ -3976,7 +4212,7 @@ var _imageLightbox = __webpack_require__(10);
 
 var _imageLightbox2 = _interopRequireDefault(_imageLightbox);
 
-var _events = __webpack_require__(5);
+var _events = __webpack_require__(6);
 
 var _contentTypePlaceholder = __webpack_require__(13);
 
@@ -3990,7 +4226,7 @@ var _messageView = __webpack_require__(7);
 
 var _messageView2 = _interopRequireDefault(_messageView);
 
-var _imageLightbox3 = __webpack_require__(24);
+var _imageLightbox3 = __webpack_require__(26);
 
 var _imageLightbox4 = _interopRequireDefault(_imageLightbox3);
 
@@ -4190,27 +4426,18 @@ var ContentTypeDetailView = function () {
           success = _ref$success === undefined ? true : _ref$success,
           message = _ref.message;
 
+      if (this.installMessage) {
+        this.installMessage.remove();
+      }
+
       this.installMessage = new _messageView2.default({
         dismissible: true,
         type: success ? 'info' : 'error',
         name: 'install-message',
         title: message
-      }).on('close', this.removeInstallMessage, this);
+      });
 
       this.rootElement.insertBefore(this.installMessage.getElement(), this.buttonBar);
-    }
-
-    /**
-     * Removes the install message
-     */
-
-  }, {
-    key: "removeInstallMessage",
-    value: function removeInstallMessage() {
-      if (this.installMessage) {
-        this.rootElement.removeChild(this.installMessage.getElement());
-        delete this.installMessage;
-      }
     }
 
     /**
@@ -4231,7 +4458,7 @@ var ContentTypeDetailView = function () {
         // add thumbnail
         var thumbnail = document.createElement('li');
         thumbnail.className = 'slide';
-        thumbnail.innerHTML = "<img src=\"" + image.url + "\" \n              alt=\"" + image.alt + "\" \n              data-index=\"" + index + "\" \n              class=\"img-responsive\" \n              aria-controls=\"" + IMAGELIGHTBOX + "-detail\" \n        />";
+        thumbnail.innerHTML = "<img src=\"" + image.url + "\"\n              alt=\"" + image.alt + "\"\n              data-index=\"" + index + "\"\n              class=\"img-responsive\"\n              aria-controls=\"" + IMAGELIGHTBOX + "-detail\"\n        />";
 
         var img = thumbnail.querySelector('img');
         img.addEventListener('click', function () {
@@ -4272,8 +4499,7 @@ var ContentTypeDetailView = function () {
       });
 
       // Remove messages
-      this.removeUpdateMessage();
-      this.removeInstallMessage();
+      this.removeMessages();
       this.resetLicenses();
 
       // Remove images:
@@ -4597,25 +4823,21 @@ var ContentTypeDetailView = function () {
           content: _dictionary2.default.get('warningUpdateAvailableBody')
         });
         this.rootElement.insertBefore(this.updateMessage.getElement(), this.contentContainer);
-      } else {
-        this.removeUpdateMessage();
       }
     }
 
     /**
-     * Remove update message
+     * Removes all install/update messages
      */
 
   }, {
-    key: "removeUpdateMessage",
-    value: function removeUpdateMessage() {
-      if (!this.updateMessage) return;
-
-      // If inserted into DOM, remove it
-      var updateElement = this.updateMessage.getElement();
-      var parent = updateElement.parentNode;
-      if (parent) {
-        parent.removeChild(updateElement);
+    key: "removeMessages",
+    value: function removeMessages() {
+      if (this.updateMessage) {
+        this.updateMessage.remove();
+      }
+      if (this.installMessage) {
+        this.installMessage.remove();
       }
     }
 
@@ -4721,7 +4943,7 @@ var ContentTypeDetailView = function () {
 exports.default = ContentTypeDetailView;
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4735,7 +4957,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _contentTypeDetailView = __webpack_require__(18);
+var _contentTypeDetailView = __webpack_require__(20);
 
 var _contentTypeDetailView2 = _interopRequireDefault(_contentTypeDetailView);
 
@@ -4745,7 +4967,7 @@ var _dictionary = __webpack_require__(3);
 
 var _dictionary2 = _interopRequireDefault(_dictionary);
 
-var _media = __webpack_require__(28);
+var _media = __webpack_require__(30);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -4778,6 +5000,7 @@ var ContentTypeDetail = function () {
       _this.services.contentType(id).then(function (contentType) {
         return _this.install({
           id: contentType.machineName,
+          title: contentType.title,
           installed: contentType.installed
         });
       });
@@ -4887,13 +5110,15 @@ var ContentTypeDetail = function () {
       var _this2 = this;
 
       var id = _ref3.id,
-          installed = _ref3.installed;
+          installed = _ref3.installed,
+          title = _ref3.title;
 
       // set spinner
       this.view.toggleSpinner(true);
 
       return this.services.installContentType(id).then(function (response) {
         _this2.trigger('installed-content-type');
+        _this2.view.removeMessages();
         _this2.view.toggleSpinner(false);
         _this2.view.setIsInstalled(true);
         _this2.view.setIsUpdatePossible(false);
@@ -4901,7 +5126,7 @@ var ContentTypeDetail = function () {
         var installMessageKey = installed ? 'contentTypeUpdateSuccess' : 'contentTypeInstallSuccess';
 
         _this2.view.setInstallMessage({
-          message: _dictionary2.default.get(installMessageKey, { ':contentType': id })
+          message: _dictionary2.default.get(installMessageKey, { ':contentType': title })
         });
       }).catch(function (error) {
         _this2.view.toggleSpinner(false);
@@ -4910,7 +5135,7 @@ var ContentTypeDetail = function () {
         var errorMessage = error.errorCode ? error : {
           success: false,
           errorCode: 'RESPONSE_FAILED',
-          message: _dictionary2.default.get('contentTypeInstallError', { ':contentType': id })
+          message: _dictionary2.default.get('contentTypeInstallError', { ':contentType': title })
         };
         _this2.view.setInstallMessage(errorMessage);
 
@@ -4980,7 +5205,7 @@ var ContentTypeDetail = function () {
 exports.default = ContentTypeDetail;
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5000,7 +5225,7 @@ var _elements = __webpack_require__(0);
 
 var _eventful = __webpack_require__(2);
 
-var _events = __webpack_require__(5);
+var _events = __webpack_require__(6);
 
 var _contentTypePlaceholder = __webpack_require__(13);
 
@@ -5234,7 +5459,7 @@ var ContentTypeListView = function () {
 exports.default = ContentTypeListView;
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5248,7 +5473,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _contentTypeListView = __webpack_require__(20);
+var _contentTypeListView = __webpack_require__(22);
 
 var _contentTypeListView2 = _interopRequireDefault(_contentTypeListView);
 
@@ -5384,7 +5609,7 @@ var ContentTypeList = function () {
 exports.default = ContentTypeList;
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5404,9 +5629,9 @@ var _messageView2 = _interopRequireDefault(_messageView);
 
 var _elements = __webpack_require__(0);
 
-var _events = __webpack_require__(5);
+var _events = __webpack_require__(6);
 
-var _navbar = __webpack_require__(31);
+var _navbar = __webpack_require__(33);
 
 var _navbar2 = _interopRequireDefault(_navbar);
 
@@ -5449,7 +5674,7 @@ var ContentBrowserView = function () {
 
     // general configuration
     this.typeAheadEnabled = true;
-    this.currentlySelected = {};
+    this.currentlySelected = '';
     this.menuId = 'content-type-filter';
     this.currentMenuId = this.menuId + '-a11y-desc-current';
 
@@ -5591,20 +5816,6 @@ var ContentBrowserView = function () {
         }
       });
 
-      this.on('menu-selected', function (event) {
-        var myArray = Object.keys(_contentTypeSection2.default.Tabs).map(function (menuItemName) {
-          return _contentTypeSection2.default.Tabs[menuItemName];
-        });
-
-        // Get the currently selected menu item
-        for (var i = 0; i < myArray.length; i++) {
-          if (myArray[i].eventName === event.choice) {
-            self.currentlySelected = myArray[i];
-            return;
-          }
-        }
-      });
-
       // add to menu bar
       this.menubar.appendChild(element);
       return element;
@@ -5627,7 +5838,7 @@ var ContentBrowserView = function () {
   }, {
     key: "clearSelection",
     value: function clearSelection() {
-      this.currentlySelected = {};
+      this.currentlySelected = '';
     }
 
     /**
@@ -5656,7 +5867,7 @@ var ContentBrowserView = function () {
           eventName = _ref2.eventName;
 
       // Skip if already selected
-      if (this.currentlySelected.eventName === eventName) {
+      if (this.currentlySelected === eventName) {
         return;
       }
 
@@ -5690,6 +5901,17 @@ var ContentBrowserView = function () {
   }, {
     key: "initMenu",
     value: function initMenu() {
+      var _this2 = this;
+
+      this.on('menu-selected', function (event) {
+        // Focus on search bar if in most popular tab (labeled All)
+        if (event.choice === 'most-popular') {
+          _this2.focusSearchBar();
+        }
+
+        _this2.currentlySelected = event.choice;
+      }, this);
+
       // call init menu from sdk
       (0, _navbar2.default)(this.menu);
     }
@@ -5720,10 +5942,10 @@ var ContentBrowserView = function () {
   }, {
     key: "focusSearchBar",
     value: function focusSearchBar() {
-      var _this2 = this;
+      var _this3 = this;
 
       setTimeout(function () {
-        return _this2.searchBar.focus();
+        return _this3.searchBar.focus();
       }, 200);
     }
 
@@ -5746,7 +5968,7 @@ var ContentBrowserView = function () {
 exports.default = ContentBrowserView;
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5764,7 +5986,7 @@ var _panel = __webpack_require__(11);
 
 var _panel2 = _interopRequireDefault(_panel);
 
-var _tabPanel = __webpack_require__(32);
+var _tabPanel = __webpack_require__(34);
 
 var _tabPanel2 = _interopRequireDefault(_tabPanel);
 
@@ -5774,7 +5996,7 @@ var _elements = __webpack_require__(0);
 
 var _eventful = __webpack_require__(2);
 
-var _events = __webpack_require__(5);
+var _events = __webpack_require__(6);
 
 var _dictionary = __webpack_require__(3);
 
@@ -6042,7 +6264,7 @@ var HubView = function () {
 exports.default = HubView;
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6189,7 +6411,7 @@ var ImageLightBox = function () {
 exports.default = ImageLightBox;
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6198,6 +6420,7 @@ exports.default = ImageLightBox;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.multiSort = exports.SearchService = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -6219,7 +6442,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * on the different weightings of the content type fields and
  * sorts the results based on the generated score.
  */
-var SearchService = function () {
+var SearchService = exports.SearchService = function () {
   /**
    * @param {HubServices} services
    */
@@ -6301,6 +6524,38 @@ var SearchService = function () {
 }();
 
 /**
+ * Sort on multiple properties
+ *
+ * @param {MixedContentType[]|ContentType[]} contentTypes Content types that should be sorted
+ * @param {string|string[]} sortOrder Order that sort properties should be applied
+ *
+ * @return {Array.<ContentType>} Content types sorted
+ */
+
+
+var multiSort = exports.multiSort = function multiSort(contentTypes, sortOrder) {
+  // Make sure all sorted instances are mixed content type
+  var mixedContentTypes = contentTypes.map(function (contentType) {
+    if (contentType.hasOwnProperty('score') && contentType.hasOwnProperty('contentType')) {
+      return contentType;
+    }
+
+    // Return a mixed content type with score 1 to survive filtering
+    return {
+      contentType: contentType,
+      score: 1
+    };
+  });
+
+  sortOrder = Array.isArray(sortOrder) ? sortOrder : [sortOrder];
+  return mixedContentTypes.sort(function (firstContentType, secondContentType) {
+    return handleSortType(firstContentType, secondContentType, sortOrder);
+  }).map(function (mixedContentType) {
+    return mixedContentType.contentType;
+  });
+};
+
+/**
  * Apply multiple filters to content types
  *
  * @param {ContentType[]} contentTypes Content types that should be filtered
@@ -6308,9 +6563,6 @@ var SearchService = function () {
  *
  * @return {ContentType[]} Remaining content types after filtering
  */
-
-
-exports.default = SearchService;
 var multiFilter = function multiFilter(contentTypes, filters) {
   // Finished filtering
   if (!filters.length) {
@@ -6340,36 +6592,6 @@ var handleFilter = function handleFilter(contentTypes, filter) {
         return contentType.installed;
       });
   }
-};
-
-/**
- * Sort on multiple properties
- *
- * @param {MixedContentType[]|ContentType[]} contentTypes Content types that should be sorted
- * @param {string|string[]} sortOrder Order that sort properties should be applied
- *
- * @return {Array.<ContentType>} Content types sorted
- */
-var multiSort = function multiSort(contentTypes, sortOrder) {
-  // Make sure all sorted instances are mixed content type
-  var mixedContentTypes = contentTypes.map(function (contentType) {
-    if (contentType.hasOwnProperty('score') && contentType.hasOwnProperty('contentType')) {
-      return contentType;
-    }
-
-    // Return a mixed content type with score 1 to survive filtering
-    return {
-      contentType: contentType,
-      score: 1
-    };
-  });
-
-  sortOrder = Array.isArray(sortOrder) ? sortOrder : [sortOrder];
-  return mixedContentTypes.sort(function (firstContentType, secondContentType) {
-    return handleSortType(firstContentType, secondContentType, sortOrder);
-  }).map(function (mixedContentType) {
-    return mixedContentType.contentType;
-  });
 };
 
 /**
@@ -6623,7 +6845,7 @@ var sortContentTypesByMachineName = function sortContentTypesByMachineName(conte
 };
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7006,7 +7228,7 @@ var UploadSection = function () {
 exports.default = UploadSection;
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7472,10 +7694,10 @@ exports.default = UploadSection;
   };
   self.fetch.polyfill = true;
 })(typeof self !== 'undefined' ? self : undefined);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7531,10 +7753,10 @@ function preloadImages(images) {
     });
   });
 }
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7647,7 +7869,7 @@ var updateView = function updateView(element, state, clickChange) {
   toggleEnabled(prevButton, state.position < 0, clickChange ? nextButton : null);
 
   if (element.dataset.preventResizeLoop === 'true') {
-    element.ignoreResize = true;
+    state.ignoreResize = true;
   }
 };
 
@@ -7661,9 +7883,17 @@ var updateView = function updateView(element, state, clickChange) {
  *
  * @function
  */
-var onNavigationButtonClick = function onNavigationButtonClick(element, state, button, updateState) {
+var onNavigationButtonClick = function onNavigationButtonClick(element, state, button, direction) {
   if (!isDisabled(button)) {
-    updateState(state);
+    state.position += direction;
+
+    // Move tabindex to our cousin
+    var selectedImage = element.querySelector('[aria-controls][tabindex="0"]');
+    selectedImage.removeAttribute('tabindex');
+
+    var uncle = selectedImage.parentElement[direction < 0 ? 'nextSibling' : 'previousSibling'];
+    uncle.firstChild.setAttribute('tabindex', '0');
+
     updateView(element, state, true);
   }
 };
@@ -7735,7 +7965,7 @@ var handleFocus = (0, _functional.curry)(function (element, state, event) {
     state.position = state.position - (focusedIndex - lastVisibleElementIndex);
     updateView(element, state);
   } else if (element.dataset.preventResizeLoop === 'true') {
-    element.ignoreResize = true;
+    state.ignoreResize = true;
   }
 
   if (!doAnimation) {
@@ -7752,6 +7982,14 @@ var handleFocus = (0, _functional.curry)(function (element, state, event) {
 var onResize = function onResize(element, state) {
   var defaultSize = parseInt(element.getAttribute(ATTRIBUTE_SIZE)) || 5;
   var displayCount = calculateDisplayCount(window.innerWidth, defaultSize);
+
+  // Move tabindex to our cousin
+  var selectedImage = element.querySelector('[aria-controls][tabindex="0"]');
+  if (selectedImage) {
+    selectedImage.removeAttribute('tabindex');
+    var topUncle = selectedImage.parentElement.parentElement.firstChild;
+    topUncle.firstChild.setAttribute('tabindex', '0');
+  }
 
   updateView(element, _extends(state, {
     displayCount: displayCount,
@@ -7806,14 +8044,10 @@ function init(element) {
 
   // initialize buttons
   nextButton.addEventListener('click', function () {
-    return onNavigationButtonClick(element, state, nextButton, function (state) {
-      return state.position--;
-    });
+    return onNavigationButtonClick(element, state, nextButton, -1);
   });
   prevButton.addEventListener('click', function () {
-    return onNavigationButtonClick(element, state, prevButton, function (state) {
-      return state.position++;
-    });
+    return onNavigationButtonClick(element, state, prevButton, 1);
   });
 
   // stop keyboard from setting focus
@@ -7836,14 +8070,19 @@ function init(element) {
   });
 
   // on screen resize calculate number of images to show
-  window.addEventListener('resize', function () {
-    if (element.ignoreResize) {
-      // If resize is triggered by resize we don't want to continue resizing
-      element.ignoreResize = false;
-      return;
+  var resizing = void 0;
+  window.addEventListener('resize', function (event) {
+    if (!resizing) {
+      resizing = setTimeout(function () {
+        if (state.ignoreResize) {
+          state.ignoreResize = false;
+        } else {
+          console.log('resizing');
+          onResize(element, state);
+        }
+        resizing = null;
+      }, 40); // 25 fps cap
     }
-
-    onResize(element, state);
   });
 
   // initialize position
@@ -7853,7 +8092,7 @@ function init(element) {
 }
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7931,7 +8170,7 @@ function init(element, closeHandler) {
 }
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8032,7 +8271,7 @@ function init(element) {
 }
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8134,24 +8373,10 @@ function init(element) {
 }
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
-
-/***/ }),
-/* 34 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(15);
-
-// Load library
-H5P = H5P || {};
-H5P.HubClient = __webpack_require__(14).default;
-H5P.HubServices = __webpack_require__(8).default;
 
 /***/ })
 /******/ ]);
