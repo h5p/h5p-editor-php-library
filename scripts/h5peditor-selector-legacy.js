@@ -73,8 +73,14 @@ ns.SelectorLegacy.prototype.resetSelection = function (library) {
  *
  * @returns {string}
  */
-ns.SelectorLegacy.prototype.getSelectedLibrary = function () {
-  return this.currentLibrary;
+ns.SelectorLegacy.prototype.getSelectedLibrary = function (next) {
+  var that = this;
+  var $option = this.$selector.find(':selected');
+  next({
+    uberName: that.currentLibrary,
+    tutorialUrl: $option.data('tutorial-url'),
+    exampleUrl: $option.data('example-url')
+  });
 }
 
 /**

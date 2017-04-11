@@ -55,8 +55,13 @@ ns.SelectorHub = function (selectedLibrary, changeLibraryDialog) {
     this.client.getContentType(e.data.h5p.mainLibrary)
       .then(function (contentType) {
         var previousLibrary = self.currentLibrary;
-        self.currentLibrary = self.createContentTypeId(contentType);
-        self.client.setPanelTitle({id: self.currentLibrary.split(' ')[0]})
+        // Use version from event data
+        const uploadedVersion = e.data.h5p.preloadedDependencies
+          .filter(function(dependency) {
+            return dependency.machineName === e.data.h5p.mainLibrary;
+          });
+        self.currentLibrary = self.createContentTypeId(uploadedVersion[0]);
+        self.client.setPanelTitle({id: self.currentLibrary.split(' ')[0]});
         self.currentParams = e.data.content;
 
         // Change library immediately or show confirmation dialog
@@ -108,8 +113,16 @@ ns.SelectorHub.prototype.resetSelection = function (library, params) {
  *
  * @returns {string} Selected library
  */
-ns.SelectorHub.prototype.getSelectedLibrary = function () {
-  return this.currentLibrary;
+ns.SelectorHub.prototype.getSelectedLibrary = function (next) {
+  var that = this;
+  this.client.getContentType(this.currentLibrary.split(' ')[0])
+    .then(function (contentType) {
+      next({
+        uberName: that.currentLibrary,
+        tutorialUrl: contentType.tutorial,
+        exampleUrl: contentType.example
+      });
+    });
 }
 
 /**

@@ -48,10 +48,21 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
 
   this.$selector = ns.$(this.selector.getElement());
 
+  /**
+   * @private
+   * @param {object} library
+   */
+  var librarySelectHandler = function (library) {
+    that.currentLibrary = library.uberName;
+    that.loadSemantics(library.uberName, that.selector.getParams());
+
+    that.$tutorialUrl.attr('href', library.tutorialUrl ? library.tutorialUrl : '#').toggle(!!library.tutorialUrl);
+    that.$exampleUrl.attr('href', library.exampleUrl ? library.exampleUrl : '#').toggle(!!library.exampleUrl);
+  }
+
   // Change library on confirmation
   changeLibraryDialog.on('confirmed', function () {
-    that.currentLibrary = that.selector.getSelectedLibrary();
-    that.loadSemantics(that.currentLibrary, that.selector.getParams());
+    that.selector.getSelectedLibrary(librarySelectHandler);
   });
 
   // Revert selector on cancel
@@ -61,13 +72,16 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
 
   // First time a library is selected in the editor
   this.selector.on('selected', function () {
-    that.currentLibrary = that.selector.getSelectedLibrary();
-    that.loadSemantics(that.currentLibrary, that.selector.getParams());
+    that.selector.getSelectedLibrary(librarySelectHandler);
   });
 
   this.selector.on('resized', function () {
     that.trigger('resized');
-  })
+  });
+
+  this.on('select', function () {
+    that.selector.getSelectedLibrary(librarySelectHandler);
+  });
 };
 
 // Extends the event dispatcher
@@ -80,8 +94,7 @@ ns.LibrarySelector.prototype.constructor = ns.LibrarySelector;
  * @param {string} library
  */
 ns.LibrarySelector.prototype.setLibrary = function (library) {
-  this.loadSemantics(library);
-  this.currentLibrary = library;
+  this.trigger('select');
 }
 
 /**

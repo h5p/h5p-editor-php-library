@@ -380,7 +380,7 @@ class H5PEditorAjax {
       $success = $this->core->updateContentTypeCache();
       if (!$success) {
         H5PCore::ajaxError(
-          $this->core->h5pF->t('Could not connect to the H5P Content Type Hub. Please try again later.'),
+          $this->core->h5pF->t("Couldn't communicate with the H5P Hub. Please try again later."),
           'NO_RESPONSE',
           404
         );

@@ -242,6 +242,10 @@ class H5peditor {
    * @param array $files
    */
   private function processFile(&$params, &$files) {
+    if (preg_match('/^https?:\/\//', $params->path)) {
+      return; // Skip external files
+    }
+
     // File could be copied from another content folder.
     $matches = array();
     if (preg_match($this->h5p->relativePathRegExp, $params->path, $matches)) {
@@ -591,6 +595,7 @@ class H5peditor {
         $local_only_lib = array(
           'id'                => (int) $local_lib->id,
           'machineName'       => $local_lib->machine_name,
+          'title'             => $local_lib->title,
           'majorVersion'      => (int) $local_lib->major_version,
           'minorVersion'      => (int) $local_lib->minor_version,
           'patchVersion'      => (int) $local_lib->patch_version,
