@@ -102,7 +102,6 @@ a {
   }
   select {
     padding: 10px 30px 10px 8px;
-    margin-bottom: 13px;
     font-family: "Open Sans", sans-serif;
     font-size: 16px;
     border: 1px solid $form-border-color;;
@@ -111,6 +110,10 @@ a {
     @include box-shadow($form-input-box-shadow);
     -moz-appearance: none;
     -webkit-appearance: none;
+  }
+  & > select {
+    margin-bottom: 13px;
+    margin-right: 20px;
   }
   select::-ms-expand {
     display: none;
@@ -911,9 +914,16 @@ a {
 
 .h5p-tutorial-url,
 .h5p-example-url {
-  font-size: 0.9em;
-  color: rgb(34, 132, 205);
-  margin-left: 20px;
+  font-size: 1em;
+  color: #2284cd;
+  display: inline-block;
+  line-height: 1;
+  height: 2em;
+  margin-right: 20px;
+  margin-bottom: 11px;
+}
+.h5p-example-url {
+
 }
 
 .h5p-tutorial-url:before {

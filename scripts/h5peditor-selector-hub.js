@@ -113,8 +113,16 @@ ns.SelectorHub.prototype.resetSelection = function (library, params) {
  *
  * @returns {string} Selected library
  */
-ns.SelectorHub.prototype.getSelectedLibrary = function () {
-  return this.currentLibrary;
+ns.SelectorHub.prototype.getSelectedLibrary = function (next) {
+  var that = this;
+  this.client.getContentType(this.currentLibrary.split(' ')[0])
+    .then(function (contentType) {
+      next({
+        uberName: that.currentLibrary,
+        tutorialUrl: contentType.tutorial,
+        exampleUrl: contentType.example
+      });
+    });
 }
 
 /**
