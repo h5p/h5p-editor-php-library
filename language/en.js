@@ -79,7 +79,7 @@ H5PEditor.language.core = {
   uploadingThrobber: 'Now uploading...',
   h5pFileWrongExtensionTitle: 'The selected file could not be uploaded',
   h5pFileWrongExtensionContent: 'Only files with the .h5p extension are allowed.',
-  h5pFileValidationFailedTitle: 'Could not validate H5P file',
+  h5pFileValidationFailedTitle: 'Could not validate H5P file.',
   h5pFileValidationFailedContent: 'Make sure the uploaded H5P contains valid H5P content. H5P' +
   ' files containing only libraries should be uploaded through the H5P Libraries page.',
   h5pFileUploadServerErrorTitle: 'The H5P file could not be uploaded',
@@ -132,7 +132,7 @@ H5PEditor.language.core = {
   licenseCannotHoldLiable: 'Can not hold liable',
   licenseMustIncludeCopyright: 'Must include copyright',
   licenseMustNotIncludeCopyright: 'Must not include copyright',
-  licenseMustIncludeLicense: 'Must not include copyright',
+  licenseMustIncludeLicense: 'Must include copyright',
   licenseFetchDetailsFailed: 'Failed fetching license details',
   imageLightboxTitle: 'Images',
   imageLightBoxProgress: ':num of :total',
