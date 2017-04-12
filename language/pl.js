@@ -139,5 +139,9 @@ H5PEditor.language.core = {
   nextImage: 'Next image',
   previousImage: 'Previous image',
   screenshots: 'Screenshots',
-  reloadButtonLabel: 'Reload'
+  reloadButtonLabel: 'Reload',
+  and: 'and',
+  titleQualityName: 'Enter quality name',
+  enterQualityName: 'Enter optional quality name',
+  addQualityNameDescription: 'If you have the same video in different qualities, give each one a name, for instance "4K", "HD", "Mobile".'
 };

@@ -131,5 +131,9 @@ H5PEditor.language.core = {
   nextImage: 'N\u00e4chstes Bild',
   previousImage: 'Vorheriges Bild',
   screenshots: 'Bildschirmfotos',
-  reloadButtonLabel: 'Neu laden'
+  reloadButtonLabel: 'Neu laden',
+  and: 'und',
+  titleQualityName: 'Namen f\u00fcr die Qualit\u00e4tsstufe eingeben',  
+  enterQualityName: 'Optionalen Namen f\u00fcr die Qualit\u00e4tsstufe eingeben',
+  addQualityNameDescription: 'Wenn du das Video in verschiedenen Qualit\u00e4tsstufen hast, gib hier jeder einen Namen, zum Beispiel "4K", "HD", "Mobil".'
 };

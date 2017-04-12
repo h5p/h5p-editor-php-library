@@ -27,6 +27,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     this.params = params;
     this.setValue = setValue;
     this.changes = [];
+    this.qualityNameApplicable = ((self.parent.library !== undefined) && (self.parent.library === '/interactiveVideo/video'));
 
     if (params !== undefined && params[0] !== undefined) {
       this.setCopyright(params[0].copyright);
@@ -59,11 +60,25 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           self.setValue(self.field, self.params);
         }
 
+        var index = (self.updateIndex !== undefined ? self.updateIndex : self.params.length);
+        // remember quality name that has been set already
+        var qualityName;
+        if ((self.params[index] !== undefined) && (self.params[index].metadata !== undefined)) {
+          qualityName = self.params[index].metadata.qualityName;
+        }
+        else {
+          qualityName = self.qualityNameApplicable ? this.$addDialog.find('.h5p-quality-name').val() : undefined;
+        }
+
         // Add a new file/source
         var file = {
           path: result.data.path,
           mime: result.data.mime,
-          copyright: self.copyright
+          copyright: self.copyright,
+          metadata: {
+            qualityName: qualityName
+          }
+
         };
         var index = (self.updateIndex !== undefined ? self.updateIndex : self.params.length);
         self.params[index] = file;
@@ -99,7 +114,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     var self = this;
 
     var imageHtml =
-      '<div class="file">' + C.createAdd(self.field.type) + '</div>' +
+      '<div class="file">' + C.createAdd(self.field.type, self.qualityNameApplicable) + '</div>' +
       '<a class="h5p-copyright-button" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>' +
       '<div class="h5p-editor-dialog">' +
         '<a href="#" class="h5p-close" title="' + H5PEditor.t('core', 'close') + '"></a>' +
@@ -115,9 +130,14 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     this.$addDialog = this.$add.next();
     var $url = this.$addDialog.find('.h5p-file-url');
+    var $qualityName = self.qualityNameApplicable ? this.$addDialog.find('.h5p-quality-name') : undefined;
+
     this.$addDialog.find('.h5p-cancel').click(function () {
       self.updateIndex = undefined;
       $url.val('');
+      if (self.qualityNameApplicable) {
+        $qualityName.val('');
+      }
       self.$addDialog.removeClass('h5p-open');
     });
 
@@ -142,9 +162,12 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       });
 
     this.$addDialog.find('.h5p-insert').click(function () {
-      self.useUrl($url.val().trim());
+      self.useUrl($url.val().trim(), self.qualityNameApplicable ? $qualityName.val().trim() : '');
       self.$addDialog.removeClass('h5p-open');
       $url.val('');
+      if (self.qualityNameApplicable) {
+        $qualityName.val('');
+      }
     });
 
     this.$errors = $container.children('.h5p-errors');
@@ -192,6 +215,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           return; // Do not allow editing of file while uploading
         }
         that.$addDialog.addClass('h5p-open').find('.h5p-file-url').val(that.params[index].path);
+        if ((that.params[index].metadata !== undefined) && (that.params[index].metadata.qualityName !== undefined)) {
+          that.$addDialog.find('.h5p-quality-name').val(that.params[index].metadata.qualityName);
+        }
         that.updateIndex = index;
       })
       .children('.h5p-remove')
@@ -229,7 +255,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     });
   };
 
-  C.prototype.useUrl = function (url) {
+  C.prototype.useUrl = function (url, qualityName) {
+    console.log('useUrl');
+    console.log(qualityName);
     if (this.params === undefined) {
       this.params = [];
       this.setValue(this.field, this.params);
@@ -249,11 +277,14 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         }
       }
     }
-
+    // Add a new file/source
     var file = {
       path: url,
       mime: this.field.type + '/' + (mime ? mime : 'unknown'),
-      copyright: this.copyright
+      copyright: this.copyright,
+      metadata: {
+        qualityName: (qualityName !== "" ? qualityName : undefined)
+      }
     };
     var index = (this.updateIndex !== undefined ? this.updateIndex : this.params.length);
     this.params[index] = file;
@@ -316,11 +347,36 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * @param {string} type 'video' or 'audio'
    * @returns {string} HTML
    */
-  C.createAdd = function (type) {
+  C.createAdd = function (type, qualityNameApplicable) {
     var inputPlaceholder = H5PEditor.t('core', type === 'audio' ? 'enterAudioUrl' : 'enterVideoUrl');
     var inputTitle = H5PEditor.t('core', type === 'audio' ? 'enterAudioTitle' : 'enterVideoTitle');
     var uploadTitle = H5PEditor.t('core', type === 'audio' ? 'uploadAudioTitle' : 'uploadVideoTitle')
     var description = (type === 'audio' ? '' : '<div class="h5p-errors"></div><div class="h5peditor-field-description">' + H5PEditor.t('core', 'addVideoDescription') + '</div>');
+
+    // allow to set quality name for content type 'interactive video' only
+    var qualityNameInput = '';
+
+    if (qualityNameApplicable) {
+      var inputPlaceholderQualityName = H5PEditor.t('core', 'enterQualityName');
+      var titleQualityName = H5PEditor.t('core', 'titleQualityName');
+      var descriptionQualityName = '<div class="h5p-errors"></div><div class="h5peditor-field-description">' + H5PEditor.t('core', 'addQualityNameDescription') + '</div>';
+      qualityNameInput =
+        '<div class="h5p-or-horizontal">' +
+          '<div class="h5p-or-horizontal-line"></div>' +
+          '<div class="h5p-or-horizontal-word-wrapper">' +
+            '<div class="h5p-or-horizontal-word">' + H5PEditor.t('core', 'and') + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="h5p-add-dialog-quality-name">' +
+          '<div class="h5p-dialog-box">' +
+            '<h3>' + titleQualityName + '</h3>' +
+            '<div class="h5p-quality-name-wrapper">' +
+              '<input type="text" placeholder="' + inputPlaceholderQualityName + '" class="h5p-quality-name h5peditor-text"/>' +
+            '</div>' +
+            descriptionQualityName +
+          '</div>' +
+        '</div>';
+    }
 
     return '<div role="button" tabindex="0" class="h5p-add-file" title="' + H5PEditor.t('core', 'addFile') + '"></div>' +
       '<div class="h5p-add-dialog">' +
@@ -329,11 +385,11 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
             '<h3>' + uploadTitle + '</h3>' +
             '<div class="h5p-file-drop-upload">' +
               '<div class="h5p-file-drop-upload-inner"/>' +
+              '</div>' +
             '</div>' +
-          '</div>' +
-          '<div class="h5p-or-vertical">' +
-            '<div class="h5p-or-vertical-line"></div>' +
-            '<div class="h5p-or-vertical-word-wrapper">' +
+            '<div class="h5p-or-vertical">' +
+              '<div class="h5p-or-vertical-line"></div>' +
+              '<div class="h5p-or-vertical-word-wrapper">' +
               '<div class="h5p-or-vertical-word">' + H5PEditor.t('core', 'or') + '</div>' +
             '</div>' +
           '</div>' +
@@ -345,6 +401,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
             description +
           '</div>' +
         '</div>' +
+        qualityNameInput +
         '<div class="h5p-buttons">' +
           '<button class="h5peditor-button-textual h5p-insert">' + H5PEditor.t('core', 'insert') + '</button>' +
           '<button class="h5peditor-button-textual h5p-cancel">' + H5PEditor.t('core', 'cancel') + '</button>' +
