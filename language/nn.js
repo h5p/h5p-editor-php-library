@@ -67,7 +67,7 @@ H5PEditor.language.core = {
   importantInstructions: 'Viktige instruksjonar',
   hideImportantInstructions: 'Skjul viktige instruksjonar',
   hide: 'Skjul',
-  example: 'Eksempel'
+  example: 'Eksempel',
   removeItem: 'Remove item',
   hubPanelLabel: 'Select content type',
   importantInstructions: 'Important instructions',
@@ -144,5 +144,7 @@ H5PEditor.language.core = {
   nextImage: 'Next image',
   previousImage: 'Previous image',
   screenshots: 'Screenshots',
-  reloadButtonLabel: 'Reload'
+  reloadButtonLabel: 'Reload',
+  videoQuality: 'Video kvalitet',
+  videoQualityDescription: 'Spesifiser video kvaliteten'
 };

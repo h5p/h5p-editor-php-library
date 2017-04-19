@@ -140,5 +140,7 @@ H5PEditor.language.core = {
   nextImage: 'Neste bilde',
   previousImage: 'Forrige bilde',
   screenshots: 'Skjermbilder',
-  reloadButtonLabel: 'Last på nytt'
+  reloadButtonLabel: 'Last på nytt',
+  videoQuality: 'Video kvalitet',
+  videoQualityDescription: 'Spesifiser video kvaliteten'
 };

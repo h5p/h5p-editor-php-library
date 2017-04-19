@@ -131,5 +131,7 @@ H5PEditor.language.core = {
   nextImage: 'N\u00e4chstes Bild',
   previousImage: 'Vorheriges Bild',
   screenshots: 'Bildschirmfotos',
-  reloadButtonLabel: 'Neu laden'
+  reloadButtonLabel: 'Neu laden',
+  videoQuality: 'Video quality',
+  videoQualityDescription: 'Specify the quality of the video'
 };
