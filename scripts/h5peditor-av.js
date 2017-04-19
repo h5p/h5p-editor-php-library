@@ -99,7 +99,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     var self = this;
 
     var imageHtml =
-      '<div class="file">' + C.createAdd(self.field.type) + '</div>' +
+      '<ul class="file list-unstyled"></ul>' +
+      C.createAdd(self.field.type) +
       '<a class="h5p-copyright-button" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>' +
       '<div class="h5p-editor-dialog">' +
         '<a href="#" class="h5p-close" title="' + H5PEditor.t('core', 'close') + '"></a>' +
@@ -108,8 +109,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     var html = H5PEditor.createFieldMarkup(this.field, imageHtml);
 
     var $container = $(html).appendTo($wrapper);
-    var $file = $container.children('.file');
-    this.$add = $file.children('.h5p-add-file').click(function () {
+    this.$files = $container.children('.file');
+    this.$add = $container.children('.h5p-add-file').click(function () {
       self.$addDialog.addClass('h5p-open');
     });
 
@@ -178,6 +179,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   C.prototype.addFile = function (index) {
     var that = this;
     var file = this.params[index];
+    var rowInputId = 'h5p-av-' + index;
+    var qualityName = '';
 
     if (that.updateIndex !== undefined) {
       this.$add.parent().children(':eq(' + index + ')').find('.h5p-type').attr('title', file.mime).text(file.mime.split('/')[1]);
@@ -185,24 +188,53 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       return;
     }
 
-    var $file = $('<div class="h5p-thumbnail"><div class="h5p-type" title="' + file.mime + '">' + file.mime.split('/')[1] + '</div><div role="button" tabindex="0" class="h5p-remove" title="' + H5PEditor.t('core', 'removeFile') + '"></div></div>')
-      .insertBefore(this.$add)
+    if(file.metadata && file.metadata.qualityName) {
+      qualityName = file.metadata.qualityName;
+    }
+
+    var fileRowHtml = '<li class="h5p-av-row">' +
+      '<div class="h5p-thumbnail">' +
+        '<div class="h5p-type" title="' + file.mime + '">' + file.mime.split('/')[1] + '</div>' +
+          '<div role="button" tabindex="0" class="h5p-remove" title="' + H5PEditor.t('core', 'removeFile') + '">' +
+        '</div>' +
+      '</div>' +
+      '<div class="h5p-video-quality">' +
+        '<div class="h5p-video-quality-title">' + H5PEditor.t('core', 'videoQuality') + '</div>' +
+        '<label class="h5peditor-field-description" for="' + rowInputId + '">' + H5PEditor.t('core', 'videoQualityDescription') + '</label>' +
+        '<input id="' + rowInputId + '" class="h5peditor-text" type="text" maxlength="60" value="' + qualityName + '">' +
+      '</div>' +
+    '</li>';
+
+    var $file = $(fileRowHtml).appendTo(that.$files);
+
+    // Handle thumbnail click
+    $file
+      .children('.h5p-thumbnail')
       .click(function () {
         if (!that.$add.is(':visible')) {
           return; // Do not allow editing of file while uploading
         }
         that.$addDialog.addClass('h5p-open').find('.h5p-file-url').val(that.params[index].path);
         that.updateIndex = index;
-      })
-      .children('.h5p-remove')
-        .click(function () {
-          if (that.$add.is(':visible')) {
-            confirmRemovalDialog.show($file.offset().top);
-          }
+      });
 
-          return false;
-        })
-        .end();
+    // Handle remove button click
+    $file
+      .find('.h5p-remove')
+      .click(function () {
+        if (that.$add.is(':visible')) {
+          confirmRemovalDialog.show($file.offset().top);
+        }
+
+        return false;
+      });
+
+    // on input update
+    $file
+      .find('input')
+      .change(function() {
+        file.metadata = { qualityName: $(this).val() };
+      });
 
     // Create remove file dialog
     var confirmRemovalDialog = new H5P.ConfirmationDialog({
