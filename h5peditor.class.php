@@ -90,6 +90,7 @@ class H5peditor {
         $lid = $libraries[$i]->name . ' ' . $libraries[$i]->majorVersion . '.' . $libraries[$i]->minorVersion;
         if (isset($devLibs[$lid])) {
           // Replace library with devlib
+          $isOld = !empty($libraries[$i]->isOld) && $libraries[$i]->isOld === TRUE;
           $libraries[$i] = (object) array(
             'uberName' => $lid,
             'name' => $devLibs[$lid]['machineName'],
@@ -100,7 +101,7 @@ class H5peditor {
             'restricted' => $libraries[$i]->restricted,
             'tutorialUrl' => $libraries[$i]->tutorialUrl
           );
-          if (!empty($libraries[$i]->isOld)) {
+          if ($isOld) {
             $libraries[$i]->isOld = TRUE;
           }
         }
