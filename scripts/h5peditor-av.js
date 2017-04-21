@@ -178,9 +178,11 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    */
   C.prototype.addFile = function (index) {
     var that = this;
+    var fileHtml;
     var file = this.params[index];
     var rowInputId = 'h5p-av-' + index;
-    var qualityName = '';
+    var defaultQualityName = H5PEditor.t('core', 'videoQualityDefaultLabel', { ':index': index + 1 });
+    var qualityName = (file.metadata && file.metadata.qualityName) ? file.metadata.qualityName : defaultQualityName;
 
     if (that.updateIndex !== undefined) {
       this.$add.parent().children(':eq(' + index + ')').find('.h5p-type').attr('title', file.mime).text(file.mime.split('/')[1]);
@@ -188,24 +190,30 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       return;
     }
 
-    if(file.metadata && file.metadata.qualityName) {
-      qualityName = file.metadata.qualityName;
+    if(this.field.enableCustomQualityLabel === true) {
+      fileHtml = '<li class="h5p-av-row">' +
+        '<div class="h5p-thumbnail">' +
+          '<div class="h5p-type" title="' + file.mime + '">' + file.mime.split('/')[1] + '</div>' +
+            '<div role="button" tabindex="0" class="h5p-remove" title="' + H5PEditor.t('core', 'removeFile') + '">' +
+          '</div>' +
+        '</div>' +
+        '<div class="h5p-video-quality">' +
+          '<div class="h5p-video-quality-title">' + H5PEditor.t('core', 'videoQuality') + '</div>' +
+          '<label class="h5peditor-field-description" for="' + rowInputId + '">' + H5PEditor.t('core', 'videoQualityDescription') + '</label>' +
+          '<input id="' + rowInputId + '" class="h5peditor-text" type="text" maxlength="60" value="' + qualityName + '">' +
+        '</div>' +
+      '</li>';
     }
-
-    var fileRowHtml = '<li class="h5p-av-row">' +
-      '<div class="h5p-thumbnail">' +
-        '<div class="h5p-type" title="' + file.mime + '">' + file.mime.split('/')[1] + '</div>' +
+    else {
+      fileHtml = '<li class="h5p-av-cell">' +
+        '<div class="h5p-thumbnail">' +
+          '<div class="h5p-type" title="' + file.mime + '">' + file.mime.split('/')[1] + '</div>' +
           '<div role="button" tabindex="0" class="h5p-remove" title="' + H5PEditor.t('core', 'removeFile') + '">' +
         '</div>' +
-      '</div>' +
-      '<div class="h5p-video-quality">' +
-        '<div class="h5p-video-quality-title">' + H5PEditor.t('core', 'videoQuality') + '</div>' +
-        '<label class="h5peditor-field-description" for="' + rowInputId + '">' + H5PEditor.t('core', 'videoQualityDescription') + '</label>' +
-        '<input id="' + rowInputId + '" class="h5peditor-text" type="text" maxlength="60" value="' + qualityName + '">' +
-      '</div>' +
-    '</li>';
+      '</li>';
+    }
 
-    var $file = $(fileRowHtml).appendTo(that.$files);
+    var $file = $(fileHtml).appendTo(that.$files);
 
     // Handle thumbnail click
     $file

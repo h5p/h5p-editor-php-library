@@ -543,6 +543,11 @@ a {
         }
       }
     }
+
+    .h5p-av-cell {
+      overflow: auto;
+      float: left;
+    }
   }
   .video .file, .audio .file {
     position: static;
