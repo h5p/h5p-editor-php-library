@@ -140,6 +140,7 @@ H5PEditor.language.core = {
   previousImage: 'Previous image',
   screenshots: 'Screenshots',
   reloadButtonLabel: 'Reload',
-  videoQuality: 'Video quality',
-  videoQualityDescription: 'Specify the quality of the video'
+  videoQuality: 'Label for this video\'s quality level',
+  videoQualityDescription: 'These labels will be shown in the video quality selector. Example labels may be "1080p" and "720p" or "HD" and "Mobile"',
+  videoQualityDefaultLabel: 'Quality :index'
 };
