@@ -48,6 +48,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     self.on('uploadComplete', function (event) {
       var result = event.data;
 
+      // Clear out add dialog
+      this.$addDialog.find('.h5p-file-url').val('');
+
       try {
         if (result.error) {
           throw result.error;
@@ -184,13 +187,38 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     var defaultQualityName = H5PEditor.t('core', 'videoQualityDefaultLabel', { ':index': index + 1 });
     var qualityName = (file.metadata && file.metadata.qualityName) ? file.metadata.qualityName : defaultQualityName;
 
+    // Check if source is YouTube
+    var youtubeRegex = C.providers.filter(function (provider) {
+      return provider.name === 'YouTube';
+    })[0].regexp;
+    var isYoutube = file.path && file.path.match(youtubeRegex);
+
+    // Only allow single source if YouTube
+    if (isYoutube) {
+      // Remove all other files except this one
+      that.$files.children().each(function (i) {
+        if (i !== that.updateIndex) {
+          that.removeFileWithElement($(this));
+        }
+      });
+      // Remove old element if updating
+      that.$files.children().each(function () {
+        $(this).remove();
+      })
+      // This is now the first and only file
+      index = 0;
+    }
+    this.$add.toggleClass('hidden', !!isYoutube);
+
+    // If updating remove and recreate element
     if (that.updateIndex !== undefined) {
-      this.$add.parent().children(':eq(' + index + ')').find('.h5p-type').attr('title', file.mime).text(file.mime.split('/')[1]);
+      var $oldFile = this.$files.children(':eq(' + index + ')');
+      $oldFile.remove();
       this.updateIndex = undefined;
-      return;
     }
 
-    if(this.field.enableCustomQualityLabel === true) {
+    // Create file with customizable quality if enabled and not youtube
+    if (this.field.enableCustomQualityLabel === true && !isYoutube) {
       fileHtml = '<li class="h5p-av-row">' +
         '<div class="h5p-thumbnail">' +
           '<div class="h5p-type" title="' + file.mime + '">' + file.mime.split('/')[1] + '</div>' +
@@ -213,7 +241,14 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       '</li>';
     }
 
-    var $file = $(fileHtml).appendTo(that.$files);
+    // Insert file element in appropriate order
+    var $file = $(fileHtml)
+    if (index >= that.$files.children().length) {
+      $file.appendTo(that.$files);
+    }
+    else {
+      $file.insertBefore(that.$files.children().eq(index));
+    }
 
     // Handle thumbnail click
     $file
@@ -252,22 +287,35 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     // Remove file on confirmation
     confirmRemovalDialog.on('confirmed', function () {
-      // Remove from params.
-      if (that.params.length === 1) {
-        delete that.params;
-        that.setValue(that.field);
-      }
-      else {
-        that.params.splice(index, 1);
-      }
-
-      $file.remove();
-
-      for (var i = 0; i < that.changes.length; i++) {
-        that.changes[i]();
-      }
+      that.removeFileWithElement($file);
     });
   };
+
+  /**
+   * Remove file at index
+   *
+   * @param {number} $file File element
+   */
+  C.prototype.removeFileWithElement = function ($file) {
+    var index = $file.index();
+
+    // Remove from params.
+    if (this.params.length === 1) {
+      delete this.params;
+      this.setValue(this.field);
+    }
+    else {
+      this.params.splice(index, 1);
+    }
+
+    $file.remove();
+    this.$add.removeClass('hidden');
+
+    // Notify change listeners
+    for (var i = 0; i < this.changes.length; i++) {
+      this.changes[i]();
+    }
+  }
 
   C.prototype.useUrl = function (url) {
     if (this.params === undefined) {

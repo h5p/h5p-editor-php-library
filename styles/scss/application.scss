@@ -187,6 +187,10 @@ a {
       color: #999;
       border-color: #999;
     }
+
+    &.hidden {
+      visibility: hidden;
+    }
   }
 
   .h5p-add-file:after {
