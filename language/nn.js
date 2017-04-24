@@ -145,7 +145,7 @@ H5PEditor.language.core = {
   previousImage: 'Previous image',
   screenshots: 'Screenshots',
   reloadButtonLabel: 'Reload',
-  videoQuality: 'Video kvalitet',
-  videoQualityDescription: 'Spesifiser video kvaliteten',
+  videoQuality: 'Navn på videokvalitet',
+  videoQualityDescription: 'Dette navnet hjelper brukeren med å identifisere den aktuelle videokvaliteten. F.eks. 1080p, 720p, HD or Mobile',
   videoQualityDefaultLabel: 'Kvalitet :index'
 };
