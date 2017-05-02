@@ -157,6 +157,7 @@ ns.loadLibrary = function (libraryName, callback) {
 ns.resetLoadedLibraries = function () {
   ns.$('head style.h5p-editor-style').remove();
   H5PIntegration.loadedCss = [];
+  H5PIntegration.loadedJs = [];
   ns.loadedCallbacks = {};
   ns.libraryLoaded = {};
 }
