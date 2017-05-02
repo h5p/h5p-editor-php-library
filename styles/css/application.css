@@ -1,4 +1,3 @@
-@charset "UTF-8";
 /* line 1, ../scss/_utils.scss */
 ul.list-unstyled {
   list-style: none;
@@ -1657,7 +1656,7 @@ a {
 }
 /* line 894, ../scss/application.scss */
 .h5peditor-field-important-description .important-description-content ul li:before {
-  content: "ÔÇó ";
+  content: "\2022 ";
   color: #adacac;
   font-size: 1.5em;
   vertical-align: middle;
