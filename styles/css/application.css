@@ -1569,8 +1569,8 @@ a {
 .h5peditor-field-description,
 .h5p-help-text {
   font-size: 12px;
-  margin-top: 20px;
-  margin-bottom: 8px;
+  margin-top: 0.3em;
+  margin-bottom: 1em;
   font-weight: 500;
   color: #434446;
   line-height: 15px;
