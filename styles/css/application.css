@@ -1223,7 +1223,7 @@ a {
   font-size: 2em;
   position: absolute;
   left: .3em;
-  top: .08em;
+  top: -0.06em;
 }
 /* line 500, ../scss/application.scss */
 .h5peditor .file .remove {
