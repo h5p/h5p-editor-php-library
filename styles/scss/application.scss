@@ -841,7 +841,9 @@ a {
     background: #f9f9d8;
     border-right: 1px solid #ffde78;
     border-bottom: 1px solid #ffde78;
+    -ms-transform: rotate(45deg);
     -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
   }
 
   .important-description-close {
@@ -882,23 +884,13 @@ a {
 
   .important-description-content {
     ul {
-      list-style: none;
       padding: 0;
       line-height: 2em;
       margin-top: 20px;
 
       li {
         line-height: 1.8em;
-        margin-left: 20px;
-
-        &:before {
-          content: "\2022 ";
-          color: #adacac;
-          font-size: 1.5em;
-          vertical-align: middle;
-          margin-left: -19px;
-          margin-right: 5px;
-        }
+        margin-left: 1.5em;
       }
     }
   }
