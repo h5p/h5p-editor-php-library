@@ -490,11 +490,12 @@ a {
       .h5peditor-field-file-upload-text:before {
         font-family: $icon-font-family;
         content: "\e902";
+        line-height: 1;
         color: #39c943;
         font-size: 2em;
         position: absolute;
-        left: .3em;
-        top: -0.06em;
+        left: 0.3em;
+        top: 0.08em;
       }
     }
     .remove {
