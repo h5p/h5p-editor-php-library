@@ -11,7 +11,7 @@ var ns = H5PEditor;
  * @param {string} library
  * @param {Object} defaultParams
  */
-ns.Editor = function (library, defaultParams, replace) {
+ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
   var self = this;
   // Library may return "0", make sure this doesn't return true in checks
   library = library && library != 0 ? library : '';
@@ -30,6 +30,8 @@ ns.Editor = function (library, defaultParams, replace) {
     'class': 'h5p-editor-iframe',
     frameBorder: '0'
   }).replaceAll(replace).load(function () {
+    iframeLoaded.call(this.contentWindow);
+
     var LibrarySelector = this.contentWindow.H5PEditor.LibrarySelector;
 
     var $ = this.contentWindow.H5P.jQuery;
@@ -38,7 +40,7 @@ ns.Editor = function (library, defaultParams, replace) {
 
     $.ajax({
       dataType: 'json',
-      url: ns.getAjaxUrl('libraries')
+      url: this.contentWindow.H5PEditor.getAjaxUrl('libraries')
     }).fail(function () {
       $container.html('Error, unable to load libraries.');
     }).done(function (data) {

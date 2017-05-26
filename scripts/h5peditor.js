@@ -2,12 +2,14 @@
  * This file contains helper functions for the editor.
  */
 
-// Use resources set in parent window
-var ns = H5PEditor = window.parent.H5PEditor;
+// Grab common resources set in parent window, but avoid sharing back resources set in iframe)
+var ns = H5PEditor = H5P.jQuery.extend(false, {}, window.parent.H5PEditor);
 ns.$ = H5P.jQuery;
 
 // Load needed resources from parent.
 H5PIntegration = window.parent.H5PIntegration;
+H5PIntegration.loadedJs = {};
+H5PIntegration.loadedCss = {};
 
 /**
  * Keep track of our widgets.
