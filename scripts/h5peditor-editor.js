@@ -10,6 +10,7 @@ var ns = H5PEditor;
  * @class H5PEditor.Editor
  * @param {string} library
  * @param {Object} defaultParams
+ * @param {Function} iframeLoaded
  */
 ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
   var self = this;
@@ -30,7 +31,9 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     'class': 'h5p-editor-iframe',
     frameBorder: '0'
   }).replaceAll(replace).load(function () {
-    iframeLoaded.call(this.contentWindow);
+    if (iframeLoaded) {
+      iframeLoaded.call(this.contentWindow);
+    }
 
     var LibrarySelector = this.contentWindow.H5PEditor.LibrarySelector;
 
