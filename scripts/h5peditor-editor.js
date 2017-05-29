@@ -14,6 +14,8 @@ var ns = H5PEditor;
  */
 ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
   var self = this;
+  var parentWindow = window;
+
   // Library may return "0", make sure this doesn't return true in checks
   library = library && library != 0 ? library : '';
 
@@ -60,6 +62,8 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       if (library) {
         self.selector.setLibrary(library);
       }
+
+      parentWindow.dispatchEvent(new parentWindow.CustomEvent('h5peditor-ready', { detail: self }));
     });
 
     // Start resizing the iframe
