@@ -165,13 +165,10 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       return false;
     });
 
-    var group = new H5PEditor.widgets.group(self, H5PEditor.copyrightSemantics, self.copyright, function (field, value) {
+    ns.File.addCopyright(self, $dialog, function (field, value) {
       self.setCopyright(value);
     });
-    group.appendTo($dialog);
-    group.expand();
-    group.$group.find('.title').remove();
-    this.children = [group];
+
   };
 
   /**

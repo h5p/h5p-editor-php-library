@@ -166,17 +166,13 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
     }
   });
 
-  var group = new ns.widgets.group(self, ns.copyrightSemantics, self.copyright,
-    function (field, value) {
-      if (self.params !== undefined) {
-        self.params.copyright = value;
-      }
-      self.copyright = value;
-    });
-  group.appendTo($dialog);
-  group.expand();
-  group.$group.find('.title').remove();
-  this.children = [group];
+  ns.File.addCopyright(self, $dialog, function (field, value) {
+    if (self.params !== undefined) {
+      self.params.copyright = value;
+    }
+    self.copyright = value;
+  });
+
 };
 
 
