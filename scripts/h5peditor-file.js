@@ -163,13 +163,15 @@ ns.File.addCopyright = function (field, $dialog, setCopyright) {
   }
 
   // Re-map old licenses that has been moved
-  if (field.copyright.license === 'ODC PDDL') {
-    field.copyright.license = 'PD';
-    field.copyright.version = 'CC0 1.0';
-  }
-  else if (field.copyright.license === 'CC PDM') {
-    field.copyright.license = 'PD';
-    field.copyright.version = 'CC PDM';
+  if (field.copyright) {
+    if (field.copyright.license === 'ODC PDDL') {
+      field.copyright.license = 'PD';
+      field.copyright.version = 'CC0 1.0';
+    }
+    else if (field.copyright.license === 'CC PDM') {
+      field.copyright.license = 'PD';
+      field.copyright.version = 'CC PDM';
+    }
   }
 
   var group = new H5PEditor.widgets.group(field, H5PEditor.copyrightSemantics, field.copyright, setCopyright);
