@@ -190,10 +190,12 @@ ns.File.addCopyright = function (field, $dialog, setCopyright) {
 
     // Find versions for selected value
     var option = find(licenseField.field.options, 'value', value);
+    var versions = option.versions;
 
-    if (option.versions === undefined) {
+    versionField.$select.prop('disabled', versions === undefined);
+    if (versions === undefined) {
       // If no versions add default
-      option.versions = [{
+      versions = [{
         value: '-',
         label: '-'
       }];
@@ -201,10 +203,10 @@ ns.File.addCopyright = function (field, $dialog, setCopyright) {
 
     // Find default selected version
     var selected = (field.copyright.license === value &&
-                    field.copyright.version ? field.copyright.version : option.versions[0].value);
+                    field.copyright.version ? field.copyright.version : versions[0].value);
 
     // Update versions selector
-    versionField.$select.html(H5PEditor.Select.createOptionsHtml(option.versions, selected)).change();
+    versionField.$select.html(H5PEditor.Select.createOptionsHtml(versions, selected)).change();
   });
 
   // Trigger update straight away

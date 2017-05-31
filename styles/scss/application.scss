@@ -111,6 +111,10 @@ a {
     @include box-shadow($form-input-box-shadow);
     -moz-appearance: none;
     -webkit-appearance: none;
+
+    &:disabled {
+      background-color: #efefef;
+    }
   }
   & > select {
     margin-bottom: 13px;
