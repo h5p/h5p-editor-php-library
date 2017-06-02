@@ -14,8 +14,6 @@ var ns = H5PEditor;
  * @param {node} replace
  */
 ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
-  'use strict';
-
   var self = this;
 
   // Library may return "0", make sure this doesn't return true in checks
@@ -39,10 +37,10 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       iframeLoaded.call(this.contentWindow);
     }
 
+    var editor = this;
     var LibrarySelector = this.contentWindow.H5PEditor.LibrarySelector;
     var $ = this.contentWindow.H5P.jQuery;
     var $container = $('body > .h5p-editor');
-    var parent = this.parentElement;
 
     this.contentWindow.H5P.$body = $(this.contentDocument.body);
 
@@ -67,7 +65,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
           self.selector.setLibrary(library);
         }
 
-        parent.dispatchEvent(new CustomEvent('h5peditor-ready', { detail: self }));
+        H5P.externalDispatcher.trigger('editorLoaded', editor);
       }
     });
 
