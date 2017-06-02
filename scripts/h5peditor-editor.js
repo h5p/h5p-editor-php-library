@@ -10,8 +10,8 @@ var ns = H5PEditor;
  * @class H5PEditor.Editor
  * @param {string} library
  * @param {Object} defaultParams
+ * @param {Element} replace
  * @param {Function} iframeLoaded
- * @param {node} replace
  */
 ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
   var self = this;
@@ -32,12 +32,11 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     },
     'class': 'h5p-editor-iframe',
     'frameBorder': '0'
-  }).replaceAll(replace).load(function() {
+  }).replaceAll(replace).load(function () {
     if (iframeLoaded) {
       iframeLoaded.call(this.contentWindow);
     }
 
-    var editor = this;
     var LibrarySelector = this.contentWindow.H5PEditor.LibrarySelector;
     var $ = this.contentWindow.H5P.jQuery;
     var $container = $('body > .h5p-editor');
@@ -45,27 +44,34 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     this.contentWindow.H5P.$body = $(this.contentDocument.body);
 
     $.ajax({
-      dataType: 'json',
-      url: ns.getAjaxUrl('libraries'),
-      error: function() {
-        $container.html('Error, unable to load libraries.');
-      },
-      success: function(data) {
-        // Create library selector
-        self.selector = new LibrarySelector(data, library, defaultParams);
-        self.selector.appendTo($container.html(''));
+      url: this.contentWindow.H5PEditor.getAjaxUrl('libraries')
+    }).fail(function () {
+      $container.html('Error, unable to load libraries.');
+    }).done(function (data) {
+      // Create library selector
+      self.selector = new LibrarySelector(data, library, defaultParams);
+      self.selector.appendTo($container.html(''));
 
-        // Resize iframe when selector resizes
-        self.selector.on('resized', function () {
-          resize();
-        });
+      // Resize iframe when selector resizes
+      self.selector.on('resized', function () {
+        resize();
+      });
 
-        // Set library if editing
-        if (library) {
-          self.selector.setLibrary(library);
-        }
+      /**
+       * Event handler for exposing events
+       *
+       * @private
+       * @param {H5P.Event} event
+       */
+      var relayEvent = function (event) {
+        H5P.externalDispatcher.trigger(event);
+      }
+      self.selector.on('editorload', relayEvent);
+      self.selector.on('editorloaded', relayEvent);
 
-        H5P.externalDispatcher.trigger('editorLoaded', editor);
+      // Set library if editing
+      if (library) {
+        self.selector.setLibrary(library);
       }
     });
 
