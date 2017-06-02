@@ -40,6 +40,7 @@ ns.SelectorHub = function (selectedLibrary, changeLibraryDialog) {
       .then(function (contentType) {
         if (!self.currentLibrary) {
           self.currentLibrary = self.createContentTypeId(contentType, true);
+          H5P.externalDispatcher.trigger('librarySelected', self.currentLibrary);
           self.trigger('selected');
           return;
         }
@@ -81,6 +82,7 @@ ns.SelectorHub = function (selectedLibrary, changeLibraryDialog) {
 
   // Clear upload field when changing library
   changeLibraryDialog.on('confirmed', function () {
+    H5P.externalDispatcher.trigger('librarySelected', self.currentLibrary);
     self.clearUploadForm();
   })
 };

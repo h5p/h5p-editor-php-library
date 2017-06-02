@@ -11,15 +11,17 @@ var ns = H5PEditor;
  * @param {string} library
  * @param {Object} defaultParams
  * @param {Function} iframeLoaded
+ * @param {node} replace
  */
 ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
   var self = this;
+
   // Library may return "0", make sure this doesn't return true in checks
   library = library && library != 0 ? library : '';
 
   // Create iframe and replace the given element with it
   var iframe = ns.$('<iframe/>', {
-    css: {
+    'css': {
       display: 'block',
       width: '100%',
       height: '3em',
@@ -29,36 +31,41 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       left: 0
     },
     'class': 'h5p-editor-iframe',
-    frameBorder: '0'
-  }).replaceAll(replace).load(function () {
+    'frameBorder': '0'
+  }).replaceAll(replace).load(function() {
     if (iframeLoaded) {
       iframeLoaded.call(this.contentWindow);
     }
 
+    var editor = this;
     var LibrarySelector = this.contentWindow.H5PEditor.LibrarySelector;
-
     var $ = this.contentWindow.H5P.jQuery;
-    this.contentWindow.H5P.$body = $(this.contentDocument.body);
     var $container = $('body > .h5p-editor');
+
+    this.contentWindow.H5P.$body = $(this.contentDocument.body);
 
     $.ajax({
       dataType: 'json',
-      url: this.contentWindow.H5PEditor.getAjaxUrl('libraries')
-    }).fail(function () {
-      $container.html('Error, unable to load libraries.');
-    }).done(function (data) {
-      // Create library selector
-      self.selector = new LibrarySelector(data, library, defaultParams);
-      self.selector.appendTo($container.html(''));
+      url: ns.getAjaxUrl('libraries'),
+      error: function() {
+        $container.html('Error, unable to load libraries.');
+      },
+      success: function(data) {
+        // Create library selector
+        self.selector = new LibrarySelector(data, library, defaultParams);
+        self.selector.appendTo($container.html(''));
 
-      // Resize iframe when selector resizes
-      self.selector.on('resized', function () {
-        resize();
-      });
+        // Resize iframe when selector resizes
+        self.selector.on('resized', function () {
+          resize();
+        });
 
-      // Set library if editing
-      if (library) {
-        self.selector.setLibrary(library);
+        // Set library if editing
+        if (library) {
+          self.selector.setLibrary(library);
+        }
+
+        H5P.externalDispatcher.trigger('editorLoaded', editor);
       }
     });
 
@@ -87,7 +94,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       H5P.$window.resize(limitedResize);
       resize();
     }
-     else {
+    else {
       // Use an interval for resizing the iframe
       (function resizeInterval() {
         resize();
