@@ -330,6 +330,10 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       for (var i = 0; i < C.providers.length; i++) {
         if (C.providers[i].regexp.test(url)) {
           mime = C.providers[i].name;
+          // add protocol if missing
+          if (!url.startsWith('https://') && !url.startsWith('http://')) {
+            url = 'https://' + url;
+          }
           break;
         }
       }
@@ -443,7 +447,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    */
   C.providers = [{
     name: 'YouTube',
-    regexp: /^https?:\/\/((youtu.|y2u.)?be|(www.|m.)?youtube.com)\//i
+    regexp: /(?:(?:youtube.com\/(?:attribution_link\?(?:\S+))?(?:v\/|embed\/|watch\/|(?:user\/(?:\S+)\/)?watch(?:\S+)v\=))|(?:youtu.be\/|y2u.be\/))([A-Za-z0-9_-]{11})/i
   }];
 
   return C;
