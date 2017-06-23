@@ -47,6 +47,9 @@ ns.Number.prototype.appendTo = function ($wrapper) {
       if (that.$range !== undefined) {
         that.$range.val(value);
       }
+      if (that.field.unit) {
+        that.$input.val(value + ' ' + that.field.unit);
+      }
     }
   });
 
@@ -72,7 +75,7 @@ ns.Number.prototype.appendTo = function ($wrapper) {
  * Create HTML for the field.
  */
 ns.Number.prototype.createHtml = function () {
-  var input = ns.createText(this.value, 15);
+  var input = ns.createText(this.value + (this.field.unit ? ' ' + this.field.unit : ''), 15);
   /* TODO: Add back in when FF gets support for input:range....
    *if (this.field.min !== undefined && this.field.max !== undefined && this.field.step !== undefined) {
     input = '<input type="range" min="' + this.field.min + '" max="' + this.field.max + '" step="' + this.field.step + '"' + (this.value === undefined ? '' : ' value="' + this.value + '"') + '/>' + input;
@@ -90,6 +93,10 @@ ns.Number.prototype.validate = function () {
 
   var value = H5P.trim(this.$input.val());
   var decimals = this.field.decimals !== undefined && this.field.decimals;
+
+  if (this.field.unit) {
+    value = value.replace(new RegExp(' *' + this.field.unit + '$'), '');
+  }
 
   if (this.$errors.html().length > 0) {
     this.$input.addClass('error');
