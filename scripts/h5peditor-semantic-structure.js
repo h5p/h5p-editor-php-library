@@ -64,6 +64,7 @@ H5PEditor.SemanticStructure = (function ($) {
           text: field.description,
           appendTo: $wrapper
         });
+        $description.html($description.html().replace('\n', '<br/>'));
       }
 
       widgets = getValidWidgets();
