@@ -219,7 +219,7 @@ ns.t = function (library, key, vars) {
 
   // Replace placeholder with variables.
   for (var placeholder in vars) {
-    if (!vars[placeholder]) {
+    if (vars[placeholder] === undefined) {
       continue;
     }
     translation = translation.replace(placeholder, vars[placeholder]);
