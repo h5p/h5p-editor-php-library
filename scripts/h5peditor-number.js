@@ -98,10 +98,6 @@ ns.Number.prototype.validate = function () {
     value = value.replace(new RegExp(' *' + this.field.unit + '$'), '');
   }
 
-  if (this.$errors.html().length > 0) {
-    this.$input.addClass('error');
-  }
-
   // Clear errors before showing new ones
   this.$errors.html('');
 
@@ -141,6 +137,8 @@ ns.Number.prototype.validate = function () {
       this.$errors.append(ns.createError(ns.t('core', 'outOfStep', {':property': propertyName, ':step': this.field.step})));
     }
   }
+
+  this.$input.toggleClass('error', this.$errors.html().length > 0);
 
   return ns.checkErrors(this.$errors, this.$input, value);
 };
