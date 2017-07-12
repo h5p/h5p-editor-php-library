@@ -40,7 +40,7 @@ ns.Number.prototype.appendTo = function ($wrapper) {
     // Validate
     var value = that.validate();
 
-    if (value !== false && value !== undefined) {
+    if (value !== false) {
       // Set param
       that.value = value;
       that.setValue(that.field, value);
