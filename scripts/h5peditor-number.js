@@ -47,7 +47,7 @@ ns.Number.prototype.appendTo = function ($wrapper) {
       if (that.$range !== undefined) {
         that.$range.val(value);
       }
-      if (that.field.unit) {
+      if (value !== undefined && that.field.unit) {
         that.$input.val(value + ' ' + that.field.unit);
       }
     }
