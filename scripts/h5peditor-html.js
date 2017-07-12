@@ -16,10 +16,6 @@ ns.Html = function (parent, field, params, setValue) {
   this.value = params;
   this.setValue = setValue;
   this.tags = ns.$.merge(['br'], (this.field.tags || this.defaultTags));
-
-  if (this.field.deprecated) {
-    this.hidden = !params;
-  }
 };
 ns.Html.first = true;
 
@@ -293,11 +289,6 @@ ns.Html.prototype.createToolbar = function () {
 ns.Html.prototype.appendTo = function ($wrapper) {
   var that = this;
 
-  if (this.hidden) {
-    this.setValue('');
-    return;
-  }
-
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$input = this.$item.children('.ckeditor');
   this.$errors = this.$item.children('.h5p-errors');
@@ -446,10 +437,6 @@ ns.Html.prototype.createHtml = function () {
 ns.Html.prototype.validate = function () {
   var that = this;
 
-  if (this.hidden) {
-    return '';
-  }
-
   if (that.$errors.children().length) {
     that.$errors.empty();
     this.$input.addClass('error');
@@ -516,9 +503,7 @@ ns.Html.removeWysiwyg = function () {
  * Remove this item.
  */
 ns.Html.prototype.remove = function () {
-  if (this.$item) {
-    this.$item.remove();
-  }
+  this.$item.remove();
 };
 
 ns.widgets.html = ns.Html;

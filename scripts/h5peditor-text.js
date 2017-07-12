@@ -15,11 +15,6 @@ ns.Text = function (parent, field, params, setValue) {
   this.value = params;
   this.setValue = setValue;
   this.changeCallbacks = [];
-
-  // Handle deprecated text fields
-  if (field.deprecated) {
-    this.hidden = !params;
-  }
 };
 
 /**
@@ -30,11 +25,6 @@ ns.Text = function (parent, field, params, setValue) {
  */
 ns.Text.prototype.appendTo = function ($wrapper) {
   var that = this;
-
-  if (this.hidden) {
-    this.setValue('');
-    return;
-  }
 
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$input = this.$item.find('input');
@@ -90,10 +80,6 @@ ns.Text.prototype.createHtml = function () {
 ns.Text.prototype.validate = function () {
   var that = this;
 
-  if (this.hidden) {
-    return '';
-  }
-
   var value = H5P.trim(this.$input.val());
 
   if (this.$errors.html().length > 0) {
@@ -120,9 +106,7 @@ ns.Text.prototype.validate = function () {
  * Remove this item.
  */
 ns.Text.prototype.remove = function () {
-  if (this.$item) {
-    this.$item.remove();
-  }
+  this.$item.remove();
 };
 
 // Tell the editor what widget we are.
