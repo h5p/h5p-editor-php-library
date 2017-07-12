@@ -289,7 +289,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     // Remove file on confirmation
     confirmRemovalDialog.on('confirmed', function () {
       that.removeFileWithElement($file);
-      that.$add.parent().find('.h5p-copyright-button').addClass('hidden');
+      if (that.$files.children().length === 0) {
+        that.$add.parent().find('.h5p-copyright-button').addClass('hidden');
+      }
     });
   };
 
