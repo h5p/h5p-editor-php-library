@@ -249,6 +249,11 @@ class H5peditor {
       return; // Skip external files
     }
 
+    // Remove temporary files suffix
+    if (substr($params->path, -4, 4) === '#tmp') {
+      $params->path = substr($params->path, 0, strlen($params->path) - 4);
+    }
+
     // File could be copied from another content folder.
     $matches = array();
     if (preg_match($this->h5p->relativePathRegExp, $params->path, $matches)) {
