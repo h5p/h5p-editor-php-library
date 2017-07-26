@@ -712,11 +712,9 @@ ns.bindImportantDescriptionEvents = function (widget, fieldName, parent) {
   var $importantField = widget.$item.find('.h5peditor-field-important-description');
 
   // Set first occurance to visible
-  ns.storage.get(context + '-seen', function (value) {
-    if (value !== true) {
-      $importantField.addClass('show');
-    }
-  });
+  if (ns.importantDescriptionSeen[context] !== true) {
+    $importantField.addClass('show');
+  }
 
   widget.$item.addClass('has-important-description');
 
@@ -740,7 +738,7 @@ ns.bindImportantDescriptionEvents = function (widget, fieldName, parent) {
       ns.$(this).parent()
         .removeClass('show')
         .siblings('.icon-important-desc').attr('aria-pressed', false);
-      ns.storage.set(context + '-seen', true);
+      ns.importantDescriptionSeen[context] = true;
     })
     .keydown(function() {
       if (event.which == 13 || event.which == 32) {
@@ -902,3 +900,6 @@ ns.storage = (function () {
   };
   return instance;
 })();
+
+// Keep track of which important descriptions have been seen
+ns.importantDescriptionSeen = {};
