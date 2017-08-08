@@ -86,6 +86,27 @@ a {
   }
   /* Placeholders - need to be on separate lines. If not,
      the browsers will invalidate them */
+  textarea:focus::-webkit-input-placeholder,
+  input:focus::-webkit-input-placeholder {
+    color: $form-input-focus-placeholder-color;
+  }
+  textarea:focus:-moz-placeholder,
+  input:focus:-moz-placeholder {
+    color: $form-input-focus-placeholder-color;
+  }
+  textarea:focus::-moz-placeholder,
+  input:focus::-moz-placeholder {
+    color: $form-input-focus-placeholder-color;
+  }
+  textarea:focus:-ms-input-placeholder,
+  input:focus:-ms-input-placeholder {
+    color: $form-input-focus-placeholder-color;
+  }
+  textarea:focus.h5peditor-ckeditor-placeholder,
+  input:focus.h5peditor-ckeditor-placeholder {
+    color: $form-input-focus-placeholder-color;
+  }
+
   ::-webkit-input-placeholder {
     color: $form-input-placeholder-color;
   }
