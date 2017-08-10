@@ -60,7 +60,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
   }).replaceAll(replace).load(function () {
 
     // "this" is the iframe DOM element
-    var self = this;
+    var loadedIframe = this;
 
     if (iframeLoaded) {
       iframeLoaded.call(this.contentWindow);
@@ -83,7 +83,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
 
       // Resize iframe when selector resizes
       self.selector.on('resized', function () {
-        resize(self);
+        resize(loadedIframe);
       });
 
       /**
@@ -94,7 +94,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
        */
       var relayEvent = function (event) {
         H5P.externalDispatcher.trigger(event);
-      }
+      };
       self.selector.on('editorload', relayEvent);
       self.selector.on('editorloaded', relayEvent);
 
@@ -111,7 +111,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       var limitedResize = function (mutations) {
         if (!running) {
           running = setTimeout(function () {
-            resize(self);
+            resize(loadedIframe);
             running = null;
           }, 40); // 25 fps cap
         }
@@ -127,12 +127,12 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       });
 
       H5P.$window.resize(limitedResize);
-      resize(self);
+      resize(loadedIframe);
     }
     else {
       // Use an interval for resizing the iframe
       (function resizeInterval() {
-        resize(self);
+        resize(loadedIframe);
         setTimeout(resizeInterval, 40); // No more than 25 times per second
       })();
     }
