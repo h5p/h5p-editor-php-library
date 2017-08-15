@@ -679,10 +679,9 @@ ns.createImportantDescription = function (importantDescription) {
     }
 
     html += '</div>' +
-            '<span class="icon-important-desc" role="button" aria-label="' + ns.t('core', 'importantInstructions') + '" tabindex="0">' +
-              '<span class="path1"></span>' +
-              '<span class="path2"></span>' +
-            '</span>';
+            '<span class="important-description-show" role="button" tabindex="0">' +
+              ns.t('core', 'showImportantInstructions') +
+            '</span><span class="important-description-clear-right"></span>';
   }
 
   return html;
@@ -713,34 +712,30 @@ ns.bindImportantDescriptionEvents = function (widget, fieldName, parent) {
 
   // Set first occurance to visible
   if (ns.importantDescriptionSeen[context] !== true) {
-    $importantField.addClass('show');
+    widget.$item.addClass('important-description-visible');
   }
 
   widget.$item.addClass('has-important-description');
 
   // Bind events to toggle button and update aria-pressed
-  widget.$item.find('.icon-important-desc')
-    .click(function() {
-      $importantField.toggleClass('show');
-      ns.$(this).attr('aria-pressed', $importantField.hasClass('show'));
+  widget.$item.find('.important-description-show')
+    .click(function () {
+      widget.$item.addClass('important-description-visible');
     })
-    .keydown(function() {
+    .keydown(function () {
       if (event.which == 13 || event.which == 32) {
         ns.$(this).trigger('click');
         event.preventDefault();
       }
-    })
-    .attr('aria-pressed', $importantField.hasClass('show') ? 'true' : 'false' );
+    });
 
   // Bind events to close button and update aria-pressed of toggle button
   widget.$item.find('.important-description-close')
-    .click(function() {
-      ns.$(this).parent()
-        .removeClass('show')
-        .siblings('.icon-important-desc').attr('aria-pressed', false);
+    .click(function () {
+      widget.$item.removeClass('important-description-visible');
       ns.importantDescriptionSeen[context] = true;
     })
-    .keydown(function() {
+    .keydown(function () {
       if (event.which == 13 || event.which == 32) {
         ns.$(this).trigger('click');
         event.preventDefault();

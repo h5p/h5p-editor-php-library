@@ -63,6 +63,7 @@ H5PEditor.language.core = {
   removeItem: 'Element entfernen',
   hubPanelLabel: 'Inhaltstyp ausw\u00e4hlen',
   importantInstructions: 'Wichtige Hinweise',
+  showImportantInstructions: 'Show instructions',
   hideImportantInstructions: 'Wichtige Hinweise ausblenden',
   hide: 'Ausblenden',
   example: 'Beispiel',
