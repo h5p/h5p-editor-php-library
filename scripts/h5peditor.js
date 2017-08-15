@@ -705,15 +705,17 @@ ns.bindImportantDescriptionEvents = function (widget, fieldName, parent) {
   var librarySelector = ns.findLibraryAncestor(parent);
   if (librarySelector.currentLibrary !== undefined) {
     var lib = librarySelector.currentLibrary.split(' ')[0];
-    context = (lib + '-' + fieldName).replace(/\.|_/g,'-');
+    context = (lib + '-' + fieldName).replace(/\.|_/g,'-') + '-important-description-open';
   }
 
   var $importantField = widget.$item.find('.h5peditor-field-important-description');
 
   // Set first occurance to visible
-  if (ns.importantDescriptionSeen[context] !== true) {
-    widget.$item.addClass('important-description-visible');
-  }
+  ns.storage.get(context, function (value) {
+    if (value === undefined || value === true) {
+      widget.$item.addClass('important-description-visible');
+    }
+  });
 
   widget.$item.addClass('has-important-description');
 
@@ -721,6 +723,7 @@ ns.bindImportantDescriptionEvents = function (widget, fieldName, parent) {
   widget.$item.find('.important-description-show')
     .click(function () {
       widget.$item.addClass('important-description-visible');
+      ns.storage.set(context, true);
     })
     .keydown(function () {
       if (event.which == 13 || event.which == 32) {
@@ -733,7 +736,7 @@ ns.bindImportantDescriptionEvents = function (widget, fieldName, parent) {
   widget.$item.find('.important-description-close')
     .click(function () {
       widget.$item.removeClass('important-description-visible');
-      ns.importantDescriptionSeen[context] = true;
+      ns.storage.set(context, false);
     })
     .keydown(function () {
       if (event.which == 13 || event.which == 32) {
@@ -895,6 +898,3 @@ ns.storage = (function () {
   };
   return instance;
 })();
-
-// Keep track of which important descriptions have been seen
-ns.importantDescriptionSeen = {};
