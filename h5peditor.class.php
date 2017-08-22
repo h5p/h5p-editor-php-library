@@ -441,7 +441,9 @@ class H5peditor {
     // Check if user has access to install libraries
     $libraries = array();
     foreach ($cached_libraries as &$result) {
+      // Check if user can install content type
       $result->restricted = !$this->canInstallContentType($result);
+
       // Formats json
       $libraries[] = $this->getCachedLibsMap($result);
     }
@@ -481,6 +483,8 @@ class H5peditor {
    * library to send to the front-end
    */
   public function getCachedLibsMap($cached_library) {
+    $restricted = isset($cached_library->restricted) ? $cached_library : FALSE;
+
     // Add mandatory fields
     $lib = array(
       'id'              => intval($cached_library->id),
@@ -503,7 +507,8 @@ class H5peditor {
       'owner'           => $cached_library->owner,
       'installed'       => FALSE,
       'isUpToDate'      => FALSE,
-      'restricted'      => isset($cached_library->restricted) ? $cached_library->restricted : FALSE
+      'restricted'      => $restricted,
+      'canInstall'      => !$restricted
     );
 
     // Add optional fields
