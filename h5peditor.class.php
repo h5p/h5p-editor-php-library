@@ -483,7 +483,7 @@ class H5peditor {
    * library to send to the front-end
    */
   public function getCachedLibsMap($cached_library) {
-    $restricted = isset($cached_library->restricted) ? $cached_library : FALSE;
+    $restricted = isset($cached_library->restricted) ? $cached_library->restricted : FALSE;
 
     // Add mandatory fields
     $lib = array(
