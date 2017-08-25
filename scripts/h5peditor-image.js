@@ -216,18 +216,10 @@ ns.widgets.image.prototype.addFile = function () {
   }
 
   var source = H5P.getPath(this.params.path, H5PEditor.contentId);
-  var thumbnail = {};
-  thumbnail.path = source;
-  thumbnail.height = 100;
-  if (this.params.width !== undefined) {
-    thumbnail.width = thumbnail.height * (this.params.width / this.params.height);
-  }
-
-  var thumbnailWidth = thumbnail.width === undefined ? '' : ' width="' + thumbnail.width + '"';
   var altText = (this.field.label === undefined ? '' : this.field.label);
   var fileHtmlString =
     '<a href="#" title="' + ns.t('core', 'changeFile') + '" class="thumbnail">' +
-      '<img ' + thumbnailWidth + 'height="' + thumbnail.height + '" alt="' + altText + '"/>' +
+      '<img ' + '" alt="' + altText + '"/>' +
     '</a>' +
     '<a href="#" class="remove" title="' + ns.t('core', 'removeFile') + '"></a>';
 
@@ -238,7 +230,7 @@ ns.widgets.image.prototype.addFile = function () {
       return false;
     })
     .children('img')
-    .attr('src', thumbnail.path)
+    .attr('src', source)
     .end()
     .next()
     .click(function () {

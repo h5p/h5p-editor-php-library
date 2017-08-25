@@ -489,6 +489,7 @@ a {
     position: relative;
     float: left;
     margin-bottom: 0;
+    max-width: 100%;
 
     &.field {
       float: none;
@@ -499,6 +500,7 @@ a {
       @include box-shadow(0 0 10px 0 #666666);
       border: 1px solid #fff;
       cursor: pointer;
+      max-width: 100%;
     }
     .thumbnail:focus {
       @include box-shadow(0 0 10px 0 #222);
@@ -561,7 +563,7 @@ a {
     img {
       max-width: 100%;
       vertical-align: bottom;
-      height: auto;
+      max-height: 100px;
     }
 
     .h5p-av-row {
