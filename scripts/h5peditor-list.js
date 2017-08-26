@@ -56,6 +56,9 @@ H5PEditor.List = (function ($) {
       var i;
       if (parameters !== undefined && parameters.length) {
         for (i = 0; i < parameters.length; i++) {
+          if (parameters[i] === null) {
+            parameters[i] = undefined;
+          }
           addItem(i);
         }
       }
@@ -72,6 +75,22 @@ H5PEditor.List = (function ($) {
     };
 
     /**
+     * Make sure list is created when setting a parameter.
+     *
+     * @private
+     * @param {number} index
+     * @param {*} value
+     */
+    var setParameters = function (index, value) {
+      if (parameters === undefined) {
+        // Create new parameters for list
+        parameters = [];
+        setValue(field, parameters);
+      }
+      parameters[index] = value;
+    };
+
+    /**
      * Add item to list.
      *
      * @private
@@ -82,33 +101,19 @@ H5PEditor.List = (function ($) {
       var childField = field.field;
       var widget = H5PEditor.getWidgetName(childField);
 
-      if (parameters === undefined) {
-        // Create new parameters for list
-        parameters = [];
-        setValue(field, parameters);
-      }
-
-      if (parameters[index] === undefined && childField['default'] !== undefined) {
+      if ((parameters === undefined || parameters[index] === undefined) && childField['default'] !== undefined) {
         // Use default value
-        parameters[index] = childField['default'];
+        setParameters(index, childField['default']);
       }
       if (paramsOverride !== undefined) {
         // Use override params
-        parameters[index] = paramsOverride;
+        setParameters(index, paramsOverride);
       }
 
-      var child = children[index] = new H5PEditor.widgets[widget](self, childField, parameters[index], function (myChildField, value) {
-        var i = findIndex(myChildField);
-        parameters[i === undefined ? index : i] = value;
+      var child = children[index] = new H5PEditor.widgets[widget](self, childField, parameters === undefined ? undefined : parameters[index], function (myChildField, value) {
+        var i = findIndex(child);
+        setParameters(i === undefined ? index : i, value);
       });
-
-      if (!passReadyCallbacks) {
-        // Run collected ready callbacks
-        for (var i = 0; i < readyCallbacks.length; i++) {
-          readyCallbacks[i]();
-        }
-        readyCallbacks = []; // Reset
-      }
 
       return child;
     };
@@ -153,6 +158,15 @@ H5PEditor.List = (function ($) {
 
       var child = addItem(id, paramsOverride);
       self.widget.addItem(child, id);
+
+      if (!passReadyCallbacks) {
+        // Run collected ready callbacks
+        for (var i = 0; i < readyCallbacks.length; i++) {
+          readyCallbacks[i]();
+        }
+        readyCallbacks = []; // Reset
+      }
+
       return true;
     };
 
@@ -167,12 +181,14 @@ H5PEditor.List = (function ($) {
       children[index].remove();
       children.splice(index, 1);
 
-      // Clean up parameters
-      parameters.splice(index, 1);
-      if (!parameters.length) {
-        // Create new parameters for list
-        parameters = undefined;
-        setValue(field);
+      if (parameters !== undefined) {
+        // Clean up parameters
+        parameters.splice(index, 1);
+        if (!parameters.length) {
+          // Create new parameters for list
+          parameters = undefined;
+          setValue(field);
+        }
       }
     };
 
@@ -183,6 +199,10 @@ H5PEditor.List = (function ($) {
      * @public
      */
     self.removeAllItems = function () {
+      if (parameters === undefined) {
+        return;
+      }
+
       // Remove child fields
       for (var i = 0; i < children.length; i++) {
         children[i].remove();
@@ -202,14 +222,16 @@ H5PEditor.List = (function ($) {
      * @param {Number} currentIndex
      * @param {Number} newIndex
      */
-    self.moveItem = function (currentIndex, newIndex) {
+    self.moveItem = function (currentIndex, newIndex) {
       // Update child fields
       var child = children.splice(currentIndex, 1);
       children.splice(newIndex, 0, child[0]);
 
       // Update parameters
-      var params = parameters.splice(currentIndex, 1);
-      parameters.splice(newIndex, 0, params[0]);
+      if (parameters) {
+        var params = parameters.splice(currentIndex, 1);
+        parameters.splice(newIndex, 0, params[0]);
+      }
     };
 
     /**
@@ -262,19 +284,31 @@ H5PEditor.List = (function ($) {
 
       // Validate our self
       if (field.max !== undefined && field.max > 0 &&
-          parameters !== undefined && parameters.length > field.max) {
+          children !== undefined && children.length > field.max) {
         // Invalid, more parameters than max allowed.
         valid = false;
-        self.setError(H5PEditor.t('core', 'exceedsMax', {':property': self.label, ':max': field.max}));
+        self.setError(H5PEditor.t('core', 'listExceedsMax', {':max': field.max}));
       }
       if (field.min !== undefined && field.min > 0 &&
-          (parameters === undefined || parameters.length < field.min)) {
+          (children === undefined || children.length < field.min)) {
         // Invalid, less parameters than min allowed.
         valid = false;
-        self.setError(H5PEditor.t('core', 'exceedsMin', {':property': self.label, ':min': field.min}));
+        self.setError(H5PEditor.t('core', 'listBelowMin', {':min': field.min}));
       }
 
       return valid;
+    };
+
+    self.getImportance = function () {
+      if (field.importance !== undefined) {
+        return H5PEditor.createImportance(field.importance);
+      }
+      else if (field.field.importance !== undefined) {
+        return H5PEditor.createImportance(field.field.importance);
+      }
+      else {
+        return '';
+      }
     };
 
     /**
@@ -287,6 +321,14 @@ H5PEditor.List = (function ($) {
      */
     self.getValue = function () {
       return (parameters === undefined ? parameters : $.extend(true, [], parameters));
+    };
+
+    /**
+     * Get a copy of the field semantics used by this list to create rows.
+     * @return {Object}
+     */
+    self.getField = function () {
+      return $.extend(true, {}, field.field);
     };
 
     // Start the party!

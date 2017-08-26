@@ -11,6 +11,7 @@ var ns = H5PEditor;
  * @returns {undefined}
  */
 ns.Html = function (parent, field, params, setValue) {
+  this.parent = parent;
   this.field = field;
   this.value = params;
   this.setValue = setValue;
@@ -66,6 +67,12 @@ ns.Html.prototype.createToolbar = function () {
     });
   }
 
+  // Alignment is added to all wysiwygs
+  toolbar.push({
+    name: "justify",
+    items: ["JustifyLeft", "JustifyCenter", "JustifyRight"]
+  });
+
   // Paragraph styles
   if (this.inTags("ul")) {
     paragraph.push("BulletedList");
@@ -106,6 +113,16 @@ ns.Html.prototype.createToolbar = function () {
     });
   }
 
+  // Create wrapper for text styling options
+  var styles = {
+    name: "styles",
+    items: []
+  };
+  var colors = {
+    name: "colors",
+    items: []
+  };
+
   // Add format group if formatters in tags (h1, h2, etc). Formats use their
   // own format_tags to filter available formats.
   if (this.inTags("h1")) formats.push("h1");
@@ -119,18 +136,135 @@ ns.Html.prototype.createToolbar = function () {
   if (formats.length > 0 || this.inTags('p') || this.inTags('div')) {
     formats.push("p");   // If the formats are shown, always have a paragraph..
     this.tags.push("p");
-    toolbar.push({
-      name: "styles",
-      items: ['Format']
-    });
+    styles.items.push('Format');
   }
 
   var ret = {
     toolbar: toolbar
   };
+
+  if (this.field.font !== undefined) {
+    this.tags.push('span');
+
+    /**
+     * Help set specified values for property.
+     *
+     * @private
+     * @param {Array} values list
+     * @param {string} prop Property
+     * @param {string} [defProp] Default property name
+     */
+    var setValues = function (values, prop, defProp) {
+      ret[prop] = '';
+      for (var i = 0; i < values.length; i++) {
+        var val = values[i];
+        if (val.label && val.css) {
+          // Add label and CSS
+          ret[prop] += val.label + '/' + val.css + ';';
+
+          // Check if default value
+          if (defProp && val.default) {
+            ret[defProp] = val.label;
+          }
+        }
+      }
+    };
+
+    /**
+     * @private
+     * @param {Array} values
+     * @returns {string}
+     */
+    var getColors = function (values) {
+      var colors = '';
+      for (var i = 0; i < values.length; i++) {
+        var val = values[i];
+        if (val.label && val.css) {
+          var css = val.css.match(/^#?([a-f0-9]{3}[a-f0-9]{3}?)$/i);
+          if (!css) {
+            continue;
+          }
+
+          // Add label and CSS
+          if (colors) {
+            colors += ',';
+          }
+          colors += val.label + '/' + css[1];
+        }
+      }
+      return colors;
+    };
+
+    if (this.field.font.family) {
+      // Font family chooser
+      styles.items.push('Font');
+
+      if (this.field.font.family instanceof Array) {
+        // Use specified families
+        setValues(this.field.font.family, 'font_names', 'font_defaultLabel');
+      }
+    }
+
+    if (this.field.font.size) {
+      // Font size chooser
+      styles.items.push('FontSize');
+
+      ret.fontSize_sizes = '';
+      if (this.field.font.size instanceof Array) {
+        // Use specified sizes
+        setValues(this.field.font.size, 'fontSize_sizes', 'fontSize_defaultLabel');
+      }
+      else {
+        ret.fontSize_defaultLabel = '100%';
+
+        // Standard font size that is used. (= 100%)
+        var defaultFont = 16;
+
+        // Standard font sizes that is available.
+        var defaultAvailable = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72];
+        for (var i = 0; i < defaultAvailable.length; i++) {
+          // Calculate percentage of standard font size. This enables scaling
+          // in content types without rounding errors across browsers.
+          var em = defaultAvailable[i] / 16;
+          ret.fontSize_sizes += (em * 100) + '%/' + em + 'em;';
+        }
+
+      }
+
+    }
+
+    if (this.field.font.color) {
+      // Text color chooser
+      colors.items.push('TextColor');
+
+      if (this.field.font.color instanceof Array) {
+        ret.colorButton_colors = getColors(this.field.font.color);
+        ret.colorButton_enableMore = false;
+      }
+    }
+
+    if (this.field.font.background) {
+      // Text background color chooser
+      colors.items.push('BGColor');
+
+      if (this.field.font.background instanceof Array) {
+        ret.colorButton_colors = getColors(this.field.font.color);
+        ret.colorButton_enableMore = false;
+      }
+    }
+  }
+
+  // Add the text styling options
+  if (styles.items.length) {
+    toolbar.push(styles);
+  }
+  if (colors.items.length) {
+    toolbar.push(colors);
+  }
+
   // Set format_tags if not empty. CKeditor does not like empty format_tags.
-  if (formats.length > 0) {
-    ret['format_tags'] = formats.join(';');
+  if (formats.length) {
+    ret.format_tags = formats.join(';');
   }
 
   // Enable selection of enterMode in module semantics.
@@ -155,9 +289,11 @@ ns.Html.prototype.createToolbar = function () {
 ns.Html.prototype.appendTo = function ($wrapper) {
   var that = this;
 
-  this.$item = ns.$(ns.createItem(this.field.type, this.createHtml(), this.field.description)).appendTo($wrapper);
+  this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$input = this.$item.children('.ckeditor');
   this.$errors = this.$item.children('.h5p-errors');
+
+  ns.bindImportantDescriptionEvents(this, this.field.name, this.parent);
 
   var ckConfig = {
     extraPlugins: "",
@@ -180,6 +316,13 @@ ns.Html.prototype.appendTo = function ($wrapper) {
   }
 
   this.$item.children('.ckeditor').focus(function () {
+
+    // Blur is not fired on destroy. Therefore we need to keep track of it!
+    var blurFired = false;
+
+    // Remove placeholder
+    that.$placeholder = that.$item.find('.h5peditor-ckeditor-placeholder').detach();
+
     if (ns.Html.first) {
       CKEDITOR.basePath = ns.basePath + '/ckeditor/';
     }
@@ -190,17 +333,41 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     // Remove existing CK instance.
     ns.Html.removeWysiwyg();
 
-    H5P.jQuery(this).trigger('blur'); // Why do we do this? - FRL, 20120723.
-
     ns.Html.current = that;
+    ckConfig.width = this.offsetWidth - 8; // Avoid miscalculations
     that.ckeditor = CKEDITOR.replace(this, ckConfig);
 
-    that.ckeditor.on('blur', function () {
+    that.ckeditor.on('focus', function () {
+      blurFired = false;
+    });
+
+    that.ckeditor.once('destroy', function () {
+
+      // In some cases, the blur event is not fired. Need to be sure it is, so that
+      // validation and saving is done
+      if (!blurFired) {
+        blur();
+      }
+
+      // Display placeholder if:
+      // -- The value held by the field is empty AND
+      // -- The value shown in the UI is empty AND
+      // -- A placeholder is defined
+      var value = that.ckeditor !== undefined ? that.ckeditor.getData() : that.$input.html();
+      if (that.$placeholder.length !== 0 && (value === undefined || value.length === 0) && (that.value === undefined || that.value.length === 0)) {
+        that.$placeholder.appendTo(that.$item.find('.ckeditor'));
+      }
+    });
+
+    var blur = function () {
+      blurFired = true;
       // Do not validate if the field has been hidden.
       if (that.$item.is(':visible')) {
         that.validate();
       }
-    });
+    };
+
+    that.ckeditor.on('blur', blur);
 
     // Add events to ckeditor. It is beeing done here since we know it exists
     // at this point... Use case from commit message: "Make the default
@@ -220,6 +387,28 @@ ns.Html.prototype.appendTo = function ($wrapper) {
           var urlField = targetTab.get('linkTargetType');
           urlField['default'] = '_blank';
         }
+
+        // Override show event handler
+        var onShow = dialogDefinition.onShow;
+        dialogDefinition.onShow = function () {
+          if (onShow !== undefined) {
+            onShow.apply(this, arguments);
+          }
+
+          // Grab current item
+          var $item = ns.Html.current.$item;
+
+          // Position dialog above text field
+          var itemPos = $item.offset();
+          var itemWidth = $item.width();
+          var itemHeight = $item.height();
+          var dialogSize = this.getSize();
+
+          var x = itemPos.left + (itemWidth / 2) - (dialogSize.width / 2);
+          var y = itemPos.top + (itemHeight / 2) - (dialogSize.height / 2);
+
+          this.move(x, y, true);
+        };
       });
       ns.Html.first = false;
     }
@@ -230,21 +419,16 @@ ns.Html.prototype.appendTo = function ($wrapper) {
  * Create HTML for the HTML field.
  */
 ns.Html.prototype.createHtml = function () {
-  var html = '<label class="h5peditor-label">';
-
-  if (this.field.label !== undefined) {
-    html += '<span class="h5peditor-label">' + this.field.label + '</span>';
-  }
-  html += '</label>';
-
-  html += '<div class="ckeditor" tabindex="0" contenteditable="true">';
-
+  var input = '<div class="ckeditor" tabindex="0" contenteditable="true">';
   if (this.value !== undefined) {
-    html += this.value;
+    input += this.value;
   }
-  html += '</div>';
+  else if (this.field.placeholder !== undefined) {
+    input += '<span class="h5peditor-ckeditor-placeholder">' + this.field.placeholder + '</span>';
+  }
+  input += '</div>';
 
-  return html;
+  return ns.createFieldMarkup(this.field, ns.createImportantDescription(this.field.important) + input);
 };
 
 /**
@@ -252,12 +436,17 @@ ns.Html.prototype.createHtml = function () {
  */
 ns.Html.prototype.validate = function () {
   var that = this;
+
   if (that.$errors.children().length) {
     that.$errors.empty();
+    this.$input.addClass('error');
   }
 
   // Get contents from editor
   var value = this.ckeditor !== undefined ? this.ckeditor.getData() : this.$input.html();
+
+  // Remove placeholder text if any:
+  value = value.replace(/<span class="h5peditor-ckeditor-placeholder">.*<\/span>/, '');
 
   var $value = ns.$('<div>' + value + '</div>');
   var textValue = $value.text();
@@ -266,7 +455,7 @@ ns.Html.prototype.validate = function () {
   if (!this.field.optional && !textValue.length) {
     // We can accept empty text, if there's an image instead.
     if (! (this.inTags("img") && $value.find('img').length > 0)) {
-      this.$errors.append(ns.createError(this.field.label + ' is required and must have some text or at least an image in it.'));
+      this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': ns.t('core', 'textField')})));
     }
   }
 
@@ -283,6 +472,8 @@ ns.Html.prototype.validate = function () {
   // Display errors and bail if set.
   if (that.$errors.children().length) {
     return false;
+  } else {
+    this.$input.removeClass('error');
   }
 
   this.value = value;

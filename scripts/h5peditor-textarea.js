@@ -12,6 +12,7 @@ var ns = H5PEditor;
  * @returns {ns.Textarea}
  */
 ns.Textarea = function (parent, field, params, setValue) {
+  this.parent = parent;
   this.field = field;
   this.value = params;
   this.setValue = setValue;
@@ -27,8 +28,10 @@ ns.Textarea.prototype.appendTo = function ($wrapper) {
   var that = this;
 
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
-  this.$input = this.$item.children('label').children('textarea');
-  this.$errors = this.$item.children('.h5p-errors');
+  this.$input = this.$item.find('textarea');
+  this.$errors = this.$item.find('.h5p-errors');
+  
+  ns.bindImportantDescriptionEvents(this, this.field.name, this.parent);
 
   this.$input.change(function () {
     // Validate
@@ -55,9 +58,7 @@ ns.Textarea.prototype.createHtml = function () {
   }
   input += '</textarea>';
 
-  var label = ns.createLabel(this.field, input);
-
-  return ns.createItem(this.field.type, label, this.field.description);
+  return ns.createFieldMarkup(this.field, ns.createImportantDescription(this.field.important) + input);
 };
 
 /**
@@ -66,8 +67,15 @@ ns.Textarea.prototype.createHtml = function () {
 ns.Textarea.prototype.validate = function () {
   var value = H5P.trim(this.$input.val());
 
+  if (this.$errors.html().length > 0) {
+    this.$input.addClass('error');
+  }
+
+  // Clear errors before showing new ones
+  this.$errors.html('');
+
   if ((this.field.optional === undefined || !this.field.optional) && !value.length) {
-    this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': 'text field'})));
+    this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': ns.t('core', 'textField')})));
   }
   else if (value.length > this.field.maxLength) {
     this.$errors.append(ns.createError(ns.t('core', 'tooLong', {':max': this.field.maxLength})));

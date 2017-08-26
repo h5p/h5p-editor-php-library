@@ -11,8 +11,8 @@ var ns = H5PEditor;
  */
 ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   var that = this;
-  var firstTime = true;
-  var options = '<option value="-">-</option>';
+
+  H5P.EventDispatcher.call(this);
 
   try {
     this.defaultParams = JSON.parse(defaultParams);
@@ -29,56 +29,76 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   this.defaultLibrary = this.currentLibrary = defaultLibrary;
   this.defaultLibraryParameterized = defaultLibrary ? defaultLibrary.replace('.', '-').toLowerCase() : undefined;
 
-  for (var i = 0; i < libraries.length; i++) {
-    var library = libraries[i];
-    var libraryName = ns.libraryToString(library);
+  //Add tutorial and example link:
+  this.$tutorialUrl = ns.$('<a class="h5p-tutorial-url" target="_blank">' + ns.t('core', 'tutorial') + '</a>').hide();
+  this.$exampleUrl = ns.$('<a class="h5p-example-url" target="_blank">' + ns.t('core', 'example') + '</a>').hide();
 
-    // Never deny editing existing content
-    // For new content deny old or restricted libs.
-    if (this.defaultLibrary === libraryName
-      || ((library.restricted === undefined || !library.restricted)
-        && library.isOld !== true
-      )
-    ) {
-      options += '<option value="' + libraryName + '"';
-      if (libraryName === defaultLibrary || library.name === this.defaultLibraryParameterized) {
-        options += ' selected="selected"';
-      }
-      if (library.tutorialUrl !== undefined) {
-        options += ' data-tutorial-url="' + library.tutorialUrl + '"';
-      }
-      options += '>' + library.title + (library.isOld===true ? ' (deprecated)' : '') + '</option>';
-    }
+  // Create confirm dialog
+  var changeLibraryDialog = new H5P.ConfirmationDialog({
+    headerText: H5PEditor.t('core', 'changeLibrary'),
+    dialogText: H5PEditor.t('core', 'confirmChangeLibrary')
+  }).appendTo(document.body);
+
+  if (H5PIntegration.hubIsEnabled) {
+    this.selector = new ns.SelectorHub(defaultLibrary, changeLibraryDialog);
+  }
+  else {
+    this.selector = new ns.SelectorLegacy(libraries, defaultLibrary, changeLibraryDialog);
   }
 
-  //Add tutorial link:
-  this.$tutorialUrl = ns.$('<a class="h5p-tutorial-url" target="_blank">' + ns.t('core', 'tutorialAvailable') + '</a>').hide();
+  this.$selector = ns.$(this.selector.getElement());
 
-  this.$selector = ns.$('<select name="h5peditor-library" title="' + ns.t('core', 'selectLibrary') + '">' + options + '</select>').change(function () {
-    var library;
-    var changeLibrary = true;
+  /**
+   * @private
+   * @param {object} library
+   */
+  var librarySelectHandler = function (library) {
+    that.currentLibrary = library.uberName;
+    that.loadSemantics(library.uberName, that.selector.getParams());
 
-    if (!firstTime) {
-      changeLibrary = confirm(H5PEditor.t('core', 'confirmChangeLibrary'));
-    }
+    that.$tutorialUrl.attr('href', library.tutorialUrl ? library.tutorialUrl : '#').toggle(!!library.tutorialUrl);
+    that.$exampleUrl.attr('href', library.exampleUrl ? library.exampleUrl : '#').toggle(!!library.exampleUrl);
+  }
 
-    if (changeLibrary) {
-      library = that.$selector.val();
-      that.loadSemantics(library);
-      that.currentLibrary = library;
-    }
-    else {
-      that.$selector.val(that.currentLibrary);
-    }
+  /**
+   * Event handler for loading a new library editor
+   * @private
+   */
+  var loadLibrary = function () {
+    that.trigger('editorload', that.selector.currentLibrary);
+    that.selector.getSelectedLibrary(librarySelectHandler);
+  };
 
-    if (library !== '-') {
-      firstTime = false;
-    }
+  // Change library on confirmation
+  changeLibraryDialog.on('confirmed', loadLibrary);
 
-    var tutorialUrl = ns.$(this).find(':selected').data('tutorial-url');
-    that.$tutorialUrl.attr('href', tutorialUrl).toggle(tutorialUrl !== undefined && tutorialUrl !== null && tutorialUrl.length !== 0);
+  // Revert selector on cancel
+  changeLibraryDialog.on('canceled', function () {
+    that.selector.resetSelection(that.currentLibrary, that.defaultParams);
   });
+
+  // First time a library is selected in the editor
+  this.selector.on('selected', loadLibrary);
+
+  this.selector.on('resized', function () {
+    that.trigger('resized');
+  });
+
+  this.on('select', loadLibrary);
 };
+
+// Extends the event dispatcher
+ns.LibrarySelector.prototype = Object.create(H5P.EventDispatcher.prototype);
+ns.LibrarySelector.prototype.constructor = ns.LibrarySelector;
+
+/**
+ * Sets the current library
+ *
+ * @param {string} library
+ */
+ns.LibrarySelector.prototype.setLibrary = function (library) {
+  this.trigger('select');
+}
 
 /**
  * Append the selector html to the given container.
@@ -91,17 +111,17 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
 
   this.$selector.appendTo($element);
   this.$tutorialUrl.appendTo($element);
-
-  $element.append('<div class="h5p-more-libraries">' + ns.t('core', 'moreLibraries') + '</div>');
+  this.$exampleUrl.appendTo($element);
 };
 
 /**
  * Display loading message and load library semantics.
  *
  * @param {String} library
+ * @param {Object} params Pass in params to semantics
  * @returns {unresolved}
  */
-ns.LibrarySelector.prototype.loadSemantics = function (library) {
+ns.LibrarySelector.prototype.loadSemantics = function (library, params) {
   var that = this;
 
   if (this.form !== undefined) {
@@ -117,19 +137,48 @@ ns.LibrarySelector.prototype.loadSemantics = function (library) {
   this.$parent.attr('class', 'h5peditor ' + library.split(' ')[0].toLowerCase().replace('.', '-') + '-editor');
 
   // Display loading message
-  var $loading = ns.$('<div class="h5peditor-loading h5p-throbber">' + ns.t('core', 'loading', {':type': 'semantics'}) + '</div>').appendTo(this.$parent);
+  var $loading = ns.$('<div class="h5peditor-loading h5p-throbber">' + ns.t('core', 'loading') + '</div>').appendTo(this.$parent);
 
   this.$selector.attr('disabled', true);
 
+  ns.resetLoadedLibraries();
   ns.loadLibrary(library, function (semantics) {
-    that.form = new ns.Form();
-    that.form.replace($loading);
+    if (!semantics) {
+      that.form = ns.$('<div/>', {
+        'class': 'h5p-errors',
+        text: H5PEditor.t('core', 'noSemantics'),
+        insertAfter: $loading
+      });
+    }
+    else {
+      var overrideParams = {};
+      if (params) {
+        overrideParams = params;
+        that.defaultParams = overrideParams;
+      }
+      else if (library === that.defaultLibrary || library === that.defaultLibraryParameterized) {
+        overrideParams = that.defaultParams;
+      }
 
-    that.form.processSemantics(semantics, (library === that.defaultLibrary || library === that.defaultLibraryParameterized ? that.defaultParams : {}));
+      that.form = new ns.Form();
+      that.form.replace($loading);
+      that.form.currentLibrary = library;
+      that.form.processSemantics(semantics, overrideParams);
+    }
 
     that.$selector.attr('disabled', false);
     $loading.remove();
+    that.trigger('editorloaded', library);
   });
+};
+
+/**
+ * Returns currently selected library
+ *
+ * @returns {string} Currently selected library
+ */
+ns.LibrarySelector.prototype.getCurrentLibrary = function () {
+  return this.currentLibrary;
 };
 
 /**

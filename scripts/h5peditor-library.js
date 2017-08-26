@@ -1,21 +1,31 @@
-var H5PEditor = H5PEditor || {};
+var H5PEditor = (H5PEditor || {});
 var ns = H5PEditor;
+
+/**
+ * Callback for setting new parameters.
+ *
+ * @callback H5PEditor.newParams
+ * @param {Object} field Current field details.
+ * @param {Object} params New parameters.
+ */
 
 /**
  * Create a field where one can select and include another library to the form.
  *
- * @param {mixed} parent
- * @param {Object} field
- * @param {mixed} params
- * @param {function} setValue
- * @returns {ns.Library}
+ * @class H5PEditor.Library
+ * @extends H5P.EventDispatcher
+ * @param {Object} parent Parent field in editor.
+ * @param {Object} field Details for current field.
+ * @param {Object} params Default parameters.
+ * @param {newParams} setValue Callback for setting new parameters.
  */
 ns.Library = function (parent, field, params, setValue) {
   var self = this;
   H5P.EventDispatcher.call(this);
-  
   if (params === undefined) {
-    this.params = {params: {}};
+    this.params = {
+      params: {}
+    };
     // If you do a console log here it might show that this.params is
     // something else than what we set it to. One of life's big mysteries...
     setValue(field, this.params);
@@ -23,16 +33,30 @@ ns.Library = function (parent, field, params, setValue) {
     this.params = params;
   }
   this.field = field;
-  this.$myField;
   this.parent = parent;
   this.changes = [];
   this.optionsLoaded = false;
   this.library = parent.library + '/' + field.name;
-  this.libraries;
 
   this.passReadies = true;
   parent.ready(function () {
     self.passReadies = false;
+  });
+
+  // Confirmation dialog for changing library
+  this.confirmChangeLibrary = new H5P.ConfirmationDialog({
+    headerText: H5PEditor.t('core', 'changeLibrary'),
+    dialogText: H5PEditor.t('core', 'confirmChangeLibrary')
+  }).appendTo(document.body);
+
+  // Load library on confirmation
+  this.confirmChangeLibrary.on('confirmed', function () {
+    self.loadLibrary(self.$select.val());
+  });
+
+  // Revert to current library on cancel
+  this.confirmChangeLibrary.on('canceled', function () {
+    self.$select.val(self.currentLibrary);
   });
 };
 
@@ -42,20 +66,19 @@ ns.Library.prototype.constructor = ns.Library;
 /**
  * Append the library selector to the form.
  *
- * @param {jQuery} $wrapper
- * @returns {undefined}
+ * @alias H5PEditor.Library#appendTo
+ * @param {H5P.jQuery} $wrapper
  */
 ns.Library.prototype.appendTo = function ($wrapper) {
   var that = this;
   var html = '';
   if (this.field.label !== 0) {
-    html = '<label class="h5peditor-label">' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
+    html = '<label class="h5peditor-label' + (this.field.optional ? '' : ' h5peditor-required') + '">' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
   }
 
+  html += ns.createDescription(this.field.description);
   html = '<div class="field ' + this.field.type + '">' + html + '<select>' + ns.createOption('-', 'Loading...') + '</select>';
-  if (this.field.description !== undefined) {
-    html += '<div class="h5peditor-field-description">' + this.field.description + '</div>';
-  }
+
   // TODO: Remove errors, it is deprecated
   html += '<div class="errors h5p-errors"></div><div class="libwrap"></div></div>';
 
@@ -63,29 +86,42 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   this.$select = this.$myField.children('select');
   this.$libraryWrapper = this.$myField.children('.libwrap');
   ns.LibraryListCache.getLibraries(that.field.options, that.librariesLoaded, that);
-}
+};
 
 /**
  * Handler for when the library list has been loaded
- * 
- * @param {H5P.Event} event
+ *
+ * @alias H5PEditor.Library#librariesLoaded
+ * @param {Array} libList
  */
-ns.Library.prototype.librariesLoaded = function(libList) {
+ns.Library.prototype.librariesLoaded = function (libList) {
   this.libraries = libList;
   var self = this;
   var options = ns.createOption('-', '-');
   for (var i = 0; i < self.libraries.length; i++) {
     var library = self.libraries[i];
-    if (library.uberName === self.params.library
-      || (library.title !== undefined && (library.restricted === undefined || !library.restricted))) {
+    if (library.uberName === self.params.library ||
+        (library.title !== undefined && (library.restricted === undefined || !library.restricted))) {
       options += ns.createOption(library.uberName, library.title, library.uberName === self.params.library);
     }
   }
 
   self.$select.html(options).change(function () {
-    if (self.params.library === undefined || confirm(H5PEditor.t('core', 'confirmChangeLibrary'))) {
-      self.loadLibrary(ns.$(this).val());
-    }
+    // Use timeout to avoid bug in Chrome >44, when confirm is used inside change event.
+    // Ref. https://code.google.com/p/chromium/issues/detail?id=525629
+    setTimeout(function () {
+
+      // Check if library is selected
+      if (self.params.library) {
+
+        // Confirm changing library
+        self.confirmChangeLibrary.show(self.$select.offset().top);
+      } else {
+
+        // Load new library
+        self.loadLibrary(self.$select.val());
+      }
+    }, 0);
   });
 
   if (self.libraries.length === 1) {
@@ -103,14 +139,14 @@ ns.Library.prototype.librariesLoaded = function(libList) {
   if (this.params.library !== undefined) {
     self.loadLibrary(this.params.library, true);
   }
-}
+};
 
 /**
  * Load the selected library.
  *
- * @param {String} libraryName On the form machineName.majorVersion.minorVersion
- * @param {Boolean} preserveParams
- * @returns {unresolved}
+ * @alias H5PEditor.Library#loadLibrary
+ * @param {string} libraryName On the form machineName.majorVersion.minorVersion
+ * @param {boolean} [preserveParams]
  */
 ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
   var that = this;
@@ -120,11 +156,12 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
   if (libraryName === '-') {
     delete this.params.library;
     delete this.params.params;
+    delete this.params.subContentId;
     this.$libraryWrapper.attr('class', 'libwrap');
     return;
   }
 
-  this.$libraryWrapper.html(ns.t('core', 'loading', {':type': 'semantics'})).addClass(libraryName.split(' ')[0].toLowerCase().replace('.', '-') + '-editor');
+  this.$libraryWrapper.html(ns.t('core', 'loading')).attr('class', 'libwrap ' + libraryName.split(' ')[0].toLowerCase().replace('.', '-') + '-editor');
 
   ns.loadLibrary(libraryName, function (semantics) {
     that.currentLibrary = libraryName;
@@ -133,6 +170,9 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     if (preserveParams === undefined || !preserveParams) {
       // Reset params
       that.params.params = {};
+    }
+    if (that.params.subContentId === undefined) {
+      that.params.subContentId = H5P.createUUID();
     }
 
     ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper.html(''), that);
@@ -147,9 +187,10 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 };
 
 /**
- * Add the given callback or run
- * @param {type} callback
- * @returns {Number|@pro;length@this.changes}
+ * Add the given callback or run it.
+ *
+ * @alias H5PEditor.Library#change
+ * @param {Function} callback
  */
 ns.Library.prototype.change = function (callback) {
   if (callback !== undefined) {
@@ -158,8 +199,8 @@ ns.Library.prototype.change = function (callback) {
   }
   else {
     // Find library
-    var library;
-    for (var i = 0; i < this.libraries.length; i++) {
+    var library, i;
+    for (i = 0; i < this.libraries.length; i++) {
       if (this.libraries[i].uberName === this.currentLibrary) {
         library = this.libraries[i];
         break;
@@ -167,7 +208,7 @@ ns.Library.prototype.change = function (callback) {
     }
 
     // Run callbacks
-    for (var i = 0; i < this.changes.length; i++) {
+    for (i = 0; i < this.changes.length; i++) {
       this.changes[i](library);
     }
   }
@@ -175,12 +216,11 @@ ns.Library.prototype.change = function (callback) {
 
 /**
  * Validate this field and its children.
+ *
+ * @alias H5PEditor.Library#validate
+ * @returns {boolean}
  */
 ns.Library.prototype.validate = function () {
-  if (this.params.library === undefined) {
-    return false;
-  }
-
   var valid = true;
 
   if (this.children) {
@@ -190,15 +230,18 @@ ns.Library.prototype.validate = function () {
       }
     }
   }
+  else if (this.libraries && this.libraries.length) {
+    valid = false;
+  }
 
-  return valid;
+  return (this.field.optional ? true : valid);
 };
 
 /**
  * Collect functions to execute once the tree is complete.
  *
- * @param {function} ready
- * @returns {undefined}
+ * @alias H5PEditor.Library#ready
+ * @param {Function} ready
  */
 ns.Library.prototype.ready = function (ready) {
   if (this.passReadies) {
@@ -212,7 +255,7 @@ ns.Library.prototype.ready = function (ready) {
 /**
  * Custom remove children that supports common fields.
  *
- * @returns {unresolved}
+ * * @alias H5PEditor.Library#removeChildren
  */
 ns.Library.prototype.removeChildren = function () {
   if (this.currentLibrary === '-' || this.children === undefined) {
@@ -253,7 +296,7 @@ ns.Library.prototype.removeChildren = function () {
 /**
  * Allows ancestors and widgets to do stuff with our children.
  *
- * @public
+ * @alias H5PEditor.Library#forEachChild
  * @param {Function} task
  */
 ns.Library.prototype.forEachChild = function (task) {
@@ -266,6 +309,8 @@ ns.Library.prototype.forEachChild = function (task) {
 
 /**
  * Called when this item is being removed.
+ *
+ * @alias H5PEditor.Library#remove
  */
 ns.Library.prototype.remove = function () {
   this.removeChildren();
