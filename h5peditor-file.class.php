@@ -168,7 +168,8 @@ class H5peditorFile {
             }
 
             $image = array($width, $height);
-          } else if (isset($svg['viewBox'])) {
+          }
+          elseif (isset($svg['viewBox'])) {
             $split = explode(' ', $svg['viewBox']);
 
             if (!(is_array($split) && sizeof($split) === 4 && $split[2] > 0 && $split[3] > 0)) {
@@ -177,7 +178,9 @@ class H5peditorFile {
             }
 
             $image = array($split[2], $split[3]);
-          } else {
+          }
+
+          if (!$image) {
             $this->result->error = $this->interface->t('Unable to determine size of uploaded .svg image.');
             return FALSE;
           }
