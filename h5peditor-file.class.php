@@ -6,6 +6,7 @@
 class H5peditorFile {
   private $result, $field, $interface;
   public $type, $name, $path, $mime, $size;
+  const NUMERIC_PATTERN = '/[^0-9,.]/';
 
   /**
    * Constructor. Process data for file uploaded through the editor.
@@ -159,8 +160,8 @@ class H5peditorFile {
           $svg = simplexml_load_file($_FILES['file']['tmp_name']);
 
           if (isset($svg['width']) && isset($svg['height'])) {
-            $width = preg_replace('/[^0-9,.]/', '', $svg['width']);
-            $height = preg_replace('/[^0-9,.]/', '', $svg['height']);
+            $width = preg_replace(self::NUMERIC_PATTERN, '', $svg['width']);
+            $height = preg_replace(self::NUMERIC_PATTERN, '', $svg['height']);
 
             if (!($width > 0 && $height > 0)) {
               $this->result->error = $this->interface->t('Unable to determine size of uploaded .svg image.');
@@ -178,11 +179,6 @@ class H5peditorFile {
             }
 
             $image = array($split[2], $split[3]);
-          }
-
-          if (!$image) {
-            $this->result->error = $this->interface->t('Unable to determine size of uploaded .svg image.');
-            return FALSE;
           }
         }
         else {
