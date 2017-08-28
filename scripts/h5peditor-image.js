@@ -219,7 +219,7 @@ ns.widgets.image.prototype.addFile = function () {
   var altText = (this.field.label === undefined ? '' : this.field.label);
   var fileHtmlString =
     '<a href="#" title="' + ns.t('core', 'changeFile') + '" class="thumbnail">' +
-      '<img ' + '" alt="' + altText + '"/>' +
+      '<img alt="' + altText + '"/>' +
     '</a>' +
     '<a href="#" class="remove" title="' + ns.t('core', 'removeFile') + '"></a>';
 
