@@ -501,6 +501,8 @@ a {
       border: 1px solid #fff;
       cursor: pointer;
       max-width: 100%;
+      min-width: 1em;
+      min-height: 1em;
     }
     .thumbnail:focus {
       @include box-shadow(0 0 10px 0 #222);
