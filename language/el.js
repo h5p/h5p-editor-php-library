@@ -134,13 +134,13 @@ H5PEditor.language.core = {
   licenseMustIncludeCopyright: 'Must include copyright',
   licenseMustIncludeLicense: 'Must include license',
   licenseFetchDetailsFailed: 'Failed fetching license details',
-  imageLightboxTitle: 'Images',
-  imageLightBoxProgress: ':num of :total',
+  imageLightboxTitle: 'Εικόνες',
+  imageLightBoxProgress: ':num από :total',
   nextImage: 'Επόμενη εικόνα',
   previousImage: 'Προηγούμενη εικόνα',
-  screenshots: 'Screenshots',
-  reloadButtonLabel: 'Reload',
-  videoQuality: 'Video quality label',
+  screenshots: 'Στιγμιότυπα',
+  reloadButtonLabel: 'Επαναφόρτωση',
+  videoQuality: 'Ετικέτα ποιότητας βίντεο',
   videoQualityDescription: 'This label helps the user identify the current quality of the video. E.g. 1080p, 720p, HD or Mobile',
-  videoQualityDefaultLabel: 'Quality :index'
+  videoQualityDefaultLabel: 'Ποιότητα :index'
 };
