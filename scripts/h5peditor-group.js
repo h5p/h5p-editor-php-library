@@ -82,7 +82,7 @@ ns.Group.prototype.appendTo = function ($wrapper) {
   });
 
   // Add title expand/collapse button
-  ns.$('<div/>', {
+  this.$title = ns.$('<div/>', {
     'class': 'title',
     title: ns.t('core', 'expandCollapse'),
     role: 'button',
@@ -283,7 +283,7 @@ ns.Group.prototype.setSummary = function (summary) {
     summaryText = this.field.label;
   }
 
-  this.$group.children('.title').text(summaryText);
+  this.$title.text(summaryText);
 };
 
 /**
@@ -333,6 +333,14 @@ ns.Group.prototype.remove = function () {
     ns.removeChildren(this.children);
     this.$group.remove();
   }
+};
+
+/**
+ * Get a copy of the fields semantics used by this group.
+ * @return {Array}
+ */
+ns.Group.prototype.getFields = function () {
+  return H5PEditor.$.extend(true, [], this.field.fields);
 };
 
 // Tell the editor what widget we are.

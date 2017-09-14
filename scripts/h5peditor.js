@@ -2,12 +2,14 @@
  * This file contains helper functions for the editor.
  */
 
-// Use resources set in parent window
-var ns = H5PEditor = window.parent.H5PEditor;
+// Grab common resources set in parent window, but avoid sharing back resources set in iframe)
+var ns = H5PEditor = H5P.jQuery.extend(false, {}, window.parent.H5PEditor);
 ns.$ = H5P.jQuery;
 
 // Load needed resources from parent.
 H5PIntegration = window.parent.H5PIntegration;
+H5PIntegration.loadedJs = {};
+H5PIntegration.loadedCss = {};
 
 /**
  * Keep track of our widgets.
@@ -15,14 +17,22 @@ H5PIntegration = window.parent.H5PIntegration;
 ns.widgets = {};
 
 /**
- * Keeps track of which semantics are loaded.
+ * Caches library data (semantics, js and css)
  */
-ns.loadedSemantics = {};
+ns.libraryCache = {};
 
 /**
- * Keeps track of callbacks to run once a semantic gets loaded.
+ * Keeps track of callbacks to run once a library gets loaded.
  */
-ns.semanticsLoaded = {};
+ns.loadedCallbacks = {};
+
+/**
+ * Keep track of which libraries have been loaded in the browser, i.e CSS is
+ * added and JS have been run
+ *
+ * @type {Object}
+ */
+ns.libraryLoaded = {};
 
 /**
  * Indiciates if the user is using Internet Explorer.
@@ -30,30 +40,76 @@ ns.semanticsLoaded = {};
 ns.isIE = navigator.userAgent.match(/; MSIE \d+.\d+;/) !== null;
 
 /**
+ * Helper function invoked when a library is requested. Will add CSS and eval JS
+ * if not already done.
+ *
+ * @private
+ * @param {string} libraryName On the form "machineName majorVersion.minorVersion"
+ * @param {Function} callback
+ */
+ns.libraryRequested = function (libraryName, callback) {
+  var libraryData = ns.libraryCache[libraryName];
+
+  if (!ns.libraryLoaded[libraryName]) {
+    // Add CSS.
+    if (libraryData.css !== undefined) {
+      var css = '';
+      for (var path in libraryData.css) {
+        if (!H5P.cssLoaded(path)) {
+          css += libraryData.css[path];
+          H5PIntegration.loadedCss.push(path);
+        }
+      }
+      if (css) {
+        ns.$('head').append('<style class="h5p-editor-style" type="text/css">' + css + '</style>');
+      }
+    }
+
+    // Add JS.
+    if (libraryData.javascript !== undefined) {
+      var js = '';
+      for (var path in libraryData.javascript) {
+        if (!H5P.jsLoaded(path)) {
+          js += libraryData.javascript[path];
+          H5PIntegration.loadedJs.push(path);
+        }
+      }
+      if (js) {
+        var k = eval.apply(window, [js]);
+      }
+    }
+
+    ns.libraryLoaded[libraryName] = true;
+  }
+
+  callback(ns.libraryCache[libraryName].semantics);
+};
+
+/**
  * Loads the given library, inserts any css and js and
  * then runs the callback with the samantics as an argument.
  *
  * @param {string} libraryName
- *  On the form machineName.majorVersion.minorVersion
+ *  On the form machineName majorVersion.minorVersion
  * @param {function} callback
  * @returns {undefined}
  */
 ns.loadLibrary = function (libraryName, callback) {
-  switch (ns.loadedSemantics[libraryName]) {
+  switch (ns.libraryCache[libraryName]) {
     default:
       // Get semantics from cache.
-      callback(ns.loadedSemantics[libraryName]);
+      ns.libraryRequested(libraryName, callback);
       break;
 
     case 0:
       // Add to queue.
-      ns.semanticsLoaded[libraryName].push(callback);
+      ns.loadedCallbacks[libraryName].push(callback);
       break;
 
     case undefined:
       // Load semantics.
-      ns.loadedSemantics[libraryName] = 0; // Indicates that others should queue.
-      ns.semanticsLoaded[libraryName] = []; // Other callbacks to run once loaded.
+      ns.libraryCache[libraryName] = 0; // Indicates that others should queue.
+      ns.loadedCallbacks[libraryName] = []; // Other callbacks to run once loaded.
       var library = ns.libraryFromString(libraryName);
 
       var url = ns.getAjaxUrl('libraries', library);
@@ -73,41 +129,13 @@ ns.loadLibrary = function (libraryName, callback) {
             semantics = ns.$.extend(true, [], semantics, language.semantics);
           }
           libraryData.semantics = semantics;
-          ns.loadedSemantics[libraryName] = libraryData.semantics;
+          ns.libraryCache[libraryName] = libraryData;
 
-          // Add CSS.
-          if (libraryData.css !== undefined) {
-            var css = '';
-            for (var path in libraryData.css) {
-              if (!H5P.cssLoaded(path)) {
-                css += libraryData.css[path];
-                H5PIntegration.loadedCss.push(path);
-              }
-            }
-            if (css) {
-              ns.$('head').append('<style type="text/css">' + css + '</style>');
-            }
-          }
-
-          // Add JS.
-          if (libraryData.javascript !== undefined) {
-            var js = '';
-            for (var path in libraryData.javascript) {
-              if (!H5P.jsLoaded(path)) {
-                js += libraryData.javascript[path];
-                H5PIntegration.loadedJs.push(path);
-              }
-            }
-            if (js) {
-              eval.apply(window, [js]);
-            }
-          }
-
-          callback(libraryData.semantics);
+          ns.libraryRequested(libraryName, callback);
 
           // Run queue.
-          for (var i = 0; i < ns.semanticsLoaded[libraryName].length; i++) {
-            ns.semanticsLoaded[libraryName][i](libraryData.semantics);
+          for (var i = 0; i < ns.loadedCallbacks[libraryName].length; i++) {
+            ns.loadedCallbacks[libraryName][i](libraryData.semantics);
           }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -122,6 +150,19 @@ ns.loadLibrary = function (libraryName, callback) {
       });
   }
 };
+
+/**
+ * Reset loaded libraries - i.e removes CSS added previously.
+ * @method
+ * @return {[type]}
+ */
+ns.resetLoadedLibraries = function () {
+  ns.$('head style.h5p-editor-style').remove();
+  H5PIntegration.loadedCss = [];
+  H5PIntegration.loadedJs = [];
+  ns.loadedCallbacks = {};
+  ns.libraryLoaded = {};
+}
 
 /**
  * Recursive processing of the semantics chunks.
@@ -594,6 +635,118 @@ ns.createDescription = function (description) {
 };
 
 /**
+ * Create an important description
+ * @param {Object} importantDescription
+ * @returns {String}
+ */
+ns.createImportantDescription = function (importantDescription) {
+  var html = '';
+
+  if (importantDescription !== undefined) {
+    html += '<div class="h5peditor-field-important-description">' +
+              '<div class="important-description-tail">' +
+              '</div>' +
+              '<div class="important-description-close" role="button" tabindex="0" aria-label="' + ns.t('core', 'hideImportantInstructions') + '">' +
+                '<span>' +
+                   ns.t('core', 'hide') +
+                '</span>' +
+              '</div>' +
+              '<span class="h5p-info-icon">' +
+              '</span>' +
+              '<span class="important-description-title">' +
+                 ns.t('core', 'importantInstructions') +
+              '</span>';
+
+    if (importantDescription.description !== undefined) {
+      html += '<div class="important-description-content">' +
+                 importantDescription.description +
+              '</div>';
+    }
+
+    if (importantDescription.example !== undefined) {
+      html += '<div class="important-description-example">' +
+                '<div class="important-description-example-title">' +
+                  '<span>' +
+                     ns.t('core', 'example') +
+                  ':</span>' +
+                '</div>' +
+                '<div class="important-description-example-text">' +
+                  '<span>' +
+                     importantDescription.example +
+                  '</span>' +
+                '</div>' +
+              '</div>';
+    }
+
+    html += '</div>' +
+            '<span class="important-description-show" role="button" tabindex="0">' +
+              ns.t('core', 'showImportantInstructions') +
+            '</span><span class="important-description-clear-right"></span>';
+  }
+
+  return html;
+};
+
+/**
+ * Bind events to important description
+ * @param {Object} widget
+ * @param {String} fieldName
+ * @param {Object} parent
+ */
+ns.bindImportantDescriptionEvents = function (widget, fieldName, parent) {
+  var that = this;
+  var context;
+
+  if (!widget.field.important) {
+    return;
+  }
+
+  // Generate a context string for using as referance in ex. localStorage.
+  var librarySelector = ns.findLibraryAncestor(parent);
+  if (librarySelector.currentLibrary !== undefined) {
+    var lib = librarySelector.currentLibrary.split(' ')[0];
+    context = (lib + '-' + fieldName).replace(/\.|_/g,'-') + '-important-description-open';
+  }
+
+  var $importantField = widget.$item.find('.h5peditor-field-important-description');
+
+  // Set first occurance to visible
+  ns.storage.get(context, function (value) {
+    if (value === undefined || value === true) {
+      widget.$item.addClass('important-description-visible');
+    }
+  });
+
+  widget.$item.addClass('has-important-description');
+
+  // Bind events to toggle button and update aria-pressed
+  widget.$item.find('.important-description-show')
+    .click(function () {
+      widget.$item.addClass('important-description-visible');
+      ns.storage.set(context, true);
+    })
+    .keydown(function () {
+      if (event.which == 13 || event.which == 32) {
+        ns.$(this).trigger('click');
+        event.preventDefault();
+      }
+    });
+
+  // Bind events to close button and update aria-pressed of toggle button
+  widget.$item.find('.important-description-close')
+    .click(function () {
+      widget.$item.removeClass('important-description-visible');
+      ns.storage.set(context, false);
+    })
+    .keydown(function () {
+      if (event.which == 13 || event.which == 32) {
+        ns.$(this).trigger('click');
+        event.preventDefault();
+      }
+    });
+};
+
+/**
  * Check if any errors has been set.
  *
  * @param {jQuery} $errors
@@ -704,3 +857,44 @@ ns.createButton = function (id, title, handler, displayTitle) {
 
   return ns.$('<div/>', options);
 };
+
+// Factory for creating storage instance
+ns.storage = (function () {
+  var instance = {
+    get: function (key, next) {
+      var value;
+
+      // Get value from browser storage
+      if (window.localStorage !== undefined) {
+        value = !!window.localStorage.getItem(key);
+      }
+
+      // Try to get a better value from user data storage
+      try {
+        H5P.getUserData(0, key, function (err, result) {
+          if (!err) {
+            value = result;
+          }
+          next(value);
+        });
+      }
+      catch (err) {
+        next(value);
+      }
+    },
+    set: function (key, value) {
+
+      // Store in browser
+      if (window.localStorage !== undefined) {
+        window.localStorage.setItem(key, value);
+      }
+
+      // Try to store in user data storage
+      try {
+        H5P.setUserData(0, key, value);
+      }
+      catch (err) {}
+    },
+  };
+  return instance;
+})();
