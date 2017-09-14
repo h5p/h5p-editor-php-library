@@ -58,7 +58,7 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
 
     that.$tutorialUrl.attr('href', library.tutorialUrl ? library.tutorialUrl : '#').toggle(!!library.tutorialUrl);
     that.$exampleUrl.attr('href', library.exampleUrl ? library.exampleUrl : '#').toggle(!!library.exampleUrl);
-  }
+  };
 
   /**
    * Event handler for loading a new library editor
@@ -98,7 +98,7 @@ ns.LibrarySelector.prototype.constructor = ns.LibrarySelector;
  */
 ns.LibrarySelector.prototype.setLibrary = function (library) {
   this.trigger('select');
-}
+};
 
 /**
  * Append the selector html to the given container.
