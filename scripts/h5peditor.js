@@ -7,7 +7,7 @@ var ns = H5PEditor = H5P.jQuery.extend(false, {}, window.parent.H5PEditor);
 ns.$ = H5P.jQuery;
 
 // Load needed resources from parent.
-H5PIntegration = window.parent.H5PIntegration;
+H5PIntegration = H5P.jQuery.extend(false, {}, window.parent.H5PIntegration);
 H5PIntegration.loadedJs = {};
 H5PIntegration.loadedCss = {};
 
