@@ -19,12 +19,26 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
   // Library may return "0", make sure this doesn't return true in checks
   library = library && library != 0 ? library : '';
 
+  try {
+    defaultParams = JSON.parse(defaultParams);
+    if (!(defaultParams instanceof Object)) {
+      throw true;
+    }
+  }
+  catch (event) {
+    // Content parameters are broken. Reset. (This allows for broken content to be reused without deleting it)
+    defaultParams = {};
+  }
+
   /**
    * Checks if iframe needs resizing, and then resize it.
    *
    * @private
    */
   var resize = function (iframe) {
+    if (!iframe.contentDocument.body) {
+      return; // Prevent crashing when iframe is unloaded
+    }
     if (iframe.clientHeight === iframe.contentDocument.body.scrollHeight &&
       iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight) {
       return; // Do not resize unless page and scrolling differs
@@ -61,6 +75,15 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
 
     // "this" is the iframe DOM element
     var loadedIframe = this;
+
+    if (!loadedIframe.contentWindow.H5P) {
+      // The iframe has probably been reloaded, losing its content
+      setTimeout(function () {
+        // Wait for next tick as a new 'load' can't be triggered recursivly
+        populateIframe();
+      }, 0);
+      return;
+    }
 
     if (iframeLoaded) {
       iframeLoaded.call(this.contentWindow);
@@ -136,18 +159,56 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
         setTimeout(resizeInterval, 40); // No more than 25 times per second
       })();
     }
+
+    // Handle iframe being reloaded
+    onUnload($(loadedIframe.contentWindow), function () {
+      if (self.formSubmitted) {
+        return;
+      }
+
+      // Keep track of previous state
+      library = self.getLibrary();
+      defaultParams = self.getParams(true);
+    });
+
   }).get(0);
-  iframe.contentDocument.open();
-  iframe.contentDocument.write(
-    '<!doctype html><html>' +
-    '<head>' +
-    ns.wrap('<link rel="stylesheet" href="', ns.assets.css, '">') +
-    ns.wrap('<script src="', ns.assets.js, '"></script>') +
-    '</head><body>' +
-    '<div class="h5p-editor h5peditor">' + ns.t('core', 'loading') + '</div>' +
-    '</body></html>');
-  iframe.contentDocument.close();
-  iframe.contentDocument.documentElement.style.overflow = 'hidden';
+
+  /**
+   * Set the iframe content and start loading the necessary assets
+   *
+   * @private
+   */
+  var populateIframe = function () {
+    iframe.contentDocument.open();
+    iframe.contentDocument.write(
+      '<!doctype html><html>' +
+      '<head>' +
+      ns.wrap('<link rel="stylesheet" href="', ns.assets.css, '">') +
+      ns.wrap('<script src="', ns.assets.js, '"></script>') +
+      '</head><body>' +
+      '<div class="h5p-editor h5peditor">' + ns.t('core', 'loading') + '</div>' +
+      '</body></html>');
+    iframe.contentDocument.close();
+    iframe.contentDocument.documentElement.style.overflow = 'hidden';
+  };
+
+  /**
+   * Wrapper for binding iframe unload event to a callback for multiple
+   * devices.
+   *
+   * @private
+   * @param {jQuery} $window of iframe
+   * @param {function} action callback on unload
+   */
+  var onUnload = function ($window, action) {
+    $window.one('beforeunload unload', function () {
+      $window.off('pagehide beforeunload unload');
+      action();
+    });
+    $window.on('pagehide', action);
+  };
+
+  populateIframe();
 };
 
 /**
@@ -174,7 +235,10 @@ ns.Editor.prototype.getLibrary = function () {
  * @alias H5PEditor.Editor#getParams
  * @returns {Object} Library parameters
  */
-ns.Editor.prototype.getParams = function () {
+ns.Editor.prototype.getParams = function (notFormSubmit) {
+  if (!notFormSubmit) {
+    this.formSubmitted = true;
+  }
   if (this.selector !== undefined) {
     return this.selector.getParams();
   }
