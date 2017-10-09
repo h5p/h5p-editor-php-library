@@ -30,8 +30,8 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     defaultParams = {};
   }
 
-  // Create iframe and replace the given element with it
-  var iframe = ns.$('<iframe/>', {
+  // Define iframe DOM Element through jQuery
+  var $iframe = ns.$('<iframe/>', {
     'css': {
       display: 'block',
       width: '100%',
@@ -43,8 +43,76 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     },
     'class': 'h5p-editor-iframe',
     'frameBorder': '0'
-  }).replaceAll(replace).load(function () {
+  });
 
+  // The DOM element is often used directly
+  var iframe = $iframe.get(0);
+
+  /**
+   * Set the iframe content and start loading the necessary assets
+   *
+   * @private
+   */
+  var populateIframe = function () {
+    iframe.contentDocument.open();
+    iframe.contentDocument.write(
+      '<!doctype html><html>' +
+      '<head>' +
+      ns.wrap('<link rel="stylesheet" href="', ns.assets.css, '">') +
+      ns.wrap('<script src="', ns.assets.js, '"></script>') +
+      '</head><body>' +
+      '<div class="h5p-editor h5peditor">' + ns.t('core', 'loading') + '</div>' +
+      '</body></html>');
+    iframe.contentDocument.close();
+    iframe.contentDocument.documentElement.style.overflow = 'hidden';
+  };
+
+  /**
+   * Wrapper for binding iframe unload event to a callback for multiple
+   * devices.
+   *
+   * @private
+   * @param {jQuery} $window of iframe
+   * @param {function} action callback on unload
+   */
+  var onUnload = function ($window, action) {
+    $window.one('beforeunload unload', function () {
+      $window.off('pagehide beforeunload unload');
+      action();
+    });
+    $window.on('pagehide', action);
+  };
+
+  /**
+   * Checks if iframe needs resizing, and then resize it.
+   *
+   * @private
+   */
+  var resize = function () {
+    if (!iframe.contentDocument.body) {
+      return; // Prevent crashing when iframe is unloaded
+    }
+    if (iframe.clientHeight === iframe.contentDocument.body.scrollHeight &&
+      iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight) {
+      return; // Do not resize unless page and scrolling differs
+    }
+
+    // Retain parent size to avoid jumping/scrolling
+    var parentHeight = iframe.parentElement.style.height;
+    iframe.parentElement.style.height = iframe.parentElement.clientHeight + 'px';
+
+    // Reset iframe height, in case content has shrinked.
+    iframe.style.height = iframe.contentWindow.document.body.clientHeight + 'px';
+
+    // Resize iframe so all content is visible. Use scrollHeight to make sure we get everything
+    iframe.style.height = iframe.contentDocument.body.scrollHeight + 'px';
+
+    // Free parent
+    iframe.parentElement.style.height = parentHeight;
+  };
+
+  // Register loaded event handler for iframe
+  $iframe.load(function () {
     if (!iframe.contentWindow.H5P) {
       // The iframe has probably been reloaded, losing its content
       setTimeout(function () {
@@ -54,6 +122,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       return;
     }
 
+    // Trigger loaded callback. Could this have been an event?
     if (iframeLoaded) {
       iframeLoaded.call(this.contentWindow);
     }
@@ -64,6 +133,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
 
     this.contentWindow.H5P.$body = $(this.contentDocument.body);
 
+    // Load libraries data
     $.ajax({
       url: this.contentWindow.H5PEditor.getAjaxUrl('libraries')
     }).fail(function () {
@@ -137,72 +207,12 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       library = self.getLibrary();
       defaultParams = self.getParams(true);
     });
+  });
 
-  }).get(0);
+  // Insert iframe into DOM
+  $iframe.replaceAll(replace);
 
-  /**
-   * Set the iframe content and start loading the necessary assets
-   *
-   * @private
-   */
-  var populateIframe = function () {
-    iframe.contentDocument.open();
-    iframe.contentDocument.write(
-      '<!doctype html><html>' +
-      '<head>' +
-      ns.wrap('<link rel="stylesheet" href="', ns.assets.css, '">') +
-      ns.wrap('<script src="', ns.assets.js, '"></script>') +
-      '</head><body>' +
-      '<div class="h5p-editor h5peditor">' + ns.t('core', 'loading') + '</div>' +
-      '</body></html>');
-    iframe.contentDocument.close();
-    iframe.contentDocument.documentElement.style.overflow = 'hidden';
-  };
-
-  /**
-   * Wrapper for binding iframe unload event to a callback for multiple
-   * devices.
-   *
-   * @private
-   * @param {jQuery} $window of iframe
-   * @param {function} action callback on unload
-   */
-  var onUnload = function ($window, action) {
-    $window.one('beforeunload unload', function () {
-      $window.off('pagehide beforeunload unload');
-      action();
-    });
-    $window.on('pagehide', action);
-  };
-
-  /**
-   * Checks if iframe needs resizing, and then resize it.
-   *
-   * @private
-   */
-  var resize = function () {
-    if (!iframe.contentDocument.body) {
-      return; // Prevent crashing when iframe is unloaded
-    }
-    if (iframe.clientHeight === iframe.contentDocument.body.scrollHeight &&
-      iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight) {
-      return; // Do not resize unless page and scrolling differs
-    }
-
-    // Retain parent size to avoid jumping/scrolling
-    var parentHeight = iframe.parentElement.style.height;
-    iframe.parentElement.style.height = iframe.parentElement.clientHeight + 'px';
-
-    // Reset iframe height, in case content has shrinked.
-    iframe.style.height = iframe.contentWindow.document.body.clientHeight + 'px';
-
-    // Resize iframe so all content is visible. Use scrollHeight to make sure we get everything
-    iframe.style.height = iframe.contentDocument.body.scrollHeight + 'px';
-
-    // Free parent
-    iframe.parentElement.style.height = parentHeight;
-  };
-
+  // Populate iframe with the H5P Editor
   populateIframe();
 };
 
