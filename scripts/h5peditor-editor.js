@@ -30,34 +30,6 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     defaultParams = {};
   }
 
-  /**
-   * Checks if iframe needs resizing, and then resize it.
-   *
-   * @private
-   */
-  var resize = function (iframe) {
-    if (!iframe.contentDocument.body) {
-      return; // Prevent crashing when iframe is unloaded
-    }
-    if (iframe.clientHeight === iframe.contentDocument.body.scrollHeight &&
-      iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight) {
-      return; // Do not resize unless page and scrolling differs
-    }
-
-    // Retain parent size to avoid jumping/scrolling
-    var parentHeight = iframe.parentElement.style.height;
-    iframe.parentElement.style.height = iframe.parentElement.clientHeight + 'px';
-
-    // Reset iframe height, in case content has shrinked.
-    iframe.style.height = iframe.contentWindow.document.body.clientHeight + 'px';
-
-    // Resize iframe so all content is visible. Use scrollHeight to make sure we get everything
-    iframe.style.height = iframe.contentDocument.body.scrollHeight + 'px';
-
-    // Free parent
-    iframe.parentElement.style.height = parentHeight;
-  };
-
   // Create iframe and replace the given element with it
   var iframe = ns.$('<iframe/>', {
     'css': {
@@ -73,10 +45,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     'frameBorder': '0'
   }).replaceAll(replace).load(function () {
 
-    // "this" is the iframe DOM element
-    var loadedIframe = this;
-
-    if (!loadedIframe.contentWindow.H5P) {
+    if (!iframe.contentWindow.H5P) {
       // The iframe has probably been reloaded, losing its content
       setTimeout(function () {
         // Wait for next tick as a new 'load' can't be triggered recursivly
@@ -105,9 +74,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       self.selector.appendTo($container.html(''));
 
       // Resize iframe when selector resizes
-      self.selector.on('resized', function () {
-        resize(loadedIframe);
-      });
+      self.selector.on('resized', resize);
 
       /**
        * Event handler for exposing events
@@ -134,7 +101,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       var limitedResize = function (mutations) {
         if (!running) {
           running = setTimeout(function () {
-            resize(loadedIframe);
+            resize();
             running = null;
           }, 40); // 25 fps cap
         }
@@ -150,18 +117,18 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       });
 
       H5P.$window.resize(limitedResize);
-      resize(loadedIframe);
+      resize();
     }
     else {
       // Use an interval for resizing the iframe
       (function resizeInterval() {
-        resize(loadedIframe);
+        resize();
         setTimeout(resizeInterval, 40); // No more than 25 times per second
       })();
     }
 
     // Handle iframe being reloaded
-    onUnload($(loadedIframe.contentWindow), function () {
+    onUnload($(iframe.contentWindow), function () {
       if (self.formSubmitted) {
         return;
       }
@@ -206,6 +173,34 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       action();
     });
     $window.on('pagehide', action);
+  };
+
+  /**
+   * Checks if iframe needs resizing, and then resize it.
+   *
+   * @private
+   */
+  var resize = function () {
+    if (!iframe.contentDocument.body) {
+      return; // Prevent crashing when iframe is unloaded
+    }
+    if (iframe.clientHeight === iframe.contentDocument.body.scrollHeight &&
+      iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight) {
+      return; // Do not resize unless page and scrolling differs
+    }
+
+    // Retain parent size to avoid jumping/scrolling
+    var parentHeight = iframe.parentElement.style.height;
+    iframe.parentElement.style.height = iframe.parentElement.clientHeight + 'px';
+
+    // Reset iframe height, in case content has shrinked.
+    iframe.style.height = iframe.contentWindow.document.body.clientHeight + 'px';
+
+    // Resize iframe so all content is visible. Use scrollHeight to make sure we get everything
+    iframe.style.height = iframe.contentDocument.body.scrollHeight + 'px';
+
+    // Free parent
+    iframe.parentElement.style.height = parentHeight;
   };
 
   populateIframe();
