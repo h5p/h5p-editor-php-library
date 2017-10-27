@@ -5,27 +5,22 @@ var ns = H5PEditor;
  * @class
  * @alias H5PEditor.SelectorHub
  */
-ns.SelectorHub = function (selectedLibrary, changeLibraryDialog) {
+ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
   var self = this;
 
   H5P.EventDispatcher.call(this);
 
-  var hubServices = new H5P.HubServices({
-    contentId: H5PEditor.contentId || 0,
-    apiRootUrl: H5PEditor.ajaxPath
-  });
+  libraries.apiVersion = {
+    major: H5PEditor.apiVersion.majorVersion,
+    minor: H5PEditor.apiVersion.minorVersion
+  };
 
   // Initialize hub client
   this.client = new H5P.HubClient({
-    apiVersion: {
-      major: H5PEditor.apiVersion.majorVersion,
-      minor: H5PEditor.apiVersion.minorVersion,
-    }
-  }, hubServices, H5PEditor.language.core);
-
-  if (selectedLibrary) {
-    this.client.setPanelTitle({id: selectedLibrary.split(' ')[0]});
-  }
+    contentId: H5PEditor.contentId || 0,
+    contentTypes: libraries,
+    selected: selectedLibrary ? selectedLibrary.split(' ')[0] : undefined,
+  }, H5PEditor.language.core);
 
   // Default to nothing selected and empty params
   this.currentLibrary = selectedLibrary;
@@ -75,8 +70,8 @@ ns.SelectorHub = function (selectedLibrary, changeLibraryDialog) {
       });
   }, this);
 
-  this.client.on('resized', function () {
-    self.trigger('resized');
+  this.client.on('resize', function () {
+    self.trigger('resize');
   });
 
   // Clear upload field when changing library
