@@ -10,39 +10,61 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
 
   H5P.EventDispatcher.call(this);
 
+  /**
+   * Looks up content type object
+   *
+   * @param {string} machineName
+   * @return {object}
+   */
+  this.getContentType = function (machineName) {
+    for (var i = 0; i < libraries.libraries.length; i++) {
+      var contentType = libraries.libraries[i];
+
+      if (contentType.machineName === machineName) {
+        return contentType;
+      }
+    }
+  }
+
   libraries.apiVersion = {
     major: H5PEditor.apiVersion.majorVersion,
     minor: H5PEditor.apiVersion.minorVersion
   };
 
-  // Initialize hub client
-  this.client = new H5P.HubClient({
+  var state = {
     contentId: H5PEditor.contentId || 0,
-    contentTypes: libraries,
-    selected: selectedLibrary ? selectedLibrary.split(' ')[0] : undefined,
-  }, H5PEditor.language.core);
+    contentTypes: libraries
+  }
+
+  if (selectedLibrary) {
+    var contentType = this.getContentType(selectedLibrary.split(' ')[0]);
+    state.title = contentType.title || contentType.machineName;
+  }
+
+  // Initialize hub client
+  this.client = new H5P.HubClient(state, H5PEditor.language.core);
 
   // Default to nothing selected and empty params
   this.currentLibrary = selectedLibrary;
 
   // Listen for content type selection
   this.client.on('select', function (event) {
+    var contentType = event;
+
     // Already selected library
-    if (event.id === self.currentLibrary.split(' ')[0]) {
+    if (contentType.machineName === self.currentLibrary.split(' ')[0]) {
       return;
     }
-    this.client.getContentType(event.id)
-      .then(function (contentType) {
-        if (!self.currentLibrary) {
-          self.currentLibrary = self.createContentTypeId(contentType, true);
-          self.trigger('selected');
-          return;
-        }
 
-        self.currentLibrary = self.createContentTypeId(contentType, true);
-        delete self.currentParams;
-        changeLibraryDialog.show(ns.$(self.getElement()).offset().top);
-      });
+    if (!self.currentLibrary) {
+      self.currentLibrary = self.createContentTypeId(contentType, true);
+      self.trigger('selected');
+      return;
+    }
+
+    self.currentLibrary = self.createContentTypeId(contentType, true);
+    delete self.currentParams;
+    changeLibraryDialog.show(ns.$(self.getElement()).offset().top);
   }, this);
 
   // Listen for uploads
@@ -99,25 +121,24 @@ ns.SelectorHub.prototype.clearUploadForm = function () {
 ns.SelectorHub.prototype.resetSelection = function (library, params) {
   this.currentLibrary = library;
   this.currentParams = params;
-  var machineName = library.split(' ')[0];
-  this.client.setPanelTitle({id: machineName});
+
+  var contentType = this.getContentType(library.split(' ')[0]);
+  this.client.setPanelTitle(contentType.title || contentType.machineName);
 }
 
 /**
  * Get currently selected library
  *
- * @returns {string} Selected library
+ * @param {function} next Callback
  */
 ns.SelectorHub.prototype.getSelectedLibrary = function (next) {
-  var that = this;
-  this.client.getContentType(this.currentLibrary.split(' ')[0])
-    .then(function (contentType) {
-      next({
-        uberName: that.currentLibrary,
-        tutorialUrl: contentType.tutorial,
-        exampleUrl: contentType.example
-      });
-    });
+  var contentType = this.getContentType(this.currentLibrary.split(' ')[0]);
+
+  return next({
+    uberName: this.currentLibrary,
+    tutorialUrl: contentType.tutorial,
+    exampleUrl: contentType.example
+  });
 }
 
 /**
