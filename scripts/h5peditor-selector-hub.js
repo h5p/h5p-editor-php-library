@@ -33,7 +33,8 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
 
   var state = {
     contentId: H5PEditor.contentId || 0,
-    contentTypes: libraries
+    contentTypes: libraries,
+    getAjaxUrl: H5PEditor.getAjaxUrl
   }
 
   if (selectedLibrary) {
