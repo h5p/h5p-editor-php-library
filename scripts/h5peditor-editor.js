@@ -135,7 +135,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
 
     // Load libraries data
     $.ajax({
-      url: this.contentWindow.H5PEditor.getAjaxUrl('content-type-cache')
+      url: this.contentWindow.H5PEditor.getAjaxUrl(H5PIntegration.hubIsEnabled ? 'content-type-cache' : 'libraries')
     }).fail(function () {
       $container.html('Error, unable to load libraries.');
     }).done(function (data) {
