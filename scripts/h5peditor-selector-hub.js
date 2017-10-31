@@ -69,28 +69,29 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
   }, this);
 
   // Listen for uploads
-  this.client.on('upload', function (e) {
-    this.client.getContentType(e.data.h5p.mainLibrary)
-      .then(function (contentType) {
-        var previousLibrary = self.currentLibrary;
-        // Use version from event data
-        const uploadedVersion = e.data.h5p.preloadedDependencies
-          .filter(function(dependency) {
-            return dependency.machineName === e.data.h5p.mainLibrary;
-          });
-        self.currentLibrary = self.createContentTypeId(uploadedVersion[0]);
-        self.client.setPanelTitle({id: self.currentLibrary.split(' ')[0]});
-        self.currentParams = e.data.content;
+  this.client.on('upload', function (event) {
+    var contentType = this.getContentType(event.h5p.mainLibrary);
 
-        // Change library immediately or show confirmation dialog
-        if (!previousLibrary) {
-          self.trigger('selected');
-          self.clearUploadForm();
-        }
-        else {
-          changeLibraryDialog.show(ns.$(self.getElement()).offset().top);
-        }
+    var previousLibrary = self.currentLibrary;
+
+    // Use version from event data
+    const uploadedVersion = event.h5p.preloadedDependencies
+      .filter(function (dependency) {
+        return dependency.machineName === event.h5p.mainLibrary;
       });
+    self.currentLibrary = self.createContentTypeId(uploadedVersion[0]);
+    self.client.setPanelTitle(self.currentLibrary.split(' ')[0]);
+    self.currentParams = event.content;
+
+    // Change library immediately or show confirmation dialog
+    if (!previousLibrary) {
+      self.trigger('selected');
+      self.clearUploadForm();
+    }
+    else {
+      changeLibraryDialog.show(ns.$(self.getElement()).offset().top);
+    }
+
   }, this);
 
   this.client.on('resize', function () {
