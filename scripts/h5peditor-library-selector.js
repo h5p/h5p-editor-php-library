@@ -14,7 +14,16 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
 
   H5P.EventDispatcher.call(this);
 
-  this.defaultParams = defaultParams;
+  try {
+    this.defaultParams = JSON.parse(defaultParams);
+    if (!(this.defaultParams instanceof Object)) {
+      throw true;
+    }
+  }
+  catch (event) {
+    // Content parameters are broken. Reset. (This allows for broken content to be reused without deleting it)
+    this.defaultParams = {};
+  }
 
   this.defaultLibrary = this.currentLibrary = defaultLibrary;
   this.defaultLibraryParameterized = defaultLibrary ? defaultLibrary.replace('.', '-').toLowerCase() : undefined;
@@ -70,8 +79,8 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   // First time a library is selected in the editor
   this.selector.on('selected', loadLibrary);
 
-  this.selector.on('resized', function () {
-    that.trigger('resized');
+  this.selector.on('resize', function () {
+    that.trigger('resize');
   });
 
   this.on('select', loadLibrary);

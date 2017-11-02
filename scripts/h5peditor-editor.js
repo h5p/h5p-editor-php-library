@@ -19,17 +19,6 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
   // Library may return "0", make sure this doesn't return true in checks
   library = library && library != 0 ? library : '';
 
-  try {
-    defaultParams = JSON.parse(defaultParams);
-    if (!(defaultParams instanceof Object)) {
-      throw true;
-    }
-  }
-  catch (event) {
-    // Content parameters are broken. Reset. (This allows for broken content to be reused without deleting it)
-    defaultParams = {};
-  }
-
   // Define iframe DOM Element through jQuery
   var $iframe = ns.$('<iframe/>', {
     'css': {
@@ -144,7 +133,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       self.selector.appendTo($container.html(''));
 
       // Resize iframe when selector resizes
-      self.selector.on('resized', resize);
+      self.selector.on('resize', resize);
 
       /**
        * Event handler for exposing events
@@ -205,7 +194,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
 
       // Keep track of previous state
       library = self.getLibrary();
-      defaultParams = self.getParams(true);
+      defaultParams = JSON.stringify(self.getParams(true));
     });
   });
 
