@@ -80,7 +80,7 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
         return dependency.machineName === event.h5p.mainLibrary;
       });
     self.currentLibrary = self.createContentTypeId(uploadedVersion[0]);
-    self.client.setPanelTitle(self.currentLibrary.split(' ')[0]);
+    self.client.setPanelTitle(event.h5p.title);
     self.currentParams = event.content;
 
     // Change library immediately or show confirmation dialog
