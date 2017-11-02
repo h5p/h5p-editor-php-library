@@ -70,8 +70,8 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   // First time a library is selected in the editor
   this.selector.on('selected', loadLibrary);
 
-  this.selector.on('resized', function () {
-    that.trigger('resized');
+  this.selector.on('resize', function () {
+    that.trigger('resize');
   });
 
   this.on('select', loadLibrary);
