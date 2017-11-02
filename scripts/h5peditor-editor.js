@@ -133,7 +133,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       self.selector.appendTo($container.html(''));
 
       // Resize iframe when selector resizes
-      self.selector.on('resized', resize);
+      self.selector.on('resize', resize);
 
       /**
        * Event handler for exposing events
