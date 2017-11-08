@@ -1,5 +1,3 @@
-//H5PEditor = window.H5PEditor || {};
-//H5PEditor.language = H5PEditor.language || {};
 H5PEditor.language.core = {
   missingTranslation: '[Mangler oversettelse :key]',
   loading: 'Laster, vennligst vent...',
@@ -147,5 +145,9 @@ H5PEditor.language.core = {
   reloadButtonLabel: 'Last på nytt',
   videoQuality: 'Navn på videokvalitet',
   videoQualityDescription: 'Dette navnet hjelper brukeren med å identifisere den aktuelle videokvaliteten. F.eks. 1080p, 720p, HD or Mobile',
-  videoQualityDefaultLabel: 'Kvalitet :index'
+  videoQualityDefaultLabel: 'Kvalitet :index',
+  noContentTypesAvailable: 'Ingen innholdstyper er tilgjengelig',
+  noContentTypesAvailableDesc: 'Nettstedet ditt har problemer med å koble til H5P.org og liste tilgjengelige innholdstyper.',
+  contentTypeCacheOutdated: 'Innholdstype-listen er utdatert',
+  contentTypeCacheOutdatedDesc: 'Nettstedet ditt har problemer med å koble til H5P.org for å se etter innholdstype-oppdateringer. Det kan hende at du ikke får oppdatert eller installert nye innholdstyper.'
 };

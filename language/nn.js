@@ -147,5 +147,9 @@ H5PEditor.language.core = {
   reloadButtonLabel: 'Reload',
   videoQuality: 'Navn på videokvalitet',
   videoQualityDescription: 'Dette navnet hjelper brukeren med å identifisere den aktuelle videokvaliteten. F.eks. 1080p, 720p, HD or Mobile',
-  videoQualityDefaultLabel: 'Kvalitet :index'
+  videoQualityDefaultLabel: 'Kvalitet :index',
+  noContentTypesAvailable: 'Ingen innhaldstyper er tilgjengeleg',
+  noContentTypesAvailableDesc: 'Nettstedet ditt har problemer med å koble til H5P.org og liste tilgjengelege innhaldstyper.',
+  contentTypeCacheOutdated: 'Innhaldstype-lista er utdatert',
+  contentTypeCacheOutdatedDesc: 'Nettstedet ditt har problemer med å koble til H5P.org for å se etter innhaldstype-oppdateringer. Det kan hende at du ikke får oppdatert eller installert nye innhaldstyper.'
 };

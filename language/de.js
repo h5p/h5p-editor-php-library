@@ -139,5 +139,9 @@ H5PEditor.language.core = {
   reloadButtonLabel: 'Neu laden',
   videoQuality: 'Videoaufl\u00f6sung',
   videoQualityDescription: 'Dieses Label hilft dem Benutzer, die aktuelle Videoaufl\u00f6sung zu erkennen. Z.B.. 1080p, 720p, HD der Mobile',
-  videoQualityDefaultLabel: 'Aufl\u00f6sung :index'
+  videoQualityDefaultLabel: 'Aufl\u00f6sung :index',
+  noContentTypesAvailable: 'No content types are available',
+  noContentTypesAvailableDesc: 'Your site is having difficulties connecting to H5P.org and listing the available content types.',
+  contentTypeCacheOutdated: 'Content type list outdated',
+  contentTypeCacheOutdatedDesc: 'Your site is having difficulties connecting to H5P.org to check for content type updates. You may not be able to update or install new content types.'
 };

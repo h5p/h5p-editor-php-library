@@ -146,5 +146,9 @@ H5PEditor.language.core = {
   reloadButtonLabel: 'Lataa uudelleen',
   videoQuality: 'Videon laadun nimike',
   videoQualityDescription: 'Tämä nimike auttaa käyttäjää tunnistamaan videon nykyisen laadun. Esim. 1080p, 720p, HD or Mobile',
-  videoQualityDefaultLabel: 'Laatu :index'
+  videoQualityDefaultLabel: 'Laatu :index',
+  noContentTypesAvailable: 'No content types are available',
+  noContentTypesAvailableDesc: 'Your site is having difficulties connecting to H5P.org and listing the available content types.',
+  contentTypeCacheOutdated: 'Content type list outdated',
+  contentTypeCacheOutdatedDesc: 'Your site is having difficulties connecting to H5P.org to check for content type updates. You may not be able to update or install new content types.'
 };

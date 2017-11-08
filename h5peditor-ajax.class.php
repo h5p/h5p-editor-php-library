@@ -93,8 +93,7 @@ class H5PEditorAjax {
 
       case H5PEditorEndpoints::CONTENT_TYPE_CACHE:
         if (!$this->isHubOn()) return;
-        if (!$this->isContentTypeCacheUpdated()) return;
-        $this->getContentTypeCache();
+        $this->getContentTypeCache(!$this->isContentTypeCacheUpdated());
         break;
 
       case H5PEditorEndpoints::LIBRARY_INSTALL:
@@ -378,11 +377,6 @@ class H5PEditorAjax {
     if (time() > $outdated_cache) {
       $success = $this->core->updateContentTypeCache();
       if (!$success) {
-        H5PCore::ajaxError(
-          $this->core->h5pF->t("Couldn't communicate with the H5P Hub. Please try again later."),
-          'NO_RESPONSE',
-          404
-        );
         return false;
       }
     }
@@ -392,9 +386,14 @@ class H5PEditorAjax {
   /**
    * Gets content type cache for globally available libraries and the order
    * in which they have been used by the author
+   *
+   * @param bool $cacheOutdated The cache is outdated and not able to update
    */
-  private function getContentTypeCache() {
+  private function getContentTypeCache($cacheOutdated) {
+    $canUpdateOrInstall = ($this->core->h5pF->hasPermission(H5PPermission::INSTALL_RECOMMENDED) ||
+                           $this->core->h5pF->hasPermission(H5PPermission::UPDATE_LIBRARIES));
     $contentTypeCache = array(
+      'outdated' => $cacheOutdated && $canUpdateOrInstall,
       'libraries' => $this->editor->getLatestGlobalLibrariesData(),
       'recentlyUsed' => $this->editor->ajaxInterface->getAuthorsRecentlyUsedLibraries()
     );

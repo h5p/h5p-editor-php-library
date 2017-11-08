@@ -144,5 +144,9 @@ H5PEditor.language.core = {
   reloadButtonLabel: 'Επαναφόρτωση',
   videoQuality: 'Ετικέτα ποιότητας βίντεο',
   videoQualityDescription: 'Αυτή η ετικέτα βοηθά τον χρήστη να αναγνωρίσει την τρέχουσα ποιότητα του βίντεο. Για παράδειγμα 1080p, 720p, HD ή Mobile',
-  videoQualityDefaultLabel: 'Ποιότητα :index'
+  videoQualityDefaultLabel: 'Ποιότητα :index',
+  noContentTypesAvailable: 'No content types are available',
+  noContentTypesAvailableDesc: 'Your site is having difficulties connecting to H5P.org and listing the available content types.',
+  contentTypeCacheOutdated: 'Content type list outdated',
+  contentTypeCacheOutdatedDesc: 'Your site is having difficulties connecting to H5P.org to check for content type updates. You may not be able to update or install new content types.'
 };
