@@ -26,11 +26,6 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
     }
   }
 
-  libraries.apiVersion = {
-    major: H5PEditor.apiVersion.majorVersion,
-    minor: H5PEditor.apiVersion.minorVersion
-  };
-
   var state = {
     contentId: H5PEditor.contentId || 0,
     contentTypes: libraries,

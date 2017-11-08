@@ -257,7 +257,10 @@ class H5PEditorAjax {
     $this->storage->removeTemporarilySavedFiles($this->core->h5pF->getUploadedH5pFolderPath());
 
     // Successfully installed.
-    H5PCore::ajaxSuccess();
+    //H5PCore::ajaxSuccess();
+
+    // Successfully installed. Refresh content types
+    $this->getContentTypeCache();
   }
 
   /**
@@ -389,13 +392,17 @@ class H5PEditorAjax {
    *
    * @param bool $cacheOutdated The cache is outdated and not able to update
    */
-  private function getContentTypeCache($cacheOutdated) {
+  private function getContentTypeCache($cacheOutdated = FALSE) {
     $canUpdateOrInstall = ($this->core->h5pF->hasPermission(H5PPermission::INSTALL_RECOMMENDED) ||
                            $this->core->h5pF->hasPermission(H5PPermission::UPDATE_LIBRARIES));
     $contentTypeCache = array(
       'outdated' => $cacheOutdated && $canUpdateOrInstall,
       'libraries' => $this->editor->getLatestGlobalLibrariesData(),
-      'recentlyUsed' => $this->editor->ajaxInterface->getAuthorsRecentlyUsedLibraries()
+      'recentlyUsed' => $this->editor->ajaxInterface->getAuthorsRecentlyUsedLibraries(),
+      'apiVersion' => array(
+        'major' => H5PCore::$coreApi['majorVersion'],
+        'minor' => H5PCore::$coreApi['minorVersion']
+      )
     );
 
     H5PCore::ajaxSuccess($contentTypeCache, TRUE);
