@@ -34,9 +34,7 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
 
   if (selectedLibrary) {
     var contentType = this.getContentType(selectedLibrary.split(' ')[0]);
-    if (contentType) {
-      state.title = contentType.title || contentType.machineName;
-    }
+    state.title = contentType ? contentType.title || contentType.machineName : selectedLibrary.split(' ')[0];
   }
 
   // Initialize hub client
