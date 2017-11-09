@@ -108,6 +108,8 @@ H5PEditor.language.core = {
   popularFirst: 'Populære først',
   newestFirst: 'Nyeste først',
   aToZ: 'A til Z',
+  noResultsFound: 'Ingen resultater',
+  noResultsFoundDesc: 'Det finnes ingen innholdstype som samsvarer med søkekriteriene dine.',
   readMore: 'Read more',
   readLess: 'Read less',
   contentTypeOwner: 'By :owner',

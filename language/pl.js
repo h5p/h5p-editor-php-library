@@ -107,6 +107,8 @@ H5PEditor.language.core = {
   popularFirst: 'Popular First',
   newestFirst: 'Newest First',
   aToZ: 'A to Z',
+  noResultsFound: 'No results found',
+  noResultsFoundDesc: 'There is no content type that matches your search criteria.',
   readMore: 'Czytaj więcej',
   readLess: 'Czytaj mniej',
   contentTypeOwner: 'Przez właściciela',
