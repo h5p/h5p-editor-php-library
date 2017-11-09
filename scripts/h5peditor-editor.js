@@ -128,6 +128,11 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     }).fail(function () {
       $container.html('Error, unable to load libraries.');
     }).done(function (data) {
+      if (data.success === false) {
+        $container.html(data.message + ' (' + data.errorCode  + ')');
+        return;
+      }
+
       // Create library selector
       self.selector = new LibrarySelector(data, library, defaultParams);
       self.selector.appendTo($container.html(''));
