@@ -151,5 +151,6 @@ H5PEditor.language.core = {
   noContentTypesAvailable: 'Ingen innholdstyper er tilgjengelig',
   noContentTypesAvailableDesc: 'Nettstedet ditt har problemer med å koble til H5P.org og liste tilgjengelige innholdstyper.',
   contentTypeCacheOutdated: 'Innholdstype-listen er utdatert',
-  contentTypeCacheOutdatedDesc: 'Nettstedet ditt har problemer med å koble til H5P.org for å se etter innholdstype-oppdateringer. Det kan hende at du ikke får oppdatert eller installert nye innholdstyper.'
+  contentTypeCacheOutdatedDesc: 'Nettstedet ditt har problemer med å koble til H5P.org for å se etter innholdstype-oppdateringer. Det kan hende at du ikke får oppdatert eller installert nye innholdstyper.',
+  tryAgain: 'Prøv på nytt'
 };
