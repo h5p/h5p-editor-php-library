@@ -34,7 +34,9 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
 
   if (selectedLibrary) {
     var contentType = this.getContentType(selectedLibrary.split(' ')[0]);
-    state.title = contentType.title || contentType.machineName;
+    if (contentType) {
+      state.title = contentType.title || contentType.machineName;
+    }
   }
 
   // Initialize hub client
@@ -128,13 +130,17 @@ ns.SelectorHub.prototype.resetSelection = function (library, params) {
  * @param {function} next Callback
  */
 ns.SelectorHub.prototype.getSelectedLibrary = function (next) {
-  var contentType = this.getContentType(this.currentLibrary.split(' ')[0]);
+  var selected = {
+    uberName: this.currentLibrary
+  };
 
-  return next({
-    uberName: this.currentLibrary,
-    tutorialUrl: contentType.tutorial,
-    exampleUrl: contentType.example
-  });
+  var contentType = this.getContentType(this.currentLibrary.split(' ')[0]);
+  if (contentType) {
+    selected.tutorialUrl = contentType.tutorial;
+    selected.exampleUrl = contentType.example;
+  }
+
+  return next(selected);
 }
 
 /**
