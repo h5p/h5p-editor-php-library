@@ -97,13 +97,13 @@ class H5PEditorAjax {
         break;
 
       case H5PEditorEndpoints::LIBRARY_INSTALL:
-          if (!$this->isPostRequest()) return;
+        if (!$this->isPostRequest()) return;
 
-          $token = func_get_arg(1);
-          if (!$this->isValidEditorToken($token)) return;
+        $token = func_get_arg(1);
+        if (!$this->isValidEditorToken($token)) return;
 
-          $machineName = func_get_arg(2);
-          $this->libraryInstall($machineName);
+        $machineName = func_get_arg(2);
+        $this->libraryInstall($machineName);
         break;
 
       case H5PEditorEndpoints::LIBRARY_UPLOAD:
@@ -256,9 +256,6 @@ class H5PEditorAjax {
     // Clean up
     $this->storage->removeTemporarilySavedFiles($this->core->h5pF->getUploadedH5pFolderPath());
 
-    // Successfully installed.
-    //H5PCore::ajaxSuccess();
-
     // Successfully installed. Refresh content types
     $this->getContentTypeCache();
   }
@@ -277,7 +274,9 @@ class H5PEditorAjax {
 
       H5PCore::ajaxError(
         $this->core->h5pF->t('Validating h5p package failed.'),
-        'VALIDATION_FAILED'
+        'VALIDATION_FAILED',
+        NULL,
+        $this->core->h5pF->getMessages('error')
       );
       return FALSE;
     }
@@ -402,7 +401,8 @@ class H5PEditorAjax {
       'apiVersion' => array(
         'major' => H5PCore::$coreApi['majorVersion'],
         'minor' => H5PCore::$coreApi['minorVersion']
-      )
+      ),
+      'details' => $this->core->h5pF->getMessages('info')
     );
 
     H5PCore::ajaxSuccess($contentTypeCache, TRUE);
