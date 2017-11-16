@@ -87,6 +87,7 @@ H5PEditor.language.core = {
   h5pFileUploadServerErrorContent: 'Odottamaton virhe. Tarkista palvelinlogisi' +
   ' lisätietoja varten.',
   contentTypeSectionAll: 'All Content Types',
+  searchResults: 'Search Results',
   contentTypeSearchFieldPlaceholder: 'Etsi sisältötyyppejä',
   contentTypeInstallButtonLabel: 'Asenna',
   contentTypeInstallingButtonLabel: 'Asentaa',

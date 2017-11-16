@@ -85,6 +85,7 @@ H5PEditor.language.core = {
   h5pFileUploadServerErrorTitle: 'Δεν ήταν δυνατή η μεταφόρτωση του αρχείου H5P',
   h5pFileUploadServerErrorContent: 'Προέκυψε ένα μη αναμενόμενο σφάλμα. Ελέγξτε το αρχείο σφαλμάτων του διακομιστή σας για περισσότερες λεπτομέρειες.',
   contentTypeSectionAll: 'All Content Types',
+  searchResults: 'Search Results',
   contentTypeSearchFieldPlaceholder: 'Αναζητήστε Τύπους Περιεχομένου',
   contentTypeInstallButtonLabel: 'Εγκατάσταση',
   contentTypeInstallingButtonLabel: 'Εγκατάσταση',

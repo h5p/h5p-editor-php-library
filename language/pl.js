@@ -87,6 +87,7 @@ H5PEditor.language.core = {
   h5pFileUploadServerErrorContent: 'Wystąpił nieoczekiwany błąd. Sprawdź dziennik błędów serwera' +
   ' więcej szczegółów.',
   contentTypeSectionAll: 'All Content Types',
+  searchResults: 'Search Results',
   contentTypeSearchFieldPlaceholder: 'Szukaj',
   contentTypeInstallButtonLabel: 'Instaluj',
   contentTypeInstallingButtonLabel: 'Instalowanie',

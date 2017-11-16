@@ -87,6 +87,7 @@ H5PEditor.language.core = {
   h5pFileUploadServerErrorContent: 'An unexpected error occured. Check your server error log for' +
   ' more details.',
   contentTypeSectionAll: 'All Content Types',
+  searchResults: 'Search Results',
   contentTypeSearchFieldPlaceholder: 'Search for Content Types',
   contentTypeInstallButtonLabel: 'Install',
   contentTypeInstallingButtonLabel: 'Installing',

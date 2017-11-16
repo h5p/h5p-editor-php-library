@@ -87,6 +87,7 @@ H5PEditor.language.core = {
   h5pFileUploadServerErrorContent: 'Er is een onverwachte fout opgetreden. Controleer het server log voor' +
   ' meer informatie.',
   contentTypeSectionAll: 'Alle Content Types',
+  searchResults: 'Search Results',
   contentTypeSearchFieldPlaceholder: 'Zoeken naar Content Types',
   contentTypeInstallButtonLabel: 'Installeren',
   contentTypeInstallingButtonLabel: 'Bezig met installeren',

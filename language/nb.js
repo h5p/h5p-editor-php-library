@@ -86,6 +86,7 @@ H5PEditor.language.core = {
   h5pFileUploadServerErrorContent: 'En uventet feil har oppstått. Sjekk din server log for' +
   ' detaljer.',
   contentTypeSectionAll: 'Alle innholdstyper',
+  searchResults: 'Søkeresultater',
   contentTypeSearchFieldPlaceholder: 'Søk etter innholdstyper',
   contentTypeInstallButtonLabel: 'Installer',
   contentTypeInstallingButtonLabel: 'Installerer',
