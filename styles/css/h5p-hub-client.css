@@ -849,6 +849,15 @@ time, mark, audio, video {
   float: right;
 }
 
+.h5p-hub .content-type-list .button-install:before {
+  font-family: 'h5p-hub';
+  content: "\E90C";
+  display: inline-block;
+  transform: rotate(-90deg);
+  margin-right: 0.7em;
+  font-size: 0.9em;
+}
+
 @media (min-width: 768px) {
   .h5p-hub .content-type-list .button {
     margin-top: 0.25em;
@@ -990,6 +999,11 @@ time, mark, audio, video {
 .h5p-hub-message .title {
   font-size: 1.042em;
   color: #1f2227;
+}
+
+.h5p-hub-message .message-content h2 {
+  margin-top: 0.4165em;
+  font-size: 1.2em;
 }
 
 .h5p-hub-message .description {
@@ -1245,6 +1259,10 @@ time, mark, audio, video {
   margin: 0 auto;
   word-wrap: break-word;
   transition: margin 0.3s linear;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 
 .carousel li {
@@ -1599,6 +1617,46 @@ time, mark, audio, video {
 .h5p-hub .imagelightbox-button.close:before {
   font-family: 'h5p-hub';
   content: "\E901";
+}
+
+.lightbox-inner.license {
+  background: #fff;
+  text-align: left;
+  width: calc(100% - 5em);
+  max-height: calc(100% - 5em);
+  overflow-y: auto;
+}
+
+.lightbox-inner.license .loading:after {
+  font-family: 'h5p-hub';
+  content: "\E923";
+  font-size: 3em;
+  line-height: 1;
+  width: 1em;
+  height: 1em;
+  padding: 0.833em;
+  display: block;
+  color: #7c8696;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  width: 1em;
+  margin: 0 auto;
+}
+
+.lightbox-inner.license .lightbox-close {
+  top: -0.8em;
+  right: -0.8em;
+  color: #333;
+}
+
+.lightbox-inner.license .modal-header {
+  font-weight: 400;
+  font-size: 1.6em;
+  margin-bottom: 1em;
+}
+
+.lightbox-inner.license .modal-title {
+  font-weight: 700;
 }
 
 @charset "UTF-8";
