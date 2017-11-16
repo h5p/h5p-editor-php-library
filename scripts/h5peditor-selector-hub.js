@@ -65,6 +65,7 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
 
   // Listen for uploads
   this.client.on('upload', function (event) {
+    libraries = event.contentTypes;
     var contentType = this.getContentType(event.h5p.mainLibrary);
 
     var previousLibrary = self.currentLibrary;
@@ -87,6 +88,11 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
     }
 
   }, this);
+
+  this.client.on('update', function (event) {
+    // Handle update to the content type cache
+    libraries = event;
+  });
 
   this.client.on('resize', function () {
     self.trigger('resize');
