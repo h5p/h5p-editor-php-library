@@ -323,7 +323,9 @@ class H5PEditorAjax {
     if (!$response) {
       H5PCore::ajaxError(
         $this->core->h5pF->t('Failed to download the requested H5P.'),
-        'DOWNLOAD_FAILED'
+        'DOWNLOAD_FAILED',
+        NULL,
+        $this->core->h5pF->getMessages('error')
       );
       return FALSE;
     }
