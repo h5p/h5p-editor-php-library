@@ -93,6 +93,7 @@ H5PEditor.language.core = {
   contentTypeInstallButtonLabel: 'Εγκατάσταση',
   contentTypeInstallingButtonLabel: 'Εγκατάσταση',
   contentTypeUseButtonLabel: 'Χρήση',
+  contentTypeDetailButtonLabel: 'Details',
   contentTypeUpdateButtonLabel: 'Ενημέρωση',
   contentTypeUpdatingButtonLabel: 'Ενημέρωση',
   contentTypeGetButtonLabel: 'Λήψη',

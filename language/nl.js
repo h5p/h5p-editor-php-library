@@ -95,6 +95,7 @@ H5PEditor.language.core = {
   contentTypeInstallButtonLabel: 'Installeren',
   contentTypeInstallingButtonLabel: 'Bezig met installeren',
   contentTypeUseButtonLabel: 'Gebruik',
+  contentTypeDetailButtonLabel: 'Details',
   contentTypeUpdateButtonLabel: 'Updaten',
   contentTypeUpdatingButtonLabel: 'Bezig met updaten',
   contentTypeGetButtonLabel: 'Ophalen',
