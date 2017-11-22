@@ -19,12 +19,68 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
   // Library may return "0", make sure this doesn't return true in checks
   library = library && library != 0 ? library : '';
 
+  // Define iframe DOM Element through jQuery
+  var $iframe = ns.$('<iframe/>', {
+    'css': {
+      display: 'block',
+      width: '100%',
+      height: '3em',
+      border: 'none',
+      zIndex: 101,
+      top: 0,
+      left: 0
+    },
+    'class': 'h5p-editor-iframe',
+    'frameBorder': '0'
+  });
+
+  // The DOM element is often used directly
+  var iframe = $iframe.get(0);
+
+  /**
+   * Set the iframe content and start loading the necessary assets
+   *
+   * @private
+   */
+  var populateIframe = function () {
+    iframe.contentDocument.open();
+    iframe.contentDocument.write(
+      '<!doctype html><html>' +
+      '<head>' +
+      ns.wrap('<link rel="stylesheet" href="', ns.assets.css, '">') +
+      ns.wrap('<script src="', ns.assets.js, '"></script>') +
+      '</head><body>' +
+      '<div class="h5p-editor h5peditor">' + ns.t('core', 'loading') + '</div>' +
+      '</body></html>');
+    iframe.contentDocument.close();
+    iframe.contentDocument.documentElement.style.overflow = 'hidden';
+  };
+
+  /**
+   * Wrapper for binding iframe unload event to a callback for multiple
+   * devices.
+   *
+   * @private
+   * @param {jQuery} $window of iframe
+   * @param {function} action callback on unload
+   */
+  var onUnload = function ($window, action) {
+    $window.one('beforeunload unload', function () {
+      $window.off('pagehide beforeunload unload');
+      action();
+    });
+    $window.on('pagehide', action);
+  };
+
   /**
    * Checks if iframe needs resizing, and then resize it.
    *
    * @private
    */
-  var resize = function (iframe) {
+  var resize = function () {
+    if (!iframe.contentDocument.body) {
+      return; // Prevent crashing when iframe is unloaded
+    }
     if (iframe.clientHeight === iframe.contentDocument.body.scrollHeight &&
       iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight) {
       return; // Do not resize unless page and scrolling differs
@@ -44,24 +100,18 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     iframe.parentElement.style.height = parentHeight;
   };
 
-  // Create iframe and replace the given element with it
-  var iframe = ns.$('<iframe/>', {
-    'css': {
-      display: 'block',
-      width: '100%',
-      height: '3em',
-      border: 'none',
-      zIndex: 101,
-      top: 0,
-      left: 0
-    },
-    'class': 'h5p-editor-iframe',
-    'frameBorder': '0'
-  }).replaceAll(replace).load(function () {
+  // Register loaded event handler for iframe
+  $iframe.load(function () {
+    if (!iframe.contentWindow.H5P) {
+      // The iframe has probably been reloaded, losing its content
+      setTimeout(function () {
+        // Wait for next tick as a new 'load' can't be triggered recursivly
+        populateIframe();
+      }, 0);
+      return;
+    }
 
-    // "this" is the iframe DOM element
-    var loadedIframe = this;
-
+    // Trigger loaded callback. Could this have been an event?
     if (iframeLoaded) {
       iframeLoaded.call(this.contentWindow);
     }
@@ -72,19 +122,23 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
 
     this.contentWindow.H5P.$body = $(this.contentDocument.body);
 
+    // Load libraries data
     $.ajax({
-      url: this.contentWindow.H5PEditor.getAjaxUrl('libraries')
+      url: this.contentWindow.H5PEditor.getAjaxUrl(H5PIntegration.hubIsEnabled ? 'content-type-cache' : 'libraries')
     }).fail(function () {
       $container.html('Error, unable to load libraries.');
     }).done(function (data) {
+      if (data.success === false) {
+        $container.html(data.message + ' (' + data.errorCode  + ')');
+        return;
+      }
+
       // Create library selector
       self.selector = new LibrarySelector(data, library, defaultParams);
       self.selector.appendTo($container.html(''));
 
       // Resize iframe when selector resizes
-      self.selector.on('resized', function () {
-        resize(loadedIframe);
-      });
+      self.selector.on('resize', resize);
 
       /**
        * Event handler for exposing events
@@ -111,7 +165,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       var limitedResize = function (mutations) {
         if (!running) {
           running = setTimeout(function () {
-            resize(loadedIframe);
+            resize();
             running = null;
           }, 40); // 25 fps cap
         }
@@ -127,27 +181,33 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       });
 
       H5P.$window.resize(limitedResize);
-      resize(loadedIframe);
+      resize();
     }
     else {
       // Use an interval for resizing the iframe
       (function resizeInterval() {
-        resize(loadedIframe);
+        resize();
         setTimeout(resizeInterval, 40); // No more than 25 times per second
       })();
     }
-  }).get(0);
-  iframe.contentDocument.open();
-  iframe.contentDocument.write(
-    '<!doctype html><html>' +
-    '<head>' +
-    ns.wrap('<link rel="stylesheet" href="', ns.assets.css, '">') +
-    ns.wrap('<script src="', ns.assets.js, '"></script>') +
-    '</head><body>' +
-    '<div class="h5p-editor h5peditor">' + ns.t('core', 'loading') + '</div>' +
-    '</body></html>');
-  iframe.contentDocument.close();
-  iframe.contentDocument.documentElement.style.overflow = 'hidden';
+
+    // Handle iframe being reloaded
+    onUnload($(iframe.contentWindow), function () {
+      if (self.formSubmitted) {
+        return;
+      }
+
+      // Keep track of previous state
+      library = self.getLibrary();
+      defaultParams = JSON.stringify(self.getParams(true));
+    });
+  });
+
+  // Insert iframe into DOM
+  $iframe.replaceAll(replace);
+
+  // Populate iframe with the H5P Editor
+  populateIframe();
 };
 
 /**
@@ -174,7 +234,10 @@ ns.Editor.prototype.getLibrary = function () {
  * @alias H5PEditor.Editor#getParams
  * @returns {Object} Library parameters
  */
-ns.Editor.prototype.getParams = function () {
+ns.Editor.prototype.getParams = function (notFormSubmit) {
+  if (!notFormSubmit) {
+    this.formSubmitted = true;
+  }
   if (this.selector !== undefined) {
     return this.selector.getParams();
   }

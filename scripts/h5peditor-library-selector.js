@@ -23,7 +23,6 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   catch (event) {
     // Content parameters are broken. Reset. (This allows for broken content to be reused without deleting it)
     this.defaultParams = {};
-    // TODO: Inform the user?
   }
 
   this.defaultLibrary = this.currentLibrary = defaultLibrary;
@@ -40,7 +39,7 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   }).appendTo(document.body);
 
   if (H5PIntegration.hubIsEnabled) {
-    this.selector = new ns.SelectorHub(defaultLibrary, changeLibraryDialog);
+    this.selector = new ns.SelectorHub(libraries, defaultLibrary, changeLibraryDialog);
   }
   else {
     this.selector = new ns.SelectorLegacy(libraries, defaultLibrary, changeLibraryDialog);
@@ -58,7 +57,7 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
 
     that.$tutorialUrl.attr('href', library.tutorialUrl ? library.tutorialUrl : '#').toggle(!!library.tutorialUrl);
     that.$exampleUrl.attr('href', library.exampleUrl ? library.exampleUrl : '#').toggle(!!library.exampleUrl);
-  }
+  };
 
   /**
    * Event handler for loading a new library editor
@@ -80,8 +79,8 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   // First time a library is selected in the editor
   this.selector.on('selected', loadLibrary);
 
-  this.selector.on('resized', function () {
-    that.trigger('resized');
+  this.selector.on('resize', function () {
+    that.trigger('resize');
   });
 
   this.on('select', loadLibrary);
@@ -98,7 +97,7 @@ ns.LibrarySelector.prototype.constructor = ns.LibrarySelector;
  */
 ns.LibrarySelector.prototype.setLibrary = function (library) {
   this.trigger('select');
-}
+};
 
 /**
  * Append the selector html to the given container.
