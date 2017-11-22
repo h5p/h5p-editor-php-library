@@ -24,13 +24,13 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
         return contentType;
       }
     }
-  }
+  };
 
   var state = {
     contentId: H5PEditor.contentId || 0,
     contentTypes: libraries,
     getAjaxUrl: H5PEditor.getAjaxUrl
-  }
+  };
 
   if (selectedLibrary) {
     var contentType = this.getContentType(selectedLibrary.split(' ')[0]);
@@ -66,8 +66,6 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
   // Listen for uploads
   this.client.on('upload', function (event) {
     libraries = event.contentTypes;
-    var contentType = this.getContentType(event.h5p.mainLibrary);
-
     var previousLibrary = self.currentLibrary;
 
     // Use version from event data
@@ -81,7 +79,6 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
     // Change library immediately or show confirmation dialog
     if (!previousLibrary) {
       self.trigger('selected');
-      self.clearUploadForm();
     }
     else {
       changeLibraryDialog.show(ns.$(self.getElement()).offset().top);
@@ -97,11 +94,6 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
   this.client.on('resize', function () {
     self.trigger('resize');
   });
-
-  // Clear upload field when changing library
-  changeLibraryDialog.on('confirmed', function () {
-    self.clearUploadForm();
-  })
 };
 
 // Extends the event dispatcher
@@ -109,16 +101,10 @@ ns.SelectorHub.prototype = Object.create(H5P.EventDispatcher.prototype);
 ns.SelectorHub.prototype.constructor = ns.SelectorHub;
 
 /**
- * Clears the upload form in the hub client
- */
-ns.SelectorHub.prototype.clearUploadForm = function () {
-  this.client.trigger('clear-upload-form');
-}
-
-/**
  * Reset current library to the provided library.
  *
  * @param {string} library Full library name
+ * @param {Object} params Library parameters
  */
 ns.SelectorHub.prototype.resetSelection = function (library, params) {
   this.currentLibrary = library;
@@ -126,7 +112,7 @@ ns.SelectorHub.prototype.resetSelection = function (library, params) {
 
   var contentType = this.getContentType(library.split(' ')[0]);
   this.client.setPanelTitle(contentType.title || contentType.machineName);
-}
+};
 
 /**
  * Get currently selected library
@@ -145,7 +131,7 @@ ns.SelectorHub.prototype.getSelectedLibrary = function (next) {
   }
 
   return next(selected);
-}
+};
 
 /**
  * Get params connected with the currently selected library
@@ -154,7 +140,7 @@ ns.SelectorHub.prototype.getSelectedLibrary = function (next) {
  */
 ns.SelectorHub.prototype.getParams = function () {
   return this.currentParams;
-}
+};
 
 /**
  * Returns the html element for the hub
