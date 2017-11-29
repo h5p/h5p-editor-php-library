@@ -297,13 +297,15 @@ a {
           position: relative;
 
           &:before {
-            font-family: 'H5P';
-            content: "\e904";
             position: absolute;
-            color: #dd0505;
-            left: 0;
-            top: 0.075em;
-            font-size: 3.8em;
+            height: 1em;
+            width: 1em;
+            top: 0.4em;
+            left: 0.3em;
+            font-size: 2.5em;
+            background: inline-image('video-link-icon.svg') no-repeat;
+            background-size: contain;
+            content: '';
           }
 
           input {
@@ -383,6 +385,27 @@ a {
       background: transparent;
     }
   }
+
+  &.h5p-audio-editor {
+    .h5p-add-dialog .h5p-add-dialog-table .h5p-dialog-box {
+      .h5p-file-drop-upload .h5p-file-drop-upload-inner:after {
+        position: relative;
+        height: 1em;
+        width: 1em;
+        top: 0.2em;
+        margin: 0 auto;
+        display: block;
+        background: $form-input-color inline-image('audio-upload-icon.svg') no-repeat;
+        background-size: contain;
+        content: '';
+      }
+
+      .h5p-file-url-wrapper:before {
+        background: inline-image('audio-link-icon.svg') no-repeat;
+      }
+    }
+  }
+
   .h5p-or {
     border-bottom: 1px solid #cdcdcd;
     padding: 0;
