@@ -386,26 +386,6 @@ a {
     }
   }
 
-  &.h5p-audio-editor {
-    .h5p-add-dialog .h5p-add-dialog-table .h5p-dialog-box {
-      .h5p-file-drop-upload .h5p-file-drop-upload-inner:after {
-        position: relative;
-        height: 1em;
-        width: 1em;
-        top: 0.2em;
-        margin: 0 auto;
-        display: block;
-        background: $form-input-color inline-image('audio-upload-icon.svg') no-repeat;
-        background-size: contain;
-        content: '';
-      }
-
-      .h5p-file-url-wrapper:before {
-        background: inline-image('audio-link-icon.svg') no-repeat;
-      }
-    }
-  }
-
   .h5p-or {
     border-bottom: 1px solid #cdcdcd;
     padding: 0;
@@ -617,6 +597,27 @@ a {
       float: left;
     }
   }
+
+  .h5p-audio-editor {
+    .h5p-add-dialog .h5p-add-dialog-table .h5p-dialog-box {
+      .h5p-file-drop-upload .h5p-file-drop-upload-inner:after {
+        position: relative;
+        height: 1em;
+        width: 1em;
+        top: 0.2em;
+        margin: 0 auto;
+        display: block;
+        background: $form-input-color inline-image('audio-upload-icon.svg') no-repeat;
+        background-size: contain;
+        content: '';
+      }
+
+      .h5p-file-url-wrapper:before {
+        background: inline-image('audio-link-icon.svg') no-repeat;
+      }
+    }
+  }
+
   .video .file, .audio .file {
     position: static;
     overflow: visible;
