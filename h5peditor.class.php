@@ -609,7 +609,7 @@ class H5peditor {
           'id'                => (int) $local_lib->id,
           'machineName'       => $local_lib->machine_name,
           'title'             => $local_lib->title,
-          'description'       => ($local_lib->description ? $local_lib->description : ''),
+          'description'       => '',
           'majorVersion'      => (int) $local_lib->major_version,
           'minorVersion'      => (int) $local_lib->minor_version,
           'patchVersion'      => (int) $local_lib->patch_version,
@@ -619,7 +619,7 @@ class H5peditor {
           'canInstall'        => FALSE,
           'installed'         => TRUE,
           'isUpToDate'        => TRUE,
-          'owner'             => ($local_lib->owner ? $local_lib->owner : ''),
+          'owner'             => '',
           'restricted'        => $can_create_restricted ? FALSE :
             ($local_lib->restricted ? TRUE : FALSE)
         );
