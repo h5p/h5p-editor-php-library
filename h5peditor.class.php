@@ -355,8 +355,8 @@ class H5peditor {
     $files = $this->h5p->getDependenciesFiles($libraries, $prefix);
     $libraryName = H5PCore::libraryToString(compact('machineName', 'majorVersion', 'minorVersion'), true);
     if( $this->h5p->fs->hasPresave($libraryName) === true ){
-        $library = $this->h5p->loadLibrary($machineName, $majorVersion, $minorVersion);
-        $this->h5p->addPresaveFile($files, $library, $prefix);
+      $library = $this->h5p->loadLibrary($machineName, $majorVersion, $minorVersion);
+      $this->h5p->addPresaveFile($files, $library, $prefix);
     }
     $this->storage->alterLibraryFiles($files, $libraries);
 
