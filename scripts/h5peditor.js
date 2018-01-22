@@ -103,6 +103,9 @@ ns.loadLibrary = function (libraryName, callback) {
 
     case 0:
       // Add to queue.
+      if (ns.loadedCallbacks[libraryName] === undefined) {
+        ns.loadedCallbacks[libraryName] = [];
+      }
       ns.loadedCallbacks[libraryName].push(callback);
       break;
 
