@@ -93,18 +93,17 @@ class H5PEditorAjax {
 
       case H5PEditorEndpoints::CONTENT_TYPE_CACHE:
         if (!$this->isHubOn()) return;
-        if (!$this->isContentTypeCacheUpdated()) return;
-        $this->getContentTypeCache();
+        H5PCore::ajaxSuccess($this->getContentTypeCache(!$this->isContentTypeCacheUpdated()), TRUE);
         break;
 
       case H5PEditorEndpoints::LIBRARY_INSTALL:
-          if (!$this->isPostRequest()) return;
+        if (!$this->isPostRequest()) return;
 
-          $token = func_get_arg(1);
-          if (!$this->isValidEditorToken($token)) return;
+        $token = func_get_arg(1);
+        if (!$this->isValidEditorToken($token)) return;
 
-          $machineName = func_get_arg(2);
-          $this->libraryInstall($machineName);
+        $machineName = func_get_arg(2);
+        $this->libraryInstall($machineName);
         break;
 
       case H5PEditorEndpoints::LIBRARY_UPLOAD:
@@ -185,9 +184,10 @@ class H5PEditorAjax {
     // Clean up
     $this->storage->removeTemporarilySavedFiles($this->core->h5pF->getUploadedH5pFolderPath());
 
-    H5PCore::ajaxSuccess((object) array(
+    H5PCore::ajaxSuccess(array(
       'h5p' => json_decode($content->h5pJson),
-      'content' => json_decode($content->contentJson)
+      'content' => json_decode($content->contentJson),
+      'contentTypes' => $this->getContentTypeCache()
     ));
   }
 
@@ -257,8 +257,8 @@ class H5PEditorAjax {
     // Clean up
     $this->storage->removeTemporarilySavedFiles($this->core->h5pF->getUploadedH5pFolderPath());
 
-    // Successfully installed.
-    H5PCore::ajaxSuccess();
+    // Successfully installed. Refresh content types
+    H5PCore::ajaxSuccess($this->getContentTypeCache());
   }
 
   /**
@@ -275,7 +275,9 @@ class H5PEditorAjax {
 
       H5PCore::ajaxError(
         $this->core->h5pF->t('Validating h5p package failed.'),
-        'VALIDATION_FAILED'
+        'VALIDATION_FAILED',
+        NULL,
+        $this->core->h5pF->getMessages('error')
       );
       return FALSE;
     }
@@ -321,7 +323,9 @@ class H5PEditorAjax {
     if (!$response) {
       H5PCore::ajaxError(
         $this->core->h5pF->t('Failed to download the requested H5P.'),
-        'DOWNLOAD_FAILED'
+        'DOWNLOAD_FAILED',
+        NULL,
+        $this->core->h5pF->getMessages('error')
       );
       return FALSE;
     }
@@ -378,11 +382,6 @@ class H5PEditorAjax {
     if (time() > $outdated_cache) {
       $success = $this->core->updateContentTypeCache();
       if (!$success) {
-        H5PCore::ajaxError(
-          $this->core->h5pF->t("Couldn't communicate with the H5P Hub. Please try again later."),
-          'NO_RESPONSE',
-          404
-        );
         return false;
       }
     }
@@ -392,13 +391,21 @@ class H5PEditorAjax {
   /**
    * Gets content type cache for globally available libraries and the order
    * in which they have been used by the author
+   *
+   * @param bool $cacheOutdated The cache is outdated and not able to update
    */
-  private function getContentTypeCache() {
-    $contentTypeCache = array(
+  private function getContentTypeCache($cacheOutdated = FALSE) {
+    $canUpdateOrInstall = ($this->core->h5pF->hasPermission(H5PPermission::INSTALL_RECOMMENDED) ||
+                           $this->core->h5pF->hasPermission(H5PPermission::UPDATE_LIBRARIES));
+    return array(
+      'outdated' => $cacheOutdated && $canUpdateOrInstall,
       'libraries' => $this->editor->getLatestGlobalLibrariesData(),
-      'recentlyUsed' => $this->editor->ajaxInterface->getAuthorsRecentlyUsedLibraries()
+      'recentlyUsed' => $this->editor->ajaxInterface->getAuthorsRecentlyUsedLibraries(),
+      'apiVersion' => array(
+        'major' => H5PCore::$coreApi['majorVersion'],
+        'minor' => H5PCore::$coreApi['minorVersion']
+      ),
+      'details' => $this->core->h5pF->getMessages('info')
     );
-
-    H5PCore::ajaxSuccess($contentTypeCache, TRUE);
   }
 }

@@ -251,6 +251,13 @@ class H5peditorFile {
   }
 
   /**
+   * Get result from file processing.
+   */
+  public function getResult() {
+    return json_encode($this->result);
+  }
+
+  /**
    * Print result from file processing.
    */
   public function printResult() {
@@ -260,6 +267,6 @@ class H5peditorFile {
     header('Cache-Control: no-cache');
     header('Content-type: text/plain; charset=utf-8');
 
-    print json_encode($this->result);
+    print $this->getResult();
   }
 }

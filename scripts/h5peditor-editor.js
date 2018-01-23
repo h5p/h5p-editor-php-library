@@ -101,10 +101,10 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
   };
 
   // Register loaded event handler for iframe
-  $iframe.load(function () {
+  var load = function () {
     if (!iframe.contentWindow.H5P) {
       // The iframe has probably been reloaded, losing its content
-      setTimeout(function () {
+      setTimeout(function () {
         // Wait for next tick as a new 'load' can't be triggered recursivly
         populateIframe();
       }, 0);
@@ -124,16 +124,21 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
 
     // Load libraries data
     $.ajax({
-      url: this.contentWindow.H5PEditor.getAjaxUrl('libraries')
+      url: this.contentWindow.H5PEditor.getAjaxUrl(H5PIntegration.hubIsEnabled ? 'content-type-cache' : 'libraries')
     }).fail(function () {
       $container.html('Error, unable to load libraries.');
     }).done(function (data) {
+      if (data.success === false) {
+        $container.html(data.message + ' (' + data.errorCode  + ')');
+        return;
+      }
+
       // Create library selector
       self.selector = new LibrarySelector(data, library, defaultParams);
       self.selector.appendTo($container.html(''));
 
       // Resize iframe when selector resizes
-      self.selector.on('resized', resize);
+      self.selector.on('resize', resize);
 
       /**
        * Event handler for exposing events
@@ -196,10 +201,14 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       library = self.getLibrary();
       defaultParams = JSON.stringify(self.getParams(true));
     });
-  });
+  };
 
   // Insert iframe into DOM
   $iframe.replaceAll(replace);
+
+  // Need to put this after the above replaceAll(), since that one makes Safari
+  // 11 trigger a load event for the iframe
+  $iframe.load(load);
 
   // Populate iframe with the H5P Editor
   populateIframe();
