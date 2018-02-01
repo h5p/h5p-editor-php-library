@@ -354,7 +354,7 @@ class H5peditor {
     // Get list of JS and CSS files that belongs to the dependencies
     $files = $this->h5p->getDependenciesFiles($libraries, $prefix);
     $libraryName = H5PCore::libraryToString(compact('machineName', 'majorVersion', 'minorVersion'), true);
-    if( $this->h5p->fs->hasPresave($libraryName) === true ){
+    if( $this->h5p->hasPresave($libraryName) === true ){
       $library = $this->h5p->loadLibrary($machineName, $majorVersion, $minorVersion);
       $this->h5p->addPresaveFile($files, $library, $prefix);
     }
