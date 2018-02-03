@@ -249,6 +249,11 @@ ns.Editor.prototype.getParams = function (notFormSubmit) {
   }
 };
 
+
+ns.Editor.prototype.presave = function (content) {
+    return this.selector.presave(content, H5P.libraryFromString(this.getLibrary()).machineName);
+}
+
 /**
  * Editor translations index by library name or "core".
  *

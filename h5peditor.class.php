@@ -36,6 +36,7 @@ class H5peditor {
     'scripts/h5peditor-dimensions.js',
     'scripts/h5peditor-coordinates.js',
     'scripts/h5peditor-none.js',
+    'scripts/h5peditor-presave.js',
     'ckeditor/ckeditor.js',
   );
   private $h5p, $storage;

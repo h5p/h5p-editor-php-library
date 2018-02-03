@@ -1,6 +1,6 @@
 //var H5PEditor = (H5PEditor || {});
 (function ($, ns) {
-  H5PEditor.init = function ($form, $type, $upload, $create, $editor, $library, $params) {
+  H5PEditor.init = function ($form, $type, $upload, $create, $editor, $library, $params, $maxScore) {
     H5PEditor.$ = H5P.jQuery;
     H5PEditor.basePath = H5PIntegration.editor.libraryUrl;
     H5PEditor.fileIcon = H5PIntegration.editor.fileIcon;
@@ -53,6 +53,7 @@
           $library.val(h5peditor.getLibrary());
           $params.val(JSON.stringify(params));
         }
+        $maxScore.val(h5peditor.presave(params));
       }
     });
   };
