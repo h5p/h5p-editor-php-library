@@ -8,7 +8,7 @@
 @import "variables";
 @import "mixins";
 @import "utils";
-@import "form-field";
+@import "form-field-rtl";
 @import "form-groups";
 @import "h5peditor-image-edit";
 @import "h5peditor-image-edit-popup";
@@ -21,6 +21,7 @@ html, body {
   font-family: $font-family;
   max-width: 960px;
   position: relative;
+  direction: rtl;
 }
 a {
   text-decoration: none;
