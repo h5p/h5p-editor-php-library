@@ -8,6 +8,13 @@ class H5peditor {
     'styles/css/fonts.css',
     'styles/css/application.css'
   );
+  
+  public static $styles_rtl = array(
+    'libs/darkroom.css',
+    'styles/css/h5p-hub-client.css',
+    'styles/css/fonts.css',
+    'styles/css/application-rtl.css'
+  );
   public static $scripts = array(
     'scripts/h5p-hub-client.js',
     'scripts/h5peditor.js',
