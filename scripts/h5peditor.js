@@ -53,36 +53,53 @@ ns.libraryRequested = function (libraryName, callback) {
   if (!ns.libraryLoaded[libraryName]) {
     // Add CSS.
     if (libraryData.css !== undefined) {
-      var css = '';
-      for (var path in libraryData.css) {
+      libraryData.css.forEach(path => {
         if (!H5P.cssLoaded(path)) {
-          css += libraryData.css[path];
           H5PIntegration.loadedCss.push(path);
+          if (path) {
+            ns.$('head').append('<link rel="stylesheet" href="' + path + '" />')
+          }
         }
-      }
-      if (css) {
-        ns.$('head').append('<style class="h5p-editor-style" type="text/css">' + css + '</style>');
-      }
+      });
     }
 
     // Add JS.
-    if (libraryData.javascript !== undefined) {
-      var js = '';
-      for (var path in libraryData.javascript) {
+    if (libraryData.javascript !== undefined && libraryData.javascript.length) {
+      libraryData.javascript.forEach(path => {
         if (!H5P.jsLoaded(path)) {
-          js += libraryData.javascript[path];
-          H5PIntegration.loadedJs.push(path);
+          var script = document.createElement('script');
+          script.type = 'text/javascript';
+
+          script.onload = function () {
+            H5PIntegration.loadedJs.push(path);
+
+            // Check if all scripts have been loaded
+            var finishedLoading = libraryData.javascript.reduce((isJsLoaded, path) => {
+              return isJsLoaded && H5P.jsLoaded(path);
+            }, true);
+
+            // All done loading scripts, mark library as loaded and run callback
+            if (finishedLoading) {
+              ns.libraryLoaded[libraryName] = true;
+              callback(ns.libraryCache[libraryName].semantics);
+            }
+          };
+
+          script.onerror = function (e) {
+            console.error("Error while loading scripts:", e);
+          };
+
+          document.head.appendChild(script);
+          script.src = path;
         }
-      }
-      if (js) {
-        var k = eval.apply(window, [js]);
-      }
+      });
     }
-
-    ns.libraryLoaded[libraryName] = true;
+    else {
+      // Don't have to wait for any scripts, run callback
+      ns.libraryLoaded[libraryName] = true;
+      callback(ns.libraryCache[libraryName].semantics);
+    }
   }
-
-  callback(ns.libraryCache[libraryName].semantics);
 };
 
 /**
