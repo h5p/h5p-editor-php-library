@@ -54,7 +54,7 @@ a {
       width: calc(100% - 70px);
     }
     .ckeditor {
-      margin-right: 70px;
+      margin-left: 70px;
     }
   }
 
@@ -118,7 +118,7 @@ a {
   }
   & > select {
     margin-bottom: 13px;
-    margin-right: 20px;
+    margin-left: 20px;
   }
   select::-ms-expand {
     display: none;
@@ -166,14 +166,14 @@ a {
   }
   .number input[type="range"] {
     width: 300px;
-    float: left;
+    float: right;
     margin: 7px 8px 0 0;
   }
   .h5p-errors {
     clear: both;
   }
   .h5p-add-file {
-    float: left;
+    float: right;
     position: relative;
     background: transparent;
     border: 2px dashed #dddddd;
@@ -231,18 +231,18 @@ a {
       overflow: hidden;
 
       .h5p-dialog-box {
-        float: left;
+        float: right;
         padding: 0;
         width: 60%;
-        margin-right: 5%;
-        margin-left: 4%;
-        text-align: left;
+        margin-left: 5%;
+        margin-right: 4%;
+        text-align: right;
         margin-top: 30px;
 
         &:first-child {
           width: 22%;
-          margin-left: 3%;
-          margin-right: 1%;
+          margin-right: 3%;
+          margin-left: 1%;
 
           h3 {
             text-align: center;
@@ -278,8 +278,8 @@ a {
 
           input {
             border-color: #bbb;
-            text-align: left;
-            padding-left: 20px;
+            text-align: right;
+            padding-right: 20px;
           }
         }
 
@@ -288,7 +288,7 @@ a {
           width: 70%;
           height: 90px;
           margin: 0 15%;
-          float: left;
+          float: right;
           background-color: #f5f5f5;
           text-align: center;
           cursor: pointer;
@@ -322,7 +322,7 @@ a {
       }
 
       .h5p-or-vertical {
-        float: left;
+        float: right;
         position: relative;
         width: 5%;
         height: 250px;
@@ -375,7 +375,7 @@ a {
     .h5p-or-vertical-line {
       position: absolute;
       margin: 10px 0;
-      left: 49%;
+      right: 49%;
       top: 0;
       bottom: 0;
       width: 1px;
@@ -410,7 +410,7 @@ a {
     width: 6em;
     height: 4.5em;
     display: block;
-    float: left;
+    float: right;
     position: relative;
     @include box-shadow(0 0 10px 0 #666666);
     border: 1px solid #fff;
@@ -420,7 +420,7 @@ a {
     .h5p-remove {
       position: absolute;
       top: 0;
-      right: 0;
+      left: 0;
       cursor: pointer;
       outline: none;
       width: 1.6em;
@@ -457,7 +457,7 @@ a {
   }
   .file {
     position: relative;
-    float: left;
+    float: right;
     margin-bottom: 0;
 
     &.field {
@@ -545,7 +545,7 @@ a {
         display: table-cell;
         overflow: hidden;
         width: 10000px;
-        padding-left: 1em;
+        padding-right: 1em;
 
         input.h5peditor-text {
           width: 100%;
@@ -555,7 +555,7 @@ a {
 
     .h5p-av-cell {
       overflow: auto;
-      float: left;
+      float: right;
     }
   }
   .video .file, .audio .file {
@@ -563,7 +563,7 @@ a {
     overflow: visible;
 
     .thumbnail, .add {
-      float: left;
+      float: right;
     }
     .add {
       margin-top: 8px;
@@ -575,7 +575,7 @@ a {
     }
     .remove {
       top: -3px;
-      right: -5px;
+      left: -5px;
     }
     .type {
       padding: 16px 8px 4px;
@@ -584,7 +584,7 @@ a {
       font-size: 10px;
     }
     .h5peditor-uploading {
-      float: left;
+      float: right;
       margin: 0.5em;
     }
   }
@@ -630,8 +630,8 @@ a {
     color: $black;
     font-size: $font-size-small;
     line-height: $form-item-height-small;
-    padding-right: $padding;
-    padding-left: 0;
+    padding-left: $padding;
+    padding-right: 0;
     clear: both;
     font-weight: normal;
 
@@ -704,7 +704,7 @@ a {
 
       &:before {
         font-size: 2em;
-        right: -0.125em;
+        left: -0.125em;
         top: 0;
         position: absolute;
         font-family: $icon-font-family;
@@ -840,11 +840,11 @@ a {
     display: block;
     position: absolute;
     bottom: -8px;
-    right: 20px;
+    left: 20px;
     width: 14px;
     height: 14px;
     background: #f9f9d8;
-    border-right: 1px solid #ffde78;
+    border-left: 1px solid #ffde78;
     border-bottom: 1px solid #ffde78;
     -ms-transform: rotate(45deg);
     -webkit-transform: rotate(45deg);
@@ -855,7 +855,7 @@ a {
     position: absolute;
     font-size: 0.9em;
     line-height: 2em;
-    right: 1.5em;
+    left: 1.5em;
     top: 1em;
     user-select: none;
     cursor: pointer;
@@ -876,7 +876,7 @@ a {
       content: "\e909";
       font-size: 2.3em;
       line-height: 0.94em;
-      margin-left: -0.3em;
+      margin-right: -0.3em;
       vertical-align: middle;
     }
   }
@@ -895,7 +895,7 @@ a {
 
       li {
         line-height: 1.8em;
-        margin-left: 1.5em;
+        margin-right: 1.5em;
       }
     }
   }
@@ -963,8 +963,8 @@ a {
   font-size: 1.5em;
   position: relative;
   top: .2em;
-  left: .2em;
-  margin-right: 10px;
+  right: .2em;
+  margin-left: 10px;
 }
 
 .h5p-example-url:before {
@@ -973,7 +973,7 @@ a {
   font-size: 1.5em;
   position: relative;
   top: .2em;
-  left: .2em;
+  right: .2em;
   margin-right: 10px;
 }
 
@@ -984,10 +984,10 @@ a {
   list-style: none;
 }
 .h5peditor-widget-option {
-  float: right;
+  float: left;
   border: 1px solid #ccc;
   border-bottom: 0;
-  margin-left: 0.5em;
+  margin-right: 0.5em;
   padding: 0.6em 1em;
   color: #0E1A25;
   font-size: 0.875em;
@@ -1012,7 +1012,7 @@ a {
   padding: 0.5em;
 }
 .h5peditor-widgets > .h5peditor-label {
-  float: left;
+  float: right;
   margin-top: 5px;
 }
 .h5p-editor-iframe {
@@ -1042,7 +1042,7 @@ a {
 .icon-important-desc {
   font-family: $icon-font-family;
   font-size: 2em;
-  float: right;
+  float: left;
   width: 70px;
   text-align: center;
   line-height: 1em;
