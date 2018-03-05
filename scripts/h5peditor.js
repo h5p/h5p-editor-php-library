@@ -53,7 +53,7 @@ ns.libraryRequested = function (libraryName, callback) {
   if (!ns.libraryLoaded[libraryName]) {
     // Add CSS.
     if (libraryData.css !== undefined) {
-      libraryData.css.forEach(path => {
+      libraryData.css.forEach(function (path) {
         if (!H5P.cssLoaded(path)) {
           H5PIntegration.loadedCss.push(path);
           if (path) {
@@ -63,36 +63,42 @@ ns.libraryRequested = function (libraryName, callback) {
       });
     }
 
-    // Add JS.
+    // Add JS, must be loaded sequentially because of dependencies
+    var i = 0;
+    function loadNextScript() {
+      // Done loading scripts, mark library as loaded and run callback
+      if (i >= libraryData.javascript.length) {
+        ns.libraryLoaded[libraryName] = true;
+        callback(ns.libraryCache[libraryName].semantics);
+        return;
+      }
+
+      var path = libraryData.javascript[i];
+      if (!H5P.jsLoaded(path)) {
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+
+        script.onload = function () {
+          H5PIntegration.loadedJs.push(path);
+          i++;
+          loadNextScript();
+        };
+
+        script.onerror = function (e) {
+          console.error("Error while loading scripts:", e);
+        };
+
+        script.src = path;
+        document.head.appendChild(script);
+      }
+      else {
+        i++;
+        loadNextScript();
+      }
+    }
+
     if (libraryData.javascript !== undefined && libraryData.javascript.length) {
-      libraryData.javascript.forEach(path => {
-        if (!H5P.jsLoaded(path)) {
-          var script = document.createElement('script');
-          script.type = 'text/javascript';
-
-          script.onload = function () {
-            H5PIntegration.loadedJs.push(path);
-
-            // Check if all scripts have been loaded
-            var finishedLoading = libraryData.javascript.reduce((isJsLoaded, path) => {
-              return isJsLoaded && H5P.jsLoaded(path);
-            }, true);
-
-            // All done loading scripts, mark library as loaded and run callback
-            if (finishedLoading) {
-              ns.libraryLoaded[libraryName] = true;
-              callback(ns.libraryCache[libraryName].semantics);
-            }
-          };
-
-          script.onerror = function (e) {
-            console.error("Error while loading scripts:", e);
-          };
-
-          document.head.appendChild(script);
-          script.src = path;
-        }
-      });
+      loadNextScript();
     }
     else {
       // Don't have to wait for any scripts, run callback
