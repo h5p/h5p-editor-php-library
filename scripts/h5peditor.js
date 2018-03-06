@@ -63,42 +63,35 @@ ns.libraryRequested = function (libraryName, callback) {
       });
     }
 
-    // Add JS, must be loaded sequentially because of dependencies
-    var i = 0;
-    function loadNextScript() {
-      // Done loading scripts, mark library as loaded and run callback
-      if (i >= libraryData.javascript.length) {
-        ns.libraryLoaded[libraryName] = true;
-        callback(ns.libraryCache[libraryName].semantics);
-        return;
-      }
-
-      var path = libraryData.javascript[i];
-      if (!H5P.jsLoaded(path)) {
-        var script = document.createElement('script');
-        script.type = 'text/javascript';
-
-        script.onload = function () {
-          H5PIntegration.loadedJs.push(path);
-          i++;
-          loadNextScript();
-        };
-
-        script.onerror = function (e) {
-          console.error("Error while loading scripts:", e);
-        };
-
-        script.src = path;
-        document.head.appendChild(script);
-      }
-      else {
-        i++;
-        loadNextScript();
-      }
-    }
-
+    // Add JS
     if (libraryData.javascript !== undefined && libraryData.javascript.length) {
-      loadNextScript();
+      libraryData.javascript.forEach(function (path) {
+        if (!H5P.jsLoaded(path)) {
+          var script = document.createElement('script');
+          script.type = 'text/javascript';
+          script.async = false;
+
+          script.onload = function () {
+            H5PIntegration.loadedJs.push(path);
+
+            var isFinishedLoading = libraryData.javascript.reduce(function (hasLoaded, jsPath) {
+              return hasLoaded && H5P.jsLoaded(jsPath);
+            }, true);
+
+            if (isFinishedLoading) {
+              ns.libraryLoaded[libraryName] = true;
+              callback(ns.libraryCache[libraryName].semantics);
+            }
+          };
+
+          script.onerror = function (e) {
+            console.error("Error while loading scripts:", e);
+          };
+
+          script.src = path;
+          document.head.appendChild(script);
+        }
+      });
     }
     else {
       // Don't have to wait for any scripts, run callback
