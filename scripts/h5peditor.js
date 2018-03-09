@@ -57,7 +57,11 @@ ns.libraryRequested = function (libraryName, callback) {
         if (!H5P.cssLoaded(path)) {
           H5PIntegration.loadedCss.push(path);
           if (path) {
-            ns.$('head').append('<link rel="stylesheet" href="' + path + '" />')
+            ns.$('head').append('<link ' +
+              'rel="stylesheet" ' +
+              'href="' + path + '" ' +
+              'type="text/css" ' +
+              '/>')
           }
         }
       });
@@ -69,6 +73,7 @@ ns.libraryRequested = function (libraryName, callback) {
         if (!H5P.jsLoaded(path)) {
           var script = document.createElement('script');
           script.type = 'text/javascript';
+          script.charset = 'UTF-8';
           script.async = false;
 
           script.onload = function () {
