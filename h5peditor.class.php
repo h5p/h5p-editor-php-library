@@ -366,11 +366,11 @@ class H5peditor {
       foreach ($files['scripts'] as $script) {
         if (preg_match('/:\/\//', $script->path) === 1) {
           // External file
-          $libraryData->javascript[$script->path . $script->version] = "\n" . file_get_contents($script->path);
+          $libraryData->javascript[] = $script->path . $script->version;
         }
         else {
           // Local file
-          $libraryData->javascript[$url . $script->path . $script->version] = "\n" . $this->h5p->fs->getContent($fileDir . $script->path);
+          $libraryData->javascript[] = $url . $script->path . $script->version;
         }
       }
     }
@@ -380,12 +380,11 @@ class H5peditor {
       foreach ($files['styles'] as $css) {
         if (preg_match('/:\/\//', $css->path) === 1) {
           // External file
-          $libraryData->css[$css->path . $css->version] = file_get_contents($css->path);
+          $libraryData->css[] = $css->path . $css->version;
         }
         else {
           // Local file
-          H5peditor::buildCssPath(NULL, $url . dirname($css->path) . '/');
-          $libraryData->css[$url . $css->path . $css->version] = preg_replace_callback('/url\([\'"]?(?![a-z]+:|\/+)([^\'")]+)[\'"]?\)/i', 'H5peditor::buildCssPath', $this->h5p->fs->getContent($fileDir . $css->path));
+          $libraryData->css[] = $url . $css->path . $css->version;
         }
       }
     }

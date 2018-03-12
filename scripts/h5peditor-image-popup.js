@@ -51,7 +51,9 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
 
     // Create editing image
     var editingImage = new Image();
-    editingImage.crossOrigin = 'Anonymous';
+    // TODO: Make crossOrigin settings configurable in H5P Settings.
+    // TODO: Update all resource fetching in core and editor to enable crossorigin credentials
+    editingImage.crossOrigin = 'use-credentials';
     editingImage.className = 'h5p-editing-image hidden';
     editingImage.id = 'h5p-editing-image-' + uniqueId;
     editingContainer.appendChild(editingImage);
@@ -265,11 +267,13 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       }
 
       editingImage.src = imgSrc;
+      editingImage.onload = function () {
+        createDarkroom();
+        editingImage.onload = null;
+      };
       imageLoading.classList.remove('hidden');
       editingImage.classList.add('hidden');
       editingContainer.appendChild(editingImage);
-
-      createDarkroom();
     };
 
     /**
