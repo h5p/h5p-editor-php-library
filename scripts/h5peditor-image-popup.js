@@ -33,7 +33,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
 
     var headerTitle = document.createElement('div');
     headerTitle.className = 'h5p-editing-image-header-title';
-    headerTitle.textContent = H5PEditor.t('core', 'editImage') + '!';
+    headerTitle.textContent = H5PEditor.t('core', 'editImage');
     header.appendChild(headerTitle);
 
     var headerButtons = document.createElement('div');
