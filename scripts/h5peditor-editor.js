@@ -43,6 +43,9 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
    * @private
    */
   var populateIframe = function () {
+    if (!iframe.contentDocument) {
+      return; // Not possible, iframe 'load' hasn't been triggered yet
+    }
     iframe.contentDocument.open();
     iframe.contentDocument.write(
       '<!doctype html><html>' +
@@ -211,6 +214,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
   $iframe.load(load);
 
   // Populate iframe with the H5P Editor
+  // (should not really be done until 'load', but might be here in case the iframe is reloaded?)
   populateIframe();
 };
 

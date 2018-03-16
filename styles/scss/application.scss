@@ -51,7 +51,9 @@ a {
       display: none;
     }
     .h5peditor-label-wrapper {
+      
       float: left;
+
     }
   }
 
@@ -304,6 +306,7 @@ a {
             left: 0;
             top: 0.075em;
             font-size: 3.8em;
+            line-height: 1;
           }
 
           input {
@@ -521,6 +524,7 @@ a {
       border-radius: 0.25em;
       color: #222222;
       font-weight: bold;
+      line-height: normal;
 
       &:hover {
         background: #ededed;
@@ -1073,6 +1077,7 @@ a {
   cursor: pointer;
   float: right;
   position: relative;
+  line-height: normal;
 
   font-style: italic;
   font-weight: bold;
