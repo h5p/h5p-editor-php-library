@@ -12,6 +12,7 @@ ns.Form = function () {
   this.commonFields = {};
   this.$form = ns.$('' +
     '<div class="h5peditor-form">' +
+      '<a href="#" class="h5p-cancel">Add Metdata</a>' +
       '<div class="tree"></div>' +
       '<div class="common collapsed hidden">' +
         '<div class="fields">' +
@@ -24,6 +25,10 @@ ns.Form = function () {
   );
   this.$common = this.$form.find('.common > .fields');
   this.library = '';
+
+  this.$form.find('.h5p-cancel').click(function () {
+    self.$form.find('.h5p-metadata-title').first().toggleClass('h5p-open');
+  });
 
   // Add title expand/collapse button
   ns.$('<div/>', {
@@ -85,8 +90,10 @@ ns.Form.prototype.remove = function () {
  * @returns {undefined}
  */
 ns.Form.prototype.processSemantics = function (semantics, defaultParams) {
-  this.params = defaultParams;
+  this.params = (defaultParams.params? defaultParams.params : {});
+  this.metadata = (defaultParams.metadata? defaultParams.metadata : {});
   ns.processSemanticsChunk(semantics, this.params, this.$form.children('.tree'), this);
+  H5PEditor.metadataForm(semantics, this.metadata, this.$form.children('.tree'), this);
 };
 
 /**

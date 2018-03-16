@@ -162,7 +162,7 @@ ns.File.addCopyright = function (field, $dialog, setCopyright) {
     }
   }
 
-  // Re-map old licenses that has been moved
+  // Re-map old licenses that have been moved
   if (field.copyright) {
     if (field.copyright.license === 'ODC PDDL') {
       field.copyright.license = 'PD';
@@ -187,7 +187,6 @@ ns.File.addCopyright = function (field, $dialog, setCopyright) {
 
   // Listen for changes to license
   licenseField.changes.push(function (value) {
-
     // Find versions for selected value
     var option = find(licenseField.field.options, 'value', value);
     var versions = option.versions;
@@ -210,6 +209,7 @@ ns.File.addCopyright = function (field, $dialog, setCopyright) {
   });
 
   // Trigger update straight away
+  // console.log(field, 'not metadata');
   licenseField.changes[licenseField.changes.length - 1](field.copyright.license);
 };
 

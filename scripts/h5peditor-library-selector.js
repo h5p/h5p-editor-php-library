@@ -202,3 +202,11 @@ ns.LibrarySelector.prototype.getParams = function () {
   //return valid ? this.form.params : false;
   return this.form.params; // TODO: Switch to the line above when we are able to tell the user where the validation fails
 };
+
+ns.LibrarySelector.prototype.getMetadata = function () {
+  if (this.form === undefined) {
+    return;
+  }
+
+  return this.form.metadata;
+}

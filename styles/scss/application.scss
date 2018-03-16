@@ -491,6 +491,10 @@ a {
     margin-bottom: 0;
     max-width: 100%;
 
+    &.authorList {
+      float: none;
+    }
+
     &.field {
       float: none;
     }
@@ -760,6 +764,11 @@ a {
     padding: 0;
   }
 }
+
+.h5p-editor-dialog.h5p-dialog-wide {
+  width: 1000px;
+}
+
 /* Placed this outside of .h5peditor context above. Don't want it to be more
    specific than neccessary (because of overriding) */
 .h5peditor-button-textual {
@@ -1085,4 +1094,41 @@ a {
 .important-description-clear-right {
   display: block;
   clear: right;
+}
+
+
+.h5p-author-list-wrapper ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.h5p-author-list-wrapper span {
+  margin-right: 2em;
+  font-style: italic;
+}
+
+.h5p-cancel {
+  display: inline;
+  width: 115px;
+  height: 25px;
+  background: white;
+  padding: 10px;
+  margin: 10px;
+  text-align: center;
+  border-radius: 5px;
+  border: solid 1px gray;
+  color: black;
+  font-weight: bold;
+}
+
+.h5p-metadata-title {
+  padding: 1em;
+}
+
+.metadata-button-wrapper {
+  float: right;
+}
+
+.push-top {
+  // margin-top: -121em;
 }

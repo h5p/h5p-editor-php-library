@@ -243,10 +243,16 @@ ns.Editor.prototype.getParams = function (notFormSubmit) {
     this.formSubmitted = true;
   }
   if (this.selector !== undefined) {
-    return this.selector.getParams();
+    return {
+      params: this.selector.getParams(),
+      metadata: this.selector.getMetadata()
+    };
   }
   else if(this.form){
-    return this.form.params;
+    return {
+      params: this.form.params,
+      metadata: this.form.metadata
+    };
   }
   else {
     console.warn('no selector defined for "getParams"');

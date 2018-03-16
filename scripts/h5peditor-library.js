@@ -80,7 +80,8 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   html = '<div class="field ' + this.field.type + '">' + html + '<select>' + ns.createOption('-', 'Loading...') + '</select>';
 
   // TODO: Remove errors, it is deprecated
-  html += '<div class="errors h5p-errors"></div><div class="libwrap"></div></div>';
+  html += '<div class="errors h5p-errors"></div><div class="libwrap"> ' +
+  '</div></div>';
 
   this.$myField = ns.$(html).appendTo($wrapper);
   this.$select = this.$myField.children('select');
@@ -176,6 +177,40 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     }
 
     ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper.html(''), that);
+
+    var $metadataWrapper = H5PEditor.$('<div class="push-top"></div>');
+
+    H5PEditor.metadataForm(semantics, that.params.params, $metadataWrapper, that);
+
+    that.$libraryWrapper.prepend($metadataWrapper);
+
+    /**
+     * Help find object in list with the given property value.
+     *
+     * @param {Object[]} list of objects to search through
+     * @param {string} property to look for
+     * @param {string} value to match property value against
+     */
+    var find = function (list, property, value) {
+      var properties = property.split('.');
+
+      for (var i = 0; i < list.length; i++) {
+        var objProp = list[i];
+
+        for (var j = 0; j < properties.length; j++) {
+          objProp = objProp[properties[j]];
+        }
+
+        if (objProp === value) {
+          return list[i];
+        }
+      }
+    }
+
+    that.$libraryWrapper.prepend('<a href="#" class="h5p-cancel">Add Metdata</a>');
+    that.$libraryWrapper.find('.h5p-cancel').click(function () {
+      that.$libraryWrapper.find('.h5p-metadata-title').toggleClass('h5p-open');
+    });
 
     if (that.libraries !== undefined) {
       that.change();
