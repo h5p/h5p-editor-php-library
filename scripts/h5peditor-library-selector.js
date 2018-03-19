@@ -204,5 +204,5 @@ ns.LibrarySelector.prototype.getParams = function () {
 };
 
 ns.LibrarySelector.prototype.presave = function(content, library){
-  return (new H5PEditor.Presave()).processMaxScore(library, content);
-}
+  return (new H5PEditor.Presave()).process(library, content);
+};
