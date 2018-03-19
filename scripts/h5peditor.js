@@ -104,6 +104,10 @@ ns.libraryRequested = function (libraryName, callback) {
       callback(ns.libraryCache[libraryName].semantics);
     }
   }
+  else {
+    // Already loaded, run callback
+    callback(ns.libraryCache[libraryName].semantics);
+  }
 };
 
 /**
