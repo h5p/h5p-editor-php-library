@@ -43,7 +43,7 @@ H5PEditor.metadataForm = function (field, params, $container, parent) {
 
   // Locate license and version selectors
   var licenseField = find(group.children, 'field.name', 'license');
-  var versionField = find(group.children, 'field.name', 'version');
+  var versionField = find(group.children, 'field.name', 'licenseVersion');
   versionField.field.optional = true; // Avoid any error messages
 
   // Listen for changes to license
@@ -153,28 +153,33 @@ function getCopyrightSemantics() {
           },
           {
             'value' : 'CC BY',
-            'label' : 'Attribution 4.0',
+            'label' : 'Attribution',
             'versions': ccVersions
           },
           {
             'value' : 'CC BY-SA',
-            'label' : 'Attribution-ShareAlike 4.0'
+            'label' : 'Attribution-ShareAlike',
+            'versions': ccVersions
           },
           {
             'value' : 'CC BY-ND',
-            'label' : 'Attribution-NoDerivs 4.0'
+            'label' : 'Attribution-NoDerivs',
+            'versions': ccVersions
           },
           {
             'value' : 'CC BY-NC',
-            'label' : 'Attribution-NonCommercial 4.0'
+            'label' : 'Attribution-NonCommercial',
+            'versions': ccVersions
           },
           {
             'value' : 'CC BY-NC-SA',
-            'label' : 'Attribution-NonCommercial-ShareAlike 4.0'
+            'label' : 'Attribution-NonCommercial-ShareAlike',
+            'versions': ccVersions
           },
           {
             'value' : 'CC BY-NC-ND',
-            'label' : 'Attribution-NonCommercial-NoDerivs 4.0'
+            'label' : 'Attribution-NonCommercial-NoDerivs',
+            'versions': ccVersions
           },
           {
             'value' : 'GNU GPL',
@@ -199,7 +204,7 @@ function getCopyrightSemantics() {
         ]
       },
       {
-        'name': 'version',
+        'name': 'licenseVersion',
         'type': 'select',
         'label': 'License Version',
         'options': [],

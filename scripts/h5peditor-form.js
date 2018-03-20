@@ -89,10 +89,11 @@ ns.Form.prototype.remove = function () {
  * @returns {undefined}
  */
 ns.Form.prototype.processSemantics = function (semantics, defaultParams) {
+  // Overriding this.params with {} will lead to old content not being editable for now
   this.metadata = (defaultParams.metadata ? defaultParams.metadata : {});
   H5PEditor.metadataForm(semantics, this.metadata, this.$form.children('.tree'), this);
 
-  this.params = (defaultParams.params ? defaultParams.params : {});
+  this.params = (defaultParams.params? defaultParams.params : defaultParams);
   ns.processSemanticsChunk(semantics, this.params, this.$form.children('.tree'), this);
 };
 
