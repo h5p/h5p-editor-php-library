@@ -2,63 +2,39 @@
 var H5PEditor = H5PEditor || {};
 var ns = H5PEditor;
 
-var MOCKED_SEMANTICS = [
-  {
-    label: "Content title",
-    description: "Used for metadata",
-    name: "contentTitle",
-    type: "text",
-    importance: "high"
-  }
-];
-
 H5PEditor.metadataForm = function (field, params, $container, parent) {
   var self = this;
   self.field = field;
   self.params = params;
   self.parent = parent;
 
-  var $wrapper = H5PEditor.$('<div class="h5p-editor-dialog h5p-dialog-wide h5p-metadata-title">' +
-  '<h2>Metadata (sharing and licensing info)</h2>' +
-  '<p>Fill in the fields below</p>' +
-  '<div class="metadata-button-wrapper">' +
-    '<a href="#" class="h5p-cancel">Cancel</a>' +
-    '<a href="#" class="h5p-cancel"> Save Metadata</a>' +
-  '</div>' +
-  '<a href="#" class="h5p-close" title="Close"></a>' +
+  var $wrapper = H5PEditor.$('' +
+  '<div class="h5p-editor-dialog h5p-dialog-wide h5p-open h5p-metadata-wrapper">' +
+    '<div class="h5p-metadata-header">' +
+      '<div class="h5p-title-container">' +
+        '<h2>Metadata (sharing and licensing info)</h2>' +
+        '<p>Fill in the fields below</p>' +
+      '</div>' +
+      '<div class="metadata-button-wrapper">' +
+        '<a href="#" class="h5p-metadata-button h5p-cancel">Cancel</a>' +
+        '<a href="#" class="h5p-metadata-button h5p-save">Save Metadata</a>' +
+      '</div>' +
+    '</div>' +
   '</div>');
 
   $wrapper.find('.h5p-cancel').click(function () {
     $wrapper.toggleClass('h5p-open');
   });
 
-  $wrapper.find('.h5p-close').click(function () {
+  $wrapper.find('.h5p-save').click(function () {
     $wrapper.toggleClass('h5p-open');
   });
 
-  /**
-   * Help find object in list with the given property value.
-   *
-   * @param {Object[]} list of objects to search through
-   * @param {string} property to look for
-   * @param {string} value to match property value against
-   */
-  var find = function (list, property, value) {
-    var properties = property.split('.');
-
-    for (var i = 0; i < list.length; i++) {
-      var objProp = list[i];
-
-      for (var j = 0; j < properties.length; j++) {
-        objProp = objProp[properties[j]];
-      }
-
-      if (objProp === value) {
-        return list[i];
-      }
-    }
+  function setCopyright(field, value) {
+    self.params = value;
   }
 
+  // Create a group to handle the copyright data
   var group = new H5PEditor.widgets.group(field, getCopyrightSemantics(), self.params, setCopyright);
   group.appendTo($wrapper);
   group.expand();
@@ -96,23 +72,38 @@ H5PEditor.metadataForm = function (field, params, $container, parent) {
   // Trigger update straight away
   licenseField.changes[licenseField.changes.length - 1](self.params.license);
 
-  var test = {}
-
-  H5PEditor.metadataAuthorWidget(test, group, this.parent);
-  self.params.authors = test;
-
-  function setCopyright(field, value) {
-    // console.log(field, value, 'field, value');
-    self.params = value;
-  }
-
-  function setMetadataAuthors(value) {
-    this.params.authors = value;
-  }
+  // Create and append the metadata authoring widget
+  var authorData = {}
+  H5PEditor.metadataAuthorWidget(authorData, group, this.parent);
+  self.params.authors = authorData;
 
   $wrapper.appendTo($container);
 }
 
+/**
+ * Help find object in list with the given property value.
+ *
+ * @param {Object[]} list of objects to search through
+ * @param {string} property to look for
+ * @param {string} value to match property value against
+ */
+function find(list, property, value) {
+  var properties = property.split('.');
+
+  for (var i = 0; i < list.length; i++) {
+    var objProp = list[i];
+
+    for (var j = 0; j < properties.length; j++) {
+      objProp = objProp[properties[j]];
+    }
+
+    if (objProp === value) {
+      return list[i];
+    }
+  }
+}
+
+// TODO: this will be moved serverside
 function getCopyrightSemantics() {
 
   var ccVersions = [
@@ -147,13 +138,13 @@ function getCopyrightSemantics() {
         'name' : 'title',
         'type' : 'text',
         'label' : 'Title',
-        'placeholder' : 'NDLA Content',
-        'optional' : true
+        'description': 'Used for searching, reports and copyright information'
       },
       {
         'name' : 'license',
         'type' : 'select',
         'label' : 'License',
+        'optional' : true,
         'default' : 'U',
         'options' : [
           {
@@ -211,27 +202,28 @@ function getCopyrightSemantics() {
         'name': 'version',
         'type': 'select',
         'label': 'License Version',
-        'options': []
+        'options': [],
+        'optional' : true
       },
       {
         'name' : 'yearFrom',
         'type' : 'text',
         'label' : 'Years (from-to)',
-        'placeholder' : '1503',
+        'placeholder' : '1991',
         'optional' : true
       },
       {
         'name' : 'yearTo',
-        'label' : ' ',
+        'label' : 'hiddenLabel',
         'type' : 'text',
-        'placeholder' : '1593',
+        'placeholder' : '1992',
         'optional' : true
       },
       {
         'name' : 'source',
         'type' : 'text',
         'label' : 'Source',
-        'placeholder' : 'http://en.wikipedia.org/wiki/Mona_Lisa',
+        'placeholder' : 'http://',
         'optional' : true,
         'regexp' : {
           'pattern' : '^http[s]?://.+',

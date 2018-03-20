@@ -2,11 +2,12 @@
 var H5PEditor = H5PEditor || {};
 var ns = H5PEditor;
 
+// TODO: This should be sent from the server
 var MOCKED_SEMANTICS = [
   {
     label: "Author's name",
-    description: "Used for metadata",
     name: "authorName",
+    optional: true,
     type: "text"
   },
   {
@@ -27,10 +28,11 @@ var MOCKED_SEMANTICS = [
         "label": "Photographer"
       }
     ],
-    default: "first"
+    default: "Designer"
   }
 ];
 
+// TODO: This will come from params.metdata.authors when the editor is initialized
 var AUTHORS = [
   {
     name: 'Thomas Marstrander',
@@ -42,32 +44,23 @@ var AUTHORS = [
   }
 ]
 
-/**
- * Adds an image upload field with image editing tool to the form.
- *
- * @param {Object} parent Parent widget of this widget
- * @param {Object} field Semantic fields
- * @param {Object} params Existing image parameters
- * @param {function} setValue Function for updating parameters
- * @returns {ns.widgets.image}
- */
 H5PEditor.metadataAuthorWidget = function (params, group, parent) {
 
   params.authors = AUTHORS;
 
-  var widget = H5PEditor.$('<div></div>');
+  var widget = H5PEditor.$('<div class="h5p-metadata-author-widget"></div>');
 
   ns.processSemanticsChunk(MOCKED_SEMANTICS, {}, widget, parent);
 
   var button = H5PEditor.$('<div class="file authorList">' +
-    '<a class="add">' +
-      '<div class="h5peditor-field-file-upload-text">Add author</div>' +
+    '<a class="h5p-metadata-button h5p-add-author">' +
+      '+ Add author' +
     '</a>' +
   '</div>')
   .click(function () {
     addAuthor();
   });
-  
+
   widget.append(button);
 
   var authorListWrapper = H5PEditor.$('<div class="h5p-author-list-wrapper"><ul class="h5p-author-list"></ul></div>');
@@ -80,7 +73,7 @@ H5PEditor.metadataAuthorWidget = function (params, group, parent) {
     var authorNameInput = (widget.find('.field-name-authorName')).find('input');
     var authorRoleInput = (widget.find('.field-name-authorRole')).find('select');
 
-    // TODO better validation
+    // TODO serverside validation?
     if (authorNameInput.val().trim() == '') {
       return;
     }

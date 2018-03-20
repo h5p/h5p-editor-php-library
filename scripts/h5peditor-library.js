@@ -209,7 +209,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 
     that.$libraryWrapper.prepend('<a href="#" class="h5p-cancel">Add Metdata</a>');
     that.$libraryWrapper.find('.h5p-cancel').click(function () {
-      that.$libraryWrapper.find('.h5p-metadata-title').toggleClass('h5p-open');
+      that.$libraryWrapper.find('.h5p-metadata-wrapper').toggleClass('h5p-open');
     });
 
     if (that.libraries !== undefined) {
