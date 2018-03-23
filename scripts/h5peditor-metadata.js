@@ -2,10 +2,10 @@
 var H5PEditor = H5PEditor || {};
 var ns = H5PEditor;
 
-H5PEditor.metadataForm = function (field, params, $container, parent) {
+H5PEditor.metadataForm = function (field, metadata, $container, parent) {
   var self = this;
   self.field = field;
-  self.params = params;
+  self.metadata = metadata;
   self.parent = parent;
 
   var $wrapper = H5PEditor.$('' +
@@ -31,11 +31,11 @@ H5PEditor.metadataForm = function (field, params, $container, parent) {
   });
 
   function setCopyright(field, value) {
-    self.params = value;
+    self.metadata = value;
   }
 
   // Create a group to handle the copyright data
-  var group = new H5PEditor.widgets.group(field, getCopyrightSemantics(), self.params, setCopyright);
+  var group = new H5PEditor.widgets.group(field, getCopyrightSemantics(), self.metadata, setCopyright);
   group.appendTo($wrapper);
   group.expand();
   group.$group.find('.title').remove();
@@ -62,23 +62,24 @@ H5PEditor.metadataForm = function (field, params, $container, parent) {
     }
 
     // Find default selected version
-    var selected = (self.params.license === value &&
-                    self.params ? self.params.version : versions[0].value);
+    var selected = (self.metadata.license === value &&
+                    self.metadata ? self.metadata.version : versions[0].value);
 
     // Update versions selector
     versionField.$select.html(H5PEditor.Select.createOptionsHtml(versions, selected)).change();
   });
 
   // Trigger update straight away
-  licenseField.changes[licenseField.changes.length - 1](self.params.license);
+  licenseField.changes[licenseField.changes.length - 1](self.metadata.license);
 
-  // Create and append the metadata authoring widget
-  var authorData = {}
-  H5PEditor.metadataAuthorWidget(authorData, group, this.parent);
-  self.params.authors = authorData;
+  var authorMeta = (metadata.authors) ? metadata : {};
+
+  H5PEditor.metadataAuthorWidget(authorMeta, group, this.parent);
+
+  self.metadata.authors = authorMeta.authors;
 
   $wrapper.appendTo($container);
-}
+};
 
 /**
  * Help find object in list with the given property value.

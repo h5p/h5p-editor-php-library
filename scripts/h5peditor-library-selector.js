@@ -53,7 +53,7 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
    */
   var librarySelectHandler = function (library) {
     that.currentLibrary = library.uberName;
-    that.loadSemantics(library.uberName, that.selector.getParams());
+    that.loadSemantics(library.uberName, that.selector.getParams(), that.selector.getMetadata());
 
     that.$tutorialUrl.attr('href', library.tutorialUrl ? library.tutorialUrl : '#').toggle(!!library.tutorialUrl);
     that.$exampleUrl.attr('href', library.exampleUrl ? library.exampleUrl : '#').toggle(!!library.exampleUrl);
@@ -120,7 +120,7 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
  * @param {Object} params Pass in params to semantics
  * @returns {unresolved}
  */
-ns.LibrarySelector.prototype.loadSemantics = function (library, params) {
+ns.LibrarySelector.prototype.loadSemantics = function (library, params, metadata) {
   var that = this;
 
   if (this.form !== undefined) {
@@ -162,7 +162,7 @@ ns.LibrarySelector.prototype.loadSemantics = function (library, params) {
       that.form = new ns.Form();
       that.form.replace($loading);
       that.form.currentLibrary = library;
-      that.form.processSemantics(semantics, overrideParams);
+      that.form.processSemantics(semantics, overrideParams, metadata);
     }
 
     that.$selector.attr('disabled', false);

@@ -60,6 +60,7 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
 
     self.currentLibrary = self.createContentTypeId(contentType, true);
     delete self.currentParams;
+    delete self.currentMetadata;
     changeLibraryDialog.show(ns.$(self.getElement()).offset().top);
   }, this);
 
@@ -75,6 +76,18 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
       });
     self.currentLibrary = self.createContentTypeId(uploadedVersion[0]);
     self.currentParams = event.content;
+    self.currentMetadata = {
+      title: event.h5p.title,
+      authors: event.h5p.authors,
+      license: event.h5p.license,
+      licenseVersion: event.h5p.licenseVersion,
+      licenseExtras: event.h5p.licenseExtras,
+      yearFrom: event.h5p.yearFrom,
+      yearTo: event.h5p.yearTo,
+      source: event.h5p.source,
+      changes: event.h5p.changes,
+      authorComments: event.h5p.authorComments
+    };
 
     // Change library immediately or show confirmation dialog
     if (!previousLibrary) {
@@ -136,10 +149,19 @@ ns.SelectorHub.prototype.getSelectedLibrary = function (next) {
 /**
  * Get params connected with the currently selected library
  *
- * @returns {string} Parameters connected to the selected library
+ * @returns {object} Parameters connected to the selected library
  */
 ns.SelectorHub.prototype.getParams = function () {
   return this.currentParams;
+};
+
+/**
+ * Get metadata connected with the currently selected library
+ *
+ * @returns {object} Metadata connected to the selected library
+ */
+ns.SelectorHub.prototype.getMetadata = function () {
+  return this.currentMetadata;
 };
 
 /**

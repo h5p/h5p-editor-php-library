@@ -42,11 +42,12 @@ var AUTHORS = [
     name: 'Frode Petterson',
     role: 'Illustrator'
   }
-]
+];
 
-H5PEditor.metadataAuthorWidget = function (params, group, parent) {
+H5PEditor.metadataAuthorWidget = function (metadata, group, parent) {
+  AUTHORS = (metadata && typeof metadata.authors === 'object' && Object.keys(metadata.authors).length > 0) ? metadata.authors : AUTHORS;
 
-  params.authors = AUTHORS;
+  metadata.authors = AUTHORS;
 
   var widget = H5PEditor.$('<div class="h5p-metadata-author-widget"></div>');
 
@@ -67,7 +68,7 @@ H5PEditor.metadataAuthorWidget = function (params, group, parent) {
   widget.append(authorListWrapper);
   renderAuthorList();
 
-  widget.appendTo(group.$group.find('.content'))
+  widget.appendTo(group.$group.find('.content'));
 
   function addAuthor() {
     var authorNameInput = (widget.find('.field-name-authorName')).find('input');
@@ -81,19 +82,19 @@ H5PEditor.metadataAuthorWidget = function (params, group, parent) {
     AUTHORS.push({
       name: authorNameInput.val(),
       role: authorRoleInput.val()
-    })
+    });
     renderAuthorList();
-    params.authors = AUTHORS;
+    metadata.authors = AUTHORS;
     authorNameInput.val(' ');
     authorRoleInput.val(1);
   }
 
   function removeAuthor(author) {
     AUTHORS = AUTHORS.filter(function(e) {
-      return e !== author
-    })
+      return e !== author;
+    });
     renderAuthorList();
-    params.authors = AUTHORS;
+    metadata.authors = AUTHORS;
   }
 
   function renderAuthorList() {
@@ -104,11 +105,11 @@ H5PEditor.metadataAuthorWidget = function (params, group, parent) {
     AUTHORS.forEach(function(author) {
       var listItem = H5PEditor.$('<li>' + author.name + ' <span>' + author.role + '</span></li>').data('author', author);
       listItem.append('<button>x</button>').click(function() {
-        removeAuthor(H5PEditor.$(this).data().author)
-      })
+        removeAuthor(H5PEditor.$(this).data().author);
+      });
       authorList.append(listItem);
     });
 
     wrapper.append(authorList);
   }
-}
+};
