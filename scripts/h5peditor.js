@@ -68,9 +68,11 @@ ns.libraryRequested = function (libraryName, callback) {
     }
 
     // Add JS
+    var loadingJs = false;
     if (libraryData.javascript !== undefined && libraryData.javascript.length) {
       libraryData.javascript.forEach(function (path) {
         if (!H5P.jsLoaded(path)) {
+          loadingJs = true;
           var script = document.createElement('script');
           script.type = 'text/javascript';
           script.charset = 'UTF-8';
@@ -98,7 +100,7 @@ ns.libraryRequested = function (libraryName, callback) {
         }
       });
     }
-    else {
+    if (!loadingJs) {
       // Don't have to wait for any scripts, run callback
       ns.libraryLoaded[libraryName] = true;
       callback(ns.libraryCache[libraryName].semantics);
