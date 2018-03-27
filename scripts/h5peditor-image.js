@@ -92,7 +92,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
     '<div class="h5p-editor-image-buttons">' +
       '<button class="h5peditor-button-textual h5p-editing-image-button">' + ns.t('core', 'editImage') + '</button>';
 
-  if (!this.field.hideCopyright) {
+  if (!this.field.disableCopyright) {
     htmlString += '<button class="h5peditor-button-textual h5p-copyright-button">' + ns.t('core', 'editCopyright') + '</button>';
   }
 

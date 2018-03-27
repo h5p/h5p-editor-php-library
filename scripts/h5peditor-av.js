@@ -105,7 +105,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       '<ul class="file list-unstyled"></ul>' +
       C.createAdd(self.field.type);
 
-    if (!this.field.hideCopyright) {
+    if (!this.field.disableCopyright) {
       imageHtml += '<a class="h5p-copyright-button" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>';
     }
 
