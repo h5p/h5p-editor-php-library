@@ -203,6 +203,6 @@ ns.LibrarySelector.prototype.getParams = function () {
   return this.form.params; // TODO: Switch to the line above when we are able to tell the user where the validation fails
 };
 
-ns.LibrarySelector.prototype.presave = function(content, library){
-  return (new H5PEditor.Presave()).process(library, content);
+ns.LibrarySelector.prototype.presave = function (content, library) {
+  return (new ns.Presave).process(library, content);
 };

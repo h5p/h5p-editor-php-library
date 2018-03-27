@@ -160,5 +160,8 @@ H5PEditor.language.core = {
   contentTypeCacheOutdated: 'Innhaldstype-lista er utdatert',
   contentTypeCacheOutdatedDesc: 'Nettstedet ditt har problemer med å koble til H5P.org for å se etter innhaldstype-oppdateringer. Det kan hende at du ikke får oppdatert eller installert nye innhaldstyper.',
   tryAgain: 'Prøv på nytt',
-  getHelp: 'Get help'
+  getHelp: 'Get help',
+  errorHeader: 'An error occured',
+  errorCalculatingMaxScore: 'Could not calculate the max score for this content. The max score is assumed to be 0. Contact your administrator if this isn’t correct.',
+  maxScoreSemanticsMissing: 'Could not find the expected semantics in the content.'
 };

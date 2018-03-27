@@ -52,8 +52,14 @@
         if (params !== undefined) {
           $library.val(h5peditor.getLibrary());
           $params.val(JSON.stringify(params));
+          try{
+            var presave = h5peditor.presave(params);
+            $maxScore.val(presave.maxScore);
+          } catch (err) {
+            alert(err.message); //This halts processing. Swap with H5P.Dialog? And perhaps stop probagation?
+            $maxScore.val(0);
+          }
         }
-        $maxScore.val(h5peditor.presave(params));
       }
     });
   };
