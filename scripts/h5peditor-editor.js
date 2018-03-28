@@ -251,7 +251,7 @@ ns.Editor.prototype.getParams = function (notFormSubmit) {
 
 
 ns.Editor.prototype.presave = function (content) {
-  return this.selector.presave(content, H5P.libraryFromString(this.getLibrary()).machineName);
+  return this.selector.presave(content, this.getLibrary());
 };
 
 /**
