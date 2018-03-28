@@ -19,7 +19,7 @@ H5PEditor.Presave = (function (Editor) {
    *
    * @public
    * @param {string} library
-   * @param {Object} content
+   * @param {object} content
    * @returns {H5PEditor.Presave}
    */
   Presave.prototype.process = function (library, content) {
@@ -74,7 +74,7 @@ H5PEditor.Presave = (function (Editor) {
    * Check if a object has the given properties.
    *
    * @static
-   * @param {Object} content
+   * @param {object} content
    * @param {string|[]} requirements
    * @returns {boolean}
    */
@@ -147,7 +147,7 @@ H5PEditor.Presave = (function (Editor) {
   };
 
   /**
-   * Constructor
+   * C
    * @constructor
    * @type {Presave}
    */
