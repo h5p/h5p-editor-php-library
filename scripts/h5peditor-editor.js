@@ -249,7 +249,12 @@ ns.Editor.prototype.getParams = function (notFormSubmit) {
   }
 };
 
-
+/**
+ *
+ * @alias H5PEditor.Editor#presave
+ * @param content
+ * @return {H5PEditor.Presave}
+ */
 ns.Editor.prototype.presave = function (content) {
   return this.selector.presave(content, this.getLibrary());
 };
