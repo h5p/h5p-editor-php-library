@@ -158,6 +158,8 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     delete this.params.library;
     delete this.params.params;
     delete this.params.subContentId;
+    delete this.params.metadata;
+
     this.$libraryWrapper.attr('class', 'libwrap');
     return;
   }
@@ -175,12 +177,15 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     if (that.params.subContentId === undefined) {
       that.params.subContentId = H5P.createUUID();
     }
+    if (that.params.metadata === undefined) {
+      that.params.metadata = {};
+    }
 
     ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper.html(''), that);
 
     var $metadataWrapper = H5PEditor.$('<div class="push-top"></div>');
 
-    H5PEditor.metadataForm(semantics, that.params.params, $metadataWrapper, that);
+    H5PEditor.metadataForm(semantics, that.params.metadata, $metadataWrapper, that);
 
     that.$libraryWrapper.prepend($metadataWrapper);
 

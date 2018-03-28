@@ -93,6 +93,15 @@ ns.SelectorLegacy.prototype.getParams = function () {
 }
 
 /**
+ * Not possible to load new metadata into legacy selector, always returns undefined.
+ *
+ * @returns {undefined}
+ */
+ns.SelectorLegacy.prototype.getMetadata = function () {
+  return undefined;
+};
+
+/**
  * Returns the html element for the hub
  *
  * @return {HTMLElement}
