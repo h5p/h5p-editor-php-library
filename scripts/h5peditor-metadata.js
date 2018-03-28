@@ -39,6 +39,7 @@ H5PEditor.metadataForm = function (field, params, $container, parent) {
   group.appendTo($wrapper);
   group.expand();
   group.$group.find('.title').remove();
+  group.$group.find('.content').addClass('copyright-form');
   field.children = [group];
 
   // Locate license and version selectors
@@ -72,10 +73,11 @@ H5PEditor.metadataForm = function (field, params, $container, parent) {
   // Trigger update straight away
   licenseField.changes[licenseField.changes.length - 1](self.params.license);
 
-  // Create and append the metadata authoring widget
-  var authorData = {}
-  H5PEditor.metadataAuthorWidget(authorData, group, this.parent);
-  self.params.authors = authorData;
+  // Create and append the metadata author list widget
+  H5PEditor.metadataAuthorWidget(self.params, group, this.parent);
+
+  // Create and append the metadata changelog widget
+  H5PEditor.metadataChangelogWidget(self.params, group, this.parent);
 
   $wrapper.appendTo($container);
 }

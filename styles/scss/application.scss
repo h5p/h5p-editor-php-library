@@ -1133,7 +1133,7 @@ a {
   &:after {
     position: absolute;
     left: 0;
-    top: 16%;
+    top: 6.5em;
     height: 1px;
     background: #ced6e3;
     content: "";
@@ -1153,7 +1153,7 @@ a {
     box-shadow: none;
   }
 
-  .content {
+  .content.copyright-form {
     display: flex;
     flex-wrap: wrap;
   }
@@ -1169,7 +1169,7 @@ a {
     margin-right: 1%;
   }
 
-  .field-name-version {
+  .field-name-licenseVersion {
     width: 49%;
     margin-bottom: 0.5em;
     margin-left: 1%;
@@ -1267,5 +1267,143 @@ a {
         font-style: italic;
       }
     }
+  }
+
+  .h5p-author-list-wrapper {
+    line-height: 2em;
+
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      display: inline-block;
+      margin-right: 1em;
+      margin-left: 1em;
+      list-style: none;
+    }
+
+    .h5p-metadata-role {
+      font-style: italic;
+      margin-right: 0.5em;
+    }
+  }
+}
+
+.h5p-metadata-changelog {
+
+  .title {
+    font-weight: 400;
+    margin-left: 20px;
+    margin-right: 20px;
+    background: #F6F6F6;
+    color: #323232;
+    border: solid 1px #ced6e3;
+    border-radius: 0.208em;
+  }
+
+  .field-name-changeLogForm {
+    border: solid 1px #ced6e3;
+    border-radius: 0.208em;
+  }
+
+  .field-name-changeLogForm .content {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 3em;
+  }
+
+  .field-name-date {
+    width: 49%;
+    margin-bottom: 0.5em;
+    margin-right: 1%;
+    margin-top: 0;
+  }
+
+  .field-name-author {
+    width: 49%;
+    margin-bottom: 0.5em;
+    margin-left: 1%;
+    margin-top: 0;
+  }
+
+  .field-name-log {
+    width: 100%;
+    height: 5em;
+  }
+
+  .h5p-metadata-new-log {
+    float: none;
+    height: 4em;
+    width: 100%;
+  }
+
+  .h5p-add-author {
+   border: solid 1px #10a186;
+   color: #10a186;
+  }
+
+  .h5p-cancel {
+    border: solid 1px #a9adb4;
+    color:#a9adb4;;
+  }
+
+  .h5p-metadata-formButtonWrapper {
+    display: flex;
+    height: 3em;
+    padding-left: 10px;
+  }
+
+  .h5p-metadata-log-wrapper-title {
+    font-weight: bolder;
+  }
+
+  .h5p-metadata-log-wrapper {
+    margin-top: 1em;
+    border: solid 1px #ced6e3;
+    border-radius: 0.208em;
+    max-height: 15.917rem;
+    overflow-y: auto;
+  }
+
+  .h5p-metadata-log {
+    display: flex;
+  }
+
+  .h5p-metadata-log-buttons {
+    min-width: 3em;
+  }
+
+  .h5p-metadata-log.not-first {
+    border-bottom: solid 1px #ced6e3;
+  }
+
+  .h5p-metadata-log-date {
+    min-width: 10em;
+    margin: 1em;
+    font-size: 0.85em;
+    font-style: italic;
+  }
+
+  .h5p-metadata-description-wrapper {
+    width: 51em;
+    font-size: 0.85em;
+    font-style: italic;
+  }
+
+  .h5p-metadata-description-wrapper {
+    font-weight: bolder;
+  }
+
+  .h5p-metadata-log-author {
+    font-weight: normal;
+  }
+
+  .h5p-metadata-new-log-message {
+    background: #C5E7E1;
+    padding: 0.5em;
+    margin-bottom: 1em;
+    color: #10a186;
   }
 }

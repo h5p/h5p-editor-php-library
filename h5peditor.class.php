@@ -38,6 +38,7 @@ class H5peditor {
     'scripts/h5peditor-none.js',
     'scripts/h5peditor-metadata.js',
     'scripts/h5peditor-metadata-author-widget.js',
+    'scripts/h5peditor-metadata-changelog-widget.js',
     'ckeditor/ckeditor.js',
   );
   private $h5p, $storage;

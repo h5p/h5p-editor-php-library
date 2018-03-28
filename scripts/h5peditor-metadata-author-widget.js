@@ -32,21 +32,11 @@ var MOCKED_SEMANTICS = [
   }
 ];
 
-// TODO: This will come from params.metdata.authors when the editor is initialized
-var AUTHORS = [
-  {
-    name: 'Thomas Marstrander',
-    role: 'Photographer'
-  },
-  {
-    name: 'Frode Petterson',
-    role: 'Illustrator'
-  }
-]
-
 H5PEditor.metadataAuthorWidget = function (params, group, parent) {
 
-  params.authors = AUTHORS;
+  if (!params.authors) {
+    params.authors = [];
+  }
 
   var widget = H5PEditor.$('<div class="h5p-metadata-author-widget"></div>');
 
@@ -67,7 +57,7 @@ H5PEditor.metadataAuthorWidget = function (params, group, parent) {
   widget.append(authorListWrapper);
   renderAuthorList();
 
-  widget.appendTo(group.$group.find('.content'))
+  widget.appendTo(group.$group.find('.content'));
 
   function addAuthor() {
     var authorNameInput = (widget.find('.field-name-authorName')).find('input');
@@ -78,22 +68,20 @@ H5PEditor.metadataAuthorWidget = function (params, group, parent) {
       return;
     }
 
-    AUTHORS.push({
+    params.authors.push({
       name: authorNameInput.val(),
       role: authorRoleInput.val()
-    })
+    });
     renderAuthorList();
-    params.authors = AUTHORS;
     authorNameInput.val(' ');
     authorRoleInput.val(1);
   }
 
   function removeAuthor(author) {
-    AUTHORS = AUTHORS.filter(function(e) {
+    params.authors = params.authors.filter(function(e) {
       return e !== author
     })
     renderAuthorList();
-    params.authors = AUTHORS;
   }
 
   function renderAuthorList() {
@@ -101,11 +89,14 @@ H5PEditor.metadataAuthorWidget = function (params, group, parent) {
     wrapper.empty();
 
     authorList = H5PEditor.$('<ul></ul>');
-    AUTHORS.forEach(function(author) {
-      var listItem = H5PEditor.$('<li>' + author.name + ' <span>' + author.role + '</span></li>').data('author', author);
-      listItem.append('<button>x</button>').click(function() {
-        removeAuthor(H5PEditor.$(this).data().author)
+    params.authors.forEach(function(author) {
+      var listItem = H5PEditor.$('<li>' + author.name + ' <span class="h5p-metadata-role">' + author.role + '</span></li>').data('author', author);
+      var deleteButton = H5PEditor.$('<button>x</button>');
+      deleteButton.click(function() {
+        removeAuthor(H5PEditor.$(listItem).data().author)
       })
+
+      listItem.append(deleteButton);
       authorList.append(listItem);
     });
 
