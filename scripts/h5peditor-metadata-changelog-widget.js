@@ -131,7 +131,7 @@ H5PEditor.metadataChangelogWidget = function (params, group, parent) {
 
   widget.appendTo(group.$group);
   render();
-  loadScripts();
+
 
   function render() {
     newLogMessage.hide();
@@ -143,6 +143,11 @@ H5PEditor.metadataChangelogWidget = function (params, group, parent) {
       formButtonWrapper.show();
       renderLogWrapper(logWrapper);
       newLogMessage.hide();
+
+      var dateWrapping = widget.find('.field-name-date');
+      var dateInput = dateWrapping.find('input')[0]
+      H5PEditor.$(dateInput).addClass('datepicker');
+      loadScripts(dateInput);
     }
     else {
       button.show();
@@ -238,8 +243,11 @@ H5PEditor.metadataChangelogWidget = function (params, group, parent) {
   /**
    * Load scripts dynamically
    */
-  function loadScripts() {
-    loadScript(H5PEditor.basePath + 'libs/datepicker/zebra_datepicker.js', function () {
+  function loadScripts(dateInput) {
+    loadScript(H5PEditor.basePath + 'libs/zebra_datepicker.src.js', function () {
+      H5PEditor.$(dateInput).Zebra_DatePicker({
+        format: 'd-m-y G:i:s'
+      });
     });
   };
 

@@ -9,7 +9,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent) {
   self.parent = parent;
 
   var $wrapper = H5PEditor.$('' +
-  '<div class="h5p-editor-dialog h5p-dialog-wide h5p-open h5p-metadata-wrapper">' +
+  '<div class="h5p-editor-dialog h5p-dialog-wide h5p-metadata-wrapper">' +
     '<div class="h5p-metadata-header">' +
       '<div class="h5p-title-container">' +
         '<h2>Metadata (sharing and licensing info)</h2>' +
@@ -23,7 +23,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent) {
   '</div>');
 
   $wrapper.find('.h5p-cancel').click(function () {
-    $wrapper.toggleClass('h5p-open');
+    $wrapper.removeClass('h5p-open');
   });
 
   $wrapper.find('.h5p-save').click(function () {
@@ -73,19 +73,11 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent) {
   // Trigger update straight away
   licenseField.changes[licenseField.changes.length - 1](self.metadata.license);
 
-<<<<<<< HEAD
   // Create and append the metadata author list widget
-  H5PEditor.metadataAuthorWidget(self.params, group, this.parent);
+  H5PEditor.metadataAuthorWidget(self.metadata, group, this.parent);
 
   // Create and append the metadata changelog widget
-  H5PEditor.metadataChangelogWidget(self.params, group, this.parent);
-=======
-  var authorMeta = (metadata.authors) ? metadata : {};
-
-  H5PEditor.metadataAuthorWidget(authorMeta, group, this.parent);
-
-  self.metadata.authors = authorMeta.authors;
->>>>>>> 39336697af98e00cf2776fa0b4fbdd9282243cf4
+  H5PEditor.metadataChangelogWidget(self.metadata, group, this.parent);
 
   $wrapper.appendTo($container);
 };

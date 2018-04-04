@@ -6,7 +6,8 @@ class H5peditor {
     'libs/darkroom.css',
     'styles/css/h5p-hub-client.css',
     'styles/css/fonts.css',
-    'styles/css/application.css'
+    'styles/css/application.css',
+    'styles/css/libs/zebra_datepicker.css'
   );
   public static $scripts = array(
     'scripts/h5p-hub-client.js',

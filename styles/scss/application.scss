@@ -1250,7 +1250,7 @@ a {
   }
 
   .authorList {
-    margin-top: 4.5%;
+    margin-top: 2.6em;
     margin-left: 1%;
 
     .h5p-add-author {
@@ -1319,6 +1319,9 @@ a {
     margin-bottom: 0.5em;
     margin-right: 1%;
     margin-top: 0;
+    span {
+      width: 100%;
+    }
   }
 
   .field-name-author {
@@ -1380,14 +1383,14 @@ a {
   }
 
   .h5p-metadata-log-date {
-    min-width: 10em;
+    min-width: 25%;
     margin: 1em;
     font-size: 0.85em;
     font-style: italic;
   }
 
   .h5p-metadata-description-wrapper {
-    width: 51em;
+    flex-grow: 1;
     font-size: 0.85em;
     font-style: italic;
   }

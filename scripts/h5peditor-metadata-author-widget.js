@@ -78,12 +78,11 @@ H5PEditor.metadataAuthorWidget = function (params, group, parent) {
   }
 
   function removeAuthor(author) {
-<<<<<<< HEAD
     params.authors = params.authors.filter(function(e) {
       return e !== author
     })
     renderAuthorList();
-=======
+
     AUTHORS = AUTHORS.filter(function(e) {
       return e !== author;
     });
