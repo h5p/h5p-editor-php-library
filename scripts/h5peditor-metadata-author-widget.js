@@ -79,15 +79,10 @@ H5PEditor.metadataAuthorWidget = function (params, group, parent) {
 
   function removeAuthor(author) {
     params.authors = params.authors.filter(function(e) {
-      return e !== author
-    })
-    renderAuthorList();
-
-    AUTHORS = AUTHORS.filter(function(e) {
       return e !== author;
     });
+
     renderAuthorList();
-    metadata.authors = AUTHORS;
   }
 
   function renderAuthorList() {
@@ -99,8 +94,8 @@ H5PEditor.metadataAuthorWidget = function (params, group, parent) {
       var listItem = H5PEditor.$('<li>' + author.name + ' <span class="h5p-metadata-role">' + author.role + '</span></li>').data('author', author);
       var deleteButton = H5PEditor.$('<button>x</button>');
       deleteButton.click(function() {
-        removeAuthor(H5PEditor.$(listItem).data().author)
-      })
+        removeAuthor(H5PEditor.$(listItem).data().author);
+      });
 
       listItem.append(deleteButton);
       authorList.append(listItem);
