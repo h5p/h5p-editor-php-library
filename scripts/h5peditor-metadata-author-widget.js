@@ -16,19 +16,19 @@ var MOCKED_SEMANTICS = [
     "label": "Author's role",
     "options": [
       {
-        "value": "Designer",
-        "label": "Designer"
+        "value": "Editor",
+        "label": "Editor"
       },
       {
-        "value": "Illustrator",
-        "label": "Illustrator"
+        "value": "Licensee",
+        "label": "Licensee"
       },
       {
-        "value": "Photographer",
-        "label": "Photographer"
+        "value": "Originator",
+        "label": "Originator"
       }
     ],
-    default: "Designer"
+    default: "Originator"
   }
 ];
 
