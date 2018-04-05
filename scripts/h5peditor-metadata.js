@@ -51,7 +51,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent) {
   licenseField.changes.push(function (value) {
     // Find versions for selected value
     var option = find(licenseField.field.options, 'value', value);
-    var versions = option.versions;
+    var versions = (option) ? option.versions : undefined;
 
     versionField.$select.prop('disabled', versions === undefined);
     if (versions === undefined) {
