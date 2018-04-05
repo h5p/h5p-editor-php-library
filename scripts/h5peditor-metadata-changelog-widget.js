@@ -193,8 +193,8 @@ H5PEditor.metadataChangelogWidget = function (params, group, parent) {
         logWrapper.append(authorWrapper);
 
         var logButtons = H5PEditor.$('<div class="h5p-metadata-log-buttons">' +
-         '<button class="h5p-metadata-delete">x</button>' +
-         '<button class="h5p-metadata-edit">v</button>' +
+         '<button class="h5p-metadata-edit"></button>' +
+         '<button class="h5p-metadata-delete"></button>' +
         '</div>');
 
         logButtons.find('.h5p-metadata-delete').click(function() {
