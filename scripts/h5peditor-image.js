@@ -241,6 +241,12 @@ ns.widgets.image.prototype.addFile = function () {
       return false;
     });
 
+  var $img = this.$file.find('img');
+  $img.one('load', function () {
+    // Make editor resize
+    $img.addClass('loaded');
+  });
+
   // Uploading original image
   that.$editImage.removeClass('hidden');
   that.$copyrightButton.removeClass('hidden');
