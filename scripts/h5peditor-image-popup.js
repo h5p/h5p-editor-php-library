@@ -1,4 +1,3 @@
-/*global H5PEditor, H5P, ns, Darkroom*/
 H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
   var instanceCounter = 0;
   var scriptsLoaded = false;

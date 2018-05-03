@@ -1,8 +1,4 @@
-/**
- * @namespace
- */
-var H5PEditor = (H5PEditor || {});
-var ns = H5PEditor;
+window.ns = window.H5PEditor = window.H5PEditor || {};
 
 /**
  * Construct the editor.
