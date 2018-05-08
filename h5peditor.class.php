@@ -108,7 +108,7 @@ class H5peditor {
       }
 
       // Some libraries rely on an LRS to work and must be enabled manually
-      if ($libraries[$i]->name === 'H5P.Questionnaire' &&
+      if (in_array($libraries[$i]->name, array('H5P.Questionnaire', 'H5P.FreeTextQuestion')) &&
           !$this->h5p->h5pF->getOption('enable_lrs_content_types')) {
         $libraries[$i]->restricted = TRUE;
       }
@@ -635,7 +635,7 @@ class H5peditor {
     // Restrict LRS dependent content
     if (!$this->h5p->h5pF->getOption('enable_lrs_content_types')) {
       foreach ($cached_libraries as &$lib) {
-        if ($lib['machineName'] === 'H5P.Questionnaire') {
+        if (in_array($lib['machineName'], array('H5P.Questionnaire', 'H5P.FreeTextQuestion'))) {
           $lib['restricted'] = TRUE;
         }
       }
