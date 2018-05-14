@@ -39,6 +39,9 @@ ns.libraryLoaded = {};
  */
 ns.isIE = navigator.userAgent.match(/; MSIE \d+.\d+;/) !== null;
 
+// best case scenario: The title field div still has the classname 'form-item-title'
+window.parent.document.getElementsByClassName('form-item-title')[0].style.display = 'none';
+
 /**
  * Helper function invoked when a library is requested. Will add CSS and eval JS
  * if not already done.

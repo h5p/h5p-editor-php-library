@@ -157,5 +157,6 @@ H5PEditor.language.core = {
   contentTypeCacheOutdated: 'Content type list outdated',
   contentTypeCacheOutdatedDesc: 'Your site is having difficulties connecting to H5P.org to check for content type updates. You may not be able to update or install new content types.',
   tryAgain: 'Try again',
-  getHelp: 'Get help'
+  getHelp: 'Get help',
+  untitled: 'Untitled'
 };
