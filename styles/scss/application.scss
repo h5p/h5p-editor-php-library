@@ -1233,6 +1233,11 @@ a {
     margin-bottom: 0.5em;
     margin-left: 1%;
   }
+
+  .h5p-metadata-license-extras {
+    width: 100%;
+    margin-top: 1em;
+  }
 }
 
 .h5p-metadata-header {
@@ -1504,5 +1509,27 @@ a {
     padding: 0.5em;
     margin-bottom: 1em;
     color: #10a186;
+  }
+}
+
+.h5p-metadata-additional-information {
+  margin-top: 1em;
+
+  .content.h5peditor-single {
+    min-height: 2em;
+    border: 1px solid #d0d0d1;
+    border-top: none;
+    background: #fff;
+    margin: 0 1.3em;
+  }
+
+  .title {
+    font-weight: 400;
+    margin-left: 20px;
+    margin-right: 20px;
+    background: #F6F6F6;
+    color: #323232;
+    border: solid 1px #ced6e3;
+    border-radius: 0.208em;
   }
 }

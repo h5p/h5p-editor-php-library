@@ -76,8 +76,43 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent) {
   // Create and append the metadata author list widget
   H5PEditor.metadataAuthorWidget(self.metadata, group, this.parent);
 
+  // Extra License Field
+  var mocked_semantics = [
+    {
+      name: 'licenseExtras',
+      type: 'textarea',
+      label: 'License Extras',
+      description: 'Any additional information about the license'
+    }
+  ];
+  var widget = H5PEditor.$('<div class="h5p-metadata-license-extras"></div>');
+  ns.processSemanticsChunk(mocked_semantics, {licenseExtras: self.metadata.licenseExtras}, widget, this.parent);
+  widget.appendTo(group.$group.find('.content'));
+
   // Create and append the metadata changelog widget
   H5PEditor.metadataChangelogWidget(self.metadata, group, this.parent);
+
+  // Additional information fields
+  mocked_semantics = [
+    {
+      name: 'additionalInfoGroup',
+      label: 'Additional Information',
+      type: 'group',
+      expanded: false,
+      fields: [
+        {
+          name: 'additionalInfo',
+          type: 'textarea',
+          label: 'Author comments',
+          description: 'Comments for the editor of the content (This text will not be published as a part of copyright info)',
+          optional: true
+        }
+      ]
+    }
+  ];
+  widget = H5PEditor.$('<div class="h5p-metadata-additional-information"></div>');
+  ns.processSemanticsChunk(mocked_semantics, {additionalInfoGroup:self.metadata.authorComments}, widget, this.parent);
+  widget.appendTo(group.$group);
 
   $wrapper.appendTo($container);
 };

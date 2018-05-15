@@ -5,7 +5,7 @@ var ns = H5PEditor;
 var MOCKED_SEMANTICS_1 = [{
     "name": "changeLog",
     "type": "group",
-    "expanded": true,
+    "expanded": false,
     "label": "Change Log",
     "fields": [
       {
