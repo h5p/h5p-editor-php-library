@@ -12,7 +12,14 @@ ns.Form = function () {
   this.commonFields = {};
   this.$form = ns.$('' +
     '<div class="h5peditor-form">' +
-      '<div class="tree"><a href="#" class="h5p-cancel">Add Metdata</a></div>' +
+      '<div class="tree">' +
+        '<a href="#" class="toggle-metadata">Metdata</a>' +
+        '<div class="field field-name-title text">' +
+          '<label class="h5peditor-label-wrapper"><span class="h5peditor-label h5peditor-required">Title</span></label>' +
+          '<div class="h5peditor-field-description">Used for searching, reports and copyright information</div>' +
+          '<input class="h5peditor-text" id="metadata-title-main" type="text" maxlength="255" placeholder="Add title">' +
+        '</div>' +
+      '</div>' +
       '<div class="common collapsed hidden">' +
         '<div class="fields">' +
           '<p class="desc">' +
@@ -25,7 +32,7 @@ ns.Form = function () {
   this.$common = this.$form.find('.common > .fields');
   this.library = '';
 
-  this.$form.find('.h5p-cancel').click(function () {
+  this.$form.find('.toggle-metadata').click(function () {
     self.$form.find('.h5p-metadata-wrapper').first().toggleClass('h5p-open');
   });
 

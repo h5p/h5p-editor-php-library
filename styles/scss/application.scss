@@ -26,6 +26,42 @@ a {
   text-decoration: none;
 }
 
+.toggle-metadata {
+  position: absolute;
+  left: 7em;
+  top: 3em;
+  padding: 0.417rem;
+  margin-left: 0.417rem;
+  font-size: 0.667rem;
+  font-family: Open Sans;
+  font-weight: normal;
+  border: 1px solid #c6c8d7;
+  border-left: none;
+  border-radius: 4px;
+  background: linear-gradient(#ffffff, #e6f6fe);
+  color: #124361;
+  z-index: 1;
+}
+
+.toggle-metadata:after {
+  position: absolute;
+  width: 21px;
+  height: 21px;
+  content: "";
+  display: block;
+  background: linear-gradient(#ffffff, #e6f6fe);
+  top: 3px;
+  left: -8px;
+  border: 1px solid #c6c8d7;
+  border-right: none;
+  border-top: none;
+  border-radius: 4px;
+  -webkit-transform: rotate(47deg) skew(5deg);
+  -moz-transform: rotate(47deg) skew(5deg);
+  transform: rotate(47deg) skew(5deg);
+  z-index: -1;
+}
+
 .h5peditor {
   font-size: 16px;
 
