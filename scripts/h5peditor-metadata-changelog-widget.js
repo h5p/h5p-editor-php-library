@@ -2,43 +2,7 @@
 var H5PEditor = H5PEditor || {};
 var ns = H5PEditor;
 
-var MOCKED_SEMANTICS_1 = [{
-    "name": "changeLog",
-    "type": "group",
-    "expanded": false,
-    "label": "Change Log",
-    "fields": [
-      {
-          "name": "changeLogForm",
-          "type": "group",
-          "label": "Question",
-          "expanded": true,
-          "fields": [
-            {
-              "name": "date",
-              "type": "text",
-              "label": "Date",
-              "optional": true
-            },
-            {
-              "name": "author",
-              "type": "text",
-              "label": "Changed by",
-              "optional": true
-            },
-            {
-              "name": "log",
-              "type": "textarea",
-              "label": "Description of change",
-              "placeholder": "Add a description of your change",
-              "optional": true
-            }
-          ]
-        }
-    ]
-  }];
-
-H5PEditor.metadataChangelogWidget = function (params, group, parent) {
+H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) {
   if (!params.changes) {
     params.changes = [];
   }
@@ -48,7 +12,7 @@ H5PEditor.metadataChangelogWidget = function (params, group, parent) {
   var widget = H5PEditor.$('<div class="h5p-metadata-changelog"></div>');
   var currentLog;
 
-  ns.processSemanticsChunk(MOCKED_SEMANTICS_1, {}, widget, parent);
+  ns.processSemanticsChunk(semantics, {}, widget, parent);
   var form = widget.find('.field-name-changeLogForm');
   form.find('.title').remove();
 

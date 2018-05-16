@@ -73,50 +73,37 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent) {
   // Trigger update straight away
   licenseField.changes[licenseField.changes.length - 1](self.metadata.license);
 
-  // Create and append the metadata author list widget
-  H5PEditor.metadataAuthorWidget(self.metadata, group, this.parent);
+  // Create and append the rest of the widgets and fields
+  // Append the metadata author list widget
+  H5PEditor.metadataAuthorWidget(getAuthorWidgetSemantics().fields, self.metadata, group, this.parent);
 
-  // Extra License Field
-  var mocked_semantics = [
-    {
-      name: 'licenseExtras',
-      type: 'textarea',
-      label: 'License Extras',
-      optional: true,
-      description: 'Any additional information about the license'
-    }
-  ];
+  // Append the additional license field
   var widget = H5PEditor.$('<div class="h5p-metadata-license-extras"></div>');
-  ns.processSemanticsChunk(mocked_semantics, {licenseExtras: self.metadata.licenseExtras}, widget, this.parent);
+  ns.processSemanticsChunk([find(serversideSemantics, 'name', 'licenseExtras')], {licenseExtras: self.metadata.licenseExtras}, widget, this.parent);
   widget.appendTo(group.$group.find('.content'));
 
-  // Create and append the metadata changelog widget
-  H5PEditor.metadataChangelogWidget(self.metadata, group, this.parent);
+  // Append the metadata changelog widget
+  H5PEditor.metadataChangelogWidget(getChangeLogWidgetSemantics(), self.metadata, group, this.parent);
 
-  // Additional information fields
-  mocked_semantics = [
-    {
-      name: 'additionalInfoGroup',
-      label: 'Additional Information',
-      type: 'group',
-      expanded: false,
-      fields: [
-        {
-          name: 'additionalInfo',
-          type: 'textarea',
-          label: 'Author comments',
-          description: 'Comments for the editor of the content (This text will not be published as a part of copyright info)',
-          optional: true
-        }
-      ]
-    }
-  ];
+  // Append the additional information field
   widget = H5PEditor.$('<div class="h5p-metadata-additional-information"></div>');
-  ns.processSemanticsChunk(mocked_semantics, {additionalInfoGroup:self.metadata.authorComments}, widget, this.parent);
+  ns.processSemanticsChunk([find(serversideSemantics, 'name', 'additionalInfoGroup')], {additionalInfoGroup:self.metadata.authorComments}, widget, this.parent);
   widget.appendTo(group.$group);
 
   $wrapper.appendTo($container);
 };
+
+function getCopyrightSemantics() {
+  return find(serversideSemantics, 'name', 'copyright')
+}
+
+function getAuthorWidgetSemantics() {
+  return find(serversideSemantics, 'name', 'authorWidget')
+}
+
+function getChangeLogWidgetSemantics() {
+  return [find(serversideSemantics, 'name', 'changeLog')]
+}
 
 /**
  * Help find object in list with the given property value.
@@ -141,33 +128,31 @@ function find(list, property, value) {
   }
 }
 
-// TODO: this will be moved serverside
-function getCopyrightSemantics() {
+var ccVersions = [
+  {
+    'value': '4.0',
+    'label': '4.0 International'
+  },
+  {
+    'value': '3.0',
+    'label': '3.0 Unported'
+  },
+  {
+    'value': '2.5',
+    'label': '2.5 Generic'
+  },
+  {
+    'value': '2.0',
+    'label': '2.0 Generic'
+  },
+  {
+    'value': '1.0',
+    'label': '1.0 Generic'
+  }
+]
 
-  var ccVersions = [
-    {
-      'value': '4.0',
-      'label': '4.0 International'
-    },
-    {
-      'value': '3.0',
-      'label': '3.0 Unported'
-    },
-    {
-      'value': '2.5',
-      'label': '2.5 Generic'
-    },
-    {
-      'value': '2.0',
-      'label': '2.0 Generic'
-    },
-    {
-      'value': '1.0',
-      'label': '1.0 Generic'
-    }
-  ]
-
-  return {
+const serversideSemantics = [
+  {
     'name': 'copyright',
     'type': 'group',
     'label': 'Copyright information',
@@ -283,5 +268,94 @@ function getCopyrightSemantics() {
         }
       }
     ]
-  };
-}
+  },
+  {
+    'name': 'authorWidget',
+    'type': 'group',
+    'fields': [
+      {
+        'label': "Author's name",
+        'name': "authorName",
+        'optional': true,
+        'type': "text"
+      },
+      {
+        "name": "authorRole",
+        "type": "select",
+        "label": "Author's role",
+        "options": [
+          {
+            "value": "Editor",
+            "label": "Editor"
+          },
+          {
+            "value": "Licensee",
+            "label": "Licensee"
+          },
+          {
+            "value": "Originator",
+            "label": "Originator"
+          }
+        ],
+        default: "Originator"
+      }
+    ]
+  },
+  {
+    name: 'licenseExtras',
+    type: 'textarea',
+    label: 'License Extras',
+    optional: true,
+    description: 'Any additional information about the license'
+  },
+  {
+    "name": "changeLog",
+    "type": "group",
+    "expanded": false,
+    "label": "Change Log",
+    "fields": [
+      {
+          "name": "changeLogForm",
+          "type": "group",
+          "label": "Question",
+          "expanded": true,
+          "fields": [
+            {
+              "name": "date",
+              "type": "text",
+              "label": "Date",
+              "optional": true
+            },
+            {
+              "name": "author",
+              "type": "text",
+              "label": "Changed by",
+              "optional": true
+            },
+            {
+              "name": "log",
+              "type": "textarea",
+              "label": "Description of change",
+              "placeholder": "Add a description of your change",
+              "optional": true
+            }
+          ]
+        }
+    ]
+  },
+  {
+    name: 'additionalInfoGroup',
+    label: 'Additional Information',
+    type: 'group',
+    expanded: false,
+    fields: [
+      {
+        name: 'additionalInfo',
+        type: 'textarea',
+        label: 'Author comments',
+        description: 'Comments for the editor of the content (This text will not be published as a part of copyright info)',
+        optional: true
+      }
+    ]
+  }
+]

@@ -2,37 +2,8 @@
 var H5PEditor = H5PEditor || {};
 var ns = H5PEditor;
 
-// TODO: This should be sent from the server
-var MOCKED_SEMANTICS = [
-  {
-    label: "Author's name",
-    name: "authorName",
-    optional: true,
-    type: "text"
-  },
-  {
-    "name": "authorRole",
-    "type": "select",
-    "label": "Author's role",
-    "options": [
-      {
-        "value": "Editor",
-        "label": "Editor"
-      },
-      {
-        "value": "Licensee",
-        "label": "Licensee"
-      },
-      {
-        "value": "Originator",
-        "label": "Originator"
-      }
-    ],
-    default: "Originator"
-  }
-];
 
-H5PEditor.metadataAuthorWidget = function (params, group, parent) {
+H5PEditor.metadataAuthorWidget = function (semantics, params, group, parent) {
 
   if (!params.authors) {
     params.authors = [];
@@ -40,7 +11,7 @@ H5PEditor.metadataAuthorWidget = function (params, group, parent) {
 
   var widget = H5PEditor.$('<div class="h5p-metadata-author-widget"></div>');
 
-  ns.processSemanticsChunk(MOCKED_SEMANTICS, {}, widget, parent);
+  ns.processSemanticsChunk(semantics, {}, widget, parent);
 
   var button = H5PEditor.$('<div class="file authorList">' +
     '<a class="h5p-metadata-button h5p-add-author">' +
