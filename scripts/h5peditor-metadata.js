@@ -82,6 +82,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent) {
       name: 'licenseExtras',
       type: 'textarea',
       label: 'License Extras',
+      optional: true,
       description: 'Any additional information about the license'
     }
   ];
