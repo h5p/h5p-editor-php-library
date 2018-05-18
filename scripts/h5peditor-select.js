@@ -75,14 +75,7 @@ H5PEditor.widgets.select = H5PEditor.Select = (function (E) {
     var html = '';
 
     for (var i = 0; i < options.length; i++) {
-      if (options[i].type === 'optionsGroup') {
-        html += '<optgroup label="' + options[i].label + '">';
-        html += C.createOptionsHtml(options[i].options, this.value);
-        html += '</optgroup>';
-      }
-      else {
-        html += E.createOption(options[i].value, options[i].label, options[i].value === selected);
-      }
+      html += E.createOption(options[i].value, options[i].label, options[i].value === selected);
     }
 
     return html;

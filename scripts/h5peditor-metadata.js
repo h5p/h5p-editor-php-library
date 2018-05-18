@@ -171,63 +171,54 @@ const serversideSemantics = [
         'default' : 'U',
         'options' : [
           {
-            'type': 'optionsGroup',
-            'label': 'Creative Commons',
-            'options': [
-              {
-                'value' : 'U',
-                'label' : 'Undisclosed'
-              },
-              {
-                'value' : 'CC BY',
-                'label' : 'Attribution',
-                'versions': ccVersions
-              },
-              {
-                'value' : 'CC BY-SA',
-                'label' : 'Attribution-ShareAlike',
-                'versions': ccVersions
-              },
-              {
-                'value' : 'CC BY-ND',
-                'label' : 'Attribution-NoDerivs',
-                'versions': ccVersions
-              },
-              {
-                'value' : 'CC BY-NC',
-                'label' : 'Attribution-NonCommercial',
-                'versions': ccVersions
-              },
-              {
-                'value' : 'CC BY-NC-SA',
-                'label' : 'Attribution-NonCommercial-ShareAlike',
-                'versions': ccVersions
-              },
-              {
-                'value' : 'CC BY-NC-ND',
-                'label' : 'Attribution-NonCommercial-NoDerivs',
-                'versions': ccVersions
-              }
-            ]
+            'value' : 'U',
+            'label' : 'Undisclosed'
+          },
+          {
+            'value' : 'CC BY',
+            'label' : 'Attribution',
+            'versions': ccVersions
+          },
+          {
+            'value' : 'CC BY-SA',
+            'label' : 'Attribution-ShareAlike',
+            'versions': ccVersions
+          },
+          {
+            'value' : 'CC BY-ND',
+            'label' : 'Attribution-NoDerivs',
+            'versions': ccVersions
+          },
+          {
+            'value' : 'CC BY-NC',
+            'label' : 'Attribution-NonCommercial',
+            'versions': ccVersions
+          },
+          {
+            'value' : 'CC BY-NC-SA',
+            'label' : 'Attribution-NonCommercial-ShareAlike',
+            'versions': ccVersions
+          },
+          {
+            'value' : 'CC BY-NC-ND',
+            'label' : 'Attribution-NonCommercial-NoDerivs',
+            'versions': ccVersions
           },
           {
             'value' : 'GNU GPL',
             'label' : 'General Public License v3'
           },
           {
-            'type': 'optionsGroup',
             'value' : 'PD',
-            'label' : 'Public Domain',
-            'options': [
-              {
-                'value' : 'ODC PDDL',
-                'label' : 'Public Domain Dedication and Licence'
-              },
-              {
-                'value' : 'CC PDM',
-                'label' : 'Public Domain Mark'
-              }
-            ]
+            'label' : 'Public Domain'
+          },
+          {
+            'value' : 'ODC PDDL',
+            'label' : 'Public Domain Dedication and Licence'
+          },
+          {
+            'value' : 'CC PDM',
+            'label' : 'Public Domain Mark'
           },
           {
             'value' : 'C',
