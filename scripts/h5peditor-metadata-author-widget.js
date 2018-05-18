@@ -2,7 +2,15 @@
 var H5PEditor = H5PEditor || {};
 var ns = H5PEditor;
 
-
+/**
+ * Creates a widget to add author information to a form
+ *
+ * @param {object} semantics
+ * @param {object} params
+ * @param {object} group
+ * @param {mixed} parent used in processSemanticsChunk()
+ * @returns {ns.Coordinates}
+ */
 H5PEditor.metadataAuthorWidget = function (semantics, params, group, parent) {
 
   if (!params.authors) {
@@ -43,6 +51,7 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, group, parent) {
       name: authorNameInput.val(),
       role: authorRoleInput.val()
     });
+    
     renderAuthorList();
     authorNameInput.val(' ');
     authorRoleInput.val(1);

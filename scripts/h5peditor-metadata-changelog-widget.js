@@ -7,6 +7,7 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
     params.changes = [];
   }
 
+  // State
   var editing = false;
   var newLog = false;
   var widget = H5PEditor.$('<div class="h5p-metadata-changelog"></div>');
@@ -95,7 +96,6 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
 
   widget.appendTo(group.$group);
   render();
-
 
   function render() {
     newLogMessage.hide();
@@ -190,6 +190,11 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
     render();
   }
 
+  function deleteLog(index) {
+    params.changes.splice(index, 1);
+    render();
+  }
+
   function populateForm() {
     if (currentLog) {
       var log = params.changes[currentLog];
@@ -197,11 +202,6 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
       authorInput.val(log.author);
       logInput.val(log.log);
     }
-  }
-
-  function deleteLog(index) {
-    params.changes.splice(index, 1);
-    render();
   }
 
   /**
@@ -236,5 +236,4 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
       async: true
     });
   };
-
 }

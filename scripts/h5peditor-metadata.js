@@ -2,6 +2,15 @@
 var H5PEditor = H5PEditor || {};
 var ns = H5PEditor;
 
+/**
+ * Creates a metadata form 
+ *
+ * @param {object} field
+ * @param {object} metadata params for the metadata fields
+ * @param {jQuery} $container
+ * @param {mixed} parent used in processSemanticsChunk()
+ * @returns {ns.Coordinates}
+ */
 H5PEditor.metadataForm = function (field, metadata, $container, parent) {
   var self = this;
   self.field = field;
@@ -22,19 +31,10 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent) {
     '</div>' +
   '</div>');
 
-  $wrapper.find('.h5p-cancel').click(function () {
-    $wrapper.removeClass('h5p-open');
-  });
-
-  $wrapper.find('.h5p-save').click(function () {
-    $wrapper.toggleClass('h5p-open');
-  });
-
-  function setCopyright(field, value) {
-    self.metadata = value;
-  }
-
   // Create a group to handle the copyright data
+  function setCopyright(field, value) {
+      self.metadata = value;
+    }
   var group = new H5PEditor.widgets.group(field, getCopyrightSemantics(), self.metadata, setCopyright);
   group.appendTo($wrapper);
   group.expand();
@@ -90,9 +90,18 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent) {
   ns.processSemanticsChunk([find(serversideSemantics, 'name', 'additionalInfoGroup')], {additionalInfoGroup:self.metadata.authorComments}, widget, this.parent);
   widget.appendTo(group.$group);
 
+  $wrapper.find('.h5p-cancel').click(function () {
+    $wrapper.removeClass('h5p-open');
+  });
+
+  $wrapper.find('.h5p-save').click(function () {
+    $wrapper.toggleClass('h5p-open');
+  });
+
   $wrapper.appendTo($container);
 };
 
+// Retrieve specific semnatics chunks
 function getCopyrightSemantics() {
   return find(serversideSemantics, 'name', 'copyright')
 }
@@ -128,6 +137,7 @@ function find(list, property, value) {
   }
 }
 
+// TODO: Should the sublicenses come from the server?
 var ccVersions = [
   {
     'value': '4.0',
@@ -151,6 +161,7 @@ var ccVersions = [
   }
 ]
 
+// TODO: Move to server
 const serversideSemantics = [
   {
     'name': 'copyright',
