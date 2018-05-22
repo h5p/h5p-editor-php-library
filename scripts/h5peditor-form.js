@@ -13,6 +13,7 @@ ns.Form = function () {
   this.$form = ns.$('' +
     '<div class="h5peditor-form">' +
       '<div class="tree">' +
+        '<div class="overlay"></div>' +
         '<a href="#" class="toggle-metadata">Metdata</a>' +
         '<div class="field field-name-title text">' +
           '<label class="h5peditor-label-wrapper"><span class="h5peditor-label h5peditor-required">Title</span></label>' +
@@ -34,8 +35,9 @@ ns.Form = function () {
 
   this.$form.find('.toggle-metadata').click(function () {
     self.$form.find('.h5p-metadata-wrapper').first().toggleClass('h5p-open');
+    self.$form.find('.overlay').toggle();
   });
-
+  
   // Add title expand/collapse button
   ns.$('<div/>', {
     'class': 'h5peditor-label',

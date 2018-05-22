@@ -3,7 +3,7 @@ var H5PEditor = H5PEditor || {};
 var ns = H5PEditor;
 
 /**
- * Creates a metadata form 
+ * Creates a metadata form
  *
  * @param {object} field
  * @param {object} metadata params for the metadata fields
@@ -92,10 +92,12 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent) {
 
   $wrapper.find('.h5p-cancel').click(function () {
     $wrapper.removeClass('h5p-open');
+    $container.find('.overlay').toggle();
   });
 
   $wrapper.find('.h5p-save').click(function () {
     $wrapper.toggleClass('h5p-open');
+    $container.find('.overlay').toggle();
   });
 
   $wrapper.appendTo($container);

@@ -62,6 +62,18 @@ a {
   z-index: -1;
 }
 
+.overlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  z-index: 2;
+  color: white;
+}
+
 .h5peditor {
   font-size: 16px;
 
@@ -1154,6 +1166,7 @@ a {
 }
 
 .h5peditor .h5p-editor-dialog.h5p-open.h5p-metadata-wrapper {
+  z-index: 3;
   margin-top: -4.0em;
   padding: 1em;
 
