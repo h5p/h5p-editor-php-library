@@ -12,6 +12,7 @@ var ns = H5PEditor;
  * @returns {ns.Coordinates}
  */
 H5PEditor.metadataForm = function (field, metadata, $container, parent) {
+  console.log(metadata);
   var self = this;
   self.field = field;
   self.metadata = metadata;
@@ -79,7 +80,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent) {
 
   // Append the additional license field
   var widget = H5PEditor.$('<div class="h5p-metadata-license-extras"></div>');
-  ns.processSemanticsChunk([find(serversideSemantics, 'name', 'licenseExtras')], {licenseExtras: self.metadata.licenseExtras}, widget, this.parent);
+  ns.processSemanticsChunk([find(serversideSemantics, 'name', 'licenseExtras')], self.metadata, widget, this.parent);
   widget.appendTo(group.$group.find('.content'));
 
   // Append the metadata changelog widget
@@ -87,7 +88,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent) {
 
   // Append the additional information field
   widget = H5PEditor.$('<div class="h5p-metadata-additional-information"></div>');
-  ns.processSemanticsChunk([find(serversideSemantics, 'name', 'additionalInfoGroup')], {additionalInfoGroup:self.metadata.authorComments}, widget, this.parent);
+  ns.processSemanticsChunk([find(serversideSemantics, 'name', 'authorComments')], self.metadata, widget, this.parent);
   widget.appendTo(group.$group);
 
   $wrapper.find('.h5p-cancel').click(function () {
@@ -105,15 +106,15 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent) {
 
 // Retrieve specific semnatics chunks
 function getCopyrightSemantics() {
-  return find(serversideSemantics, 'name', 'copyright')
+  return find(serversideSemantics, 'name', 'copyright');
 }
 
 function getAuthorWidgetSemantics() {
-  return find(serversideSemantics, 'name', 'authorWidget')
+  return find(serversideSemantics, 'name', 'authorWidget');
 }
 
 function getChangeLogWidgetSemantics() {
-  return [find(serversideSemantics, 'name', 'changeLog')]
+  return [find(serversideSemantics, 'name', 'changeLog')];
 }
 
 /**
@@ -161,7 +162,7 @@ var ccVersions = [
     'value': '1.0',
     'label': '1.0 Generic'
   }
-]
+];
 
 // TODO: Move to server
 const serversideSemantics = [
@@ -306,11 +307,11 @@ const serversideSemantics = [
     ]
   },
   {
-    name: 'licenseExtras',
-    type: 'textarea',
-    label: 'License Extras',
-    optional: true,
-    description: 'Any additional information about the license'
+    "name": "licenseExtras",
+    "type": "textarea",
+    "label": "License Extras",
+    "optional": true,
+    "description": "Any additional information about the license"
   },
   {
     "name": "changeLog",
@@ -348,18 +349,18 @@ const serversideSemantics = [
     ]
   },
   {
-    name: 'additionalInfoGroup',
-    label: 'Additional Information',
-    type: 'group',
-    expanded: false,
-    fields: [
+    "name": "authorComments",
+    "label": "Additional Information",
+    "type": "group",
+    "expanded": false,
+    "fields": [
       {
-        name: 'additionalInfo',
-        type: 'textarea',
-        label: 'Author comments',
-        description: 'Comments for the editor of the content (This text will not be published as a part of copyright info)',
-        optional: true
+        "name": "authorComments",
+        "type": "textarea",
+        "label": "Author comments",
+        "description": "Comments for the editor of the content (This text will not be published as a part of copyright info)",
+        "optional": true
       }
     ]
   }
-]
+];
