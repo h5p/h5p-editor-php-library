@@ -12,7 +12,6 @@ var ns = H5PEditor;
  * @returns {ns.Coordinates}
  */
 H5PEditor.metadataForm = function (field, metadata, $container, parent) {
-  console.log(metadata);
   var self = this;
   self.field = field;
   self.metadata = metadata;
