@@ -225,6 +225,10 @@ const serversideSemantics = [
             'value' : 'PD',
             'label' : 'Public Domain'
           },
+          { 
+            'value' : 'CC0',
+            'label' : 'Creative Commons 0'
+          }
           {
             'value' : 'ODC PDDL',
             'label' : 'Public Domain Dedication and Licence'
