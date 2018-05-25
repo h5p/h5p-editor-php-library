@@ -18,6 +18,8 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
   self.metadata = metadata;
   self.parent = parent;
 
+  self.metadataSemantics = Object.values(H5PEditor.metadataSemantics);
+
   var $wrapper = H5PEditor.$('' +
   '<div class="h5p-editor-dialog h5p-dialog-wide h5p-metadata-wrapper">' +
     '<div class="h5p-metadata-header">' +
@@ -80,7 +82,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
 
   // Append the additional license field
   var widget = H5PEditor.$('<div class="h5p-metadata-license-extras"></div>');
-  ns.processSemanticsChunk([find(serversideSemantics, 'name', 'licenseExtras')], self.metadata, widget, this.parent);
+  ns.processSemanticsChunk([find(self.metadataSemantics, 'name', 'licenseExtras')], self.metadata, widget, this.parent);
   widget.appendTo(group.$group.find('.content'));
 
   // Append the metadata changelog widget
@@ -88,7 +90,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
 
   // Append the additional information field
   widget = H5PEditor.$('<div class="h5p-metadata-additional-information"></div>');
-  ns.processSemanticsChunk([find(serversideSemantics, 'name', 'authorComments')], self.metadata, widget, this.parent);
+  ns.processSemanticsChunk([find(self.metadataSemantics, 'name', 'authorComments')], self.metadata, widget, this.parent);
   widget.appendTo(group.$group);
 
   $wrapper.find('.h5p-cancel').click(function () {
@@ -112,20 +114,21 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
   }
 
   $wrapper.appendTo($container);
+
+  // Retrieve specific semnatics chunks
+  function getCopyrightSemantics() {
+    return find(self.metadataSemantics, 'name', 'copyright');
+  }
+
+  function getAuthorWidgetSemantics() {
+    return find(self.metadataSemantics, 'name', 'authorWidget');
+  }
+
+  function getChangeLogWidgetSemantics() {
+    return [find(self.metadataSemantics, 'name', 'changeLog')];
+  }
+
 };
-
-// Retrieve specific semnatics chunks
-function getCopyrightSemantics() {
-  return find(serversideSemantics, 'name', 'copyright');
-}
-
-function getAuthorWidgetSemantics() {
-  return find(serversideSemantics, 'name', 'authorWidget');
-}
-
-function getChangeLogWidgetSemantics() {
-  return [find(serversideSemantics, 'name', 'changeLog')];
-}
 
 /**
  * Help find object in list with the given property value.
@@ -149,232 +152,3 @@ function find(list, property, value) {
     }
   }
 }
-
-// TODO: Should the sublicenses come from the server?
-var ccVersions = [
-  {
-    'value': '4.0',
-    'label': '4.0 International'
-  },
-  {
-    'value': '3.0',
-    'label': '3.0 Unported'
-  },
-  {
-    'value': '2.5',
-    'label': '2.5 Generic'
-  },
-  {
-    'value': '2.0',
-    'label': '2.0 Generic'
-  },
-  {
-    'value': '1.0',
-    'label': '1.0 Generic'
-  }
-];
-
-// TODO: Move to server
-const serversideSemantics = [
-  {
-    'name': 'copyright',
-    'type': 'group',
-    'label': 'Copyright information',
-    'fields': [
-      {
-        'name' : 'title',
-        'type' : 'text',
-        'label' : 'Title',
-        'description': 'Used for searching, reports and copyright information'
-      },
-      {
-        'name' : 'license',
-        'type' : 'select',
-        'label' : 'License',
-        'optional' : true,
-        'default' : 'U',
-        'options' : [
-          {
-            'value' : 'U',
-            'label' : 'Undisclosed'
-          },
-          {
-            'value' : 'CC BY',
-            'label' : 'Attribution',
-            'versions': ccVersions
-          },
-          {
-            'value' : 'CC BY-SA',
-            'label' : 'Attribution-ShareAlike',
-            'versions': ccVersions
-          },
-          {
-            'value' : 'CC BY-ND',
-            'label' : 'Attribution-NoDerivs',
-            'versions': ccVersions
-          },
-          {
-            'value' : 'CC BY-NC',
-            'label' : 'Attribution-NonCommercial',
-            'versions': ccVersions
-          },
-          {
-            'value' : 'CC BY-NC-SA',
-            'label' : 'Attribution-NonCommercial-ShareAlike',
-            'versions': ccVersions
-          },
-          {
-            'value' : 'CC BY-NC-ND',
-            'label' : 'Attribution-NonCommercial-NoDerivs',
-            'versions': ccVersions
-          },
-          {
-            'value' : 'GNU GPL',
-            'label' : 'General Public License v3'
-          },
-          {
-            'value' : 'PD',
-            'label' : 'Public Domain'
-          },
-          { 
-            'value' : 'CC0',
-            'label' : 'Creative Commons 0'
-          }
-          {
-            'value' : 'ODC PDDL',
-            'label' : 'Public Domain Dedication and Licence'
-          },
-          {
-            'value' : 'CC PDM',
-            'label' : 'Public Domain Mark'
-          },
-          {
-            'value' : 'C',
-            'label' : 'Copyright'
-          }
-        ]
-      },
-      {
-        'name': 'licenseVersion',
-        'type': 'select',
-        'label': 'License Version',
-        'options': [],
-        'optional' : true
-      },
-      {
-        'name' : 'yearFrom',
-        'type' : 'text',
-        'label' : 'Years (from-to)',
-        'placeholder' : '1991',
-        'optional' : true
-      },
-      {
-        'name' : 'yearTo',
-        'label' : 'hiddenLabel',
-        'type' : 'text',
-        'placeholder' : '1992',
-        'optional' : true
-      },
-      {
-        'name' : 'source',
-        'type' : 'text',
-        'label' : 'Source',
-        'placeholder' : 'http://',
-        'optional' : true,
-        'regexp' : {
-          'pattern' : '^http[s]?://.+',
-          'modifiers' : 'i'
-        }
-      }
-    ]
-  },
-  {
-    'name': 'authorWidget',
-    'type': 'group',
-    'fields': [
-      {
-        'label': "Author's name",
-        'name': "authorName",
-        'optional': true,
-        'type': "text"
-      },
-      {
-        "name": "authorRole",
-        "type": "select",
-        "label": "Author's role",
-        "options": [
-          {
-            "value": "Editor",
-            "label": "Editor"
-          },
-          {
-            "value": "Licensee",
-            "label": "Licensee"
-          },
-          {
-            "value": "Originator",
-            "label": "Originator"
-          }
-        ],
-        default: "Originator"
-      }
-    ]
-  },
-  {
-    "name": "licenseExtras",
-    "type": "textarea",
-    "label": "License Extras",
-    "optional": true,
-    "description": "Any additional information about the license"
-  },
-  {
-    "name": "changeLog",
-    "type": "group",
-    "expanded": false,
-    "label": "Change Log",
-    "fields": [
-      {
-          "name": "changeLogForm",
-          "type": "group",
-          "label": "Question",
-          "expanded": true,
-          "fields": [
-            {
-              "name": "date",
-              "type": "text",
-              "label": "Date",
-              "optional": true
-            },
-            {
-              "name": "author",
-              "type": "text",
-              "label": "Changed by",
-              "optional": true
-            },
-            {
-              "name": "log",
-              "type": "textarea",
-              "label": "Description of change",
-              "placeholder": "Add a description of your change",
-              "optional": true
-            }
-          ]
-        }
-    ]
-  },
-  {
-    "name": "authorComments",
-    "label": "Additional Information",
-    "type": "group",
-    "expanded": false,
-    "fields": [
-      {
-        "name": "authorComments",
-        "type": "textarea",
-        "label": "Author comments",
-        "description": "Comments for the editor of the content (This text will not be published as a part of copyright info)",
-        "optional": true
-      }
-    ]
-  }
-];

@@ -51,7 +51,7 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, group, parent) {
       name: authorNameInput.val(),
       role: authorRoleInput.val()
     });
-    
+
     renderAuthorList();
     authorNameInput.val(' ');
     authorRoleInput.val(1);

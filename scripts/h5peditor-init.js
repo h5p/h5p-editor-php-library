@@ -10,6 +10,7 @@
 
     // Semantics describing what copyright information can be stored for media.
     H5PEditor.copyrightSemantics = H5PIntegration.editor.copyrightSemantics;
+    H5PEditor.metadataSemantics = H5PIntegration.editor.metadataSemantics;
 
     // Required styles and scripts for the editor
     H5PEditor.assets = H5PIntegration.editor.assets;
