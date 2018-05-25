@@ -214,7 +214,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 
     // TODO: Find out if we should use the metadata button here as well
     that.$libraryWrapper.prepend('<a href="#" class="toggle-metadata">Add Metdata</a>');
-    that.$libraryWrapper.find('.h5p-metadata-open').click(function () {
+    that.$libraryWrapper.find('.toggle-metadata').click(function () {
       that.$libraryWrapper.find('.h5p-metadata-wrapper').toggleClass('h5p-open');
     });
 
