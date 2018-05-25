@@ -9,9 +9,10 @@ var ns = H5PEditor;
  * @param {object} metadata params for the metadata fields
  * @param {jQuery} $container
  * @param {mixed} parent used in processSemanticsChunk()
+ * @param {string} [formType] Form type.
  * @returns {ns.Coordinates}
  */
-H5PEditor.metadataForm = function (field, metadata, $container, parent) {
+H5PEditor.metadataForm = function (field, metadata, $container, parent, formType) {
   var self = this;
   self.field = field;
   self.metadata = metadata;
@@ -33,8 +34,8 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent) {
 
   // Create a group to handle the copyright data
   function setCopyright(field, value) {
-      self.metadata = value;
-    }
+    self.metadata = value;
+  }
   var group = new H5PEditor.widgets.group(field, getCopyrightSemantics(), self.metadata, setCopyright);
   group.appendTo($wrapper);
   group.expand();
@@ -99,6 +100,16 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent) {
     $wrapper.toggleClass('h5p-open');
     $container.find('.overlay').toggle();
   });
+
+  // Sync with main title form
+  if (formType === 'main') {
+    const $titleFieldMeta = group.$group.find('.field.field-name-title.text').find('input.h5peditor-text');
+
+    const $titleFieldMain = parent.syncTitle($titleFieldMeta);
+    $titleFieldMain.on('input.titleFieldMeta', function() {
+      $titleFieldMeta.val($titleFieldMain.val());
+    });
+  }
 
   $wrapper.appendTo($container);
 };
