@@ -24,11 +24,11 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
   '<div class="h5p-editor-dialog h5p-dialog-wide h5p-metadata-wrapper">' +
     '<div class="h5p-metadata-header">' +
       '<div class="h5p-title-container">' +
-        '<h2>Metadata (sharing and licensing info)</h2>' +
-        '<p>Fill in the fields below</p>' +
+        '<h2>' + H5PEditor.t('core', 'metadataSharingAndLicensingInfo') + '</h2>' +
+        '<p>' + H5PEditor.t('core', 'fillInTheFieldsBelow') + '</p>' +
       '</div>' +
       '<div class="metadata-button-wrapper">' +
-        '<a href="#" class="h5p-metadata-button h5p-save">Save Metadata</a>' +
+        '<a href="#" class="h5p-metadata-button h5p-save">' + H5PEditor.t('core', 'saveMetadata') + '</a>' +
       '</div>' +
     '</div>' +
   '</div>');

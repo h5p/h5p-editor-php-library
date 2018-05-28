@@ -159,5 +159,16 @@ H5PEditor.language.core = {
   contentTypeCacheOutdatedDesc: 'Your site is having difficulties connecting to H5P.org to check for content type updates. You may not be able to update or install new content types.',
   tryAgain: 'Try again',
   getHelp: 'Get help',
-  untitled: 'Untitled'
+  untitled: 'Untitled',
+  title: 'Title',
+  metadata: 'Metadata',
+  addMetadata: 'Add metadata',
+  addTitle: 'Add title',
+  usedForSearchingReportsAndCopyrightInformation: 'Used for searching, reports and copyright information',
+  metadataSharingAndLicensingInfo: 'Metadata (sharing and licensing info)',
+  fillInTheFieldsBelow : 'Fill in the fields below',
+  saveMetadata: 'Save metadata',
+  addAuthor: 'Add author',
+  addNewChange: 'Add new change',
+  logThisChange: 'Log this change'
 };

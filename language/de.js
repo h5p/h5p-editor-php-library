@@ -153,5 +153,16 @@ H5PEditor.language.core = {
   contentTypeCacheOutdatedDesc: 'Your site is having difficulties connecting to H5P.org to check for content type updates. You may not be able to update or install new content types.',
   tryAgain: 'Try again',
   getHelp: 'Get help',
-  untitled: 'Unbenannt: '
+  untitled: 'Unbenannt: ',
+  title: 'Titel',
+  metadata: 'Metadaten',
+  addMetadata: 'Metadaten hinzuf\u00fcgen',
+  addTitle: 'Titel hinzuf\u00fcgen',
+  usedForSearchingReportsAndCopyrightInformation: 'Wird für die Suche, Berichte und Urheberrechtsinformationen benutzt',
+  metadataSharingAndLicensingInfo: 'Metadaten (Lizenzinformationen)',
+  fillInTheFieldsBelow : 'F\u00fclle die folgenden Felder aus',
+  saveMetadata: 'Metadaten speichern',
+  addAuthor: 'Autor hinzuf\u00fcgen',
+  addNewChange: '\u00c4nderung hinzuf\u00fcgen',
+  logThisChange: '\u00c4nderung festhalten'
 };

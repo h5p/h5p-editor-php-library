@@ -14,11 +14,11 @@ ns.Form = function () {
     '<div class="h5peditor-form">' +
       '<div class="tree">' +
         '<div class="overlay"></div>' +
-        '<a href="#" class="toggle-metadata">Metdata</a>' +
+        '<a href="#" class="toggle-metadata">' + ns.t('core', 'metadata') + '</a>' +
         '<div class="field field-name-title text">' +
-          '<label class="h5peditor-label-wrapper"><span class="h5peditor-label h5peditor-required">Title</span></label>' +
-          '<div class="h5peditor-field-description">Used for searching, reports and copyright information</div>' +
-          '<input class="h5peditor-text" id="metadata-title-main" type="text" maxlength="255" placeholder="Add title">' +
+          '<label class="h5peditor-label-wrapper"><span class="h5peditor-label h5peditor-required">' + ns.t('core', 'title') + '</span></label>' +
+          '<div class="h5peditor-field-description">' + ns.t('core', 'usedForSearchingReportsAndCopyrightInformation') + '</div>' +
+          '<input class="h5peditor-text" id="metadata-title-main" type="text" maxlength="255" placeholder="' + ns.t('core', 'addTitle') +'">' +
         '</div>' +
       '</div>' +
       '<div class="common collapsed hidden">' +

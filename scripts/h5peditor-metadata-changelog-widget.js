@@ -23,7 +23,7 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
 
   var cancelButton = H5PEditor.$('<div class="file authorList">' +
     '<a class="h5p-metadata-button h5p-cancel">' +
-      'Cancel' +
+      H5PEditor.t('core', 'cancel') +
     '</a>' +
   '</div>')
   .click(function () {
@@ -35,8 +35,8 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
   });
 
   var createLogButton = H5PEditor.$('<div class="file authorList">' +
-    '<a class="h5p-metadata-button h5p-add-author">' +
-      'Log this change' +
+    '<a class="h5p-metadata-button h5p-log-change">' +
+      H5PEditor.t('core', 'logThisChange') +
     '</a>' +
   '</div>')
   .click(function () {
@@ -76,7 +76,7 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
 
   var button = H5PEditor.$('<div class="file h5p-metadata-new-log">' +
     '<a class="h5p-metadata-button h5p-add-author">' +
-      '+ Add new change' +
+      H5PEditor.t('core', 'addNewChange') +
     '</a>' +
   '</div>')
   .click(function () {

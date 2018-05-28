@@ -1314,6 +1314,11 @@ a {
     .h5p-add-author {
      border: solid 1px #10a186;
      color: #10a186;
+
+     &:before {
+       content: "+";
+       margin-right: 0.7em;
+     }
     }
 
     li {
@@ -1416,6 +1421,16 @@ a {
   .h5p-add-author {
    border: solid 1px #10a186;
    color: #10a186;
+
+   &:before {
+     content: "+";
+     margin-right: 0.7em;
+   }
+  }
+
+  .h5p-log-change {
+    border: solid 1px #10a186;
+    color: #10a186;
   }
 
   .h5p-metadata-formButtonWrapper {

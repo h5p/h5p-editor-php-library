@@ -161,5 +161,16 @@ H5PEditor.language.core = {
   contentTypeCacheOutdatedDesc: 'Nettstedet ditt har problemer med å koble til H5P.org for å se etter innhaldstype-oppdateringer. Det kan hende at du ikke får oppdatert eller installert nye innhaldstyper.',
   tryAgain: 'Prøv på nytt',
   getHelp: 'Get help',
-  untitled: 'Untitled'
+  untitled: 'Untitled',
+  title: 'Title',
+  metadata: 'Metadata',
+  addMetadata: 'Add metadata',
+  addTitle: 'Add title',
+  usedForSearchingReportsAndCopyrightInformation: 'Used for searching, reports and copyright information',
+  metadataSharingAndLicensingInfo: 'Metadata (sharing and licensing info)',
+  fillInTheFieldsBelow : 'Fill in the fields below',
+  saveMetadata: 'Save metadata',
+  addAuthor: 'Add author',
+  addNewChange: 'Add new change',
+  logThisChange: 'Log this change'
 };
