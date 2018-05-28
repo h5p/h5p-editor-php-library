@@ -38,7 +38,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
   function setCopyright(field, value) {
     self.metadata = value;
   }
-  var group = new H5PEditor.widgets.group(field, getCopyrightSemantics(), self.metadata, setCopyright);
+  var group = new H5PEditor.widgets.group(field, getPartialSemantics('copyright'), self.metadata, setCopyright);
   group.appendTo($wrapper);
   group.expand();
   group.$group.find('.title').remove();
@@ -78,19 +78,19 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
 
   // Create and append the rest of the widgets and fields
   // Append the metadata author list widget
-  H5PEditor.metadataAuthorWidget(getAuthorWidgetSemantics().fields, self.metadata, group, this.parent);
+  H5PEditor.metadataAuthorWidget(getPartialSemantics('authorWidget').fields, self.metadata, group, this.parent);
 
   // Append the additional license field
   var widget = H5PEditor.$('<div class="h5p-metadata-license-extras"></div>');
-  ns.processSemanticsChunk([find(self.metadataSemantics, 'name', 'licenseExtras')], self.metadata, widget, this.parent);
+  ns.processSemanticsChunk([getPartialSemantics('licenseExtras')], self.metadata, widget, this.parent);
   widget.appendTo(group.$group.find('.content'));
 
   // Append the metadata changelog widget
-  H5PEditor.metadataChangelogWidget(getChangeLogWidgetSemantics(), self.metadata, group, this.parent);
+  H5PEditor.metadataChangelogWidget(getPartialSemantics('changeLog'), self.metadata, group, this.parent);
 
   // Append the additional information field
   widget = H5PEditor.$('<div class="h5p-metadata-additional-information"></div>');
-  ns.processSemanticsChunk([find(self.metadataSemantics, 'name', 'authorComments')], self.metadata, widget, this.parent);
+  ns.processSemanticsChunk([getPartialSemantics('authorComments')], self.metadata, widget, this.parent);
   widget.appendTo(group.$group);
 
   $wrapper.find('.h5p-cancel').click(function () {
@@ -106,8 +106,8 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
   // Sync with main title form
   if (formType === 'main') {
     const $titleFieldMeta = group.$group.find('.field.field-name-title.text').find('input.h5peditor-text');
-
     const $titleFieldMain = parent.syncTitle($titleFieldMeta);
+
     $titleFieldMain.on('input.titleFieldMeta', function() {
       $titleFieldMeta.val($titleFieldMain.val());
     });
@@ -115,17 +115,8 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
 
   $wrapper.appendTo($container);
 
-  // Retrieve specific semnatics chunks
-  function getCopyrightSemantics() {
-    return find(self.metadataSemantics, 'name', 'copyright');
-  }
-
-  function getAuthorWidgetSemantics() {
-    return find(self.metadataSemantics, 'name', 'authorWidget');
-  }
-
-  function getChangeLogWidgetSemantics() {
-    return [find(self.metadataSemantics, 'name', 'changeLog')];
+  function getPartialSemantics(selector) {
+    return find(self.metadataSemantics, 'name', selector);
   }
 
 };
