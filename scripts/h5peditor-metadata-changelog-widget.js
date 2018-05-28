@@ -1,6 +1,7 @@
 /*global H5P*/
 var H5PEditor = H5PEditor || {};
 var ns = H5PEditor;
+var H5PIntegration = H5PIntegration || false;
 
 H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) {
   if (!params.changes) {
@@ -14,8 +15,8 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
   var currentLog;
 
   ns.processSemanticsChunk(semantics, {}, widget, parent);
-  var form = widget.find('.field-name-changeLogForm');
-  form.find('.title').remove();
+  var $form = widget.find('.field-name-changeLogForm');
+  $form.find('.title').remove();
 
   var dateInput = widget.find('.field-name-date').find('input');
   var authorInput = widget.find('.field-name-author').find('input');
@@ -72,7 +73,7 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
   var formButtonWrapper = H5PEditor.$('<div class="h5p-metadata-formButtonWrapper"></div>');
   formButtonWrapper.append(cancelButton);
   formButtonWrapper.append(createLogButton);
-  form.append(formButtonWrapper);
+  $form.append(formButtonWrapper);
 
   var button = H5PEditor.$('<div class="file h5p-metadata-new-log">' +
     '<a class="h5p-metadata-button h5p-add-author">' +
@@ -82,17 +83,18 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
   .click(function () {
     editing = true;
     newLog = false;
+    if (H5PIntegration && H5PIntegration.user && H5PIntegration.user.name) {
+      $form.find('.field-name-author').find('input.h5peditor-text').val(H5PIntegration.user.name);
+    }
     render();
   });
   widget.find('.content').first().append(button);
 
-  var newLogMessage = H5PEditor.$('<div class="h5p-metadata-new-log-message">New change has been logged</div>');
+  var newLogMessage = H5PEditor.$('<div class="h5p-metadata-new-log-message">' + H5PEditor.t('core', 'newChangeHasBeenLogged') + '</div>');
   widget.find('.content').first().append(newLogMessage);
 
   var logWrapper = H5PEditor.$('<div></div>');
   widget.find('.content').first().append(logWrapper);
-
-  var logList;
 
   widget.appendTo(group.$group);
   render();
@@ -102,20 +104,20 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
 
     if (editing) {
       button.hide();
-      form.show();
+      $form.show();
       populateForm();
       formButtonWrapper.show();
       renderLogWrapper(logWrapper);
       newLogMessage.hide();
 
       var dateWrapping = widget.find('.field-name-date');
-      var dateInput = dateWrapping.find('input')[0]
+      var dateInput = dateWrapping.find('input')[0];
       H5PEditor.$(dateInput).addClass('datepicker');
       loadScripts(dateInput);
     }
     else {
       button.show();
-      form.hide();
+      $form.hide();
       formButtonWrapper.hide();
       renderLogWrapper(logWrapper);
 
@@ -127,10 +129,10 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
 
   function renderLogWrapper(logWrapper) {
     logWrapper.empty();
-    logWrapper.append('<span class="h5p-metadata-log-wrapper-title">Logged changes</span>');
+    logWrapper.append('<span class="h5p-metadata-log-wrapper-title">'+ H5PEditor.t('core', 'loggedChanges')  + '</span>');
 
     if (params.changes.length == 0) {
-      logWrapper.append(H5PEditor.$('<p>No changes have been logged</p>'));
+      logWrapper.append(H5PEditor.$('<p>' + H5PEditor.t('core', 'noChangesHaveBeenLogged') + '</p>'));
     }
     else {
       var logList = H5PEditor.$('<div class="h5p-metadata-log-wrapper"></div>');
@@ -152,7 +154,7 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
           log.author +
         '</div>');
 
-        var logWrapper = H5PEditor.$('<div class="h5p-metadata-description-wrapper"></div>');
+        logWrapper = H5PEditor.$('<div class="h5p-metadata-description-wrapper"></div>');
         logWrapper.append(logDescription);
         logWrapper.append(authorWrapper);
 
@@ -213,7 +215,7 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
         format: 'd-m-y G:i:s'
       });
     });
-  };
+  }
 
   /**
    * Load a script dynamically
@@ -235,5 +237,5 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
       },
       async: true
     });
-  };
+  }
 }

@@ -164,5 +164,8 @@ H5PEditor.language.core = {
   saveMetadata: 'Metadaten speichern',
   addAuthor: 'Autor hinzuf\u00fcgen',
   addNewChange: '\u00c4nderung hinzuf\u00fcgen',
-  logThisChange: '\u00c4nderung festhalten'
+  logThisChange: '\u00c4nderung festhalten',
+  newChangeHasBeenLogged: 'Neue \u00c4nderung wurde festgehalten',
+  loggedChanges: '\u00c4nderungen festgehalten',
+  noChangesHaveBeenLogged: 'Keine \u00c4nderungen festgehalten'
 };

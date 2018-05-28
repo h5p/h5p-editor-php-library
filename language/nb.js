@@ -170,5 +170,8 @@ H5PEditor.language.core = {
   saveMetadata: 'Save metadata',
   addAuthor: 'Add author',
   addNewChange: 'Add new change',
-  logThisChange: 'Log this change'
+  logThisChange: 'Log this change',
+  newChangeHasBeenLogged: 'New change has been logged',
+  loggedChanges: 'Logged changes',
+  noChangesHaveBeenLogged: 'No changes have been logged'
 };

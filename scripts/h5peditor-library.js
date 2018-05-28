@@ -1,5 +1,6 @@
 var H5PEditor = (H5PEditor || {});
 var ns = H5PEditor;
+var H5PIntegration = H5PIntegration || false;
 
 /**
  * Callback for setting new parameters.
@@ -216,6 +217,12 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     that.$libraryWrapper.prepend('<a href="#" class="toggle-metadata">' + ns.t('core', 'addMetadata') + '</a>');
     that.$libraryWrapper.find('.toggle-metadata').click(function () {
       that.$libraryWrapper.find('.h5p-metadata-wrapper').toggleClass('h5p-open');
+      that.$libraryWrapper.find('.h5p-metadata-wrapper').find('.field-name-title').find('input.h5peditor-text').focus();
+      if (H5PIntegration && H5PIntegration.user && H5PIntegration.user.name) {
+        that.$libraryWrapper.find('.field-name-authorName').find('input.h5peditor-text').val(H5PIntegration.user.name);
+      }
+
+
     });
 
     if (that.libraries !== undefined) {

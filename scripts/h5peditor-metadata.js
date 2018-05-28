@@ -1,5 +1,6 @@
 /*global H5P*/
 var H5PEditor = H5PEditor || {};
+var H5PIntegration = H5PIntegration || false;
 var ns = H5PEditor;
 
 /**
@@ -9,7 +10,7 @@ var ns = H5PEditor;
  * @param {object} metadata params for the metadata fields
  * @param {jQuery} $container
  * @param {mixed} parent used in processSemanticsChunk()
- * @param {string} [formType] Form type.
+ * @param {string} [formType] Form type main|sub|...
  * @returns {ns.Coordinates}
  */
 H5PEditor.metadataForm = function (field, metadata, $container, parent, formType) {
@@ -17,6 +18,11 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
   self.field = field;
   self.metadata = metadata;
   self.parent = parent;
+
+  // Set default title, but not for main content
+  if (formType !== 'main' || !self.metadata.title || self.metadata.title === '') {
+    self.metadata.title = H5PEditor.t('core', 'untitled') + ' ' + H5PEditor.parent.currentLibrary.split(' ')[0].split('.')[1];
+  }
 
   self.metadataSemantics = Object.values(H5PEditor.metadataSemantics);
 
@@ -105,6 +111,11 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
     $titleFieldMain.on('input.titleFieldMeta', function() {
       $titleFieldMeta.val($titleFieldMain.val());
     });
+  }
+
+  // Set author of main content. TODO: Add realName to H5PIntegration
+  if (formType === 'main' && H5PIntegration && H5PIntegration.user && H5PIntegration.user.name) {
+    $wrapper.find('.field-name-authorName').find('input.h5peditor-text').val(H5PIntegration.user.name);
   }
 
   $wrapper.appendTo($container);
