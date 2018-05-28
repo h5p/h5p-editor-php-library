@@ -86,7 +86,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
   widget.appendTo(group.$group.find('.content'));
 
   // Append the metadata changelog widget
-  H5PEditor.metadataChangelogWidget(getPartialSemantics('changeLog'), self.metadata, group, this.parent);
+  H5PEditor.metadataChangelogWidget([getPartialSemantics('changeLog')], self.metadata, group, this.parent);
 
   // Append the additional information field
   widget = H5PEditor.$('<div class="h5p-metadata-additional-information"></div>');
