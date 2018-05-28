@@ -421,18 +421,6 @@ a {
       background: #ddd;
       text-align: right;
     }
-    .h5p-cancel {
-      margin-left: 0.5em;
-      color: #b83c3c;
-      background: transparent;
-      border: 0;
-      cursor: pointer;
-    }
-    .h5p-cancel:focus,
-    .h5p-cancel:hover {
-      color: #e20d0d;
-      background: transparent;
-    }
   }
   .h5p-or {
     border-bottom: 1px solid #cdcdcd;
@@ -1257,7 +1245,7 @@ a {
   display: flex;
 
   .h5p-title-container {
-   flex-basis: 100%;
+   flex-grow: 1;
    margin-left: 4em;
 
    h2 {
@@ -1281,15 +1269,6 @@ a {
 
 .metadata-button-wrapper {
   margin-top: 2em;
-  min-width: 16em;
-
-  .h5p-cancel {
-    color: #124361;
-    border: solid 2px #a9adb4;
-    border-radius: 0.408rem;
-    color:#a9adb4;;
-    padding: 0.833rem;
-  }
 
   .h5p-save {
     border: solid 2px #10a186;
@@ -1437,11 +1416,6 @@ a {
   .h5p-add-author {
    border: solid 1px #10a186;
    color: #10a186;
-  }
-
-  .h5p-cancel {
-    border: solid 1px #a9adb4;
-    color:#a9adb4;;
   }
 
   .h5p-metadata-formButtonWrapper {

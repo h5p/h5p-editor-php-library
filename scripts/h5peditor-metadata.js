@@ -28,7 +28,6 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
         '<p>Fill in the fields below</p>' +
       '</div>' +
       '<div class="metadata-button-wrapper">' +
-        '<a href="#" class="h5p-metadata-button h5p-cancel">Cancel</a>' +
         '<a href="#" class="h5p-metadata-button h5p-save">Save Metadata</a>' +
       '</div>' +
     '</div>' +
@@ -92,11 +91,6 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
   widget = H5PEditor.$('<div class="h5p-metadata-additional-information"></div>');
   ns.processSemanticsChunk([getPartialSemantics('authorComments')], self.metadata, widget, this.parent);
   widget.appendTo(group.$group);
-
-  $wrapper.find('.h5p-cancel').click(function () {
-    $wrapper.removeClass('h5p-open');
-    $container.find('.overlay').toggle();
-  });
 
   $wrapper.find('.h5p-save').click(function () {
     $wrapper.toggleClass('h5p-open');
