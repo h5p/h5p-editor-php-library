@@ -642,13 +642,14 @@ ns.createText = function (value, maxLength, placeholder) {
  * @returns {String}
  */
 ns.createLabel = function (field, content) {
-  var html = '<label class="h5peditor-label-wrapper">';
+  // New items can be added next to the label within the flex-wrapper
+  var html = '<div class="h5p-editor-flex-wrapper">' + '<label class="h5peditor-label-wrapper">';
 
   if (field.label !== 0) {
     html += '<span class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' + (field.label === undefined ? field.name : field.label) + '</span>';
   }
 
-  return html + (content || '') + '</label>';
+  return html + (content || '') + '</label></div>';
 };
 
 /**

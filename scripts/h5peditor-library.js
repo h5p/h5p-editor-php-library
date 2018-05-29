@@ -185,36 +185,18 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper.html(''), that);
 
     var $metadataWrapper = H5PEditor.$('<div class="push-top"></div>');
-
     H5PEditor.metadataForm(semantics, that.params.metadata, $metadataWrapper, that);
-
     that.$libraryWrapper.prepend($metadataWrapper);
 
-    /**
-     * Help find object in list with the given property value.
-     *
-     * @param {Object[]} list of objects to search through
-     * @param {string} property to look for
-     * @param {string} value to match property value against
-     */
-    var find = function (list, property, value) {
-      var properties = property.split('.');
+    const $metadataButton = H5PEditor.$('' +
+      '<div class="h5p-metadata-button-wrapper">' +
+        '<div class="h5p-metadata-button-tip"></div>' +
+        '<div class="toggle-metadata">' + ns.t('core', 'addMetadata') + '</div>' +
+      '</div>');
 
-      for (var i = 0; i < list.length; i++) {
-        var objProp = list[i];
+    // Find your way to the item we need to add the button to
+    that.$libraryWrapper.find('.push-top').first().next().find('.h5p-editor-flex-wrapper').first().append($metadataButton);
 
-        for (var j = 0; j < properties.length; j++) {
-          objProp = objProp[properties[j]];
-        }
-
-        if (objProp === value) {
-          return list[i];
-        }
-      }
-    };
-
-    // TODO: Find out if we should use the metadata button here as well
-    that.$libraryWrapper.prepend('<a href="#" class="toggle-metadata">' + ns.t('core', 'addMetadata') + '</a>');
     that.$libraryWrapper.find('.toggle-metadata').click(function () {
       that.$libraryWrapper.find('.h5p-metadata-wrapper').toggleClass('h5p-open');
       that.$libraryWrapper.find('.h5p-metadata-wrapper').find('.field-name-title').find('input.h5peditor-text').focus();

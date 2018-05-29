@@ -26,12 +26,20 @@ a {
   text-decoration: none;
 }
 
+.h5p-metadata-button-wrapper {
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: -5px;
+  margin-left: 7px;
+  cursor: pointer;
+}
+
 .toggle-metadata {
-  position: absolute;
-  left: 7em;
-  top: 3em;
+  margin-left: -14px;
+  height: 15px;
+  max-height: 15px;
   padding: 0.417rem;
-  margin-left: 0.417rem;
   font-size: 0.667rem;
   font-family: Open Sans;
   font-weight: normal;
@@ -41,17 +49,15 @@ a {
   background: linear-gradient(#ffffff, #e6f6fe);
   color: #124361;
   z-index: 1;
+  justify-content:center;
+  align-content:center;
 }
 
-.toggle-metadata:after {
-  position: absolute;
+.h5p-metadata-button-tip {
   width: 21px;
   height: 21px;
   content: "";
-  display: block;
   background: linear-gradient(#ffffff, #e6f6fe);
-  top: 3px;
-  left: -8px;
   border: 1px solid #c6c8d7;
   border-right: none;
   border-top: none;
@@ -59,7 +65,7 @@ a {
   -webkit-transform: rotate(47deg) skew(5deg);
   -moz-transform: rotate(47deg) skew(5deg);
   transform: rotate(47deg) skew(5deg);
-  z-index: -1;
+  z-index: 0;
 }
 
 .overlay {
@@ -92,6 +98,16 @@ a {
   }
   textarea {
     resize: vertical;
+  }
+
+  .h5p-editor-flex-wrapper {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .h5peditor-label-wrapper {
+    display: flex;
+    flex-direction: row;
   }
 
   .has-important-description {
