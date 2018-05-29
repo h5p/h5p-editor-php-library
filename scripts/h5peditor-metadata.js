@@ -100,7 +100,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
 
   $wrapper.find('.h5p-save').click(function () {
     $wrapper.toggleClass('h5p-open');
-    $container.find('.overlay').toggle();
+    $container.closest('.tree').find('.overlay').toggle();
   });
 
   // Sync with main title form
