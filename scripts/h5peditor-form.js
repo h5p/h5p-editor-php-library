@@ -10,13 +10,22 @@ ns.Form = function () {
   this.params = {};
   this.passReadies = false;
   this.commonFields = {};
+
+  const metadataButton = '' +
+  '<div class="h5p-metadata-button-wrapper">' +
+    '<div class="h5p-metadata-button-tip"></div>' +
+    '<div class="toggle-metadata">' + ns.t('core', 'metadata') + '</div>' +
+  '</div>';
+
   this.$form = ns.$('' +
     '<div class="h5peditor-form">' +
       '<div class="tree">' +
         '<div class="overlay"></div>' +
-        '<a href="#" class="toggle-metadata">' + ns.t('core', 'metadata') + '</a>' +
         '<div class="field field-name-title text">' +
-          '<label class="h5peditor-label-wrapper"><span class="h5peditor-label h5peditor-required">' + ns.t('core', 'title') + '</span></label>' +
+          '<div class="h5p-editor-flex-wrapper">' +
+            '<label class="h5peditor-label-wrapper"><span class="h5peditor-label h5peditor-required">' + ns.t('core', 'title') + '</span></label>' +
+            metadataButton +
+          '</div>' +
           '<div class="h5peditor-field-description">' + ns.t('core', 'usedForSearchingReportsAndCopyrightInformation') + '</div>' +
           '<input class="h5peditor-text" id="metadata-title-main" type="text" maxlength="255" placeholder="' + ns.t('core', 'addTitle') +'">' +
         '</div>' +
