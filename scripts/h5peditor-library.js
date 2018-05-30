@@ -74,7 +74,17 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   var that = this;
   var html = '';
   if (this.field.label !== 0) {
-    html = '<label class="h5peditor-label' + (this.field.optional ? '' : ' h5peditor-required') + '">' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>';
+    /*
+    '<div class="h5p-editor-flex-wrapper">' +
+      '<label class="h5peditor-label-wrapper"><span class="h5peditor-label h5peditor-required">' + ns.t('core', 'title') + '</span></label>' +
+      metadataButton +
+    '</div>' +
+    */
+    html = '' +
+      '<div class="h5p-editor-flex-wrapper">' +
+        //'<label class="h5peditor-label' + (this.field.optional ? '' : ' h5peditor-required') + '">' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>' +
+        '<label class="h5peditor-label-wrapper"><span class="h5peditor-label' + (this.field.optional ? '' : ' h5peditor-required') + '">' + (this.field.label === undefined ? this.field.name : this.field.label) + '</span></label>' +
+      '</div>';
   }
 
   html += ns.createDescription(this.field.description);
@@ -174,6 +184,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     if (preserveParams === undefined || !preserveParams) {
       // Reset params
       that.params.params = {};
+      that.params.metadata = {};
     }
     if (that.params.subContentId === undefined) {
       that.params.subContentId = H5P.createUUID();
@@ -184,35 +195,41 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 
     ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper.html(''), that);
 
-    var $metadataWrapper = H5PEditor.$('<div class="push-top"></div>');
-    H5PEditor.metadataForm(semantics, that.params.metadata, $metadataWrapper, that);
-    that.$libraryWrapper.prepend($metadataWrapper);
-
-    const $metadataButton = H5PEditor.$('' +
-      '<div class="h5p-metadata-button-wrapper">' +
-        '<div class="h5p-metadata-button-tip"></div>' +
-        '<div class="toggle-metadata">' + ns.t('core', 'addMetadata') + '</div>' +
-      '</div>');
-
-    // Find your way to the item we need to add the button to
-    that.$libraryWrapper.find('.push-top').first().next().find('.h5p-editor-flex-wrapper').first().append($metadataButton);
-
-    that.$libraryWrapper.find('.toggle-metadata').click(function () {
-      that.$libraryWrapper.find('.h5p-metadata-wrapper').toggleClass('h5p-open');
-      that.$libraryWrapper.closest('.tree').find('.overlay').toggle();
-      that.$libraryWrapper.find('.h5p-metadata-wrapper').find('.field-name-title').find('input.h5peditor-text').focus();
-      if (H5PIntegration && H5PIntegration.user && H5PIntegration.user.name) {
-        that.$libraryWrapper.find('.field-name-authorName').find('input.h5peditor-text').val(H5PIntegration.user.name);
-      }
-
-
-    });
-
     if (that.libraries !== undefined) {
       that.change();
     }
     else {
       that.runChangeCallback = true;
+    }
+
+    const $metadataWrapper = H5PEditor.$('<div class="push-top"></div>');
+    H5PEditor.metadataForm(semantics, that.params.metadata, $metadataWrapper, that);
+    that.$libraryWrapper.prepend($metadataWrapper);
+
+    // Prevent multiple buttons when changing libraries
+    if (that.$metadataButton === undefined) {
+      that.$metadataButton = H5PEditor.$('' +
+        '<div class="h5p-metadata-button-wrapper">' +
+          '<div class="h5p-metadata-button-tip"></div>' +
+          '<div class="toggle-metadata">' + ns.t('core', 'metadata') + '</div>' +
+        '</div>');
+
+      // Put the metadataButton after the first visible label
+      let label = that.$libraryWrapper.closest('.content').find('.h5p-editor-flex-wrapper').first();
+      if (label.css('display') === 'none') {
+        label = that.$libraryWrapper.find('.push-top').first().next().find('.h5p-editor-flex-wrapper').first();
+      }
+      label.append(that.$metadataButton);
+
+      // Add click listener
+      that.$metadataButton.click(function () {
+        that.$libraryWrapper.find('.h5p-metadata-wrapper').toggleClass('h5p-open');
+        that.$libraryWrapper.closest('.tree').find('.overlay').toggle();
+        that.$libraryWrapper.find('.h5p-metadata-wrapper').find('.field-name-title').find('input.h5peditor-text').focus();
+        if (H5PIntegration && H5PIntegration.user && H5PIntegration.user.name) {
+          that.$libraryWrapper.find('.field-name-authorName').find('input.h5peditor-text').val(H5PIntegration.user.name);
+        }
+      });
     }
   });
 };
