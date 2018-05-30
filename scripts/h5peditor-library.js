@@ -214,7 +214,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     };
 
     // TODO: Find out if we should use the metadata button here as well
-    that.$libraryWrapper.prepend('<a href="#" class="toggle-metadata">' + ns.t('core', 'addMetadata') + '</a>');
+    that.$libraryWrapper.prepend('<a href="#" class="toggle-metadata">' + ns.t('core', 'metadata') + '</a>');
     that.$libraryWrapper.find('.toggle-metadata').click(function () {
       that.$libraryWrapper.find('.h5p-metadata-wrapper').toggleClass('h5p-open');
       that.$libraryWrapper.find('.h5p-metadata-wrapper').find('.field-name-title').find('input.h5peditor-text').focus();
