@@ -24,7 +24,9 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
     self.metadata.title = H5PEditor.t('core', 'untitled') + ' ' + H5PEditor.parent.currentLibrary.split(' ')[0].split('.')[1];
   }
 
-  self.metadataSemantics = Object.values(H5PEditor.metadataSemantics);
+  self.metadataSemantics = Object.keys(H5PEditor.metadataSemantics).map(function (item) {
+    return H5PEditor.metadataSemantics[item];
+  });
 
   var $wrapper = H5PEditor.$('' +
   '<div class="h5p-editor-dialog h5p-dialog-wide h5p-metadata-wrapper">' +
@@ -99,6 +101,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
   widget.appendTo(group.$group);
 
   $wrapper.find('.h5p-save').click(function () {
+
     $wrapper.toggleClass('h5p-open');
     $container.closest('.tree').find('.overlay').toggle();
   });
@@ -133,7 +136,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
  * @param {string} property to look for
  * @param {string} value to match property value against
  */
-function find(list, property, value) {
+function find (list, property, value) {
   var properties = property.split('.');
 
   for (var i = 0; i < list.length; i++) {
