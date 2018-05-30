@@ -163,7 +163,6 @@ H5PEditor.language.core = {
   untitled: 'Untitled',
   title: 'Title',
   metadata: 'Metadata',
-  addMetadata: 'Add metadata',
   addTitle: 'Add title',
   usedForSearchingReportsAndCopyrightInformation: 'Used for searching, reports and copyright information',
   metadataSharingAndLicensingInfo: 'Metadata (sharing and licensing info)',
