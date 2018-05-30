@@ -82,8 +82,10 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       return; // Prevent crashing when iframe is unloaded
     }
     if (iframe.clientHeight === iframe.contentDocument.body.scrollHeight &&
-      iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight) {
+      (iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight ||
+       iframe.contentDocument.body.scrollHeight - 1 === iframe.contentWindow.document.body.clientHeight)) {
       return; // Do not resize unless page and scrolling differs
+      // Note: ScrollHeight may be 1px larger in some cases(Edge) where the actual height is a fraction.
     }
 
     // Retain parent size to avoid jumping/scrolling
