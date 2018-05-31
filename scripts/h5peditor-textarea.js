@@ -30,7 +30,7 @@ ns.Textarea.prototype.appendTo = function ($wrapper) {
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$input = this.$item.find('textarea');
   this.$errors = this.$item.find('.h5p-errors');
-  
+
   ns.bindImportantDescriptionEvents(this, this.field.name, this.parent);
 
   this.$input.change(function () {

@@ -12,10 +12,10 @@ ns.Form = function () {
   this.commonFields = {};
 
   const metadataButton = '' +
-  '<div class="h5p-metadata-button-wrapper">' +
-    '<div class="h5p-metadata-button-tip"></div>' +
-    '<div class="toggle-metadata">' + ns.t('core', 'metadata') + '</div>' +
-  '</div>';
+    '<div class="h5p-metadata-button-wrapper">' +
+      '<div class="h5p-metadata-button-tip"></div>' +
+      '<div class="toggle-metadata">' + ns.t('core', 'metadata') + '</div>' +
+    '</div>';
 
   this.$form = ns.$('' +
     '<div class="h5peditor-form">' +
@@ -111,7 +111,7 @@ ns.Form.prototype.processSemantics = function (semantics, defaultParams, metadat
   H5PEditor.metadataForm(semantics, this.metadata, this.$form.children('.tree'), this, 'main');
 
   // Overriding this.params with {} will lead to old content not being editable for now
-  this.params = (defaultParams.params? defaultParams.params : defaultParams);
+  this.params = (defaultParams.params ? defaultParams.params : defaultParams);
   ns.processSemanticsChunk(semantics, this.params, this.$form.children('.tree'), this);
 };
 

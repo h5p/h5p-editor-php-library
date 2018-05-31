@@ -209,4 +209,4 @@ ns.LibrarySelector.prototype.getMetadata = function () {
   }
 
   return this.form.metadata;
-}
+};

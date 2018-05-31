@@ -130,7 +130,6 @@ ns.Library.prototype.librariesLoaded = function (libList) {
   });
 
   if (self.libraries.length === 1) {
-
     self.$select.hide();
     self.$myField.children('.h5p-editor-flex-wrapper').hide();
     self.loadLibrary(self.$select.children(':last').val(), true);
@@ -196,11 +195,14 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
       that.runChangeCallback = true;
     }
 
-    const $metadataWrapper = H5PEditor.$('<div class="push-top"></div>');
-    H5PEditor.metadataForm(semantics, that.params.metadata, $metadataWrapper, that);
-    that.$libraryWrapper.prepend($metadataWrapper);
+    if (that.$metadataWrapper === undefined) {
+      that.$metadataWrapper = H5PEditor.$('<div class="push-top"></div>');
+      H5PEditor.metadataForm(semantics, that.params.metadata, that.$metadataWrapper, that);
+      //that.$libraryWrapper.prepend($metadataWrapper);
+      that.$libraryWrapper.before(that.$metadataWrapper);
+    }
 
-    // Prevent multiple buttons when changing libraries
+    //Prevent multiple buttons when changing libraries
     if (that.$metadataButton === undefined) {
       that.$metadataButton = H5PEditor.$('' +
         '<div class="h5p-metadata-button-wrapper">' +
@@ -217,11 +219,11 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 
       // Add click listener
       that.$metadataButton.click(function () {
-        that.$libraryWrapper.find('.h5p-metadata-wrapper').toggleClass('h5p-open');
-        that.$libraryWrapper.closest('.tree').find('.overlay').toggle();
-        that.$libraryWrapper.find('.h5p-metadata-wrapper').find('.field-name-title').find('input.h5peditor-text').focus();
+        that.$metadataWrapper.find('.h5p-metadata-wrapper').toggleClass('h5p-open');
+        that.$metadataWrapper.closest('.tree').find('.overlay').toggle();
+        that.$metadataWrapper.find('.h5p-metadata-wrapper').find('.field-name-title').find('input.h5peditor-text').focus();
         if (H5PIntegration && H5PIntegration.user && H5PIntegration.user.name) {
-          that.$libraryWrapper.find('.field-name-authorName').find('input.h5peditor-text').val(H5PIntegration.user.name);
+          that.$metadataWrapper.find('.field-name-authorName').find('input.h5peditor-text').val(H5PIntegration.user.name);
         }
       });
     }

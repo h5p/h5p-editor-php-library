@@ -69,7 +69,7 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, group, parent) {
     var wrapper = widget.find('.h5p-author-list-wrapper');
     wrapper.empty();
 
-    authorList = H5PEditor.$('<ul></ul>');
+    const authorList = H5PEditor.$('<ul></ul>');
     params.authors.forEach(function(author) {
       var listItem = H5PEditor.$('<li>' + author.name + ' <span class="h5p-metadata-role">' + author.role + '</span></li>').data('author', author);
       var deleteButton = H5PEditor.$('<button></button>');
