@@ -74,15 +74,8 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   var that = this;
   var html = '';
   if (this.field.label !== 0) {
-    /*
-    '<div class="h5p-editor-flex-wrapper">' +
-      '<label class="h5peditor-label-wrapper"><span class="h5peditor-label h5peditor-required">' + ns.t('core', 'title') + '</span></label>' +
-      metadataButton +
-    '</div>' +
-    */
     html = '' +
       '<div class="h5p-editor-flex-wrapper">' +
-        //'<label class="h5peditor-label' + (this.field.optional ? '' : ' h5peditor-required') + '">' + (this.field.label === undefined ? this.field.name : this.field.label) + '</label>' +
         '<label class="h5peditor-label-wrapper"><span class="h5peditor-label' + (this.field.optional ? '' : ' h5peditor-required') + '">' + (this.field.label === undefined ? this.field.name : this.field.label) + '</span></label>' +
       '</div>';
   }
@@ -137,8 +130,9 @@ ns.Library.prototype.librariesLoaded = function (libList) {
   });
 
   if (self.libraries.length === 1) {
+
     self.$select.hide();
-    self.$myField.children('.h5peditor-label').hide();
+    self.$myField.children('.h5p-editor-flex-wrapper').hide();
     self.loadLibrary(self.$select.children(':last').val(), true);
   }
 
