@@ -50,9 +50,9 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
 
     // Create editing image
     var editingImage = new Image();
-    // TODO: Make crossOrigin settings configurable in H5P Settings.
-    // TODO: Update all resource fetching in core and editor to enable crossorigin credentials
-    editingImage.crossOrigin = 'use-credentials';
+    if (H5PIntegration && H5PIntegration.crossorigin) {
+      editingImage.crossOrigin = H5PIntegration.crossorigin;
+    }
     editingImage.className = 'h5p-editing-image hidden';
     editingImage.id = 'h5p-editing-image-' + uniqueId;
     editingContainer.appendChild(editingImage);
