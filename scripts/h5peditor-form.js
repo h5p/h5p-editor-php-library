@@ -11,24 +11,10 @@ ns.Form = function () {
   this.passReadies = false;
   this.commonFields = {};
 
-  const metadataButton = '' +
-    '<div class="h5p-metadata-button-wrapper">' +
-      '<div class="h5p-metadata-button-tip"></div>' +
-      '<div class="toggle-metadata">' + ns.t('core', 'metadata') + '</div>' +
-    '</div>';
-
   this.$form = ns.$('' +
     '<div class="h5peditor-form">' +
       '<div class="tree">' +
         '<div class="overlay"></div>' +
-        '<div class="field field-name-title text">' +
-          '<div class="h5p-editor-flex-wrapper">' +
-            '<label class="h5peditor-label-wrapper"><span class="h5peditor-label h5peditor-required">' + ns.t('core', 'title') + '</span></label>' +
-            metadataButton +
-          '</div>' +
-          '<div class="h5peditor-field-description">' + ns.t('core', 'usedForSearchingReportsAndCopyrightInformation') + '</div>' +
-          '<input class="h5peditor-text" id="metadata-title-main" type="text" maxlength="255" placeholder="' + ns.t('core', 'addTitle') +'">' +
-        '</div>' +
       '</div>' +
       '<div class="common collapsed hidden">' +
         '<div class="fields">' +
@@ -42,6 +28,29 @@ ns.Form = function () {
   this.$common = this.$form.find('.common > .fields');
   this.library = '';
 
+  // Inject a custom text field for the metadata title
+  var metaDataTitleSemantics = [{
+    'name' : 'title',
+    'type' : 'text',
+    'label' : ns.t('core', 'title'),
+    'description': ns.t('core', 'usedForSearchingReportsAndCopyrightInformation'),
+    'optional': false
+  }];
+
+  // Ensure it has validation functions
+  ns.processSemanticsChunk(metaDataTitleSemantics, {}, this.$form.children('.tree'), this)
+
+  // Give it an ID
+  this.$form.find('h5peditor-text').attr('id', 'metadata-title-main');
+
+  // Add the metadata button
+  const metadataButton = ns.$('' +
+    '<div class="h5p-metadata-button-wrapper">' +
+      '<div class="h5p-metadata-button-tip"></div>' +
+      '<div class="toggle-metadata">' + ns.t('core', 'metadata') + '</div>' +
+    '</div>');
+
+  this.$form.find('.h5p-editor-flex-wrapper').append(metadataButton);
   this.$form.find('.toggle-metadata').click(function () {
     self.$form.find('.h5p-metadata-wrapper').first().toggleClass('h5p-open');
     self.$form.find('.overlay').toggle();

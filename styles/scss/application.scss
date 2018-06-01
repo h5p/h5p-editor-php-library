@@ -1183,6 +1183,12 @@ a {
     color: #697484;
   }
 
+  .errors p,
+  .h5p-errors p {
+    color: #da0001;
+    font-size: 1em;
+  }
+
   &:after {
     position: absolute;
     left: 0;
