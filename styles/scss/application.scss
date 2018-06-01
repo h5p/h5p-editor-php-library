@@ -1173,14 +1173,20 @@ a {
   z-index: 3;
   margin-top: -4.0em;
   padding: 1em;
+  display: flex;
+  flex-direction: column;
 
   h2 {
     font-size: 1.250em;
+    overflow: hidden;
+    text-overflow:ellipsis;
   }
 
   p {
     font-size: 0.8333em;
     color: #697484;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &:after {
@@ -1263,6 +1269,8 @@ a {
   .h5p-title-container {
    flex-grow: 1;
    margin-left: 4em;
+   white-space: nowrap;
+   overflow: hidden;
 
    h2 {
      margin-bottom: 0;
