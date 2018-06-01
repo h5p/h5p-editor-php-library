@@ -19,18 +19,23 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, group, parent) {
 
   var widget = H5PEditor.$('<div class="h5p-metadata-author-widget"></div>');
 
-  ns.processSemanticsChunk(semantics, {}, widget, parent);
+  var $authorData = H5PEditor.$('<div class="h5p-author-data"></div>');
+  widget.append($authorData);
+
+  ns.processSemanticsChunk(semantics, {}, $authorData, parent);
 
   var button = H5PEditor.$('<div class="file authorList">' +
     '<a class="h5p-metadata-button h5p-add-author">' +
+    '<span class="icon">' +
       H5PEditor.t('core', 'addAuthor') +
+    '</span>' +
     '</a>' +
   '</div>')
   .click(function () {
     addAuthor();
   });
 
-  widget.append(button);
+  $authorData.append(button);
 
   var authorListWrapper = H5PEditor.$('<div class="h5p-author-list-wrapper"><ul class="h5p-author-list"></ul></div>');
   widget.append(authorListWrapper);

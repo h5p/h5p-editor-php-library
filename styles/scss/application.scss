@@ -1160,13 +1160,16 @@ a {
   height: 25px;
   background: white;
   padding: 10px;
-  margin-left: 10px;
   text-align: center;
   border-radius: 5px;
   border: solid 1px gray;
   color: black;
   font-weight: bold;
   cursor: pointer;
+}
+
+.h5p-metadata-button.h5p-cancel {
+  margin-right: 10px;
 }
 
 .h5peditor .h5p-editor-dialog.h5p-open.h5p-metadata-wrapper {
@@ -1238,6 +1241,11 @@ a {
     width: 24%;
     margin-bottom: 0.5em;
     margin-right: 1%;
+    white-space: nowrap;
+
+    .h5peditor-text {
+      width: 100%;
+    }
   }
 
   .field-name-yearTo {
@@ -1248,6 +1256,9 @@ a {
 
     .h5peditor-label {
       visibility: hidden;
+    }
+    .h5peditor-text {
+      width: 100%;
     }
   }
 
@@ -1271,6 +1282,7 @@ a {
    margin-left: 4em;
    white-space: nowrap;
    overflow: hidden;
+   margin-right: 1%;
 
    h2 {
      margin-bottom: 0;
@@ -1311,42 +1323,54 @@ a {
         margin-right: 0.7em;
       }
     }
-
   }
 }
 
 .h5p-metadata-author-widget {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   border: solid 1px #ced6e3;
   border-radius: 0.208em;
   width: 100%;
   padding: 1em;
   margin-top: 1em;
 
+  .h5p-author-data {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+
   .field-name-authorName {
+    flex-grow: 1;
+    margin-right: 2%;
+    overflow: hidden;
+    white-space: nowrap;
     min-width: 49%;
-    margin-right: 1%;
   }
 
   .field-name-authorRole {
     margin-top: 0;
-    margin-left: 1%;
+    margin-right: 2%;
     width: 25%;
     flex-grow: 1;
+    overflow: hidden;
+    white-space: nowrap;
   }
 
   .authorList {
     margin-top: 2.6em;
-    margin-left: 1%;
+    white-space: nowrap;
 
     .h5p-add-author {
      border: solid 1px #10a186;
      color: #10a186;
 
-     &:before {
-       content: "+";
-       margin-right: 0.7em;
+     .icon {
+       &:before {
+         content: "+";
+         margin-right: 0.7em;
+       }
      }
     }
 
@@ -1416,7 +1440,6 @@ a {
   .field-name-changeLogForm .content {
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 3em;
   }
 
   .field-name-date {
@@ -1438,7 +1461,6 @@ a {
 
   .field-name-log {
     width: 100%;
-    height: 5em;
   }
 
   .h5p-metadata-new-log {
@@ -1465,7 +1487,7 @@ a {
   .h5p-metadata-formButtonWrapper {
     display: flex;
     height: 3em;
-    padding-left: 10px;
+    padding-left: 20px;
   }
 
   .h5p-metadata-log-wrapper-title {
