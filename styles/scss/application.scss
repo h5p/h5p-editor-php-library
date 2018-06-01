@@ -1283,6 +1283,7 @@ a {
   }
 }
 
+
 .metadata-button-wrapper {
   margin-top: 2em;
 
@@ -1292,13 +1293,17 @@ a {
     color: #fff;
     background-color: #10a186;
     padding: 0.833rem;
+    white-space: nowrap;
 
-    &:before {
-      font-family: 'h5p-metadata-icons';
-      content: "\e901";
-      font-size: 0.7em;
-      margin-right: 0.7em;
+    .icon {
+      &:before {
+        font-family: 'h5p-metadata-icons';
+        content: "\e901";
+        font-size: 0.7em;
+        margin-right: 0.7em;
+      }
     }
+
   }
 }
 
