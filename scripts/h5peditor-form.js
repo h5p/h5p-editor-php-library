@@ -41,7 +41,7 @@ ns.Form = function () {
   ns.processSemanticsChunk(metaDataTitleSemantics, {}, this.$form.children('.tree'), this)
 
   // Give it an ID
-  this.$form.find('h5peditor-text').attr('id', 'metadata-title-main');
+  this.$form.find('.h5peditor-text').attr('id', 'metadata-title-main');
 
   // Add the metadata button
   const metadataButton = ns.$('' +
