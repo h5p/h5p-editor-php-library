@@ -22,8 +22,8 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
   var authorInput = widget.find('.field-name-author').find('input');
   var logInput = widget.find('.field-name-log').find('textarea');
 
-  var cancelButton = H5PEditor.$('<div class="file authorList">' +
-    '<a class="h5p-metadata-button h5p-cancel">' +
+  var cancelButton = H5PEditor.$('<div>' +
+    '<a class="h5p-metadata-button h5p-cancel" role="button">' +
       H5PEditor.t('core', 'cancel') +
     '</a>' +
   '</div>')
@@ -35,8 +35,8 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
     render();
   });
 
-  var createLogButton = H5PEditor.$('<div class="file authorList">' +
-    '<a class="h5p-metadata-button h5p-log-change">' +
+  var createLogButton = H5PEditor.$('<div>' +
+    '<a class="h5p-metadata-button h5p-log-change" role="button">' +
       H5PEditor.t('core', 'logThisChange') +
     '</a>' +
   '</div>')
@@ -76,7 +76,7 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
   $form.append(formButtonWrapper);
 
   var button = H5PEditor.$('<div class="file h5p-metadata-new-log">' +
-    '<a class="h5p-metadata-button h5p-add-author">' +
+    '<a class="h5p-metadata-button h5p-add-author" role="button">' +
       H5PEditor.t('core', 'addNewChange') +
     '</a>' +
   '</div>')

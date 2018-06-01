@@ -36,7 +36,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
         '<p>' + H5PEditor.t('core', 'fillInTheFieldsBelow') + '</p>' +
       '</div>' +
       '<div class="metadata-button-wrapper">' +
-        '<a href="#" class="h5p-metadata-button h5p-save">' + H5PEditor.t('core', 'saveMetadata') + '</a>' +
+        '<a href="#" class="h5p-metadata-button h5p-save"><span class="icon">' + H5PEditor.t('core', 'saveMetadata') + '</span></a>' +
       '</div>' +
     '</div>' +
   '</div>');
