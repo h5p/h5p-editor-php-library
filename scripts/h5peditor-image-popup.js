@@ -50,8 +50,9 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
 
     // Create editing image
     var editingImage = new Image();
-    if (H5PIntegration && H5PIntegration.crossorigin) {
-      editingImage.crossOrigin = H5PIntegration.crossorigin;
+    var crossOrigin = H5P.getCrossOrigin();
+    if (crossOrigin) {
+      editingImage.crossOrigin = crossOrigin;
     }
     editingImage.className = 'h5p-editing-image hidden';
     editingImage.id = 'h5p-editing-image-' + uniqueId;
