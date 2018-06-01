@@ -26,9 +26,7 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, group, parent) {
 
   var button = H5PEditor.$('<div class="file authorList">' +
     '<a class="h5p-metadata-button h5p-add-author">' +
-    '<span class="icon">' +
       H5PEditor.t('core', 'addAuthor') +
-    '</span>' +
     '</a>' +
   '</div>')
   .click(function () {
