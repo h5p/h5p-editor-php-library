@@ -1320,15 +1320,6 @@ a {
     background-color: #10a186;
     padding: 0.833rem;
     white-space: nowrap;
-
-    .icon {
-      &:before {
-        font-family: 'h5p-metadata-icons';
-        content: "\e901";
-        font-size: 0.7em;
-        margin-right: 0.7em;
-      }
-    }
   }
 }
 
@@ -1369,15 +1360,8 @@ a {
     white-space: nowrap;
 
     .h5p-add-author {
-     border: solid 1px #10a186;
-     color: #10a186;
-
-     .icon {
-       &:before {
-         content: "+";
-         margin-right: 0.7em;
-       }
-     }
+      border: solid 1px #10a186;
+      color: #10a186;
     }
 
     li {
