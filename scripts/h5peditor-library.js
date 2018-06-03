@@ -154,6 +154,7 @@ ns.Library.prototype.librariesLoaded = function (libList) {
  * @param {boolean} [preserveParams]
  */
 ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
+  debugger
   var that = this;
 
   this.removeChildren();
@@ -176,8 +177,11 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 
     if (preserveParams === undefined || !preserveParams) {
       // Reset params
+      delete that.params.subContentId;
       that.params.params = {};
       that.params.metadata = {};
+      // TODO: Reset title (whole form)
+      // TODO: The form still contains the previous values after changing subcontent
     }
     if (that.params.subContentId === undefined) {
       that.params.subContentId = H5P.createUUID();
@@ -203,7 +207,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     }
 
     //Prevent multiple buttons when changing libraries
-    if (that.$metadataButton === undefined) {
+    if (that.$libraryWrapper.closest('.content').find('.h5p-metadata-button-wrapper').length === 0) {
       that.$metadataButton = H5PEditor.$('' +
         '<div class="h5p-metadata-button-wrapper">' +
           '<div class="h5p-metadata-button-tip"></div>' +
@@ -213,7 +217,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
       // Put the metadataButton after the first visible label
       let label = that.$libraryWrapper.closest('.content').find('.h5p-editor-flex-wrapper').first();
       if (label.css('display') === 'none') {
-        label = that.$libraryWrapper.find('.push-top').first().next().find('.h5p-editor-flex-wrapper').first();
+        label = that.$libraryWrapper.find('.h5p-editor-flex-wrapper').first();
       }
       label.append(that.$metadataButton);
 
@@ -334,6 +338,9 @@ ns.Library.prototype.removeChildren = function () {
       }
     }
   }
+
+  debugger
+
   ns.removeChildren(this.children);
 };
 

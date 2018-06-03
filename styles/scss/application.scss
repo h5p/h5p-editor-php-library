@@ -37,8 +37,8 @@ a {
 
 .toggle-metadata {
   margin-left: -14px;
-  height: 15px;
-  max-height: 15px;
+  height: 14.5px;
+  max-height: 14.5px;
   padding: 0.417rem;
   font-size: 0.667rem;
   font-family: Open Sans;
@@ -1411,20 +1411,26 @@ a {
 }
 
 .h5p-metadata-changelog {
+  width: 100%;
+  margin-top: 1em;
 
   .title {
     font-weight: 400;
-    margin-left: 20px;
-    margin-right: 20px;
     background: #F6F6F6;
     color: #323232;
     border: solid 1px #ced6e3;
     border-radius: 0.208em;
   }
 
+  .content {
+    padding: 0;
+    margin-top: 20px;
+  }
+
   .field-name-changeLogForm {
     border: solid 1px #ced6e3;
     border-radius: 0.208em;
+    padding: 0 20px;
   }
 
   .field-name-changeLogForm .content {
@@ -1455,7 +1461,7 @@ a {
 
   .h5p-metadata-new-log {
     float: none;
-    height: 4em;
+    height: 3em;
     width: 100%;
   }
 
@@ -1477,7 +1483,7 @@ a {
   .h5p-metadata-formButtonWrapper {
     display: flex;
     height: 3em;
-    padding-left: 20px;
+    padding-top: 20px;
   }
 
   .h5p-metadata-log-wrapper-title {
@@ -1558,6 +1564,7 @@ a {
 }
 
 .h5p-metadata-additional-information {
+  width: 100%;
   margin-top: 1em;
 
   .content.h5peditor-single {
@@ -1565,13 +1572,10 @@ a {
     border: 1px solid #d0d0d1;
     border-top: none;
     background: #fff;
-    margin: 0 1.3em;
   }
 
   .title {
     font-weight: 400;
-    margin-left: 20px;
-    margin-right: 20px;
     background: #F6F6F6;
     color: #323232;
     border: solid 1px #ced6e3;

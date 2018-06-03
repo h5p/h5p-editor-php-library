@@ -14,13 +14,17 @@ var ns = H5PEditor;
  * @returns {ns.Coordinates}
  */
 H5PEditor.metadataForm = function (field, metadata, $container, parent, formType) {
+  /*
+   * TODO: Is there a decent way to make this a "real class" that can be used?
+   *       Changing all the fields by using a DOM selector in other files feels very wrong.
+   */
   var self = this;
   self.field = field;
   self.metadata = metadata;
   self.parent = parent;
 
   // Set default title, but not for main content
-  if (formType !== 'main' || !self.metadata.title || self.metadata.title === '') {
+  if (formType !== 'main' && (!self.metadata.title || self.metadata.title === '')) {
     self.metadata.title = H5PEditor.t('core', 'untitled') + ' ' + H5PEditor.parent.currentLibrary.split(' ')[0].split('.')[1];
   }
 
@@ -48,6 +52,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
   var group = new H5PEditor.widgets.group(field, getPartialSemantics('copyright'), self.metadata, setCopyright);
   group.appendTo($wrapper);
   group.expand();
+
   group.$group.find('.title').remove();
   group.$group.find('.content').addClass('copyright-form');
   field.children = [group];
@@ -74,7 +79,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
 
     // Find default selected version
     var selected = (self.metadata.license === value &&
-                    self.metadata ? self.metadata.version : versions[0].value);
+                    self.metadata ? self.metadata.licenseVersion : versions[0].value);
 
     // Update versions selector
     versionField.$select.html(H5PEditor.Select.createOptionsHtml(versions, selected)).change();
@@ -90,15 +95,15 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
   // Append the additional license field
   var widget = H5PEditor.$('<div class="h5p-metadata-license-extras"></div>');
   ns.processSemanticsChunk([getPartialSemantics('licenseExtras')], self.metadata, widget, this.parent);
-  widget.appendTo(group.$group.find('.content'));
+  widget.appendTo(group.$group.find('.content.copyright-form'));
 
   // Append the metadata changelog widget
   H5PEditor.metadataChangelogWidget([getPartialSemantics('changeLog')], self.metadata, group, this.parent);
 
   // Append the additional information field
-  widget = H5PEditor.$('<div class="h5p-metadata-additional-information"></div>');
-  ns.processSemanticsChunk([getPartialSemantics('authorComments')], self.metadata, widget, this.parent);
-  widget.appendTo(group.$group);
+  var $widget = H5PEditor.$('<div class="h5p-metadata-additional-information"></div>');
+  ns.processSemanticsChunk([getPartialSemantics('authorComments')], self.metadata, $widget, this.parent);
+  $widget.appendTo(group.$group.find('.content.copyright-form'));
 
   $wrapper.find('.h5p-save').click(function () {
 
@@ -126,7 +131,6 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
   function getPartialSemantics(selector) {
     return find(self.metadataSemantics, 'name', selector);
   }
-
 };
 
 /**

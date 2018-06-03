@@ -96,7 +96,7 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
   var logWrapper = H5PEditor.$('<div></div>');
   widget.find('.content').first().append(logWrapper);
 
-  widget.appendTo(group.$group);
+  widget.appendTo(group.$group.find('.content.copyright-form'));
   render();
 
   function render() {
