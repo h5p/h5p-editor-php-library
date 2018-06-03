@@ -154,7 +154,6 @@ ns.Library.prototype.librariesLoaded = function (libList) {
  * @param {boolean} [preserveParams]
  */
 ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
-  debugger
   var that = this;
 
   this.removeChildren();
@@ -338,8 +337,6 @@ ns.Library.prototype.removeChildren = function () {
       }
     }
   }
-
-  debugger
 
   ns.removeChildren(this.children);
 };
