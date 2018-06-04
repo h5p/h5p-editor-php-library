@@ -42,8 +42,8 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, group, parent) {
   widget.appendTo(group.$group.find('.content'));
 
   function addAuthor() {
-    var authorNameInput = (widget.find('.field-name-authorName')).find('input');
-    var authorRoleInput = (widget.find('.field-name-authorRole')).find('select');
+    var authorNameInput = (widget.find('.field-name-name')).find('input');
+    var authorRoleInput = (widget.find('.field-name-role')).find('select');
 
     // TODO serverside validation?
     if (authorNameInput.val().trim() == '') {

@@ -123,7 +123,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
 
   // Set author of main content. TODO: Add realName to H5PIntegration
   if (formType === 'main' && H5PIntegration && H5PIntegration.user && H5PIntegration.user.name) {
-    $wrapper.find('.field-name-authorName').find('input.h5peditor-text').val(H5PIntegration.user.name);
+    $wrapper.find('.h5p-author-data').find('.field-name-name').find('input.h5peditor-text').val(H5PIntegration.user.name);
   }
 
   $wrapper.appendTo($container);
