@@ -1,4 +1,3 @@
-//var H5PEditor = (H5PEditor || {});
 (function ($, ns) {
   H5PEditor.init = function ($form, $type, $upload, $create, $editor, $library, $params) {
     H5PEditor.$ = H5P.jQuery;

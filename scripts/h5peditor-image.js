@@ -1,5 +1,4 @@
-/*global H5P*/
-var H5PEditor = H5PEditor || {};
+var H5PEditor = window.H5PEditor = window.H5PEditor || {};
 var ns = H5PEditor;
 
 /**

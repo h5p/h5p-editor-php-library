@@ -1,6 +1,3 @@
-/** @namespace H5PEditor */
-var H5PEditor = H5PEditor || {};
-
 H5PEditor.List = (function ($) {
   /**
    * List structure.
