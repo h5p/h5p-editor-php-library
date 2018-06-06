@@ -73,7 +73,7 @@ ns.Library.prototype.constructor = ns.Library;
 ns.Library.prototype.appendTo = function ($wrapper) {
   var that = this;
   var html = '';
-  if (this.field.label !== 0) {
+  if (this.field.label !== 0 && this.field.label !== undefined) {
     html = '' +
       '<div class="h5p-editor-flex-wrapper">' +
         '<label class="h5peditor-label-wrapper"><span class="h5peditor-label' + (this.field.optional ? '' : ' h5peditor-required') + '">' + (this.field.label === undefined ? this.field.name : this.field.label) + '</span></label>' +
