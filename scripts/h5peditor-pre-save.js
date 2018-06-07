@@ -55,22 +55,6 @@ H5PEditor.Presave = (function (Editor) {
   };
 
   /**
-   * Check if score is valid
-   *
-   * @static
-   * @param score
-   * @returns {boolean}
-   */
-  Presave.isScoreValid = function (score) {
-    try {
-      Presave.validateScore(score);
-    } catch (err) {
-      return false;
-    }
-    return true;
-  };
-
-  /**
    * Check if a object has the given properties.
    *
    * @static
