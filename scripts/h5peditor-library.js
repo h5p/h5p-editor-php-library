@@ -22,6 +22,7 @@ var H5PIntegration = H5PIntegration || false;
  */
 ns.Library = function (parent, field, params, setValue) {
   var self = this;
+
   H5P.EventDispatcher.call(this);
   if (params === undefined) {
     this.params = {
@@ -210,8 +211,20 @@ ns.Library.prototype.addMetadataForm = function (semantics) {
 
   if (that.$metadataWrapper === undefined) {
     that.$metadataWrapper = H5PEditor.$('<div class="push-top"></div>');
-    H5PEditor.metadataForm(semantics, that.params.metadata, that.$metadataWrapper, that);
-    //that.$libraryWrapper.prepend($metadataWrapper);
+
+    /*
+     * Some content types may bring their own editor, and the title
+     * fields of subcontent forms should have the ID metadata-title-sub.
+     * This is far from ideal, but there's no easy connection to the dialog form.
+     * Alternatively, store the current dialog title field in the custom
+     * editor and implement a getter function for it.
+     */
+    var $syncField = H5PEditor.$(document).find('input#metadata-title-sub');
+    if ($syncField.lenght === 0) {
+      $syncField = undefined;
+    }
+
+    H5PEditor.metadataForm(semantics, that.params.metadata, that.$metadataWrapper, that, $syncField);
     that.$libraryWrapper.before(that.$metadataWrapper);
   }
 

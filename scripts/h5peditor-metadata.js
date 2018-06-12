@@ -8,15 +8,16 @@ var ns = H5PEditor;
  *
  * @param {object} field
  * @param {object} metadata params for the metadata fields
- * @param {jQuery} $container
- * @param {mixed} parent used in processSemanticsChunk()
- * @param {string} [formType] Form type main|sub|...
+ * @param {jQuery} $container Container.
+ * @param {mixed} parent used in processSemanticsChunk().
+ * @param {jQuery} [$syncField] Input field to sync with.
  * @returns {ns.Coordinates}
  */
-H5PEditor.metadataForm = function (field, metadata, $container, parent, formType) {
+H5PEditor.metadataForm = function (field, metadata, $container, parent, $syncField) {
   /*
    * TODO: Is there a decent way to make this a "real class" that can be used?
-   *       Changing all the fields by using a DOM selector in other files feels very wrong.
+   *       Changing all the fields by using a DOM selector here and in other
+   *       source files feels very wrong.
    */
   var self = this;
   self.field = field;
@@ -24,7 +25,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
   self.parent = parent;
 
   // Set default title, but not for main content
-  if (formType !== 'main' && (!self.metadata.title || self.metadata.title === '')) {
+  if (!self.metadata.title || self.metadata.title === '') {
     self.metadata.title = H5PEditor.t('core', 'untitled') + ' ' + H5PEditor.parent.currentLibrary.split(' ')[0].split('.')[1];
   }
 
@@ -106,24 +107,28 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
   $widget.appendTo(group.$group.find('.content.copyright-form'));
 
   $wrapper.find('.h5p-save').click(function () {
-
     $wrapper.toggleClass('h5p-open');
     $container.closest('.tree').find('.overlay').toggle();
   });
 
-  // Sync with main title form
-  if (formType === 'main') {
-    const $titleFieldMeta = group.$group.find('.field.field-name-title.text').find('input.h5peditor-text');
-    const $titleFieldMain = parent.syncTitle($titleFieldMeta);
-
-    $titleFieldMain.on('input.titleFieldMeta', function() {
-      $titleFieldMeta.val($titleFieldMain.val());
-    });
+  // Sync title field with other field
+  if ($syncField) {
+    sync(
+      group.$group.find('.field.field-name-title.text').find('input.h5peditor-text'), // title field
+      $syncField
+    );
   }
 
-  // Set author of main content. TODO: Add realName to H5PIntegration
-  if (formType === 'main' && H5PIntegration && H5PIntegration.user && H5PIntegration.user.name) {
-    $wrapper.find('.h5p-author-data').find('.field-name-name').find('input.h5peditor-text').val(H5PIntegration.user.name);
+  // Set author of main content.
+  // TODO: Add realName to H5PIntegration
+  if (
+    H5PIntegration && H5PIntegration.user && H5PIntegration.user.name
+  ) {
+    $wrapper
+      .find('.h5p-author-data')
+      .find('.field-name-name')
+      .find('input.h5peditor-text')
+      .val(H5PIntegration.user.name);
   }
 
   $wrapper.appendTo($container);
@@ -132,6 +137,46 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, formType
     return find(self.metadataSemantics, 'name', selector);
   }
 };
+
+/**
+ * Sync two input fields. Empty fields will take value of the other or be set to ''.
+ * master fields takes precedence if both are set already.
+ *
+ * @param {jQuery} $masterField - Master field that holds the value for initialization.
+ * @param {jQuery} $slaveField - Slave field to be synced with.
+ * @param {string} [defaultText] - Default text if fields are empty.
+ */
+ function sync ($masterField, $slaveField, defaultText) {
+  if (!$masterField || !$slaveField) {
+    return;
+  }
+
+  const listenerName = 'input.metadataSync';
+
+  // Remove old sync
+  $masterField.off(listenerName);
+  $slaveField.off(listenerName);
+
+  // Initialize fields
+  if ($masterField.val()) {
+    $slaveField.val($masterField.val());
+  }
+  else if ($slaveField.val()) {
+    $masterField.val($slaveField.val());
+  }
+  else {
+    $masterField.val(defaultText || '');
+    $slaveField.val(defaultText || '');
+  }
+
+  // Keep fields in sync
+  $masterField.on(listenerName, function() {
+    $slaveField.val($masterField.val());
+  });
+  $slaveField.on(listenerName, function() {
+    $masterField.val($slaveField.val());
+  });
+}
 
 /**
  * Help find object in list with the given property value.

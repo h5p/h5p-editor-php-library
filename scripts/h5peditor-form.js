@@ -114,7 +114,7 @@ ns.Form.prototype.remove = function () {
  */
 ns.Form.prototype.processSemantics = function (semantics, defaultParams, metadata) {
   this.metadata = (metadata ? metadata : defaultParams.metadata || {});
-  H5PEditor.metadataForm(semantics, this.metadata, this.$form.children('.tree'), this, 'main');
+  H5PEditor.metadataForm(semantics, this.metadata, this.$form.children('.tree'), this, this.$form.find('input#metadata-title-main'));
 
   // Overriding this.params with {} will lead to old content not being editable for now
   this.params = (defaultParams.params ? defaultParams.params : defaultParams);
@@ -129,27 +129,4 @@ ns.Form.prototype.processSemantics = function (semantics, defaultParams, metadat
  */
 ns.Form.prototype.ready = function (ready) {
   this.readies.push(ready);
-};
-
-/**
- * Sync title field with other title field
- *
- * @param {jQuery} $inputField Inputfield to sync with.
- * @return {jQuery} Inputfield that's listening.
- */
-ns.Form.prototype.syncTitle = function($inputField) {
-  const $titleFieldMain = this.$form.find('input#metadata-title-main');
-
-  // Remove old Listener, just in case ...
-  $inputField.off('input.titleFieldMain');
-
-  // Initialize
-  $titleFieldMain.val($inputField.val());
-
-  // Sync
-  $inputField.on('input.titleFieldMain', function() {
-    $titleFieldMain.val($inputField.val());
-  });
-
-  return $titleFieldMain;
 };
