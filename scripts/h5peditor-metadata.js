@@ -131,6 +131,12 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, $syncFie
       .val(H5PIntegration.user.name);
   }
 
+  // Select title field text on click
+  $wrapper.find('.field-name-title').find('.h5peditor-text').on('click', function () {
+    this.select();
+    this.setSelectionRange(0, this.value.length); // Safari mobile fix
+  });
+
   $wrapper.appendTo($container);
 
   function getPartialSemantics(selector) {
