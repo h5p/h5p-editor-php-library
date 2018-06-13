@@ -30,16 +30,16 @@ a {
   display:flex;
   flex-direction: row;
   align-items: center;
-  margin-top: -5px;
+  margin-top: -10px;
   margin-left: 7px;
   cursor: pointer;
 }
 
 .toggle-metadata {
-  margin-left: -14px;
+  margin-left: -11px;
   height: 14.5px;
   max-height: 14.5px;
-  padding: 0.417rem;
+  padding: 0.217rem;
   font-size: 0.667rem;
   font-family: Open Sans;
   font-weight: normal;
@@ -55,8 +55,8 @@ a {
 }
 
 .h5p-metadata-button-tip {
-  width: 21px;
-  height: 21px;
+  width: 16.5px;
+  height: 16.5px;
   content: "";
   background: linear-gradient(#ffffff, #e6f6fe);
   border: 1px solid #c6c8d7;
@@ -96,6 +96,7 @@ a {
   .errors p,
   .h5p-errors {
     color: #da0001;
+    white-space: normal;
   }
   textarea {
     resize: vertical;
@@ -116,9 +117,7 @@ a {
       display: none;
     }
     .h5peditor-label-wrapper {
-
       float: left;
-
     }
   }
 
@@ -1154,7 +1153,9 @@ a {
   display: block;
   clear: right;
 }
-
+#metadata-title-main-label {
+  margin-top: 0;
+}
 
 .h5p-metadata-button {
   width: 115px;
@@ -1179,6 +1180,14 @@ a {
   padding: 1em;
   display: flex;
   flex-direction: column;
+
+  .h5peditor-label {
+    font-size: 1em;
+  }
+
+  .copyright-form {
+    margin-top: 20px;
+  }
 
   h2 {
     font-size: 1.250em;
@@ -1212,6 +1221,9 @@ a {
 
   select {
     width: 100%;
+    border: solid 1px #b8c0ce;
+    font-size: 0.833em;
+    border-radius: 0.208em;
     box-shadow: none;
   }
 
@@ -1229,24 +1241,24 @@ a {
 
   .field-name-title {
     width: 100%;
-    margin-bottom: 0.5em;
+    margin-bottom: 1em;
   }
 
   .field-name-license {
     width: 49%;
-    margin-bottom: 0.5em;
+    margin-bottom: 1em;
     margin-right: 1%;
   }
 
   .field-name-licenseVersion {
     width: 49%;
-    margin-bottom: 0.5em;
+    margin-bottom: 1em;
     margin-left: 1%;
   }
 
   .field-name-yearFrom {
     width: 24%;
-    margin-bottom: 0.5em;
+    margin-bottom: 1em;
     margin-right: 1%;
     white-space: nowrap;
 
@@ -1257,7 +1269,7 @@ a {
 
   .field-name-yearTo {
     width: 23%;
-    margin-bottom: 0.5em;
+    margin-bottom: 1em;
     margin-right: 1%;
     margin-left: 1%;
 
@@ -1271,7 +1283,7 @@ a {
 
   .field-name-source {
     width: 49%;
-    margin-bottom: 0.5em;
+    margin-bottom: 1em;
     margin-left: 1%;
   }
 
@@ -1357,7 +1369,7 @@ a {
   }
 
   .authorList {
-    margin-top: 2.6em;
+    margin-top: 2.4em;
     white-space: nowrap;
 
     .h5p-add-author {
@@ -1388,11 +1400,14 @@ a {
       display: inline-block;
       margin-right: 1em;
       list-style: none;
+      font-weight: bold;
     }
 
     .h5p-metadata-role {
       font-style: italic;
       margin-right: 0.5em;
+      font-weight: normal;
+      font-size: 0.85em;
     }
 
     button {
@@ -1496,6 +1511,7 @@ a {
     border-radius: 0.208em;
     max-height: 15.917rem;
     overflow-y: auto;
+    padding:0.5em;
   }
 
   .h5p-metadata-log {
