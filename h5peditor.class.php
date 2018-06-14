@@ -648,6 +648,12 @@ class H5peditor {
     }
   }
 
+  /**
+   * Determine if a library has a presave.js file in the root folder
+   *
+   * @param string $libraryName
+   * @return bool
+   */
   public function hasPresave($libraryName){
     if( isset($this->h5p->h5pD) ){
       $parsedLibrary = H5PCore::libraryFromString($libraryName);
@@ -664,6 +670,13 @@ class H5peditor {
     return $this->h5p->fs->hasPresave($libraryName);
   }
 
+  /**
+   * Adds the path to the presave.js file to the list of dependency assets for the library
+   *
+   * @param array $assets
+   * @param string $library
+   * @param string $prefix
+   */
   public function addPresaveFile(&$assets, $library, $prefix = ''){
     $path = 'libraries' . DIRECTORY_SEPARATOR . H5PCore::libraryToString($library, true);
     if( array_key_exists('path', $library)){
