@@ -1,6 +1,3 @@
-var H5PEditor = H5PEditor || {};
-var ns = H5PEditor;
-
 /**
  * Adds a file upload field to the form.
  *

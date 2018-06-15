@@ -1,6 +1,3 @@
-var H5PEditor = H5PEditor || {};
-var ns = H5PEditor;
-
 /**
  * Create a text field for the form.
  *

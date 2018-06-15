@@ -1,6 +1,3 @@
-/** @namespace H5PEditor */
-var H5PEditor = H5PEditor || {};
-
 H5PEditor.SemanticStructure = (function ($) {
   var self = this;
 

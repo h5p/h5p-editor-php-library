@@ -1,8 +1,4 @@
-/**
- * @namespace
- */
-var H5PEditor = (H5PEditor || {});
-var ns = H5PEditor;
+window.ns = window.H5PEditor = window.H5PEditor || {};
 
 /**
  * Construct the editor.
@@ -43,6 +39,9 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
    * @private
    */
   var populateIframe = function () {
+    if (!iframe.contentDocument) {
+      return; // Not possible, iframe 'load' hasn't been triggered yet
+    }
     iframe.contentDocument.open();
     iframe.contentDocument.write(
       '<!doctype html><html>' +
@@ -82,8 +81,10 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       return; // Prevent crashing when iframe is unloaded
     }
     if (iframe.clientHeight === iframe.contentDocument.body.scrollHeight &&
-      iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight) {
+      (iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight ||
+       iframe.contentDocument.body.scrollHeight - 1 === iframe.contentWindow.document.body.clientHeight)) {
       return; // Do not resize unless page and scrolling differs
+      // Note: ScrollHeight may be 1px larger in some cases(Edge) where the actual height is a fraction.
     }
 
     // Retain parent size to avoid jumping/scrolling
@@ -101,10 +102,10 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
   };
 
   // Register loaded event handler for iframe
-  $iframe.load(function () {
+  var load = function () {
     if (!iframe.contentWindow.H5P) {
       // The iframe has probably been reloaded, losing its content
-      setTimeout(function () {
+      setTimeout(function () {
         // Wait for next tick as a new 'load' can't be triggered recursivly
         populateIframe();
       }, 0);
@@ -201,12 +202,17 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       library = self.getLibrary();
       defaultParams = JSON.stringify(self.getParams(true));
     });
-  });
+  };
 
   // Insert iframe into DOM
   $iframe.replaceAll(replace);
 
+  // Need to put this after the above replaceAll(), since that one makes Safari
+  // 11 trigger a load event for the iframe
+  $iframe.load(load);
+
   // Populate iframe with the H5P Editor
+  // (should not really be done until 'load', but might be here in case the iframe is reloaded?)
   populateIframe();
 };
 

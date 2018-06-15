@@ -1,6 +1,3 @@
-var H5PEditor = H5PEditor || {};
-var ns = H5PEditor;
-
 /**
  * Creates a boolean field for the editor.
  *

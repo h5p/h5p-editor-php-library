@@ -1,5 +1,3 @@
-var H5PEditor = H5PEditor || {};
-
 /**
  * Audio/Video module.
  * Makes it possible to add audio or video through file uploads and urls.
