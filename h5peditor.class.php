@@ -673,7 +673,7 @@ class H5peditor {
    * Adds the path to the presave.js file to the list of dependency assets for the library
    *
    * @param array $assets
-   * @param string $library
+   * @param array $library
    * @param string $prefix
    */
   public function addPresaveFile(&$assets, $library, $prefix = ''){
