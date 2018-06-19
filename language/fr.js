@@ -159,5 +159,8 @@ H5PEditor.language.core = {
   contentTypeCacheOutdated: 'Liste des types d\'Activités obsolète',
   contentTypeCacheOutdatedDesc: 'Votre site rencontre des difficultés pour se connecter à H5P.org pour vérifier les mises à jour des types d\'Activités. Vous pourriez être incapable de mettre à jour ou d\'installer de nouveaux types d\'Activités.',
   tryAgain: 'Recommencer',
-  getHelp: 'Obtenir de l\'aide'
+  getHelp: 'Obtenir de l\'aide',
+  errorHeader: 'An error occured',
+  errorCalculatingMaxScore: 'Could not calculate the max score for this content. The max score is assumed to be 0. Contact your administrator if this isn’t correct.',
+  maxScoreSemanticsMissing: 'Could not find the expected semantics in the content.'
 };
