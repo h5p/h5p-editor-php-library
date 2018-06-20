@@ -161,12 +161,14 @@ ns.loadLibrary = function (libraryName, callback) {
           libraryData.semantics = semantics;
           ns.libraryCache[libraryName] = libraryData;
 
-          ns.libraryRequested(libraryName, callback);
+          ns.libraryRequested(libraryName, function (semen) {
+            callback(semen);
 
-          // Run queue.
-          for (var i = 0; i < ns.loadedCallbacks[libraryName].length; i++) {
-            ns.loadedCallbacks[libraryName][i](libraryData.semantics);
-          }
+            // Run queue.
+            for (var i = 0; i < ns.loadedCallbacks[libraryName].length; i++) {
+              ns.loadedCallbacks[libraryName][i](semen);
+            }
+          });
         },
         error: function(jqXHR, textStatus, errorThrown) {
           if (window['console'] !== undefined) {
