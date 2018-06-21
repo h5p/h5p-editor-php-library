@@ -165,22 +165,34 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, $syncFie
 
   // Initialize fields
   if ($masterField.val()) {
-    $slaveField.val($masterField.val());
+    $slaveField
+      .val($masterField.val())
+      .trigger('change');
   }
   else if ($slaveField.val()) {
-    $masterField.val($slaveField.val());
+    $masterField
+      .val($slaveField.val())
+      .trigger('change');
   }
   else {
-    $masterField.val(defaultText || '');
-    $slaveField.val(defaultText || '');
+    $masterField
+      .val(defaultText || '')
+      .trigger('change');
+    $slaveField
+      .val(defaultText || '')
+      .trigger('change');
   }
 
   // Keep fields in sync
   $masterField.on(listenerName, function() {
-    $slaveField.val($masterField.val());
+    $slaveField
+      .val($masterField.val())
+      .trigger('change');
   });
   $slaveField.on(listenerName, function() {
-    $masterField.val($slaveField.val());
+    $masterField
+      .val($slaveField.val())
+      .trigger('change');
   });
 }
 
