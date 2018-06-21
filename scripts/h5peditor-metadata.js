@@ -14,6 +14,7 @@ var ns = H5PEditor;
  * @returns {ns.Coordinates}
  */
 H5PEditor.metadataForm = function (field, metadata, $container, parent, $syncField) {
+  const that = this;
   /*
    * TODO: Is there a decent way to make this a "real class" that can be used?
    *       Changing all the fields by using a DOM selector here and in other
@@ -59,14 +60,14 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, $syncFie
   field.children = [group];
 
   // Locate license and version selectors
-  var licenseField = find(group.children, 'field.name', 'license');
+  this.licenseField = find(group.children, 'field.name', 'license');
   var versionField = find(group.children, 'field.name', 'licenseVersion');
   versionField.field.optional = true; // Avoid any error messages
 
   // Listen for changes to license
-  licenseField.changes.push(function (value) {
+  this.licenseField.changes.push(function (value) {
     // Find versions for selected value
-    var option = find(licenseField.field.options, 'value', value);
+    var option = find(that.licenseField.field.options, 'value', value);
     var versions = (option) ? option.versions : undefined;
 
     versionField.$select.prop('disabled', versions === undefined);
@@ -87,11 +88,11 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, $syncFie
   });
 
   // Trigger update straight away
-  licenseField.changes[licenseField.changes.length - 1](self.metadata.license);
+  this.licenseField.changes[this.licenseField.changes.length - 1](self.metadata.license);
 
   // Create and append the rest of the widgets and fields
   // Append the metadata author list widget
-  H5PEditor.metadataAuthorWidget(getPartialSemantics('authorWidget').fields, self.metadata, group, this.parent);
+  this.$addAuthorButton = H5PEditor.metadataAuthorWidget(getPartialSemantics('authorWidget').fields, self.metadata, group, this.parent);
 
   // Append the additional license field
   var widget = H5PEditor.$('<div class="h5p-metadata-license-extras"></div>');
@@ -107,6 +108,11 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, $syncFie
   $widget.appendTo(group.$group.find('.content.copyright-form'));
 
   $wrapper.find('.h5p-save').click(function () {
+    // Automatically store author if a license is set
+    if (that.licenseField.value !== 'U') {
+      that.$addAuthorButton.click();
+    }
+
     $wrapper.toggleClass('h5p-open');
     $container.closest('.tree').find('.overlay').toggle();
   });
