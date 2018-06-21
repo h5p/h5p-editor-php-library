@@ -159,5 +159,8 @@ H5PEditor.language.core = {
   contentTypeCacheOutdated: 'Die Liste der Inhaltstypen ist veraltet',
   contentTypeCacheOutdatedDesc: 'Es kann nicht nach Aktualisierungen f\u00fcr Inhaltypen gesucht werden, da Verbindungsprobleme zu H5P.org bestehen. Es ist m\u00f6glich, dass keine neuen Inhaltstypen installiert oder bestehende aktualisiert werden k\u00f6nnen.',
   tryAgain: 'Bitte versuche es erneut',
-  getHelp: 'Hilfe'
+  getHelp: 'Hilfe',
+  errorHeader: 'An error occured',
+  errorCalculatingMaxScore: 'Could not calculate the max score for this content. The max score is assumed to be 0. Contact your administrator if this isn’t correct.',
+  maxScoreSemanticsMissing: 'Could not find the expected semantics in the content.
 };
