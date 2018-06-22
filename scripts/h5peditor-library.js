@@ -91,7 +91,13 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   this.$myField = ns.$(html).appendTo($wrapper);
   this.$select = this.$myField.children('select');
   this.$libraryWrapper = this.$myField.children('.libwrap');
-  ns.LibraryListCache.getLibraries(that.field.options, that.librariesLoaded, that);
+
+  // Libraries may be listed as array of strings or as array of objects for adding information
+  const libraryOptions = (typeof that.field.options[0] === 'string') ? that.field.options : that.field.options.map(function (libraryItem) {
+    return libraryItem.name;
+  });
+
+  ns.LibraryListCache.getLibraries(libraryOptions, that.librariesLoaded, that);
 };
 
 /**
@@ -208,6 +214,20 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
  */
 ns.Library.prototype.addMetadataForm = function (semantics) {
   var that = this;
+
+  // Don't add button if told so by semantics
+  if (typeof this.field.options[0] === 'object') {
+    const itemPosition = this.field.options
+      .map(function (item) {
+        return item.name;
+      })
+      .indexOf(this.currentLibrary);
+
+    // By default, the metadata button should be displayed
+    if (this.field.options[itemPosition].hasmetadata === false) {
+      return;
+    }
+  }
 
   if (that.$metadataWrapper === undefined) {
     that.$metadataWrapper = H5PEditor.$('<div class="push-top"></div>');
@@ -331,9 +351,13 @@ ns.Library.prototype.removeChildren = function () {
     return;
   }
 
-  // Remove old metadata form
-  this.$metadataWrapper.remove();
-  delete this.$metadataWrapper;
+  // Remove old metadata form and button
+  if (this.$metadataWrapper) {
+    this.$metadataWrapper.remove();
+    delete this.$metadataWrapper;
+    this.$metadataButton.remove();
+    delete this.$metadataButton;
+  }
 
   var ancestor = ns.findAncestor(this.parent);
 
