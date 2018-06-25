@@ -1206,6 +1206,8 @@ a {
   .h5p-errors p {
     color: #da0001;
     font-size: 1em;
+    white-space: normal;
+    text-overflow: unset;
   }
 
   &:after {
@@ -1273,9 +1275,6 @@ a {
     margin-right: 1%;
     margin-left: 1%;
 
-    .h5peditor-label {
-      visibility: hidden;
-    }
     .h5peditor-text {
       width: 100%;
     }
