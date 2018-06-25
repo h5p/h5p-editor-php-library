@@ -18,6 +18,11 @@ var llc = H5PEditor.LibraryListCache = {
  * @param {Function} thisArg - Context for the callback function
  */
 llc.getLibraries = function(libraries, handler, thisArg) {
+  // Determine whether we're dealing with simple library strings or objects
+  libraries = libraries.map(function (option) {
+    return (typeof option === 'object') ? option.name : option;
+  });
+
   var cachedLibraries = [];
   var status = 'hasAll';
   for (var i = 0; i < libraries.length; i++) {

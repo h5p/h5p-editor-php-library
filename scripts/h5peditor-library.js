@@ -91,13 +91,7 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   this.$myField = ns.$(html).appendTo($wrapper);
   this.$select = this.$myField.children('select');
   this.$libraryWrapper = this.$myField.children('.libwrap');
-
-  // Libraries may be listed as array of strings or as array of objects for adding information
-  const libraryOptions = (typeof that.field.options[0] === 'string') ? that.field.options : that.field.options.map(function (libraryItem) {
-    return libraryItem.name;
-  });
-
-  ns.LibraryListCache.getLibraries(libraryOptions, that.librariesLoaded, that);
+  ns.LibraryListCache.getLibraries(that.field.options, that.librariesLoaded, that);
 };
 
 /**
