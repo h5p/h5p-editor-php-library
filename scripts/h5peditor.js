@@ -779,6 +779,20 @@ ns.bindImportantDescriptionEvents = function (widget, fieldName, parent) {
 };
 
 /**
+ * Generate markup for the copy and paste buttons.
+ *
+ * @returns {string} HTML
+ */
+ns.createCopyPasteButtons = function () {
+  return '<div class="h5peditor-copypaste-wrap">' +
+           '<button class="h5peditor-copy-button" disabled>' + ns.t('core', 'copyButton') + '</button>' +
+           '<button class="h5peditor-paste-button"' +
+             (localStorage.getItem('h5pClipboard') ? '' : ' disabled') + '>' + ns.t('core', 'pasteButton') + 
+           '</button>' +
+         '</div>';
+};
+
+/**
  * Check if any errors has been set.
  *
  * @param {jQuery} $errors

@@ -1089,3 +1089,28 @@ a {
   display: block;
   clear: right;
 }
+
+.h5peditor-copypaste-wrap {
+  float: right;
+}
+
+.h5peditor-copy-button,
+.h5peditor-paste-button {
+  border: 1px solid #cdcdcd;
+  background: #f5f5f5;
+  padding: 0.5em 0.75em;
+  margin-left: 0.25em;
+  border-radius: 0.25em;
+
+  &:before {
+    font-family: $icon-font-family;
+    content: "\e909";
+    color: #f26f6f;
+  }
+  &:disabled {
+    opacity: 0.5;
+  }
+  &:active {
+    background: pink;
+  }
+}

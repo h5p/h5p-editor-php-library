@@ -55,6 +55,10 @@ ns.Library = function (parent, field, params, setValue) {
   this.confirmChangeLibrary.on('canceled', function () {
     self.$select.val(self.currentLibrary);
   });
+
+  H5P.externalDispatcher.on('datainclipboard', function (event) {
+    self.$pasteButton.prop('disabled', event.data.reset);
+  });
 };
 
 ns.Library.prototype = Object.create(H5P.EventDispatcher.prototype);
@@ -75,6 +79,9 @@ ns.Library.prototype.appendTo = function ($wrapper) {
 
   html += ns.createDescription(this.field.description);
   html = '<div class="field ' + this.field.type + '">' + html + '<select>' + ns.createOption('-', 'Loading...') + '</select>';
+  if (window.localStorage) {
+    html += ns.createCopyPasteButtons();
+  }
 
   // TODO: Remove errors, it is deprecated
   html += '<div class="errors h5p-errors"></div><div class="libwrap"></div></div>';
@@ -82,6 +89,42 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   this.$myField = ns.$(html).appendTo($wrapper);
   this.$select = this.$myField.children('select');
   this.$libraryWrapper = this.$myField.children('.libwrap');
+  if (window.localStorage) {
+    this.$copyButton = this.$myField.find('.h5peditor-copy-button').click(function () {
+      H5P.clipboardify(that.params);
+    });
+    this.$pasteButton = this.$myField.find('.h5peditor-paste-button').click(function () {
+      var clipboard = H5P.getClipboard();
+
+      // Check if content type is supported here
+      var supported = false;
+      if (clipboard.generic) {
+        for (var i = 0; i < that.libraries.length; i++) {
+          if (that.libraries[i].uberName === clipboard.generic.library) {
+            supported = true;
+          }
+        }
+      }
+
+      if (!clipboard.generic) {
+        console.error('Content Type not supported');
+        return;
+      }
+
+      // Update UI
+      that.$select.val(clipboard.generic.library)
+
+      // Update params
+      for (var prop in clipboard.generic) {
+        if (clipboard.generic.hasOwnProperty(prop)) {
+          that.params[prop] = clipboard.generic[prop];
+        }
+      }
+
+      // Load form
+      that.loadLibrary(clipboard.generic.library, true);
+    });
+  }
   ns.LibraryListCache.getLibraries(that.field.options, that.librariesLoaded, that);
 };
 
@@ -155,6 +198,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     delete this.params.params;
     delete this.params.subContentId;
     this.$libraryWrapper.attr('class', 'libwrap');
+    this.$copyButton.prop('disabled', true);
     return;
   }
 
@@ -173,6 +217,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     }
 
     ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper.html(''), that);
+    that.$copyButton.prop('disabled', false);
 
     if (that.libraries !== undefined) {
       that.change();
