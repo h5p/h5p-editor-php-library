@@ -67,7 +67,21 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, $syncFie
   // Listen for changes to license
   this.licenseField.changes.push(function (value) {
     // Find versions for selected value
-    var option = find(that.licenseField.field.options, 'value', value);
+    function getNestedOptions(options) {
+      var flattenedOptions = [];
+      options.forEach(function(option) {
+        if (option.type === 'optgroup') {
+          flattenedOptions = flattenedOptions.concat(getNestedOptions(option.options));
+        }
+        else {
+          flattenedOptions.push(option);
+        }
+      });
+      return flattenedOptions;
+    }
+
+    var nestedOptions = getNestedOptions(that.licenseField.field.options);
+    var option = find(nestedOptions, 'value', value);
     var versions = (option) ? option.versions : undefined;
 
     versionField.$select.prop('disabled', versions === undefined);
