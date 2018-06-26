@@ -57,7 +57,16 @@ ns.Library = function (parent, field, params, setValue) {
   });
 
   H5P.externalDispatcher.on('datainclipboard', function (event) {
-    self.$pasteButton.prop('disabled', event.data.reset);
+    if (!self.libraries) {
+      return; // Libraries not loaded yet.
+    }
+
+    var canPaste = !event.data.reset;
+    if (canPaste) {
+      // Check if content type is supported here
+      canPaste = self.canHas(H5P.getClipboard());
+    }
+    self.$pasteButton.prop('disabled', !canPaste);
   });
 };
 
@@ -97,18 +106,9 @@ ns.Library.prototype.appendTo = function ($wrapper) {
       var clipboard = H5P.getClipboard();
 
       // Check if content type is supported here
-      var supported = false;
-      if (clipboard.generic) {
-        for (var i = 0; i < that.libraries.length; i++) {
-          if (that.libraries[i].uberName === clipboard.generic.library) {
-            supported = true;
-          }
-        }
-      }
-
-      if (!clipboard.generic) {
-        console.error('Content Type not supported');
-        return;
+      if (!that.canHas(clipboard)) {
+        console.error('Tried to paste unsupported content into library selector');
+        return false;
       }
 
       // Update UI
@@ -129,14 +129,33 @@ ns.Library.prototype.appendTo = function ($wrapper) {
 };
 
 /**
+ * Check if the clipboard can be pasted into this selector.
+ *
+ * @param {Object} [clipboard]
+ * @return {boolean}
+ */
+ns.Library.prototype.canHas = function (clipboard) {
+  if (clipboard && clipboard.generic) {
+    for (var i = 0; i < this.libraries.length; i++) {
+      if (this.libraries[i].uberName === clipboard.generic.library) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+/**
  * Handler for when the library list has been loaded
  *
  * @alias H5PEditor.Library#librariesLoaded
  * @param {Array} libList
  */
 ns.Library.prototype.librariesLoaded = function (libList) {
-  this.libraries = libList;
   var self = this;
+  this.libraries = libList;
+
   var options = ns.createOption('-', '-');
   for (var i = 0; i < self.libraries.length; i++) {
     var library = self.libraries[i];
@@ -166,8 +185,12 @@ ns.Library.prototype.librariesLoaded = function (libList) {
 
   if (self.libraries.length === 1) {
     self.$select.hide();
-    self.$myField.children('.h5peditor-label').hide();
+    self.$myField.children('.h5peditor-label').add(self.$copyButton).add(self.$pasteButton).hide();
     self.loadLibrary(self.$select.children(':last').val(), true);
+  }
+  else if (self.canHas(H5P.getClipboard())) {
+    // Toggle paste button when libraries are loaded
+    self.$pasteButton.prop('disabled', false);
   }
 
   if (self.runChangeCallback === true) {
