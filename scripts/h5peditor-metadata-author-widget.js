@@ -45,18 +45,31 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, group, parent) {
     var authorNameInput = (widget.find('.field-name-name')).find('input');
     var authorRoleInput = (widget.find('.field-name-role')).find('select');
 
+    var authorName = authorNameInput.val().trim();
+    var authorRole = authorRoleInput.val();
+
     // TODO serverside validation?
-    if (authorNameInput.val().trim() == '') {
+    if (authorName === '') {
+      return;
+    }
+
+    // Don't add author if already in list with the same role
+    const authorDuplicate = params.authors.some(function (author) {
+      return author.name === authorName && author.role === authorRole;
+    });
+    if (authorDuplicate) {
+      authorNameInput.val('');
+      authorRoleInput.val(1);
       return;
     }
 
     params.authors.push({
-      name: authorNameInput.val(),
-      role: authorRoleInput.val()
+      name: authorName,
+      role: authorRole
     });
 
     renderAuthorList();
-    authorNameInput.val(' ');
+    authorNameInput.val('');
     authorRoleInput.val(1);
   }
 
