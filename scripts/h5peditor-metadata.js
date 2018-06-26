@@ -104,6 +104,18 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, $syncFie
   // Trigger update straight away
   this.licenseField.changes[this.licenseField.changes.length - 1](self.metadata.license);
 
+  // Make sure the source field is empty or starts with a protocol
+  const sourceField = find(group.children, 'field.name', 'source');
+  sourceField.$item.on('change', function() {
+    const sourceInput = H5PEditor.$(this).find('input.h5peditor-text');
+    if (sourceInput.val().trim() !== '' &&
+      sourceInput.val().indexOf('https://') !== 0 &&
+      sourceInput.val().indexOf('http://') !== 0
+    ) {
+      sourceInput.val('https://' + sourceInput.val()).trigger('change');
+    }
+  });
+
   // Create and append the rest of the widgets and fields
   // Append the metadata author list widget
   this.$addAuthorButton = H5PEditor.metadataAuthorWidget(getPartialSemantics('authorWidget').fields, self.metadata, group, this.parent);
