@@ -64,7 +64,7 @@ ns.Library = function (parent, field, params, setValue) {
     var canPaste = !event.data.reset;
     if (canPaste) {
       // Check if content type is supported here
-      canPaste = self.canHas(H5P.getClipboard());
+      canPaste = self.canPaste(H5P.getClipboard());
     }
     self.$pasteButton.prop('disabled', !canPaste);
   });
@@ -103,26 +103,7 @@ ns.Library.prototype.appendTo = function ($wrapper) {
       H5P.clipboardify(that.params);
     });
     this.$pasteButton = this.$myField.find('.h5peditor-paste-button').click(function () {
-      var clipboard = H5P.getClipboard();
-
-      // Check if content type is supported here
-      if (!that.canHas(clipboard)) {
-        console.error('Tried to paste unsupported content into library selector');
-        return false;
-      }
-
-      // Update UI
-      that.$select.val(clipboard.generic.library)
-
-      // Update params
-      for (var prop in clipboard.generic) {
-        if (clipboard.generic.hasOwnProperty(prop)) {
-          that.params[prop] = clipboard.generic[prop];
-        }
-      }
-
-      // Load form
-      that.loadLibrary(clipboard.generic.library, true);
+      that.replaceContent(H5P.getClipboard());
     });
   }
   ns.LibraryListCache.getLibraries(that.field.options, that.librariesLoaded, that);
@@ -134,7 +115,7 @@ ns.Library.prototype.appendTo = function ($wrapper) {
  * @param {Object} [clipboard]
  * @return {boolean}
  */
-ns.Library.prototype.canHas = function (clipboard) {
+ns.Library.prototype.canPaste = function (clipboard) {
   if (clipboard && clipboard.generic) {
     for (var i = 0; i < this.libraries.length; i++) {
       if (this.libraries[i].uberName === clipboard.generic.library) {
@@ -144,6 +125,65 @@ ns.Library.prototype.canHas = function (clipboard) {
   }
 
   return false;
+}
+
+/**
+ * Replace library content using given clipboard
+ *
+ * @param {Object} [clipboard]
+ */
+ns.Library.prototype.replaceContent = function (clipboard) {
+  var self = this;
+
+  // Check if content type is supported here
+  if (!self.canPaste(clipboard)) {
+    console.error('Tried to paste unsupported content into library selector');
+    return;
+  }
+
+  // Load library on confirmation
+  self.confirmReplace(function () {
+    // Update UI
+    self.$select.val(clipboard.generic.library)
+
+    // Delete old params (to keep object ref)
+    for (var prop in self.params) {
+      if (self.params.hasOwnProperty(prop)) {
+        delete self.params[prop];
+      }
+    }
+
+    // Update params
+    for (var prop in clipboard.generic) {
+      if (clipboard.generic.hasOwnProperty(prop)) {
+        self.params[prop] = clipboard.generic[prop];
+      }
+    }
+
+    // Load form
+    self.loadLibrary(clipboard.generic.library, true);
+  });
+}
+
+/**
+ * Confirm replace if there is content selected
+ *
+ * @param {function} next
+ */
+ns.Library.prototype.confirmReplace = function (next) {
+  if (this.params.library) {
+    // Confirm changing library
+    var confirmReplace = new H5P.ConfirmationDialog({
+      headerText: H5PEditor.t('core', 'changeLibrary'),
+      dialogText: H5PEditor.t('core', 'confirmChangeLibrary')
+    }).appendTo(document.body);
+    confirmReplace.on('confirmed', next);
+    confirmReplace.show(this.$select.offset().top);
+  }
+  else {
+    // No need to confirm
+    next();
+  }
 }
 
 /**
@@ -188,7 +228,7 @@ ns.Library.prototype.librariesLoaded = function (libList) {
     self.$myField.children('.h5peditor-label').add(self.$copyButton).add(self.$pasteButton).hide();
     self.loadLibrary(self.$select.children(':last').val(), true);
   }
-  else if (self.canHas(H5P.getClipboard())) {
+  else if (self.canPaste(H5P.getClipboard())) {
     // Toggle paste button when libraries are loaded
     self.$pasteButton.prop('disabled', false);
   }
