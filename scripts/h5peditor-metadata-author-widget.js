@@ -12,12 +12,14 @@ var ns = H5PEditor;
  * @returns {ns.Coordinates}
  */
 H5PEditor.metadataAuthorWidget = function (semantics, params, group, parent) {
-
   if (!params.authors) {
     params.authors = [];
   }
 
-  var widget = H5PEditor.$('<div class="h5p-metadata-author-widget"></div>');
+  // Store authors that have just been removed
+  const removedAuthors = [];
+
+  const widget = H5PEditor.$('<div class="h5p-metadata-author-widget"></div>');
 
   var $authorData = H5PEditor.$('<div class="h5p-author-data"></div>');
   widget.append($authorData);
@@ -29,10 +31,10 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, group, parent) {
       H5PEditor.t('core', 'addAuthor') +
     '</a>' +
   '</div>')
-  .click(function () {
-    addAuthor();
+  .data('widget', widget)
+  .click(function (event) {
+    addAuthor(event.originalEvent !== undefined);
   });
-
   $authorData.append($button);
 
   var authorListWrapper = H5PEditor.$('<div class="h5p-author-list-wrapper"><ul class="h5p-author-list"></ul></div>');
@@ -41,7 +43,12 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, group, parent) {
 
   widget.appendTo(group.$group.find('.content'));
 
-  function addAuthor() {
+  /**
+   * Add author to the list of authors.
+   *
+   * @param {boolean} deliberatelyAdded - If true, user clicked to add an author.
+   */
+  function addAuthor(deliberatelyAdded) {
     var authorNameInput = (widget.find('.field-name-name')).find('input');
     var authorRoleInput = (widget.find('.field-name-role')).find('select');
 
@@ -63,6 +70,14 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, group, parent) {
       return;
     }
 
+    // Don't add author automatically if she/he was just removed from list
+    const justRemoved = removedAuthors.some(function (author) {
+      return author.name === authorName && author.role === authorRole;
+    });
+    if (justRemoved && !deliberatelyAdded) {
+      return;
+    }
+
     params.authors.push({
       name: authorName,
       role: authorRole
@@ -73,9 +88,20 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, group, parent) {
     authorRoleInput.val(1);
   }
 
+  /**
+   * Remove author from list.
+   *
+   * @param {object} author - Author to be removed.
+   * @param {string} author.name - Author name.
+   * @param {string} author.role - Author role.
+   */
   function removeAuthor(author) {
     params.authors = params.authors.filter(function(e) {
-      return e !== author;
+      const remove = (e === author);
+      if (remove) {
+        removedAuthors.push(author);
+      }
+      return !remove;
     });
 
     renderAuthorList();
