@@ -279,14 +279,17 @@ ns.LibrarySelector.prototype.getParams = function () {
   return this.form.params; // TODO: Switch to the line above when we are able to tell the user where the validation fails
 };
 
-<<<<<<< HEAD
+/**
+ * TODO: Please document your functions
+ */
 ns.LibrarySelector.prototype.getMetadata = function () {
   if (this.form === undefined) {
     return;
   }
 
   return this.form.metadata;
-=======
+};
+
 /**
  *
  * @param content
@@ -295,5 +298,4 @@ ns.LibrarySelector.prototype.getMetadata = function () {
  */
 ns.LibrarySelector.prototype.presave = function (content, library) {
   return (new ns.Presave).process(library, content);
->>>>>>> copy-paste
 };
