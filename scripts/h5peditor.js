@@ -937,7 +937,7 @@ ns.createButton = function (id, title, handler, displayTitle) {
  * @param {string} [options.listenerName] - Listener name.
  */
  ns.sync = function ($masterField, $slaveField, options) {
-  if (!$masterField || !$slaveField) {
+  if (!$masterField || $masterField.length === 0 || !$slaveField || $slaveField.length === 0) {
     return;
   }
   options = options || {};
