@@ -35,6 +35,11 @@ a {
   cursor: pointer;
 }
 
+.h5p-metadata-button-wrapper.inline-with-selector {
+  display: inline-flex;
+  margin-left: 17px;
+}
+
 .toggle-metadata {
   margin-left: -11px;
   height: 14.5px;

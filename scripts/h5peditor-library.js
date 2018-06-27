@@ -250,12 +250,21 @@ ns.Library.prototype.addMetadataForm = function (semantics) {
         '<div class="toggle-metadata">' + ns.t('core', 'metadata') + '</div>' +
       '</div>');
 
-    // Put the metadataButton after the first visible label
-    let label = that.$libraryWrapper.closest('.content').find('.h5p-editor-flex-wrapper').first();
-    if (label.css('display') === 'none') {
-      label = that.$libraryWrapper.find('.h5p-editor-flex-wrapper').first();
+    // Put the metadataButton after the first visible label if it has a label
+    var $labelWrapper = that.$libraryWrapper.siblings('.h5p-editor-flex-wrapper').children('.h5peditor-label-wrapper');
+    if ($labelWrapper.length && !$labelWrapper.is(':empty')) {
+      var label = that.$libraryWrapper.closest('.content').find('.h5p-editor-flex-wrapper').first();
+      if (label.css('display') === 'none') {
+        label = that.$libraryWrapper.find('.h5p-editor-flex-wrapper').first();
+      }
+      label.append(that.$metadataButton);
     }
-    label.append(that.$metadataButton);
+    else {
+      var $librarySelector = that.$libraryWrapper.siblings('select');
+      that.$metadataButton.addClass('inline-with-selector');
+      $librarySelector.after(that.$metadataButton);
+    }
+
 
     // Add click listener
     that.$metadataButton.click(function () {
