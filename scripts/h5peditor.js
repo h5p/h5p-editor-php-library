@@ -161,12 +161,14 @@ ns.loadLibrary = function (libraryName, callback) {
           libraryData.semantics = semantics;
           ns.libraryCache[libraryName] = libraryData;
 
-          ns.libraryRequested(libraryName, callback);
+          ns.libraryRequested(libraryName, function (semen) {
+            callback(semen);
 
-          // Run queue.
-          for (var i = 0; i < ns.loadedCallbacks[libraryName].length; i++) {
-            ns.loadedCallbacks[libraryName][i](libraryData.semantics);
-          }
+            // Run queue.
+            for (var i = 0; i < ns.loadedCallbacks[libraryName].length; i++) {
+              ns.loadedCallbacks[libraryName][i](semen);
+            }
+          });
         },
         error: function(jqXHR, textStatus, errorThrown) {
           if (window['console'] !== undefined) {
@@ -776,6 +778,41 @@ ns.bindImportantDescriptionEvents = function (widget, fieldName, parent) {
       }
     });
 };
+
+/**
+ * Generate markup for the copy and paste buttons.
+ *
+ * @returns {string} HTML
+ */
+ns.createCopyPasteButtons = function () {
+  return '<label class="h5peditor-copypaste-wrap">' +
+           '<button class="h5peditor-copy-button" disabled>' + ns.t('core', 'copyButton') + '</button>' +
+           '<button class="h5peditor-paste-button" disabled>' + ns.t('core', 'pasteButton') + '</button>' +
+         '</label>';
+};
+
+/**
+ * Confirm replace if there is content selected
+ *
+ * @param {string} library Current selected library
+ * @param {number} top Offset
+ * @param {function} next Next callback
+ */
+ns.confirmReplace = function (library, top, next) {
+  if (library) {
+    // Confirm changing library
+    var confirmReplace = new H5P.ConfirmationDialog({
+      headerText: H5PEditor.t('core', 'changeLibrary'),
+      dialogText: H5PEditor.t('core', 'confirmChangeLibrary')
+    }).appendTo(document.body);
+    confirmReplace.on('confirmed', next);
+    confirmReplace.show(top);
+  }
+  else {
+    // No need to confirm
+    next();
+  }
+}
 
 /**
  * Check if any errors has been set.

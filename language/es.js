@@ -173,5 +173,8 @@ H5PEditor.language.core = {
   logThisChange: 'Log this change',
   newChangeHasBeenLogged: 'New change has been logged',
   loggedChanges: 'Logged changes',
-  noChangesHaveBeenLogged: 'No changes have been logged'
+  noChangesHaveBeenLogged: 'No changes have been logged',
+  errorHeader: 'An error occured',
+  errorCalculatingMaxScore: 'Could not calculate the max score for this content. The max score is assumed to be 0. Contact your administrator if this isn’t correct.',
+  maxScoreSemanticsMissing: 'Could not find the expected semantics in the content.'
 };

@@ -172,5 +172,8 @@ H5PEditor.language.core = {
   logThisChange: 'Log this change',
   newChangeHasBeenLogged: 'New change has been logged',
   loggedChanges: 'Logged changes',
-  noChangesHaveBeenLogged: 'No changes have been logged'
+  noChangesHaveBeenLogged: 'No changes have been logged',
+  errorHeader: 'En feil har oppstått',
+  errorCalculatingMaxScore: 'Kunne ikke kalkulerer maks poengsum for denne innholdstypen. Maks poengsum er antatt til å være 0. Kontakt administrator dersom dette ikke er korrekt.',
+  maxScoreSemanticsMissing: 'Kunne ikke finne den forventede semantikken i den valgte innholdstypen.'
 };

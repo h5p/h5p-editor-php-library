@@ -26,12 +26,15 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
   var state = {
     contentId: H5PEditor.contentId || 0,
     contentTypes: libraries,
-    getAjaxUrl: H5PEditor.getAjaxUrl
+    getAjaxUrl: H5PEditor.getAjaxUrl,
+    expanded: true,
+    canPaste: false
   };
 
   if (selectedLibrary) {
     var contentType = this.getContentType(selectedLibrary.split(' ')[0]);
     state.title = contentType ? contentType.title || contentType.machineName : selectedLibrary.split(' ')[0];
+    state.expanded = false;
   }
 
   // Initialize hub client
@@ -104,6 +107,10 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
   this.client.on('resize', function () {
     self.trigger('resize');
   });
+
+  this.client.on('paste', function () {
+    self.trigger('paste');
+  });
 };
 
 // Extends the event dispatcher
@@ -116,12 +123,21 @@ ns.SelectorHub.prototype.constructor = ns.SelectorHub;
  * @param {string} library Full library name
  * @param {Object} params Library parameters
  */
-ns.SelectorHub.prototype.resetSelection = function (library, params) {
+ns.SelectorHub.prototype.resetSelection = function (library, params, expanded) {
   this.currentLibrary = library;
   this.currentParams = params;
 
   var contentType = this.getContentType(library.split(' ')[0]);
-  this.client.setPanelTitle(contentType.title || contentType.machineName);
+  this.client.setPanelTitle(contentType.title || contentType.machineName, expanded);
+};
+
+/**
+ * Reset current library to the provided library.
+ *
+ * @param {boolean} canPaste
+ */
+ns.SelectorHub.prototype.setCanPaste = function (canPaste) {
+  this.client.setCanPaste(canPaste);
 };
 
 /**

@@ -60,6 +60,19 @@ ns.Library = function (parent, field, params, setValue) {
   this.confirmChangeLibrary.on('canceled', function () {
     self.$select.val(self.currentLibrary);
   });
+
+  H5P.externalDispatcher.on('datainclipboard', function (event) {
+    if (!self.libraries) {
+      return; // Libraries not loaded yet.
+    }
+
+    var canPaste = !event.data.reset;
+    if (canPaste) {
+      // Check if content type is supported here
+      canPaste = self.canPaste(H5P.getClipboard());
+    }
+    self.$pasteButton.prop('disabled', !canPaste);
+  });
 };
 
 ns.Library.prototype = Object.create(H5P.EventDispatcher.prototype);
@@ -83,6 +96,9 @@ ns.Library.prototype.appendTo = function ($wrapper) {
 
   html += ns.createDescription(this.field.description);
   html = '<div class="field ' + this.field.type + '">' + html + '<select>' + ns.createOption('-', 'Loading...') + '</select>';
+  if (window.localStorage) {
+    html += ns.createCopyPasteButtons();
+  }
 
   // TODO: Remove errors, it is deprecated
   html += '<div class="errors h5p-errors"></div><div class="libwrap"> ' +
@@ -91,8 +107,94 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   this.$myField = ns.$(html).appendTo($wrapper);
   this.$select = this.$myField.children('select');
   this.$libraryWrapper = this.$myField.children('.libwrap');
+  if (window.localStorage) {
+    this.$copyButton = this.$myField.find('.h5peditor-copy-button').click(function () {
+      that.validate(); // Make sure all values are up-to-date
+      H5P.clipboardify(that.params);
+    });
+    this.$pasteButton = this.$myField.find('.h5peditor-paste-button').click(function () {
+      that.replaceContent(H5P.getClipboard());
+    });
+  }
   ns.LibraryListCache.getLibraries(that.field.options, that.librariesLoaded, that);
 };
+
+/**
+ * Check if the clipboard can be pasted into this selector.
+ *
+ * @param {Object} [clipboard]
+ * @return {boolean}
+ */
+ns.Library.prototype.canPaste = function (clipboard) {
+  if (clipboard && clipboard.generic) {
+    for (var i = 0; i < this.libraries.length; i++) {
+      if (this.libraries[i].uberName === clipboard.generic.library) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+/**
+ * Replace library content using given clipboard
+ *
+ * @param {Object} [clipboard]
+ */
+ns.Library.prototype.replaceContent = function (clipboard) {
+  var self = this;
+
+  // Check if content type is supported here
+  if (!self.canPaste(clipboard)) {
+    console.error('Tried to paste unsupported sub-content');
+    return;
+  }
+
+  // Load library on confirmation
+  ns.confirmReplace(this.params.library, this.$select.offset().top, function () {
+    // Update UI
+    self.$select.val(clipboard.generic.library)
+
+    // Delete old params (to keep object ref)
+    for (var prop in self.params) {
+      if (self.params.hasOwnProperty(prop)) {
+        delete self.params[prop];
+      }
+    }
+
+    // Update params
+    for (var prop in clipboard.generic) {
+      if (clipboard.generic.hasOwnProperty(prop)) {
+        self.params[prop] = clipboard.generic[prop];
+      }
+    }
+
+    // Load form
+    self.loadLibrary(clipboard.generic.library, true);
+  });
+}
+
+/**
+ * Confirm replace if there is content selected
+ *
+ * @param {function} next
+ */
+ns.Library.prototype.confirmReplace = function (next) {
+  if (this.params.library) {
+    // Confirm changing library
+    var confirmReplace = new H5P.ConfirmationDialog({
+      headerText: H5PEditor.t('core', 'changeLibrary'),
+      dialogText: H5PEditor.t('core', 'confirmChangeLibrary')
+    }).appendTo(document.body);
+    confirmReplace.on('confirmed', next);
+    confirmReplace.show(this.$select.offset().top);
+  }
+  else {
+    // No need to confirm
+    next();
+  }
+}
 
 /**
  * Handler for when the library list has been loaded
@@ -101,8 +203,9 @@ ns.Library.prototype.appendTo = function ($wrapper) {
  * @param {Array} libList
  */
 ns.Library.prototype.librariesLoaded = function (libList) {
-  this.libraries = libList;
   var self = this;
+  this.libraries = libList;
+
   var options = ns.createOption('-', '-');
   for (var i = 0; i < self.libraries.length; i++) {
     var library = self.libraries[i];
@@ -132,8 +235,12 @@ ns.Library.prototype.librariesLoaded = function (libList) {
 
   if (self.libraries.length === 1) {
     self.$select.hide();
-    self.$myField.children('.h5p-editor-flex-wrapper').hide();
+    self.$myField.children('.h5p-editor-flex-wrapper').add(self.$copyButton).add(self.$pasteButton).hide();
     self.loadLibrary(self.$select.children(':last').val(), true);
+  }
+  else if (window.localStorage && self.canPaste(H5P.getClipboard())) {
+    // Toggle paste button when libraries are loaded
+    self.$pasteButton.prop('disabled', false);
   }
 
   if (self.runChangeCallback === true) {
@@ -166,6 +273,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     delete this.params.metadata;
 
     this.$libraryWrapper.attr('class', 'libwrap');
+    this.$copyButton.prop('disabled', true);
     return;
   }
 
@@ -189,6 +297,9 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     }
 
     ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper.html(''), that);
+    if (window.localStorage) {
+      that.$copyButton.prop('disabled', false);
+    }
 
     if (that.libraries !== undefined) {
       that.change();

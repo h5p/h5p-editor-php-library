@@ -1158,6 +1158,7 @@ a {
   display: block;
   clear: right;
 }
+
 #metadata-title-main-label {
   margin-top: 0;
 }
@@ -1601,4 +1602,38 @@ a {
     border: solid 1px #ced6e3;
     border-radius: 0.208em;
   }
+}
+
+.h5peditor-copypaste-wrap {
+  float: right;
+}
+
+.h5peditor-copy-button,
+.h5peditor-paste-button {
+  border: 1px solid #cdcdcd;
+  background: #f5f5f5;
+  padding: 0.5em 0.75em;
+  margin-left: 0.25em;
+  border-radius: 0.25em;
+  cursor: pointer;
+
+  &:before {
+    font-family: $icon-font-family;
+    content: "\e909";
+    color: #f26f6f;
+  }
+  &:disabled {
+    opacity: 0.5;
+  }
+  &:active {
+    background: pink;
+  }
+}
+.h5p-hub .h5peditor-paste-button {
+  font-size: 16px;
+  margin-right: 1.3em;
+  margin-top: 0.9em;
+  background: transparent;
+  border: 0;
+  color: #a3a7ac;
 }
