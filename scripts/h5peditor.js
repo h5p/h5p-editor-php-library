@@ -791,6 +791,29 @@ ns.createCopyPasteButtons = function () {
 };
 
 /**
+ * Confirm replace if there is content selected
+ *
+ * @param {string} library Current selected library
+ * @param {number} top Offset
+ * @param {function} next Next callback
+ */
+ns.confirmReplace = function (library, top, next) {
+  if (library) {
+    // Confirm changing library
+    var confirmReplace = new H5P.ConfirmationDialog({
+      headerText: H5PEditor.t('core', 'changeLibrary'),
+      dialogText: H5PEditor.t('core', 'confirmChangeLibrary')
+    }).appendTo(document.body);
+    confirmReplace.on('confirmed', next);
+    confirmReplace.show(top);
+  }
+  else {
+    // No need to confirm
+    next();
+  }
+}
+
+/**
  * Check if any errors has been set.
  *
  * @param {jQuery} $errors

@@ -1101,6 +1101,7 @@ a {
   padding: 0.5em 0.75em;
   margin-left: 0.25em;
   border-radius: 0.25em;
+  cursor: pointer;
 
   &:before {
     font-family: $icon-font-family;
@@ -1113,4 +1114,12 @@ a {
   &:active {
     background: pink;
   }
+}
+.h5p-hub .h5peditor-paste-button {
+  font-size: 16px;
+  margin-right: 1.3em;
+  margin-top: 0.9em;
+  background: transparent;
+  border: 0;
+  color: #a3a7ac;
 }

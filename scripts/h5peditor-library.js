@@ -100,6 +100,7 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   this.$libraryWrapper = this.$myField.children('.libwrap');
   if (window.localStorage) {
     this.$copyButton = this.$myField.find('.h5peditor-copy-button').click(function () {
+      that.validate(); // Make sure all values are up-to-date
       H5P.clipboardify(that.params);
     });
     this.$pasteButton = this.$myField.find('.h5peditor-paste-button').click(function () {
@@ -137,12 +138,12 @@ ns.Library.prototype.replaceContent = function (clipboard) {
 
   // Check if content type is supported here
   if (!self.canPaste(clipboard)) {
-    console.error('Tried to paste unsupported content into library selector');
+    console.error('Tried to paste unsupported sub-content');
     return;
   }
 
   // Load library on confirmation
-  self.confirmReplace(function () {
+  ns.confirmReplace(this.params.library, this.$select.offset().top, function () {
     // Update UI
     self.$select.val(clipboard.generic.library)
 
