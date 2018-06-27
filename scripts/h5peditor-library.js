@@ -229,7 +229,7 @@ ns.Library.prototype.librariesLoaded = function (libList) {
     self.$myField.children('.h5peditor-label').add(self.$copyButton).add(self.$pasteButton).hide();
     self.loadLibrary(self.$select.children(':last').val(), true);
   }
-  else if (self.canPaste(H5P.getClipboard())) {
+  else if (window.localStorage && self.canPaste(H5P.getClipboard())) {
     // Toggle paste button when libraries are loaded
     self.$pasteButton.prop('disabled', false);
   }
@@ -281,7 +281,9 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     }
 
     ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper.html(''), that);
-    that.$copyButton.prop('disabled', false);
+    if (window.localStorage) {
+      that.$copyButton.prop('disabled', false);
+    }
 
     if (that.libraries !== undefined) {
       that.change();

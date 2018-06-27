@@ -236,7 +236,9 @@ ns.LibrarySelector.prototype.loadSemantics = function (library, params) {
       that.form.replace($loading);
       that.form.currentLibrary = library;
       that.form.processSemantics(semantics, overrideParams);
-      that.$copyButton.prop('disabled', false);
+      if (window.localStorage) {
+        that.$copyButton.prop('disabled', false);
+      }
     }
 
     that.$selector.attr('disabled', false);
