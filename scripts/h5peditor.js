@@ -889,6 +889,61 @@ ns.createButton = function (id, title, handler, displayTitle) {
   return ns.$('<div/>', options);
 };
 
+/**
+ * Sync two input fields. Empty fields will take value of the other or be set to ''.
+ * master fields takes precedence if both are set already.
+ *
+ * @param {jQuery} $masterField - Master field that holds the value for initialization.
+ * @param {jQuery} $slaveField - Slave field to be synced with.
+ * @param {object} [options] - Options.
+ * @param {string} [options.defaultText] - Default text if fields are empty.
+ * @param {string} [options.listenerName] - Listener name.
+ */
+ ns.sync = function ($masterField, $slaveField, options) {
+  if (!$masterField || !$slaveField) {
+    return;
+  }
+  options = options || {};
+
+  const listenerName = options.listenerName || 'input.metadata-sync';
+
+  // Remove old sync
+  $masterField.off(listenerName);
+  $slaveField.off(listenerName);
+
+  // Initialize fields
+  if ($masterField.val()) {
+    $slaveField
+      .val($masterField.val())
+      .trigger('change');
+  }
+  else if ($slaveField.val()) {
+    $masterField
+      .val($slaveField.val())
+      .trigger('change');
+  }
+  else if (options.defaultText) {
+    $masterField
+      .val(options.defaultText)
+      .trigger('change');
+    $slaveField
+      .val(options.defaultText)
+      .trigger('change');
+  }
+
+  // Keep fields in sync
+  $masterField.on(listenerName, function() {
+    $slaveField
+      .val($masterField.val())
+      .trigger('change');
+  });
+  $slaveField.on(listenerName, function() {
+    $masterField
+      .val($slaveField.val())
+      .trigger('change');
+  });
+};
+
 // Factory for creating storage instance
 ns.storage = (function () {
   var instance = {

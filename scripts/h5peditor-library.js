@@ -224,7 +224,9 @@ ns.Library.prototype.addMetadataForm = function (semantics) {
   }
 
   if (that.$metadataWrapper === undefined) {
-    that.$metadataWrapper = H5PEditor.$('<div class="push-top"></div>');
+    that.$metadataWrapper = ns.$('<div class="push-top"></div>');
+
+    const $metadataForm = ns.metadataForm(semantics, that.params.metadata, that.$metadataWrapper, that, {populateTitle: true});
 
     /*
      * Some content types may bring their own editor, and the title
@@ -233,12 +235,13 @@ ns.Library.prototype.addMetadataForm = function (semantics) {
      * Alternatively, store the current dialog title field in the custom
      * editor and implement a getter function for it.
      */
-    var $syncField = H5PEditor.$(document).find('input#metadata-title-sub');
-    if ($syncField.lenght === 0) {
-      $syncField = undefined;
-    }
 
-    H5PEditor.metadataForm(semantics, that.params.metadata, that.$metadataWrapper, that, $syncField);
+    // Sync title fields of this editor form and a metadata form. Won't sync if theere's no title field.
+    ns.sync(
+      ns.$(document).find('input#metadata-title-sub').find('#metadata-title-main'),
+      $metadataForm.find('.field-name-title').find('input')
+    );
+
     that.$libraryWrapper.before(that.$metadataWrapper);
   }
 

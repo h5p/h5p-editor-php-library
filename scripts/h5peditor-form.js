@@ -37,7 +37,7 @@ ns.Form = function () {
   // Ensure it has validation functions
   ns.processSemanticsChunk(metaDataTitleSemantics, {}, this.$form.children('.tree'), this)
 
-  // Give it an ID
+  // Give title field an ID
   this.$form.find('.field-name-title').attr('id', 'metadata-title-main-label');
   this.$form.find('.h5peditor-text').attr('id', 'metadata-title-main');
 
@@ -115,7 +115,18 @@ ns.Form.prototype.remove = function () {
  */
 ns.Form.prototype.processSemantics = function (semantics, defaultParams, metadata) {
   this.metadata = (metadata ? metadata : defaultParams.metadata || {});
-  H5PEditor.metadataForm(semantics, this.metadata, this.$form.children('.tree'), this, this.$form.find('input#metadata-title-main'));
+
+  const $metadataForm = ns.metadataForm(semantics, this.metadata, this.$form.children('.tree'), this);
+
+  // Sync title fields of this editor form and a metadata form
+  ns.sync(
+    this.$form.find('#metadata-title-main'),
+    $metadataForm.find('.field-name-title').find('input')
+  );
+
+  // Set the title
+  const title = (this.metadata && this.metadata.title) ? this.metadata.title : '';
+  this.$form.find('input#metadata-title-main').val(title);
 
   // Overriding this.params with {} will lead to old content not being editable for now
   this.params = (defaultParams.params ? defaultParams.params : defaultParams);
