@@ -40,6 +40,7 @@ class H5peditor {
     'scripts/h5peditor-metadata.js',
     'scripts/h5peditor-metadata-author-widget.js',
     'scripts/h5peditor-metadata-changelog-widget.js',
+    'scripts/h5peditor-pre-save.js',
     'ckeditor/ckeditor.js',
   );
   private $h5p, $storage;
@@ -361,6 +362,11 @@ class H5peditor {
 
     // Get list of JS and CSS files that belongs to the dependencies
     $files = $this->h5p->getDependenciesFiles($libraries, $prefix);
+    $libraryName = H5PCore::libraryToString(compact('machineName', 'majorVersion', 'minorVersion'), true);
+    if( $this->hasPresave($libraryName) === true ){
+      $library = $this->h5p->loadLibrary($machineName, $majorVersion, $minorVersion);
+      $this->addPresaveFile($files, $library, $prefix);
+    }
     $this->storage->alterLibraryFiles($files, $libraries);
 
     // Restore asset aggregation setting
@@ -647,5 +653,50 @@ class H5peditor {
         }
       }
     }
+  }
+
+  /**
+   * Determine if a library has a presave.js file in the root folder
+   *
+   * @param string $libraryName
+   * @return bool
+   */
+  public function hasPresave($libraryName){
+    if( isset($this->h5p->h5pD) ){
+      $parsedLibrary = H5PCore::libraryFromString($libraryName);
+      if($parsedLibrary !== false){
+        $machineName = $parsedLibrary['machineName'];
+        $majorVersion = $parsedLibrary['majorVersion'];
+        $minorVersion = $parsedLibrary['minorVersion'];
+        $library = $this->h5p->h5pD->getLibrary($machineName, $majorVersion, $minorVersion);
+        if( !is_null($library)){
+          return $this->h5p->fs->hasPresave($libraryName, $library['path']);
+        }
+      }
+    }
+    return $this->h5p->fs->hasPresave($libraryName);
+  }
+
+  /**
+   * Adds the path to the presave.js file to the list of dependency assets for the library
+   *
+   * @param array $assets
+   * @param array $library
+   * @param string $prefix
+   */
+  public function addPresaveFile(&$assets, $library, $prefix = ''){
+    $path = 'libraries' . DIRECTORY_SEPARATOR . H5PCore::libraryToString($library, true);
+    if( array_key_exists('path', $library)){
+      $path = $library['path'];
+    }
+    $version = "?ver={$library['majorVersion']}.{$library['minorVersion']}.{$library['patchVersion']}";
+    if( array_key_exists('version', $library) ){
+      $version = $library['version'];
+    }
+
+    $assets['scripts'][] = (object) array(
+      'path' => $prefix . DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR . 'presave.js',
+      'version' => $version,
+    );
   }
 }
