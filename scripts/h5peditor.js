@@ -950,34 +950,22 @@ ns.createButton = function (id, title, handler, displayTitle) {
 
   // Initialize fields
   if ($masterField.val()) {
-    $slaveField
-      .val($masterField.val())
-      .trigger('change');
+    $slaveField.val($masterField.val()).trigger('change');
   }
   else if ($slaveField.val()) {
-    $masterField
-      .val($slaveField.val())
-      .trigger('change');
+    $masterField.val($slaveField.val()).trigger('change');
   }
   else if (options.defaultText) {
-    $masterField
-      .val(options.defaultText)
-      .trigger('change');
-    $slaveField
-      .val(options.defaultText)
-      .trigger('change');
+    $masterField.val(options.defaultText).trigger('change');
+    $slaveField.val(options.defaultText).trigger('change');
   }
 
   // Keep fields in sync
   $masterField.on(listenerName, function() {
-    $slaveField
-      .val($masterField.val())
-      .trigger('change');
+    $slaveField.val($masterField.val()).trigger('change');
   });
   $slaveField.on(listenerName, function() {
-    $masterField
-      .val($slaveField.val())
-      .trigger('change');
+    $masterField.val($slaveField.val()).trigger('change');
   });
 };
 

@@ -337,7 +337,7 @@ ns.Library.prototype.addMetadataForm = function (semantics) {
   if (that.$metadataWrapper === undefined) {
     that.$metadataWrapper = ns.$('<div class="push-top"></div>');
 
-    const $metadataForm = ns.metadataForm(semantics, that.params.metadata, that.$metadataWrapper, that, {populateTitle: true});
+    that.$metadataForm = ns.metadataForm(semantics, that.params.metadata, that.$metadataWrapper, that, {populateTitle: true});
 
     /*
      * Some content types may bring their own editor, and the title
@@ -347,10 +347,9 @@ ns.Library.prototype.addMetadataForm = function (semantics) {
      * editor and implement a getter function for it.
      */
 
-    // Sync title fields of this editor form and a metadata form. Won't sync if theere's no title field.
     ns.sync(
-      ns.$(document).find('input#metadata-title-sub').find('#metadata-title-main'),
-      $metadataForm.find('.field-name-title').find('input')
+      ns.$(document).find('input#metadata-title-sub'),
+      that.$metadataForm.find('.field-name-title').find('input')
     );
 
     that.$libraryWrapper.before(that.$metadataWrapper);
@@ -388,6 +387,14 @@ ns.Library.prototype.addMetadataForm = function (semantics) {
       if (H5PIntegration && H5PIntegration.user && H5PIntegration.user.name) {
         that.$metadataWrapper.find('.field-name-authorName').find('input.h5peditor-text').val(H5PIntegration.user.name);
       }
+      /*
+       * Try (again) to sync with a title field. Individual editors may need
+       * this here because the master may not yet exist before.
+       */
+      ns.sync(
+        ns.$(document).find('input#metadata-title-sub'),
+        that.$metadataForm.find('.field-name-title').find('input')
+      );
     });
   }
 };
