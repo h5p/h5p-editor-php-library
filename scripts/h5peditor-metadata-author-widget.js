@@ -125,6 +125,4 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, group, parent) {
 
     wrapper.append(authorList);
   }
-
-  return $button;
 };
