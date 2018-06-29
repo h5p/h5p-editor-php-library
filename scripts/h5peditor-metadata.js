@@ -120,7 +120,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
 
   // Create and append the rest of the widgets and fields
   // Append the metadata author list widget
-  this.$addAuthorButton = H5PEditor.metadataAuthorWidget(getPartialSemantics('authorWidget').fields, self.metadata, group, this.parent);
+  H5PEditor.metadataAuthorWidget(getPartialSemantics('authorWidget').fields, self.metadata, group, this.parent);
 
   // Append the additional license field
   var widget = H5PEditor.$('<div class="h5p-metadata-license-extras"></div>');
@@ -136,9 +136,9 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
   $widget.appendTo(group.$group.find('.content.copyright-form'));
 
   $wrapper.find('.h5p-save').click(function () {
-    // Automatically store author if a license is set
-    if (that.licenseField.value !== 'U') {
-      that.$addAuthorButton.click();
+    // Try to automatically add an author if form is closed and a license selected
+    if ($wrapper.find('.field-name-license select').val() !== 'U') {
+      $wrapper.find('.h5p-metadata-button.h5p-add-author').first().click();
     }
 
     $wrapper.toggleClass('h5p-open');
