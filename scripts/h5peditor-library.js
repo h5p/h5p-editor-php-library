@@ -346,9 +346,8 @@ ns.Library.prototype.addMetadataForm = function (semantics) {
      * Alternatively, store the current dialog title field in the custom
      * editor and implement a getter function for it.
      */
-
     ns.sync(
-      ns.$(document).find('input#metadata-title-sub'),
+      that.$libraryWrapper.parent().siblings('.h5p-metadata-title-wrapper').find('input#metadata-title-sub'),
       that.$metadataForm.find('.field-name-title').find('input')
     );
 
@@ -363,9 +362,17 @@ ns.Library.prototype.addMetadataForm = function (semantics) {
         '<div class="toggle-metadata">' + ns.t('core', 'metadata') + '</div>' +
       '</div>');
 
-    // Put the metadataButton after the first visible label if it has a label
+    // TODO: This needs refactoring. Badly!
+    // There are too many combinations of
+    // - metadata title (yes/no)
+    // - metadata button (yes/no)
+    // - metadata button (here/there/elsewhere)
+    // - compound type (editor this way/editor that way)
+    // that were introduced one after the other leading to too many switches and CSS selectors all over the place
+
+    // Put the metadataButton after the first visible label if it has text
     var $labelWrapper = that.$libraryWrapper.siblings('.h5p-editor-flex-wrapper').children('.h5peditor-label-wrapper');
-    if ($labelWrapper.length && !$labelWrapper.is(':empty')) {
+    if ($labelWrapper.length > 0 && !$labelWrapper.is(':empty')) {
       var label = that.$libraryWrapper.closest('.content').find('.h5p-editor-flex-wrapper').first();
       if (label.css('display') === 'none') {
         label = that.$libraryWrapper.find('.h5p-editor-flex-wrapper').first();
@@ -373,11 +380,23 @@ ns.Library.prototype.addMetadataForm = function (semantics) {
       label.append(that.$metadataButton);
     }
     else {
-      var $librarySelector = that.$libraryWrapper.siblings('select');
-      that.$metadataButton.addClass('inline-with-selector');
-      $librarySelector.after(that.$metadataButton);
+      $labelWrapper = that.$libraryWrapper.find('.h5peditor-label-wrapper').first();
+      // We might be in a compound content type like CP or IV where the layout is different
+      const $compoundLabelWrapper = that.$libraryWrapper.parent().parent().find('.h5p-metadata-title-wrapper').find('.h5p-editor-flex-wrapper').first();
+      if ($compoundLabelWrapper.length > 0) {
+        $compoundLabelWrapper.append(that.$metadataButton);
+      }
+      // First label found, even if it's empty
+      else if ($labelWrapper.length > 0) {
+        $labelWrapper.append(that.$metadataButton);
+      }
+      // Next to the library select field
+      else {
+        var $librarySelector = that.$libraryWrapper.siblings('select');
+        that.$metadataButton.addClass('inline-with-selector');
+        $librarySelector.after(that.$metadataButton);
+      }
     }
-
 
     // Add click listener
     that.$metadataButton.click(function () {
@@ -388,11 +407,11 @@ ns.Library.prototype.addMetadataForm = function (semantics) {
         that.$metadataWrapper.find('.field-name-authorName').find('input.h5peditor-text').val(H5PIntegration.user.name);
       }
       /*
-       * Try (again) to sync with a title field. Individual editors may need
+       * Try (again) to sync with a title field. Custom editors may need
        * this here because the master may not yet exist before.
        */
       ns.sync(
-        ns.$(document).find('input#metadata-title-sub'),
+        that.$libraryWrapper.parent().siblings('.h5p-metadata-title-wrapper').find('input#metadata-title-sub'),
         that.$metadataForm.find('.field-name-title').find('input')
       );
     });

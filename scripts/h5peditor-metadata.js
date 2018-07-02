@@ -114,7 +114,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
       sourceInput.val().indexOf('https://') !== 0 &&
       sourceInput.val().indexOf('http://') !== 0
     ) {
-      sourceInput.val('https://' + sourceInput.val()).trigger('change');
+      sourceInput.val('http://' + sourceInput.val()).trigger('change');
     }
   });
 
@@ -159,6 +159,9 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
 
   // Select title field text on click
   $wrapper.find('.field-name-title').find('.h5peditor-text').on('click', function () {
+    if (this.selectionStart === 0 && this.selectionEnd === this.value.length) {
+      return;
+    }
     this.select();
     this.setSelectionRange(0, this.value.length); // Safari mobile fix
   });
