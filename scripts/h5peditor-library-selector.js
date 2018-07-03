@@ -114,6 +114,7 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   this.on('select', loadLibrary);
 
   H5P.externalDispatcher.on('datainclipboard', function (event) {
+    that.$copyButton.html(ns.t('core', 'copyButton')).removeClass('h5peditor-copied');
     var disable = !event.data.reset;
     if (disable) {
       // Check if content type is supported here
@@ -165,6 +166,7 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
         params: self.getParams(),
         metadata: self.getMetadata()
       });
+      self.$copyButton.html(ns.t('core', 'copiedButton')).addClass('h5peditor-copied');
     });
     this.$pasteButton = $buttons.find('.h5peditor-paste-button').click(function () {
       self.pasteContent();

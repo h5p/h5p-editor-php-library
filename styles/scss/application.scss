@@ -1626,12 +1626,15 @@ a {
     display: inline-block;
     margin-right: 0.125em;
   }
+  &:hover {
+    background: #fafafa;
+  }
+  &:active {
+    background: #efefef;
+  }
   &:disabled {
     opacity: 0.5;
     cursor: auto;
-  }
-  &:active {
-    background: pink;
   }
 }
 .h5p-hub .h5peditor-paste-button {
@@ -1644,4 +1647,7 @@ a {
 }
 .h5peditor-paste-button:before {
   content: "\e90a";
+}
+.h5peditor-copied:before {
+  content: "\e601";
 }

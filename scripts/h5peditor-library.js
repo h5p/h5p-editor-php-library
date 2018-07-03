@@ -65,6 +65,7 @@ ns.Library = function (parent, field, params, setValue) {
     if (!self.libraries) {
       return; // Libraries not loaded yet.
     }
+    self.$copyButton.html(ns.t('core', 'copyButton')).removeClass('h5peditor-copied');
 
     var canPaste = !event.data.reset;
     if (canPaste) {
@@ -111,6 +112,7 @@ ns.Library.prototype.appendTo = function ($wrapper) {
     this.$copyButton = this.$myField.find('.h5peditor-copy-button').click(function () {
       that.validate(); // Make sure all values are up-to-date
       H5P.clipboardify(that.params);
+      that.$copyButton.html(ns.t('core', 'copiedButton')).addClass('h5peditor-copied');
     });
     this.$pasteButton = this.$myField.find('.h5peditor-paste-button').click(function () {
       that.replaceContent(H5P.getClipboard());
