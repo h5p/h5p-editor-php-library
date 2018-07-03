@@ -802,8 +802,8 @@ ns.confirmReplace = function (library, top, next) {
   if (library) {
     // Confirm changing library
     var confirmReplace = new H5P.ConfirmationDialog({
-      headerText: H5PEditor.t('core', 'changeLibrary'),
-      dialogText: H5PEditor.t('core', 'confirmChangeLibrary')
+      headerText: H5PEditor.t('core', 'pasteContent'),
+      dialogText: H5PEditor.t('core', 'confirmPasteContent')
     }).appendTo(document.body);
     confirmReplace.on('confirmed', next);
     confirmReplace.show(top);

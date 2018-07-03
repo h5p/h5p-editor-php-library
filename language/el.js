@@ -174,5 +174,10 @@ H5PEditor.language.core = {
   noChangesHaveBeenLogged: 'No changes have been logged',
   errorHeader: 'An error occured',
   errorCalculatingMaxScore: 'Could not calculate the max score for this content. The max score is assumed to be 0. Contact your administrator if this isn’t correct.',
-  maxScoreSemanticsMissing: 'Could not find the expected semantics in the content.'
+  maxScoreSemanticsMissing: 'Could not find the expected semantics in the content.',
+  copyButton: 'Copy',
+  copiedButton: 'Copied',
+  pasteButton: 'Paste',
+  pasteContent: 'Paste Content',
+  confirmPasteContent: 'By doing this you will replace the current content with the content from your clipboard. Are you sure you wish to continue?'
 };

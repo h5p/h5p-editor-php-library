@@ -175,5 +175,10 @@ H5PEditor.language.core = {
   noChangesHaveBeenLogged: 'No changes have been logged',
   errorHeader: 'En feil har oppstått',
   errorCalculatingMaxScore: 'Kunne ikke kalkulerer maks poengsum for denne innholdstypen. Maks poengsum er antatt til å være 0. Kontakt administrator dersom dette ikke er korrekt.',
-  maxScoreSemanticsMissing: 'Kunne ikke finne den forventede semantikken i den valgte innholdstypen.'
+  maxScoreSemanticsMissing: 'Kunne ikke finne den forventede semantikken i den valgte innholdstypen.',
+  copyButton: 'Kopier',
+  copiedButton: 'Kopiert',
+  pasteButton: 'Lim inn',
+  pasteContent: 'Lim inn innhold',
+  confirmPasteContent: 'Ved å gjøre dette vil du erstatte innholdet i redigeringsverktøyet med innhold fra utklippstavlen din. Er du sikker på at du vil fortsette?'
 };
