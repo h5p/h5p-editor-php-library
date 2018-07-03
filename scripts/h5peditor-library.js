@@ -273,6 +273,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     delete this.params.metadata;
 
     this.$libraryWrapper.attr('class', 'libwrap');
+    this.$copyButton.prop('disabled', true);
     return;
   }
 
@@ -296,6 +297,9 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     }
 
     ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper.html(''), that);
+    if (window.localStorage) {
+      that.$copyButton.prop('disabled', false);
+    }
 
     if (that.libraries !== undefined) {
       that.change();
