@@ -74,7 +74,7 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   this.canPaste = function (clipboard) {
     if (clipboard && clipboard.generic) {
       for (var i = 0; i < libraries.libraries.length; i++) {
-        var uberName = libraries.libraries[i].machineName + ' ' + libraries.libraries[i].majorVersion + '.' + libraries.libraries[i].minorVersion;
+        var uberName = libraries.libraries[i].machineName + ' ' + libraries.libraries[i].localMajorVersion + '.' + libraries.libraries[i].localMinorVersion;
         if (uberName === clipboard.generic.library) {
           return true;
         }
@@ -150,7 +150,8 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
     this.$copyButton = $buttons.find('.h5peditor-copy-button').click(function () {
       H5P.clipboardify({
         library: self.getCurrentLibrary(),
-        params: self.getParams()
+        params: self.getParams(),
+        metadata: self.getMetadata()
       });
     });
     this.$pasteButton = $buttons.find('.h5peditor-paste-button').click(function () {
@@ -181,7 +182,7 @@ ns.LibrarySelector.prototype.pasteContent = function () {
   }
 
   ns.confirmReplace(self.getCurrentLibrary(), self.$parent.offset().top, function () {
-    self.selector.resetSelection(clipboard.generic.library, clipboard.generic.params, false);
+    self.selector.resetSelection(clipboard.generic.library, clipboard.generic.params, clipboard.generic.metadata, false);
     self.setLibrary();
   });
 };

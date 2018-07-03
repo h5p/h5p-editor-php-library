@@ -122,10 +122,13 @@ ns.SelectorHub.prototype.constructor = ns.SelectorHub;
  *
  * @param {string} library Full library name
  * @param {Object} params Library parameters
+ * @param {Object} metadata Library metadata
+ * @param {boolean} expanded Selector open
  */
-ns.SelectorHub.prototype.resetSelection = function (library, params, expanded) {
+ns.SelectorHub.prototype.resetSelection = function (library, params, metadata, expanded) {
   this.currentLibrary = library;
   this.currentParams = params;
+  this.currentMetadata = metadata;
 
   var contentType = this.getContentType(library.split(' ')[0]);
   this.client.setPanelTitle(contentType.title || contentType.machineName, expanded);
