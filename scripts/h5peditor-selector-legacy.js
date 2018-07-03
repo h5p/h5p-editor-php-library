@@ -63,6 +63,7 @@ ns.SelectorLegacy = function (libraries, selectedLibrary, changeLibraryDialog) {
  */
 ns.SelectorLegacy.prototype.resetSelection = function (library) {
   this.$selector.val(library);
+  this.currentLibrary = library;
 }
 
 /**

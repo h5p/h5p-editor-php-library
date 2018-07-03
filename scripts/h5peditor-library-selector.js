@@ -73,10 +73,22 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
    */
   this.canPaste = function (clipboard) {
     if (clipboard && clipboard.generic) {
-      for (var i = 0; i < libraries.libraries.length; i++) {
-        var uberName = libraries.libraries[i].machineName + ' ' + libraries.libraries[i].localMajorVersion + '.' + libraries.libraries[i].localMinorVersion;
-        if (uberName === clipboard.generic.library) {
-          return true;
+      if (libraries.libraries !== undefined) {
+        // HUB
+        for (var i = 0; i < libraries.libraries.length; i++) {
+          var uberName = libraries.libraries[i].machineName + ' ' + libraries.libraries[i].localMajorVersion + '.' + libraries.libraries[i].localMinorVersion;
+          if (uberName === clipboard.generic.library) {
+            return true;
+          }
+        }
+      }
+      else {
+        // Legacy
+        for (var i = 0; i < libraries.length; i++) {
+          var uberName = libraries[i].name + ' ' + libraries[i].majorVersion + '.' + libraries[i].minorVersion;
+          if (uberName === clipboard.generic.library) {
+            return true;
+          }
         }
       }
     }
