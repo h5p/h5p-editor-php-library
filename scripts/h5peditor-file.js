@@ -159,7 +159,7 @@ ns.File.addCopyright = function (field, $dialog, setCopyright) {
     }
   }
 
-  // Re-map old licenses that has been moved
+  // Re-map old licenses that have been moved
   if (field.copyright) {
     if (field.copyright.license === 'ODC PDDL') {
       field.copyright.license = 'PD';
@@ -172,6 +172,7 @@ ns.File.addCopyright = function (field, $dialog, setCopyright) {
   }
 
   var group = new H5PEditor.widgets.group(field, H5PEditor.copyrightSemantics, field.copyright, setCopyright);
+  // TODO: We'll have to do something here with metadataSemantics if we change the widgtets
   group.appendTo($dialog);
   group.expand();
   group.$group.find('.title').remove();
@@ -184,7 +185,6 @@ ns.File.addCopyright = function (field, $dialog, setCopyright) {
 
   // Listen for changes to license
   licenseField.changes.push(function (value) {
-
     // Find versions for selected value
     var option = find(licenseField.field.options, 'value', value);
     var versions = option.versions;
@@ -207,6 +207,7 @@ ns.File.addCopyright = function (field, $dialog, setCopyright) {
   });
 
   // Trigger update straight away
+  // console.log(field, 'not metadata');
   licenseField.changes[licenseField.changes.length - 1](field.copyright.license);
 };
 

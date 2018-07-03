@@ -89,13 +89,16 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
 
   var htmlString = '<div class="file"></div>' +
     '<div class="h5p-editor-image-buttons">' +
-      '<button class="h5peditor-button-textual h5p-editing-image-button">' + ns.t('core', 'editImage') + '</button>' +
-      '<button class="h5peditor-button-textual h5p-copyright-button">' + ns.t('core', 'editCopyright') + '</button>' +
-    '</div>' +
+      '<button class="h5peditor-button-textual h5p-editing-image-button">' + ns.t('core', 'editImage') + '</button>';
+
+  if (!this.field.disableCopyright) {
+    htmlString += '<button class="h5peditor-button-textual h5p-copyright-button">' + ns.t('core', 'editCopyright') + '</button>';
+  }
+
+  htmlString += '</div>' +
     '<div class="h5p-editor-dialog">' +
       '<a href="#" class="h5p-close" title="' + ns.t('core', 'close') + '"></a>' +
     '</div>';
-
 
   var html = ns.createFieldMarkup(this.field, htmlString);
 

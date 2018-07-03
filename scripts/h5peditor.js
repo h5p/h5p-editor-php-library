@@ -644,13 +644,14 @@ ns.createText = function (value, maxLength, placeholder) {
  * @returns {String}
  */
 ns.createLabel = function (field, content) {
-  var html = '<label class="h5peditor-label-wrapper">';
+  // New items can be added next to the label within the flex-wrapper
+  var html = '<div class="h5p-editor-flex-wrapper">' + '<label class="h5peditor-label-wrapper">';
 
   if (field.label !== 0) {
     html += '<span class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' + (field.label === undefined ? field.name : field.label) + '</span>';
   }
 
-  return html + (content || '') + '</label>';
+  return html + (content || '') + '</label></div>';
 };
 
 /**
@@ -779,6 +780,41 @@ ns.bindImportantDescriptionEvents = function (widget, fieldName, parent) {
 };
 
 /**
+ * Generate markup for the copy and paste buttons.
+ *
+ * @returns {string} HTML
+ */
+ns.createCopyPasteButtons = function () {
+  return '<label class="h5peditor-copypaste-wrap">' +
+           '<button class="h5peditor-copy-button" disabled>' + ns.t('core', 'copyButton') + '</button>' +
+           '<button class="h5peditor-paste-button" disabled>' + ns.t('core', 'pasteButton') + '</button>' +
+         '</label>';
+};
+
+/**
+ * Confirm replace if there is content selected
+ *
+ * @param {string} library Current selected library
+ * @param {number} top Offset
+ * @param {function} next Next callback
+ */
+ns.confirmReplace = function (library, top, next) {
+  if (library) {
+    // Confirm changing library
+    var confirmReplace = new H5P.ConfirmationDialog({
+      headerText: H5PEditor.t('core', 'pasteContent'),
+      dialogText: H5PEditor.t('core', 'confirmPasteContent')
+    }).appendTo(document.body);
+    confirmReplace.on('confirmed', next);
+    confirmReplace.show(top);
+  }
+  else {
+    // No need to confirm
+    next();
+  }
+}
+
+/**
  * Check if any errors has been set.
  *
  * @param {jQuery} $errors
@@ -888,6 +924,49 @@ ns.createButton = function (id, title, handler, displayTitle) {
   options[displayTitle ? 'html' : 'aria-label'] = title;
 
   return ns.$('<div/>', options);
+};
+
+/**
+ * Sync two input fields. Empty fields will take value of the other or be set to ''.
+ * master fields takes precedence if both are set already.
+ *
+ * @param {jQuery} $masterField - Master field that holds the value for initialization.
+ * @param {jQuery} $slaveField - Slave field to be synced with.
+ * @param {object} [options] - Options.
+ * @param {string} [options.defaultText] - Default text if fields are empty.
+ * @param {string} [options.listenerName] - Listener name.
+ */
+ ns.sync = function ($masterField, $slaveField, options) {
+  if (!$masterField || $masterField.length === 0 || !$slaveField || $slaveField.length === 0) {
+    return;
+  }
+  options = options || {};
+
+  const listenerName = options.listenerName || 'input.metadata-sync';
+
+  // Remove old sync
+  $masterField.off(listenerName);
+  $slaveField.off(listenerName);
+
+  // Initialize fields
+  if ($masterField.val()) {
+    $slaveField.val($masterField.val()).trigger('change');
+  }
+  else if ($slaveField.val()) {
+    $masterField.val($slaveField.val()).trigger('change');
+  }
+  else if (options.defaultText) {
+    $masterField.val(options.defaultText).trigger('change');
+    $slaveField.val(options.defaultText).trigger('change');
+  }
+
+  // Keep fields in sync
+  $masterField.on(listenerName, function() {
+    $slaveField.val($masterField.val()).trigger('change');
+  });
+  $slaveField.on(listenerName, function() {
+    $masterField.val($slaveField.val()).trigger('change');
+  });
 };
 
 // Factory for creating storage instance

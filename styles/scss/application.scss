@@ -26,6 +26,66 @@ a {
   text-decoration: none;
 }
 
+.h5p-metadata-button-wrapper {
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: -10px;
+  margin-left: 7px;
+  cursor: pointer;
+}
+
+.h5p-metadata-button-wrapper.inline-with-selector {
+  display: inline-flex;
+  margin-left: 17px;
+}
+
+.toggle-metadata {
+  margin-left: -11px;
+  height: 14.5px;
+  max-height: 14.5px;
+  padding: 0.217rem;
+  font-size: 0.667rem;
+  font-family: Open Sans;
+  font-weight: normal;
+  border: 1px solid #c6c8d7;
+  border-left: none;
+  border-radius: 4px;
+  background: linear-gradient(#ffffff, #e6f6fe);
+  color: #124361;
+  z-index: 1;
+  justify-content:center;
+  align-content:center;
+  line-height: 1.5em;
+}
+
+.h5p-metadata-button-tip {
+  width: 16.5px;
+  height: 16.5px;
+  content: "";
+  background: linear-gradient(#ffffff, #e6f6fe);
+  border: 1px solid #c6c8d7;
+  border-right: none;
+  border-top: none;
+  border-radius: 4px;
+  -webkit-transform: rotate(47deg) skew(5deg);
+  -moz-transform: rotate(47deg) skew(5deg);
+  transform: rotate(47deg) skew(5deg);
+  z-index: 0;
+}
+
+.overlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  z-index: 2;
+  color: white;
+}
+
 .h5peditor {
   font-size: 16px;
 
@@ -41,9 +101,20 @@ a {
   .errors p,
   .h5p-errors {
     color: #da0001;
+    white-space: normal;
   }
   textarea {
     resize: vertical;
+  }
+
+  .h5p-editor-flex-wrapper {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .h5peditor-label-wrapper {
+    display: flex;
+    flex-direction: row;
   }
 
   .has-important-description {
@@ -371,18 +442,6 @@ a {
       background: #ddd;
       text-align: right;
     }
-    .h5p-cancel {
-      margin-left: 0.5em;
-      color: #b83c3c;
-      background: transparent;
-      border: 0;
-      cursor: pointer;
-    }
-    .h5p-cancel:focus,
-    .h5p-cancel:hover {
-      color: #e20d0d;
-      background: transparent;
-    }
   }
   .h5p-or {
     border-bottom: 1px solid #cdcdcd;
@@ -491,6 +550,10 @@ a {
     float: left;
     margin-bottom: 0;
     max-width: 100%;
+
+    &.authorList {
+      float: none;
+    }
 
     &.field {
       float: none;
@@ -762,6 +825,12 @@ a {
     padding: 0;
   }
 }
+
+.h5p-editor-dialog.h5p-dialog-wide {
+  width: 90%;
+  border-radius: 0.208em;
+}
+
 /* Placed this outside of .h5peditor context above. Don't want it to be more
    specific than neccessary (because of overriding) */
 .h5peditor-button-textual {
@@ -1088,4 +1157,497 @@ a {
 .important-description-clear-right {
   display: block;
   clear: right;
+}
+
+#metadata-title-main-label {
+  margin-top: 0;
+}
+
+.h5p-metadata-button {
+  width: 115px;
+  height: 25px;
+  background: white;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+  border: solid 1px gray;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.h5p-metadata-button.h5p-cancel {
+  margin-right: 10px;
+}
+
+.h5peditor .h5p-editor-dialog.h5p-open.h5p-metadata-wrapper {
+  z-index: 5;
+  margin-top: -4.0em;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+
+  .h5peditor-label {
+    font-size: 1em;
+  }
+
+  .copyright-form {
+    margin-top: 20px;
+  }
+
+  h2 {
+    font-size: 1.250em;
+    overflow: hidden;
+    text-overflow:ellipsis;
+  }
+
+  p {
+    font-size: 0.8333em;
+    color: #697484;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .errors p,
+  .h5p-errors p {
+    color: #da0001;
+    font-size: 1em;
+    white-space: normal;
+    text-overflow: unset;
+  }
+
+  &:after {
+    position: absolute;
+    left: 0;
+    top: 6.5em;
+    height: 1px;
+    background: #ced6e3;
+    content: "";
+    width: 100%;
+    display: block;
+    }
+
+  select {
+    width: 100%;
+    border: solid 1px #b8c0ce;
+    font-size: 0.833em;
+    border-radius: 0.208em;
+    box-shadow: none;
+  }
+
+  input {
+    border: solid 1px #b8c0ce;
+    font-size: 0.833em;
+    border-radius: 0.208em;
+    box-shadow: none;
+  }
+
+  .content.copyright-form {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .field-name-title {
+    width: 100%;
+    margin-bottom: 1em;
+  }
+
+  .field-name-license {
+    width: 49%;
+    margin-bottom: 1em;
+    margin-right: 1%;
+  }
+
+  .field-name-licenseVersion {
+    width: 49%;
+    margin-bottom: 1em;
+    margin-left: 1%;
+  }
+
+  .field-name-yearFrom {
+    width: 24%;
+    margin-bottom: 1em;
+    margin-right: 1%;
+    white-space: nowrap;
+
+    .h5peditor-text {
+      width: 100%;
+    }
+  }
+
+  .field-name-yearTo {
+    width: 23%;
+    margin-bottom: 1em;
+    margin-right: 1%;
+    margin-left: 1%;
+
+    .h5peditor-text {
+      width: 100%;
+    }
+  }
+
+  .field-name-source {
+    width: 49%;
+    margin-bottom: 1em;
+    margin-left: 1%;
+  }
+
+  .h5p-metadata-license-extras {
+    width: 100%;
+    margin-top: 1em;
+  }
+}
+
+.h5p-metadata-header {
+  display: flex;
+
+  .h5p-title-container {
+   flex-grow: 1;
+   margin-left: 4em;
+   white-space: nowrap;
+   overflow: hidden;
+   margin-right: 1%;
+
+   h2 {
+     margin-bottom: 0;
+   }
+
+   p {
+     margin-top: 0.1em;
+   }
+  }
+
+  .h5p-title-container:before {
+    position: absolute;
+    font-family: 'h5p-metadata-icons';
+    content: '\e903';
+    left: 0.6em;
+    font-size: 2.5em;
+    top: 0.9em;
+  }
+}
+
+
+.metadata-button-wrapper {
+  margin-top: 2em;
+
+  .h5p-save {
+    border: solid 2px #10a186;
+    border-radius: 0.408rem;
+    color: #fff;
+    background-color: #10a186;
+    padding: 0.833rem;
+    white-space: nowrap;
+  }
+}
+
+.h5p-metadata-author-widget {
+  display: flex;
+  flex-direction: column;
+  border: solid 1px #ced6e3;
+  border-radius: 0.208em;
+  width: 100%;
+  padding: 1em;
+  margin-top: 1em;
+
+  .h5p-author-data {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+
+  .field-name-name {
+    flex-grow: 1;
+    margin-right: 2%;
+    overflow: hidden;
+    white-space: nowrap;
+    min-width: 49%;
+  }
+
+  .field-name-role {
+    margin-top: 0;
+    margin-right: 2%;
+    width: 25%;
+    flex-grow: 1;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .authorList {
+    margin-top: 2.4em;
+    white-space: nowrap;
+
+    .h5p-add-author {
+      border: solid 1px #10a186;
+      color: #10a186;
+    }
+
+    li {
+      display: inline;
+      margin-right: 0.5em;
+
+      span {
+        margin-right: 1em;
+        font-style: italic;
+      }
+    }
+  }
+
+  .h5p-author-list-wrapper {
+    line-height: 2em;
+
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      display: inline-block;
+      margin-right: 1em;
+      list-style: none;
+      font-weight: bold;
+    }
+
+    .h5p-metadata-role {
+      font-style: italic;
+      margin-right: 0.5em;
+      font-weight: normal;
+      font-size: 0.85em;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      color: #6b6b6b;
+      background: transparent;
+
+      &:after {
+        font-family: 'h5p-metadata-icons';
+        content: "\e902";
+        font-size: 1.2em;
+      }
+    }
+  }
+}
+
+.h5p-metadata-changelog {
+  width: 100%;
+  margin-top: 1em;
+
+  .title {
+    font-weight: 400;
+    background: #F6F6F6;
+    color: #323232;
+    border: solid 1px #ced6e3;
+    border-radius: 0.208em;
+  }
+
+  .content {
+    padding: 0;
+    margin-top: 20px;
+  }
+
+  .field-name-changeLogForm {
+    border: solid 1px #ced6e3;
+    border-radius: 0.208em;
+    padding: 0 20px;
+  }
+
+  .field-name-changeLogForm .content {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .field-name-date {
+    width: 49%;
+    margin-bottom: 0.5em;
+    margin-right: 1%;
+    margin-top: 0;
+    span {
+      width: 100%;
+    }
+  }
+
+  .field-name-author {
+    width: 49%;
+    margin-bottom: 0.5em;
+    margin-left: 1%;
+    margin-top: 0;
+  }
+
+  .field-name-log {
+    width: 100%;
+  }
+
+  .h5p-metadata-new-log {
+    float: none;
+    height: 3em;
+    width: 100%;
+  }
+
+  .h5p-add-author {
+   border: solid 1px #10a186;
+   color: #10a186;
+
+   &:before {
+     content: "+";
+     margin-right: 0.7em;
+   }
+  }
+
+  .h5p-log-change {
+    border: solid 1px #10a186;
+    color: #10a186;
+  }
+
+  .h5p-metadata-formButtonWrapper {
+    display: flex;
+    height: 3em;
+    padding-top: 20px;
+  }
+
+  .h5p-metadata-log-wrapper-title {
+    font-weight: bolder;
+  }
+
+  .h5p-metadata-log-wrapper {
+    margin-top: 1em;
+    border: solid 1px #ced6e3;
+    border-radius: 0.208em;
+    max-height: 15.917rem;
+    overflow-y: auto;
+    padding:0.5em;
+  }
+
+  .h5p-metadata-log {
+    display: flex;
+
+    button {
+      margin-top: 0.8em;
+      border: none;
+      cursor: pointer;
+      color: #6b6b6b;
+      background: transparent;
+    }
+
+    .h5p-metadata-delete {
+      &:after {
+        font-family: 'h5p-metadata-icons';
+        content: "\e902";
+        font-size: 1.2em;
+      }
+    }
+
+    .h5p-metadata-edit {
+      &:after {
+        font-family: 'h5p-metadata-icons';
+        content: "\e904";
+        font-size: 1.2em;
+      }
+    }
+  }
+
+  .h5p-metadata-log-buttons {
+    min-width: 3em;
+  }
+
+  .h5p-metadata-log.not-first {
+    border-bottom: solid 1px #ced6e3;
+  }
+
+  .h5p-metadata-log-date {
+    min-width: 25%;
+    margin: 1em;
+    font-size: 0.85em;
+    font-style: italic;
+  }
+
+  .h5p-metadata-description-wrapper {
+    flex-grow: 1;
+    font-size: 0.85em;
+    font-style: italic;
+  }
+
+  .h5p-metadata-description-wrapper {
+    font-weight: bolder;
+  }
+
+  .h5p-metadata-log-author {
+    font-weight: normal;
+  }
+
+  .h5p-metadata-new-log-message {
+    background: #C5E7E1;
+    padding: 0.5em;
+    margin-bottom: 1em;
+    color: #10a186;
+  }
+}
+
+.h5p-metadata-additional-information {
+  width: 100%;
+  margin-top: 1em;
+
+  .content.h5peditor-single {
+    min-height: 2em;
+    border: 1px solid #d0d0d1;
+    border-top: none;
+    background: #fff;
+  }
+
+  .title {
+    font-weight: 400;
+    background: #F6F6F6;
+    color: #323232;
+    border: solid 1px #ced6e3;
+    border-radius: 0.208em;
+  }
+}
+
+.h5peditor-copypaste-wrap {
+  float: right;
+}
+
+.h5peditor-copy-button,
+.h5peditor-paste-button {
+  border: 1px solid #cdcdcd;
+  background: #f5f5f5;
+  padding: 0.5em 0.75em;
+  margin-left: 0.25em;
+  border-radius: 0.25em;
+  cursor: pointer;
+
+  &:before {
+    font-family: $icon-font-family;
+    content: "\e905";
+    color: #f26f6f;
+    font-size: 1.25em;
+    vertical-align: bottom;
+    display: inline-block;
+    margin-right: 0.125em;
+  }
+  &:hover {
+    background: #fafafa;
+  }
+  &:active {
+    background: #efefef;
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: auto;
+  }
+}
+.h5p-hub .h5peditor-paste-button {
+  font-size: 16px;
+  margin-right: 1.3em;
+  margin-top: 0.9em;
+  background: transparent;
+  border: 0;
+  color: #a3a7ac;
+}
+.h5peditor-paste-button:before {
+  content: "\e90a";
+}
+.h5peditor-copied:before {
+  content: "\e601";
 }

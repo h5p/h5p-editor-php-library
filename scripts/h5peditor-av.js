@@ -101,10 +101,14 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     var imageHtml =
       '<ul class="file list-unstyled"></ul>' +
-      C.createAdd(self.field.type) +
-      '<a class="h5p-copyright-button" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>' +
-      '<div class="h5p-editor-dialog">' +
-        '<a href="#" class="h5p-close" title="' + H5PEditor.t('core', 'close') + '"></a>' +
+      C.createAdd(self.field.type);
+
+    if (!this.field.disableCopyright) {
+      imageHtml += '<a class="h5p-copyright-button" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>';
+    }
+
+    imageHtml += '<div class="h5p-editor-dialog">' +
+      '<a href="#" class="h5p-close" title="' + H5PEditor.t('core', 'close') + '"></a>' +
       '</div>';
 
     var html = H5PEditor.createFieldMarkup(this.field, imageHtml);

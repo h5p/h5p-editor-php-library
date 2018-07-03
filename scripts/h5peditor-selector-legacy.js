@@ -63,6 +63,7 @@ ns.SelectorLegacy = function (libraries, selectedLibrary, changeLibraryDialog) {
  */
 ns.SelectorLegacy.prototype.resetSelection = function (library) {
   this.$selector.val(library);
+  this.currentLibrary = library;
 }
 
 /**
@@ -88,6 +89,15 @@ ns.SelectorLegacy.prototype.getSelectedLibrary = function (next) {
 ns.SelectorLegacy.prototype.getParams = function () {
   return undefined;
 }
+
+/**
+ * Not possible to load new metadata into legacy selector, always returns undefined.
+ *
+ * @returns {undefined}
+ */
+ns.SelectorLegacy.prototype.getMetadata = function () {
+  return undefined;
+};
 
 /**
  * Returns the html element for the hub

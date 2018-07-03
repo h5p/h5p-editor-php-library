@@ -6,7 +6,8 @@ class H5peditor {
     'libs/darkroom.css',
     'styles/css/h5p-hub-client.css',
     'styles/css/fonts.css',
-    'styles/css/application.css'
+    'styles/css/application.css',
+    'styles/css/libs/zebra_datepicker.css'
   );
   public static $scripts = array(
     'scripts/h5p-hub-client.js',
@@ -36,6 +37,9 @@ class H5peditor {
     'scripts/h5peditor-dimensions.js',
     'scripts/h5peditor-coordinates.js',
     'scripts/h5peditor-none.js',
+    'scripts/h5peditor-metadata.js',
+    'scripts/h5peditor-metadata-author-widget.js',
+    'scripts/h5peditor-metadata-changelog-widget.js',
     'scripts/h5peditor-pre-save.js',
     'ckeditor/ckeditor.js',
   );
@@ -128,6 +132,10 @@ class H5peditor {
    * @param array $oldParameters
    */
   public function processParameters($content, $newLibrary, $newParameters, $oldLibrary = NULL, $oldParameters = NULL) {
+    // Old core versions didn't have params wrapped together with metadata
+    if (isset($newParameters->params) && isset($newParameters->metadata)) {
+      $newParameters = $newParameters->params;
+    }
     $newFiles = array();
     $oldFiles = array();
 
