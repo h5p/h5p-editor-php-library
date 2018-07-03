@@ -159,7 +159,7 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
 
   if (window.localStorage) {
     var $buttons = ns.$(ns.createCopyPasteButtons()).appendTo($element);
-    this.$copyButton = $buttons.find('.h5peditor-copy-button').click(function () {
+    $buttons.find('.h5peditor-copy-button').click(function () {
       H5P.clipboardify({
         library: self.getCurrentLibrary(),
         params: self.getParams(),
@@ -249,9 +249,6 @@ ns.LibrarySelector.prototype.loadSemantics = function (library, params, metadata
       that.form.replace($loading);
       that.form.currentLibrary = library;
       that.form.processSemantics(semantics, overrideParams, metadata);
-      if (window.localStorage) {
-        that.$copyButton.prop('disabled', false);
-      }
     }
 
     that.$selector.attr('disabled', false);
