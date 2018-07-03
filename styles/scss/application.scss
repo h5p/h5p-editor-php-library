@@ -1628,6 +1628,7 @@ a {
   }
   &:disabled {
     opacity: 0.5;
+    cursor: auto;
   }
   &:active {
     background: pink;
