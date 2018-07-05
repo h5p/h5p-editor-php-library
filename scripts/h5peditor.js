@@ -24,7 +24,7 @@ ns.libraryCache = {};
 /**
  * Keeps track of callbacks to run once a library gets loaded.
  */
-ns.loadedCallbacks = {};
+ns.loadedCallbacks = [];
 
 /**
  * Keep track of which libraries have been loaded in the browser, i.e CSS is
@@ -165,8 +165,10 @@ ns.loadLibrary = function (libraryName, callback) {
             callback(semen);
 
             // Run queue.
-            for (var i = 0; i < ns.loadedCallbacks[libraryName].length; i++) {
-              ns.loadedCallbacks[libraryName][i](semen);
+            if (ns.loadedCallbacks[libraryName]) {
+              for (var i = 0; i < ns.loadedCallbacks[libraryName].length; i++) {
+                ns.loadedCallbacks[libraryName][i](semen);
+              }
             }
           });
         },
@@ -192,7 +194,7 @@ ns.resetLoadedLibraries = function () {
   ns.$('head style.h5p-editor-style').remove();
   H5PIntegration.loadedCss = [];
   H5PIntegration.loadedJs = [];
-  ns.loadedCallbacks = {};
+  ns.loadedCallbacks = [];
   ns.libraryLoaded = {};
 }
 
@@ -644,14 +646,19 @@ ns.createText = function (value, maxLength, placeholder) {
  * @returns {String}
  */
 ns.createLabel = function (field, content) {
+  // There's no good way to retrieve the current library the label is processed for, is it?
+  // We use the previous library's state of entitlement instead.
+  const wrapperFront = (this.previousLibraryEntitledForMetadata) ? '<div class="h5p-editor-flex-wrapper">' : '';
+  const wrapperBack = (this.previousLibraryEntitledForMetadata) ? '</div>' : '';
+
   // New items can be added next to the label within the flex-wrapper
-  var html = '<div class="h5p-editor-flex-wrapper">' + '<label class="h5peditor-label-wrapper">';
+  var html = wrapperFront + '<label class="h5peditor-label-wrapper">';
 
   if (field.label !== 0) {
     html += '<span class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' + (field.label === undefined ? field.name : field.label) + '</span>';
   }
 
-  return html + (content || '') + '</label></div>';
+  return html + (content || '') + '</label>' + wrapperBack;
 };
 
 /**
@@ -980,6 +987,8 @@ ns.createButton = function (id, title, handler, displayTitle) {
  * @return {boolean} True, if form should have the metadata button.
  */
 ns.entitledForMetadata = function (library) {
+  this.previousLibraryEntitledForMetadata = false;
+
   if (!library || typeof library !== 'string') {
     return false;
   }
@@ -991,69 +1000,66 @@ ns.entitledForMetadata = function (library) {
 
   // This list holds all the libraries that (and later) are ready for metadata
   const passList = [
-    'H5P.Timeline 1.2',
-    'H5P.AppearIn 1.1',
-    'H5P.Questionnaire 1.3',
-    'H5P.InteractiveVideo 1.20',
-    'H5P.CoursePresentation 1.20',
-    'H5P.Video 1.5',
-    'H5P.TwitterUserFeed 1.1',
-    'H5P.TextInputField 1.2',
-    'H5P.Text 1.2',
-    'H5P.Table 1.2',
-    'H5P.StandardPage 1.4',
-    'H5P.SimpleMultiChoice 1.2',
-    'H5P.QuestionSet 1.16',
-    'H5P.OpenEndedQuestion 1.1',
-    'H5P.MemoryGame 1.3',
-    'H5P.Link 1.4',
-    'H5P.IVHotspot 1.3',
-    'H5P.GoalsPage 1.5',
-    'H5P.GoalsAssessmentPage 1.4',
-    'H5P.GoToQuestion 1.4',
-    'H5P.Flashcards 1.6',
-    'H5P.FacebookPageFeed 1.1',
-    'H5P.ExportableTextArea 1.3',
-    'H5P.DragText 1.8',
-    'H5P.DocumentationTool 1.7',
-    'H5P.TrueFalse 1.5',
-    'H5P.DocumentExportPage 1.4',
-    'H5P.Collage 0.4',
-    'H5P.Chart 1.3',
-    'H5P.Blanks 1.11',
-    'H5P.AudioRecorder 1.1',
-    'H5P.Audio 1.3',
-    'H5P.MarkTheWords 1.9',
-    'H5P.ImageHotspots 1.7',
-    'H5P.SpeakTheWords 1.4',
-    'H5P.Summary 1.10',
-    'H5P.DragQuestion 1.13',
-    'H5P.SpeakTheWordsSet 1.2',
-    'H5P.Image 1.1',
-    'H5P.Column 1.8',
     'H5P.Accordion 1.1',
-    'H5P.TrueFalse 1.5',
-    'H5P.MultiChoice 1.13',
-    'H5P.ImageHotspotQuestion 1.8',
-    'H5P.SingleChoiceSet 1.11',
-    'H5P.ArithmeticQuiz 1.2',
-    'H5P.SingleChoiceSet.1.11',
-    'H5P.ImageHotspotQuestion 1.8',
-    'H5P.GuessTheAnswer 1.4',
-    'H5P.Dialogcards 1.8',
-    'H5P.ExportPage 1.2',
-    'H5P.IFrameEmbed 1.1',
-    'H5P.ContinuousText 1.3',
-    'H5P.FreeTextQuestion 1.1',
-    'H5P.Essay 1.2',
+    'H5P.AdvancedText 1.2',
     'H5P.Agamotto 1.4',
-    'H5P.ImageMultipleHotspotQuestion 1.1',
+    'H5P.AppearIn 1.1',
+    'H5P.ArithmeticQuiz 1.2',
+    'H5P.Audio 1.3',
+    'H5P.AudioRecorder 1.1',
+    'H5P.Blanks 1.11',
+    'H5P.Chart 1.3',
+    'H5P.Collage 0.4',
+    'H5P.Column 1.8',
+    'H5P.ContinuousText 1.3',
+    'H5P.CoursePresentation 1.20',
+    'H5P.Dialogcards 1.8',
+    'H5P.DocumentationTool 1.7',
+    'H5P.DocumentExportPage 1.4',
+    'H5P.DragQuestion 1.13',
+    'H5P.DragText 1.8',
+    'H5P.Essay 1.2',
+    'H5P.ExportableTextArea 1.3',
+    'H5P.ExportPage 1.2',
+    'H5P.FacebookPageFeed 1.1',
+    'H5P.Flashcards 1.6',
+    'H5P.FreeTextQuestion 1.1',
+    'H5P.GoalsAssessmentPage 1.4',
+    'H5P.GoalsPage 1.5',
+    'H5P.GoToQuestion 1.4',
+    'H5P.GuessTheAnswer 1.4',
+    'H5P.IFrameEmbed 1.1',
+    'H5P.Image 1.1',
+    'H5P.ImageHotspotQuestion 1.8',
+    'H5P.ImageHotspots 1.7',
     'H5P.ImageJuxtaposition 1.2',
+    'H5P.ImageMultipleHotspotQuestion 1.1',
     'H5P.ImagePair 1.4',
-    'H5P.ImageSlider 1.1',
     'H5P.ImageSequencing 1.1',
+    'H5P.ImageSlider 1.1',
+    'H5P.InteractiveVideo 1.20',
+    'H5P.IVHotspot 1.3',
+    'H5P.Link 1.4',
+    'H5P.MarkTheWords 1.9',
+    'H5P.MemoryGame 1.3',
+    'H5P.MultiChoice 1.13',
+    'H5P.OpenEndedQuestion 1.1',
     'H5P.PersonalityQuiz 1.1',
-    'H5P.AdvancedText 1.2'
+    'H5P.Questionnaire 1.3',
+    'H5P.QuestionSet 1.16',
+    'H5P.SimpleMultiChoice 1.2',
+    'H5P.SingleChoiceSet 1.11',
+    'H5P.SpeakTheWords 1.4',
+    'H5P.SpeakTheWordsSet 1.2',
+    'H5P.StandardPage 1.4',
+    'H5P.Summary 1.10',
+    'H5P.Table 1.2',
+    'H5P.Text 1.2',
+    'H5P.TextInputField 1.2',
+    'H5P.Timeline 1.2',
+    'H5P.TrueFalse 1.5',
+    'H5P.TwitterUserFeed 1.1',
+    'H5P.Video 1.5'
   ];
 
   let pass = passList.filter(function(item) {
@@ -1067,6 +1073,8 @@ ns.entitledForMetadata = function (library) {
   if (library.majorVersion < pass.majorVersion || library.minorVersion < pass.minorVersion) {
     return false;
   }
+
+  this.previousLibraryEntitledForMetadata = true;
 
   return true;
 };

@@ -1,7 +1,7 @@
 /**
  * Construct a form from library semantics.
  */
-ns.Form = function (library) {
+ns.Form = function () {
   var self = this;
 
   this.params = {};
@@ -10,9 +10,7 @@ ns.Form = function (library) {
 
   this.$form = ns.$('' +
     '<div class="h5peditor-form">' +
-      '<div class="tree">' +
-        '<div class="overlay"></div>' +
-      '</div>' +
+      '<div class="tree"></div>' +
       '<div class="common collapsed hidden">' +
         '<div class="fields">' +
           '<p class="desc">' +
@@ -26,8 +24,11 @@ ns.Form = function (library) {
   this.library = '';
 
   // Without this check, metadata would be on by default
-  this.entitledForMetadata = ns.entitledForMetadata(library);
+  this.entitledForMetadata = ns.entitledForMetadata(Object.keys(ns.libraryLoaded)[0]);
   if (this.entitledForMetadata) {
+    // Add overlay
+    this.$form.append('<div class="overlay"></div>');
+
     // Inject a custom text field for the metadata title
     var metaDataTitleSemantics = [{
       'name' : 'title',
@@ -56,12 +57,6 @@ ns.Form = function (library) {
       self.$form.find('.h5p-metadata-wrapper').first().toggleClass('h5p-open');
       self.$form.find('.overlay').toggle();
     });
-  }
-  else {
-    // Adjust styling to account for metadata button not there. Not using
-    // a class because it doesn't have any other style attributes and this
-    // way only this if/else clause needs to be removed later.
-    this.$form.css('padding-top', '0');
   }
 
   // Add title expand/collapse button

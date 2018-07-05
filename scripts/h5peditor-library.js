@@ -408,7 +408,7 @@ ns.Library.prototype.addMetadataForm = function (semantics) {
     // Add click listener
     that.$metadataButton.click(function () {
       that.$metadataWrapper.find('.h5p-metadata-wrapper').toggleClass('h5p-open');
-      that.$metadataWrapper.closest('.tree').find('.overlay').toggle();
+      that.$metadataWrapper.closest('.h5peditor-form').find('.overlay').toggle();
       that.$metadataWrapper.find('.h5p-metadata-wrapper').find('.field-name-title').find('input.h5peditor-text').focus();
       if (H5PIntegration && H5PIntegration.user && H5PIntegration.user.name) {
         that.$metadataWrapper.find('.field-name-authorName').find('input.h5peditor-text').val(H5PIntegration.user.name);
