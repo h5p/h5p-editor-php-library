@@ -142,7 +142,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
     }
 
     $wrapper.toggleClass('h5p-open');
-    $container.closest('.tree').find('.overlay').toggle();
+    $container.closest('.h5peditor-form').find('.overlay').toggle();
   });
 
   // Set author of main content.
