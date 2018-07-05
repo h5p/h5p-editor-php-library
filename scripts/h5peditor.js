@@ -969,6 +969,108 @@ ns.createButton = function (id, title, handler, displayTitle) {
   });
 };
 
+/**
+ * Check if the current library is entitled for the metadata button. No by default.
+ *
+ * It will probably be okay to remove this check at some point in time when
+ * the majority of content types and plugins have been updated to a version
+ * that supports the metadata system.
+ *
+ * @param {string} library - Current library.
+ * @return {boolean} True, if form should have the metadata button.
+ */
+ns.entitledForMetadata = function (library) {
+  if (!library || typeof library !== 'string') {
+    return false;
+  }
+
+  library = H5P.libraryFromString(library);
+  if (!library) {
+    return false;
+  }
+
+  // This list holds all the libraries that (and later) are ready for metadata
+  const passList = [
+    'H5P.Timeline 1.2',
+    'H5P.AppearIn 1.1',
+    'H5P.Questionnaire 1.3',
+    'H5P.InteractiveVideo 1.20',
+    'H5P.CoursePresentation 1.20',
+    'H5P.Video 1.5',
+    'H5P.TwitterUserFeed 1.1',
+    'H5P.TextInputField 1.2',
+    'H5P.Text 1.2',
+    'H5P.Table 1.2',
+    'H5P.StandardPage 1.4',
+    'H5P.SimpleMultiChoice 1.2',
+    'H5P.QuestionSet 1.16',
+    'H5P.OpenEndedQuestion 1.1',
+    'H5P.MemoryGame 1.3',
+    'H5P.Link 1.4',
+    'H5P.IVHotspot 1.3',
+    'H5P.GoalsPage 1.5',
+    'H5P.GoalsAssessmentPage 1.4',
+    'H5P.GoToQuestion 1.4',
+    'H5P.Flashcards 1.6',
+    'H5P.FacebookPageFeed 1.1',
+    'H5P.ExportableTextArea 1.3',
+    'H5P.DragText 1.8',
+    'H5P.DocumentationTool 1.7',
+    'H5P.TrueFalse 1.5',
+    'H5P.DocumentExportPage 1.4',
+    'H5P.Collage 0.4',
+    'H5P.Chart 1.3',
+    'H5P.Blanks 1.11',
+    'H5P.AudioRecorder 1.1',
+    'H5P.Audio 1.3',
+    'H5P.MarkTheWords 1.9',
+    'H5P.ImageHotspots 1.7',
+    'H5P.SpeakTheWords 1.4',
+    'H5P.Summary 1.10',
+    'H5P.DragQuestion 1.13',
+    'H5P.SpeakTheWordsSet 1.2',
+    'H5P.Image 1.1',
+    'H5P.Column 1.8',
+    'H5P.Accordion 1.1',
+    'H5P.TrueFalse 1.5',
+    'H5P.MultiChoice 1.13',
+    'H5P.ImageHotspotQuestion 1.8',
+    'H5P.SingleChoiceSet 1.11',
+    'H5P.ArithmeticQuiz 1.2',
+    'H5P.SingleChoiceSet.1.11',
+    'H5P.ImageHotspotQuestion 1.8',
+    'H5P.GuessTheAnswer 1.4',
+    'H5P.Dialogcards 1.8',
+    'H5P.ExportPage 1.2',
+    'H5P.IFrameEmbed 1.1',
+    'H5P.ContinuousText 1.3',
+    'H5P.FreeTextQuestion 1.1',
+    'H5P.Essay 1.2',
+    'H5P.Agamotto 1.4',
+    'H5P.ImageMultipleHotspotQuestion 1.1',
+    'H5P.ImageJuxtaposition 1.2',
+    'H5P.ImagePair 1.4',
+    'H5P.ImageSlider 1.1',
+    'H5P.ImageSequencing 1.1',
+    'H5P.PersonalityQuiz 1.1',
+    'H5P.AdvancedText 1.2'
+  ];
+
+  let pass = passList.filter(function(item) {
+    return item.indexOf(library.machineName + ' ') !== -1;
+  });
+  if (pass.length === 0) {
+    return false;
+  }
+
+  pass = H5P.libraryFromString(pass[0]);
+  if (library.majorVersion < pass.majorVersion || library.minorVersion < pass.minorVersion) {
+    return false;
+  }
+
+  return true;
+};
+
 // Factory for creating storage instance
 ns.storage = (function () {
   var instance = {

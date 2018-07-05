@@ -322,6 +322,11 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 ns.Library.prototype.addMetadataForm = function (semantics) {
   var that = this;
 
+  // Don't add metadata objects if library version is not entitled to have it them
+  if (!ns.entitledForMetadata(this.currentLibrary)) {
+    return;
+  }
+
   // Don't add button if told so by semantics
   if (typeof this.field.options[0] === 'object') {
     const itemPosition = this.field.options
