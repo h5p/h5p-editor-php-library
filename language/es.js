@@ -34,7 +34,6 @@ H5PEditor.language.core = {
   editCopyright: 'Editar copyright',
   close: 'Cerrar',
   tutorial: 'Tutorial',
-  example: 'Example',
   editMode: 'Modo de edición',
   listLabel: 'Lista',
   uploadError: 'Error en la subida del archivo',
@@ -181,5 +180,7 @@ H5PEditor.language.core = {
   copiedButton: 'Copied',
   pasteButton: 'Paste',
   pasteContent: 'Paste Content',
-  confirmPasteContent: 'By doing this you will replace the current content with the content from your clipboard. Are you sure you wish to continue?'
+  confirmPasteContent: 'By doing this you will replace the current content with the content from your clipboard. Are you sure you wish to continue?',
+  copyToClipboard: 'Copy H5P content to the clipboard',
+  pasteFromClipboard: 'Paste H5P content from the clipboard'
 };

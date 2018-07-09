@@ -34,7 +34,6 @@ H5PEditor.language.core = {
   editCopyright: 'Επεξεργασία πνευματικών δικαιωμάτων',
   close: 'Κλείσιμο',
   tutorial: 'Μάθημα',
-  example: 'Παράδειγμα',
   editMode: 'Λειτουργία επεξεργασίας',
   listLabel: 'Λίστα',
   uploadError: 'Σφάλμα Μεταφόρτωσης Αρχείου',
@@ -69,6 +68,7 @@ H5PEditor.language.core = {
   showImportantInstructions: 'Εμφάνιση οδηγιών',
   hideImportantInstructions: 'Απόκρυψη σημαντικών οδηγιών',
   hide: 'Απόκρυψη',
+  example: 'Παράδειγμα',
   createContentTabLabel: 'Δημιουργία Περιεχομένου',
   uploadTabLabel: 'Μεταφόρτωση',
   uploadPlaceholder: 'Δεν έχει επιλεγεί αρχείο',
@@ -86,7 +86,8 @@ H5PEditor.language.core = {
   h5pFileValidationFailedContent: 'Βεβαιωθείτε ότι το φορτωμένο H5P περιέχει έγκυρο περιεχόμενο H5P. ' +
   'Τα αρχεία H5P τα οποία περιέχουν μόνο βιβλιοθήκες, θα πρέπει να μεταφορτωθούν μέσω της σελίδας Βιβλιοθήκες H5P.',
   h5pFileUploadServerErrorTitle: 'Δεν ήταν δυνατή η μεταφόρτωση του αρχείου H5P',
-  h5pFileUploadServerErrorContent: 'Προέκυψε ένα μη αναμενόμενο σφάλμα. Ελέγξτε το αρχείο σφαλμάτων του διακομιστή σας για περισσότερες λεπτομέρειες.',
+  h5pFileUploadServerErrorContent: 'Προέκυψε ένα μη αναμενόμενο σφάλμα. Ελέγξτε το αρχείο σφαλμάτων του διακομιστή' +
+  ' σας για περισσότερες λεπτομέρειες.',
   contentTypeSectionAll: 'All Content Types',
   searchResults: 'Search Results',
   contentTypeSearchFieldPlaceholder: 'Αναζητήστε Τύπους Περιεχομένου',
@@ -179,5 +180,7 @@ H5PEditor.language.core = {
   copiedButton: 'Copied',
   pasteButton: 'Paste',
   pasteContent: 'Paste Content',
-  confirmPasteContent: 'By doing this you will replace the current content with the content from your clipboard. Are you sure you wish to continue?'
+  confirmPasteContent: 'By doing this you will replace the current content with the content from your clipboard. Are you sure you wish to continue?',
+  copyToClipboard: 'Copy H5P content to the clipboard',
+  pasteFromClipboard: 'Paste H5P content from the clipboard'
 };

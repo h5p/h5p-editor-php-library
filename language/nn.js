@@ -34,7 +34,6 @@ H5PEditor.language.core = {
   editCopyright: 'Rediger opphavsrett',
   close: 'Lukk',
   tutorial: 'Veiledning',
-  example: 'Eksempel',
   editMode: 'Redigeringsmodus',
   listLabel: 'Liste',
   uploadError: 'Filopplasting feilet',
@@ -64,13 +63,12 @@ H5PEditor.language.core = {
   orderItemUp: 'Flytt element opp',
   orderItemDown: 'Flytt element ned',
   removeItem: 'Fjern element',
+  hubPanelLabel: 'Select content type',
   importantInstructions: 'Viktige instruksjonar',
   showImportantInstructions: 'Vis instruksjonar',
   hideImportantInstructions: 'Skjul viktige instruksjonar',
   hide: 'Skjul',
   example: 'Eksempel',
-  removeItem: 'Remove item',
-  hubPanelLabel: 'Select content type',
   createContentTabLabel: 'Create Content',
   uploadTabLabel: 'Upload',
   uploadPlaceholder: 'No file chosen',
@@ -182,5 +180,7 @@ H5PEditor.language.core = {
   copiedButton: 'Kopiert',
   pasteButton: 'Lim inn',
   pasteContent: 'Lim inn innhold',
-  confirmPasteContent: 'Ved å gjøre dette vil du erstatte innholdet i redigeringsverktøyet med innhold fra utklippstavlen din. Er du sikker på at du vil fortsette?'
+  confirmPasteContent: 'Ved å gjøre dette vil du erstatte innholdet i redigeringsverktøyet med innhold fra utklippstavlen din. Er du sikker på at du vil fortsette?',
+  copyToClipboard: 'Copy H5P content to the clipboard',
+  pasteFromClipboard: 'Paste H5P content from the clipboard'
 };

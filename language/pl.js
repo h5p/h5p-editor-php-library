@@ -34,7 +34,6 @@ H5PEditor.language.core = {
   editCopyright: 'Edytuj prawa autorskie',
   close: 'Zamknij',
   tutorial: 'Tutorial',
-  example: 'Przykład',
   editMode: 'Tryb edycji',
   listLabel: 'List',
   uploadError: 'Błąd podczas dodawnia',
@@ -163,7 +162,6 @@ H5PEditor.language.core = {
   untitled: 'Untitled',
   title: 'Title',
   metadata: 'Metadata',
-  addMetadata: 'Add metadata',
   addTitle: 'Add title',
   usedForSearchingReportsAndCopyrightInformation: 'Used for searching, reports and copyright information',
   metadataSharingAndLicensingInfo: 'Metadata (sharing and licensing info)',
@@ -182,5 +180,7 @@ H5PEditor.language.core = {
   copiedButton: 'Copied',
   pasteButton: 'Paste',
   pasteContent: 'Paste Content',
-  confirmPasteContent: 'By doing this you will replace the current content with the content from your clipboard. Are you sure you wish to continue?'
+  confirmPasteContent: 'By doing this you will replace the current content with the content from your clipboard. Are you sure you wish to continue?',
+  copyToClipboard: 'Copy H5P content to the clipboard',
+  pasteFromClipboard: 'Paste H5P content from the clipboard'
 };

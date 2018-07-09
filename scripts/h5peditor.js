@@ -792,10 +792,10 @@ ns.bindImportantDescriptionEvents = function (widget, fieldName, parent) {
  * @returns {string} HTML
  */
 ns.createCopyPasteButtons = function () {
-  return '<label class="h5peditor-copypaste-wrap">' +
-           '<button class="h5peditor-copy-button" disabled>' + ns.t('core', 'copyButton') + '</button>' +
-           '<button class="h5peditor-paste-button" disabled>' + ns.t('core', 'pasteButton') + '</button>' +
-         '</label>';
+  return '<div class="h5peditor-copypaste-wrap">' +
+           '<button class="h5peditor-copy-button" title="' + H5PEditor.t('core', 'copyToClipboard') + '" disabled>' + ns.t('core', 'copyButton') + '</button>' +
+           '<button class="h5peditor-paste-button" title="' + H5PEditor.t('core', 'pasteFromClipboard') + '" disabled>' + ns.t('core', 'pasteButton') + '</button>' +
+         '</div>';
 };
 
 /**
@@ -819,7 +819,7 @@ ns.confirmReplace = function (library, top, next) {
     // No need to confirm
     next();
   }
-}
+};
 
 /**
  * Check if any errors has been set.
