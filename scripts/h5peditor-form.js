@@ -125,21 +125,19 @@ ns.Form.prototype.remove = function () {
  * @returns {undefined}
  */
 ns.Form.prototype.processSemantics = function (semantics, defaultParams, metadata) {
-  if (this.entitledForMetadata) {
-    this.metadata = (metadata ? metadata : defaultParams.metadata || {});
+  this.metadata = (metadata ? metadata : defaultParams.metadata || {});
 
-    const $metadataForm = ns.metadataForm(semantics, this.metadata, this.$form.children('.tree'), this);
+  const $metadataForm = ns.metadataForm(semantics, this.metadata, this.$form.children('.tree'), this);
 
-    // Sync title fields of this editor form and a metadata form
-    ns.sync(
-      this.$form.find('#metadata-title-main'),
-      $metadataForm.find('.field-name-title').find('input')
-    );
+  // Sync title fields of this editor form and a metadata form
+  ns.sync(
+    this.$form.find('#metadata-title-main'),
+    $metadataForm.find('.field-name-title').find('input')
+  );
 
-    // Set the title
-    const title = (this.metadata && this.metadata.title) ? this.metadata.title : '';
-    this.$form.find('input#metadata-title-main').val(title);
-  }
+  // Set the title
+  const title = (this.metadata && this.metadata.title) ? this.metadata.title : '';
+  this.$form.find('input#metadata-title-main').val(title);
 
   // Overriding this.params with {} will lead to old content not being editable for now
   this.params = (defaultParams.params ? defaultParams.params : defaultParams);
