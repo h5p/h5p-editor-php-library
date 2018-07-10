@@ -1669,6 +1669,9 @@ a {
   &:disabled {
   }
 }
+.h5p-hub .h5peditor-paste-button:before {
+  color: #68a9ed;
+}
 .h5peditor-copied:before {
   top: 0.1em;
   content: "\e601";
