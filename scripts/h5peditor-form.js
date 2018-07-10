@@ -21,9 +21,9 @@ ns.Form = function () {
     '</div>'
   );
   this.$common = this.$form.find('.common > .fields');
-  this.library = '';
+  this.library = Object.keys(ns.libraryLoaded)[0];
 
-  this.entitledForMetadata = ns.entitledForMetadata(Object.keys(ns.libraryLoaded)[0]);
+  this.entitledForMetadata = ns.entitledForMetadata(this.library);
   // Add overlay
   this.$form.append('<div class="overlay"></div>');
 
@@ -52,11 +52,26 @@ ns.Form = function () {
 
   /*
    * Temporarily needed for old content where wrapper will not be created by
-   * the editor.
+   * the editor. Something like this should not be in core, of course.
+   * Can be removed as soon as the new content types are considered to be
+   * the default.
    */
   if (!this.entitledForMetadata) {
     const $wrapper = ns.$('<div/>', {'class': 'h5p-editor-flex-wrapper'});
     this.$form.find('label.h5peditor-label-wrapper').wrap($wrapper);
+
+    // This fixes CSS overrides done by some old custom editors, but should not be in core
+    switch (this.library.split(' ')[0]) {
+      case 'H5P.InteractiveVideo':
+        this.$form.find('#metadata-title-main-label').first().css('padding', '20px 20px 0 20px');
+        break;
+      case 'H5P.DragQuestion':
+        this.$form.find('#metadata-title-main-label').first().css('padding', '20px 20px 0 20px');
+        break;
+      case 'H5P.CoursePresentation':
+        this.$form.find('#metadata-title-main-label').first().css('margin-bottom', '50px');
+        break;
+    }
   }
 
   this.$form.find('.h5p-editor-flex-wrapper').append(metadataButton);
