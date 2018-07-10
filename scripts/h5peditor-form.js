@@ -23,60 +23,47 @@ ns.Form = function () {
   this.$common = this.$form.find('.common > .fields');
   this.library = '';
 
-  /*
-   * The check for entitledForMetadata is needed for now, because old
-   * content should not show the metadata options. Also, on Drupal 7,
-   * old content needs the title field, so it's displayed/hidden when changing
-   * the library chosen in the Hub.
-   * As soon as the new content versions have spread and are considered to be
-   * the default version, this code can go as the other special treatment
-   * in application.js for Drupal 7 and in h5peditor-editor.js.
-   */
-  const $formTitle = ns.$(parent.document).find('.form-item-title');
   this.entitledForMetadata = ns.entitledForMetadata(Object.keys(ns.libraryLoaded)[0]);
-  if (this.entitledForMetadata) {
-    if ($formTitle.length > 0) {
-      $formTitle.css('display', 'none');
-    }
+  // Add overlay
+  this.$form.append('<div class="overlay"></div>');
 
-    // Add overlay
-    this.$form.append('<div class="overlay"></div>');
+  // Inject a custom text field for the metadata title
+  var metaDataTitleSemantics = [{
+    'name' : 'title',
+    'type' : 'text',
+    'label' : ns.t('core', 'title'),
+    'description': ns.t('core', 'usedForSearchingReportsAndCopyrightInformation'),
+    'optional': false
+  }];
 
-    // Inject a custom text field for the metadata title
-    var metaDataTitleSemantics = [{
-      'name' : 'title',
-      'type' : 'text',
-      'label' : ns.t('core', 'title'),
-      'description': ns.t('core', 'usedForSearchingReportsAndCopyrightInformation'),
-      'optional': false
-    }];
+  // Ensure it has validation functions
+  ns.processSemanticsChunk(metaDataTitleSemantics, {}, this.$form.children('.tree'), this)
 
-    // Ensure it has validation functions
-    ns.processSemanticsChunk(metaDataTitleSemantics, {}, this.$form.children('.tree'), this)
+  // Give title field an ID
+  this.$form.find('.field-name-title').attr('id', 'metadata-title-main-label');
+  this.$form.find('.h5peditor-text').attr('id', 'metadata-title-main');
 
-    // Give title field an ID
-    this.$form.find('.field-name-title').attr('id', 'metadata-title-main-label');
-    this.$form.find('.h5peditor-text').attr('id', 'metadata-title-main');
+  // Add the metadata button
+  const metadataButton = ns.$('' +
+    '<div class="h5p-metadata-button-wrapper">' +
+      '<div class="h5p-metadata-button-tip"></div>' +
+      '<div class="toggle-metadata">' + ns.t('core', 'metadata') + '</div>' +
+    '</div>');
 
-    // Add the metadata button
-    const metadataButton = ns.$('' +
-      '<div class="h5p-metadata-button-wrapper">' +
-        '<div class="h5p-metadata-button-tip"></div>' +
-        '<div class="toggle-metadata">' + ns.t('core', 'metadata') + '</div>' +
-      '</div>');
-
-    this.$form.find('.h5p-editor-flex-wrapper').append(metadataButton);
-    this.$form.find('.toggle-metadata').click(function () {
-      self.$form.find('.h5p-metadata-wrapper').first().toggleClass('h5p-open');
-      self.$form.find('.overlay').toggle();
-    });
+  /*
+   * Temporarily needed for old content where wrapper will not be created by
+   * the editor.
+   */
+  if (!this.entitledForMetadata) {
+    const $wrapper = ns.$('<div/>', {'class': 'h5p-editor-flex-wrapper'});
+    this.$form.find('label.h5peditor-label-wrapper').wrap($wrapper);
   }
-  else {
-    // Drupal 7
-    if ($formTitle.length > 0) {
-      $formTitle.css('display', '');
-    }
-  }
+
+  this.$form.find('.h5p-editor-flex-wrapper').append(metadataButton);
+  this.$form.find('.toggle-metadata').click(function () {
+    self.$form.find('.h5p-metadata-wrapper').first().toggleClass('h5p-open');
+    self.$form.find('.overlay').toggle();
+  });
 
   // Add title expand/collapse button
   ns.$('<div/>', {

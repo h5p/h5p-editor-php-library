@@ -123,19 +123,6 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
 
     this.contentWindow.H5P.$body = $(this.contentDocument.body);
 
-    /*
-     * This is a workaround for Drupal 7 that should show a title field for
-     * content type versions that don't support metadata, but should not
-     * for newer content. Since the title field needs to be created by Drupal,
-     * but we don't want to show it by default, we hide it here on loading the.
-     * form. Can be removed as soon as the metadata enabled content types are
-     * considered to be the default.
-     */
-    const title = document.getElementsByClassName('form-item-title');
-    if (title.length > 0) {
-      title[0].style.display = 'none';
-    }
-
     // Load libraries data
     $.ajax({
       url: this.contentWindow.H5PEditor.getAjaxUrl(H5PIntegration.hubIsEnabled ? 'content-type-cache' : 'libraries')
