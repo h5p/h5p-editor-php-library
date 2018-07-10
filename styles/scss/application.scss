@@ -1649,13 +1649,25 @@ a {
   content: "\e90a";
 }
 .h5p-hub .h5peditor-paste-button {
-font-size: 16px;
-  margin-right: 1.3em;
-  margin-top: 0.9em;
-  background: transparent;
-  border: 0;
-  color: #a3a7ac;
   font-family: $font-family;
+  color: #fff;
+  border: solid 1px transparent;
+  padding: 0 0.75em 0.5em 0.75em;
+  background: initial;
+  line-height: initial;
+  height: initial;
+  margin-top: 0.5em;
+  margin-right: 0.5em;
+
+  &:hover {
+    background: #4b5460;
+    border-color: #606a78;
+  }
+  &:active {
+    background: #434b55;
+  }
+  &:disabled {
+  }
 }
 .h5peditor-copied:before {
   top: 0.1em;
