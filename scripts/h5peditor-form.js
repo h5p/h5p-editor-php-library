@@ -23,9 +23,22 @@ ns.Form = function () {
   this.$common = this.$form.find('.common > .fields');
   this.library = '';
 
-  // Without this check, metadata would be on by default
+  /*
+   * The check for entitledForMetadata is needed for now, because old
+   * content should not show the metadata options. Also, on Drupal 7,
+   * old content needs the title field, so it's displayed/hidden when changing
+   * the library chosen in the Hub.
+   * As soon as the new content versions have spread and are considered to be
+   * the default version, this code can go as the other special treatment
+   * in application.js for Drupal 7 and in h5peditor-editor.js.
+   */
+  const $formTitle = ns.$(parent.document).find('.form-item-title');
   this.entitledForMetadata = ns.entitledForMetadata(Object.keys(ns.libraryLoaded)[0]);
   if (this.entitledForMetadata) {
+    if ($formTitle.length > 0) {
+      $formTitle.css('display', 'none');
+    }
+
     // Add overlay
     this.$form.append('<div class="overlay"></div>');
 
@@ -57,6 +70,12 @@ ns.Form = function () {
       self.$form.find('.h5p-metadata-wrapper').first().toggleClass('h5p-open');
       self.$form.find('.overlay').toggle();
     });
+  }
+  else {
+    // Drupal 7
+    if ($formTitle.length > 0) {
+      $formTitle.css('display', '');
+    }
   }
 
   // Add title expand/collapse button
