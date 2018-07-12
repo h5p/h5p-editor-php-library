@@ -137,7 +137,7 @@ ns.Library.prototype.canPaste = function (clipboard) {
   }
 
   return false;
-}
+};
 
 /**
  * Replace library content using given clipboard
@@ -175,7 +175,7 @@ ns.Library.prototype.replaceContent = function (clipboard) {
     // Load form
     self.loadLibrary(clipboard.generic.library, true);
   });
-}
+};
 
 /**
  * Confirm replace if there is content selected
@@ -196,7 +196,7 @@ ns.Library.prototype.confirmReplace = function (next) {
     // No need to confirm
     next();
   }
-}
+};
 
 /**
  * Handler for when the library list has been loaded

@@ -14,13 +14,15 @@ var ns = H5PEditor;
  * @param {boolean} [options.populateTitle] If true, will populate the title if empty.
  */
 H5PEditor.metadataForm = function (field, metadata, $container, parent, options) {
-  // TODO: Is field really needed? Was it copy-pasted?
   const that = this;
   options = options || {};
   /*
    * TODO: Is there a decent way to make this a "real class" that can be used?
    *       Changing all the fields by using a DOM selector here and in other
    *       source files feels very wrong.
+   *       Also, the implementation works differently compared to other
+   *       widgets. If you read this, I feel ashamed although I didn't build
+   *       this right from the start.
    */
   var self = this;
   self.metadata = metadata;
@@ -59,7 +61,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
 
   group.$group.find('.title').remove();
   group.$group.find('.content').addClass('copyright-form');
-  field.children = [group];
+  //field.children = group.children;
 
   // Locate license and version selectors
   this.licenseField = find(group.children, 'field.name', 'license');
@@ -118,22 +120,31 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
     }
   });
 
+  // This is a hack to work around the design of this widget -- which is poor
+  var tmpChildren = this.parent.children.slice();
+
   // Create and append the rest of the widgets and fields
   // Append the metadata author list widget
   H5PEditor.metadataAuthorWidget(getPartialSemantics('authorWidget').fields, self.metadata, group, this.parent);
+  tmpChildren = tmpChildren.concat(this.parent.children);
 
   // Append the additional license field
-  var widget = H5PEditor.$('<div class="h5p-metadata-license-extras"></div>');
-  ns.processSemanticsChunk([getPartialSemantics('licenseExtras')], self.metadata, widget, this.parent);
-  widget.appendTo(group.$group.find('.content.copyright-form'));
+  var $widget = H5PEditor.$('<div class="h5p-metadata-license-extras"></div>');
+  ns.processSemanticsChunk([getPartialSemantics('licenseExtras')], self.metadata, $widget, this.parent);
+  $widget.appendTo(group.$group.find('.content.copyright-form'));
+  tmpChildren = tmpChildren.concat(this.parent.children);
 
   // Append the metadata changelog widget
   H5PEditor.metadataChangelogWidget([getPartialSemantics('changeLog')], self.metadata, group, this.parent);
+  tmpChildren = tmpChildren.concat(this.parent.children);
 
   // Append the additional information field
-  var $widget = H5PEditor.$('<div class="h5p-metadata-additional-information"></div>');
+  $widget = H5PEditor.$('<div class="h5p-metadata-additional-information"></div>');
   ns.processSemanticsChunk([getPartialSemantics('authorComments')], self.metadata, $widget, this.parent);
   $widget.appendTo(group.$group.find('.content.copyright-form'));
+  tmpChildren = tmpChildren.concat(this.parent.children);
+
+  this.parent.children = tmpChildren;
 
   $wrapper.find('.h5p-save').click(function () {
     // Try to automatically add an author if form is closed and a license selected
