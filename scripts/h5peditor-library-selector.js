@@ -294,7 +294,9 @@ ns.LibrarySelector.prototype.getParams = function () {
 };
 
 /**
- * TODO: Please document your functions
+ * Get the metadata of the main form.
+ *
+ * @return {object} Metadata object.
  */
 ns.LibrarySelector.prototype.getMetadata = function () {
   if (this.form === undefined) {

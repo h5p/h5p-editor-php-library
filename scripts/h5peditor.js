@@ -654,6 +654,11 @@ ns.createLabel = function (field, content) {
   // New items can be added next to the label within the flex-wrapper
   var html = wrapperFront + '<label class="h5peditor-label-wrapper">';
 
+  // Temporary fix for the old version of CoursePresentation's custom editor
+  if (field.widget === 'coursepresentation' && field.name === 'presentation') {
+    field.label = 0;
+  }
+
   if (field.label !== 0) {
     html += '<span class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' + (field.label === undefined ? field.name : field.label) + '</span>';
   }

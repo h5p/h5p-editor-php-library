@@ -369,14 +369,6 @@ ns.Library.prototype.addMetadataForm = function (semantics) {
         '<div class="toggle-metadata">' + ns.t('core', 'metadata') + '</div>' +
       '</div>');
 
-    // TODO: This needs refactoring. Badly!
-    // There are too many combinations of
-    // - metadata title (yes/no)
-    // - metadata button (yes/no)
-    // - metadata button (here/there/elsewhere)
-    // - compound type (editor this way/editor that way)
-    // that were introduced one after the other leading to too many switches and CSS selectors all over the place
-
     // Put the metadataButton after the first visible label if it has text
     var $labelWrapper = that.$libraryWrapper.siblings('.h5p-editor-flex-wrapper').children('.h5peditor-label-wrapper');
     if ($labelWrapper.length > 0 && !$labelWrapper.is(':empty')) {

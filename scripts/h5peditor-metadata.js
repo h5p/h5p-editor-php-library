@@ -16,14 +16,7 @@ var ns = H5PEditor;
 H5PEditor.metadataForm = function (field, metadata, $container, parent, options) {
   const that = this;
   options = options || {};
-  /*
-   * TODO: Is there a decent way to make this a "real class" that can be used?
-   *       Changing all the fields by using a DOM selector here and in other
-   *       source files feels very wrong.
-   *       Also, the implementation works differently compared to other
-   *       widgets. If you read this, I feel ashamed although I didn't build
-   *       this right from the start.
-   */
+
   var self = this;
   self.metadata = metadata;
   self.parent = parent;
@@ -61,7 +54,6 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
 
   group.$group.find('.title').remove();
   group.$group.find('.content').addClass('copyright-form');
-  //field.children = group.children;
 
   // Locate license and version selectors
   this.licenseField = find(group.children, 'field.name', 'license');
@@ -120,7 +112,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
     }
   });
 
-  // This is a hack to work around the design of this widget -- which is poor
+  // This can be made nicer when refactoring
   var tmpChildren = this.parent.children.slice();
 
   // Create and append the rest of the widgets and fields
@@ -157,7 +149,6 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
   });
 
   // Set author of main content.
-  // TODO: Add realName to H5PIntegration
   if (
     H5PIntegration && H5PIntegration.user && H5PIntegration.user.name
   ) {

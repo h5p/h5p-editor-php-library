@@ -52,9 +52,8 @@ ns.Form = function () {
 
   /*
    * Temporarily needed for old content where wrapper will not be created by
-   * the editor. Something like this should not be in core, of course.
-   * Can be removed as soon as the new content types are considered to be
-   * the default.
+   * the editor. Can be removed as soon as the new content types are considered
+   * to be the default.
    */
   if (!this.entitledForMetadata) {
     const $wrapper = ns.$('<div/>', {'class': 'h5p-editor-flex-wrapper'});
@@ -69,7 +68,7 @@ ns.Form = function () {
         this.$form.find('#metadata-title-main-label').first().css('padding', '20px 20px 0 20px');
         break;
       case 'H5P.CoursePresentation':
-        this.$form.find('#metadata-title-main-label').first().css('margin-bottom', '50px');
+        this.$form.find('#metadata-title-main-label').first().css('margin-bottom', '0');
         break;
     }
   }
