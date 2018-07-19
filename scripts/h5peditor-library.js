@@ -65,14 +65,13 @@ ns.Library = function (parent, field, params, setValue) {
     if (!self.libraries) {
       return; // Libraries not loaded yet.
     }
-    self.$copyButton.html(ns.t('core', 'copyButton')).removeClass('h5peditor-copied');
 
     var canPaste = !event.data.reset;
     if (canPaste) {
       // Check if content type is supported here
       canPaste = self.canPaste(H5P.getClipboard());
     }
-    self.$pasteButton.prop('disabled', !canPaste);
+    self.$pasteButton.toggleClass('disabled', !canPaste);
   });
 };
 
@@ -110,11 +109,34 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   this.$libraryWrapper = this.$myField.children('.libwrap');
   if (window.localStorage) {
     this.$copyButton = this.$myField.find('.h5peditor-copy-button').click(function () {
+      if (this.classList.contains('disabled')) {
+        return;
+      }
+
       that.validate(); // Make sure all values are up-to-date
       H5P.clipboardify(that.params);
-      that.$copyButton.html(ns.t('core', 'copiedButton')).addClass('h5peditor-copied');
+
+      ns.attachToastTo(
+        that.$copyButton.get(0),
+        H5PEditor.t('core', 'copiedToClipboard'),
+        {position: {horizontal: 'right', vertical: 'above'}}
+      );
     });
     this.$pasteButton = this.$myField.find('.h5peditor-paste-button').click(function () {
+
+      // Inform user why paste is not possible
+      if (this.classList.contains('disabled')) {
+        const pasteCheck = ns.canPastePlus(H5P.getClipboard(), that.libraries);
+        if (pasteCheck.canPaste !== true) {
+          if (pasteCheck.reason === 'pasteTooOld' || pasteCheck.reason === 'pasteTooNew') {
+            that.confirmPasteError(pasteCheck.description, that.$select.offset().top, function() {});
+          }
+          else {
+            ns.attachToastTo(this, pasteCheck.description, {position: {horizontal: 'right', vertical: 'above'}});
+          }
+          return;
+        }
+      }
       that.replaceContent(H5P.getClipboard());
     });
   }
@@ -242,7 +264,7 @@ ns.Library.prototype.librariesLoaded = function (libList) {
   }
   else if (window.localStorage && self.canPaste(H5P.getClipboard())) {
     // Toggle paste button when libraries are loaded
-    self.$pasteButton.prop('disabled', false);
+    self.$pasteButton.toggleClass('disabled', false);
   }
 
   if (self.runChangeCallback === true) {
@@ -275,7 +297,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     delete this.params.metadata;
 
     this.$libraryWrapper.attr('class', 'libwrap');
-    this.$copyButton.prop('disabled', true);
+    this.$copyButton.toggleClass('disabled', true);
     return;
   }
 
@@ -300,7 +322,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 
     ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper.html(''), that);
     if (window.localStorage) {
-      that.$copyButton.prop('disabled', false);
+      that.$copyButton.toggleClass('disabled', false);
     }
 
     if (that.libraries !== undefined) {

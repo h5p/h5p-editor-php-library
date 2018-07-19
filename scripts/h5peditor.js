@@ -798,8 +798,8 @@ ns.bindImportantDescriptionEvents = function (widget, fieldName, parent) {
  */
 ns.createCopyPasteButtons = function () {
   return '<div class="h5peditor-copypaste-wrap">' +
-           '<button class="h5peditor-copy-button" title="' + H5PEditor.t('core', 'copyToClipboard') + '" disabled>' + ns.t('core', 'copyButton') + '</button>' +
-           '<button class="h5peditor-paste-button" title="' + H5PEditor.t('core', 'pasteFromClipboard') + '" disabled>' + ns.t('core', 'pasteButton') + '</button>' +
+           '<button class="h5peditor-copy-button disabled" title="' + H5PEditor.t('core', 'copyToClipboard') + '">' + ns.t('core', 'copyButton') + '</button>' +
+           '<button class="h5peditor-paste-button disabled" title="' + H5PEditor.t('core', 'pasteFromClipboard') + '">' + ns.t('core', 'pasteButton') + '</button>' +
          '</div>';
 };
 
@@ -1082,6 +1082,233 @@ ns.entitledForMetadata = function (library) {
   this.previousLibraryEntitledForMetadata = true;
 
   return true;
+};
+
+/**
+ * Show a toast message.
+ *
+ * The reference element could be dom elements the toast should be attached to,
+ * or e.g. the document body for general toast messages.
+ *
+ * @param {DOM} element Reference element to show toast message for.
+ * @param {string} message Message to show.
+ * @param {object} [config] Configuration.
+ * @param {string} [config.style=h5p-editor-toast] Style name for the tooltip.
+ * @param {number} [config.duration=3000] Toast message length in ms.
+ * @param {object} [config.position] Relative positioning of the toast.
+ * @param {string} [config.position.horizontal=centered] [before|left|centered|right|after].
+ * @param {string} [config.position.vertical=below] [above|top|centered|bottom|below].
+ * @param {number} [config.position.offsetHorizontal=0] Extra horizontal offset.
+ * @param {number} [config.position.offsetVertical=0] Extra vetical offset.
+ */
+ns.attachToastTo = function (element, message, config) {
+  if (element === undefined || message === undefined) {
+    return;
+  }
+
+  /**
+   * Handle click while toast is showing.
+   */
+  const clickHandler = function (event) {
+    /*
+     * A common use case will be to attach toasts to buttons that are clicked.
+     * The click would remove the toast message instantly without this check.
+     */
+    if (event.target === element) {
+      return;
+    }
+    clearTimeout(timer);
+    removeToast();
+  };
+
+  /**
+   * Remove the toast message.
+   */
+  const removeToast = function () {
+    document.removeEventListener('click', clickHandler);
+    toast.remove(toast);
+  };
+
+  /**
+   * Get absolute coordinates for the toast.
+   *
+   * @param {DOM} element Reference element to show toast message for.
+   * @param {DOM} toast Toast element.
+   * @param {object} [position={}] Relative positioning of the toast message.
+   * @param {string} [position.horizontal=centered] [before|left|centered|right|after].
+   * @param {string} [position.vertical=below] [above|top|centered|bottom|below].
+   * @param {number} [position.offsetHorizontal=0] Extra horizontal offset.
+   * @param {number} [position.offsetVertical=0] Extra vetical offset.
+   * @return {object}
+   */
+  const getToastCoordinates = function (element, toast, position) {
+    position = position || {};
+    position.offsetHorizontal = position.offsetHorizontal || 0;
+    position.offsetVertical = position.offsetVertical || 0;
+
+    const toastRect = toast.getBoundingClientRect();
+    const elementRect = element.getBoundingClientRect();
+
+    let left = 0;
+    let top = 0;
+
+    // Compute horizontal position
+    switch (position.horizontal) {
+      case 'before':
+        left = elementRect.left - toastRect.width - position.offsetHorizontal;
+        break;
+      case 'after':
+        left = elementRect.left + elementRect.width + position.offsetHorizontal;
+        break;
+      case 'left':
+        left = elementRect.left + position.offsetHorizontal;
+        break;
+      case 'right':
+        left = elementRect.left + elementRect.width - toastRect.width - position.offsetHorizontal;
+        break;
+      case 'centered':
+        left = elementRect.left + elementRect.width / 2 - toastRect.width / 2 + position.offsetHorizontal;
+        break;
+      default:
+        left = elementRect.left + elementRect.width / 2 - toastRect.width / 2 + position.offsetHorizontal;
+    }
+
+    // Compute vertical position
+    switch (position.vertical) {
+      case 'above':
+        top = elementRect.top - toastRect.height - position.offsetVertical;
+        break;
+      case 'below':
+        top = elementRect.top + elementRect.height + position.offsetVertical;
+        break;
+      case 'top':
+        top = elementRect.top + position.offsetVertical;
+        break;
+      case 'bottom':
+        top = elementRect.top + elementRect.height - toastRect.height - position.offsetVertical;
+        break;
+      case 'centered':
+        top = elementRect.top + elementRect.height / 2 - toastRect.height / 2 + position.offsetVertical;
+        break;
+      default:
+        top = elementRect.top + elementRect.height + position.offsetVertical;
+    }
+
+    return {left: left, top: top};
+  };
+
+  // Sanitization
+  config = config || {};
+  config.style = config.style || 'h5p-editor-toast';
+  config.duration = config.duration || 3000;
+
+  // Build toast
+  const toast = document.createElement('div');
+  toast.setAttribute('id', config.style);
+  toast.classList.add('h5p-toast-disabled');
+  toast.classList.add(config.style);
+
+  const msg = document.createElement('span');
+  msg.innerHTML = message;
+  toast.appendChild(msg);
+
+  document.body.appendChild(toast);
+
+  // The message has to be set before getting the coordinates
+  const coordinates = getToastCoordinates(element, toast, config.position);
+  toast.style.left = Math.round(coordinates.left) + 'px';
+  toast.style.top = Math.round(coordinates.top) + 'px';
+
+  toast.classList.remove('h5p-toast-disabled');
+  const timer = setTimeout(removeToast, config.duration);
+
+  // The toast can also be removed by clicking somewhere
+  document.addEventListener('click', clickHandler);
+};
+
+/**
+ * Check if clipboard can be pasted.
+ *
+ * @param {Object} clipboard Clipboard data.
+ * @param {Object} libs Libraries to compare against.
+ * @return {boolean} True, if content can be pasted.
+ */
+ns.canPaste = function (clipboard, libs) {
+  return (this.canPastePlus(clipboard, libs)).canPaste;
+};
+
+/**
+ * Check if clipboard can be pasted and give reason if not.
+ *
+ * @param {Object} clipboard Clipboard data.
+ * @param {Object} libs Libraries to compare against.
+ * @return {Object} Results. {canPaste: boolean, reason: string, description: string}.
+ */
+ns.canPastePlus = function (clipboard, libs) {
+  // Clipboard is empty
+  if (!clipboard || !clipboard.generic) {
+    return {canPaste: false, reason: 'pasteNoContent', description: ns.t('core', 'pasteNoContent')};
+  }
+
+  // No libraries to compare to
+  if (libs === undefined) {
+    return {canPaste: false, reason: 'pasteError', description:ns.t('core', 'pasteError')};
+  }
+
+  // Translate Hub format to common library format
+  if (libs.libraries !== undefined) {
+    libs = libs.libraries;
+    libs.forEach(function(lib) {
+      lib.name = lib.machineName;
+      lib.majorVersion = lib.localMajorVersion;
+      lib.minorVersion = lib.localMinorVersion;
+    });
+  }
+
+  // Check if clipboard library type is available
+  const machineNameClip = clipboard.generic.library.split(' ')[0];
+  let candidates = libs.filter(function (library) {
+    return library.name === machineNameClip;
+  });
+  if (candidates.length === 0) {
+    return {canPaste: false, reason: 'pasteContentNotSupported', description: ns.t('core', 'pasteContentNotSupported')};
+  }
+
+  // Check if clipboard library version is available
+  const versionClip = clipboard.generic.library.split(' ')[1];
+  const match = candidates.some(function(candidate) {
+    return ('' + candidate.majorVersion + '.' + candidate.minorVersion) === versionClip;
+  });
+  if (match) {
+    return {canPaste: true};
+  }
+
+  // Sort remaining candidates by version number
+  candidates = candidates
+    .map(function (candidate) {
+      return '' + candidate.majorVersion + '.' + candidate.minorVersion;
+    })
+    .map(function (candidate) {
+      return candidate.replace(/\d+/g, function (d) {return +d + 1000;});
+    })
+    .sort()
+    .map(function (candidate) {
+      return candidate.replace(/\d+/g, function (d) {return +d - 1000;});
+    });
+
+  // Clipboard library is newer than latest available local library
+  const candidateMax = candidates.slice(-1)[0];
+  if (+candidateMax.split('.')[0] < +versionClip.split('.')[0] || (+candidateMax.split('.')[0] === +versionClip.split('.')[0] && +candidateMax.split('.')[1] < +versionClip.split('.')[1])) {
+    return {canPaste: false, reason: 'pasteTooNew', description: ns.t('core', 'pasteTooNew', {':clip': versionClip, ':local': candidateMax})};
+  }
+
+  // Clipboard library is older than latest available local library
+  const candidateMin = candidates.slice(0, 1)[0];
+  if (+candidateMin.split('.')[0] > +versionClip.split('.')[0] || (+candidateMin.split('.')[0] === +versionClip.split('.')[0] && +candidateMin.split('.')[1] > +versionClip.split('.')[1])) {
+    return {canPaste: false, reason: 'pasteTooOld', description: ns.t('core', 'pasteTooOld', {':clip': versionClip, ':local': candidateMin})};
+  }
+
+  return {canPaste: false, reason: 'pasteError', description: ns.t('core', 'pasteError')};
 };
 
 // Factory for creating storage instance

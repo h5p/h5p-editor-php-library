@@ -182,5 +182,12 @@ H5PEditor.language.core = {
   pasteContent: 'Inhalt Einf\u00fcgen',
   confirmPasteContent: 'Du wirst mit dieser Aktion den bestehenden Inhalt durch den aus dem Zwischenspeicher ersetzen. Bist du sicher, dass du das tun willst?',
   copyToClipboard: 'Kopiere H5P-Inhalt in den Zwischenspeicher',
-  pasteFromClipboard: 'Füge H5P-Inhalt aus dem Zwischenspeicher ein'
+  copiedToClipboard: 'Content is copied to the clipboard',
+  pasteFromClipboard: 'Paste H5P content from the clipboard',
+  pasteNoContent: 'No H5P content on the clipboard',
+  pasteError: 'Cannot paste from clipboard',
+  pasteContentNotSupported: 'The content you’re trying to paste is not supported in this context',
+  pasteTooOld: 'The content you’re trying to paste is of a lower version (:clip) than what is supported in this context (:local), if possible try to have the content you want to paste upgraded, copy it again and try pasting it here.',
+  pasteTooNew: 'The content you’re trying to paste is of a higher version (:clip) than what is supported in this context (:local), if possible try to have this content upgraded first, and then try pasting the content here again.',
+  ok: 'OK'
 };
