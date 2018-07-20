@@ -119,7 +119,7 @@ ns.Library.prototype.appendTo = function ($wrapper) {
       ns.attachToastTo(
         that.$copyButton.get(0),
         H5PEditor.t('core', 'copiedToClipboard'),
-        {position: {horizontal: 'right', vertical: 'above'}}
+        {position: {horizontal: 'center', vertical: 'above', overflowReference: window.frameElement}}
       );
     });
     this.$pasteButton = this.$myField.find('.h5peditor-paste-button').click(function () {
@@ -132,7 +132,11 @@ ns.Library.prototype.appendTo = function ($wrapper) {
             that.confirmPasteError(pasteCheck.description, that.$select.offset().top, function() {});
           }
           else {
-            ns.attachToastTo(this, pasteCheck.description, {position: {horizontal: 'right', vertical: 'above'}});
+            ns.attachToastTo(
+              this,
+              pasteCheck.description,
+              {position: {horizontal: 'center', vertical: 'above', overflowReference: window.frameElement}}
+            );
           }
           return;
         }

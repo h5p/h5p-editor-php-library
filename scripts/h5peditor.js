@@ -1100,6 +1100,13 @@ ns.entitledForMetadata = function (library) {
  * @param {string} [config.position.vertical=below] [above|top|centered|bottom|below].
  * @param {number} [config.position.offsetHorizontal=0] Extra horizontal offset.
  * @param {number} [config.position.offsetVertical=0] Extra vetical offset.
+ * @param {boolean} [config.position.noOverflowLeft=false] True to prevent overflow left.
+ * @param {boolean} [config.position.noOverflowRight=false] True to prevent overflow right.
+ * @param {boolean} [config.position.noOverflowTop=false] True to prevent overflow top.
+ * @param {boolean} [config.position.noOverflowBottom=false] True to prevent overflow bottom.
+ * @param {boolean} [config.position.noOverflowX=false] True to prevent overflow left and right.
+ * @param {boolean} [config.position.noOverflowY=false] True to prevent overflow top and bottom.
+ * @param {object} [config.position.overflowReference=document.body] DOM reference for overflow.
  */
 ns.attachToastTo = function (element, message, config) {
   if (element === undefined || message === undefined) {
@@ -1139,6 +1146,13 @@ ns.attachToastTo = function (element, message, config) {
    * @param {string} [position.vertical=below] [above|top|centered|bottom|below].
    * @param {number} [position.offsetHorizontal=0] Extra horizontal offset.
    * @param {number} [position.offsetVertical=0] Extra vetical offset.
+   * @param {boolean} [position.noOverflowLeft=false] True to prevent overflow left.
+   * @param {boolean} [position.noOverflowRight=false] True to prevent overflow right.
+   * @param {boolean} [position.noOverflowTop=false] True to prevent overflow top.
+   * @param {boolean} [position.noOverflowBottom=false] True to prevent overflow bottom.
+   * @param {boolean} [position.noOverflowX=false] True to prevent overflow left and right.
+   * @param {boolean} [position.noOverflowY=false] True to prevent overflow top and bottom.
+   * @param {object} [position.overflowReference=document.body] DOM reference for overflow.
    * @return {object}
    */
   const getToastCoordinates = function (element, toast, position) {
@@ -1192,6 +1206,22 @@ ns.attachToastTo = function (element, message, config) {
         break;
       default:
         top = elementRect.top + elementRect.height + position.offsetVertical;
+    }
+
+    // Prevent overflow
+    const overflowElement = position.overflowReference || document.body;
+    const bounds = overflowElement.getBoundingClientRect();
+    if ((position.noOverflowLeft || position.noOverflowX) && left < bounds.x) {
+      left = bounds.x;
+    }
+    if ((position.noOverflowRight || position.noOverflowX) && left + toastRect.width > bounds.x + bounds.width) {
+      left = bounds.x + bounds.width - toastRect.width;
+    }
+    if ((position.noOverflowTop || position.noOverflowY) && top < bounds.y) {
+      top = bounds.y;
+    }
+    if ((position.noOverflowBottom || position.noOverflowY) && top + toastRect.height > bounds.y + bounds.height) {
+      left = bounds.y + bounds.height - toastRect.height;
     }
 
     return {left: left, top: top};
