@@ -1665,7 +1665,8 @@ a {
   &:active {
     background: #434b55;
   }
-  &:disabled {
+  &.disabled {
+    border-color:transparent;
   }
 }
 .h5p-hub .h5peditor-paste-button:before {
