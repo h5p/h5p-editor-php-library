@@ -1120,8 +1120,9 @@ ns.attachToastTo = function (element, message, config) {
     /*
      * A common use case will be to attach toasts to buttons that are clicked.
      * The click would remove the toast message instantly without this check.
+     * Children of the clicked element are also ignored.
      */
-    if (event.target === element) {
+    if (event.path.indexOf(element) !== -1) {
       return;
     }
     clearTimeout(timer);
