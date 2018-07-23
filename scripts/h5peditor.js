@@ -1153,7 +1153,6 @@ ns.attachToastTo = function (element, message, config) {
    * @param {boolean} [position.noOverflowBottom=false] True to prevent overflow bottom.
    * @param {boolean} [position.noOverflowX=false] True to prevent overflow left and right.
    * @param {boolean} [position.noOverflowY=false] True to prevent overflow top and bottom.
-   * @param {object} [position.overflowReference=document.body] DOM reference for overflow.
    * @return {object}
    */
   const getToastCoordinates = function (element, toast, position) {
@@ -1210,18 +1209,18 @@ ns.attachToastTo = function (element, message, config) {
     }
 
     // Prevent overflow
-    const overflowElement = position.overflowReference || document.body;
+    const overflowElement = document.body;
     const bounds = overflowElement.getBoundingClientRect();
-    if ((position.noOverflowLeft || position.noOverflowX) && left < bounds.x) {
+    if ((position.noOverflowLeft || position.noOverflowX) && (left < bounds.x)) {
       left = bounds.x;
     }
-    if ((position.noOverflowRight || position.noOverflowX) && left + toastRect.width > bounds.x + bounds.width) {
+    if ((position.noOverflowRight || position.noOverflowX) && ((left + toastRect.width) > (bounds.x + bounds.width))) {
       left = bounds.x + bounds.width - toastRect.width;
     }
-    if ((position.noOverflowTop || position.noOverflowY) && top < bounds.y) {
+    if ((position.noOverflowTop || position.noOverflowY) && (top < bounds.y)) {
       top = bounds.y;
     }
-    if ((position.noOverflowBottom || position.noOverflowY) && top + toastRect.height > bounds.y + bounds.height) {
+    if ((position.noOverflowBottom || position.noOverflowY) && ((top + toastRect.height) > (bounds.y + bounds.height))) {
       left = bounds.y + bounds.height - toastRect.height;
     }
 

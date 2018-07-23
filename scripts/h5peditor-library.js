@@ -119,7 +119,7 @@ ns.Library.prototype.appendTo = function ($wrapper) {
       ns.attachToastTo(
         that.$copyButton.get(0),
         H5PEditor.t('core', 'copiedToClipboard'),
-        {position: {horizontal: 'center', vertical: 'above', overflowReference: window.frameElement}}
+        {position: {horizontal: 'center', vertical: 'above', noOverflowX: true}}
       );
     });
     this.$pasteButton = this.$myField.find('.h5peditor-paste-button').click(function () {
@@ -135,7 +135,7 @@ ns.Library.prototype.appendTo = function ($wrapper) {
             ns.attachToastTo(
               this,
               pasteCheck.description,
-              {position: {horizontal: 'center', vertical: 'above', overflowReference: window.frameElement}}
+              {position: {horizontal: 'center', vertical: 'above', noOverflowX: true}}
             );
           }
           return;

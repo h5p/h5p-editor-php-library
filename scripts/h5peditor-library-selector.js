@@ -193,9 +193,8 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
         {position: {
           horizontal: 'center',
           vertical: 'above',
-          noOverflowX: true,
-          overflowReference: window.frameElement}
-        }
+          noOverflowX: true
+        }}
       );
     });
     this.$pasteButton = $buttons.find('.h5peditor-paste-button').click(function () {
@@ -213,9 +212,8 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
               {position: {
                 horizontal: 'center',
                 vertical: 'above',
-                noOverflowX: true,
-                overflowReference: window.frameElement}
-              }
+                noOverflowX: true
+              }}
             );
           }
           return;
