@@ -96,7 +96,13 @@ ns.Library.prototype.appendTo = function ($wrapper) {
 
   html += ns.createDescription(this.field.description);
   html = '<div class="field ' + this.field.type + '">' + html + '<select>' + ns.createOption('-', 'Loading...') + '</select>';
-  if (window.localStorage) {
+
+  // Get hascopypaste property from semantics library options
+  const hascopypaste = this.field.options.some(function(option) {
+    return (option.name === that.params.library && option.hascopypaste !== false);
+  });
+
+  if (window.localStorage && hascopypaste) {
     html += ns.createCopyPasteButtons();
   }
 
