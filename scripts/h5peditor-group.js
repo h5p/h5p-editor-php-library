@@ -109,6 +109,7 @@ ns.Group.prototype.appendTo = function ($wrapper) {
     this.children = [];
     var field = this.field.fields[0];
     var widget = field.widget === undefined ? field.type : field.widget;
+    this.params = this.params === undefined ? this.field.fields[0].default : this.params;
     this.children[0] = new ns.widgets[widget](this, field, this.params, function (field, value) {
       that.setValue(that.field, value);
     });
