@@ -50,10 +50,6 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
 
     // Create editing image
     var editingImage = new Image();
-    var crossOrigin = H5P.getCrossOrigin();
-    if (crossOrigin) {
-      editingImage.crossOrigin = crossOrigin;
-    }
     editingImage.className = 'h5p-editing-image hidden';
     editingImage.id = 'h5p-editing-image-' + uniqueId;
     editingContainer.appendChild(editingImage);
@@ -264,6 +260,15 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       var darkroom = popup.querySelector('.darkroom-container');
       if (darkroom) {
         darkroom.parentNode.removeChild(darkroom);
+      }
+
+      // Set crossorigin attribute
+      var crossOrigin = H5P.getCrossOrigin(imgSrc);
+      if (crossOrigin) {
+        editingImage.crossOrigin = crossOrigin;
+      }
+      else {
+        editingImage.removeAttribute('crossorigin');
       }
 
       editingImage.src = imgSrc;
