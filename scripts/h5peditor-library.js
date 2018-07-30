@@ -98,8 +98,9 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   html = '<div class="field ' + this.field.type + '">' + html + '<select>' + ns.createOption('-', 'Loading...') + '</select>';
 
   // Get hascopypaste property from semantics library options
+  // options can either be string or object!
   const hascopypaste = this.field.options.some(function(option) {
-    return (option.name === that.params.library && option.hascopypaste !== false);
+    return ((option === that.params.library || option.name === that.params.library) && option.hascopypaste !== false);
   });
 
   if (window.localStorage && hascopypaste) {
