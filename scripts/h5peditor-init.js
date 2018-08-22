@@ -58,7 +58,7 @@
 
           $library.val(h5peditor.getLibrary());
           $params.val(JSON.stringify(params));
-          try{
+          try {
             var presave = h5peditor.presave(params);
             $maxScore.val(presave.maxScore);
           } catch (err) {

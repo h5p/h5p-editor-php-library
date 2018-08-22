@@ -189,7 +189,7 @@ ns.Library.prototype.replaceContent = function (clipboard) {
   // Load library on confirmation
   ns.confirmReplace(this.params.library, this.$select.offset().top, function () {
     // Update UI
-    self.$select.val(clipboard.generic.library)
+    self.$select.val(clipboard.generic.library);
 
     // Delete old params (to keep object ref)
     for (var prop in self.params) {
@@ -199,7 +199,7 @@ ns.Library.prototype.replaceContent = function (clipboard) {
     }
 
     // Update params
-    for (var prop in clipboard.generic) {
+    for (prop in clipboard.generic) {
       if (clipboard.generic.hasOwnProperty(prop)) {
         self.params[prop] = clipboard.generic[prop];
       }
@@ -369,7 +369,7 @@ ns.Library.prototype.addMetadataForm = function (semantics) {
       .indexOf(this.currentLibrary);
 
     // By default, the metadata button should be displayed
-    if (this.field.options[itemPosition].hasmetadata === false) {
+    if (this.field.options[itemPosition].hasMetadata === false) {
       return;
     }
   }
