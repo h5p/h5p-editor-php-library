@@ -50,34 +50,13 @@ ns.Form = function () {
       '<div class="toggle-metadata">' + ns.t('core', 'metadata') + '</div>' +
     '</div>');
 
-  /*
-   * Temporarily needed for old content where wrapper will not be created by
-   * the editor. Can be removed as soon as the new content types are considered
-   * to be the default.
-   */
-  if (!this.entitledForMetadata) {
-    const $wrapper = ns.$('<div/>', {'class': 'h5p-editor-flex-wrapper'});
-    this.$form.find('label.h5peditor-label-wrapper').wrap($wrapper);
-
-    // This fixes CSS overrides done by some old custom editors, but should not be in core
-    switch (this.library.split(' ')[0]) {
-      case 'H5P.InteractiveVideo':
-        this.$form.find('#metadata-title-main-label').first().css('padding', '20px 20px 0 20px');
-        break;
-      case 'H5P.DragQuestion':
-        this.$form.find('#metadata-title-main-label').first().css('padding', '20px 20px 0 20px');
-        break;
-      case 'H5P.CoursePresentation':
-        this.$form.find('#metadata-title-main-label').first().css('margin-bottom', '0');
-        break;
-    }
+  if (this.entitledForMetadata) {
+    this.$form.find('.h5p-editor-flex-wrapper').append(metadataButton);
+    this.$form.find('.toggle-metadata').click(function () {
+      self.$form.find('.h5p-metadata-wrapper').first().toggleClass('h5p-open');
+      self.$form.find('.overlay').toggle();
+    });
   }
-
-  this.$form.find('.h5p-editor-flex-wrapper').append(metadataButton);
-  this.$form.find('.toggle-metadata').click(function () {
-    self.$form.find('.h5p-metadata-wrapper').first().toggleClass('h5p-open');
-    self.$form.find('.overlay').toggle();
-  });
 
   // Add title expand/collapse button
   ns.$('<div/>', {
