@@ -403,14 +403,19 @@ class H5peditor {
       }
     }
 
+    $translations = array();
     // Add translations for libraries.
     foreach ($libraries as $library) {
-      $language = $this->getLibraryLanguage($library['machineName'], $library['majorVersion'], $library['minorVersion'], $languageCode);
-      if ($language !== NULL) {
-        $lang                                = '; H5PEditor.language["' . $library['machineName'] . '"] = ' . $language . ';';
-        $libraryData->javascript[md5($lang)] = $lang;
+      if (empty($library['semantics'])) {
+        $translation = $this->getLibraryLanguage($library['machineName'], $library['majorVersion'], $library['minorVersion'], $languageCode);
+
+        if ($translation !== NULL) {
+          $translations[$library['machineName']] = json_decode($translation);
+        }
       }
     }
+
+    $libraryData->translations = $translations;
 
     return $libraryData;
   }

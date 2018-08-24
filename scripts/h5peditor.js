@@ -87,6 +87,14 @@ ns.libraryRequested = function (libraryName, callback) {
 
             if (isFinishedLoading) {
               ns.libraryLoaded[libraryName] = true;
+
+              // Need to set translations after all scripts have been loaded
+              if (libraryData.translations) {
+                for (var machineName in libraryData.translations) {
+                  H5PEditor.language[machineName] = libraryData.translations[machineName];
+                }
+              }
+
               callback(ns.libraryCache[libraryName].semantics);
             }
           };
@@ -161,13 +169,13 @@ ns.loadLibrary = function (libraryName, callback) {
           libraryData.semantics = semantics;
           ns.libraryCache[libraryName] = libraryData;
 
-          ns.libraryRequested(libraryName, function (semen) {
-            callback(semen);
+          ns.libraryRequested(libraryName, function (semantics) {
+            callback(semantics);
 
             // Run queue.
             if (ns.loadedCallbacks[libraryName]) {
               for (var i = 0; i < ns.loadedCallbacks[libraryName].length; i++) {
-                ns.loadedCallbacks[libraryName][i](semen);
+                ns.loadedCallbacks[libraryName][i](semantics);
               }
             }
           });
