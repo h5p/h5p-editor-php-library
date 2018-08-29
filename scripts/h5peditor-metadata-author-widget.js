@@ -51,7 +51,6 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, group, parent) {
     var authorName = authorNameInput.val().trim();
     var authorRole = authorRoleInput.val();
 
-    // TODO serverside validation?
     if (authorName === '') {
       return;
     }
