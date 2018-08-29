@@ -52,8 +52,9 @@ H5PEditor.widgets.select = H5PEditor.Select = (function (E) {
    * @returns {String} HTML.
    */
   C.prototype.createHtml = function () {
+    var options = '';
     if (this.field.optional === true || this.field.default === undefined) {
-      var options = E.createOption('-', '-');
+      options = E.createOption('-', '-');
     }
     options += C.createOptionsHtml(this.field.options, this.value);
 
