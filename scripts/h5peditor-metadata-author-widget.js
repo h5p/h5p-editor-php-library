@@ -1,7 +1,3 @@
-/*global H5P*/
-var H5PEditor = H5PEditor || {};
-var ns = H5PEditor;
-
 /**
  * Creates a widget to add author information to a form
  *
