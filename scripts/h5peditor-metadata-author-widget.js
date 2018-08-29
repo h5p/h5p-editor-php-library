@@ -27,7 +27,6 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, group, parent) {
       H5PEditor.t('core', 'addAuthor') +
     '</a>' +
   '</div>')
-  .data('widget', widget)
   .click(function (event) {
     addAuthor(event.originalEvent !== undefined);
   });
@@ -107,11 +106,11 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, group, parent) {
     wrapper.empty();
 
     const authorList = H5PEditor.$('<ul></ul>');
-    params.authors.forEach(function(author) {
-      var listItem = H5PEditor.$('<li>' + author.name + ' <span class="h5p-metadata-role">' + author.role + '</span></li>').data('author', author);
+    params.authors.forEach(function (author) {
+      var listItem = H5PEditor.$('<li>' + author.name + ' <span class="h5p-metadata-role">' + author.role + '</span></li>');
       var deleteButton = H5PEditor.$('<button></button>');
-      deleteButton.click(function() {
-        removeAuthor(H5PEditor.$(listItem).data().author);
+      deleteButton.click(function () {
+        removeAuthor(author);
       });
 
       listItem.append(deleteButton);
