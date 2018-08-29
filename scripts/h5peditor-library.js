@@ -408,7 +408,7 @@ ns.Library.prototype.addMetadataForm = function (semantics) {
     that.$libraryWrapper.before(that.$metadataWrapper);
   }
 
-  //Prevent multiple buttons when changing libraries
+  // Prevent multiple buttons when changing libraries
   if (that.$libraryWrapper.closest('.content').find('.h5p-metadata-button-wrapper').length === 0) {
     that.$metadataButton = H5PEditor.$('' +
       '<div class="h5p-metadata-button-wrapper">' +
