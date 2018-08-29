@@ -1317,7 +1317,9 @@ ns.canPastePlus = function (clipboard, libs) {
 
   // Clipboard library is newer than latest available local library
   const candidateMax = candidates.slice(-1)[0];
-  if (+candidateMax.split('.')[0] < +versionClip.split('.')[0] || (+candidateMax.split('.')[0] === +versionClip.split('.')[0] && +candidateMax.split('.')[1] < +versionClip.split('.')[1])) {
+  if (+candidateMax.split('.')[0] < +versionClip.split('.')[0] ||
+      (+candidateMax.split('.')[0] === +versionClip.split('.')[0] &&
+      +candidateMax.split('.')[1] < +versionClip.split('.')[1])) {
     return {
       canPaste: false,
       reason: 'pasteTooNew',
@@ -1330,7 +1332,9 @@ ns.canPastePlus = function (clipboard, libs) {
 
   // Clipboard library is older than latest available local library
   const candidateMin = candidates.slice(0, 1)[0];
-  if (+candidateMin.split('.')[0] > +versionClip.split('.')[0] || (+candidateMin.split('.')[0] === +versionClip.split('.')[0] && +candidateMin.split('.')[1] > +versionClip.split('.')[1])) {
+  if (+candidateMin.split('.')[0] > +versionClip.split('.')[0] ||
+      (+candidateMin.split('.')[0] === +versionClip.split('.')[0] &&
+       +candidateMin.split('.')[1] > +versionClip.split('.')[1])) {
     return {
       canPaste: false,
       reason: 'pasteTooOld',
