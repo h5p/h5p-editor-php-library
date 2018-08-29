@@ -1,8 +1,3 @@
-/*global H5P*/
-var H5PEditor = H5PEditor || {};
-var ns = H5PEditor;
-var H5PIntegration = H5PIntegration || false;
-
 H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) {
   if (!params.changes) {
     params.changes = [];
