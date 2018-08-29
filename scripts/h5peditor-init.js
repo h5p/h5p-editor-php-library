@@ -58,11 +58,14 @@
 
           $library.val(h5peditor.getLibrary());
           $params.val(JSON.stringify(params));
+
           try {
-            var presave = h5peditor.presave(params);
+            var presave = h5peditor.presave(params.params);
             $maxScore.val(presave.maxScore);
-          } catch (err) {
-            alert(err.message); //This halts processing. Swap with H5P.Dialog? And perhaps stop probagation?
+          }
+          catch (err) {
+            // This halts processing. Swap with H5P.Dialog? And perhaps stop probagation?
+            alert(err.message);
             $maxScore.val(0);
           }
 

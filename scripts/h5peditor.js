@@ -1254,12 +1254,20 @@ ns.canPaste = function (clipboard, libs) {
 ns.canPastePlus = function (clipboard, libs) {
   // Clipboard is empty
   if (!clipboard || !clipboard.generic) {
-    return {canPaste: false, reason: 'pasteNoContent', description: ns.t('core', 'pasteNoContent')};
+    return {
+      canPaste: false,
+      reason: 'pasteNoContent',
+      description: ns.t('core', 'pasteNoContent')
+    };
   }
 
   // No libraries to compare to
   if (libs === undefined) {
-    return {canPaste: false, reason: 'pasteError', description:ns.t('core', 'pasteError')};
+    return {
+      canPaste: false,
+      reason: 'pasteError',
+      description: ns.t('core', 'pasteError')
+    };
   }
 
   // Translate Hub format to common library format
@@ -1278,7 +1286,11 @@ ns.canPastePlus = function (clipboard, libs) {
     return library.name === machineNameClip;
   });
   if (candidates.length === 0) {
-    return {canPaste: false, reason: 'pasteContentNotSupported', description: ns.t('core', 'pasteContentNotSupported')};
+    return {
+      canPaste: false,
+      reason: 'pasteContentNotSupported',
+      description: ns.t('core', 'pasteContentNotSupported')
+    };
   }
 
   // Check if clipboard library version is available
@@ -1306,16 +1318,34 @@ ns.canPastePlus = function (clipboard, libs) {
   // Clipboard library is newer than latest available local library
   const candidateMax = candidates.slice(-1)[0];
   if (+candidateMax.split('.')[0] < +versionClip.split('.')[0] || (+candidateMax.split('.')[0] === +versionClip.split('.')[0] && +candidateMax.split('.')[1] < +versionClip.split('.')[1])) {
-    return {canPaste: false, reason: 'pasteTooNew', description: ns.t('core', 'pasteTooNew', {':clip': versionClip, ':local': candidateMax})};
+    return {
+      canPaste: false,
+      reason: 'pasteTooNew',
+      description: ns.t('core', 'pasteTooNew', {
+        ':clip': versionClip,
+        ':local': candidateMax
+      })
+    };
   }
 
   // Clipboard library is older than latest available local library
   const candidateMin = candidates.slice(0, 1)[0];
   if (+candidateMin.split('.')[0] > +versionClip.split('.')[0] || (+candidateMin.split('.')[0] === +versionClip.split('.')[0] && +candidateMin.split('.')[1] > +versionClip.split('.')[1])) {
-    return {canPaste: false, reason: 'pasteTooOld', description: ns.t('core', 'pasteTooOld', {':clip': versionClip, ':local': candidateMin})};
+    return {
+      canPaste: false,
+      reason: 'pasteTooOld',
+      description: ns.t('core', 'pasteTooOld', {
+        ':clip': versionClip,
+        ':local': candidateMin
+      })
+    };
   }
 
-  return {canPaste: false, reason: 'pasteError', description: ns.t('core', 'pasteError')};
+  return {
+    canPaste: false,
+    reason: 'pasteError',
+    description: ns.t('core', 'pasteError')
+  };
 };
 
 // Factory for creating storage instance
