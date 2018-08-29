@@ -1,7 +1,3 @@
-var H5PEditor = (H5PEditor || {});
-var ns = H5PEditor;
-var H5PIntegration = H5PIntegration || false;
-
 /**
  * Callback for setting new parameters.
  *

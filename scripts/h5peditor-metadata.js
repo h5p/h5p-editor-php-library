@@ -1,8 +1,3 @@
-/*global H5P*/
-var H5PEditor = H5PEditor || {};
-var H5PIntegration = H5PIntegration || false;
-var ns = H5PEditor;
-
 /**
  * Creates a metadata form
  *
