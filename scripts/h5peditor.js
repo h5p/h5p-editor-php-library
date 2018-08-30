@@ -999,7 +999,7 @@ ns.createButton = function (id, title, handler, displayTitle) {
  * @param {string} library - Current library.
  * @return {boolean} True, if form should have the metadata button.
  */
-ns.entitledForMetadata = function (library) {
+ns.enableMetadataCopyPaste = function (library) {
   this.previousLibraryEntitledForMetadata = true;
 
   if (!library || typeof library !== 'string') {

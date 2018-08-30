@@ -101,7 +101,7 @@ ns.Library.prototype.appendTo = function ($wrapper) {
 
   html += '<select>' + ns.createOption('-', 'Loading...') + '</select>';
 
-  if (window.localStorage) {
+  if (window.localStorage && ns.enableMetadataCopyPaste()) {
     html += ns.createCopyPasteButtons();
   }
 
