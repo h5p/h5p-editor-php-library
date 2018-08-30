@@ -147,9 +147,9 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
   if (H5PIntegration && H5PIntegration.user && H5PIntegration.user.name) {
     $wrapper
       .find('.h5p-author-data')
-      .find('.field-name-name')
-      .find('input.h5peditor-text')
-      .val(H5PIntegration.user.name);
+        .find('.field-name-name')
+          .find('input.h5peditor-text')
+            .val(H5PIntegration.user.name);
   }
 
   // Select title field text on click
