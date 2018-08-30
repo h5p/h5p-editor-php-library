@@ -144,9 +144,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
   });
 
   // Set author of main content.
-  if (
-    H5PIntegration && H5PIntegration.user && H5PIntegration.user.name
-  ) {
+  if (H5PIntegration && H5PIntegration.user && H5PIntegration.user.name) {
     $wrapper
       .find('.h5p-author-data')
       .find('.field-name-name')
