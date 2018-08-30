@@ -82,36 +82,34 @@ ns.Library.prototype.constructor = ns.Library;
  */
 ns.Library.prototype.appendTo = function ($wrapper) {
   var that = this;
-  var $html = ns.$('<div class="field ' + this.field.type + '">');
+  var html = '<div class="field ' + this.field.type + '">';
 
   if (this.field.label !== 0 && this.field.label !== undefined) {
-    var $labelWrapper = ns.$('<div class="h5p-editor-flex-wrapper">' +
+    html += '<div class="h5p-editor-flex-wrapper">' +
         '<label class="h5peditor-label-wrapper">' +
           '<span class="h5peditor-label' +
             (this.field.optional ? '' : ' h5peditor-required') + '">' +
               (this.field.label === undefined ? this.field.name : this.field.label) +
           '</span>' +
         '</label>' +
-      '</div>');
-    $labelWrapper.appendTo($html);
+      '</div>';
   }
 
   if (this.field.description) {
-    ns.$(ns.createDescription(this.field.description)).appendTo($html);
+    html += ns.createDescription(this.field.description);
   }
 
-  // Add librarySelector, can be removed using removeLibrarySelector()
-  this.$librarySelector = ns.$('<select>' + ns.createOption('-', 'Loading...') + '</select>');
-  this.$librarySelector.appendTo($html);
+  html += '<select>' + ns.createOption('-', 'Loading...') + '</select>';
 
-  // Add copy-/paste buttons, can be removed using removeCopyPaste()
   if (window.localStorage) {
-    this.$copyPasteButtons = ns.$(ns.createCopyPasteButtons());
-    this.$copyPasteButtons.appendTo($html);
+    html += ns.createCopyPasteButtons();
   }
-  ns.$('<div class="libwrap"></div>').appendTo($html);
 
-  this.$myField = $html.appendTo($wrapper);
+  html += '<div class="libwrap"></div>';
+
+  html += '</div>';
+
+  this.$myField = ns.$(html).appendTo($wrapper);
   this.$select = this.$myField.children('select');
   this.$libraryWrapper = this.$myField.children('.libwrap');
   if (window.localStorage) {
@@ -173,17 +171,25 @@ ns.Library.prototype.canPaste = function (clipboard) {
 };
 
 /**
- * Remove library selector
+ * Hide fields that are not required.
  */
-ns.Library.prototype.removeLibrarySelector = function () {
-  this.$librarySelector.remove();
+ns.Library.prototype.hide = function () {
+  this.hideLibrarySelector();
+  this.hideCopyPaste();
+}
+
+/**
+ * Hide library selector.
+ */
+ns.Library.prototype.hideLibrarySelector = function () {
+  this.$myField.children('select').hide();
 };
 
 /**
- * Hide copy button and paste button
+ * Hide copy button and paste button.
  */
-ns.Library.prototype.removeCopyPaste = function () {
-  this.$copyPasteButtons.remove();
+ns.Library.prototype.hideCopyPaste = function () {
+  this.$myField.children('.h5peditor-copypaste-wrap').hide();
 };
 
 /**
