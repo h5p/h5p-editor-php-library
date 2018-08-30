@@ -400,11 +400,8 @@ ns.Library.prototype.addMetadataForm = function (semantics) {
     that.$metadataForm = ns.metadataForm(semantics, that.params.metadata, that.$metadataWrapper, that, {populateTitle: true});
 
     /*
-     * Some content types may bring their own editor, and the title
-     * fields of subcontent forms should have the ID metadata-title-sub.
-     * This is far from ideal, but there's no easy connection to the dialog form.
-     * Alternatively, store the current dialog title field in the custom
-     * editor and implement a getter function for it.
+     * Note: Use the id metadata-title-sub in custom editors to invoke syncing
+     * the title field with the metadata title
      */
     ns.sync(
       that.$libraryWrapper.parent().siblings('.h5p-metadata-title-wrapper').find('input#metadata-title-sub'),
