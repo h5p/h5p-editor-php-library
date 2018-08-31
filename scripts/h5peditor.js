@@ -1027,19 +1027,24 @@ ns.enableMetadataCopyPaste = function (library) {
     'H5P.ExportableTextArea 1.2', // Title moved to/retrieved from metadata
     'H5P.GoalsAssessmentPage 1.3', // Title moved to/retrieved from metadata
     'H5P.GoalsPage 1.4', // Title moved to/retrieved from metadata
+    'H5P.GoToQuestion 1.3', // Should not have metadata by UX
     'H5P.Image 1.0', // Copyright information was moved to metadata
     'H5P.ImageHotspotQuestion 1.7', // Title moved to/retrieved from metadata
-    // TODO: FindMultipleHotspots (external) - Title Fields
+    'H5P.ImageMultipleHotspotQuestion 1.0', // FindMultipleHotspots (external) - Title Fields
     'H5P.ImageHotspots 1.6', // Not all sub-libraries are supposed to have metadata
     'H5P.ImageJuxtaposition 1.1', // Title moved to/retrieved from metadata
     'H5P.InteractiveVideo 1.19', // Custom Editor was changed
+    'H5P.IVHotspot 1.2', // Should not have metadata by UX
+    'H5P.Link 1.3', // Should not have metadata by UX
     'H5P.MarkTheWords 1.8', // Title moved to/retrieved from metadata
     'H5P.MultiChoice 1.12', // Title moved to/retrieved from metadata
-    // TODO: PersonalityQuiz (external) - Title Fields
+    'H5P.Nil 1.0', // Should not have metadata by UX
+    'H5P.PersonalityQuiz 1.0', // PersonalityQuiz (external) - Title Fields
     'H5P.SingleChoiceSet 1.10', // Title moved to/retrieved from metadata
     'H5P.StandardPage 1.3', // Title moved to/retrieved from metadata
     'H5P.Summary 1.9', // Title moved to/retrieved from metadata
     'H5P.TrueFalse 1.4', // Title moved to/retrieved from metadata
+    'H5P.TwitterUserFeed 1.0', // Should not have metadata by UX
     'H5P.Video 1.4' // Copyright information was moved to metadata
   ];
 
