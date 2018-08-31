@@ -104,7 +104,8 @@ class H5peditor {
             'minorVersion' => $devLibs[$lid]['minorVersion'],
             'runnable' => $devLibs[$lid]['runnable'],
             'restricted' => $libraries[$i]->restricted,
-            'tutorialUrl' => $libraries[$i]->tutorialUrl
+            'tutorialUrl' => $libraries[$i]->tutorialUrl,
+            'metadata' => $devLibs[$lid]['metadata'],
           );
           if ($isOld) {
             $libraries[$i]->isOld = TRUE;

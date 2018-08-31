@@ -375,23 +375,14 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 ns.Library.prototype.addMetadataForm = function (semantics) {
   var that = this;
 
-  // Don't add metadata objects if library version is not entitled to have it them
-  if (!ns.entitledForMetadata(this.currentLibrary)) {
+  // Don't add metadata if deactivated in library.json
+  if (!this.enableMetadata()) {
     return;
   }
 
-  // Don't add button if told so by semantics
-  if (typeof this.field.options[0] === 'object') {
-    const itemPosition = this.field.options
-      .map(function (item) {
-        return item.name;
-      })
-      .indexOf(this.currentLibrary);
-
-    // By default, the metadata button should be displayed
-    if (this.field.options[itemPosition].hasMetadata === false) {
-      return;
-    }
+  // Don't add metadata / copy&paste if library version is not entitled to it
+  if (!ns.enableMetadataCopyPaste(this.currentLibrary)) {
+    return;
   }
 
   if (that.$metadataWrapper === undefined) {
@@ -465,6 +456,21 @@ ns.Library.prototype.addMetadataForm = function (semantics) {
       );
     });
   }
+};
+
+/**
+ * Check if metadata button should be shown.
+ *
+ * @return {boolean} True, id button should be shown. False otherwise.
+ */
+ns.Library.prototype.enableMetadata = function () {
+  var that = this;
+
+  var library = this.libraries.filter(function (library) {
+    return library.uberName === that.currentLibrary;
+  });
+
+  return (library.length === 0 || library[0].metadata !== 0);
 };
 
 /**
