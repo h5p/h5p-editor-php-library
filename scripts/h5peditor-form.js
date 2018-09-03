@@ -61,13 +61,13 @@ ns.Form = function () {
      // This fixes CSS overrides done by some old custom editors, but should not be in core
     switch (this.library.split(' ')[0]) {
       case 'H5P.InteractiveVideo':
-        this.$form.find('#metadata-title-main-label').first().css('padding', '20px 20px 0 20px');
-        break;
       case 'H5P.DragQuestion':
+      case 'H5P.ImageHotspotQuestion':
         this.$form.find('#metadata-title-main-label').first().css('padding', '20px 20px 0 20px');
         break;
+
       case 'H5P.CoursePresentation':
-        this.$form.find('#metadata-title-main-label').first().css('margin-bottom', '0');
+        this.$form.find('#metadata-title-main-label').first().css('padding-bottom', '1em');
         break;
     }
   }
