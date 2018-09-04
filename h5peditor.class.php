@@ -385,7 +385,11 @@ class H5peditor {
         }
         else {
           // Local file
-          $libraryData->javascript[] = $url . $script->path . $script->version;
+          $path = $url . $script->path;
+          if (!isset($this->h5p->h5pD)) {
+            $path .= $script->version;
+          }
+          $libraryData->javascript[] = $path;
         }
       }
     }
@@ -399,7 +403,11 @@ class H5peditor {
         }
         else {
           // Local file
-          $libraryData->css[] = $url . $css->path . $css->version;
+          $path = $url . $css->path;
+          if (!isset($this->h5p->h5pD)) {
+            $path .= $css->version;
+          }
+          $libraryData->css[] = $path;
         }
       }
     }
