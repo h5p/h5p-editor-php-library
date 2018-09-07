@@ -74,11 +74,12 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
    * @return {boolean}
    */
   this.canPaste = function (clipboard) {
+    var i, uberName;
     if (clipboard && clipboard.generic) {
       if (libraries.libraries !== undefined) {
         // HUB
-        for (var i = 0; i < libraries.libraries.length; i++) {
-          var uberName = libraries.libraries[i].machineName + ' ' + libraries.libraries[i].localMajorVersion + '.' + libraries.libraries[i].localMinorVersion;
+        for (i = 0; i < libraries.libraries.length; i++) {
+          uberName = libraries.libraries[i].machineName + ' ' + libraries.libraries[i].localMajorVersion + '.' + libraries.libraries[i].localMinorVersion;
           if (uberName === clipboard.generic.library) {
             return true;
           }
@@ -86,8 +87,8 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
       }
       else {
         // Legacy
-        for (var i = 0; i < libraries.length; i++) {
-          var uberName = libraries[i].name + ' ' + libraries[i].majorVersion + '.' + libraries[i].minorVersion;
+        for (i = 0; i < libraries.length; i++) {
+          uberName = libraries[i].name + ' ' + libraries[i].majorVersion + '.' + libraries[i].minorVersion;
           if (uberName === clipboard.generic.library) {
             return true;
           }
@@ -203,7 +204,7 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
         const pasteCheck = ns.canPastePlus(H5P.getClipboard(), self.libraries);
         if (pasteCheck.canPaste !== true) {
           if (pasteCheck.reason === 'pasteTooOld' || pasteCheck.reason === 'pasteTooNew') {
-            self.confirmPasteError(pasteCheck.description, self.$parent.offset().top, function() {});
+            self.confirmPasteError(pasteCheck.description, self.$parent.offset().top, function () {});
           }
           else {
             ns.attachToastTo(
@@ -246,7 +247,7 @@ ns.LibrarySelector.prototype.pasteContent = function () {
   const pasteCheck = ns.canPastePlus(H5P.getClipboard(), self.libraries);
   if (pasteCheck.canPaste !== true) {
     if (pasteCheck.reason === 'pasteTooOld' || pasteCheck.reason === 'pasteTooNew') {
-      self.confirmPasteError(pasteCheck.description, self.$parent.offset().top, function() {});
+      self.confirmPasteError(pasteCheck.description, self.$parent.offset().top, function () {});
     }
     else {
       ns.attachToastTo(
@@ -348,12 +349,12 @@ ns.LibrarySelector.prototype.getParams = function () {
   }
 
   // Only return if all fields has validated.
-  var valid = true;
+  //var valid = true;
 
   if (this.form.children !== undefined) {
     for (var i = 0; i < this.form.children.length; i++) {
       if (this.form.children[i].validate() === false) {
-        valid = false;
+        //valid = false;
       }
     }
   }

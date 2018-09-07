@@ -60,7 +60,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
     // Find versions for selected value
     function getNestedOptions(options) {
       var flattenedOptions = [];
-      options.forEach(function(option) {
+      options.forEach(function (option) {
         if (option.type === 'optgroup') {
           flattenedOptions = flattenedOptions.concat(getNestedOptions(option.options));
         }
@@ -97,7 +97,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
 
   // Make sure the source field is empty or starts with a protocol
   const sourceField = find(group.children, 'field.name', 'source');
-  sourceField.$item.on('change', function() {
+  sourceField.$item.on('change', function () {
     const sourceInput = H5PEditor.$(this).find('input.h5peditor-text');
     if (sourceInput.val().trim() !== '' &&
       sourceInput.val().indexOf('https://') !== 0 &&
@@ -147,9 +147,9 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
   if (H5PIntegration && H5PIntegration.user && H5PIntegration.user.name) {
     $wrapper
       .find('.h5p-author-data')
-        .find('.field-name-name')
-          .find('input.h5peditor-text')
-            .val(H5PIntegration.user.name);
+      .find('.field-name-name')
+      .find('input.h5peditor-text')
+      .val(H5PIntegration.user.name);
   }
 
   // Select title field text on click

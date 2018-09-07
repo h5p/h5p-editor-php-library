@@ -27,7 +27,8 @@ ns.Library = function (parent, field, params, setValue) {
     // If you do a console log here it might show that this.params is
     // something else than what we set it to. One of life's big mysteries...
     setValue(field, this.params);
-  } else {
+  }
+  else {
     this.params = params;
   }
   this.field = field;
@@ -134,7 +135,7 @@ ns.Library.prototype.appendTo = function ($wrapper) {
         const pasteCheck = ns.canPastePlus(H5P.getClipboard(), that.libraries);
         if (pasteCheck.canPaste !== true) {
           if (pasteCheck.reason === 'pasteTooOld' || pasteCheck.reason === 'pasteTooNew') {
-            that.confirmPasteError(pasteCheck.description, that.$select.offset().top, function() {});
+            that.confirmPasteError(pasteCheck.description, that.$select.offset().top, function () {});
           }
           else {
             ns.attachToastTo(
@@ -176,7 +177,7 @@ ns.Library.prototype.canPaste = function (clipboard) {
 ns.Library.prototype.hide = function () {
   this.hideLibrarySelector();
   this.hideCopyPaste();
-}
+};
 
 /**
  * Hide library selector.
@@ -274,14 +275,12 @@ ns.Library.prototype.librariesLoaded = function (libList) {
     // Use timeout to avoid bug in Chrome >44, when confirm is used inside change event.
     // Ref. https://code.google.com/p/chromium/issues/detail?id=525629
     setTimeout(function () {
-
       // Check if library is selected
       if (self.params.library) {
-
         // Confirm changing library
         self.confirmChangeLibrary.show(self.$select.offset().top);
-      } else {
-
+      }
+      else {
         // Load new library
         self.loadLibrary(self.$select.val());
       }

@@ -155,7 +155,7 @@ ns.Group.prototype.hasSingleChild = function () {
  */
 ns.Group.prototype.initSubContent = function (params) {
   // If group contains library-like sub content that needs UUIDs
-  if(this.isSubContent()){
+  if (this.isSubContent()) {
     params['subContentId'] = params['subContentId'] || H5P.createUUID();
   }
 

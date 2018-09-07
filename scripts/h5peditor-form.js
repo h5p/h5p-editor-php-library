@@ -37,7 +37,7 @@ ns.Form = function () {
   }];
 
   // Ensure it has validation functions
-  ns.processSemanticsChunk(metaDataTitleSemantics, {}, this.$form.children('.tree'), this)
+  ns.processSemanticsChunk(metaDataTitleSemantics, {}, this.$form.children('.tree'), this);
 
   // Give title field an ID
   this.$form.find('.field-name-title').attr('id', 'metadata-title-main-label');
@@ -58,7 +58,7 @@ ns.Form = function () {
   if (!this.enableMetadataCopyPaste) {
     const $wrapper = ns.$('<div/>', {'class': 'h5p-editor-flex-wrapper'});
     this.$form.find('label.h5peditor-label-wrapper').wrap($wrapper);
-     // This fixes CSS overrides done by some old custom editors, but should not be in core
+    // This fixes CSS overrides done by some old custom editors, but should not be in core
     switch (this.library.split(' ')[0]) {
       case 'H5P.InteractiveVideo':
       case 'H5P.DragQuestion':

@@ -21,8 +21,7 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
     '<a class="h5p-metadata-button h5p-cancel" role="button">' +
       H5PEditor.t('core', 'cancel') +
     '</a>' +
-  '</div>')
-  .click(function () {
+  '</div>').click(function () {
     dateInput.val('');
     authorInput.val('');
     logInput.val('');
@@ -34,8 +33,7 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
     '<a class="h5p-metadata-button h5p-log-change" role="button">' +
       H5PEditor.t('core', 'logThisChange') +
     '</a>' +
-  '</div>')
-  .click(function () {
+  '</div>').click(function () {
     editing = false;
 
     if (!dateInput.val() || !authorInput.val() || !logInput.val()) {
@@ -74,8 +72,7 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
     '<a class="h5p-metadata-button h5p-add-author" role="button">' +
       H5PEditor.t('core', 'addNewChange') +
     '</a>' +
-  '</div>')
-  .click(function () {
+  '</div>').click(function () {
     editing = true;
     newLog = false;
     if (H5PIntegration && H5PIntegration.user && H5PIntegration.user.name) {
@@ -158,13 +155,13 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
          '<button class="h5p-metadata-delete"></button>' +
         '</div>');
 
-        logButtons.find('.h5p-metadata-delete').click(function() {
+        logButtons.find('.h5p-metadata-delete').click(function () {
           var wrapper = this.closest('.h5p-metadata-log');
           var index = H5PEditor.$(wrapper).attr('data');
           deleteLog(index);
         });
 
-        logButtons.find('.h5p-metadata-edit').click(function() {
+        logButtons.find('.h5p-metadata-edit').click(function () {
           var wrapper = this.closest('.h5p-metadata-log');
           var index = H5PEditor.$(wrapper).attr('data');
           editLog(index);
@@ -228,9 +225,9 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, group, parent) 
         }
       },
       error: function (r,e) {
-        console.log('error loading libraries: ', e);
+        console.warn('error loading libraries: ', e);
       },
       async: true
     });
   }
-}
+};

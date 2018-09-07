@@ -163,7 +163,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     if (iframe.contentWindow.MutationObserver !== undefined) {
       // If supported look for changes to DOM elements. This saves resources.
       var running;
-      var limitedResize = function (mutations) {
+      var limitedResize = function () {
         if (!running) {
           running = setTimeout(function () {
             resize();
@@ -226,7 +226,7 @@ ns.Editor.prototype.getLibrary = function () {
   if (this.selector !== undefined) {
     return this.selector.getCurrentLibrary();
   }
-  else if(this.selectedContentTypeId) {
+  else if (this.selectedContentTypeId) {
     return this.selectedContentTypeId;
   }
   else {
@@ -250,7 +250,7 @@ ns.Editor.prototype.getParams = function (notFormSubmit) {
       metadata: this.selector.getMetadata()
     };
   }
-  else if(this.form){
+  else if (this.form) {
     return {
       params: this.form.params,
       metadata: this.form.metadata
