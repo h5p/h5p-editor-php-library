@@ -68,7 +68,6 @@ H5PEditor.language.core = {
   importantInstructions: 'Važna uputstva',
   hideImportantInstructions: 'Sakrijte važna uputstva',
   hide: 'sakriti',
-  example: 'Primjer',
   createContentTabLabel: 'Napravite sadžaj',
   uploadTabLabel: 'Upload',
   uploadPlaceholder: 'Nijedan fajl nije odabran',

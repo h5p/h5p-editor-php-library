@@ -262,6 +262,18 @@ ns.Editor.prototype.getParams = function (notFormSubmit) {
 };
 
 /**
+ * Creates a default content title, based on the title of the current selected
+ * library
+ *
+ * @return {String}
+ */
+ns.Editor.prototype.getDefaultTitle = function () {
+  var libraryMetadata = this.selector.selector.getContentType(this.getLibrary().split(' ')[0]);
+  var libraryTitle = (libraryMetadata && libraryMetadata.title) ? libraryMetadata.title : '';
+  return H5PEditor.t('core', 'untitled').replace(':libraryTitle', libraryTitle);
+};
+
+/**
  *
  * @alias H5PEditor.Editor#presave
  * @param content

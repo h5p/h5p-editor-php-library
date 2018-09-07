@@ -68,7 +68,6 @@ H5PEditor.language.core = {
   importantInstructions: 'تعليمات هامة',
   hideImportantInstructions: 'إخفاء التعليمات الهامة',
   hide: 'إخفاء',
-  example: 'مثال',
   createContentTabLabel: 'إنشاء محتوى',
   uploadTabLabel: 'رفع',
   uploadPlaceholder: 'لم يتم اختيار ملف',
@@ -80,7 +79,7 @@ H5PEditor.language.core = {
   h5pFileWrongExtensionTitle: 'تعذر تحميل الملف المحدد',
   h5pFileWrongExtensionContent: 'فقط الملفات بالامتداد .h5p مسموحة.',
   h5pFileValidationFailedTitle: 'تعذر التحقق من الملف.',
-  h5pFileValidationFailedContent: 'تأكد أن الملف الذي تم رفعه يحوي على محتوى صالح. H5P' + 
+  h5pFileValidationFailedContent: 'تأكد أن الملف الذي تم رفعه يحوي على محتوى صالح. H5P' +
   ' يجب تحميل الملفات التي تحتوي على مكتبات فقط من خلال صفحة مكتبات H5P.',
   h5pFileUploadServerErrorTitle: 'الملف لا يمكن تحميله',
   h5pFileUploadServerErrorContent: 'حدث خطأ غير متوقع. تحقق من سجل أخطاء السيرفر ' + ' more details.',

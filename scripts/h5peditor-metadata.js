@@ -18,7 +18,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
 
   // Set default title
   if (options.populateTitle && (!self.metadata.title || self.metadata.title === '')) {
-    self.metadata.title = H5PEditor.t('core', 'untitled') + ' ' + H5PEditor.parent.currentLibrary.split(' ')[0].split('.')[1];
+    self.metadata.title = H5PEditor.LibraryListCache.getDefaultTitle(H5PEditor.parent.currentLibrary);
   }
 
   self.metadataSemantics = Object.keys(H5PEditor.metadataSemantics).map(function (item) {

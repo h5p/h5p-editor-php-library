@@ -104,3 +104,14 @@ llc.setLibraries = function(libraries, requestedLibraries) {
     }
   }
 };
+
+/**
+ * Creates a default content title, based on the title of the library
+ * @param  {String} uberName "<machineName> <major>.<minor>"
+ * @return {String}
+ */
+llc.getDefaultTitle = function (uberName) {
+  var libraryMetadata = llc.libraryCache[uberName];
+  var title = libraryMetadata && libraryMetadata.title ? libraryMetadata.title : '';
+  return H5PEditor.t('core', 'untitled').replace(':libraryTitle', title);
+};
