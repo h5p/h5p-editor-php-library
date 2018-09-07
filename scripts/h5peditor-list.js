@@ -163,6 +163,7 @@ H5PEditor.List = (function ($) {
         }
         readyCallbacks = []; // Reset
       }
+      self.trigger('addedItem', child);
 
       return true;
     };
@@ -187,6 +188,7 @@ H5PEditor.List = (function ($) {
           setValue(field);
         }
       }
+      self.trigger('removedItem', index);
     };
 
     /**
