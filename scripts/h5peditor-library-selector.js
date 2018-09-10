@@ -179,6 +179,13 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
 
   if (window.localStorage) {
     var $buttons = ns.$(ns.createCopyPasteButtons()).appendTo($element);
+
+    // Hide copy paste until library is selected:
+    $buttons.hide();
+    self.on('editorloaded', function () {
+      $buttons.show();
+    });
+
     this.$copyButton = $buttons.find('.h5peditor-copy-button').click(function () {
       if (this.classList.contains('disabled')) {
         return;
