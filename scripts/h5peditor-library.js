@@ -102,7 +102,7 @@ ns.Library.prototype.appendTo = function ($wrapper) {
 
   html += '<select>' + ns.createOption('-', 'Loading...') + '</select>';
 
-  if (window.localStorage && ns.enableMetadataCopyPaste()) {
+  if (window.localStorage) {
     html += ns.createCopyPasteButtons();
   }
 
@@ -379,8 +379,8 @@ ns.Library.prototype.addMetadataForm = function (semantics) {
     return;
   }
 
-  // Don't add metadata / copy&paste if library version is not entitled to it
-  if (!ns.enableMetadataCopyPaste(this.currentLibrary)) {
+  // Don't add metadata if library version is not entitled to it
+  if (!ns.enableMetadata(this.currentLibrary)) {
     return;
   }
 

@@ -23,7 +23,7 @@ ns.Form = function () {
   this.$common = this.$form.find('.common > .fields');
   this.library = Object.keys(ns.libraryLoaded)[0];
 
-  this.enableMetadataCopyPaste = ns.enableMetadataCopyPaste(this.library);
+  this.enableMetadata = ns.enableMetadata(this.library);
   // Add overlay
   this.$form.append('<div class="overlay"></div>');
 
@@ -55,7 +55,7 @@ ns.Form = function () {
    * the editor. Can be removed as soon as the new content types are considered
    * to be the default.
    */
-  if (!this.enableMetadataCopyPaste) {
+  if (!this.enableMetadata) {
     const $wrapper = ns.$('<div/>', {'class': 'h5p-editor-flex-wrapper'});
     this.$form.find('label.h5peditor-label-wrapper').wrap($wrapper);
     // This fixes CSS overrides done by some old custom editors, but should not be in core

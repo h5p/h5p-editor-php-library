@@ -996,7 +996,7 @@ ns.sync = function ($masterField, $slaveField, options) {
  * @param {string} library - Current library.
  * @return {boolean} True, if form should have the metadata button.
  */
-ns.enableMetadataCopyPaste = function (library) {
+ns.enableMetadata = function (library) {
   this.previousLibraryEntitledForMetadata = true;
 
   if (!library || typeof library !== 'string') {
