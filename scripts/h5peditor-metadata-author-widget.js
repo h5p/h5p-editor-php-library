@@ -23,9 +23,9 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, group, parent) {
   ns.processSemanticsChunk(semantics, {}, $authorData, parent);
 
   var $button = H5PEditor.$('<div class="file authorList">' +
-    '<a class="h5p-metadata-button h5p-add-author">' +
+    '<button class="h5p-metadata-button h5p-add-author" tabindex="0">' +
       H5PEditor.t('core', 'addAuthor') +
-    '</a>' +
+    '</button>' +
   '</div>').click(function (event) {
     addAuthor(event.originalEvent !== undefined);
   });

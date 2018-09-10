@@ -27,7 +27,7 @@ a {
 }
 
 .h5p-metadata-button-wrapper {
-  display:flex;
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-top: -10px;
@@ -1164,8 +1164,6 @@ a {
 }
 
 .h5p-metadata-button {
-  width: 115px;
-  height: 25px;
   background: white;
   padding: 10px;
   text-align: center;
@@ -1173,6 +1171,7 @@ a {
   border: solid 1px gray;
   color: black;
   font-weight: bold;
+  display: inline;
   cursor: pointer;
 }
 
@@ -1374,7 +1373,7 @@ a {
   }
 
   .authorList {
-    margin-top: 2.4em;
+    margin-top: 1.8em;
     white-space: nowrap;
 
     .h5p-add-author {
@@ -1440,6 +1439,9 @@ a {
     color: #323232;
     border: solid 1px #ced6e3;
     border-radius: 0.208em;
+  }
+  .title:focus {
+    border-color: rgb(77, 144, 254);
   }
 
   .content {
@@ -1601,6 +1603,9 @@ a {
     color: #323232;
     border: solid 1px #ced6e3;
     border-radius: 0.208em;
+  }
+  .title:focus {
+    border-color: rgb(77, 144, 254);
   }
 }
 
