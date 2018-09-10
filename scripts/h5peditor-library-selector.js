@@ -121,7 +121,7 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
 
   // Revert selector on cancel
   changeLibraryDialog.on('canceled', function () {
-    that.selector.resetSelection(that.currentLibrary, that.defaultParams, true);
+    that.selector.resetSelection(that.currentLibrary, that.defaultParams, that.form.metadata, true);
   });
 
   // First time a library is selected in the editor
