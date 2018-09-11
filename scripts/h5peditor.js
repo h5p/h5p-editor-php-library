@@ -228,6 +228,8 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
     parent.readies = [];
   }
 
+  var renderableCommonFields = {};
+
   for (var i = 0; i < semanticsChunk.length; i++) {
     var field = semanticsChunk[i];
 
@@ -258,7 +260,14 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
         ancestor = ns.findAncestor(parent);
       }
 
-      ns.addCommonField(field, parent, params, ancestor);
+      var library = field.library ? field.library : (parent.currentLibrary ? parent.currentLibrary : '');
+      renderableCommonFields[library] = renderableCommonFields[library] || [];
+      renderableCommonFields[library].push({
+        field: field,
+        parent: parent,
+        params: params,
+        ancestor: ancestor
+      });
       continue;
     }
 
@@ -274,6 +283,41 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
     parent.children.push(fieldInstance);
   }
 
+  // Render all gathered common field
+  if (renderableCommonFields) {
+    for (var machineName in renderableCommonFields) {
+      // Get title for common fields group
+      H5PEditor.LibraryListCache.getLibraries([machineName], function (libraries) {
+        var libraryName = machineName.length ? machineName.split(' ')[0] : '';
+        if (libraries.length && libraries[0].title) {
+          libraryName = libraries[0].title;
+        }
+        var commonFields = renderableCommonFields[machineName];
+
+        // Create a library wrapper
+        var commonFieldsLibraryWrapper = document.createElement('fieldset');
+        var libraryWrapperClass = libraryName.replace(/\s+/g, '-').toLowerCase();
+
+        commonFieldsLibraryWrapper.classList.add(
+          'common-fields-library-wrapper',
+          'common-fields-' + libraryWrapperClass
+        );
+
+        var libraryTitle = document.createElement('legend');
+        libraryTitle.classList.add('common-field-legend');
+        libraryTitle.textContent = libraryName;
+        commonFieldsLibraryWrapper.appendChild(libraryTitle);
+
+        commonFields.forEach(function (field) {
+          var commonFieldInstance = ns.addCommonField(field.field, field.parent, field.params, field.ancestor);
+          commonFieldInstance.appendTo(ns.$(commonFieldsLibraryWrapper));
+        });
+
+        ancestor.$common[0].appendChild(commonFieldsLibraryWrapper);
+      });
+    }
+  }
+
   if (!parent.passReadies) {
     // Run ready callbacks.
     for (i = 0; i < parent.readies.length; i++) {
@@ -284,15 +328,27 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
 };
 
 /**
+ * Attach ancestor of parent's common fields to a new wrapper
+ *
+ * @param {Object} parent Parent content type instance that common fields should be attached to
+ * @param {HTMLElement} wrapper New wrapper of common fields
+ */
+ns.setCommonFieldsWrapper = function (parent, wrapper) {
+  var ancestor = ns.findAncestor(parent);
+  wrapper.appendChild(ancestor.$common[0]);
+};
+
+/**
  * Add a field to the common container.
  *
  * @param {object} field
  * @param {object} parent
  * @param {object} params
  * @param {object} ancestor
+ * @param {boolean} skipAppendTo
  * @returns {undefined}
  */
-ns.addCommonField = function (field, parent, params, ancestor) {
+ns.addCommonField = function (field, parent, params, ancestor, skipAppendTo) {
   var commonField;
   if (ancestor.commonFields[parent.library] === undefined) {
     ancestor.commonFields[parent.library] = {};
@@ -327,7 +383,9 @@ ns.addCommonField = function (field, parent, params, ancestor) {
 
   if (commonField.setValues.length === 1) {
     ancestor.$common.parent().removeClass('hidden');
-    commonField.instance.appendTo(ancestor.$common);
+    if (skipAppendTo) {
+      commonField.instance.appendTo(ancestor.$common);
+    }
     commonField.params = params[field.name];
   }
   else {
@@ -335,6 +393,7 @@ ns.addCommonField = function (field, parent, params, ancestor) {
   }
 
   parent.children.push(commonField.instance);
+  return commonField.instance;
 };
 
 /**
