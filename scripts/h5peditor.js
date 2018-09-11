@@ -296,7 +296,7 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
 
         // Create a library wrapper
         var commonFieldsLibraryWrapper = document.createElement('fieldset');
-        var libraryWrapperClass = libraryName.replace(' ', '-');
+        var libraryWrapperClass = libraryName.replace(/\s+/g, '-').toLowerCase();
 
         commonFieldsLibraryWrapper.classList.add(
           'common-fields-library-wrapper',
