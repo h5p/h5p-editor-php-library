@@ -43,9 +43,11 @@ ns.Library = function (parent, field, params, setValue) {
   });
 
   // I need to be appended to the DOM before the metadata button can be added
-  parent.on('ready', function () {
-    self.addMetadataForm();
-  });
+  if (parent.on) {
+    parent.on('ready', function () {
+      self.addMetadataForm();
+    });
+  }
 
   // Confirmation dialog for changing library
   this.confirmChangeLibrary = new H5P.ConfirmationDialog({
