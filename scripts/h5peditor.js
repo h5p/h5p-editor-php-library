@@ -40,6 +40,13 @@ ns.libraryLoaded = {};
 ns.isIE = navigator.userAgent.match(/; MSIE \d+.\d+;/) !== null;
 
 /**
+ * Keep track of renderable common fields.
+ *
+ * @type {Object}
+ */
+ns.renderableCommonFields = {};
+
+/**
  * Helper function invoked when a library is requested. Will add CSS and eval JS
  * if not already done.
  *
@@ -213,9 +220,10 @@ ns.resetLoadedLibraries = function () {
  * @param {object} params
  * @param {jQuery} $wrapper
  * @param {mixed} parent
+ * @param {string} [machineName] Machine name of library that is being processed
  * @returns {undefined}
  */
-ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
+ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, machineName) {
   var ancestor;
   parent.children = [];
 
@@ -227,8 +235,6 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
     // If the parent can't pass ready callbacks we need to take care of them.
     parent.readies = [];
   }
-
-  var renderableCommonFields = {};
 
   for (var i = 0; i < semanticsChunk.length; i++) {
     var field = semanticsChunk[i];
@@ -260,13 +266,20 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
         ancestor = ns.findAncestor(parent);
       }
 
-      var library = field.library ? field.library : (parent.currentLibrary ? parent.currentLibrary : '');
-      renderableCommonFields[library] = renderableCommonFields[library] || [];
-      renderableCommonFields[library].push({
+
+      var library = machineName ? machineName
+        : (field.library ? field.library
+          : (parent.currentLibrary ? parent.currentLibrary : 'Other libraries'));
+      ns.renderableCommonFields[library] = ns.renderableCommonFields[library] || {};
+      ns.renderableCommonFields[library].fields = ns.renderableCommonFields[library].fields || [];
+
+      // Add renderable if it doesn't exist
+      ns.renderableCommonFields[library].fields.push({
         field: field,
         parent: parent,
         params: params,
-        ancestor: ancestor
+        ancestor: ancestor,
+        rendered: false
       });
       continue;
     }
@@ -284,36 +297,66 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
   }
 
   // Render all gathered common field
-  if (renderableCommonFields) {
-    for (var machineName in renderableCommonFields) {
+  if (ns.renderableCommonFields) {
+    for (var commonFieldMachineName in ns.renderableCommonFields) {
       // Get title for common fields group
-      H5PEditor.LibraryListCache.getLibraries([machineName], function (libraries) {
-        var libraryName = machineName.length ? machineName.split(' ')[0] : '';
-        if (libraries.length && libraries[0].title) {
-          libraryName = libraries[0].title;
-        }
-        var commonFields = renderableCommonFields[machineName];
-
-        // Create a library wrapper
-        var commonFieldsLibraryWrapper = document.createElement('fieldset');
-        var libraryWrapperClass = libraryName.replace(/\s+/g, '-').toLowerCase();
-
-        commonFieldsLibraryWrapper.classList.add(
-          'common-fields-library-wrapper',
-          'common-fields-' + libraryWrapperClass
-        );
-
-        var libraryTitle = document.createElement('legend');
-        libraryTitle.classList.add('common-field-legend');
-        libraryTitle.textContent = libraryName;
-        commonFieldsLibraryWrapper.appendChild(libraryTitle);
+      H5PEditor.LibraryListCache.getLibraries([commonFieldMachineName], function (libraries) {
+        var commonFields = ns.renderableCommonFields[commonFieldMachineName].fields;
+        var renderableCommonFields = [];
 
         commonFields.forEach(function (field) {
-          var commonFieldInstance = ns.addCommonField(field.field, field.parent, field.params, field.ancestor);
-          commonFieldInstance.appendTo(ns.$(commonFieldsLibraryWrapper));
+          if (!field.rendered) {
+            var commonField = ns.addCommonField(field.field, field.parent, field.params, field.ancestor);
+            if (commonField.setValues.length === 1) {
+              renderableCommonFields.push({
+                field: field,
+                instance: commonField.instance
+              });
+            }
+          }
+          field.rendered = true;
         });
 
-        ancestor.$common[0].appendChild(commonFieldsLibraryWrapper);
+        // Render common fields if found
+        if (renderableCommonFields.length) {
+          var libraryName = commonFieldMachineName.length ? commonFieldMachineName.split(' ')[0] : '';
+          if (libraries.length && libraries[0].title) {
+            libraryName = libraries[0].title;
+          }
+
+          // Create a library wrapper
+          var hasLibraryWrapper = !!ns.renderableCommonFields[commonFieldMachineName].wrapper;
+          var commonFieldsLibraryWrapper = ns.renderableCommonFields[commonFieldMachineName].wrapper;
+          if (!hasLibraryWrapper) {
+            commonFieldsLibraryWrapper = document.createElement('fieldset');
+            var libraryWrapperClass = libraryName.replace(/\s+/g, '-').toLowerCase();
+
+            commonFieldsLibraryWrapper.classList.add(
+              'common-fields-library-wrapper',
+              'common-fields-' + libraryWrapperClass
+            );
+
+            var libraryTitle = document.createElement('legend');
+            libraryTitle.classList.add('common-field-legend');
+            libraryTitle.textContent = libraryName;
+            commonFieldsLibraryWrapper.appendChild(libraryTitle);
+
+            ns.renderableCommonFields[commonFieldMachineName].wrapper = commonFieldsLibraryWrapper;
+          }
+
+          renderableCommonFields.forEach(function (commonField) {
+            commonField.instance.appendTo(ns.$(commonFieldsLibraryWrapper));
+            // Gather under a common ancestor
+            if (commonField.field && commonField.field.ancestor) {
+              ancestor = commonField.field.ancestor;
+            }
+          });
+
+          // Attach to common ancestor if it is not already attached
+          if (!hasLibraryWrapper && ancestor) {
+            ancestor.$common[0].appendChild(commonFieldsLibraryWrapper);
+          }
+        }
       });
     }
   }
@@ -393,7 +436,7 @@ ns.addCommonField = function (field, parent, params, ancestor, skipAppendTo) {
   }
 
   parent.children.push(commonField.instance);
-  return commonField.instance;
+  return commonField;
 };
 
 /**
