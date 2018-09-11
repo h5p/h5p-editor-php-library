@@ -159,7 +159,7 @@ H5PEditor.language.core = {
   contentTypeCacheOutdatedDesc: 'Es kann nicht nach Aktualisierungen f\u00fcr Inhaltypen gesucht werden, da Verbindungsprobleme zu H5P.org bestehen. Es ist m\u00f6glich, dass keine neuen Inhaltstypen installiert oder bestehende aktualisiert werden k\u00f6nnen.',
   tryAgain: 'Bitte versuche es erneut',
   getHelp: 'Hilfe',
-  untitled: 'Unbenannt: ',
+  untitled: 'Unbenannt: :libraryTitle',
   title: 'Titel',
   metadata: 'Metadaten',
   addTitle: 'Titel hinzuf\u00fcgen',

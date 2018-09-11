@@ -158,7 +158,7 @@ H5PEditor.language.core = {
   contentTypeCacheOutdated: 'Liste des types d\'Activités obsolète',
   contentTypeCacheOutdatedDesc: 'Votre site rencontre des difficultés pour se connecter à H5P.org pour vérifier les mises à jour des types d\'Activités. Vous pourriez être incapable de mettre à jour ou d\'installer de nouveaux types d\'Activités.',
   tryAgain: 'Recommencer',
-  untitled: 'Untitled',
+  untitled: 'Untitled :libraryTitle',
   getHelp: 'Obtenir de l\'aide',
   title: 'Title',
   metadata: 'Metadata',

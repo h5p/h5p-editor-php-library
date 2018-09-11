@@ -159,7 +159,7 @@ H5PEditor.language.core = {
   contentTypeCacheOutdatedDesc: 'Twoja strona nie może połączyć się z H5P.org, aby wyświetlić dostępne aktualizacje typów zasobu. Aktualizowanie ani instalowanie typów zasobu nie jest teraz możliwe.',
   tryAgain: 'Spróbuj ponownie',
   getHelp: 'Pomoc',
-  untitled: 'Bez tytułu',
+  untitled: 'Bez tytułu :libraryTitle',
   title: 'Tytuł',
   metadata: 'Metadane',
   addTitle: 'Dodaj tytuł',

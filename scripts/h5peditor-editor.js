@@ -163,7 +163,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     if (iframe.contentWindow.MutationObserver !== undefined) {
       // If supported look for changes to DOM elements. This saves resources.
       var running;
-      var limitedResize = function (mutations) {
+      var limitedResize = function () {
         if (!running) {
           running = setTimeout(function () {
             resize();
@@ -226,7 +226,7 @@ ns.Editor.prototype.getLibrary = function () {
   if (this.selector !== undefined) {
     return this.selector.getCurrentLibrary();
   }
-  else if(this.selectedContentTypeId) {
+  else if (this.selectedContentTypeId) {
     return this.selectedContentTypeId;
   }
   else {
@@ -250,7 +250,7 @@ ns.Editor.prototype.getParams = function (notFormSubmit) {
       metadata: this.selector.getMetadata()
     };
   }
-  else if(this.form){
+  else if (this.form) {
     return {
       params: this.form.params,
       metadata: this.form.metadata
@@ -259,6 +259,18 @@ ns.Editor.prototype.getParams = function (notFormSubmit) {
   else {
     console.warn('no selector defined for "getParams"');
   }
+};
+
+/**
+ * Creates a default content title, based on the title of the current selected
+ * library
+ *
+ * @return {String}
+ */
+ns.Editor.prototype.getDefaultTitle = function () {
+  var libraryMetadata = this.selector.selector.getContentType(this.getLibrary().split(' ')[0]);
+  var libraryTitle = (libraryMetadata && libraryMetadata.title) ? libraryMetadata.title : '';
+  return H5PEditor.t('core', 'untitled').replace(':libraryTitle', libraryTitle);
 };
 
 /**

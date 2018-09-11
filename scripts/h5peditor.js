@@ -61,7 +61,7 @@ ns.libraryRequested = function (libraryName, callback) {
               'rel="stylesheet" ' +
               'href="' + path + '" ' +
               'type="text/css" ' +
-              '/>')
+              '/>');
           }
         }
       });
@@ -180,12 +180,12 @@ ns.loadLibrary = function (libraryName, callback) {
             }
           });
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
           if (window['console'] !== undefined) {
-            console.log('Ajax request failed');
-            console.log(jqXHR);
-            console.log(textStatus);
-            console.log(errorThrown);
+            console.warn('Ajax request failed');
+            console.warn(jqXHR);
+            console.warn(textStatus);
+            console.warn(errorThrown);
           }
         },
         dataType: 'json'
@@ -204,7 +204,7 @@ ns.resetLoadedLibraries = function () {
   H5PIntegration.loadedJs = [];
   ns.loadedCallbacks = [];
   ns.libraryLoaded = {};
-}
+};
 
 /**
  * Recursive processing of the semantics chunks.
@@ -320,7 +320,7 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent) {
 
   if (!parent.passReadies) {
     // Run ready callbacks.
-    for (var i = 0; i < parent.readies.length; i++) {
+    for (i = 0; i < parent.readies.length; i++) {
       parent.readies[i]();
     }
     delete parent.readies;
@@ -361,10 +361,10 @@ ns.addCommonField = function (field, parent, params, ancestor, skipAppendTo) {
     var widget = ns.getWidgetName(field);
     ancestor.commonFields[parent.library][parent.currentLibrary][field.name] = {
       instance: new ns.widgets[widget](parent, field, params[field.name], function (field, value) {
-          for (var i = 0; i < commonField.setValues.length; i++) {
-            commonField.setValues[i](field, value);
-          }
-        }),
+        for (var i = 0; i < commonField.setValues.length; i++) {
+          commonField.setValues[i](field, value);
+        }
+      }),
       setValues: [],
       parents: []
     };
@@ -806,7 +806,6 @@ ns.createImportantDescription = function (importantDescription) {
  * @param {Object} parent
  */
 ns.bindImportantDescriptionEvents = function (widget, fieldName, parent) {
-  var that = this;
   var context;
 
   if (!widget.field.important) {
@@ -819,8 +818,6 @@ ns.bindImportantDescriptionEvents = function (widget, fieldName, parent) {
     var lib = librarySelector.currentLibrary.split(' ')[0];
     context = (lib + '-' + fieldName).replace(/\.|_/g,'-') + '-important-description-open';
   }
-
-  var $importantField = widget.$item.find('.h5peditor-field-important-description');
 
   // Set first occurance to visible
   ns.storage.get(context, function (value) {
@@ -965,7 +962,7 @@ ns.getWidgetName = function (field) {
 /**
  * Mimics how php's htmlspecialchars works (the way we uses it)
  */
-ns.htmlspecialchars = function(string) {
+ns.htmlspecialchars = function (string) {
   return string.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#039;').replace(/"/g, '&quot;');
 };
 
@@ -985,7 +982,7 @@ ns.createButton = function (id, title, handler, displayTitle) {
     tabIndex: 0,
     'aria-disabled': 'false',
     on: {
-      click: function (event) {
+      click: function () {
         handler.call(this);
       },
       keydown: function (event) {
@@ -1015,7 +1012,7 @@ ns.createButton = function (id, title, handler, displayTitle) {
  * @param {string} [options.defaultText] - Default text if fields are empty.
  * @param {string} [options.listenerName] - Listener name.
  */
- ns.sync = function ($masterField, $slaveField, options) {
+ns.sync = function ($masterField, $slaveField, options) {
   if (!$masterField || $masterField.length === 0 || !$slaveField || $slaveField.length === 0) {
     return;
   }
@@ -1040,10 +1037,10 @@ ns.createButton = function (id, title, handler, displayTitle) {
   }
 
   // Keep fields in sync
-  $masterField.on(listenerName, function() {
+  $masterField.on(listenerName, function () {
     $slaveField.val($masterField.val()).trigger('change');
   });
-  $slaveField.on(listenerName, function() {
+  $slaveField.on(listenerName, function () {
     $masterField.val($slaveField.val()).trigger('change');
   });
 };
@@ -1058,7 +1055,7 @@ ns.createButton = function (id, title, handler, displayTitle) {
  * @param {string} library - Current library.
  * @return {boolean} True, if form should have the metadata button.
  */
-ns.enableMetadataCopyPaste = function (library) {
+ns.enableMetadata = function (library) {
   this.previousLibraryEntitledForMetadata = true;
 
   if (!library || typeof library !== 'string') {
@@ -1107,7 +1104,7 @@ ns.enableMetadataCopyPaste = function (library) {
     'H5P.Video 1.4' // Copyright information was moved to metadata
   ];
 
-  let block = blockList.filter(function(item) {
+  let block = blockList.filter(function (item) {
     // + ' ' makes sure to avoid partial matches
     return item.indexOf(library.machineName + ' ') !== -1;
   });
@@ -1337,7 +1334,7 @@ ns.canPastePlus = function (clipboard, libs) {
   // Translate Hub format to common library format
   if (libs.libraries !== undefined) {
     libs = libs.libraries;
-    libs.forEach(function(lib) {
+    libs.forEach(function (lib) {
       lib.name = lib.machineName;
       lib.majorVersion = lib.localMajorVersion;
       lib.minorVersion = lib.localMinorVersion;
@@ -1359,7 +1356,7 @@ ns.canPastePlus = function (clipboard, libs) {
 
   // Check if clipboard library version is available
   const versionClip = clipboard.generic.library.split(' ')[1];
-  const match = candidates.some(function(candidate) {
+  const match = candidates.some(function (candidate) {
     return ('' + candidate.majorVersion + '.' + candidate.minorVersion) === versionClip;
   });
   if (match) {
@@ -1372,11 +1369,15 @@ ns.canPastePlus = function (clipboard, libs) {
       return '' + candidate.majorVersion + '.' + candidate.minorVersion;
     })
     .map(function (candidate) {
-      return candidate.replace(/\d+/g, function (d) {return +d + 1000;});
+      return candidate.replace(/\d+/g, function (d) {
+        return +d + 1000;
+      });
     })
     .sort()
     .map(function (candidate) {
-      return candidate.replace(/\d+/g, function (d) {return +d - 1000;});
+      return candidate.replace(/\d+/g, function (d) {
+        return +d - 1000;
+      });
     });
 
   // Clipboard library is newer than latest available local library
@@ -1451,8 +1452,8 @@ ns.storage = (function () {
       try {
         H5P.setUserData(0, key, value);
       }
-      catch (err) {}
-    },
+      catch (err) { /*Intentionally left empty*/ }
+    }
   };
   return instance;
 })();

@@ -64,7 +64,7 @@ ns.SelectorLegacy = function (libraries, selectedLibrary, changeLibraryDialog) {
 ns.SelectorLegacy.prototype.resetSelection = function (library) {
   this.$selector.val(library);
   this.currentLibrary = library;
-}
+};
 
 /**
  * Get currently selected library.
@@ -79,7 +79,7 @@ ns.SelectorLegacy.prototype.getSelectedLibrary = function (next) {
     tutorialUrl: $option.data('tutorial-url'),
     exampleUrl: $option.data('example-url')
   });
-}
+};
 
 /**
  * Not possible to load new params into legacy selector, always returns undefined.
@@ -88,7 +88,7 @@ ns.SelectorLegacy.prototype.getSelectedLibrary = function (next) {
  */
 ns.SelectorLegacy.prototype.getParams = function () {
   return undefined;
-}
+};
 
 /**
  * Not possible to load new metadata into legacy selector, always returns undefined.
@@ -104,6 +104,6 @@ ns.SelectorLegacy.prototype.getMetadata = function () {
  *
  * @return {HTMLElement}
  */
-ns.SelectorLegacy.prototype.getElement = function(){
+ns.SelectorLegacy.prototype.getElement = function () {
   return this.$selector.get(0);
 };

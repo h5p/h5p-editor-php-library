@@ -20,7 +20,7 @@ H5PEditor.widgets.select = H5PEditor.Select = (function (E) {
       for (var i = 0; i < this.changes.length; i++) {
         this.changes[i](value);
       }
-    }
+    };
   }
 
   /**

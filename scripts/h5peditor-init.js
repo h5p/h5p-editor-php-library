@@ -1,5 +1,5 @@
 (function ($, ns) {
-  H5PEditor.init = function ($form, $type, $upload, $create, $editor, $library, $params, $maxScore, submitCallback) {
+  H5PEditor.init = function ($form, $type, $upload, $create, $editor, $library, $params, $maxScore, $title, submitCallback) {
     H5PEditor.$ = H5P.jQuery;
     H5PEditor.basePath = H5PIntegration.editor.libraryUrl;
     H5PEditor.fileIcon = H5PIntegration.editor.fileIcon;
@@ -52,9 +52,12 @@
         if (params !== undefined) {
           params.metadata = params.metadata || {};
 
-          // Set default metadata title if not set
-          var defaultName = h5peditor.getLibrary().split('.')[1].split(' ')[0].replace(/([a-z])([A-Z])/g, '$1 $2');
-          params.metadata.title = params.metadata.title || H5PEditor.language.core.untitled + ' ' + defaultName;
+          // If title is not set, create a default one:
+          params.metadata.title = params.metadata.title || h5peditor.getDefaultTitle();
+          // Set the title field to the metadata title if the field
+          if ($title && $title.length !== 0) {
+            $title.val(params.metadata.title);
+          }
 
           $library.val(h5peditor.getLibrary());
           $params.val(JSON.stringify(params));
@@ -81,11 +84,11 @@
     var url = H5PIntegration.editor.ajaxPath + action;
 
     if (parameters !== undefined) {
-	  var separator = url.indexOf('?') === -1 ? '?' : '&';
+      var separator = url.indexOf('?') === -1 ? '?' : '&';
       for (var property in parameters) {
         if (parameters.hasOwnProperty(property)) {
           url += separator + property + '=' + parameters[property];
-		  separator = '&';
+          separator = '&';
         }
       }
     }

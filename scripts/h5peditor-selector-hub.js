@@ -186,7 +186,7 @@ ns.SelectorHub.prototype.getMetadata = function () {
  * @public
  * @return {HTMLElement}
  */
-ns.SelectorHub.prototype.getElement = function(){
+ns.SelectorHub.prototype.getElement = function () {
   return this.client.getElement();
 };
 

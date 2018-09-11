@@ -23,11 +23,10 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, group, parent) {
   ns.processSemanticsChunk(semantics, {}, $authorData, parent);
 
   var $button = H5PEditor.$('<div class="file authorList">' +
-    '<a class="h5p-metadata-button h5p-add-author">' +
+    '<button class="h5p-metadata-button h5p-add-author" tabindex="0">' +
       H5PEditor.t('core', 'addAuthor') +
-    '</a>' +
-  '</div>')
-  .click(function (event) {
+    '</button>' +
+  '</div>').click(function (event) {
     addAuthor(event.originalEvent !== undefined);
   });
   $authorData.append($button);
@@ -90,7 +89,7 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, group, parent) {
    * @param {string} author.role - Author role.
    */
   function removeAuthor(author) {
-    params.authors = params.authors.filter(function(e) {
+    params.authors = params.authors.filter(function (e) {
       const remove = (e === author);
       if (remove) {
         removedAuthors.push(author);

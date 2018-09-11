@@ -157,7 +157,7 @@ ns.File.addCopyright = function (field, $dialog, setCopyright) {
         return list[i];
       }
     }
-  }
+  };
 
   // Re-map old licenses that have been moved
   if (field.copyright) {
@@ -248,7 +248,7 @@ ns.File.prototype.addFile = function () {
   this.$file.html('<a href="#" title="' + ns.t('core', 'changeFile') + '" class="thumbnail"><img ' + (thumbnail.width === undefined ? '' : ' width="' + thumbnail.width + '"') + 'height="' + thumbnail.height + '" alt="' + (this.field.label === undefined ? '' : this.field.label) + '"/><a href="#" class="remove" title="' + ns.t('core', 'removeFile') + '"></a></a>').children(':eq(0)').click(function () {
     that.openFileSelector();
     return false;
-  }).children('img').attr('src', thumbnail.path).end().next().click(function (e) {
+  }).children('img').attr('src', thumbnail.path).end().next().click(function () {
     that.confirmRemovalDialog.show(H5P.jQuery(this).offset().top);
     return false;
   });

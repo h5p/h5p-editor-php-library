@@ -1,5 +1,4 @@
 H5PEditor.SemanticStructure = (function ($) {
-  var self = this;
 
   /**
    * The base of the semantic structure system.
@@ -28,7 +27,7 @@ H5PEditor.SemanticStructure = (function ($) {
      * Global instance variables.
      * @private
      */
-    var $widgetSelect, $wrapper, $inner, $errors, $content, $helpText, widgets;
+    var $widgetSelect, $wrapper, $inner, $errors, $helpText, widgets;
 
     /**
      * Initialize. Wrapped to avoid leaking variables
@@ -47,10 +46,9 @@ H5PEditor.SemanticStructure = (function ($) {
       created for what is needed. */
 
       // Create field label
-      var $label;
       if (field.label !== 0) {
         // Add label
-        $label = createLabel(self.label, field.optional).appendTo($wrapper);
+        createLabel(self.label, field.optional).appendTo($wrapper);
       }
 
       // Create description
@@ -84,10 +82,6 @@ H5PEditor.SemanticStructure = (function ($) {
       $inner = $('<div/>', {
         'class': 'h5peditor-widget-wrapper' + (widgets.length > 1 ? ' content' : ' '),
         appendTo: $wrapper
-      });
-
-      $content = $('<div/>', {
-        'class': 'h5peditor-field-content'
       });
 
       // Create errors container
@@ -199,6 +193,8 @@ H5PEditor.SemanticStructure = (function ($) {
       else {
         $helpText.detach();
       }
+
+      self.trigger('ready');
     };
 
     /**
@@ -208,10 +204,10 @@ H5PEditor.SemanticStructure = (function ($) {
      * @param {jQuery} $container
      */
     self.appendTo = function ($container) {
+      $wrapper.appendTo($container);
+
       // Use first widget by default
       changeWidget(widgets[0].name);
-
-      $wrapper.appendTo($container);
     };
 
     /**

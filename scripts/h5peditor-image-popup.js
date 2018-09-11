@@ -185,7 +185,8 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
           self.darkroom.plugins.crop.cropCurrentZone();
 
           canvas.addEventListener('crop:update', convertData, false);
-        } else {
+        }
+        else {
           convertData();
         }
       }
@@ -335,7 +336,8 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     this.toggle = function () {
       if (isShowing) {
         this.hide();
-      } else {
+      }
+      else {
         this.show();
       }
     };

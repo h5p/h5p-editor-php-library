@@ -18,7 +18,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
 
   // Set default title
   if (options.populateTitle && (!self.metadata.title || self.metadata.title === '')) {
-    self.metadata.title = H5PEditor.t('core', 'untitled') + ' ' + H5PEditor.parent.currentLibrary.split(' ')[0].split('.')[1];
+    self.metadata.title = H5PEditor.LibraryListCache.getDefaultTitle(H5PEditor.parent.currentLibrary);
   }
 
   self.metadataSemantics = Object.keys(H5PEditor.metadataSemantics).map(function (item) {
@@ -33,7 +33,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
         '<p>' + H5PEditor.t('core', 'fillInTheFieldsBelow') + '</p>' +
       '</div>' +
       '<div class="metadata-button-wrapper">' +
-        '<a href="#" class="h5p-metadata-button h5p-save">' + H5PEditor.t('core', 'saveMetadata') + '</a>' +
+        '<button href="#" class="h5p-metadata-button h5p-save">' + H5PEditor.t('core', 'saveMetadata') + '</button>' +
       '</div>' +
     '</div>' +
   '</div>');
@@ -60,7 +60,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
     // Find versions for selected value
     function getNestedOptions(options) {
       var flattenedOptions = [];
-      options.forEach(function(option) {
+      options.forEach(function (option) {
         if (option.type === 'optgroup') {
           flattenedOptions = flattenedOptions.concat(getNestedOptions(option.options));
         }
@@ -97,7 +97,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
 
   // Make sure the source field is empty or starts with a protocol
   const sourceField = find(group.children, 'field.name', 'source');
-  sourceField.$item.on('change', function() {
+  sourceField.$item.on('change', function () {
     const sourceInput = H5PEditor.$(this).find('input.h5peditor-text');
     if (sourceInput.val().trim() !== '' &&
       sourceInput.val().indexOf('https://') !== 0 &&
@@ -147,9 +147,9 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
   if (H5PIntegration && H5PIntegration.user && H5PIntegration.user.name) {
     $wrapper
       .find('.h5p-author-data')
-        .find('.field-name-name')
-          .find('input.h5peditor-text')
-            .val(H5PIntegration.user.name);
+      .find('.field-name-name')
+      .find('input.h5peditor-text')
+      .val(H5PIntegration.user.name);
   }
 
   // Select title field text on click
