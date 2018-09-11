@@ -2,6 +2,12 @@
 
 class H5peditor {
 
+  private static $hasWYSIWYGEditor = array(
+    'H5P.CoursePresentation',
+    'H5P.InteractiveVideo',
+    'H5P.DragQuestion'
+  );
+
   public static $styles = array(
     'libs/darkroom.css',
     'styles/css/h5p-hub-client.css',
@@ -320,6 +326,17 @@ class H5peditor {
     $library = $this->h5p->loadLibrary($machineName, $majorVersion, $minorVersion);
     $dependencies = array();
     $this->h5p->findLibraryDependencies($dependencies, $library);
+
+    // Load addons for wysiwyg editors
+    if (in_array($machineName, self::$hasWYSIWYGEditor)) {
+      $addons = $this->h5p->h5pF->loadAddons();
+      foreach ($addons as $addon) {
+        $key = 'editor-' . $addon['machineName'];
+        $dependencies[$key]['weight'] = sizeof($dependencies)+1;
+        $dependencies[$key]['type'] = 'editor';
+        $dependencies[$key]['library'] = $addon;
+      }
+    }
 
     // Order dependencies by weight
     $orderedDependencies = array();
