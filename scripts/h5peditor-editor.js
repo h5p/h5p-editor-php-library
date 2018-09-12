@@ -284,8 +284,15 @@ ns.Editor.prototype.isMainTitleSet = function () {
  * @param content
  * @return {H5PEditor.Presave}
  */
-ns.Editor.prototype.presave = function (content) {
-  return this.selector.presave(content, this.getLibrary());
+ns.Editor.prototype.getMaxScore = function (content) {
+  try {
+    var value = this.selector.presave(content, this.getLibrary());
+    return value.maxScore;
+  }
+  catch (e) {
+    // Deliberatly catching error
+    return 0;
+  }
 };
 
 /**
