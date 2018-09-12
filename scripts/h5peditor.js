@@ -542,6 +542,42 @@ ns.findField = function (path, parent) {
 };
 
 /**
+ * Find a semantics field in the semantics structure by name of the field
+ * Will return the first found by depth first search if there are identically named fields
+ *
+ * @param {string} fieldName Name of the field we wish to find
+ * @param {Object|Array} semanticsStructure Semantics we wish to find the field within
+ * @returns {null|Object} Returns the field if found, otherwise null.
+ */
+ns.findSemanticsField = function (fieldName, semanticsStructure) {
+  if (Array.isArray(semanticsStructure)) {
+    for (let i = 0; i < semanticsStructure.length; i++) {
+      var semanticsField = ns.findSemanticsField(fieldName, semanticsStructure[i]);
+      if (semanticsField !== null) {
+        // Return immediately if field is found
+        return semanticsField;
+      }
+    }
+    return null;
+  }
+  else if (semanticsStructure.name === fieldName) {
+    return semanticsStructure;
+  }
+  else if (semanticsStructure.field) {
+    // Process field
+    return ns.findSemanticsField(fieldName, semanticsStructure.field);
+  }
+  else if (semanticsStructure.fields) {
+    // Process fields
+    return ns.findSemanticsField(fieldName, semanticsStructure.fields);
+  }
+  else {
+    // No matching semantics found within known properties and list structures
+    return null;
+  }
+};
+
+/**
  * Follow a field and get all changes to its params.
  *
  * @param {Object} parent The parent object of the field.
