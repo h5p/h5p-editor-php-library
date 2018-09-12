@@ -46,31 +46,31 @@
       $type.filter('input[value="create"]').attr('checked', true).change();
     }
 
-    $form.submit(function () {
+    $form.submit(function (event) {
       if (h5peditor !== undefined) {
         var params = h5peditor.getParams();
-        if (params !== undefined) {
-          params.metadata = params.metadata || {};
 
-          // If title is not set, create a default one:
-          params.metadata.title = params.metadata.title || h5peditor.getDefaultTitle();
-          // Set the title field to the metadata title if the field
+        // Validate mandatory main title. Prevent submitting if that's not set.
+        // Deliberatly doing it after getParams(), so that any other validation
+        // problems are also revealed
+        if (!h5peditor.isMainTitleSet()) {
+          return event.preventDefault();
+        }
+
+        if (params !== undefined) {
+          // Set the title field to the metadata title if the field exists
           if ($title && $title.length !== 0) {
-            $title.val(params.metadata.title);
+            $title.val(params.metadata.title || '');
           }
 
+          // Set main library
           $library.val(h5peditor.getLibrary());
+
+          // Set params
           $params.val(JSON.stringify(params));
 
-          try {
-            var presave = h5peditor.presave(params.params);
-            $maxScore.val(presave.maxScore);
-          }
-          catch (err) {
-            // This halts processing. Swap with H5P.Dialog? And perhaps stop probagation?
-            alert(err.message);
-            $maxScore.val(0);
-          }
+          // Set max score
+          $maxScore.val(h5peditor.getMaxScore(params.params));
 
           if (submitCallback) {
             submitCallback(params);
