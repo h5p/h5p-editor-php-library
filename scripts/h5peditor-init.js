@@ -46,7 +46,7 @@
       $type.filter('input[value="create"]').attr('checked', true).change();
     }
 
-    $form.submit(function () {
+    $form.submit(function (event) {
       if (h5peditor !== undefined) {
         var params = h5peditor.getParams();
 
