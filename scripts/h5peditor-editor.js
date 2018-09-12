@@ -262,15 +262,20 @@ ns.Editor.prototype.getParams = function (notFormSubmit) {
 };
 
 /**
- * Creates a default content title, based on the title of the current selected
- * library
+ * Check if main title is set. If not, focus on it!
  *
- * @return {String}
+ * @return {[type]}
  */
-ns.Editor.prototype.getDefaultTitle = function () {
-  var libraryMetadata = this.selector.selector.getContentType(this.getLibrary().split(' ')[0]);
-  var libraryTitle = (libraryMetadata && libraryMetadata.title) ? libraryMetadata.title : '';
-  return H5PEditor.t('core', 'untitled').replace(':libraryTitle', libraryTitle);
+ns.Editor.prototype.isMainTitleSet = function () {
+  var mainTitleField = this.selector.form.mainTitleField;
+
+  // validate() actually doesn't return a boolean, but the trimmed value
+  // We know title is a mandatory field, so that's what we are checking here
+  var valid = mainTitleField.validate();
+  if (!valid) {
+    mainTitleField.$input.focus();
+  }
+  return valid;
 };
 
 /**

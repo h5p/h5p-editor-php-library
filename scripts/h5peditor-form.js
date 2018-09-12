@@ -39,9 +39,11 @@ ns.Form = function () {
   // Ensure it has validation functions
   ns.processSemanticsChunk(metaDataTitleSemantics, {}, this.$form.children('.tree'), this);
 
+  self.mainTitleField = ns.findField('title', this);
+
   // Give title field an ID
-  this.$form.find('.field-name-title').attr('id', 'metadata-title-main-label');
-  this.$form.find('.h5peditor-text').attr('id', 'metadata-title-main');
+  self.mainTitleField.$item.attr('id', 'metadata-title-main-label');
+  self.mainTitleField.$input.attr('id', 'metadata-title-main');
 
   // Add the metadata button
   const metadataButton = ns.$('' +
