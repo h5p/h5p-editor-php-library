@@ -319,7 +319,8 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
 
         // Render common fields if found
         if (renderableCommonFields.length) {
-          var libraryName = commonFieldMachineName.length ? commonFieldMachineName.split(' ')[0] : '';
+          var libraryName = commonFieldMachineName === 'Other libraries' ? commonFieldMachineName
+            : (commonFieldMachineName.length ? commonFieldMachineName.split(' ')[0] : '');
           if (libraries.length && libraries[0].title) {
             libraryName = libraries[0].title;
           }
@@ -331,10 +332,8 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
             commonFieldsLibraryWrapper = document.createElement('fieldset');
             var libraryWrapperClass = libraryName.replace(/\s+/g, '-').toLowerCase();
 
-            commonFieldsLibraryWrapper.classList.add(
-              'common-fields-library-wrapper',
-              'common-fields-' + libraryWrapperClass
-            );
+            commonFieldsLibraryWrapper.classList.add('common-fields-library-wrapper');
+            commonFieldsLibraryWrapper.classList.add('common-fields-' + libraryWrapperClass);
 
             var libraryTitle = document.createElement('legend');
             libraryTitle.classList.add('common-field-legend');
