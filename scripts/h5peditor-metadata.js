@@ -27,7 +27,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
   }
   // Set default title (using semantics default)
   if (options.populateTitle) {
-    fields['title'].default = H5PEditor.LibraryListCache.getDefaultTitle(H5PEditor.parent.currentLibrary);
+    fields['title'].default = H5PEditor.LibraryListCache.getDefaultTitle(parent.currentLibrary);
   }
 
   var $wrapper = $('' +
