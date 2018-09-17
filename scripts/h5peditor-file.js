@@ -207,7 +207,6 @@ ns.File.addCopyright = function (field, $dialog, setCopyright) {
   });
 
   // Trigger update straight away
-  // console.log(field, 'not metadata');
   licenseField.changes[licenseField.changes.length - 1](field.copyright.license);
 };
 

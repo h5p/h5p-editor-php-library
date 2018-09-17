@@ -49,7 +49,7 @@ ns.Form = function () {
   const metadataButton = ns.$('' +
     '<div class="h5p-metadata-button-wrapper">' +
       '<div class="h5p-metadata-button-tip"></div>' +
-      '<div class="toggle-metadata">' + ns.t('core', 'metadata') + '</div>' +
+      '<div class="h5p-metadata-toggler">' + ns.t('core', 'metadata') + '</div>' +
     '</div>');
 
   /*
@@ -75,7 +75,7 @@ ns.Form = function () {
   }
   else {
     this.$form.find('.h5p-editor-flex-wrapper').append(metadataButton);
-    this.$form.find('.toggle-metadata').click(function () {
+    this.$form.find('.h5p-metadata-toggler').click(function () {
       self.$form.find('.h5p-metadata-wrapper').first().toggleClass('h5p-open');
       self.$form.find('.overlay').toggle();
     });
