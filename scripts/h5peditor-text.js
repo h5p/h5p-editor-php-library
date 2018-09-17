@@ -1,3 +1,4 @@
+/* global ns */
 /**
  * Create a text field for the form.
  *

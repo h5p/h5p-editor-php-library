@@ -1,3 +1,4 @@
+/* global ns */
 /**
  * Construct a library selector.
  *

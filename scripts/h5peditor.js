@@ -1,3 +1,4 @@
+/* global ns */
 /**
  * This file contains helper functions for the editor.
  */
@@ -912,7 +913,7 @@ ns.bindImportantDescriptionEvents = function (widget, fieldName, parent) {
       widget.$item.addClass('important-description-visible');
       ns.storage.set(context, true);
     })
-    .keydown(function () {
+    .keydown(function (event) {
       if (event.which == 13 || event.which == 32) {
         ns.$(this).trigger('click');
         event.preventDefault();
@@ -925,7 +926,7 @@ ns.bindImportantDescriptionEvents = function (widget, fieldName, parent) {
       widget.$item.removeClass('important-description-visible');
       ns.storage.set(context, false);
     })
-    .keydown(function () {
+    .keydown(function (event) {
       if (event.which == 13 || event.which == 32) {
         ns.$(this).trigger('click');
         event.preventDefault();

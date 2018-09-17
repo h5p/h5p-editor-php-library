@@ -1,3 +1,4 @@
+/* global ns */
 /**
  * Create a field without html
  *

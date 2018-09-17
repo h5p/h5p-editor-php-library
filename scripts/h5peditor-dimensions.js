@@ -1,3 +1,4 @@
+/* global ns */
 /**
  * Adds a dimensions field to the form.
  *

@@ -1,3 +1,4 @@
+/* global ns */
 /**
  * Create a group of fields.
  *

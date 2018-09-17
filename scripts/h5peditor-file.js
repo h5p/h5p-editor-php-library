@@ -1,3 +1,4 @@
+/* global ns */
 /**
  * Adds a file upload field to the form.
  *

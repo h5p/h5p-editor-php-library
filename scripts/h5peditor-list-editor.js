@@ -1,3 +1,4 @@
+/* global ns */
 H5PEditor.ListEditor = (function ($) {
 
   /**

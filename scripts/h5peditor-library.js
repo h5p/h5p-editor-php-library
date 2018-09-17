@@ -1,3 +1,4 @@
+/* global ns */
 /**
  * Callback for setting new parameters.
  *
