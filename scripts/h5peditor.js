@@ -1554,7 +1554,7 @@ ns.Fullscreen = (function (EventDispatcher, fullScreenBrowserPrefix, safariBrows
     // Extend event system
     EventDispatcher.call(this);
 
-    /** @alias H5P.ActionBar# */
+    /** @alias H5P.Fullscreen# */
     const self = this;
 
     // Event names varies from browser to browser
