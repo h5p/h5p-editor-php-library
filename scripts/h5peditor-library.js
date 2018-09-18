@@ -364,14 +364,14 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
       that.$copyButton.toggleClass('disabled', false);
     }
 
+    that.addMetadataForm(semantics);
+
     if (that.libraries !== undefined) {
       that.change();
     }
     else {
       that.runChangeCallback = true;
     }
-
-    that.addMetadataForm(semantics);
   });
 };
 
