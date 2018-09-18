@@ -1090,6 +1090,7 @@ ns.createButton = function (id, title, handler, displayTitle) {
  * @param {object} [options] - Options.
  * @param {string} [options.defaultText] - Default text if fields are empty.
  * @param {string} [options.listenerName] - Listener name.
+ * @param {function} [options.callback] - Callback when a sync is executed. Returns new string.
  */
 ns.sync = function ($masterField, $slaveField, options) {
   if (!$masterField || $masterField.length === 0 || !$slaveField || $slaveField.length === 0) {
@@ -1103,25 +1104,40 @@ ns.sync = function ($masterField, $slaveField, options) {
   $masterField.off(listenerName);
   $slaveField.off(listenerName);
 
+  let valueSet = '';
+
   // Initialize fields
   if ($masterField.val()) {
-    $slaveField.val($masterField.val()).trigger('change');
+    valueSet = $masterField.val();
+    $slaveField.val(valueSet).trigger('change');
   }
   else if ($slaveField.val()) {
-    $masterField.val($slaveField.val()).trigger('change');
+    valueSet = $slaveField.val();
+    $masterField.val(valueSet).trigger('change');
   }
   else if (options.defaultText) {
-    $masterField.val(options.defaultText).trigger('change');
-    $slaveField.val(options.defaultText).trigger('change');
+    valueSet = options.defaultText || '';
+    $masterField.val(valueSet).trigger('change');
+    $slaveField.val(valueSet).trigger('change');
   }
 
   // Keep fields in sync
   $masterField.on(listenerName, function () {
     $slaveField.val($masterField.val()).trigger('change');
+    if (options.callback) {
+      options.callback($masterField.val());
+    }
   });
   $slaveField.on(listenerName, function () {
     $masterField.val($slaveField.val()).trigger('change');
+    if (options.callback) {
+      options.callback($slaveField.val());
+    }
   });
+
+  if (options.callback) {
+    options.callback(valueSet);
+  }
 };
 
 /**
