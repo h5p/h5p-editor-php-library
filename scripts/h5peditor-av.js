@@ -1,3 +1,4 @@
+/* global ns */
 /**
  * Audio/Video module.
  * Makes it possible to add audio or video through file uploads and urls.

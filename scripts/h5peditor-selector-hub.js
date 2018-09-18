@@ -1,3 +1,4 @@
+/* global ns */
 /**
  * @class
  * @alias H5PEditor.SelectorHub

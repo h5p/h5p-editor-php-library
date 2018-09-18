@@ -1,3 +1,4 @@
+/* global ns */
 /**
  * Create a group of fields.
  *
@@ -99,20 +100,20 @@ ns.Group.prototype.appendTo = function ($wrapper) {
   });
 
   // Add content container
-  var $content = ns.$('<div/>', {
+  this.$content = ns.$('<div/>', {
     'class': 'content',
     appendTo: this.$group
   });
 
   if (this.hasSingleChild() && !this.isSubContent()) {
-    $content.addClass('h5peditor-single');
+    this.$content.addClass('h5peditor-single');
     this.children = [];
     var field = this.field.fields[0];
     var widget = field.widget === undefined ? field.type : field.widget;
     this.children[0] = new ns.widgets[widget](this, field, this.params, function (field, value) {
       that.setValue(that.field, value);
     });
-    this.children[0].appendTo($content);
+    this.children[0].appendTo(this.$content);
   }
   else {
     if (this.params === undefined) {
@@ -122,7 +123,7 @@ ns.Group.prototype.appendTo = function ($wrapper) {
 
     this.params = this.initSubContent(this.params);
 
-    ns.processSemanticsChunk(this.field.fields, this.params, $content, this);
+    ns.processSemanticsChunk(this.field.fields, this.params, this.$content, this);
   }
 
   // Set summary

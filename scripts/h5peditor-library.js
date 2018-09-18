@@ -1,3 +1,4 @@
+/* global ns */
 /**
  * Callback for setting new parameters.
  *
@@ -387,20 +388,25 @@ ns.Library.prototype.addMetadataForm = function () {
     return;
   }
 
-  if (that.$metadataWrapper === undefined) {
-    that.$metadataWrapper = ns.$('<div class="push-top"></div>');
-    that.$metadataForm = ns.metadataForm(that.semantics, that.params.metadata, that.$metadataWrapper, that, {populateTitle: true});
+  if (that.$metadataFormWrapper === undefined) {
+    // Put metadata form wrapper before library wrapper
+    that.$metadataFormWrapper = ns.$('<div class="h5p-metadata-form-wrapper"></div>');
+    that.$metadataForm = ns.metadataForm(that.semantics, that.params.metadata, that.$metadataFormWrapper, that, {populateTitle: true});
 
     /*
      * Note: Use the id metadata-title-sub in custom editors to invoke syncing
      * the title field with the metadata title
      */
     ns.sync(
-      that.$libraryWrapper.parent().siblings('.h5p-metadata-title-wrapper').find('input#metadata-title-sub'),
-      that.$metadataForm.find('.field-name-title').find('input')
+      that.$libraryWrapper.parent()
+        .siblings('.h5p-metadata-title-wrapper')
+        .find('input#metadata-title-sub'),
+      that.$metadataForm
+        .find('.field-name-title')
+        .find('input')
     );
 
-    that.$libraryWrapper.before(that.$metadataWrapper);
+    that.$libraryWrapper.before(that.$metadataFormWrapper);
   }
 
   // Prevent multiple buttons when changing libraries
@@ -409,29 +415,48 @@ ns.Library.prototype.addMetadataForm = function () {
     that.$metadataButton = H5PEditor.$('' +
       '<div class="h5p-metadata-button-wrapper">' +
         '<div class="h5p-metadata-button-tip"></div>' +
-        '<div class="toggle-metadata">' + ns.t('core', 'metadata') + '</div>' +
+        '<div class="h5p-metadata-toggler">' + ns.t('core', 'metadata') + '</div>' +
       '</div>');
 
-    // Put the metadataButton after the first visible label if it has text
-    var $labelWrapper = that.$libraryWrapper.siblings('.h5p-editor-flex-wrapper').children('.h5peditor-label-wrapper');
+    // Put the metadataButton after the first visible label found if it has text
+    var $labelWrapper = that.$libraryWrapper
+      .siblings('.h5p-editor-flex-wrapper')
+      .children('.h5peditor-label-wrapper');
+
     if ($labelWrapper.length > 0 && !$labelWrapper.is(':empty')) {
-      var label = that.$libraryWrapper.closest('.content').find('.h5p-editor-flex-wrapper').first();
-      if (label.css('display') === 'none') {
-        label = that.$libraryWrapper.find('.h5p-editor-flex-wrapper').first();
+      var label = that.$libraryWrapper
+        .closest('.content')
+        .find('.h5p-editor-flex-wrapper')
+        .first();
+
+      if (label.length === 0 || label.css('display') === 'none') {
+        label = that.$libraryWrapper
+          .find('.h5p-editor-flex-wrapper')
+          .first();
       }
       label.append(that.$metadataButton);
     }
     else {
-      $labelWrapper = that.$libraryWrapper.find('.h5peditor-label-wrapper').first();
+      $labelWrapper = that.$libraryWrapper
+        .find('.h5peditor-label-wrapper')
+        .first();
+
       // We might be in a compound content type like CP or IV where the layout is different
-      const $compoundLabelWrapper = that.$libraryWrapper.parent().parent().find('.h5p-metadata-title-wrapper').find('.h5p-editor-flex-wrapper').first();
+      const $compoundLabelWrapper = that.$libraryWrapper
+        .parent().parent()
+        .find('.h5p-metadata-title-wrapper')
+        .find('.h5p-editor-flex-wrapper')
+        .first();
+
       if ($compoundLabelWrapper.length > 0) {
         $compoundLabelWrapper.append(that.$metadataButton);
       }
+
       // First label found, even if it's empty
       else if ($labelWrapper.length > 0) {
         $labelWrapper.append(that.$metadataButton);
       }
+
       // Next to the library select field
       else {
         var $librarySelector = that.$libraryWrapper.siblings('select');
@@ -442,19 +467,38 @@ ns.Library.prototype.addMetadataForm = function () {
 
     // Add click listener
     that.$metadataButton.click(function () {
-      that.$metadataWrapper.find('.h5p-metadata-wrapper').toggleClass('h5p-open');
-      that.$metadataWrapper.closest('.h5peditor-form').find('.overlay').toggle();
-      that.$metadataWrapper.find('.h5p-metadata-wrapper').find('.field-name-title').find('input.h5peditor-text').focus();
+      that.$metadataFormWrapper
+        .find('.h5p-metadata-wrapper')
+        .toggleClass('h5p-open');
+
+      that.$metadataFormWrapper
+        .closest('.h5peditor-form')
+        .find('.overlay')
+        .toggle();
+
+      that.$metadataFormWrapper
+        .find('.h5p-metadata-wrapper')
+        .find('.field-name-title')
+        .find('input.h5peditor-text')
+        .focus();
+
       if (H5PIntegration && H5PIntegration.user && H5PIntegration.user.name) {
-        that.$metadataWrapper.find('.field-name-authorName').find('input.h5peditor-text').val(H5PIntegration.user.name);
+        that.$metadataFormWrapper
+          .find('.field-name-authorName')
+          .find('input.h5peditor-text')
+          .val(H5PIntegration.user.name);
       }
       /*
        * Try (again) to sync with a title field. Custom editors may need
        * this here because the master may not yet exist before.
        */
       ns.sync(
-        that.$libraryWrapper.parent().siblings('.h5p-metadata-title-wrapper').find('input#metadata-title-sub'),
-        that.$metadataForm.find('.field-name-title').find('input')
+        that.$libraryWrapper.parent()
+          .siblings('.h5p-metadata-title-wrapper')
+          .find('input#metadata-title-sub'),
+        that.$metadataForm
+          .find('.field-name-title')
+          .find('input')
       );
     });
   }
@@ -557,9 +601,9 @@ ns.Library.prototype.removeChildren = function () {
   }
 
   // Remove old metadata form and button
-  if (this.$metadataWrapper) {
-    this.$metadataWrapper.remove();
-    delete this.$metadataWrapper;
+  if (this.$metadataFormWrapper) {
+    this.$metadataFormWrapper.remove();
+    delete this.$metadataFormWrapper;
     this.$metadataButton.remove();
     delete this.$metadataButton;
   }

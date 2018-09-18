@@ -1,3 +1,4 @@
+/* global ns CKEDITOR */
 /**
  * Adds a html text field to the form.
  *

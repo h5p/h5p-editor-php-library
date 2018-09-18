@@ -9,23 +9,28 @@
  * @param {boolean} [options.populateTitle] If true, will populate the title if empty.
  */
 H5PEditor.metadataForm = function (field, metadata, $container, parent, options) {
-  const that = this;
   options = options || {};
 
-  var self = this;
-  self.metadata = metadata;
-  self.parent = parent;
+  var $ = H5PEditor.$;
 
-  // Set default title
-  if (options.populateTitle && (!self.metadata.title || self.metadata.title === '')) {
-    self.metadata.title = H5PEditor.LibraryListCache.getDefaultTitle(H5PEditor.parent.currentLibrary);
-  }
-
-  self.metadataSemantics = Object.keys(H5PEditor.metadataSemantics).map(function (item) {
-    return H5PEditor.metadataSemantics[item];
+  var semantics = H5PEditor.metadataSemantics;
+  var fields = {};
+  semantics.forEach(function (field) {
+    fields[field.name] = field;
   });
 
-  var $wrapper = H5PEditor.$('' +
+  // Set author as defaults in semantics
+  if (H5PIntegration.user && H5PIntegration.user.name) {
+    // Set current user as default for "changed by":
+    fields['changes'].field.fields[1].default = H5PIntegration.user.name;
+    fields['authors'].field.fields[0].default = H5PIntegration.user.name;
+  }
+  // Set default title (using semantics default)
+  if (options.populateTitle) {
+    fields['title'].default = H5PEditor.LibraryListCache.getDefaultTitle(parent.currentLibrary);
+  }
+
+  var $wrapper = $('' +
   '<div class="h5p-editor-dialog h5p-dialog-wide h5p-metadata-wrapper">' +
     '<div class="h5p-metadata-header">' +
       '<div class="h5p-title-container">' +
@@ -38,104 +43,123 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
     '</div>' +
   '</div>');
 
-  // Create a group to handle the copyright data
-  function setCopyright(field, value) {
-    self.metadata = value;
-  }
-
-  var group = new H5PEditor.widgets.group(field, getPartialSemantics('copyright'), self.metadata, setCopyright);
-  group.appendTo($wrapper);
-  group.expand();
-
-  group.$group.find('.title').remove();
-  group.$group.find('.content').addClass('copyright-form');
-
-  // Locate license and version selectors
-  this.licenseField = find(group.children, 'field.name', 'license');
-  var versionField = find(group.children, 'field.name', 'licenseVersion');
-  versionField.field.optional = true; // Avoid any error messages
-
-  // Listen for changes to license
-  this.licenseField.changes.push(function (value) {
-    // Find versions for selected value
-    function getNestedOptions(options) {
-      var flattenedOptions = [];
-      options.forEach(function (option) {
-        if (option.type === 'optgroup') {
-          flattenedOptions = flattenedOptions.concat(getNestedOptions(option.options));
-        }
-        else {
-          flattenedOptions.push(option);
-        }
-      });
-      return flattenedOptions;
-    }
-
-    var nestedOptions = getNestedOptions(that.licenseField.field.options);
-    var option = find(nestedOptions, 'value', value);
-    var versions = (option) ? option.versions : undefined;
-
-    versionField.$select.prop('disabled', versions === undefined);
-    if (versions === undefined) {
-      // If no versions add default
-      versions = [{
-        value: '-',
-        label: '-'
-      }];
-    }
-
-    // Find default selected version
-    var selected = (self.metadata.license === value &&
-                    self.metadata ? self.metadata.licenseVersion : versions[0].value);
-
-    // Update versions selector
-    versionField.$select.html(H5PEditor.Select.createOptionsHtml(versions, selected)).change();
+  var $fieldsWrapper = $('<div>', {
+    'class': 'h5p-metadata-fields-wrapper',
+    appendTo: $wrapper
   });
 
-  // Trigger update straight away
-  this.licenseField.changes[this.licenseField.changes.length - 1](self.metadata.license);
+  var setupTitleField = function () {
+    // Select title field text on click
+    var titleField = H5PEditor.findField('title', parent);
+    titleField.$input.click(function () {
+      if (this.selectionStart === 0 && this.selectionEnd === this.value.length) {
+        return;
+      }
+      this.select();
+      this.setSelectionRange(0, this.value.length); // Safari mobile fix
+    });
+  };
 
-  // Make sure the source field is empty or starts with a protocol
-  const sourceField = find(group.children, 'field.name', 'source');
-  sourceField.$item.on('change', function () {
-    const sourceInput = H5PEditor.$(this).find('input.h5peditor-text');
-    if (sourceInput.val().trim() !== '' &&
-      sourceInput.val().indexOf('https://') !== 0 &&
-      sourceInput.val().indexOf('http://') !== 0
-    ) {
-      sourceInput.val('http://' + sourceInput.val()).trigger('change');
-    }
-  });
+  var setupLicenseField = function () {
+    // Locate license and version selectors
+    var licenseField = H5PEditor.findField('license', parent);
+    var versionField = H5PEditor.findField('licenseVersion', parent);
+    versionField.field.optional = true; // Avoid any error messages
 
-  // This can be made nicer when refactoring
-  var tmpChildren = this.parent.children.slice();
+    // Listen for changes to license
+    licenseField.changes.push(function (value) {
+      // Find versions for selected value
+      function getNestedOptions(options) {
+        var flattenedOptions = [];
+        options.forEach(function (option) {
+          if (option.type === 'optgroup') {
+            flattenedOptions = flattenedOptions.concat(getNestedOptions(option.options));
+          }
+          else {
+            flattenedOptions.push(option);
+          }
+        });
+        return flattenedOptions;
+      }
 
-  // Create and append the rest of the widgets and fields
+      var nestedOptions = getNestedOptions(licenseField.field.options);
+      var option = find(nestedOptions, 'value', value);
+      var versions = (option) ? option.versions : undefined;
+
+      versionField.$select.prop('disabled', versions === undefined);
+      if (versions === undefined) {
+        // If no versions add default
+        versions = [{
+          value: '-',
+          label: '-'
+        }];
+      }
+
+      // Find default selected version
+      var selected = (metadata.license === value && metadata ? metadata.licenseVersion : versions[0].value);
+
+      // Update versions selector
+      versionField.$select.html(H5PEditor.Select.createOptionsHtml(versions, selected)).change();
+    });
+
+    // Trigger update straight away
+    licenseField.changes[licenseField.changes.length - 1](metadata.license);
+  };
+
+  var setupSourceField = function () {
+    // Make sure the source field is empty or starts with a protocol
+    const sourceField = H5PEditor.findField('source', parent);
+    sourceField.$item.on('change', function () {
+      const sourceInput = $(this).find('input.h5peditor-text');
+      if (sourceInput.val().trim() !== '' &&
+        sourceInput.val().indexOf('https://') !== 0 &&
+        sourceInput.val().indexOf('http://') !== 0
+      ) {
+        sourceInput.val('http://' + sourceInput.val()).trigger('change');
+      }
+    });
+  };
+
+  // Create the first fields:
+  H5PEditor.processSemanticsChunk([
+    fields['title'],
+    fields['license'],
+    fields['licenseVersion'],
+    fields['yearFrom'],
+    fields['yearTo'],
+    fields['source']
+  ], metadata, $fieldsWrapper, parent);
+
+  setupTitleField();
+  setupLicenseField();
+  setupSourceField();
+
   // Append the metadata author list widget
-  H5PEditor.metadataAuthorWidget(getPartialSemantics('authorWidget').fields, self.metadata, group, this.parent);
-  tmpChildren = tmpChildren.concat(this.parent.children);
+  H5PEditor.metadataAuthorWidget(fields['authors'].field.fields, metadata, $fieldsWrapper, parent);
 
-  // Append the additional license field
-  var $widget = H5PEditor.$('<div class="h5p-metadata-license-extras"></div>');
-  ns.processSemanticsChunk([getPartialSemantics('licenseExtras')], self.metadata, $widget, this.parent);
-  $widget.appendTo(group.$group.find('.content.copyright-form'));
-  tmpChildren = tmpChildren.concat(this.parent.children);
+  // Append the License Extras field
+  H5PEditor.processSemanticsChunk([fields['licenseExtras']], metadata, $fieldsWrapper, parent);
 
   // Append the metadata changelog widget
-  H5PEditor.metadataChangelogWidget([getPartialSemantics('changeLog')], self.metadata, group, this.parent);
-  tmpChildren = tmpChildren.concat(this.parent.children);
+  H5PEditor.metadataChangelogWidget([fields['changes'].field], metadata, $fieldsWrapper, parent);
 
-  // Append the additional information field
-  $widget = H5PEditor.$('<div class="h5p-metadata-additional-information"></div>');
-  ns.processSemanticsChunk([getPartialSemantics('authorComments')], self.metadata, $widget, this.parent);
-  $widget.appendTo(group.$group.find('.content.copyright-form'));
-  tmpChildren = tmpChildren.concat(this.parent.children);
+  // Append the Additional information group
+  var additionals = new H5PEditor.widgets.group(parent, {
+    name: 'additionals',
+    label: 'Additional information',
+    fields: [
+      fields['authorComments']
+    ]
+  }, metadata.authorComments, function (field, value) {
+    metadata.authorComments = value;
+  });
+  additionals.appendTo($fieldsWrapper);
 
-  this.parent.children = tmpChildren;
-
+  // Handle click on save button
   $wrapper.find('.h5p-save').click(function () {
     // Try to automatically add an author if form is closed and a license selected
     if ($wrapper.find('.field-name-license select').val() !== 'U') {
+      // TODO - this is NOT the way to do things:
       $wrapper.find('.h5p-metadata-button.h5p-add-author').first().click();
     }
 
@@ -143,31 +167,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
     $container.closest('.h5peditor-form').find('.overlay').toggle();
   });
 
-  // Set author of main content.
-  if (H5PIntegration && H5PIntegration.user && H5PIntegration.user.name) {
-    $wrapper
-      .find('.h5p-author-data')
-      .find('.field-name-name')
-      .find('input.h5peditor-text')
-      .val(H5PIntegration.user.name);
-  }
-
-  // Select title field text on click
-  $wrapper.find('.field-name-title').find('.h5peditor-text').on('click', function () {
-    if (this.selectionStart === 0 && this.selectionEnd === this.value.length) {
-      return;
-    }
-    this.select();
-    this.setSelectionRange(0, this.value.length); // Safari mobile fix
-  });
-
-  $wrapper.appendTo($container);
-
-  function getPartialSemantics(selector) {
-    return find(self.metadataSemantics, 'name', selector);
-  }
-
-  return $wrapper;
+  return $wrapper.appendTo($container);
 };
 
 /**

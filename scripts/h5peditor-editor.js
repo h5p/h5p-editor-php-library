@@ -1,3 +1,4 @@
+/* global ns */
 window.ns = window.H5PEditor = window.H5PEditor || {};
 
 /**

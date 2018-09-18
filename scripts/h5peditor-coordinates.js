@@ -1,3 +1,4 @@
+/* global ns */
 /**
  * Creates a coordinates picker for the form.
  *

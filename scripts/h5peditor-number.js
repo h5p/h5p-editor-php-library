@@ -1,3 +1,4 @@
+/* global ns */
 /**
  * Create a number picker field for the form.
  *

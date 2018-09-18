@@ -1,3 +1,4 @@
+/* global ns */
 /**
  * Creates a boolean field for the editor.
  *
