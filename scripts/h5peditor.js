@@ -1535,3 +1535,88 @@ ns.storage = (function () {
   };
   return instance;
 })();
+
+/**
+ * Wrapper that makes it easy to enter fullscreen for any given element.
+ *
+ * @class
+ * @augments H5P.EventDispatcher
+ * @param {DOMElement} element
+ */
+ns.Fullscreen = (function (EventDispatcher, fullScreenBrowserPrefix, safariBrowser) {
+
+  function Fullscreen(element) {
+    if (!(element instanceof HTMLElement)) {
+      throw new Error('Element not an instance of HTMLElement');
+    }
+
+    // Extend event system
+    EventDispatcher.call(this);
+
+    /** @alias H5P.ActionBar# */
+    const self = this;
+
+    // Event names varies from browser to browser
+    const eventName = (fullScreenBrowserPrefix === 'ms' ? 'MSFullscreenChange' : fullScreenBrowserPrefix + 'fullscreenchange');
+
+    // Keep track of if this fullscreen is active or not (keep in mind that others could still be active)
+    self.isActive = false;
+
+    /**
+     * Event handler for fullscreen changes.
+     */
+    const handleFullscreenChange = function (event) {
+      if (event.target !== element) {
+        return; // Other fullscreen
+      }
+      if (!self.isActive) {
+        // Entering fullscreen mode
+        self.isActive = true;
+        self.trigger('entered');
+      }
+      else {
+        // Exiting fullscreen
+        self.isActive = false;
+        self.trigger('exited');
+      }
+    };
+    document.addEventListener(eventName, handleFullscreenChange, false);
+
+    /**
+     * Engage fullscreen mode
+     */
+    self.enter = function () {
+      if (fullScreenBrowserPrefix === '') {
+        element.requestFullScreen();
+      }
+      else {
+        const method = (fullScreenBrowserPrefix === 'ms' ? 'msRequestFullscreen' : fullScreenBrowserPrefix + 'RequestFullScreen');
+        const params = (fullScreenBrowserPrefix === 'webkit' && safariBrowser === 0 ? Element.ALLOW_KEYBOARD_INPUT : undefined);
+        element[method](params);
+      }
+    };
+
+    /**
+     * Disengage fullscreen mode
+     */
+    self.exit = function () {
+      if (!self.isActive) {
+        return; // Only allow to exit own fullscreen mode
+      }
+      if (fullScreenBrowserPrefix === '') {
+        document.exitFullscreen();
+      }
+      else if (fullScreenBrowserPrefix === 'moz') {
+        document.mozCancelFullScreen();
+      }
+      else {
+        document[fullScreenBrowserPrefix + 'ExitFullscreen']();
+      }
+    };
+  }
+
+  Fullscreen.prototype = Object.create(EventDispatcher.prototype);
+  Fullscreen.prototype.constructor = Fullscreen;
+
+  return Fullscreen;
+})(H5P.EventDispatcher, H5P.fullScreenBrowserPrefix, H5P.safariBrowser);
