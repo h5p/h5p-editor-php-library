@@ -429,7 +429,7 @@ ns.Library.prototype.addMetadataForm = function () {
         .find('.h5p-editor-flex-wrapper')
         .first();
 
-      if (label.css('display') === 'none') {
+      if (label.length === 0 || label.css('display') === 'none') {
         label = that.$libraryWrapper
           .find('.h5p-editor-flex-wrapper')
           .first();
