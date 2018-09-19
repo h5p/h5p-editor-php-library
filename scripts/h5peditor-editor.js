@@ -251,12 +251,6 @@ ns.Editor.prototype.getParams = function (notFormSubmit) {
       metadata: this.selector.getMetadata()
     };
   }
-  else if (this.form) {
-    return {
-      params: this.form.params,
-      metadata: this.form.metadata
-    };
-  }
   else {
     console.warn('no selector defined for "getParams"');
   }

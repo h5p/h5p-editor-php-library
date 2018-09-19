@@ -130,6 +130,7 @@ ns.Form.prototype.replace = function ($element) {
  * Remove the current form.
  */
 ns.Form.prototype.remove = function () {
+  ns.removeChildren(this.metadataChildren);
   ns.removeChildren(this.children);
   this.$form.remove();
 };
@@ -160,9 +161,11 @@ ns.Form.prototype.processSemantics = function (semantics, defaultParams, metadat
   // Overriding this.params with {} will lead to old content not being editable for now
   this.params = (defaultParams.params ? defaultParams.params : defaultParams);
 
-  var children = this.children; // Preserve already existing children
+  // Put metadata children in a separate array
+  this.metadataChildren = this.children;
+
+  // Create real children
   ns.processSemanticsChunk(semantics, this.params, this.$form.children('.tree'), this);
-  this.children = children.concat(this.children);
 };
 
 /**
