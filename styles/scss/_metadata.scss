@@ -1,0 +1,109 @@
+.h5p-metadata-button-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: -10px;
+  margin-left: 7px;
+  cursor: pointer;
+}
+
+.h5p-metadata-button-wrapper.inline-with-selector {
+  display: inline-flex;
+  margin-left: 17px;
+}
+
+.h5p-metadata-toggler {
+  margin-left: -11px;
+  height: 14.5px;
+  max-height: 14.5px;
+  padding: 0.217rem;
+  font-size: 0.667rem;
+  font-family: Open Sans;
+  font-weight: normal;
+  border: 1px solid #c6c8d7;
+  border-left: none;
+  border-radius: 4px;
+  background: linear-gradient(#ffffff, #e6f6fe);
+  color: #124361;
+  z-index: 1;
+  justify-content:center;
+  align-content:center;
+  line-height: 1.5em;
+}
+
+.h5p-metadata-button-tip {
+  width: 16.5px;
+  height: 16.5px;
+  content: "";
+  background: linear-gradient(#ffffff, #e6f6fe);
+  border: 1px solid #c6c8d7;
+  border-right: none;
+  border-top: none;
+  border-radius: 4px;
+  -webkit-transform: rotate(47deg) skew(5deg);
+  -moz-transform: rotate(47deg) skew(5deg);
+  transform: rotate(47deg) skew(5deg);
+  z-index: 0;
+}
+
+#metadata-title-main-label {
+  margin-top: 0;
+}
+
+.h5p-metadata-button {
+  background: white;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+  border: solid 1px gray;
+  color: black;
+  font-weight: bold;
+  display: inline;
+  cursor: pointer;
+}
+
+.h5p-metadata-button.h5p-cancel {
+  margin-right: 10px;
+}
+
+.h5p-metadata-header {
+  display: flex;
+
+  .h5p-title-container {
+   flex-grow: 1;
+   margin-left: 4em;
+   white-space: nowrap;
+   overflow: hidden;
+   margin-right: 1%;
+
+   h2 {
+     margin-bottom: 0;
+   }
+
+   p {
+     margin-top: 0.1em;
+   }
+  }
+
+  .h5p-title-container:before {
+    position: absolute;
+    font-family: 'h5p-metadata-icons';
+    content: '\e903';
+    left: 0.6em;
+    font-size: 2.5em;
+    top: 0.9em;
+  }
+}
+
+.metadata-button-wrapper {
+  margin-top: 2em;
+
+  .h5p-save {
+    border: solid 2px #10a186;
+    border-radius: 0.408rem;
+    color: #fff;
+    background-color: #10a186;
+    padding: 0.833rem;
+    white-space: nowrap;
+  }
+}

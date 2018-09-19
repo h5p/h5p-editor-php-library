@@ -1,8 +1,5 @@
-/**
- * @namespace
- */
-var H5PEditor = (H5PEditor || {});
-var ns = H5PEditor;
+/* global ns */
+window.ns = window.H5PEditor = window.H5PEditor || {};
 
 /**
  * Construct the editor.
@@ -43,6 +40,9 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
    * @private
    */
   var populateIframe = function () {
+    if (!iframe.contentDocument) {
+      return; // Not possible, iframe 'load' hasn't been triggered yet
+    }
     iframe.contentDocument.open();
     iframe.contentDocument.write(
       '<!doctype html><html>' +
@@ -164,7 +164,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     if (iframe.contentWindow.MutationObserver !== undefined) {
       // If supported look for changes to DOM elements. This saves resources.
       var running;
-      var limitedResize = function (mutations) {
+      var limitedResize = function () {
         if (!running) {
           running = setTimeout(function () {
             resize();
@@ -213,6 +213,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
   $iframe.load(load);
 
   // Populate iframe with the H5P Editor
+  // (should not really be done until 'load', but might be here in case the iframe is reloaded?)
   populateIframe();
 };
 
@@ -226,7 +227,7 @@ ns.Editor.prototype.getLibrary = function () {
   if (this.selector !== undefined) {
     return this.selector.getCurrentLibrary();
   }
-  else if(this.selectedContentTypeId) {
+  else if (this.selectedContentTypeId) {
     return this.selectedContentTypeId;
   }
   else {
@@ -245,13 +246,53 @@ ns.Editor.prototype.getParams = function (notFormSubmit) {
     this.formSubmitted = true;
   }
   if (this.selector !== undefined) {
-    return this.selector.getParams();
+    return {
+      params: this.selector.getParams(),
+      metadata: this.selector.getMetadata()
+    };
   }
-  else if(this.form){
-    return this.form.params;
+  else if (this.form) {
+    return {
+      params: this.form.params,
+      metadata: this.form.metadata
+    };
   }
   else {
     console.warn('no selector defined for "getParams"');
+  }
+};
+
+/**
+ * Check if main title is set. If not, focus on it!
+ *
+ * @return {[type]}
+ */
+ns.Editor.prototype.isMainTitleSet = function () {
+  var mainTitleField = this.selector.form.mainTitleField;
+
+  // validate() actually doesn't return a boolean, but the trimmed value
+  // We know title is a mandatory field, so that's what we are checking here
+  var valid = mainTitleField.validate();
+  if (!valid) {
+    mainTitleField.$input.focus();
+  }
+  return valid;
+};
+
+/**
+ *
+ * @alias H5PEditor.Editor#presave
+ * @param content
+ * @return {H5PEditor.Presave}
+ */
+ns.Editor.prototype.getMaxScore = function (content) {
+  try {
+    var value = this.selector.presave(content, this.getLibrary());
+    return value.maxScore;
+  }
+  catch (e) {
+    // Deliberatly catching error
+    return 0;
   }
 };
 

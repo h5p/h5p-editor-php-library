@@ -265,7 +265,7 @@ class H5peditorFile {
 
     // text/plain is used to support IE
     header('Cache-Control: no-cache');
-    header('Content-type: text/plain; charset=utf-8');
+    header('Content-Type: text/plain; charset=utf-8');
 
     print $this->getResult();
   }

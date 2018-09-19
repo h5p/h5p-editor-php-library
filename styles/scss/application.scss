@@ -26,6 +26,18 @@ a {
   text-decoration: none;
 }
 
+.overlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  z-index: 2;
+  color: white;
+}
+
 .h5peditor {
   font-size: 16px;
 
@@ -41,9 +53,20 @@ a {
   .errors p,
   .h5p-errors {
     color: #da0001;
+    white-space: normal;
   }
   textarea {
     resize: vertical;
+  }
+
+  .h5p-editor-flex-wrapper {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .h5peditor-label-wrapper {
+    display: flex;
+    flex-direction: row;
   }
 
   .has-important-description {
@@ -304,6 +327,7 @@ a {
             left: 0;
             top: 0.075em;
             font-size: 3.8em;
+            line-height: 1;
           }
 
           input {
@@ -369,18 +393,6 @@ a {
       border-top: 1px solid #cdcdcd;
       background: #ddd;
       text-align: right;
-    }
-    .h5p-cancel {
-      margin-left: 0.5em;
-      color: #b83c3c;
-      background: transparent;
-      border: 0;
-      cursor: pointer;
-    }
-    .h5p-cancel:focus,
-    .h5p-cancel:hover {
-      color: #e20d0d;
-      background: transparent;
     }
   }
   .h5p-or {
@@ -491,6 +503,10 @@ a {
     margin-bottom: 0;
     max-width: 100%;
 
+    &.authorList {
+      float: none;
+    }
+
     &.field {
       float: none;
     }
@@ -517,6 +533,7 @@ a {
       border-radius: 0.25em;
       color: #222222;
       font-weight: bold;
+      line-height: normal;
 
       &:hover {
         background: #ededed;
@@ -760,6 +777,12 @@ a {
     padding: 0;
   }
 }
+
+.h5p-editor-dialog.h5p-dialog-wide {
+  width: 90%;
+  border-radius: 0.208em;
+}
+
 /* Placed this outside of .h5peditor context above. Don't want it to be more
    specific than neccessary (because of overriding) */
 .h5peditor-button-textual {
@@ -1064,6 +1087,7 @@ a {
   cursor: pointer;
   float: right;
   position: relative;
+  line-height: normal;
 
   font-style: italic;
   font-weight: bold;
@@ -1086,3 +1110,32 @@ a {
   display: block;
   clear: right;
 }
+
+// Default toast. Should be available.
+.h5p-editor-toast {
+  font-size: 0.75em;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  z-index: 110;
+  position: absolute;
+  padding: 0 0.5em;
+  line-height: 2;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  top: 0;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 1s;
+}
+
+.h5p-toast-disabled {
+  opacity: 0;
+  visibility: hidden;
+}
+
+@import "metadata";
+@import "metadata-popup";
+@import "metadata-changelog-widget";
+@import "metadata-author-widget";
+@import "copy-paste";

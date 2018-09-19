@@ -1,6 +1,4 @@
-var H5PEditor = H5PEditor || {};
-var ns = H5PEditor;
-
+/* global ns CKEDITOR */
 /**
  * Adds a html text field to the form.
  *
@@ -217,9 +215,6 @@ ns.Html.prototype.createToolbar = function () {
       else {
         ret.fontSize_defaultLabel = '100%';
 
-        // Standard font size that is used. (= 100%)
-        var defaultFont = 16;
-
         // Standard font sizes that is available.
         var defaultAvailable = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72];
         for (var i = 0; i < defaultAvailable.length; i++) {
@@ -228,9 +223,7 @@ ns.Html.prototype.createToolbar = function () {
           var em = defaultAvailable[i] / 16;
           ret.fontSize_sizes += (em * 100) + '%/' + em + 'em;';
         }
-
       }
-
     }
 
     if (this.field.font.color) {
@@ -271,7 +264,8 @@ ns.Html.prototype.createToolbar = function () {
   if (this.field.enterMode === 'p' || formats.length > 0) {
     this.tags.push('p');
     ret.enterMode = CKEDITOR.ENTER_P;
-  } else {
+  }
+  else {
     // Default to DIV, not allowing BR at all.
     this.tags.push('div');
     ret.enterMode = CKEDITOR.ENTER_DIV;
@@ -373,7 +367,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     // at this point... Use case from commit message: "Make the default
     // linkTargetType blank for ckeditor" - STGW
     if (ns.Html.first) {
-      CKEDITOR.on('dialogDefinition', function(e) {
+      CKEDITOR.on('dialogDefinition', function (e) {
         // Take the dialog name and its definition from the event data.
         var dialogName = e.data.name;
         var dialogDefinition = e.data.definition;
@@ -445,8 +439,11 @@ ns.Html.prototype.validate = function () {
   // Get contents from editor
   var value = this.ckeditor !== undefined ? this.ckeditor.getData() : this.$input.html();
 
-  // Remove placeholder text if any:
-  value = value.replace(/<span class="h5peditor-ckeditor-placeholder">.*<\/span>/, '');
+  value = value
+    // Remove placeholder text if any:
+    .replace(/<span class="h5peditor-ckeditor-placeholder">.*<\/span>/, '')
+    // Workaround for Microsoft browsers that otherwise can produce non-emtpy fields causing trouble
+    .replace(/^<br>$/, '');
 
   var $value = ns.$('<div>' + value + '</div>');
   var textValue = $value.text();
@@ -472,7 +469,8 @@ ns.Html.prototype.validate = function () {
   // Display errors and bail if set.
   if (that.$errors.children().length) {
     return false;
-  } else {
+  }
+  else {
     this.$input.removeClass('error');
   }
 
