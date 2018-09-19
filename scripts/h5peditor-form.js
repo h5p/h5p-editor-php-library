@@ -30,7 +30,7 @@ ns.Form = function () {
 
   // Inject a custom text field for the metadata title
   var metaDataTitleSemantics = [{
-    'name' : 'title',
+    'name' : 'mainTitle',
     'type' : 'text',
     'label' : ns.t('core', 'title'),
     'description': ns.t('core', 'usedForSearchingReportsAndCopyrightInformation'),
@@ -40,7 +40,7 @@ ns.Form = function () {
   // Ensure it has validation functions
   ns.processSemanticsChunk(metaDataTitleSemantics, {}, this.$form.children('.tree'), this);
 
-  self.mainTitleField = ns.findField('title', this);
+  self.mainTitleField = ns.findField('mainTitle', this);
 
   // Give title field an ID
   self.mainTitleField.$item.attr('id', 'metadata-title-main-label');
@@ -144,21 +144,25 @@ ns.Form.prototype.remove = function () {
 ns.Form.prototype.processSemantics = function (semantics, defaultParams, metadata) {
   this.metadata = (metadata ? metadata : defaultParams.metadata || {});
 
-  const $metadataForm = ns.metadataForm(semantics, this.metadata, this.$form.children('.tree'), this);
+  this.$metadataForm = ns.metadataForm(semantics, this.metadata, this.$form.children('.tree'), this);
+  const metadataTitle = ns.findField('title', this);
 
   // Sync title fields of this editor form and a metadata form
   ns.sync(
-    this.$form.find('#metadata-title-main'),
-    $metadataForm.find('.field-name-title').find('input')
+    this.mainTitleField.$input,
+    metadataTitle.$input
   );
 
   // Set the title
   const title = (this.metadata && this.metadata.title) ? this.metadata.title : '';
-  this.$form.find('input#metadata-title-main').val(title);
+  this.mainTitleField.$input.val(title);
 
   // Overriding this.params with {} will lead to old content not being editable for now
   this.params = (defaultParams.params ? defaultParams.params : defaultParams);
+
+  var children = this.children; // Preserve already existing children
   ns.processSemanticsChunk(semantics, this.params, this.$form.children('.tree'), this);
+  this.children = children.concat(this.children);
 };
 
 /**
