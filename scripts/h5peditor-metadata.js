@@ -25,10 +25,6 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
     fields['changes'].field.fields[1].default = H5PIntegration.user.name;
     fields['authors'].field.fields[0].default = H5PIntegration.user.name;
   }
-  // Set default title (using semantics default)
-  if (options.populateTitle) {
-    fields['title'].default = H5PEditor.LibraryListCache.getDefaultTitle(parent.currentLibrary);
-  }
 
   var $wrapper = $('' +
   '<div class="h5p-editor-dialog h5p-dialog-wide h5p-metadata-wrapper">' +
@@ -58,6 +54,11 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
       this.select();
       this.setSelectionRange(0, this.value.length); // Safari mobile fix
     });
+
+    // Set the default title
+    if (!metadata.title && options.populateTitle) {
+      titleField.$input.val(H5PEditor.LibraryListCache.getDefaultTitle(parent.currentLibrary));
+    }
   };
 
   var setupLicenseField = function () {
