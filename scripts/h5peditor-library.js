@@ -110,7 +110,45 @@ ns.Library.prototype.appendTo = function ($wrapper) {
 
   html += '<select>' + ns.createOption('-', 'Loading...') + '</select>';
 
-  if (window.localStorage) {
+  /**
+   * For some content types with custom editors, we don't want to add the copy
+   * and paste button, since it is handled by the custom editors themself.
+   *
+   * @return {boolean}
+   */
+  var enableCopyAndPaste = function () {
+    var librarySelector = ns.findLibraryAncestor(that.parent);
+    if (librarySelector.currentLibrary !== undefined) {
+
+      var library = ns.libraryFromString(librarySelector.currentLibrary);
+
+      var config = {
+        'H5P.CoursePresentation': {
+          major: 1,
+          minor: 20
+        },
+        'H5P.InteractiveVideo': {
+          major: 1,
+          minor: 20
+        },
+        'H5P.DragQuestion': {
+          major: 1,
+          minor: 13
+        }
+      }[library.machineName];
+
+      if (config === undefined) {
+        return true;
+      }
+
+      return library.majorVersion > config.major ||
+        (library.majorVersion == config.major && library.minorVersion >= config.minor);
+    }
+
+    return true;
+  };
+
+  if (window.localStorage && enableCopyAndPaste()) {
     html += ns.createCopyPasteButtons();
   }
 
