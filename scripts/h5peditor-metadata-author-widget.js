@@ -33,6 +33,7 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
       H5PEditor.t('core', 'addAuthor') +
     '</button>' +
   '</div>').click(function (event) {
+    event.preventDefault();
     addAuthor(event.originalEvent !== undefined);
   });
   $authorData.append($button);
