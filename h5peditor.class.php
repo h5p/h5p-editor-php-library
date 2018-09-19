@@ -13,7 +13,7 @@ class H5peditor {
     'styles/css/h5p-hub-client.css',
     'styles/css/fonts.css',
     'styles/css/application.css',
-    'styles/css/libs/zebra_datepicker.css'
+    'styles/css/libs/zebra_datepicker.min.css'
   );
   public static $scripts = array(
     'scripts/h5p-hub-client.js',

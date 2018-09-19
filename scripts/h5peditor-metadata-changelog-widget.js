@@ -244,7 +244,7 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
    */
   function loadDatePickerLib(callback) {
     $.ajax({
-      url: H5PEditor.basePath + 'libs/zebra_datepicker.src.js',
+      url: H5PEditor.basePath + 'libs/zebra_datepicker.min.js',
       dataType: 'script',
       success: callback,
       error: function (r,e) {
