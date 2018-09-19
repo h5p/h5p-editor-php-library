@@ -120,6 +120,8 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
     });
   };
 
+  var children = parent.children;
+
   // Create the first fields:
   H5PEditor.processSemanticsChunk([
     fields['title'],
@@ -129,6 +131,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
     fields['yearTo'],
     fields['source']
   ], metadata, $fieldsWrapper, parent);
+  children = children.concat(parent.children);
 
   setupTitleField();
   setupLicenseField();
@@ -136,12 +139,15 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
 
   // Append the metadata author list widget
   H5PEditor.metadataAuthorWidget(fields['authors'].field.fields, metadata, $fieldsWrapper, parent);
+  children = children.concat(parent.children);
 
   // Append the License Extras field
   H5PEditor.processSemanticsChunk([fields['licenseExtras']], metadata, $fieldsWrapper, parent);
+  children = children.concat(parent.children);
 
   // Append the metadata changelog widget
   H5PEditor.metadataChangelogWidget([fields['changes'].field], metadata, $fieldsWrapper, parent);
+  children = children.concat(parent.children);
 
   // Append the Additional information group
   var additionals = new H5PEditor.widgets.group(parent, {
@@ -154,6 +160,8 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
     metadata.authorComments = value;
   });
   additionals.appendTo($fieldsWrapper);
+
+  parent.children = children.concat([additionals]);
 
   // Handle click on save button
   $wrapper.find('.h5p-save').click(function () {
