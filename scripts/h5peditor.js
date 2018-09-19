@@ -1163,43 +1163,34 @@ ns.enableMetadata = function (library) {
   }
 
   // This list holds all old libraries (/older versions implicitly) that need an update for metadata
-  const blockList = [
-    'H5P.Accordion 1.0', // H5P.AdvancedText as sub-library should not have metadata
-    'H5P.Agamotto 1.3', // Title moved to/retrieved from metadata
-    'H5P.Audio 1.2', // Copyright information was moved to metadata
-    'H5P.Blanks 1.10', // Title moved to/retrieved from metadata
-    'H5P.Column 1.7', // Mixed libraries
-    'H5P.CoursePresentation 1.19', // Custom Editor was changed
-    'H5P.Dialogcards 1.7', // Title moved to/retrieved from metadata
-    'H5P.DocumentationTool 1.6', // Title moved to/retrieved from metadata
-    'H5P.DocumentExportPage 1.3', // Title moved to/retrieved from metadata
-    'H5P.DragQuestion 1.12', // Title moved to/retrieved from metadata
-    'H5P.DragText 1.7', // Title moved to/retrieved from metadata
-    'H5P.ExportableTextArea 1.2', // Title moved to/retrieved from metadata
-    'H5P.GoalsAssessmentPage 1.3', // Title moved to/retrieved from metadata
-    'H5P.GoalsPage 1.4', // Title moved to/retrieved from metadata
-    'H5P.GoToQuestion 1.3', // Should not have metadata by UX
-    'H5P.Image 1.0', // Copyright information was moved to metadata
-    'H5P.ImageHotspotQuestion 1.7', // Title moved to/retrieved from metadata
-    'H5P.ImageMultipleHotspotQuestion 1.0', // FindMultipleHotspots (external) - Title Fields
-    'H5P.ImageHotspots 1.6', // Not all sub-libraries are supposed to have metadata
-    'H5P.ImageJuxtaposition 1.1', // Title moved to/retrieved from metadata
-    'H5P.InteractiveVideo 1.19', // Custom Editor was changed
-    'H5P.IVHotspot 1.2', // Should not have metadata by UX
-    'H5P.Link 1.3', // Should not have metadata by UX
-    'H5P.MarkTheWords 1.8', // Title moved to/retrieved from metadata
-    'H5P.MultiChoice 1.12', // Title moved to/retrieved from metadata
-    'H5P.Nil 1.0', // Should not have metadata by UX
-    'H5P.PersonalityQuiz 1.0', // PersonalityQuiz (external) - Title Fields
-    'H5P.SingleChoiceSet 1.10', // Title moved to/retrieved from metadata
-    'H5P.StandardPage 1.3', // Title moved to/retrieved from metadata
-    'H5P.Summary 1.9', // Title moved to/retrieved from metadata
-    'H5P.TrueFalse 1.4', // Title moved to/retrieved from metadata
-    'H5P.TwitterUserFeed 1.0', // Should not have metadata by UX
-    'H5P.Video 1.4' // Copyright information was moved to metadata
+  const blackList = [
+    // Should never have metadata because it does not make sense
+    'H5P.IVHotspot 1.2',
+    'H5P.Link 1.3',
+    'H5P.TwitterUserFeed 1.0',
+    'H5P.GoToQuestion 1.3',
+    'H5P.Nil 1.0',
+
+    // Copyright information moved to metadata
+    'H5P.Audio 1.2',
+    'H5P.Video 1.4',
+    'H5P.Image 1.0',
+
+    // Title moved to metadata
+    'H5P.DocumentExportPage 1.3',
+    'H5P.ExportableTextArea 1.2',
+    'H5P.GoalsAssessmentPage 1.3',
+    'H5P.GoalsPage 1.4',
+    'H5P.StandardPage 1.3',
+    'H5P.DragQuestion 1.12',
+    'H5P.ImageHotspotQuestion 1.7',
+
+    // Custom editor changed
+    'H5P.CoursePresentation 1.19',
+    'H5P.InteractiveVideo 1.19'
   ];
 
-  let block = blockList.filter(function (item) {
+  let block = blackList.filter(function (item) {
     // + ' ' makes sure to avoid partial matches
     return item.indexOf(library.machineName + ' ') !== -1;
   });
