@@ -1561,6 +1561,9 @@ ns.storage = (function () {
  * @param {DOMElement} element
  */
 ns.Fullscreen = (function (EventDispatcher, fullScreenBrowserPrefix, safariBrowser) {
+  if (fullScreenBrowserPrefix === undefined) {
+    return undefined; // Not supported
+  }
 
   function Fullscreen(element) {
     if (!(element instanceof HTMLElement)) {
