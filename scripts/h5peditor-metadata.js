@@ -19,11 +19,13 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
     fields[field.name] = field;
   });
 
+  var currentUserName = (H5PIntegration.user && H5PIntegration.user.name) ? H5PIntegration.user.name : undefined;
+
   // Set author as defaults in semantics
-  if (H5PIntegration.user && H5PIntegration.user.name) {
+  if (currentUserName) {
     // Set current user as default for "changed by":
-    fields['changes'].field.fields[1].default = H5PIntegration.user.name;
-    fields['authors'].field.fields[0].default = H5PIntegration.user.name;
+    fields['changes'].field.fields[1].default = currentUserName;
+    fields['authors'].field.fields[0].default = currentUserName;
   }
 
   var $wrapper = $('' +
@@ -139,7 +141,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
   setupSourceField();
 
   // Append the metadata author list widget
-  H5PEditor.metadataAuthorWidget(fields['authors'].field.fields, metadata, $fieldsWrapper, parent);
+  var metadataAuthorWidget = H5PEditor.metadataAuthorWidget(fields['authors'].field.fields, metadata, $fieldsWrapper, parent);
   children = children.concat(parent.children);
 
   // Append the License Extras field
@@ -166,10 +168,9 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
 
   // Handle click on save button
   $wrapper.find('.h5p-save').click(function () {
-    // Try to automatically add an author if form is closed and a license selected
-    if ($wrapper.find('.field-name-license select').val() !== 'U') {
-      // TODO - this is NOT the way to do things:
-      $wrapper.find('.h5p-metadata-button.h5p-add-author').first().click();
+    // If license selected, and there's no authors, add the current one
+    if (metadata.license !== 'U' && metadata.authors.length === 0) {
+      metadataAuthorWidget.addAuthor(currentUserName, 'author');
     }
 
     $wrapper.toggleClass('h5p-open');

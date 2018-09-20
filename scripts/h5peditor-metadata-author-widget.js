@@ -14,9 +14,6 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
 
   const $ = H5PEditor.$;
 
-  // Store authors that have just been removed
-  const removedAuthors = [];
-
   const widget = $('<div class="field h5p-metadata-author-widget"></div>');
 
   var $authorData = $('<div class="h5p-author-data"></div>');
@@ -34,22 +31,7 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
     '</button>' +
   '</div>').click(function (event) {
     event.preventDefault();
-    addAuthor(event.originalEvent !== undefined);
-  });
-  $authorData.append($button);
 
-  var authorListWrapper = $('<div class="h5p-author-list-wrapper"><ul class="h5p-author-list"></ul></div>');
-  widget.append(authorListWrapper);
-  renderAuthorList();
-
-  widget.appendTo($wrapper);
-
-  /**
-   * Add author to the list of authors.
-   *
-   * @param {boolean} deliberatelyAdded - If true, user clicked to add an author.
-   */
-  function addAuthor(deliberatelyAdded) {
     // Temporarily set name as mandatory to get the error messages only when
     // clicking the Add Author button
     nameField.field.optional = false;
@@ -70,14 +52,22 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
       return;
     }
 
-    // Don't add author automatically if she/he was just removed from list
-    const justRemoved = removedAuthors.some(function (author) {
-      return author.name === name && author.role === role;
-    });
-    if (justRemoved && !deliberatelyAdded) {
-      return;
-    }
+    addAuthor(name, role);
+  });
+  $authorData.append($button);
 
+  var authorListWrapper = $('<div class="h5p-author-list-wrapper"><ul class="h5p-author-list"></ul></div>');
+  widget.append(authorListWrapper);
+  renderAuthorList();
+
+  widget.appendTo($wrapper);
+
+  /**
+   * Add an author to the list of authors
+   * @param {string} name
+   * @param {string} role
+   */
+  function addAuthor(name, role) {
     params.authors.push({
       name: name,
       role: role
@@ -87,6 +77,9 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
     resetForm();
   }
 
+  /**
+   * Resets the form
+   */
   function resetForm() {
     nameField.$input.val('');
   }
@@ -100,11 +93,7 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
    */
   function removeAuthor(author) {
     params.authors = params.authors.filter(function (e) {
-      const remove = (e === author);
-      if (remove) {
-        removedAuthors.push(author);
-      }
-      return !remove;
+      return (e !== author);
     });
 
     renderAuthorList();
@@ -137,4 +126,8 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
 
     wrapper.append(authorList);
   }
+
+  return {
+    addAuthor: addAuthor
+  };
 };
