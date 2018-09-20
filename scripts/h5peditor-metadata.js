@@ -170,7 +170,7 @@ H5PEditor.metadataForm = function (field, metadata, $container, parent, options)
   $wrapper.find('.h5p-save').click(function () {
     // If license selected, and there's no authors, add the current one
     if (metadata.license !== 'U' && metadata.authors.length === 0) {
-      metadataAuthorWidget.addAuthor(currentUserName, 'author');
+      metadataAuthorWidget.addAuthor(currentUserName, 'Author');
     }
 
     $wrapper.toggleClass('h5p-open');
