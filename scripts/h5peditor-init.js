@@ -50,14 +50,14 @@
       if (h5peditor !== undefined) {
         var params = h5peditor.getParams();
 
-        // Validate mandatory main title. Prevent submitting if that's not set.
-        // Deliberatly doing it after getParams(), so that any other validation
-        // problems are also revealed
-        if (!h5peditor.isMainTitleSet()) {
-          return event.preventDefault();
-        }
+        if (params !== undefined && params.params !== undefined) {
+          // Validate mandatory main title. Prevent submitting if that's not set.
+          // Deliberatly doing it after getParams(), so that any other validation
+          // problems are also revealed
+          if (!h5peditor.isMainTitleSet()) {
+            return event.preventDefault();
+          }
 
-        if (params !== undefined) {
           // Set the title field to the metadata title if the field exists
           if ($title && $title.length !== 0) {
             $title.val(params.metadata.title || '');

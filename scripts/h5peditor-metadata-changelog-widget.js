@@ -28,7 +28,8 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
     'class': 'h5p-metadata-button h5p-cancel',
     role: 'button',
     text: H5PEditor.t('core', 'cancel'),
-    click: function () {
+    click: function (event) {
+      event.preventDefault();
       resetForm();
       state.editing = false;
       state.currentLog = undefined;
@@ -40,7 +41,8 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
     'class': 'h5p-metadata-button h5p-log-change',
     role: 'button',
     text: H5PEditor.t('core', 'logThisChange'),
-    click: function () {
+    click: function (event) {
+      event.preventDefault();
       var entry = validateForm(false);
 
       if (!entry.date || !entry.author || !entry.log) {
@@ -67,7 +69,8 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
     role: 'button',
     tabindex: 0,
     text: H5PEditor.t('core', 'addNewChange'),
-    click: function () {
+    click: function (event) {
+      event.preventDefault();
       state.editing = true;
       state.newLog = false;
       resetForm();
@@ -160,13 +163,15 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
          '<button class="h5p-metadata-delete"></button>' +
         '</div>');
 
-        logButtons.find('.h5p-metadata-delete').click(function () {
+        logButtons.find('.h5p-metadata-delete').click(function (event) {
+          event.preventDefault();
           var wrapper = this.closest('.h5p-metadata-log');
           var index = $(wrapper).attr('data');
           deleteLog(index);
         });
 
-        logButtons.find('.h5p-metadata-edit').click(function () {
+        logButtons.find('.h5p-metadata-edit').click(function (event) {
+          event.preventDefault();
           var wrapper = this.closest('.h5p-metadata-log');
           var index = $(wrapper).attr('data');
           editLog(index);
