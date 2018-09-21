@@ -111,7 +111,7 @@ class H5peditor {
             'runnable' => $devLibs[$lid]['runnable'],
             'restricted' => $libraries[$i]->restricted,
             'tutorialUrl' => $libraries[$i]->tutorialUrl,
-            'metadata' => $devLibs[$lid]['metadata'],
+            'metadataSettings' => $devLibs[$lid]['metadataSettings'],
           );
           if ($isOld) {
             $libraries[$i]->isOld = TRUE;
