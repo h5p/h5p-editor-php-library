@@ -43,13 +43,6 @@ ns.Library = function (parent, field, params, setValue) {
     self.passReadies = false;
   });
 
-  // I need to be appended to the DOM before the metadata button can be added
-  if (parent.on) {
-    parent.on('ready', function () {
-      self.addMetadataForm();
-    });
-  }
-
   // Confirmation dialog for changing library
   this.confirmChangeLibrary = new H5P.ConfirmationDialog({
     headerText: H5PEditor.t('core', 'changeLibrary'),
@@ -381,7 +374,6 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
   this.$libraryWrapper.html(ns.t('core', 'loading')).attr('class', 'libwrap ' + libraryName.split(' ')[0].toLowerCase().replace('.', '-') + '-editor');
 
   ns.loadLibrary(libraryName, function (semantics) {
-    that.semantics = semantics;
     that.currentLibrary = libraryName;
     that.params.library = libraryName;
 
@@ -417,7 +409,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 /**
  * Add metadata form.
  */
-ns.Library.prototype.addMetadataForm = function () {
+ns.Library.prototype.addMetadataForm = function (semantics) {
   var that = this;
 
   // Don't add metadata if deactivated in library.json
@@ -432,7 +424,7 @@ ns.Library.prototype.addMetadataForm = function () {
   if (that.$metadataFormWrapper === undefined) {
     // Put metadata form wrapper before library wrapper
     that.$metadataFormWrapper = ns.$('<div class="h5p-metadata-form-wrapper"></div>');
-    that.$metadataForm = ns.metadataForm(that.semantics, that.params.metadata, that.$metadataFormWrapper, that, {populateTitle: true});
+    that.$metadataForm = ns.metadataForm(semantics, that.params.metadata, that.$metadataFormWrapper, that, {populateTitle: true});
 
     /*
      * Note: Use the id metadata-title-sub in custom editors to invoke syncing
@@ -452,7 +444,6 @@ ns.Library.prototype.addMetadataForm = function () {
 
   // Prevent multiple buttons when changing libraries
   if (that.$libraryWrapper.closest('.content').find('.h5p-metadata-button-wrapper').length === 0) {
-
     that.$metadataButton = H5PEditor.$('' +
       '<div class="h5p-metadata-button-wrapper">' +
         '<div class="h5p-metadata-button-tip"></div>' +
@@ -560,11 +551,6 @@ ns.Library.prototype.addMetadataForm = function () {
  * @return {boolean} True, id button should be shown. False otherwise.
  */
 ns.Library.prototype.enableMetadata = function () {
-
-  if (this.libraries === undefined) {
-    return false;
-  }
-
   var that = this;
 
   var library = this.libraries.filter(function (library) {
