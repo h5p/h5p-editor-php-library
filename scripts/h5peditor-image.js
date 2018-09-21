@@ -103,6 +103,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
   var html = ns.createFieldMarkup(this.field, htmlString);
 
   var $container = ns.$(html).appendTo($wrapper);
+  this.$item = $container;
   this.$editImage = $container.find('.h5p-editing-image-button');
   this.$copyrightButton = $container.find('.h5p-copyright-button');
   this.$file = $container.find('.file');

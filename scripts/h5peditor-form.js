@@ -28,31 +28,6 @@ ns.Form = function () {
   // Add overlay
   this.$form.append('<div class="overlay"></div>');
 
-  // Inject a custom text field for the metadata title
-  var metaDataTitleSemantics = [{
-    'name' : 'mainTitle',
-    'type' : 'text',
-    'label' : ns.t('core', 'title'),
-    'description': ns.t('core', 'usedForSearchingReportsAndCopyrightInformation'),
-    'optional': false
-  }];
-
-  // Ensure it has validation functions
-  ns.processSemanticsChunk(metaDataTitleSemantics, {}, this.$form.children('.tree'), this);
-
-  self.mainTitleField = ns.findField('mainTitle', this);
-
-  // Give title field an ID
-  self.mainTitleField.$item.attr('id', 'metadata-title-main-label');
-  self.mainTitleField.$input.attr('id', 'metadata-title-main');
-
-  // Add the metadata button
-  const metadataButton = ns.$('' +
-    '<div class="h5p-metadata-button-wrapper">' +
-      '<div class="h5p-metadata-button-tip"></div>' +
-      '<div class="h5p-metadata-toggler">' + ns.t('core', 'metadata') + '</div>' +
-    '</div>');
-
   /*
    * Temporarily needed for old content where wrapper will not be created by
    * the editor. Can be removed as soon as the new content types are considered
@@ -73,13 +48,6 @@ ns.Form = function () {
         this.$form.find('#metadata-title-main-label').first().css('padding-bottom', '1em');
         break;
     }
-  }
-  else {
-    this.$form.find('.h5p-editor-flex-wrapper').append(metadataButton);
-    this.$form.find('.h5p-metadata-toggler').click(function () {
-      self.$form.find('.h5p-metadata-wrapper').first().toggleClass('h5p-open');
-      self.$form.find('.overlay').toggle();
-    });
   }
 
   // Add title expand/collapse button
@@ -130,7 +98,7 @@ ns.Form.prototype.replace = function ($element) {
  * Remove the current form.
  */
 ns.Form.prototype.remove = function () {
-  ns.removeChildren(this.metadataChildren);
+  ns.removeChildren(this.metadataForm.children);
   ns.removeChildren(this.children);
   this.$form.remove();
 };
@@ -145,24 +113,10 @@ ns.Form.prototype.remove = function () {
 ns.Form.prototype.processSemantics = function (semantics, defaultParams, metadata) {
   this.metadata = (metadata ? metadata : defaultParams.metadata || {});
 
-  this.$metadataForm = ns.metadataForm(semantics, this.metadata, this.$form.children('.tree'), this);
-  const metadataTitle = ns.findField('title', this);
-
-  // Sync title fields of this editor form and a metadata form
-  ns.sync(
-    this.mainTitleField.$input,
-    metadataTitle.$input
-  );
-
-  // Set the title
-  const title = (this.metadata && this.metadata.title) ? this.metadata.title : '';
-  this.mainTitleField.$input.val(title);
+  this.metadataForm = new ns.MetadataForm(this, this.metadata, this.$form.children('.tree'), true);
 
   // Overriding this.params with {} will lead to old content not being editable for now
   this.params = (defaultParams.params ? defaultParams.params : defaultParams);
-
-  // Put metadata children in a separate array
-  this.metadataChildren = this.children;
 
   // Create real children
   ns.processSemanticsChunk(semantics, this.params, this.$form.children('.tree'), this);

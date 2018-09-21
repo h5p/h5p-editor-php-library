@@ -390,12 +390,34 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
       that.params.metadata = {};
     }
 
-    ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper.html(''), that);
+// TODO: Add select library title to metadata params !
+    that.$libraryWrapper.html('');
+
+    // Add metadata form for subcontent
+    const metadataSettings = that.findLibraryMetadataSettings(libraryName);
+    metadataSettings.disableExtraTitleField = true;
+    if (!metadataSettings.disable) {
+      that.metadataForm = new ns.MetadataForm(that, that.params.metadata, that.$libraryWrapper, !metadataSettings.disableExtraTitleField, true);
+    }
+    else {
+      that.metadataForm = null; // Prevent usage of last selected content's metadata form
+    }
+
+    ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper, that);
     if (window.localStorage) {
       that.$copyButton.toggleClass('disabled', false);
     }
 
-    that.addMetadataForm();
+    if (that.metadataForm && metadataSettings.disableExtraTitleField) {
+      // Find another location for the metadata button
+      for (let i = 0; i < that.children.length; i++) {
+        if (that.children[i].$item) {
+          // Use the first field with a valid $item
+          that.metadataForm.appendButtonTo(that.children[i].$item.children('.h5p-editor-flex-wrapper'));
+          break;
+        }
+      }
+    }
 
     if (that.libraries !== undefined) {
       that.change();
@@ -407,157 +429,26 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 };
 
 /**
- * Add metadata form.
- */
-ns.Library.prototype.addMetadataForm = function (semantics) {
-  var that = this;
-
-  // Don't add metadata if deactivated in library.json
-  if (!this.currentLibrary || !this.enableMetadata() || !ns.enableMetadata(this.currentLibrary)) {
-    return;
-  }
-
-  // Restore children after adding metadata fields
-  const children = this.children;
-  this.children = [];
-
-  if (that.$metadataFormWrapper === undefined) {
-    // Put metadata form wrapper before library wrapper
-    that.$metadataFormWrapper = ns.$('<div class="h5p-metadata-form-wrapper"></div>');
-    that.$metadataForm = ns.metadataForm(semantics, that.params.metadata, that.$metadataFormWrapper, that, {populateTitle: true});
-
-    /*
-     * Note: Use the id metadata-title-sub in custom editors to invoke syncing
-     * the title field with the metadata title
-     */
-    ns.sync(
-      that.$libraryWrapper.parent()
-        .siblings('.h5p-metadata-title-wrapper')
-        .find('input#metadata-title-sub'),
-      that.$metadataForm
-        .find('.field-name-title')
-        .find('input')
-    );
-
-    that.$libraryWrapper.before(that.$metadataFormWrapper);
-  }
-
-  // Prevent multiple buttons when changing libraries
-  if (that.$libraryWrapper.closest('.content').find('.h5p-metadata-button-wrapper').length === 0) {
-    that.$metadataButton = H5PEditor.$('' +
-      '<div class="h5p-metadata-button-wrapper">' +
-        '<div class="h5p-metadata-button-tip"></div>' +
-        '<div class="h5p-metadata-toggler">' + ns.t('core', 'metadata') + '</div>' +
-      '</div>');
-
-    const librarySelectorLabelVisible = (that.libraries.length > 1) && that.$label.text().trim().length !== 0;
-
-    if (librarySelectorLabelVisible) {
-      that.$metadataButton.appendTo(this.$label.parent());
-    }
-    else {
-      // Put the metadataButton after the first visible label found if it has text
-      var $labelWrapper = that.$libraryWrapper
-        .siblings('.h5p-editor-flex-wrapper')
-        .children('.h5peditor-label-wrapper');
-
-      if ($labelWrapper.length > 0 && !$labelWrapper.is(':empty')) {
-        var label = that.$libraryWrapper
-          .closest('.content')
-          .find('.h5p-editor-flex-wrapper')
-          .first();
-
-        if (label.length === 0 || label.css('display') === 'none') {
-          label = that.$libraryWrapper
-            .find('.h5p-editor-flex-wrapper')
-            .first();
-        }
-        label.append(that.$metadataButton);
-      }
-      else {
-        $labelWrapper = that.$libraryWrapper
-          .find('.h5peditor-label-wrapper')
-          .first();
-
-        // We might be in a compound content type like CP or IV where the layout is different
-        const $compoundLabelWrapper = that.$libraryWrapper
-          .parent().parent()
-          .find('.h5p-metadata-title-wrapper')
-          .find('.h5p-editor-flex-wrapper')
-          .first();
-
-        if ($compoundLabelWrapper.length > 0) {
-          $compoundLabelWrapper.append(that.$metadataButton);
-        }
-        // First label found, even if it's empty
-        else if ($labelWrapper.length > 0) {
-          $labelWrapper.append(that.$metadataButton);
-        }
-        // Next to the library select field
-        else {
-          var $librarySelector = that.$libraryWrapper.siblings('select');
-          that.$metadataButton.addClass('inline-with-selector');
-          $librarySelector.after(that.$metadataButton);
-        }
-      }
-    }
-
-    // Add click listener
-    that.$metadataButton.click(function () {
-      that.$metadataFormWrapper
-        .find('.h5p-metadata-wrapper')
-        .toggleClass('h5p-open');
-
-      that.$metadataFormWrapper
-        .closest('.h5peditor-form')
-        .find('.overlay')
-        .toggle();
-
-      that.$metadataFormWrapper
-        .find('.h5p-metadata-wrapper')
-        .find('.field-name-title')
-        .find('input.h5peditor-text')
-        .focus();
-
-      if (H5PIntegration && H5PIntegration.user && H5PIntegration.user.name) {
-        that.$metadataFormWrapper
-          .find('.field-name-authorName')
-          .find('input.h5peditor-text')
-          .val(H5PIntegration.user.name);
-      }
-      /*
-       * Try (again) to sync with a title field. Custom editors may need
-       * this here because the master may not yet exist before.
-       */
-      ns.sync(
-        that.$libraryWrapper.parent()
-          .siblings('.h5p-metadata-title-wrapper')
-          .find('input#metadata-title-sub'),
-        that.$metadataForm
-          .find('.field-name-title')
-          .find('input')
-      );
-    });
-  }
-
-  // Restore children
-  this.metadataChildren = this.children;
-  this.children = children;
-};
-
-/**
- * Check if metadata button should be shown.
+ * Locate the Library Metadata Settings object for the given library.
  *
- * @return {boolean} True, id button should be shown. False otherwise.
+ * @param {String} libraryName
+ * @return {Object}
  */
-ns.Library.prototype.enableMetadata = function () {
-  var that = this;
+ns.Library.prototype.findLibraryMetadataSettings = function (libraryName) {
+  const self = this;
 
-  var library = this.libraries.filter(function (library) {
-    return library.uberName === that.currentLibrary;
-  });
+  let metadata;
+  for (let i = 0; i < self.libraries.length; i++) {
+    if (self.libraries[i].uberName === self.libraryName)  {
+      library = self.libraries[i].metadata;
+      break;
+    }
+  }
 
-  return (library.length === 0 || library[0].metadata !== 0);
+  return metadata ? metadata : {
+    disable: !ns.enableMetadata(libraryName),
+    disableExtraTitleField: false
+  };
 };
 
 /**
@@ -597,9 +488,9 @@ ns.Library.prototype.change = function (callback) {
 ns.Library.prototype.validate = function () {
   var valid = true;
 
-  if (this.metadataChildren) {
-    for (var i = 0; i < this.metadataChildren.length; i++) {
-      if (this.metadataChildren[i].validate() === false) {
+  if (this.metadataForm && this.metadataForm.children) {
+    for (var i = 0; i < this.metadataForm.children.length; i++) {
+      if (this.metadataForm.children[i].validate() === false) {
         valid = false;
       }
     }
@@ -640,8 +531,8 @@ ns.Library.prototype.ready = function (ready) {
  * * @alias H5PEditor.Library#removeChildren
  */
 ns.Library.prototype.removeChildren = function () {
-  if (this.metadataChildren !== undefined) {
-    ns.removeChildren(this.metadataChildren);
+  if (this.metadataForm && this.metadataForm.children !== undefined) {
+    ns.removeChildren(this.metadataForm.children);
   }
 
   if (this.currentLibrary === '-' || this.children === undefined) {
