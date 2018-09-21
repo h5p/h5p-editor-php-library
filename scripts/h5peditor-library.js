@@ -395,7 +395,6 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 
     // Add metadata form for subcontent
     const metadataSettings = that.findLibraryMetadataSettings(libraryName);
-    metadataSettings.disableExtraTitleField = true;
     if (!metadataSettings.disable) {
       that.metadataForm = new ns.MetadataForm(that, that.params.metadata, that.$libraryWrapper, !metadataSettings.disableExtraTitleField, true);
     }
