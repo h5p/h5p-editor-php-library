@@ -83,11 +83,9 @@ H5PEditor.language.core = {
   h5pFileWrongExtensionTitle: 'O arquivo selecionado não pôde ser carregado',
   h5pFileWrongExtensionContent: 'Somente arquivos com a extensão .h5p são permitidos.',
   h5pFileValidationFailedTitle: 'Não foi possível validar o arquivo H5P.',
-  h5pFileValidationFailedContent: 'Tenha certeza que o H5P carregado possui conteúdo válido H5P. Arquivos H5P' +
-  ' que contém apenas bibliotecas devem ser enviados através da página de Bibliotecas H5P.',
+  h5pFileValidationFailedContent: 'Tenha certeza que o H5P carregado possui conteúdo válido H5P. Arquivos H5P que contém apenas bibliotecas devem ser enviados através da página de Bibliotecas H5P.',
   h5pFileUploadServerErrorTitle: 'O arquivo H5P não pôde ser enviado',
-  h5pFileUploadServerErrorContent: 'Um erro inesperado ocorreu. Verifique seu o log de erros do servidor' +
-  ' para maiores informações.',
+  h5pFileUploadServerErrorContent: 'Um erro inesperado ocorreu. Verifique seu o log de erros do servidor para maiores informações.',
   contentTypeSectionAll: 'Todos os tipos de conteúdo',
   searchResults: 'Procurar resultados',
   contentTypeSearchFieldPlaceholder: 'Procurar por tipos de conteúdo',
@@ -127,7 +125,7 @@ H5PEditor.language.core = {
   currentMenuSelected: 'seleção atual',
   errorCommunicatingHubTitle: 'Incapaz de se comunicar com o hub.',
   errorCommunicatingHubContent: 'Um erro ocorreu. Por favor, tente novamente.',
-  warningNoContentTypesInstalled: "Você não possui nenhum tipo de conteúdo instalado.",
+  warningNoContentTypesInstalled: 'Você não possui nenhum tipo de conteúdo instalado.',
   warningChangeBrowsingToSeeResults: 'Clique em <em>todos</em> para obter uma lista de todos os conteúdos que você pode instalar.',
   warningUpdateAvailableTitle: 'Uma nova versão de :contentType está disponível.',
   warningUpdateAvailableBody: 'Atualize para a última versão para uma experiência melhorada.',
@@ -165,10 +163,12 @@ H5PEditor.language.core = {
   addTitle: 'Adicionar título',
   usedForSearchingReportsAndCopyrightInformation: 'Usado para pesquisas, relatórios e informações de direitos autorais',
   metadataSharingAndLicensingInfo: 'Metadados (informações de compartilhamento e licenciamento)',
-  fillInTheFieldsBelow : 'Preencha os campos abaixo',
+  fillInTheFieldsBelow: 'Preencha os campos abaixo',
   saveMetadata: 'Salvar metadados',
   addAuthor: 'Adicionar autor',
+  confirmRemoveAuthor: 'Are you sure you would like to remove this author?',
   addNewChange: 'Adicionar nova alteração',
+  confirmDeleteChangeLog: 'Are you sure you would like to delete this change log entry?',
   logThisChange: 'Registrar alteração',
   newChangeHasBeenLogged: 'A nova alteração foi registrada no log',
   loggedChanges: 'Alterações registradas',
@@ -189,5 +189,5 @@ H5PEditor.language.core = {
   pasteContentNotSupported: 'O conteúdo que você está tentando colar não é suportado neste contexto',
   pasteTooOld: 'O conteúdo que você está tentando colar é de uma versão inferior (:clip) à versão suportada neste contexto (:local), se possível, tente atualizar o conteúdo que deseja colar, copie-o novamente e tente colá-lo aqui.',
   pasteTooNew: 'O conteúdo que você está tentando colar é de uma versão superior (:clip) à versão suportada neste contexto (:local), se possível, tente atualizar este conteúdo, e então tente colar novamente.',
-  ok: 'OK'
+  ok: 'OK',
 };

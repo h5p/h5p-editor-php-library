@@ -83,11 +83,9 @@ H5PEditor.language.core = {
   h5pFileWrongExtensionTitle: 'Het geselecteerde bestand kon niet worden geüpload',
   h5pFileWrongExtensionContent: 'Alleen bestanden met de .h5p extensie toegestaan.',
   h5pFileValidationFailedTitle: 'Kon het H5P bestand niet valideren.',
-  h5pFileValidationFailedContent: 'Zorg ervoor dat de geüploade H5P geldige H5P content bevat. H5P' +
-  ' bestanden die alleen bibliotheken bevatten, dienen te worden geüpload via de H5P Bibliotheken pagina.',
+  h5pFileValidationFailedContent: 'Zorg ervoor dat de geüploade H5P geldige H5P content bevat. H5P bestanden die alleen bibliotheken bevatten, dienen te worden geüpload via de H5P Bibliotheken pagina.',
   h5pFileUploadServerErrorTitle: 'Het H5P bestand kon niet worden geüpload',
-  h5pFileUploadServerErrorContent: 'Er is een onverwachte fout opgetreden. Controleer het server log voor' +
-  ' meer informatie.',
+  h5pFileUploadServerErrorContent: 'Er is een onverwachte fout opgetreden. Controleer het server log voor meer informatie.',
   contentTypeSectionAll: 'Alle Content Types',
   searchResults: 'Search Results',
   contentTypeSearchFieldPlaceholder: 'Zoeken naar Content Types',
@@ -127,7 +125,7 @@ H5PEditor.language.core = {
   currentMenuSelected: 'huidige selectie',
   errorCommunicatingHubTitle: 'Kan niet communiceren met hub.',
   errorCommunicatingHubContent: 'Er is een fout opgetreden. Probeer het opnieuw.',
-  warningNoContentTypesInstalled: "Je hebt geen geïnstalleerde content types.",
+  warningNoContentTypesInstalled: 'Je hebt geen geïnstalleerde content types.',
   warningChangeBrowsingToSeeResults: 'Klik <em>Alle</em> om de lijst op te halen van alle content types die je kunt installeren.',
   warningUpdateAvailableTitle: 'Er is een nieuwe versie van :contentType beschikbaar.',
   warningUpdateAvailableBody: 'Update naar de laatste versie voor een verbeterde ervaring.',
@@ -165,10 +163,12 @@ H5PEditor.language.core = {
   addTitle: 'Add title',
   usedForSearchingReportsAndCopyrightInformation: 'Used for searching, reports and copyright information',
   metadataSharingAndLicensingInfo: 'Metadata (sharing and licensing info)',
-  fillInTheFieldsBelow : 'Fill in the fields below',
+  fillInTheFieldsBelow: 'Fill in the fields below',
   saveMetadata: 'Save metadata',
   addAuthor: 'Add author',
+  confirmRemoveAuthor: 'Are you sure you would like to remove this author?',
   addNewChange: 'Add new change',
+  confirmDeleteChangeLog: 'Are you sure you would like to delete this change log entry?',
   logThisChange: 'Log this change',
   newChangeHasBeenLogged: 'New change has been logged',
   loggedChanges: 'Logged changes',
@@ -189,5 +189,5 @@ H5PEditor.language.core = {
   pasteContentNotSupported: 'The content you’re trying to paste is not supported in this context',
   pasteTooOld: 'The content you’re trying to paste is of a lower version (:clip) than what is supported in this context (:local), if possible try to have the content you want to paste upgraded, copy it again and try pasting it here.',
   pasteTooNew: 'The content you’re trying to paste is of a higher version (:clip) than what is supported in this context (:local), if possible try to have this content upgraded first, and then try pasting the content here again.',
-  ok: 'OK'
+  ok: 'OK',
 };

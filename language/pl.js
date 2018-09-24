@@ -83,11 +83,9 @@ H5PEditor.language.core = {
   h5pFileWrongExtensionTitle: 'Nie można przesłać wybranego pliku',
   h5pFileWrongExtensionContent: 'Dopuszczalne są tylko pliki z rozszerzeniem .h5p.',
   h5pFileValidationFailedTitle: 'Wybrany plik H5P może być nieprawidłowy.',
-  h5pFileValidationFailedContent: 'Upewnij się, że przesyłane pliki zawierają prawidłową treść H5P.' +
-  ' Pliki zawierające tylko biblioteki powinny być dodawane z formularza bibliotek H5P.',
+  h5pFileValidationFailedContent: 'Upewnij się, że przesyłane pliki zawierają prawidłową treść H5P. Pliki zawierające tylko biblioteki powinny być dodawane z formularza bibliotek H5P.',
   h5pFileUploadServerErrorTitle: 'Nie można przesłać pliku H5P',
-  h5pFileUploadServerErrorContent: 'Wystąpił nieoczekiwany błąd. Sprawdź dziennik błędów serwera' +
-  ' więcej szczegółów.',
+  h5pFileUploadServerErrorContent: 'Wystąpił nieoczekiwany błąd. Sprawdź dziennik błędów serwera więcej szczegółów.',
   contentTypeSectionAll: 'Wszystkie typy zasobu',
   searchResults: 'Wyniki wyszukiwania',
   contentTypeSearchFieldPlaceholder: 'Szukaj',
@@ -127,7 +125,7 @@ H5PEditor.language.core = {
   currentMenuSelected: 'obecny wybór',
   errorCommunicatingHubTitle: 'Nie można skomunikować się z hubem.',
   errorCommunicatingHubContent: 'Wystąpił błąd. Proszę spróbuj ponownie.',
-  warningNoContentTypesInstalled: "Nie masz zainstalowanych żadnych typów zasobu.",
+  warningNoContentTypesInstalled: 'Nie masz zainstalowanych żadnych typów zasobu.',
   warningChangeBrowsingToSeeResults: 'Kliknij przycisk <em>Wszystko</ em>, aby wyświetlić listę wszystkich typów zasobu, które można zainstalować.',
   warningUpdateAvailableTitle: 'Dostępna jest nowa wersja :contentType.',
   warningUpdateAvailableBody: 'Zaktualizuj do najnowszej wersji, aby uzyskać pełną funkcjonalność.',
@@ -165,10 +163,12 @@ H5PEditor.language.core = {
   addTitle: 'Dodaj tytuł',
   usedForSearchingReportsAndCopyrightInformation: 'Używany w wyszukiwaniu, raportach i informacji o prawach autorskich',
   metadataSharingAndLicensingInfo: 'Metadane (informacje o udostępnianiu i licencji)',
-  fillInTheFieldsBelow : 'Wypełnij poniższe pola',
+  fillInTheFieldsBelow: 'Wypełnij poniższe pola',
   saveMetadata: 'Zapisz metadane',
   addAuthor: 'Dodaj autora',
+  confirmRemoveAuthor: 'Are you sure you would like to remove this author?',
   addNewChange: 'Dodaj nową zmianę',
+  confirmDeleteChangeLog: 'Are you sure you would like to delete this change log entry?',
   logThisChange: 'Zarejestruj tę zmianę',
   newChangeHasBeenLogged: 'Nowa zmiana została zarejestrowana',
   loggedChanges: 'Zarejestrowane zmiany',
@@ -189,5 +189,5 @@ H5PEditor.language.core = {
   pasteContentNotSupported: 'Zasób, który próbujesz wkleić, nie jest wspierany w tym kontekście',
   pasteTooOld: 'Zasób, który próbujesz wkleić, jest w starszej wersji (:clip) niż wspierany w tym kontekście (:local). Jeśli możesz, spróbuj najpierw zaktualizować zasób, a dopiero potem go skopiować i wkleić tutaj.',
   pasteTooNew: 'Zasób, który próbujesz wkleić, jest w nowszej wersji (:clip) niż wspierany w tym kontekście (:local). Jeśli możesz, spróbuj najpierw zaktualizować typ zasobu, a dopiero potem wkleić go tutaj.',
-  ok: 'OK'
+  ok: 'OK',
 };

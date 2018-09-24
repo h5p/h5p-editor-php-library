@@ -83,11 +83,9 @@ H5PEditor.language.core = {
   h5pFileWrongExtensionTitle: 'Valittua tiedostoa ei pystytty lataamaan',
   h5pFileWrongExtensionContent: 'Vain .h5p päätteiset tiedostot ovat sallittuja.',
   h5pFileValidationFailedTitle: 'H5P tiedostoa ei pystytty varmistamaan.',
-  h5pFileValidationFailedContent: 'Varmista että ladattu H5P tiedosto sisältää H5P sisältöä. H5P' +
-  ' tiedostot joissa on ainoastaan kirjastoja täytyy ladata H5P Libraries sivulla.',
+  h5pFileValidationFailedContent: 'Varmista että ladattu H5P tiedosto sisältää H5P sisältöä. H5P tiedostot joissa on ainoastaan kirjastoja täytyy ladata H5P Libraries sivulla.',
   h5pFileUploadServerErrorTitle: 'H5P tiedostoa ei pystytty lataamaan',
-  h5pFileUploadServerErrorContent: 'Odottamaton virhe. Tarkista palvelinlogisi' +
-  ' lisätietoja varten.',
+  h5pFileUploadServerErrorContent: 'Odottamaton virhe. Tarkista palvelinlogisi lisätietoja varten.',
   contentTypeSectionAll: 'All Content Types',
   searchResults: 'Search Results',
   contentTypeSearchFieldPlaceholder: 'Etsi sisältötyyppejä',
@@ -127,7 +125,7 @@ H5PEditor.language.core = {
   currentMenuSelected: 'nykyinen valinta',
   errorCommunicatingHubTitle: 'Yhteyttä hubiin ei saatu muodostettua.',
   errorCommunicatingHubContent: 'Virhe tapahtui. Yritä uudelleen.',
-  warningNoContentTypesInstalled: "Sinulla ei ole yhtään sisältötyyppiä asennettuna.",
+  warningNoContentTypesInstalled: 'Sinulla ei ole yhtään sisältötyyppiä asennettuna.',
   warningChangeBrowsingToSeeResults: 'Klikkaa <em>Kaikki</em> saadaksesi listan kaikista asennettavista sisältötyypeistä.',
   warningUpdateAvailableTitle: 'Sisällöstä :contentType on uusi versio saatavilla.',
   warningUpdateAvailableBody: 'Päivitä viimeisimpään versioon parannetuilla ominaisuuksilla.',
@@ -165,10 +163,12 @@ H5PEditor.language.core = {
   addTitle: 'Add title',
   usedForSearchingReportsAndCopyrightInformation: 'Used for searching, reports and copyright information',
   metadataSharingAndLicensingInfo: 'Metadata (sharing and licensing info)',
-  fillInTheFieldsBelow : 'Fill in the fields below',
+  fillInTheFieldsBelow: 'Fill in the fields below',
   saveMetadata: 'Save metadata',
   addAuthor: 'Add author',
+  confirmRemoveAuthor: 'Are you sure you would like to remove this author?',
   addNewChange: 'Add new change',
+  confirmDeleteChangeLog: 'Are you sure you would like to delete this change log entry?',
   logThisChange: 'Log this change',
   newChangeHasBeenLogged: 'New change has been logged',
   loggedChanges: 'Logged changes',
@@ -189,5 +189,5 @@ H5PEditor.language.core = {
   pasteContentNotSupported: 'The content you’re trying to paste is not supported in this context',
   pasteTooOld: 'The content you’re trying to paste is of a lower version (:clip) than what is supported in this context (:local), if possible try to have the content you want to paste upgraded, copy it again and try pasting it here.',
   pasteTooNew: 'The content you’re trying to paste is of a higher version (:clip) than what is supported in this context (:local), if possible try to have this content upgraded first, and then try pasting the content here again.',
-  ok: 'OK'
+  ok: 'OK',
 };

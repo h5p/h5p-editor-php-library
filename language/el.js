@@ -83,11 +83,9 @@ H5PEditor.language.core = {
   h5pFileWrongExtensionTitle: 'Δεν ήταν δυνατή η μεταφόρτωση του επιλεγμένου αρχείου',
   h5pFileWrongExtensionContent: 'Μόνο αρχεία με επέκταση .h5p επιτρέπονται.',
   h5pFileValidationFailedTitle: 'Δεν ήταν δυνατή η επικύρωση του αρχείου H5P.',
-  h5pFileValidationFailedContent: 'Βεβαιωθείτε ότι το φορτωμένο H5P περιέχει έγκυρο περιεχόμενο H5P. ' +
-  'Τα αρχεία H5P τα οποία περιέχουν μόνο βιβλιοθήκες, θα πρέπει να μεταφορτωθούν μέσω της σελίδας Βιβλιοθήκες H5P.',
+  h5pFileValidationFailedContent: 'Βεβαιωθείτε ότι το φορτωμένο H5P περιέχει έγκυρο περιεχόμενο H5P. Τα αρχεία H5P τα οποία περιέχουν μόνο βιβλιοθήκες, θα πρέπει να μεταφορτωθούν μέσω της σελίδας Βιβλιοθήκες H5P.',
   h5pFileUploadServerErrorTitle: 'Δεν ήταν δυνατή η μεταφόρτωση του αρχείου H5P',
-  h5pFileUploadServerErrorContent: 'Προέκυψε ένα μη αναμενόμενο σφάλμα. Ελέγξτε το αρχείο σφαλμάτων του διακομιστή' +
-  ' σας για περισσότερες λεπτομέρειες.',
+  h5pFileUploadServerErrorContent: 'Προέκυψε ένα μη αναμενόμενο σφάλμα. Ελέγξτε το αρχείο σφαλμάτων του διακομιστή σας για περισσότερες λεπτομέρειες.',
   contentTypeSectionAll: 'All Content Types',
   searchResults: 'Search Results',
   contentTypeSearchFieldPlaceholder: 'Αναζητήστε Τύπους Περιεχομένου',
@@ -165,10 +163,12 @@ H5PEditor.language.core = {
   addTitle: 'Add title',
   usedForSearchingReportsAndCopyrightInformation: 'Used for searching, reports and copyright information',
   metadataSharingAndLicensingInfo: 'Metadata (sharing and licensing info)',
-  fillInTheFieldsBelow : 'Fill in the fields below',
+  fillInTheFieldsBelow: 'Fill in the fields below',
   saveMetadata: 'Save metadata',
   addAuthor: 'Add author',
+  confirmRemoveAuthor: 'Are you sure you would like to remove this author?',
   addNewChange: 'Add new change',
+  confirmDeleteChangeLog: 'Are you sure you would like to delete this change log entry?',
   logThisChange: 'Log this change',
   newChangeHasBeenLogged: 'New change has been logged',
   loggedChanges: 'Logged changes',
@@ -189,5 +189,5 @@ H5PEditor.language.core = {
   pasteContentNotSupported: 'The content you’re trying to paste is not supported in this context',
   pasteTooOld: 'The content you’re trying to paste is of a lower version (:clip) than what is supported in this context (:local), if possible try to have the content you want to paste upgraded, copy it again and try pasting it here.',
   pasteTooNew: 'The content you’re trying to paste is of a higher version (:clip) than what is supported in this context (:local), if possible try to have this content upgraded first, and then try pasting the content here again.',
-  ok: 'OK'
+  ok: 'OK',
 };
