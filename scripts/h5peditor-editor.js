@@ -262,7 +262,7 @@ ns.Editor.prototype.getParams = function (notFormSubmit) {
  * @return {[type]}
  */
 ns.Editor.prototype.isMainTitleSet = function () {
-  var mainTitleField = this.selector.form.mainTitleField;
+  var mainTitleField = this.selector.form.metadataForm.getExtraTitleField();
 
   // validate() actually doesn't return a boolean, but the trimmed value
   // We know title is a mandatory field, so that's what we are checking here

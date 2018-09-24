@@ -191,6 +191,13 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
       $button.appendTo($element);
     };
 
+    /**
+     * @return {Object} The extra title field instance
+     */
+    self.getExtraTitleField = function () {
+      return hasExtraTitleField ? extraTitle : undefined;
+    };
+
     // Prepare semantics
     const semantics = [];
     if (hasExtraTitleField) {
@@ -251,9 +258,10 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
     // Add the final child
     self.children = children.concat([additionals]);
 
+    let extraTitle;
     if (hasExtraTitleField) {
       // Append to correct place in DOM
-      const extraTitle = H5PEditor.findField('extraTitle', self);
+      extraTitle = H5PEditor.findField('extraTitle', self);
       extraTitle.$item.appendTo($container);
       $button.appendTo(extraTitle.$item.children('.h5p-editor-flex-wrapper'));
 
