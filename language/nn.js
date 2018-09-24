@@ -125,7 +125,7 @@ H5PEditor.language.core = {
   currentMenuSelected: 'current selection',
   errorCommunicatingHubTitle: 'Not able to communicate with hub.',
   errorCommunicatingHubContent: 'An error occured. Please try again.',
-  warningNoContentTypesInstalled: 'You don't have any content types installed.',
+  warningNoContentTypesInstalled: 'You don\'t have any content types installed.',
   warningChangeBrowsingToSeeResults: 'Click <em>All</em> to get the list of all the content types you can install.',
   warningUpdateAvailableTitle: 'A new version of :contentType is available.',
   warningUpdateAvailableBody: 'Update to the latest version for an improved experience.',
