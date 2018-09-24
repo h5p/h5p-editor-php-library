@@ -117,7 +117,9 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
       // The delete-button
       $('<button>', {
         click: function () {
-          removeAuthor(author);
+          if (confirm(H5PEditor.t('core', 'confirmRemoveAuthor'))) {
+            removeAuthor(author);
+          }
         }
       }).appendTo(listItem);
 
