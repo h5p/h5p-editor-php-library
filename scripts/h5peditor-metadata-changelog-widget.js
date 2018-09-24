@@ -165,9 +165,13 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
 
         logButtons.find('.h5p-metadata-delete').click(function (event) {
           event.preventDefault();
-          var wrapper = this.closest('.h5p-metadata-log');
-          var index = $(wrapper).attr('data');
-          deleteLog(index);
+
+          // Ask for confirmation
+          if (confirm(H5PEditor.t('core', 'confirmDeleteChangeLog'))) {
+            var wrapper = this.closest('.h5p-metadata-log');
+            var index = $(wrapper).attr('data');
+            deleteLog(index);
+          }
         });
 
         logButtons.find('.h5p-metadata-edit').click(function (event) {
