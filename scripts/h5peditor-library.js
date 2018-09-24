@@ -390,11 +390,17 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
       that.params.metadata = {};
     }
 
-// TODO: Add select library title to metadata params !
+    // Reset wrapper content
     that.$libraryWrapper.html('');
 
+    // Locate selected library object
+    const library = that.findLibrary(libraryName);
+
+    // Store selected Content Type title in metadata for Copyright usage
+    that.params.metadata.contentType = library.title;
+
     // Add metadata form for subcontent
-    const metadataSettings = that.findLibraryMetadataSettings(libraryName);
+    const metadataSettings = that.getLibraryMetadataSettings(library);
     if (!metadataSettings.disable) {
       that.metadataForm = new ns.MetadataForm(that, that.params.metadata, that.$libraryWrapper, !metadataSettings.disableExtraTitleField, true);
     }
@@ -428,24 +434,33 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 };
 
 /**
+ * Locate the Library object for the given library name.
+ *
+ * @param {String} libraryName
+ * @return {Object}
+ */
+ns.Library.prototype.findLibrary = function (libraryName) {
+  const self = this;
+
+  for (let i = 0; i < self.libraries.length; i++) {
+    if (self.libraries[i].uberName === libraryName)  {
+      return self.libraries[i];
+    }
+  }
+};
+
+
+/**
  * Locate the Library Metadata Settings object for the given library.
  *
  * @param {String} libraryName
  * @return {Object}
  */
-ns.Library.prototype.findLibraryMetadataSettings = function (libraryName) {
+ns.Library.prototype.getLibraryMetadataSettings = function (library) {
   const self = this;
 
-  let metadata;
-  for (let i = 0; i < self.libraries.length; i++) {
-    if (self.libraries[i].uberName === self.libraryName)  {
-      library = self.libraries[i].metadata;
-      break;
-    }
-  }
-
-  return metadata ? metadata : {
-    disable: !ns.enableMetadata(libraryName),
+  return library.metadata ? library.metadata : {
+    disable: !ns.enableMetadata(library.uberName),
     disableExtraTitleField: false
   };
 };
