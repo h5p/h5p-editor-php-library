@@ -792,13 +792,8 @@ ns.createText = function (value, maxLength, placeholder) {
  * @returns {String}
  */
 ns.createLabel = function (field, content) {
-  // There's no good way to retrieve the current library the label is processed for, is it?
-  // We use the previous library's state of entitlement instead.
-  const wrapperFront = (this.previousLibraryEntitledForMetadata) ? '<div class="h5p-editor-flex-wrapper">' : '';
-  const wrapperBack = (this.previousLibraryEntitledForMetadata) ? '</div>' : '';
-
   // New items can be added next to the label within the flex-wrapper
-  var html = wrapperFront + '<label class="h5peditor-label-wrapper">';
+  var html = '<label class="h5peditor-label-wrapper">';
 
   // Temporary fix for the old version of CoursePresentation's custom editor
   if (field.widget === 'coursepresentation' && field.name === 'presentation') {
@@ -809,7 +804,7 @@ ns.createLabel = function (field, content) {
     html += '<span class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' + (field.label === undefined ? field.name : field.label) + '</span>';
   }
 
-  return html + (content || '') + '</label>' + wrapperBack;
+  return html + (content || '') + '</label>';
 };
 
 /**
@@ -1151,7 +1146,6 @@ ns.sync = function ($masterField, $slaveField, options) {
  * @return {boolean} True, if form should have the metadata button.
  */
 ns.enableMetadata = function (library) {
-  this.previousLibraryEntitledForMetadata = true;
 
   if (!library || typeof library !== 'string') {
     return false;
@@ -1202,8 +1196,6 @@ ns.enableMetadata = function (library) {
   if (library.majorVersion > block.majorVersion || library.majorVersion === block.majorVersion && library.minorVersion > block.minorVersion) {
     return true;
   }
-
-  this.previousLibraryEntitledForMetadata = false;
 
   return false;
 };

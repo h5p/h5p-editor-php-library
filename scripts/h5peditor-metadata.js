@@ -187,8 +187,8 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
     /**
      * @param {$} $element
      */
-    self.appendButtonTo = function ($element) {
-      $button.appendTo($element);
+    self.appendButtonTo = function ($item) {
+      $button.appendTo($item.children('.h5peditor-label-wrapper').wrap('<div class="h5p-editor-flex-wrapper"/>').parent());
     };
 
     /**
@@ -201,11 +201,7 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
     // Prepare semantics
     const semantics = [];
     if (hasExtraTitleField) {
-      const extraTitleField = JSON.parse(JSON.stringify(findField('title'))); // Clone
-      extraTitleField.name = 'extraTitle'; // Change name to avoid conflicts
-      extraTitleField.description = t('usedForSearchingReportsAndCopyrightInformation');
-      delete extraTitleField.placeholder;
-      semantics.push(extraTitleField);
+      semantics.push(getExtraTitleFieldSemantics());
     }
     semantics.push(findField('title'));
     semantics.push(findField('license'));
@@ -264,7 +260,7 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
       // Append to correct place in DOM
       extraTitle = H5PEditor.findField('extraTitle', self);
       extraTitle.$item.appendTo($container);
-      $button.appendTo(extraTitle.$item.children('.h5p-editor-flex-wrapper'));
+      self.appendButtonTo(extraTitle.$item);
 
       ns.sync(extraTitle.$input, titleField.$input);
     }
@@ -282,6 +278,31 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
   // Extends the event dispatcher
   MetadataForm.prototype = Object.create(EventDispatcher.prototype);
   MetadataForm.prototype.constructor = MetadataForm;
+
+  MetadataForm.createLegacyForm = function (params, $container) {
+    const legacyForm = {
+      passReadies: false,
+      getExtraTitleField: function () {
+        return H5PEditor.findField('extraTitle', legacyForm);
+      }
+    };
+
+    // Generate the form
+    H5PEditor.processSemanticsChunk([getExtraTitleFieldSemantics()], params, $container, legacyForm);
+
+    return legacyForm;
+  };
+
+  /**
+   * @return {Object}
+   */
+  const getExtraTitleFieldSemantics = function () {
+    const extraTitle = JSON.parse(JSON.stringify(findField('title'))); // Clone
+    extraTitle.name = 'extraTitle'; // Change name to avoid conflicts
+    extraTitle.description = t('usedForSearchingReportsAndCopyrightInformation');
+    delete extraTitle.placeholder;
+    return extraTitle;
+  };
 
   /**
    * @param {string} key

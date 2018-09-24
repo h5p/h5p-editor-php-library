@@ -22,33 +22,9 @@ ns.Form = function () {
     '</div>'
   );
   this.$common = this.$form.find('.common > .fields');
-  this.library = Object.keys(ns.libraryLoaded)[0];
 
-  this.enableMetadata = ns.enableMetadata(this.library);
   // Add overlay
   this.$form.append('<div class="overlay"></div>');
-
-  /*
-   * Temporarily needed for old content where wrapper will not be created by
-   * the editor. Can be removed as soon as the new content types are considered
-   * to be the default.
-   */
-  if (!this.enableMetadata) {
-    const $wrapper = ns.$('<div/>', {'class': 'h5p-editor-flex-wrapper'});
-    this.$form.find('label.h5peditor-label-wrapper').wrap($wrapper);
-    // This fixes CSS overrides done by some old custom editors, but should not be in core
-    switch (this.library.split(' ')[0]) {
-      case 'H5P.InteractiveVideo':
-      case 'H5P.DragQuestion':
-      case 'H5P.ImageHotspotQuestion':
-        this.$form.find('#metadata-title-main-label').first().css('padding', '20px 20px 0 20px');
-        break;
-
-      case 'H5P.CoursePresentation':
-        this.$form.find('#metadata-title-main-label').first().css('padding-bottom', '1em');
-        break;
-    }
-  }
 
   // Add title expand/collapse button
   ns.$('<div/>', {
@@ -113,7 +89,25 @@ ns.Form.prototype.remove = function () {
 ns.Form.prototype.processSemantics = function (semantics, defaultParams, metadata) {
   this.metadata = (metadata ? metadata : defaultParams.metadata || {});
 
-  this.metadataForm = new ns.MetadataForm(this, this.metadata, this.$form.children('.tree'), true);
+  if (ns.enableMetadata(this.currentLibrary)) {
+    this.metadataForm = new ns.MetadataForm(this, this.metadata, this.$form.children('.tree'), true);
+  }
+  else {
+    this.metadataForm = H5PEditor.MetadataForm.createLegacyForm(this.metadata, this.$form.children('.tree'));
+
+    // This fixes CSS overrides done by some old custom editors
+    switch (this.currentLibrary.split(' ')[0]) {
+      case 'H5P.InteractiveVideo':
+      case 'H5P.DragQuestion':
+      case 'H5P.ImageHotspotQuestion':
+        this.metadataForm.getExtraTitleField().$item.css('padding', '20px 20px 0 20px');
+        break;
+
+      case 'H5P.CoursePresentation':
+        this.metadataForm.getExtraTitleField().$item.css('padding-bottom', '1em');
+        break;
+    }
+  }
 
   // Overriding this.params with {} will lead to old content not being editable for now
   this.params = (defaultParams.params ? defaultParams.params : defaultParams);
