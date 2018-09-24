@@ -459,7 +459,7 @@ ns.Library.prototype.findLibrary = function (libraryName) {
 ns.Library.prototype.getLibraryMetadataSettings = function (library) {
   const self = this;
 
-  return library.metadata ? library.metadata : {
+  return library.metadataSettings ? library.metadataSettings : {
     disable: !ns.enableMetadata(library.uberName),
     disableExtraTitleField: false
   };
