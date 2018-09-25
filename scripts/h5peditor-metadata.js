@@ -185,6 +185,13 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
     };
 
     /**
+     * @param {$} $container
+     */
+    self.appendTo = function ($container) {
+      $wrapper.appendTo($container);
+    };
+
+    /**
      * @param {$} $element
      */
     self.appendButtonTo = function ($item) {
@@ -272,7 +279,7 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
       }
     }
 
-    $wrapper.appendTo($container);
+    self.appendTo($container);
   }
 
   // Extends the event dispatcher
