@@ -418,7 +418,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
       for (let i = 0; i < that.children.length; i++) {
         if (that.children[i].$item) {
           // Use the first field with a valid $item
-          that.metadataForm.appendButtonTo(that.children[i].$item.children('.h5p-editor-flex-wrapper'));
+          that.metadataForm.appendButtonTo(that.children[i].$item);
           break;
         }
       }
