@@ -49,6 +49,10 @@ a {
     border: 0;
     padding: 0;
   }
+  .cke_dialog_background_cover {
+    width: 100% !important;
+    height: 100% !important;
+  }
 
   .errors p,
   .h5p-errors {
@@ -154,7 +158,9 @@ a {
   .h5peditor-ckeditor-placeholder {
     color: $form-input-placeholder-color;
   }
-  select {
+  & > select,
+  h5peditor-select,
+  .field > select {
     padding: 10px 30px 10px 8px;
     font-family: "Open Sans", sans-serif;
     font-size: 16px;

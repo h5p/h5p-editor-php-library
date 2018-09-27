@@ -327,6 +327,10 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     // Remove existing CK instance.
     ns.Html.removeWysiwyg();
 
+    CKEDITOR.document.getBody = function () {
+      return new CKEDITOR.dom.element(that.$item[0]);
+    };
+
     ns.Html.current = that;
     ckConfig.width = this.offsetWidth - 8; // Avoid miscalculations
     that.ckeditor = CKEDITOR.replace(this, ckConfig);
@@ -393,13 +397,11 @@ ns.Html.prototype.appendTo = function ($wrapper) {
           var $item = ns.Html.current.$item;
 
           // Position dialog above text field
-          var itemPos = $item.offset();
-          var itemWidth = $item.width();
-          var itemHeight = $item.height();
+          var itemPos = $item[0].getBoundingClientRect();
           var dialogSize = this.getSize();
 
-          var x = itemPos.left + (itemWidth / 2) - (dialogSize.width / 2);
-          var y = itemPos.top + (itemHeight / 2) - (dialogSize.height / 2);
+          var x = itemPos.x + (itemPos.width / 2) - (dialogSize.width / 2);
+          var y = itemPos.y + (itemPos.height / 2) - (dialogSize.height / 2);
 
           this.move(x, y, true);
         };
