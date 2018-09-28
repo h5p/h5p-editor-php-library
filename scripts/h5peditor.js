@@ -339,6 +339,16 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
             var libraryTitle = document.createElement('legend');
             libraryTitle.classList.add('common-field-legend');
             libraryTitle.textContent = libraryName;
+            libraryTitle.tabIndex = '0';
+            libraryTitle.setAttribute('role', 'button');
+            libraryTitle.addEventListener('click', function () {
+              commonFieldsLibraryWrapper.classList.toggle('expanded');
+            });
+            libraryTitle.addEventListener('keypress', function (e) {
+              if (e.which === 32) {
+                commonFieldsLibraryWrapper.classList.toggle('expanded');
+              }
+            });
             commonFieldsLibraryWrapper.appendChild(libraryTitle);
 
             ns.renderableCommonFields[commonFieldMachineName].wrapper = commonFieldsLibraryWrapper;

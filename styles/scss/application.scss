@@ -1140,6 +1140,50 @@ a {
   visibility: hidden;
 }
 
+.h5peditor fieldset.common-fields-library-wrapper {
+  width: 100%;
+  padding: 0 1em 1em;
+  box-sizing: border-box;
+  height: 20px;
+  border: solid 1px #e2e5ee;
+  border-radius: 4px;
+  margin-bottom: 1em;
+
+  & > * {
+    display: none;
+  }
+  & > legend {
+    display: block;
+    cursor: pointer;
+    outline: none;
+    color: #363b42;
+    background-color: #fff;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 0.875em;
+
+    &:before {
+      font-family: "H5P";
+      content: "\e566";
+      margin-right: 0.5em;
+    }
+    &:focus:before {
+      outline: 1px dotted #666;
+    }
+  }
+
+  &.expanded {
+    height: auto;
+
+    & > * {
+      display: block;
+    }
+    & > legend:before {
+      content: "\e565";
+    }
+  }
+}
+
 @import "metadata";
 @import "metadata-popup";
 @import "metadata-changelog-widget";
