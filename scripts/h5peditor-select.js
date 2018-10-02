@@ -59,7 +59,7 @@ H5PEditor.widgets.select = H5PEditor.Select = (function (E) {
     }
     options += C.createOptionsHtml(this.field.options, this.value);
 
-    var select = '<select>' + options + '</select>';
+    var select = '<select class="h5peditor-select">' + options + '</select>';
 
     return E.createFieldMarkup(this.field, select);
   };
