@@ -26,18 +26,6 @@ a {
   text-decoration: none;
 }
 
-.overlay {
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.85);
-  z-index: 2;
-  color: white;
-}
-
 .h5peditor {
   font-size: 16px;
 
@@ -156,7 +144,7 @@ a {
   }
   select {
     padding: 10px 30px 10px 8px;
-    font-family: "Open Sans", sans-serif;
+    font-family: $font-family;
     font-size: 16px;
     border: 1px solid $form-border-color;;
     background: $form-input-color inline-image('down.png') no-repeat;
@@ -1060,7 +1048,9 @@ a {
 .h5peditor-required:after {
   content: "*";
   color: #da0001;
-  margin-left: 0.25em;
+  margin-left: 0.2em;
+  position: relative;
+  top: -0.2em;
 }
 
 /* Help CKEditor blend into the H5PEditor */
@@ -1134,7 +1124,7 @@ a {
   visibility: hidden;
 }
 
-@import "metadata";
+@import "metadata-form";
 @import "metadata-popup";
 @import "metadata-changelog-widget";
 @import "metadata-author-widget";

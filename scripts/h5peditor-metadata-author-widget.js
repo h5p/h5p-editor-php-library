@@ -26,7 +26,7 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
   var roleField = H5PEditor.findField('role', parent);
 
   var $button = $('<div class="field authorList">' +
-    '<button class="h5p-metadata-button h5p-add-author" tabindex="0">' +
+    '<button class="h5p-metadata-button inverted h5p-add-author" tabindex="0">' +
       H5PEditor.t('core', 'addAuthor') +
     '</button>' +
   '</div>').click(function (event) {
@@ -116,6 +116,7 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
 
       // The delete-button
       $('<button>', {
+        'class': 'h5p-metadata-icon-button',
         click: function () {
           if (confirm(H5PEditor.t('core', 'confirmRemoveAuthor'))) {
             removeAuthor(author);

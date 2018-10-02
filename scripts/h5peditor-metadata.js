@@ -29,21 +29,26 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
     }
 
     /**
-     * @private
+     * Open the popup
+     * @param {Object} event
      */
-    const toggle = function () {
-      $wrapper.toggleClass('h5p-open');
-      $container.closest('.h5peditor-form').find('.overlay').toggle();
-    };
+    const openPopup = function (event) {
+      var offset = event.clientY - 150;
 
-    /**
-     * @private
-     */
-    const handleMetadataButtonClick = function () {
-      toggle();
+      $('html,body').css('height', '100%');
+      $('.h5peditor').append($overlay);
+      $wrapper.css('margin-top', (offset > 20 ? offset : 20) + 'px');
 
       // Focus title field
       titleField.$input.focus();
+    };
+
+    /**
+     * Close the popup
+     */
+    const closePopup = function () {
+      $('html,body').css('height', '');
+      $overlay.detach();
     };
 
     /**
@@ -55,7 +60,7 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
         metadataAuthorWidget.addAuthor(currentUserName, 'Author');
       }
 
-      toggle();
+      closePopup();
     };
 
     /**
@@ -143,8 +148,12 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
       });
     };
 
+    const $overlay = $('<div>', {
+      'class': 'overlay h5p-metadata-popup-overlay'
+    });
+
     const $wrapper = $(
-      '<div class="h5p-editor-dialog h5p-dialog-wide h5p-metadata-wrapper">' +
+      '<div class="h5p-metadata-wrapper">' +
         '<div class="h5p-metadata-header">' +
           '<div class="h5p-title-container">' +
             '<h2>' + t('metadataSharingAndLicensingInfo') + '</h2>' +
@@ -164,12 +173,14 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
       appendTo: $wrapper
     });
 
+    $wrapper.appendTo($overlay);
+
     const $button = $(
       '<div class="h5p-metadata-button-wrapper">' +
         '<div class="h5p-metadata-button-tip"></div>' +
         '<div class="h5p-metadata-toggler">' + t('metadata') + '</div>' +
       '</div>')
-      .click(handleMetadataButtonClick);
+      .click(openPopup);
 
     /**
      * Handle ready callbacks from children
@@ -269,7 +280,7 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
       extraTitle.$item.appendTo($container);
       self.appendButtonTo(extraTitle.$item);
 
-      ns.sync(extraTitle.$input, titleField.$input);
+      H5PEditor.sync(extraTitle.$input, titleField.$input);
     }
 
     if (!parent.passReadies) {
@@ -278,8 +289,6 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
         readies[i]();
       }
     }
-
-    self.appendTo($container);
   }
 
   // Extends the event dispatcher
@@ -354,7 +363,7 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
         return list[i];
       }
     }
-  }
+  };
 
   return MetadataForm;
 })(H5P.EventDispatcher, H5P.jQuery, H5PEditor.metadataSemantics);

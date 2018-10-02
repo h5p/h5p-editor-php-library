@@ -23,9 +23,6 @@ ns.Form = function () {
   );
   this.$common = this.$form.find('.common > .fields');
 
-  // Add overlay
-  this.$form.append('<div class="overlay"></div>');
-
   // Add title expand/collapse button
   ns.$('<div/>', {
     'class': 'h5peditor-label',
