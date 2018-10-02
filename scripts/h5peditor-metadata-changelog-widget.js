@@ -225,11 +225,15 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
 
       var log = params.changes[state.currentLog];
       dateField.$input.val(log.date);
-      authorField.$input.val(log.author);
 
-      var tmp = document.createElement('div');
-      tmp.innerHTML = H5PEditor.htmlspecialchars(log.log);
-      logField.$input.val(tmp.textContent);
+      // Unescape in case it comes from backend
+      var unescaper = document.createElement('div');
+
+      unescaper.innerHTML = H5PEditor.htmlspecialchars(log.author);
+      authorField.$input.val(unescaper.textContent);
+
+      unescaper.innerHTML = H5PEditor.htmlspecialchars(log.log);
+      logField.$input.val(unescaper.textContent);
     }
   }
 
