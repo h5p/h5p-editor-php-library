@@ -562,15 +562,12 @@ ns.Library.prototype.removeChildren = function () {
   }
 
   var ancestor = ns.findAncestor(this.parent);
-
-  for (var libraryPath in ancestor.commonFields) {
-    var library = libraryPath.split('/')[0];
-
+  for (var library in ancestor.commonFields) {
     if (library === this.currentLibrary) {
       var remove = false;
 
-      for (var fieldName in ancestor.commonFields[libraryPath]) {
-        var field = ancestor.commonFields[libraryPath][fieldName];
+      for (var fieldName in ancestor.commonFields[library]) {
+        var field = ancestor.commonFields[library][fieldName];
         if (field.parents.length === 1) {
           field.instance.remove();
           remove = true;
@@ -585,7 +582,8 @@ ns.Library.prototype.removeChildren = function () {
       }
 
       if (remove) {
-        delete ancestor.commonFields[libraryPath];
+        delete ancestor.commonFields[library];
+        ns.renderableCommonFields[library].wrapper.remove();
       }
     }
   }

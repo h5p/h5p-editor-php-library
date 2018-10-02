@@ -339,6 +339,16 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
             var libraryTitle = document.createElement('legend');
             libraryTitle.classList.add('common-field-legend');
             libraryTitle.textContent = libraryName;
+            libraryTitle.tabIndex = '0';
+            libraryTitle.setAttribute('role', 'button');
+            libraryTitle.addEventListener('click', function () {
+              commonFieldsLibraryWrapper.classList.toggle('expanded');
+            });
+            libraryTitle.addEventListener('keypress', function (e) {
+              if (e.which === 32) {
+                commonFieldsLibraryWrapper.classList.toggle('expanded');
+              }
+            });
             commonFieldsLibraryWrapper.appendChild(libraryTitle);
 
             ns.renderableCommonFields[commonFieldMachineName].wrapper = commonFieldsLibraryWrapper;
@@ -393,16 +403,16 @@ ns.setCommonFieldsWrapper = function (parent, wrapper) {
  */
 ns.addCommonField = function (field, parent, params, ancestor, skipAppendTo) {
   var commonField;
-  if (ancestor.commonFields[parent.library] === undefined) {
-    ancestor.commonFields[parent.library] = {};
+
+  // Group all fields based on library name + version
+  if (ancestor.commonFields[parent.currentLibrary] === undefined) {
+    ancestor.commonFields[parent.currentLibrary] = {};
   }
 
-  ancestor.commonFields[parent.library][parent.currentLibrary] =
-    ancestor.commonFields[parent.library][parent.currentLibrary] || {};
-
-  if (ancestor.commonFields[parent.library][parent.currentLibrary][field.name] === undefined) {
+  // Field name will have to be unique for library
+  if (ancestor.commonFields[parent.currentLibrary][field.name] === undefined) {
     var widget = ns.getWidgetName(field);
-    ancestor.commonFields[parent.library][parent.currentLibrary][field.name] = {
+    ancestor.commonFields[parent.currentLibrary][field.name] = {
       instance: new ns.widgets[widget](parent, field, params[field.name], function (field, value) {
         for (var i = 0; i < commonField.setValues.length; i++) {
           commonField.setValues[i](field, value);
@@ -413,7 +423,7 @@ ns.addCommonField = function (field, parent, params, ancestor, skipAppendTo) {
     };
   }
 
-  commonField = ancestor.commonFields[parent.library][parent.currentLibrary][field.name];
+  commonField = ancestor.commonFields[parent.currentLibrary][field.name];
   commonField.parents.push(ns.findLibraryAncestor(parent));
   commonField.setValues.push(function (field, value) {
     if (value === undefined) {
