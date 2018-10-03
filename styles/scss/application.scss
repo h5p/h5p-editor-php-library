@@ -638,6 +638,7 @@ a {
   .libwrap {
     margin-top: $padding;
 
+    &.no-margin, 
     &:empty {
       margin-top: 0;
     }

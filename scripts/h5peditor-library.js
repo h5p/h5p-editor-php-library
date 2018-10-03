@@ -215,6 +215,8 @@ ns.Library.prototype.canPaste = function (clipboard) {
  * Hide fields that are not required.
  */
 ns.Library.prototype.hide = function () {
+  this.$label.hide();
+  this.$libraryWrapper.addClass('no-margin');
   this.hideLibrarySelector();
   this.hideCopyPaste();
 };
