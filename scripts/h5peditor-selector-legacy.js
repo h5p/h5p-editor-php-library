@@ -18,8 +18,9 @@ ns.SelectorLegacy = function (libraries, selectedLibrary, changeLibraryDialog) {
 
     // Never deny editing existing content
     // For new content deny old or restricted libs.
-    if (this.defaultLibrary === libraryName ||
-       ((library.restricted === undefined || !library.restricted)
+    if (selectedLibrary === libraryName ||
+      ((library.restricted === undefined || !library.restricted) &&
+      library.isOld !== true
       )
     ) {
       options += '<option value="' + libraryName + '"';
@@ -32,7 +33,7 @@ ns.SelectorLegacy = function (libraries, selectedLibrary, changeLibraryDialog) {
       if (library.exampleUrl !== undefined) {
         options += ' data-example-url="' + library.exampleUrl + '"';
       }
-      options += '>' + library.title + (library.isOld===true ? ' (' + libraryName.split(' ')[1] + ')' : '') + '</option>';
+      options += '>' + library.title + (library.isOld===true ? ' (deprecated)' : '') + '</option>';
     }
   }
 
