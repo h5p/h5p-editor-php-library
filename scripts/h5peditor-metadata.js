@@ -280,7 +280,7 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
       extraTitle.$item.appendTo($container);
       self.appendButtonTo(extraTitle.$item);
 
-      H5PEditor.sync(extraTitle.$input, titleField.$input);
+      linkFields(titleField, extraTitle);
     }
 
     if (!parent.passReadies) {
@@ -363,6 +363,49 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
         return list[i];
       }
     }
+  };
+
+  /**
+   * Automatically sync all the given fields when one value changes.
+   * Note: Currently only supports H5PEditor.Text field widgets.
+   *
+   * @private
+   * @param {...*} var_args
+   */
+  const linkFields = function (var_args) {
+    const fields = arguments;
+
+    let preventLoop;
+
+    /**
+     * Change event handler for all fields
+     * @private
+     * @param {*} value
+     */
+    const updateAllFields = function (value) {
+      if (preventLoop) {
+        return;
+      }
+
+      // Do not run updates for this update
+      preventLoop = true;
+
+      // Apply value to all fields
+      for (let i = 0; i < fields.length; i++) {
+        fields[i].$input.val(value);
+      }
+
+      // Done
+      preventLoop = false;
+    };
+
+    // Add change event listeners
+    for (let i = 0; i < fields.length; i++) {
+      fields[i].change(updateAllFields);
+    }
+
+    // Use initial value from first field
+    updateAllFields(fields[0].$input.val());
   };
 
   return MetadataForm;

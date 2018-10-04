@@ -1087,65 +1087,6 @@ ns.createButton = function (id, title, handler, displayTitle) {
 };
 
 /**
- * Sync two input fields. Empty fields will take value of the other or be set to ''.
- * master fields takes precedence if both are set already.
- *
- * @param {jQuery} $masterField - Master field that holds the value for initialization.
- * @param {jQuery} $slaveField - Slave field to be synced with.
- * @param {object} [options] - Options.
- * @param {string} [options.defaultText] - Default text if fields are empty.
- * @param {string} [options.listenerName] - Listener name.
- * @param {function} [options.callback] - Callback when a sync is executed. Returns new string.
- */
-ns.sync = function ($masterField, $slaveField, options) {
-  if (!$masterField || $masterField.length === 0 || !$slaveField || $slaveField.length === 0) {
-    return;
-  }
-  options = options || {};
-
-  const listenerName = options.listenerName || 'input.metadata-sync';
-
-  // Remove old sync
-  $masterField.off(listenerName);
-  $slaveField.off(listenerName);
-
-  let valueSet = '';
-
-  // Initialize fields
-  if ($masterField.val()) {
-    valueSet = $masterField.val();
-    $slaveField.val(valueSet).trigger('change');
-  }
-  else if ($slaveField.val()) {
-    valueSet = $slaveField.val();
-    $masterField.val(valueSet).trigger('change');
-  }
-  else if (options.defaultText) {
-    valueSet = options.defaultText || '';
-    $masterField.val(valueSet).trigger('change');
-    $slaveField.val(valueSet).trigger('change');
-  }
-
-  // Keep fields in sync
-  $masterField.on(listenerName, function () {
-    $slaveField.val($masterField.val()).trigger('change');
-    if (options.callback) {
-      options.callback($masterField.val());
-    }
-  });
-  $slaveField.on(listenerName, function () {
-    $masterField.val($slaveField.val()).trigger('change');
-    if (options.callback) {
-      options.callback($slaveField.val());
-    }
-  });
-
-  if (options.callback) {
-    options.callback(valueSet);
-  }
-};
-
-/**
  * Check if the current library is entitled for the metadata button. True by default.
  *
  * It will probably be okay to remove this check at some point in time when
