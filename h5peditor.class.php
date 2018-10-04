@@ -2,11 +2,18 @@
 
 class H5peditor {
 
+  private static $hasWYSIWYGEditor = array(
+    'H5P.CoursePresentation',
+    'H5P.InteractiveVideo',
+    'H5P.DragQuestion'
+  );
+
   public static $styles = array(
     'libs/darkroom.css',
     'styles/css/h5p-hub-client.css',
     'styles/css/fonts.css',
-    'styles/css/application.css'
+    'styles/css/application.css',
+    'styles/css/libs/zebra_datepicker.min.css'
   );
   public static $scripts = array(
     'scripts/h5p-hub-client.js',
@@ -36,6 +43,10 @@ class H5peditor {
     'scripts/h5peditor-dimensions.js',
     'scripts/h5peditor-coordinates.js',
     'scripts/h5peditor-none.js',
+    'scripts/h5peditor-metadata.js',
+    'scripts/h5peditor-metadata-author-widget.js',
+    'scripts/h5peditor-metadata-changelog-widget.js',
+    'scripts/h5peditor-pre-save.js',
     'ckeditor/ckeditor.js',
   );
   private $h5p, $storage;
@@ -99,7 +110,8 @@ class H5peditor {
             'minorVersion' => $devLibs[$lid]['minorVersion'],
             'runnable' => $devLibs[$lid]['runnable'],
             'restricted' => $libraries[$i]->restricted,
-            'tutorialUrl' => $libraries[$i]->tutorialUrl
+            'tutorialUrl' => $libraries[$i]->tutorialUrl,
+            'metadataSettings' => $devLibs[$lid]['metadataSettings'],
           );
           if ($isOld) {
             $libraries[$i]->isOld = TRUE;
@@ -108,7 +120,7 @@ class H5peditor {
       }
 
       // Some libraries rely on an LRS to work and must be enabled manually
-      if ($libraries[$i]->name === 'H5P.Questionnaire' &&
+      if (in_array($libraries[$i]->name, array('H5P.Questionnaire', 'H5P.FreeTextQuestion')) &&
           !$this->h5p->h5pF->getOption('enable_lrs_content_types')) {
         $libraries[$i]->restricted = TRUE;
       }
@@ -127,6 +139,10 @@ class H5peditor {
    * @param array $oldParameters
    */
   public function processParameters($content, $newLibrary, $newParameters, $oldLibrary = NULL, $oldParameters = NULL) {
+    // Old core versions didn't have params wrapped together with metadata
+    if (isset($newParameters->params) && isset($newParameters->metadata)) {
+      $newParameters = $newParameters->params;
+    }
     $newFiles = array();
     $oldFiles = array();
 
@@ -311,6 +327,17 @@ class H5peditor {
     $dependencies = array();
     $this->h5p->findLibraryDependencies($dependencies, $library);
 
+    // Load addons for wysiwyg editors
+    if (in_array($machineName, self::$hasWYSIWYGEditor)) {
+      $addons = $this->h5p->h5pF->loadAddons();
+      foreach ($addons as $addon) {
+        $key = 'editor-' . $addon['machineName'];
+        $dependencies[$key]['weight'] = sizeof($dependencies)+1;
+        $dependencies[$key]['type'] = 'editor';
+        $dependencies[$key]['library'] = $addon;
+      }
+    }
+
     // Order dependencies by weight
     $orderedDependencies = array();
     for ($i = 1, $s = count($dependencies); $i <= $s; $i++) {
@@ -353,6 +380,11 @@ class H5peditor {
 
     // Get list of JS and CSS files that belongs to the dependencies
     $files = $this->h5p->getDependenciesFiles($libraries, $prefix);
+    $libraryName = H5PCore::libraryToString(compact('machineName', 'majorVersion', 'minorVersion'), true);
+    if( $this->hasPresave($libraryName) === true ){
+      $library = $this->h5p->loadLibrary($machineName, $majorVersion, $minorVersion);
+      $this->addPresaveFile($files, $library, $prefix);
+    }
     $this->storage->alterLibraryFiles($files, $libraries);
 
     // Restore asset aggregation setting
@@ -366,11 +398,15 @@ class H5peditor {
       foreach ($files['scripts'] as $script) {
         if (preg_match('/:\/\//', $script->path) === 1) {
           // External file
-          $libraryData->javascript[$script->path . $script->version] = "\n" . file_get_contents($script->path);
+          $libraryData->javascript[] = $script->path . $script->version;
         }
         else {
           // Local file
-          $libraryData->javascript[$url . $script->path . $script->version] = "\n" . $this->h5p->fs->getContent($fileDir . $script->path);
+          $path = $url . $script->path;
+          if (!isset($this->h5p->h5pD)) {
+            $path .= $script->version;
+          }
+          $libraryData->javascript[] = $path;
         }
       }
     }
@@ -380,24 +416,32 @@ class H5peditor {
       foreach ($files['styles'] as $css) {
         if (preg_match('/:\/\//', $css->path) === 1) {
           // External file
-          $libraryData->css[$css->path . $css->version] = file_get_contents($css->path);
+          $libraryData->css[] = $css->path . $css->version;
         }
         else {
           // Local file
-          H5peditor::buildCssPath(NULL, $url . dirname($css->path) . '/');
-          $libraryData->css[$url . $css->path . $css->version] = preg_replace_callback('/url\([\'"]?(?![a-z]+:|\/+)([^\'")]+)[\'"]?\)/i', 'H5peditor::buildCssPath', $this->h5p->fs->getContent($fileDir . $css->path));
+          $path = $url . $css->path;
+          if (!isset($this->h5p->h5pD)) {
+            $path .= $css->version;
+          }
+          $libraryData->css[] = $path;
         }
       }
     }
 
+    $translations = array();
     // Add translations for libraries.
     foreach ($libraries as $library) {
-      $language = $this->getLibraryLanguage($library['machineName'], $library['majorVersion'], $library['minorVersion'], $languageCode);
-      if ($language !== NULL) {
-        $lang                                = '; H5PEditor.language["' . $library['machineName'] . '"] = ' . $language . ';';
-        $libraryData->javascript[md5($lang)] = $lang;
+      if (empty($library['semantics'])) {
+        $translation = $this->getLibraryLanguage($library['machineName'], $library['majorVersion'], $library['minorVersion'], $languageCode);
+
+        if ($translation !== NULL) {
+          $translations[$library['machineName']] = json_decode($translation);
+        }
       }
     }
+
+    $libraryData->translations = $translations;
 
     return $libraryData;
   }
@@ -635,10 +679,55 @@ class H5peditor {
     // Restrict LRS dependent content
     if (!$this->h5p->h5pF->getOption('enable_lrs_content_types')) {
       foreach ($cached_libraries as &$lib) {
-        if ($lib['machineName'] === 'H5P.Questionnaire') {
+        if (in_array($lib['machineName'], array('H5P.Questionnaire', 'H5P.FreeTextQuestion'))) {
           $lib['restricted'] = TRUE;
         }
       }
     }
+  }
+
+  /**
+   * Determine if a library has a presave.js file in the root folder
+   *
+   * @param string $libraryName
+   * @return bool
+   */
+  public function hasPresave($libraryName){
+    if( isset($this->h5p->h5pD) ){
+      $parsedLibrary = H5PCore::libraryFromString($libraryName);
+      if($parsedLibrary !== false){
+        $machineName = $parsedLibrary['machineName'];
+        $majorVersion = $parsedLibrary['majorVersion'];
+        $minorVersion = $parsedLibrary['minorVersion'];
+        $library = $this->h5p->h5pD->getLibrary($machineName, $majorVersion, $minorVersion);
+        if( !is_null($library)){
+          return $this->h5p->fs->hasPresave($libraryName, $library['path']);
+        }
+      }
+    }
+    return $this->h5p->fs->hasPresave($libraryName);
+  }
+
+  /**
+   * Adds the path to the presave.js file to the list of dependency assets for the library
+   *
+   * @param array $assets
+   * @param array $library
+   * @param string $prefix
+   */
+  public function addPresaveFile(&$assets, $library, $prefix = ''){
+    $path = 'libraries' . DIRECTORY_SEPARATOR . H5PCore::libraryToString($library, true);
+    if( array_key_exists('path', $library)){
+      $path = $library['path'];
+    }
+    $version = "?ver={$library['majorVersion']}.{$library['minorVersion']}.{$library['patchVersion']}";
+    if( array_key_exists('version', $library) ){
+      $version = $library['version'];
+    }
+
+    $assets['scripts'][] = (object) array(
+      'path' => $prefix . DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR . 'presave.js',
+      'version' => $version,
+    );
   }
 }

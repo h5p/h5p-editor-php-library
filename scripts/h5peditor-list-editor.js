@@ -1,6 +1,4 @@
-/** @namespace H5PEditor */
-var H5PEditor = H5PEditor || {};
-
+/* global ns */
 H5PEditor.ListEditor = (function ($) {
 
   /**
@@ -140,7 +138,7 @@ H5PEditor.ListEditor = (function ($) {
        *
        * @private
        */
-      var up = function (event) {
+      var up = function () {
 
         // Stop listening for mouse move events
         H5P.$window
@@ -155,8 +153,7 @@ H5PEditor.ListEditor = (function ($) {
             'user-select': '',
             '-ms-user-select': ''
           })
-          .attr('unselectable', 'off')
-          [0].onselectstart = H5P.$body[0].ondragstart = null;
+          .attr('unselectable', 'off')[0].onselectstart = H5P.$body[0].ondragstart = null;
 
         if (!mouseDownAt) {
           // Not your regular click, we have been moving
@@ -201,8 +198,7 @@ H5PEditor.ListEditor = (function ($) {
             'user-select': 'none',
             '-ms-user-select': 'none'
           })
-          .attr('unselectable', 'on')
-          [0].onselectstart = H5P.$body[0].ondragstart = function () {
+          .attr('unselectable', 'on')[0].onselectstart = H5P.$body[0].ondragstart = function () {
             return false;
           };
       };
@@ -309,7 +305,7 @@ H5PEditor.ListEditor = (function ($) {
       // Append item to list
       $item.appendTo($list);
 
-      if (item instanceof H5PEditor.Group) {
+      if (item instanceof H5PEditor.Group && item.field.expanded !== false) {
         // Good UX: automatically expand groups if not explicitly disabled by semantics
         item.expand();
       }

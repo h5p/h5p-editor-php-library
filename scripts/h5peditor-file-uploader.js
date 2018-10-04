@@ -59,7 +59,7 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
      */
     self.uploadData = function (data) {
       if (data === undefined) {
-        throw('Missing data.');
+        throw ('Missing data.');
       }
       return upload(data);
     };
@@ -269,7 +269,8 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
 
       if (files !== undefined) {
         $file.prop('files', files);
-      } else if (data !== undefined) {
+      }
+      else if (data !== undefined) {
         // Upload given data
         $data.val(data);
         upload();
