@@ -1,5 +1,12 @@
 .h5peditor-copypaste-wrap {
   float: right;
+  margin-bottom: 14px;
+}
+.h5peditor-copypaste-wrap.hidden {
+  display: none;
+}
+.h5peditor-clearfix {
+  clear: both;
 }
 
 .h5peditor-paste-button,

@@ -948,7 +948,7 @@ ns.createCopyPasteButtons = function () {
   return '<div class="h5peditor-copypaste-wrap">' +
            '<button class="h5peditor-copy-button disabled" title="' + H5PEditor.t('core', 'copyToClipboard') + '">' + ns.t('core', 'copyButton') + '</button>' +
            '<button class="h5peditor-paste-button disabled" title="' + H5PEditor.t('core', 'pasteFromClipboard') + '">' + ns.t('core', 'pasteButton') + '</button>' +
-         '</div>';
+         '</div><div class="h5peditor-clearfix"></div>';
 };
 
 /**

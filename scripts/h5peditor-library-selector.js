@@ -182,9 +182,9 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
     var $buttons = ns.$(ns.createCopyPasteButtons()).appendTo($element);
 
     // Hide copy paste until library is selected:
-    $buttons.hide();
+    $buttons.addClass('hidden');
     self.on('editorloaded', function () {
-      $buttons.show();
+      $buttons.removeClass('hidden');
     });
 
     this.$copyButton = $buttons.find('.h5peditor-copy-button').click(function () {
