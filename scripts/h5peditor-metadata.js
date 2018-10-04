@@ -392,7 +392,7 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
 
       // Apply value to all fields
       for (let i = 0; i < fields.length; i++) {
-        fields[i].$input.val(value);
+        fields[i].$input.val(value).change();
       }
 
       // Done
