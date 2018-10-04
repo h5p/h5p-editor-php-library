@@ -385,7 +385,7 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
      * @param {*} value
      */
     const updateAllFields = function (value) {
-      if (preventLoop) {
+      if (preventLoop || value === undefined) {
         return;
       }
 
@@ -407,7 +407,9 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
     }
 
     // Use initial value from first field
-    updateAllFields(fields[0].value);
+    if (fields[0].value !== undefined) {
+      updateAllFields(fields[0].value);
+    }
   };
 
   return MetadataForm;
