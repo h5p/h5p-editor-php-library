@@ -299,12 +299,14 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
     const legacyForm = {
       passReadies: false,
       getExtraTitleField: function () {
-        return H5PEditor.findField('extraTitle', legacyForm);
+        return H5PEditor.findField('title', legacyForm);
       }
     };
 
     // Generate the form
-    H5PEditor.processSemanticsChunk([getExtraTitleFieldSemantics()], params, $container, legacyForm);
+    const field = getExtraTitleFieldSemantics();
+    field.name = 'title';
+    H5PEditor.processSemanticsChunk([field], params, $container, legacyForm);
 
     return legacyForm;
   };
