@@ -407,7 +407,7 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
     }
 
     // Use initial value from first field
-    updateAllFields(fields[0].$input.val());
+    updateAllFields(fields[0].value);
   };
 
   return MetadataForm;
