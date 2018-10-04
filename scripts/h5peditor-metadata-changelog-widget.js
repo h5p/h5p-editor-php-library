@@ -26,10 +26,9 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
 
   var $cancelButton = $('<button>', {
     'class': 'h5p-metadata-button h5p-cancel',
-    role: 'button',
+    type: 'button',
     text: H5PEditor.t('core', 'cancel'),
     click: function (event) {
-      event.preventDefault();
       resetForm();
       state.editing = false;
       state.currentLog = undefined;
@@ -39,10 +38,9 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
 
   var $createLogButton = $('<button>', {
     'class': 'h5p-metadata-button inverted h5p-log-change',
-    role: 'button',
+    type: 'button',
     text: H5PEditor.t('core', 'logThisChange'),
     click: function (event) {
-      event.preventDefault();
       var entry = validateForm(false);
 
       if (!entry.date || !entry.author || !entry.log) {
@@ -66,11 +64,9 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
 
   var $addLogButton = $('<button>', {
     'class': 'h5p-metadata-button inverted h5p-add-author',
-    role: 'button',
-    tabindex: 0,
+    type: 'button',
     text: H5PEditor.t('core', 'addNewChange'),
     click: function (event) {
-      event.preventDefault();
       state.editing = true;
       state.newLog = false;
       resetForm();
@@ -159,13 +155,11 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
         $descriptionWrapper.append(authorWrapper);
 
         var logButtons = $('<div class="h5p-metadata-log-buttons">' +
-         '<button class="h5p-metadata-edit h5p-metadata-icon-button"></button>' +
-         '<button class="h5p-metadata-delete h5p-metadata-icon-button"></button>' +
+         '<button type="button" class="h5p-metadata-edit h5p-metadata-icon-button"></button>' +
+         '<button type="button" class="h5p-metadata-delete h5p-metadata-icon-button"></button>' +
         '</div>');
 
         logButtons.find('.h5p-metadata-delete').click(function (event) {
-          event.preventDefault();
-
           // Ask for confirmation
           if (confirm(H5PEditor.t('core', 'confirmDeleteChangeLog'))) {
             var wrapper = this.closest('.h5p-metadata-log');
@@ -175,7 +169,6 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
         });
 
         logButtons.find('.h5p-metadata-edit').click(function (event) {
-          event.preventDefault();
           var wrapper = this.closest('.h5p-metadata-log');
           var index = $(wrapper).data('index');
 

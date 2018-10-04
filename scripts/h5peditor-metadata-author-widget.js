@@ -26,11 +26,10 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
   var roleField = H5PEditor.findField('role', parent);
 
   var $button = $('<div class="field authorList">' +
-    '<button class="h5p-metadata-button inverted h5p-add-author" tabindex="0">' +
+    '<button type="button" class="h5p-metadata-button inverted h5p-add-author">' +
       H5PEditor.t('core', 'addAuthor') +
     '</button>' +
-  '</div>').click(function (event) {
-    event.preventDefault();
+  '</div>').children('button').click(function (event) {
 
     // Temporarily set name as mandatory to get the error messages only when
     // clicking the Add Author button
@@ -53,7 +52,7 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
     }
 
     addAuthor(name, role);
-  });
+  }).end();
   $authorData.append($button);
 
   var authorListWrapper = $('<div class="h5p-author-list-wrapper"><ul class="h5p-author-list"></ul></div>');
@@ -116,6 +115,7 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
 
       // The delete-button
       $('<button>', {
+        type: 'button',
         'class': 'h5p-metadata-icon-button',
         click: function () {
           if (confirm(H5PEditor.t('core', 'confirmRemoveAuthor'))) {
