@@ -376,7 +376,6 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
    */
   const linkFields = function (var_args) {
     const fields = arguments;
-    const escaper = document.createElement('div');
 
     let preventLoop;
 
@@ -394,9 +393,8 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
       preventLoop = true;
 
       // Apply value to all fields
-      escaper.innerHTML = value;
       for (let i = 0; i < fields.length; i++) {
-        fields[i].$input.val(escaper.innerText).change();
+        fields[i].$input.val(value).change();
       }
 
       // Done
@@ -410,7 +408,9 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
 
     // Use initial value from first field
     if (fields[0].value !== undefined) {
-      updateAllFields(fields[0].value);
+      const escaper = document.createElement('div');
+      escaper.innerHTML = fields[0].value;
+      updateAllFields(escaper.innerText);
     }
   };
 
