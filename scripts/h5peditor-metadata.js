@@ -376,6 +376,7 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
    */
   const linkFields = function (var_args) {
     const fields = arguments;
+    const escaper = document.createElement('div');
 
     let preventLoop;
 
@@ -393,8 +394,9 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
       preventLoop = true;
 
       // Apply value to all fields
+      escaper.innerHTML = value;
       for (let i = 0; i < fields.length; i++) {
-        fields[i].$input.val(value).change();
+        fields[i].$input.val(escaper.innerText).change();
       }
 
       // Done
