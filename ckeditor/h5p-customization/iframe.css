@@ -1,4 +1,6 @@
-.cke_editable table
+.cke_editable table,
+.cke_editable th,
+.cke_editable td
 {
 	border-style: solid;
 }
