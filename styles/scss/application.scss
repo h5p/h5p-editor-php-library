@@ -638,7 +638,7 @@ a {
   .libwrap {
     margin-top: $padding;
 
-    &.no-margin, 
+    &.no-margin,
     &:empty {
       margin-top: 0;
     }
@@ -1073,6 +1073,9 @@ a {
 .h5peditor .cke_toolgroup,
 .h5peditor .cke_combo_button {
   border: 1px solid #f5f5f5;
+}
+.h5peditor .ckeditor table {
+  border-style: solid;
 }
 
 /* The show important description button */

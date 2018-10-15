@@ -333,6 +333,10 @@ ns.Html.prototype.appendTo = function ($wrapper) {
 
     ns.Html.current = that;
     ckConfig.width = this.offsetWidth - 8; // Avoid miscalculations
+
+    // Add custom styles for CKEditor iframe
+    ckConfig.contentsCss = [CKEDITOR.basePath + 'contents.css', CKEDITOR.basePath + 'h5p-customization/iframe.css'];
+
     that.ckeditor = CKEDITOR.replace(this, ckConfig);
 
     that.ckeditor.on('focus', function () {
