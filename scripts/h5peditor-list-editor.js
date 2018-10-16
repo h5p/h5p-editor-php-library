@@ -64,6 +64,38 @@ H5PEditor.ListEditor = (function ($) {
     };
 
     /**
+     * Default confirm handler.
+     *
+     * @param {Object} item Content parameters
+     * @param {number} id Index of element being removed
+     * @param {Object} buttonOffset Delete button offset, useful for positioning dialog
+     * @param {function} confirm Run to confirm delete
+     */
+    self.defaultConfirmHandler = (item, id, buttonOffset, confirm) => {
+      // Create default confirmation dialog for removing list item
+      const confirmRemovalDialog = new H5P.ConfirmationDialog({
+        dialogText: H5PEditor.t('core', 'confirmRemoval', {':type': entity})
+      }).appendTo(document.body);
+
+      // Remove list item on confirmation
+      confirmRemovalDialog.on('confirmed', confirm);
+      confirmRemovalDialog.show(buttonOffset.top);
+    };
+
+    // Use the default confirmation handler by default
+    let confirmationHandler = self.defaultConfirmHandler;
+
+    /**
+     * Set a custom confirmation handler callback (instead of the default dialog)
+     *
+     * @public
+     * @param {function} confirmHandler
+     */
+    self.setConfirmHandler = function (handler) {
+      confirmHandler = handler;
+    };
+
+    /**
      * Adds UI items to the widget.
      *
      * @public
@@ -73,17 +105,6 @@ H5PEditor.ListEditor = (function ($) {
       var $placeholder, mouseDownAt;
       var $item = $('<li/>', {
         'class' : 'h5p-li',
-      });
-
-      // Create confirmation dialog for removing list item
-      var confirmRemovalDialog = new H5P.ConfirmationDialog({
-        dialogText: H5PEditor.t('core', 'confirmRemoval', {':type': entity})
-      }).appendTo(document.body);
-
-      // Remove list item on confirmation
-      confirmRemovalDialog.on('confirmed', function () {
-        list.removeItem($item.index());
-        $item.remove();
       });
 
       /**
@@ -263,7 +284,10 @@ H5PEditor.ListEditor = (function ($) {
       H5PEditor.createButton('order-down', H5PEditor.t('core', 'orderItemDown'), moveItemDown).appendTo($orderGroup);
 
       H5PEditor.createButton('remove', H5PEditor.t('core', 'removeItem'), function () {
-        confirmRemovalDialog.show($(this).offset().top);
+        confirmHandler(item, $item.index(), $(this).offset(), function () {
+          list.removeItem($item.index());
+          $item.remove();
+        });
       }).appendTo($listActions);
 
       // Append new field item to content wrapper
