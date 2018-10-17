@@ -83,7 +83,8 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     }
     if (iframe.clientHeight === iframe.contentDocument.body.scrollHeight &&
       (iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight ||
-       iframe.contentDocument.body.scrollHeight - 1 === iframe.contentWindow.document.body.clientHeight)) {
+       iframe.contentDocument.body.scrollHeight - 1 === iframe.contentWindow.document.body.clientHeight ||
+       iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight - 1)) {
       return; // Do not resize unless page and scrolling differs
       // Note: ScrollHeight may be 1px larger in some cases(Edge) where the actual height is a fraction.
     }
