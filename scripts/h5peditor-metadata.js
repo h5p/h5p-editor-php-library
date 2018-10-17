@@ -78,7 +78,7 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
 
       // Set the default title
       if (!params.title && populateTitleField) {
-        titleField.$input.val(H5PEditor.LibraryListCache.getDefaultTitle(parent.currentLibrary));
+        titleField.$input.val(H5PEditor.LibraryListCache.getDefaultTitle(parent.currentLibrary)).change();
       }
     };
 
