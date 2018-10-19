@@ -71,7 +71,7 @@ H5PEditor.ListEditor = (function ($) {
      * @param {Object} buttonOffset Delete button offset, useful for positioning dialog
      * @param {function} confirm Run to confirm delete
      */
-    self.defaultConfirmHandler = (item, id, buttonOffset, confirm) => {
+    self.defaultConfirmHandler = function (item, id, buttonOffset, confirm) {
       // Create default confirmation dialog for removing list item
       const confirmRemovalDialog = new H5P.ConfirmationDialog({
         dialogText: H5PEditor.t('core', 'confirmRemoval', {':type': entity})
