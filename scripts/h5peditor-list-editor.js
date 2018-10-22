@@ -83,7 +83,7 @@ H5PEditor.ListEditor = (function ($) {
     };
 
     // Use the default confirmation handler by default
-    let confirmationHandler = self.defaultConfirmHandler;
+    let confirmHandler = self.defaultConfirmHandler;
 
     /**
      * Set a custom confirmation handler callback (instead of the default dialog)
