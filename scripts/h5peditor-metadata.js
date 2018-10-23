@@ -60,6 +60,12 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
         metadataAuthorWidget.addAuthor(currentUserName, 'Author');
       }
 
+      // Can't send undefined, in case a version already has been saved
+      // This might happen when changing licenses
+      if (params.licenseVersion === undefined) {
+        params.licenseVersion = '';
+      }
+
       closePopup();
     };
 
