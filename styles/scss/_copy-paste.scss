@@ -1,5 +1,8 @@
 .h5peditor-copypaste-wrap {
   float: right;
+}
+.h5peditor > .h5peditor-copypaste-wrap {
+  /* Make sure buttons are visible when Tutorial and Example is missing */
   margin-bottom: 14px;
 }
 .h5peditor-copypaste-wrap.hidden {
@@ -53,9 +56,9 @@
   color: #fff;
   border: solid 1px transparent;
   padding: 0 0.75em 0.5em 0.75em;
-  background: initial;
-  line-height: initial;
-  height: initial;
+  background: transparent;
+  line-height: 1;
+  height: auto;
   margin-top: 0.5em;
   margin-right: 0.5em;
 
