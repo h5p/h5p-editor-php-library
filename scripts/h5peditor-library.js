@@ -585,7 +585,7 @@ ns.Library.prototype.removeChildren = function () {
 
       if (remove) {
         delete ancestor.commonFields[library];
-        ns.renderableCommonFields[library].wrapper.remove();
+        ns.$(ns.renderableCommonFields[library].wrapper).remove();
       }
     }
   }
