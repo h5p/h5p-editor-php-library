@@ -28,7 +28,7 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
     'class': 'h5p-metadata-button h5p-cancel',
     type: 'button',
     text: H5PEditor.t('core', 'cancel'),
-    click: function (event) {
+    click: function () {
       resetForm();
       state.editing = false;
       state.currentLog = undefined;
@@ -40,7 +40,7 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
     'class': 'h5p-metadata-button inverted h5p-log-change',
     type: 'button',
     text: H5PEditor.t('core', 'logThisChange'),
-    click: function (event) {
+    click: function () {
       var entry = validateForm(false);
 
       if (!entry.date || !entry.author || !entry.log) {
@@ -66,7 +66,7 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
     'class': 'h5p-metadata-button inverted h5p-add-author',
     type: 'button',
     text: H5PEditor.t('core', 'addNewChange'),
-    click: function (event) {
+    click: function () {
       state.editing = true;
       state.newLog = false;
       resetForm();
@@ -159,17 +159,17 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
          '<button type="button" class="h5p-metadata-delete h5p-metadata-icon-button"></button>' +
         '</div>');
 
-        logButtons.find('.h5p-metadata-delete').click(function (event) {
+        logButtons.find('.h5p-metadata-delete').click(function () {
           // Ask for confirmation
           if (confirm(H5PEditor.t('core', 'confirmDeleteChangeLog'))) {
-            var wrapper = this.closest('.h5p-metadata-log');
+            var wrapper = $(this).closest('.h5p-metadata-log');
             var index = $(wrapper).data('index');
             deleteLog(index);
           }
         });
 
-        logButtons.find('.h5p-metadata-edit').click(function (event) {
-          var wrapper = this.closest('.h5p-metadata-log');
+        logButtons.find('.h5p-metadata-edit').click(function () {
+          var wrapper = $(this).closest('.h5p-metadata-log');
           var index = $(wrapper).data('index');
 
           editLog(index);
