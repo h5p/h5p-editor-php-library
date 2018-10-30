@@ -167,7 +167,7 @@ H5PEditor.language.core = {
  metadataSharingAndLicensingInfo: 'Metadatuak (partekatze eta lizentziaren gaineko informazioa)',
  fillInTheFieldsBelow : 'Bete azpiko eremuetan',
  saveMetadata: 'Gorde metadatuak',
- addAuthor: 'Gehitu egilea',
+ addAuthor: 'Save author',
  confirmRemoveAuthor: 'Ziur zaude egile hori kendu nahi duzula?',
  addNewChange: 'Gehitu aldaketa berri bat',
  confirmDeleteChangeLog: 'Ziur zaude aldketaren erregistro sarrera hau kendu nahi duzula?',
