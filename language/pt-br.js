@@ -165,7 +165,7 @@ H5PEditor.language.core = {
   metadataSharingAndLicensingInfo: 'Metadados (informações de compartilhamento e licenciamento)',
   fillInTheFieldsBelow: 'Preencha os campos abaixo',
   saveMetadata: 'Salvar metadados',
-  addAuthor: 'Adicionar autor',
+  addAuthor: 'Save author',
   confirmRemoveAuthor: 'Are you sure you would like to remove this author?',
   addNewChange: 'Adicionar nova alteração',
   confirmDeleteChangeLog: 'Are you sure you would like to delete this change log entry?',

@@ -165,7 +165,7 @@ H5PEditor.language.core = {
   metadataSharingAndLicensingInfo: 'Üstveri (Metadata) (paylaşma ve lisanslama bilgisi)',
   fillInTheFieldsBelow: 'Aşağıdaki alanları doldurunuz',
   saveMetadata: 'Üstveriyi (metadata) kaydet',
-  addAuthor: 'Yazar ekle',
+  addAuthor: 'Save author',
   confirmRemoveAuthor: 'Bu yazarı kaldırmak istediğinizden emin misiniz?',
   addNewChange: 'Yeni değişiklik ekle',
   confirmDeleteChangeLog: 'Bu değişim log kaydını silmek istediğinizden emin misiniz?',

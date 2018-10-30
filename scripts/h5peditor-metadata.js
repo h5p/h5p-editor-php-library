@@ -57,7 +57,7 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
     const handleSaveButtonClick = function () {
       // If license selected, and there's no authors, add the current one
       if (params.license !== 'U' && params.authors.length === 0) {
-        metadataAuthorWidget.addAuthor(currentUserName, 'Author');
+        metadataAuthorWidget.addDefaultAuthor(currentUserName, 'Author');
       }
 
       ['licenseVersion', 'licenseExtras', 'source', 'yearFrom', 'yearTo', 'authorComments'].forEach(function (name) {
