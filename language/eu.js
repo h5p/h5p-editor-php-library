@@ -171,6 +171,7 @@ H5PEditor.language.core = {
  confirmRemoveAuthor: 'Ziur zaude egile hori kendu nahi duzula?',
  addNewChange: 'Gehitu aldaketa berri bat',
  confirmDeleteChangeLog: 'Ziur zaude aldketaren erregistro sarrera hau kendu nahi duzula?',
+ changelogDescription: 'Some licenses require that changes made to the original work, or derivatives are logged and displayed. You may log your changes here for licensing reasons or just to allow yourself and others to keep track of the changes made to this content.',
  logThisChange: 'Erregistratu aldaketa',
  newChangeHasBeenLogged: 'Aldaketa berri bat erregistratu daN',
  loggedChanges: 'Erregistratutako aldaketak',
