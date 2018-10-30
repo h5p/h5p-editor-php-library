@@ -24,6 +24,13 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
   var $form = changeField.$content;
   var $formFields = dateField.$item.add(authorField.$item).add(logField.$item);
 
+  // Add description
+  var $description = $('<div>', {
+    'class': 'h5peditor-field-description',
+    'text': H5PEditor.t('core', 'changelogDescription')
+  });
+  $form.append($description);
+
   var $cancelButton = $('<button>', {
     'class': 'h5p-metadata-button h5p-cancel',
     type: 'button',
@@ -102,6 +109,7 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
 
   function render() {
     $newLogMessage.toggle(state.newLog);
+    $description.toggle(!state.editing);
     $addLogButton.toggle(!state.editing);
     $cancelButton.toggle(state.editing);
     $createLogButton.toggle(state.editing);

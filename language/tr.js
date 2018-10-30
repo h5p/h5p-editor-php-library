@@ -169,6 +169,7 @@ H5PEditor.language.core = {
   confirmRemoveAuthor: 'Bu yazarı kaldırmak istediğinizden emin misiniz?',
   addNewChange: 'Yeni değişiklik ekle',
   confirmDeleteChangeLog: 'Bu değişim log kaydını silmek istediğinizden emin misiniz?',
+  changelogDescription: 'Some licenses require that changes made to the original work, or derivatives are logged and displayed. You may log your changes here for licensing reasons or just to allow yourself and others to keep track of the changes made to this content.',
   logThisChange: 'Bu değişimi logla',
   newChangeHasBeenLogged: 'Yeni değişiklik loglandı',
   loggedChanges: 'Loglanmış değişiklikler',
