@@ -60,6 +60,14 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
         metadataAuthorWidget.addAuthor(currentUserName, 'Author');
       }
 
+      ['licenseVersion', 'licenseExtras', 'source', 'yearFrom', 'yearTo', 'authorComments'].forEach(function (name) {
+        // Can't send undefined, in case the field already has a value, and it
+        // now has been reset
+        if (params[name] === undefined || params[name] === '') {
+          params[name] = null;
+        }
+      });
+
       closePopup();
     };
 
@@ -78,7 +86,7 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
 
       // Set the default title
       if (!params.title && populateTitleField) {
-        titleField.$input.val(H5PEditor.LibraryListCache.getDefaultTitle(parent.currentLibrary));
+        titleField.$input.val(H5PEditor.LibraryListCache.getDefaultTitle(parent.currentLibrary)).change();
       }
     };
 
@@ -385,7 +393,7 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
      * @param {*} value
      */
     const updateAllFields = function (value) {
-      if (preventLoop) {
+      if (preventLoop || value === undefined) {
         return;
       }
 
@@ -407,7 +415,11 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
     }
 
     // Use initial value from first field
-    updateAllFields(fields[0].$input.val());
+    if (fields[0].value !== undefined) {
+      const escaper = document.createElement('div');
+      escaper.innerHTML = fields[0].value;
+      updateAllFields(escaper.innerText);
+    }
   };
 
   return MetadataForm;
