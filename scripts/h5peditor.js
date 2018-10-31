@@ -963,7 +963,8 @@ ns.confirmReplace = function (library, top, next) {
     // Confirm changing library
     var confirmReplace = new H5P.ConfirmationDialog({
       headerText: H5PEditor.t('core', 'pasteContent'),
-      dialogText: H5PEditor.t('core', 'confirmPasteContent')
+      dialogText: H5PEditor.t('core', 'confirmPasteContent'),
+      confirmText: H5PEditor.t('core', 'confirmPasteButtonText')
     }).appendTo(document.body);
     confirmReplace.on('confirmed', next);
     confirmReplace.show(top);
