@@ -60,14 +60,6 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
         metadataAuthorWidget.addDefaultAuthor(currentUserName, 'Author');
       }
 
-      ['licenseVersion', 'licenseExtras', 'source', 'yearFrom', 'yearTo', 'authorComments'].forEach(function (name) {
-        // Can't send undefined, in case the field already has a value, and it
-        // now has been reset
-        if (params[name] === undefined || params[name] === '') {
-          params[name] = null;
-        }
-      });
-
       closePopup();
     };
 
