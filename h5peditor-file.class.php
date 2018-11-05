@@ -167,6 +167,7 @@ class H5peditorFile {
         $allowed = array(
           'audio/mpeg' => 'mp3',
           'audio/mp3' => 'mp3',
+          'audio/mp4' => 'm4a',
           'audio/x-wav' => 'wav',
           'audio/wav' => 'wav',
           //'application/ogg' => 'ogg',
@@ -265,7 +266,7 @@ class H5peditorFile {
 
     // text/plain is used to support IE
     header('Cache-Control: no-cache');
-    header('Content-type: text/plain; charset=utf-8');
+    header('Content-Type: text/plain; charset=utf-8');
 
     print $this->getResult();
   }
