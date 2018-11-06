@@ -435,6 +435,12 @@ class H5peditor {
       if (empty($library['semantics'])) {
         $translation = $this->getLibraryLanguage($library['machineName'], $library['majorVersion'], $library['minorVersion'], $languageCode);
 
+        // If translation was not found, and this is not the English one, try to load
+        // the English translation
+        if ($translation === NULL && $languageCode !== 'en') {
+          $translation = $this->getLibraryLanguage($library['machineName'], $library['majorVersion'], $library['minorVersion'], 'en');
+        }
+
         if ($translation !== NULL) {
           $translations[$library['machineName']] = json_decode($translation);
         }
