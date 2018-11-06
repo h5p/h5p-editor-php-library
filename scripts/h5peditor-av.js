@@ -1,5 +1,4 @@
-var H5PEditor = H5PEditor || {};
-
+/* global ns */
 /**
  * Audio/Video module.
  * Makes it possible to add audio or video through file uploads and urls.
@@ -103,10 +102,14 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     var imageHtml =
       '<ul class="file list-unstyled"></ul>' +
-      C.createAdd(self.field.type) +
-      '<a class="h5p-copyright-button" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>' +
-      '<div class="h5p-editor-dialog">' +
-        '<a href="#" class="h5p-close" title="' + H5PEditor.t('core', 'close') + '"></a>' +
+      C.createAdd(self.field.type);
+
+    if (!this.field.disableCopyright) {
+      imageHtml += '<a class="h5p-copyright-button" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>';
+    }
+
+    imageHtml += '<div class="h5p-editor-dialog">' +
+      '<a href="#" class="h5p-close" title="' + H5PEditor.t('core', 'close') + '"></a>' +
       '</div>';
 
     var html = H5PEditor.createFieldMarkup(this.field, imageHtml);
@@ -127,18 +130,18 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     this.$addDialog.find('.h5p-file-drop-upload')
       .addClass('has-advanced-upload')
-      .on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
+      .on('drag dragstart dragend dragover dragenter dragleave drop', function (e) {
         e.preventDefault();
         e.stopPropagation();
       })
-      .on('dragover dragenter', function(e) {
+      .on('dragover dragenter', function (e) {
         $(this).addClass('over');
         e.originalEvent.dataTransfer.dropEffect = 'copy';
       })
-      .on('dragleave', function(e) {
+      .on('dragleave', function () {
         $(this).removeClass('over');
       })
-      .on('drop', function(e) {
+      .on('drop', function (e) {
         self.uploadFiles(e.originalEvent.dataTransfer.files);
       })
       .click(function () {
@@ -157,7 +160,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       for (var i = 0; i < this.params.length; i++) {
         this.addFile(i);
       }
-    } else {
+    }
+    else {
       $container.find('.h5p-copyright-button').addClass('hidden');
     }
 
@@ -203,7 +207,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       // Remove old element if updating
       that.$files.children().each(function () {
         $(this).remove();
-      })
+      });
       // This is now the first and only file
       index = 0;
     }
@@ -241,7 +245,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     }
 
     // Insert file element in appropriate order
-    var $file = $(fileHtml)
+    var $file = $(fileHtml);
     if (index >= that.$files.children().length) {
       $file.appendTo(that.$files);
     }
@@ -276,7 +280,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     // on input update
     $file
       .find('input')
-      .change(function() {
+      .change(function () {
         file.metadata = { qualityName: $(this).val() };
       });
 
@@ -319,7 +323,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     for (var i = 0; i < this.changes.length; i++) {
       this.changes[i]();
     }
-  }
+  };
 
   C.prototype.useUrl = function (url) {
     if (this.params === undefined) {
@@ -328,13 +332,14 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     }
 
     var mime;
+    var i;
     var matches = url.match(/\.(webm|mp4|ogv|m4a|mp3|ogg|oga|wav)/i);
     if (matches !== null) {
       mime = matches[matches.length - 1];
     }
     else {
       // Try to find a provider
-      for (var i = 0; i < C.providers.length; i++) {
+      for (i = 0; i < C.providers.length; i++) {
         if (C.providers[i].regexp.test(url)) {
           mime = C.providers[i].name;
           break;
@@ -351,7 +356,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     this.params[index] = file;
     this.addFile(index);
 
-    for (var i = 0; i < this.changes.length; i++) {
+    for (i = 0; i < this.changes.length; i++) {
       this.changes[i](file);
     }
   };
@@ -411,7 +416,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   C.createAdd = function (type) {
     var inputPlaceholder = H5PEditor.t('core', type === 'audio' ? 'enterAudioUrl' : 'enterVideoUrl');
     var inputTitle = H5PEditor.t('core', type === 'audio' ? 'enterAudioTitle' : 'enterVideoTitle');
-    var uploadTitle = H5PEditor.t('core', type === 'audio' ? 'uploadAudioTitle' : 'uploadVideoTitle')
+    var uploadTitle = H5PEditor.t('core', type === 'audio' ? 'uploadAudioTitle' : 'uploadVideoTitle');
     var description = (type === 'audio' ? '' : '<div class="h5p-errors"></div><div class="h5peditor-field-description">' + H5PEditor.t('core', 'addVideoDescription') + '</div>');
 
     return '<div role="button" tabindex="0" class="h5p-add-file" title="' + H5PEditor.t('core', 'addFile') + '"></div>' +

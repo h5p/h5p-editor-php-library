@@ -1,5 +1,4 @@
-/*global H5P*/
-var H5PEditor = H5PEditor || {};
+var H5PEditor = window.H5PEditor = window.H5PEditor || {};
 var ns = H5PEditor;
 
 /**
@@ -90,17 +89,21 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
 
   var htmlString = '<div class="file"></div>' +
     '<div class="h5p-editor-image-buttons">' +
-      '<button class="h5peditor-button-textual h5p-editing-image-button">' + ns.t('core', 'editImage') + '</button>' +
-      '<button class="h5peditor-button-textual h5p-copyright-button">' + ns.t('core', 'editCopyright') + '</button>' +
-    '</div>' +
+      '<button class="h5peditor-button-textual h5p-editing-image-button">' + ns.t('core', 'editImage') + '</button>';
+
+  if (!this.field.disableCopyright) {
+    htmlString += '<button class="h5peditor-button-textual h5p-copyright-button">' + ns.t('core', 'editCopyright') + '</button>';
+  }
+
+  htmlString += '</div>' +
     '<div class="h5p-editor-dialog">' +
       '<a href="#" class="h5p-close" title="' + ns.t('core', 'close') + '"></a>' +
     '</div>';
 
-
   var html = ns.createFieldMarkup(this.field, htmlString);
 
   var $container = ns.$(html).appendTo($wrapper);
+  this.$item = $container;
   this.$editImage = $container.find('.h5p-editing-image-button');
   this.$copyrightButton = $container.find('.h5p-copyright-button');
   this.$file = $container.find('.file');
@@ -237,6 +240,12 @@ ns.widgets.image.prototype.addFile = function () {
       that.confirmRemovalDialog.show(that.$file.offset().top);
       return false;
     });
+
+  var $img = this.$file.find('img');
+  $img.one('load', function () {
+    // Make editor resize
+    $img.addClass('loaded');
+  });
 
   // Uploading original image
   that.$editImage.removeClass('hidden');
