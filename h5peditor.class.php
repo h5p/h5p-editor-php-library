@@ -139,10 +139,6 @@ class H5peditor {
    * @param array $oldParameters
    */
   public function processParameters($content, $newLibrary, $newParameters, $oldLibrary = NULL, $oldParameters = NULL) {
-    // Old core versions didn't have params wrapped together with metadata
-    if (isset($newParameters->params) && isset($newParameters->metadata)) {
-      $newParameters = $newParameters->params;
-    }
     $newFiles = array();
     $oldFiles = array();
 
