@@ -140,6 +140,9 @@ ns.libraryRequested = function (libraryName, callback) {
 ns.loadLibrary = function (libraryName, callback) {
   switch (ns.libraryCache[libraryName]) {
     default:
+      // Common fields need to be cleared of won't be reattached
+      ns.renderableCommonFields = {};
+
       // Get semantics from cache.
       ns.libraryRequested(libraryName, callback);
       break;
@@ -388,6 +391,8 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
  */
 ns.setCommonFieldsWrapper = function (parent, wrapper) {
   var ancestor = ns.findAncestor(parent);
+  // Hide the ancestor whose children will be reattached elsewhere
+  ancestor.$common.parent().addClass('hidden');
   wrapper.appendChild(ancestor.$common[0]);
 };
 
