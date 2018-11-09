@@ -253,7 +253,7 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
         mimes = field.mimes.join(',');
       }
       else if (field.type === 'image') {
-        mimes = 'image/jpeg,image/png,image/gif';
+        mimes = 'image/jpeg,image/png,image/gif,image/svg+xml';
       }
       else if (field.type === 'audio') {
         mimes = 'audio/mpeg,audio/x-wav,audio/ogg,audio/mp4';
