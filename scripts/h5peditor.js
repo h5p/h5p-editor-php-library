@@ -140,9 +140,6 @@ ns.libraryRequested = function (libraryName, callback) {
 ns.loadLibrary = function (libraryName, callback) {
   switch (ns.libraryCache[libraryName]) {
     default:
-      // Common fields need to be cleared of won't be reattached
-      ns.renderableCommonFields = {};
-
       // Get semantics from cache.
       ns.libraryRequested(libraryName, callback);
       break;
@@ -366,8 +363,11 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
           });
 
           // Attach to common ancestor if it is not already attached
-          if (!hasLibraryWrapper && ancestor) {
-            ancestor.$common[0].appendChild(commonFieldsLibraryWrapper);
+          if (ancestor) {
+            const wrapperAttached = ancestor.$common.first().find(commonFieldsLibraryWrapper).length > 0;
+            if (!wrapperAttached) {
+              ancestor.$common[0].appendChild(commonFieldsLibraryWrapper);
+            }
           }
         }
       });
