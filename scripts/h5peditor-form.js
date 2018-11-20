@@ -73,6 +73,7 @@ ns.Form.prototype.replace = function ($element) {
 ns.Form.prototype.remove = function () {
   ns.removeChildren(this.metadataForm.children);
   ns.removeChildren(this.children);
+  ns.renderableCommonFields = {}; // Reset all common fields
   this.$form.remove();
 };
 
