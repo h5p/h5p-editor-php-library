@@ -363,8 +363,11 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
           });
 
           // Attach to common ancestor if it is not already attached
-          if (!hasLibraryWrapper && ancestor) {
-            ancestor.$common[0].appendChild(commonFieldsLibraryWrapper);
+          if (ancestor) {
+            const wrapperAttached = ancestor.$common.first().find(commonFieldsLibraryWrapper).length > 0;
+            if (!wrapperAttached) {
+              ancestor.$common[0].appendChild(commonFieldsLibraryWrapper);
+            }
           }
         }
       });
@@ -388,6 +391,8 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
  */
 ns.setCommonFieldsWrapper = function (parent, wrapper) {
   var ancestor = ns.findAncestor(parent);
+  // Hide the ancestor whose children will be reattached elsewhere
+  ancestor.$common.parent().addClass('hidden');
   wrapper.appendChild(ancestor.$common[0]);
 };
 
