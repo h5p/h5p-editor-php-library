@@ -78,7 +78,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
    * @private
    */
   var resize = function () {
-    if (!iframe.contentDocument.body) {
+    if (!iframe.contentDocument.body || self.preventResize) {
       return; // Prevent crashing when iframe is unloaded
     }
     if (iframe.clientHeight === iframe.contentDocument.body.scrollHeight &&
@@ -124,6 +124,16 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     var $container = $('body > .h5p-editor');
 
     this.contentWindow.H5P.$body = $(this.contentDocument.body);
+
+    /**
+     * Trigger semi-fullscreen for $element.
+     *
+     * @param {jQuery} $element
+     * @return {function} Exit trigger
+     */
+    this.contentWindow.H5PEditor.semiFullscreen = function ($element) {
+      return self.semiFullscreen($iframe, $element);
+    };
 
     // Load libraries data
     $.ajax({
@@ -290,6 +300,143 @@ ns.Editor.prototype.getMaxScore = function (content) {
     return 0;
   }
 };
+
+/**
+ * Trigger semi-fullscreen for $iframe and $element.
+ *
+ * @param {jQuery} $iframe
+ * @param {jQuery} $element
+ * @return {function} Exit trigger
+ */
+ns.Editor.prototype.semiFullscreen = function ($iframe, $element) {
+  const self = this;
+
+  // Add class for element to cover all of the page
+  const $classes = $iframe.add($element).addClass('h5peditor-semi-fullscreen');
+  // NOTE: Styling for this class is provided by Core
+
+  // Prevent the resizing loop from messing with the iframe while
+  // the semi-fullscreen is active.
+  self.preventResize = true;
+
+  // Reset the iframe's default CSS props
+  $iframe.css({
+    width: '',
+    height: '',
+    zIndex: '',
+    top: '',
+    left: ''
+  });
+  // NOTE: Style attribute has been used here since June 2014 since there are
+  // no CSS files in H5PEditor loaded outside the iframe.
+
+  // Hide all elements except the iframe and the fullscreen elements
+  // This is to avoid tabbing and readspeakers accessing these while
+  // the semi-fullscreen is active.
+  const restoreOutside = ns.hideAllButOne($iframe[0], $iframe[0].contentWindow);
+  const restoreInside = ns.hideAllButOne($element[0], window);
+
+  /**
+   * Exit/restore callback returned.
+   *
+   * @private
+   */
+  return function exitSemiFullscreen() {
+    // Remove our special class
+    $classes.removeClass('h5peditor-semi-fullscreen');
+
+    // Allow the resizing loop to adjust the iframe
+    self.preventResize = false;
+
+    // Restore the default style attribute properties
+    $iframe.css({
+      width: '100%',
+      height: '3em',
+      zIndex: 101,
+      top: 0,
+      left: 0
+    });
+
+    // Return all of the elements hidden back to their original state
+    restoreOutside();
+    restoreInside();
+  }
+};
+
+/**
+ * Will hide all siblings and ancestor siblings(uncles and aunts) of element.
+ *
+ * @param {Element} element
+ * @param {Window} win Needed to get the correct computed style
+ * @return {function} Restore trigger
+ */
+ns.hideAllButOne = function (element, win) {
+  // Make it easy and quick to restore previous display values
+  const restore = [];
+
+  /**
+   * Check if the given element is visible.
+   *
+   * @private
+   * @param {Element} element
+   */
+  const isVisible = function (element) {
+    if (element.offsetParent === null) {
+      // Must check computed style to be sure in case of fixed element
+      if (win.getComputedStyle(element).display !== 'none') {
+        return true;
+      }
+    }
+    else {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Recusive function going up the DOM tree.
+   * Will hide all siblings of given element.
+   *
+   * @private
+   * @param {Element} element
+   */
+  const recurse = function (element) {
+    // Loop through siblings
+    for (let i = 0; i < element.parentElement.children.length; i++) {
+      let sibling = element.parentElement.children[i];
+      if (sibling === element) {
+        continue; // Skip where we came from
+      }
+
+      // Only hide if sibling is visible
+      if (isVisible(sibling)) {
+        // Make it simple to restore original value
+        restore.push({
+          element: sibling,
+          display: sibling.style.display
+        });
+        sibling.style.display = 'none';
+      }
+    }
+
+    // Climb up the tree until we hit some body
+    if (element.parentElement.tagName !== 'BODY') {
+      recurse(element.parentElement);
+    }
+  }
+  recurse(element); // Start
+
+  /**
+   * Restore callback returned.
+   *
+   * @private
+   */
+  return function () {
+    for (let i = restore.length - 1; i > -1; i--) { // In opposite order
+      restore[i].element.style.display = restore[i].display;
+    }
+  };
+}
 
 /**
  * Editor translations index by library name or "core".
