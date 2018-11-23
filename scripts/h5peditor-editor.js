@@ -128,11 +128,15 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     /**
      * Trigger semi-fullscreen for $element.
      *
-     * @param {jQuery} $element
+     * @param {jQuery} $element Element to put in semi-fullscreen
+     * @param {function} before Callback that runs after entering semi-fullscreen
+     * @param {function} done Callback that runs after exiting semi-fullscreen
      * @return {function} Exit trigger
      */
-    this.contentWindow.H5PEditor.semiFullscreen = function ($element) {
-      return self.semiFullscreen($iframe, $element);
+    this.contentWindow.H5PEditor.semiFullscreen = function ($element, after, done) {
+      const exit = self.semiFullscreen($iframe, $element, done);
+      after();
+      return exit;
     };
 
     // Load libraries data
@@ -306,9 +310,10 @@ ns.Editor.prototype.getMaxScore = function (content) {
  *
  * @param {jQuery} $iframe
  * @param {jQuery} $element
+ * @param {function} done Callback that runs after semi-fullscreen exit
  * @return {function} Exit trigger
  */
-ns.Editor.prototype.semiFullscreen = function ($iframe, $element) {
+ns.Editor.prototype.semiFullscreen = function ($iframe, $element, done) {
   const self = this;
 
   // Add class for element to cover all of the page
@@ -333,15 +338,28 @@ ns.Editor.prototype.semiFullscreen = function ($iframe, $element) {
   // Hide all elements except the iframe and the fullscreen elements
   // This is to avoid tabbing and readspeakers accessing these while
   // the semi-fullscreen is active.
-  const restoreOutside = ns.hideAllButOne($iframe[0], $iframe[0].contentWindow);
+  const iframeWindow = $iframe[0].contentWindow;
+  const restoreOutside = ns.hideAllButOne($iframe[0], iframeWindow);
   const restoreInside = ns.hideAllButOne($element[0], window);
+
+  /**
+   * Trigger semi-fullscreen exit on ESC key
+   *
+   * @private
+   */
+  const handleKeyup = function (e) {
+    if (e.which === 27) {
+      restore();
+    }
+  }
+  iframeWindow.document.body.addEventListener('keyup', handleKeyup);
 
   /**
    * Exit/restore callback returned.
    *
    * @private
    */
-  return function exitSemiFullscreen() {
+  const restore = function () {
     // Remove our special class
     $classes.removeClass('h5peditor-semi-fullscreen');
 
@@ -360,7 +378,12 @@ ns.Editor.prototype.semiFullscreen = function ($iframe, $element) {
     // Return all of the elements hidden back to their original state
     restoreOutside();
     restoreInside();
+
+    iframeWindow.document.body.removeEventListener('keyup', handleKeyup);
+    done(); // Callback for UI
   }
+
+  return restore;
 };
 
 /**
