@@ -436,9 +436,10 @@ ns.hideAllButOne = function (element, win) {
         // Make it simple to restore original value
         restore.push({
           element: sibling,
-          display: sibling.style.display
+          display: sibling.style.getPropertyValue('display'),
+          priority: sibling.style.getPropertyPriority('display')
         });
-        sibling.style.display = 'none';
+        sibling.style.setProperty('display', 'none', 'important');
       }
     }
 
@@ -456,7 +457,7 @@ ns.hideAllButOne = function (element, win) {
    */
   return function () {
     for (let i = restore.length - 1; i > -1; i--) { // In opposite order
-      restore[i].element.style.display = restore[i].display;
+      restore[i].element.style.setProperty('display', restore[i].display, restore[i].priority);
     }
   };
 }
