@@ -638,7 +638,7 @@ a {
   .libwrap {
     margin-top: $padding;
 
-    &.no-margin, 
+    &.no-margin,
     &:empty {
       margin-top: 0;
     }
@@ -713,7 +713,7 @@ a {
 
   .h5p-editor-dialog {
     position: absolute;
-    z-index: 1;
+    z-index: 2;
     margin: 5.5em 0 1em;
     visibility: hidden;
     opacity: 0;
