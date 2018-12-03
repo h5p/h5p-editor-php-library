@@ -80,6 +80,10 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
       if (!params.title && populateTitleField) {
         titleField.$input.val(H5PEditor.LibraryListCache.getDefaultTitle(parent.currentLibrary)).change();
       }
+
+      titleField.$input.change(function () {
+        self.trigger('titlechange');
+      });
     };
 
     /**

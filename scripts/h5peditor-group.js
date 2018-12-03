@@ -243,11 +243,32 @@ ns.Group.prototype.findSummary = function () {
       break;
     }
     else if (widget === 'library') {
+      let lastLib;
       if (params !== undefined) {
         summary = child.$select.children(':selected').text();
+        if (params.metadata && params.metadata.title) {
+          // The given title usually makes more sense than the type name
+          summary = params.metadata.title + ' (' + summary + ')';
+        }
       }
+      const setSummary = function () {
+        if (child.params && child.params.metadata && child.params.metadata.title) {
+          // The given title usually makes more sense than the type name
+          that.setSummary(child.params.metadata.title + (child.libraries.length > 1 && child.params.metadata.title.indexOf(lastLib.title) === -1 ? ' (' +  lastLib.title + ')' : ''));
+        }
+        else {
+          that.setSummary(lastLib.title);
+        }
+      };
       child.change(function (library) {
-        that.setSummary(library.title);
+        lastLib = library;
+        setSummary();
+
+        if (child.metadataForm) {
+          // Update summary when metadata title changes
+          child.metadataForm.off('titlechange', setSummary);
+          child.metadataForm.on('titlechange', setSummary);
+        }
       });
       break;
     }
@@ -275,7 +296,7 @@ ns.Group.prototype.setSummary = function (summary) {
   this.trigger('summary', summaryText);
 
   if (summaryText !== undefined) {
-    summaryText = this.field.label + ': ' + (summaryText.length > 48 ? summaryText.substr(0, 45) + '...' : summaryText);
+    summaryText = (summaryText.length > 48 ? summaryText.substr(0, 45) + '...' : summaryText);
   }
   else {
     summaryText = this.field.label;
