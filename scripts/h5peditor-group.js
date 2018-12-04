@@ -244,11 +244,11 @@ ns.Group.prototype.findSummary = function () {
     }
     else if (widget === 'library') {
       let lastLib;
-      if (params !== undefined) {
+      if (child.params !== undefined) {
         summary = child.$select.children(':selected').text();
-        if (params.metadata && params.metadata.title) {
+        if (child.params.metadata && child.params.metadata.title) {
           // The given title usually makes more sense than the type name
-          summary = params.metadata.title + ' (' + summary + ')';
+          summary = child.params.metadata.title + (!child.libraries || (child.libraries.length > 1 && child.params.metadata.title.indexOf(summary) === -1) ? ' (' +  summary + ')' : '');
         }
       }
       const setSummary = function () {
@@ -260,6 +260,9 @@ ns.Group.prototype.findSummary = function () {
           that.setSummary(lastLib.title);
         }
       };
+      if (child.metadataForm) {
+        child.metadataForm.on('titlechange', setSummary);
+      }
       child.change(function (library) {
         lastLib = library;
         setSummary();
