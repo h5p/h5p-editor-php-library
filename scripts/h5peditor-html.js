@@ -1,3 +1,4 @@
+/* global ns CKEDITOR */
 /**
  * Adds a html text field to the form.
  *
@@ -214,9 +215,6 @@ ns.Html.prototype.createToolbar = function () {
       else {
         ret.fontSize_defaultLabel = '100%';
 
-        // Standard font size that is used. (= 100%)
-        var defaultFont = 16;
-
         // Standard font sizes that is available.
         var defaultAvailable = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72];
         for (var i = 0; i < defaultAvailable.length; i++) {
@@ -225,9 +223,7 @@ ns.Html.prototype.createToolbar = function () {
           var em = defaultAvailable[i] / 16;
           ret.fontSize_sizes += (em * 100) + '%/' + em + 'em;';
         }
-
       }
-
     }
 
     if (this.field.font.color) {
@@ -268,7 +264,8 @@ ns.Html.prototype.createToolbar = function () {
   if (this.field.enterMode === 'p' || formats.length > 0) {
     this.tags.push('p');
     ret.enterMode = CKEDITOR.ENTER_P;
-  } else {
+  }
+  else {
     // Default to DIV, not allowing BR at all.
     this.tags.push('div');
     ret.enterMode = CKEDITOR.ENTER_DIV;
@@ -330,6 +327,10 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     // Remove existing CK instance.
     ns.Html.removeWysiwyg();
 
+    CKEDITOR.document.getBody = function () {
+      return new CKEDITOR.dom.element(that.$item[0]);
+    };
+
     ns.Html.current = that;
     ckConfig.width = this.offsetWidth - 8; // Avoid miscalculations
     that.ckeditor = CKEDITOR.replace(this, ckConfig);
@@ -370,7 +371,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     // at this point... Use case from commit message: "Make the default
     // linkTargetType blank for ckeditor" - STGW
     if (ns.Html.first) {
-      CKEDITOR.on('dialogDefinition', function(e) {
+      CKEDITOR.on('dialogDefinition', function (e) {
         // Take the dialog name and its definition from the event data.
         var dialogName = e.data.name;
         var dialogDefinition = e.data.definition;
@@ -396,13 +397,11 @@ ns.Html.prototype.appendTo = function ($wrapper) {
           var $item = ns.Html.current.$item;
 
           // Position dialog above text field
-          var itemPos = $item.offset();
-          var itemWidth = $item.width();
-          var itemHeight = $item.height();
+          var itemPos = $item[0].getBoundingClientRect();
           var dialogSize = this.getSize();
 
-          var x = itemPos.left + (itemWidth / 2) - (dialogSize.width / 2);
-          var y = itemPos.top + (itemHeight / 2) - (dialogSize.height / 2);
+          var x = itemPos.x + (itemPos.width / 2) - (dialogSize.width / 2);
+          var y = itemPos.y + (itemPos.height / 2) - (dialogSize.height / 2);
 
           this.move(x, y, true);
         };
@@ -472,7 +471,8 @@ ns.Html.prototype.validate = function () {
   // Display errors and bail if set.
   if (that.$errors.children().length) {
     return false;
-  } else {
+  }
+  else {
     this.$input.removeClass('error');
   }
 

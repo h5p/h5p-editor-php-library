@@ -1,3 +1,4 @@
+/* global ns */
 /**
  * Creates a boolean field for the editor.
  *
@@ -26,7 +27,7 @@ ns.Boolean = function (parent, field, params, setValue) {
     for (var i = 0; i < this.changes.length; i++) {
       this.changes[i](value);
     }
-  }
+  };
 };
 
 /**

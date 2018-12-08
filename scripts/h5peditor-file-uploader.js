@@ -59,7 +59,7 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
      */
     self.uploadData = function (data) {
       if (data === undefined) {
-        throw('Missing data.');
+        throw ('Missing data.');
       }
       return upload(data);
     };
@@ -256,7 +256,7 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
         mimes = 'image/jpeg,image/png,image/gif';
       }
       else if (field.type === 'audio') {
-        mimes = 'audio/mpeg,audio/x-wav,audio/ogg';
+        mimes = 'audio/mpeg,audio/x-wav,audio/ogg,audio/mp4';
       }
       else if (field.type === 'video') {
         mimes = 'video/mp4,video/webm,video/ogg';
@@ -269,7 +269,8 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
 
       if (files !== undefined) {
         $file.prop('files', files);
-      } else if (data !== undefined) {
+      }
+      else if (data !== undefined) {
         // Upload given data
         $data.val(data);
         upload();

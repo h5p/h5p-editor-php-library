@@ -1,3 +1,4 @@
+/* global ns */
 /**
  * Create a field without html
  *
@@ -17,10 +18,8 @@ ns.None = function (parent, field, params, setValue) {
  * Implementation of appendTo
  *
  * None doesn't append anything
- *
- * @param {jQuery} $wrapper
  */
-ns.None.prototype.appendTo = function ($wrapper) {};
+ns.None.prototype.appendTo = function () {};
 
 /**
  * Implementation of validate

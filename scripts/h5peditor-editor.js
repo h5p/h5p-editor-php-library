@@ -1,3 +1,4 @@
+/* global ns */
 window.ns = window.H5PEditor = window.H5PEditor || {};
 
 /**
@@ -82,7 +83,8 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     }
     if (iframe.clientHeight === iframe.contentDocument.body.scrollHeight &&
       (iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight ||
-       iframe.contentDocument.body.scrollHeight - 1 === iframe.contentWindow.document.body.clientHeight)) {
+       iframe.contentDocument.body.scrollHeight - 1 === iframe.contentWindow.document.body.clientHeight ||
+       iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight - 1)) {
       return; // Do not resize unless page and scrolling differs
       // Note: ScrollHeight may be 1px larger in some cases(Edge) where the actual height is a fraction.
     }
@@ -163,7 +165,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     if (iframe.contentWindow.MutationObserver !== undefined) {
       // If supported look for changes to DOM elements. This saves resources.
       var running;
-      var limitedResize = function (mutations) {
+      var limitedResize = function () {
         if (!running) {
           running = setTimeout(function () {
             resize();
@@ -226,7 +228,7 @@ ns.Editor.prototype.getLibrary = function () {
   if (this.selector !== undefined) {
     return this.selector.getCurrentLibrary();
   }
-  else if(this.selectedContentTypeId) {
+  else if (this.selectedContentTypeId) {
     return this.selectedContentTypeId;
   }
   else {
@@ -245,14 +247,31 @@ ns.Editor.prototype.getParams = function (notFormSubmit) {
     this.formSubmitted = true;
   }
   if (this.selector !== undefined) {
-    return this.selector.getParams();
-  }
-  else if(this.form){
-    return this.form.params;
+    return {
+      params: this.selector.getParams(),
+      metadata: this.selector.getMetadata()
+    };
   }
   else {
     console.warn('no selector defined for "getParams"');
   }
+};
+
+/**
+ * Check if main title is set. If not, focus on it!
+ *
+ * @return {[type]}
+ */
+ns.Editor.prototype.isMainTitleSet = function () {
+  var mainTitleField = this.selector.form.metadataForm.getExtraTitleField();
+
+  // validate() actually doesn't return a boolean, but the trimmed value
+  // We know title is a mandatory field, so that's what we are checking here
+  var valid = mainTitleField.validate();
+  if (!valid) {
+    mainTitleField.$input.focus();
+  }
+  return valid;
 };
 
 /**
@@ -261,8 +280,15 @@ ns.Editor.prototype.getParams = function (notFormSubmit) {
  * @param content
  * @return {H5PEditor.Presave}
  */
-ns.Editor.prototype.presave = function (content) {
-  return this.selector.presave(content, this.getLibrary());
+ns.Editor.prototype.getMaxScore = function (content) {
+  try {
+    var value = this.selector.presave(content, this.getLibrary());
+    return value.maxScore;
+  }
+  catch (e) {
+    // Deliberatly catching error
+    return 0;
+  }
 };
 
 /**

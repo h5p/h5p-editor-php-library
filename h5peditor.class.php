@@ -2,11 +2,18 @@
 
 class H5peditor {
 
+  private static $hasWYSIWYGEditor = array(
+    'H5P.CoursePresentation',
+    'H5P.InteractiveVideo',
+    'H5P.DragQuestion'
+  );
+
   public static $styles = array(
     'libs/darkroom.css',
     'styles/css/h5p-hub-client.css',
     'styles/css/fonts.css',
-    'styles/css/application.css'
+    'styles/css/application.css',
+    'styles/css/libs/zebra_datepicker.min.css'
   );
   public static $scripts = array(
     'scripts/h5p-hub-client.js',
@@ -36,6 +43,9 @@ class H5peditor {
     'scripts/h5peditor-dimensions.js',
     'scripts/h5peditor-coordinates.js',
     'scripts/h5peditor-none.js',
+    'scripts/h5peditor-metadata.js',
+    'scripts/h5peditor-metadata-author-widget.js',
+    'scripts/h5peditor-metadata-changelog-widget.js',
     'scripts/h5peditor-pre-save.js',
     'ckeditor/ckeditor.js',
   );
@@ -100,7 +110,8 @@ class H5peditor {
             'minorVersion' => $devLibs[$lid]['minorVersion'],
             'runnable' => $devLibs[$lid]['runnable'],
             'restricted' => $libraries[$i]->restricted,
-            'tutorialUrl' => $libraries[$i]->tutorialUrl
+            'tutorialUrl' => $libraries[$i]->tutorialUrl,
+            'metadataSettings' => $devLibs[$lid]['metadataSettings'],
           );
           if ($isOld) {
             $libraries[$i]->isOld = TRUE;
@@ -312,6 +323,17 @@ class H5peditor {
     $dependencies = array();
     $this->h5p->findLibraryDependencies($dependencies, $library);
 
+    // Load addons for wysiwyg editors
+    if (in_array($machineName, self::$hasWYSIWYGEditor)) {
+      $addons = $this->h5p->h5pF->loadAddons();
+      foreach ($addons as $addon) {
+        $key = 'editor-' . $addon['machineName'];
+        $dependencies[$key]['weight'] = sizeof($dependencies)+1;
+        $dependencies[$key]['type'] = 'editor';
+        $dependencies[$key]['library'] = $addon;
+      }
+    }
+
     // Order dependencies by weight
     $orderedDependencies = array();
     for ($i = 1, $s = count($dependencies); $i <= $s; $i++) {
@@ -376,7 +398,11 @@ class H5peditor {
         }
         else {
           // Local file
-          $libraryData->javascript[] = $url . $script->path . $script->version;
+          $path = $url . $script->path;
+          if (!isset($this->h5p->h5pD)) {
+            $path .= $script->version;
+          }
+          $libraryData->javascript[] = $path;
         }
       }
     }
@@ -390,19 +416,34 @@ class H5peditor {
         }
         else {
           // Local file
-          $libraryData->css[] = $url . $css->path . $css->version;
+          $path = $url . $css->path;
+          if (!isset($this->h5p->h5pD)) {
+            $path .= $css->version;
+          }
+          $libraryData->css[] = $path;
         }
       }
     }
 
+    $translations = array();
     // Add translations for libraries.
     foreach ($libraries as $library) {
-      $language = $this->getLibraryLanguage($library['machineName'], $library['majorVersion'], $library['minorVersion'], $languageCode);
-      if ($language !== NULL) {
-        $lang                                = '; H5PEditor.language["' . $library['machineName'] . '"] = ' . $language . ';';
-        $libraryData->javascript[md5($lang)] = $lang;
+      if (empty($library['semantics'])) {
+        $translation = $this->getLibraryLanguage($library['machineName'], $library['majorVersion'], $library['minorVersion'], $languageCode);
+
+        // If translation was not found, and this is not the English one, try to load
+        // the English translation
+        if ($translation === NULL && $languageCode !== 'en') {
+          $translation = $this->getLibraryLanguage($library['machineName'], $library['majorVersion'], $library['minorVersion'], 'en');
+        }
+
+        if ($translation !== NULL) {
+          $translations[$library['machineName']] = json_decode($translation);
+        }
       }
     }
+
+    $libraryData->translations = $translations;
 
     return $libraryData;
   }

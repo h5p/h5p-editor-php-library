@@ -1,3 +1,4 @@
+/* global ns Darkroom */
 H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
   var instanceCounter = 0;
   var scriptsLoaded = false;
@@ -50,10 +51,6 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
 
     // Create editing image
     var editingImage = new Image();
-    var crossOrigin = H5P.getCrossOrigin();
-    if (crossOrigin) {
-      editingImage.crossOrigin = crossOrigin;
-    }
     editingImage.className = 'h5p-editing-image hidden';
     editingImage.id = 'h5p-editing-image-' + uniqueId;
     editingContainer.appendChild(editingImage);
@@ -189,7 +186,8 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
           self.darkroom.plugins.crop.cropCurrentZone();
 
           canvas.addEventListener('crop:update', convertData, false);
-        } else {
+        }
+        else {
           convertData();
         }
       }
@@ -266,6 +264,15 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
         darkroom.parentNode.removeChild(darkroom);
       }
 
+      // Set crossorigin attribute
+      var crossOrigin = H5P.getCrossOrigin(imgSrc);
+      if (crossOrigin) {
+        editingImage.crossOrigin = crossOrigin;
+      }
+      else {
+        editingImage.removeAttribute('crossorigin');
+      }
+
       editingImage.src = imgSrc;
       editingImage.onload = function () {
         createDarkroom();
@@ -330,7 +337,8 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     this.toggle = function () {
       if (isShowing) {
         this.hide();
-      } else {
+      }
+      else {
         this.show();
       }
     };

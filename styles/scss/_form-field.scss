@@ -38,3 +38,14 @@
     color: #356593;
   }
 }
+
+.common-fields-library-wrapper {
+  @include field-margin($padding);
+  border: none;
+  margin: 0;
+  padding: 0;
+
+  .common-field-legend {
+    display: none;
+  }
+}
