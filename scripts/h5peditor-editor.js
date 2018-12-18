@@ -324,6 +324,11 @@ ns.Editor.prototype.semiFullscreen = function ($iframe, $element, done) {
   // the semi-fullscreen is active.
   self.preventResize = true;
 
+  // Prevent body overflow
+  const bodyOverflowValue = document.body.style.getPropertyValue('overflow');
+  const bodyOverflowPriority = document.body.style.getPropertyPriority('overflow');
+  document.body.style.setProperty('overflow', 'hidden', 'important');
+
   // Reset the iframe's default CSS props
   $iframe.css({
     width: '',
@@ -365,6 +370,9 @@ ns.Editor.prototype.semiFullscreen = function ($iframe, $element, done) {
 
     // Allow the resizing loop to adjust the iframe
     self.preventResize = false;
+
+    // Restore body overflow
+    document.body.style.setProperty('overflow', bodyOverflowValue, bodyOverflowPriority);
 
     // Restore the default style attribute properties
     $iframe.css({
