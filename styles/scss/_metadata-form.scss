@@ -131,6 +131,9 @@
   /* Adds a 20px margin on the bottom */
   border-bottom: 20px solid transparent;
   background-clip: padding-box;
+  max-height: calc(100% - 40px);
+  overflow: auto;
+  margin-bottom: 20px;
 
   .h5p-metadata-header {
     display: flex;
