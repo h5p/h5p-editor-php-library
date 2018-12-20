@@ -199,5 +199,4 @@ H5PEditor.language.core = {
   avTablistLabel: 'Insert using',
   tabTitleBasicFileUpload: 'File Upload',
   tabTitleInputLinkURL: 'Link/URL'
-  ];
 };
