@@ -277,6 +277,47 @@ a {
     .h5p-add-dialog-table {
       overflow: hidden;
 
+      .av-tablist {
+        overflow: hidden;
+        margin: 1em 1em 0 1em;
+      }
+
+      .av-tab {
+        cursor: pointer;
+        float: left;
+        padding: 0.25em 0.5em;
+        border-top: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        font-weight: bold;
+        font-size: 15px;
+        color: #666;
+        background: #f5f5f5;
+
+        &:first-child {
+          border-left: 1px solid #ccc;
+        }
+        &.selected {
+          color: #333;
+          background: #fff;
+        }
+      }
+
+      .av-tabpanel {
+        border: 1px solid #ccc;
+        margin: 0 1em 1em 1em;
+        overflow: hidden;
+        padding: 1em;
+
+        h3 {
+          margin: 0 0 1em 0;
+        }
+        .h5p-file-drop-upload {
+          width: 90px;
+          margin: 0;
+        }
+      }
+
+
       .h5p-dialog-box {
         float: left;
         padding: 0;
@@ -295,76 +336,76 @@ a {
             text-align: center;
           }
         }
+      }
 
-        h3 {
-          color: #666;
-          font-size: 1em;
-          margin: 1.2em 0;
-          line-height: 1.1em;
+      h3 {
+        color: #666;
+        font-size: 1em;
+        margin: 1.2em 0;
+        line-height: 1.1em;
+      }
+
+      .h5peditor-field-description {
+        color: #bbb;
+      }
+
+      .h5p-file-url-wrapper {
+        background-color: #f5f5f5;
+        border: 1px solid #bbb;
+        padding: 15px 15px 15px 60px;
+        position: relative;
+
+        &:before {
+          font-family: 'H5P';
+          content: "\e904";
+          position: absolute;
+          color: #dd0505;
+          left: 0;
+          top: 0.075em;
+          font-size: 3.8em;
+          line-height: 1;
         }
 
-        .h5peditor-field-description {
-          color: #bbb;
+        input {
+          border-color: #bbb;
+          text-align: left;
+          padding-left: 20px;
+        }
+      }
+
+      .h5p-file-drop-upload {
+        position: relative;
+        width: 70%;
+        height: 90px;
+        margin: 0 15%;
+        float: left;
+        background-color: #f5f5f5;
+        text-align: center;
+        cursor: pointer;
+        border: 1px solid #bbb;
+
+        .h5p-file-drop-upload-inner {
+          border: 2px dashed #bbb;;
+          background-color: white;
+          position: absolute;
+          top: 3px;
+          bottom: 3px;
+          left: 3px;
+          right: 3px;
+
+          &:after {
+            font-family: "H5P";
+            content: "\e903";
+            line-height: 1.4em;
+            font-size: 3.5em;
+            color: #bbb;
+          }
         }
 
-        .h5p-file-url-wrapper {
-          background-color: #f5f5f5;
-          border: 1px solid #bbb;
-          padding: 15px 15px 15px 60px;
-          position: relative;
-
-          &:before {
-            font-family: 'H5P';
-            content: "\e904";
-            position: absolute;
-            color: #dd0505;
-            left: 0;
-            top: 0.075em;
-            font-size: 3.8em;
-            line-height: 1;
-          }
-
-          input {
-            border-color: #bbb;
-            text-align: left;
-            padding-left: 20px;
-          }
-        }
-
-        .h5p-file-drop-upload {
-          position: relative;
-          width: 70%;
-          height: 90px;
-          margin: 0 15%;
-          float: left;
-          background-color: #f5f5f5;
-          text-align: center;
-          cursor: pointer;
-          border: 1px solid #bbb;
-
-          .h5p-file-drop-upload-inner {
-            border: 2px dashed #bbb;;
-            background-color: white;
-            position: absolute;
-            top: 3px;
-            bottom: 3px;
-            left: 3px;
-            right: 3px;
-
-            &:after {
-              font-family: "H5P";
-              content: "\e903";
-              line-height: 1.4em;
-              font-size: 3.5em;
-              color: #bbb;
-            }
-          }
-
-          &:hover,
-          &.over {
-            .h5p-file-drop-upload-inner:after {
-              color: #999;
-            }
+        &:hover,
+        &.over {
+          .h5p-file-drop-upload-inner:after {
+            color: #999;
           }
         }
       }
