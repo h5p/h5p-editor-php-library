@@ -40,7 +40,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       self.$errors.html('');
 
       // Close dialog
-      self.$addDialog.removeClass('h5p-open');
+      self.closeDialog();
     });
 
     // Monitor upload progress
@@ -127,6 +127,11 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     let activeTab = 0;
     const toggleTab = function () {
+      // Pause last tab
+      if (activeTab > 1) {
+        tabInstances[activeTab - 2].pause();
+      }
+
       // Update tab
       this.parentElement.querySelector('.selected').classList.remove('selected');
       this.classList.add('selected');
@@ -142,6 +147,17 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           activeTab = i - 1;
           break;
         }
+      }
+
+      // Toggle insert button disabled
+      if (activeTab === 0) {
+        self.$insertButton[0].disabled = true;
+      }
+      else if (activeTab === 1) {
+        self.$insertButton[0].disabled = false;
+      }
+      else {
+        self.$insertButton[0].disabled = !tabInstances[activeTab - 2].hasMedia();
       }
     }
     const moveFocus = function (el) {
@@ -169,22 +185,31 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     this.$addDialog = this.$add.next();
 
     const tabInstances = [];
+    self.tabInstances = tabInstances;
     if (self.field.extraTabs) {
+      const createTabInstance = function (type, index) {
+        const tabInstance = new H5PEditor.AV[type]();
+        tabInstance.appendTo(self.$addDialog[0].children[0].children[index + 3]);
+        tabInstance.on('hasMedia', function (e) {
+          if (index === activeTab - 2) {
+            self.$insertButton[0].disabled = !e.data;
+          }
+        });
+        tabInstances.push(tabInstance);
+      }
+
       // Append extra tabs
       for (let i = 0; i < self.field.extraTabs.length; i++) {
         if (H5PEditor.AV[self.field.extraTabs[i]]) {
-          const tabInstance = new H5PEditor.AV[self.field.extraTabs[i]]();
-          tabInstance.appendTo(this.$addDialog[0].children[0].children[i + 3]);
-          tabInstances.push(tabInstance);
+          createTabInstance(self.field.extraTabs[i], i);
         }
       }
     }
 
-    var $url = this.$addDialog.find('.h5p-file-url');
+    var $url = this.$url = this.$addDialog.find('.h5p-file-url');
     this.$addDialog.find('.h5p-cancel').click(function () {
       self.updateIndex = undefined;
-      $url.val('');
-      self.$addDialog.removeClass('h5p-open');
+      self.closeDialog();
     });
 
     this.$addDialog.find('.h5p-file-drop-upload')
@@ -207,7 +232,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         self.openFileSelector();
       });
 
-    this.$addDialog.find('.h5p-insert').click(function () {
+    this.$insertButton = this.$addDialog.find('.h5p-insert').click(function () {
       if (tabInstances.length && activeTab > 1) {
         const media = tabInstances[activeTab - 2].getMedia();
         if (media) {
@@ -215,11 +240,13 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         }
       }
       else {
-        self.useUrl($url.val().trim());
-        $url.val('');
+        const url = $url.val().trim();
+        if (url) {
+          self.useUrl(url);
+        }
       }
 
-      self.$addDialog.removeClass('h5p-open');
+      self.closeDialog();
     });
 
     this.$errors = $container.children('.h5p-errors');
@@ -475,6 +502,21 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   };
 
   /**
+   * Close the add media dialog
+   */
+  C.prototype.closeDialog = function () {
+    this.$addDialog.removeClass('h5p-open');
+
+    // Reset URL input
+    this.$url.val('');
+
+    // Reset all of the tabs
+    for (let i = 0; i < this.tabInstances.length; i++) {
+      this.tabInstances[i].reset();
+    }
+  };
+
+  /**
    * Create the HTML for the dialog itself.
    *
    * @param {string} content HTML
@@ -550,7 +592,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       const title = (i > 1 ? H5PEditor.t('H5PEditor.' + tab, 'title') : H5PEditor.t('core', 'tabTitle' + tab));
 
       tabsHTML += '<div class="av-tab' + (i === 0 ? ' selected' : '') + '" tabindex="' + tabindex + '" role="tab" aria-selected="' + selected + '" aria-controls="av-tabpanel-' + tabId + '" id="av-tab-' + tabId + '">' + title + '</div>';
-      tabpanelsHTML += '<div class="av-tabpanel" tabindex="0" role="tabpanel" id="av-tabpanel-' + tabId + '" aria-labelledby="av-tab-' + tabId + '"' + (i === 0 ? '' : ' hidden=""') + '>' + C.createTabContent(tab, type) + '</div>';
+      tabpanelsHTML += '<div class="av-tabpanel" tabindex="-1" role="tabpanel" id="av-tabpanel-' + tabId + '" aria-labelledby="av-tab-' + tabId + '"' + (i === 0 ? '' : ' hidden=""') + '>' + C.createTabContent(tab, type) + '</div>';
     }
 
     return C.createInsertDialog(

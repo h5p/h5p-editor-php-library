@@ -285,7 +285,7 @@ a {
       .av-tab {
         cursor: pointer;
         float: left;
-        padding: 0.25em 0.5em;
+        padding: 0.5em 0.75em;
         border-top: 1px solid #ccc;
         border-right: 1px solid #ccc;
         font-weight: bold;
@@ -861,7 +861,7 @@ a {
     line-height: 0.9;
   }
 
-  &:hover {
+  &:hover:not([disabled]) {
     @include button-background(
       $form-item-importance-medium-background-hover,
       $form-item-importance-medium-background-hover-highlight);
@@ -903,6 +903,11 @@ a {
         $form-item-importance-low-background-hover-highlight);
       border-color: $form-item-importance-low-background-hover;
     }
+  }
+
+  &[disabled] {
+    cursor: default;
+    opacity: 0.6;
   }
 }
 .h5peditor-field-description,
