@@ -527,7 +527,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       '<div class="h5p-add-dialog">' +
         '<div class="h5p-add-dialog-table">' + content + '</div>' +
         '<div class="h5p-buttons">' +
-          '<button class="h5peditor-button-textual h5p-insert">' + H5PEditor.t('core', 'insert') + '</button>' +
+          '<button class="h5peditor-button-textual h5p-insert" disabled>' + H5PEditor.t('core', 'insert') + '</button>' +
           '<button class="h5peditor-button-textual h5p-cancel">' + H5PEditor.t('core', 'cancel') + '</button>' +
         '</div>' +
       '</div>';
