@@ -554,14 +554,15 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * Create the HTML for the dialog itself.
    *
    * @param {string} content HTML
+   * @param {boolea} disableInsert
    * @returns {string} HTML
    */
-  C.createInsertDialog = function (content) {
+  C.createInsertDialog = function (content, disableInsert) {
     return '<div role="button" tabindex="0" class="h5p-add-file" title="' + H5PEditor.t('core', 'addFile') + '"></div>' +
       '<div class="h5p-add-dialog">' +
         '<div class="h5p-add-dialog-table">' + content + '</div>' +
         '<div class="h5p-buttons">' +
-          '<button class="h5peditor-button-textual h5p-insert" disabled>' + H5PEditor.t('core', 'insert') + '</button>' +
+          '<button class="h5peditor-button-textual h5p-insert"' + (disableInsert ? ' disabled' : '') + '>' + H5PEditor.t('core', 'insert') + '</button>' +
           '<button class="h5peditor-button-textual h5p-cancel">' + H5PEditor.t('core', 'cancel') + '</button>' +
         '</div>' +
       '</div>';
@@ -630,7 +631,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     }
 
     return C.createInsertDialog(
-      '<div class="av-tablist" role="tablist" aria-label="' + H5PEditor.t('core', 'avTablistLabel') + '">' + tabsHTML + '</div>' + tabpanelsHTML
+      '<div class="av-tablist" role="tablist" aria-label="' + H5PEditor.t('core', 'avTablistLabel') + '">' + tabsHTML + '</div>' + tabpanelsHTML,
+      true
     );
   };
 
