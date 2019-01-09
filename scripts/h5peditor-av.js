@@ -107,7 +107,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     var imageHtml =
       '<ul class="file list-unstyled"></ul>' +
-      (self.field.extraTabs ? C.createTabbedAdd(self.field.type, self.field.extraTabs) : C.createAdd(self.field.type))
+      (self.field.widgetExtensions ? C.createTabbedAdd(self.field.type, self.field.widgetExtensions) : C.createAdd(self.field.type))
 
     if (!this.field.disableCopyright) {
       imageHtml += '<a class="h5p-copyright-button" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>';
@@ -125,11 +125,30 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       self.$addDialog.addClass('h5p-open');
     });
 
-    let activeTab = 0;
+    // Tabs that are hard-coded into this widget. Any other tab must be an extension.
+    const TABS = {
+      UPLOAD: 0,
+      INPUT: 1
+    };
+
+    // The current active tab
+    let activeTab = TABS.UPLOAD;
+
+    /**
+     * @param {number} tab
+     * @return {boolean}
+     */
+    const isExtension = function (tab) {
+      return tab > TABS.INPUT; // Always last tab
+    };
+
+    /**
+     * Toggle the currently active tab.
+     */
     const toggleTab = function () {
-      // Pause last tab
-      if (activeTab > 1) {
-        tabInstances[activeTab - 2].pause();
+      // Pause the last active tab
+      if (isExtension(activeTab)) {
+        tabInstances[activeTab].pause();
       }
 
       // Update tab
@@ -144,22 +163,26 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       // Set active tab index
       for (let i = 0; i < el.parentElement.children.length; i++) {
         if (el.parentElement.children[i] === el) {
-          activeTab = i - 1;
+          activeTab = i - 1; // Compensate for .av-tablist in the same wrapper
           break;
         }
       }
 
       // Toggle insert button disabled
-      if (activeTab === 0) {
+      if (activeTab === TABS.UPLOAD) {
         self.$insertButton[0].disabled = true;
       }
-      else if (activeTab === 1) {
+      else if (activeTab === TABS.INPUT) {
         self.$insertButton[0].disabled = false;
       }
       else {
-        self.$insertButton[0].disabled = !tabInstances[activeTab - 2].hasMedia();
+        self.$insertButton[0].disabled = !tabInstances[activeTab].hasMedia();
       }
     }
+
+    /**
+     * Switch focus between the buttons in the tablist
+     */
     const moveFocus = function (el) {
       if (el) {
         this.setAttribute('tabindex', '-1');
@@ -167,16 +190,18 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         el.focus();
       }
     }
+
+    // Register event listeners to tab DOM elements
     $container.find('.av-tab').click(toggleTab).keydown(function (e) {
-      if (e.which === 13 || e.which === 32) {
+      if (e.which === 13 || e.which === 32) { // Enter or Space
         toggleTab.call(this, e);
         e.preventDefault();
       }
-      else if (e.which === 37 || e.which === 38) {
+      else if (e.which === 37 || e.which === 38) { // Left or Up
         moveFocus.call(this, this.previousSibling);
         e.preventDefault();
       }
-      else if (e.which === 39 || e.which === 40) {
+      else if (e.which === 39 || e.which === 40) { // Right or Down
         moveFocus.call(this, this.nextSibling);
         e.preventDefault();
       }
@@ -184,14 +209,21 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     this.$addDialog = this.$add.next();
 
-    const tabInstances = [];
+    // Prepare to add the extra tab instances
+    const tabInstances = [null, null]; // Add nulls for hard-coded tabs
     self.tabInstances = tabInstances;
-    if (self.field.extraTabs) {
+
+    if (self.field.widgetExtensions) {
+
+      /**
+       * @param {string} type Constructor name scoped inside this widget
+       * @param {number} index
+       */
       const createTabInstance = function (type, index) {
         const tabInstance = new H5PEditor.AV[type]();
-        tabInstance.appendTo(self.$addDialog[0].children[0].children[index + 3]);
+        tabInstance.appendTo(self.$addDialog[0].children[0].children[index + 1]); // Compensate for .av-tablist in the same wrapper
         tabInstance.on('hasMedia', function (e) {
-          if (index === activeTab - 2) {
+          if (index === activeTab) {
             self.$insertButton[0].disabled = !e.data;
           }
         });
@@ -199,9 +231,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       }
 
       // Append extra tabs
-      for (let i = 0; i < self.field.extraTabs.length; i++) {
-        if (H5PEditor.AV[self.field.extraTabs[i]]) {
-          createTabInstance(self.field.extraTabs[i], i);
+      for (let i = 0; i < self.field.widgetExtensions.length; i++) {
+        if (H5PEditor.AV[self.field.widgetExtensions[i]]) {
+          createTabInstance(self.field.widgetExtensions[i], i + 2); // Compensate for the number of hard-coded tabs
         }
       }
     }
@@ -233,8 +265,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       });
 
     this.$insertButton = this.$addDialog.find('.h5p-insert').click(function () {
-      if (tabInstances.length && activeTab > 1) {
-        const media = tabInstances[activeTab - 2].getMedia();
+      if (isExtension(activeTab)) {
+        const media = tabInstances[activeTab].getMedia();
         if (media) {
           self.upload(media.data, media.name);
         }
@@ -512,7 +544,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     // Reset all of the tabs
     for (let i = 0; i < this.tabInstances.length; i++) {
-      this.tabInstances[i].reset();
+      if (this.tabInstances[i]) {
+        this.tabInstances[i].reset();
+      }
     }
   };
 
