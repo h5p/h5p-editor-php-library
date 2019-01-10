@@ -195,5 +195,8 @@ H5PEditor.language.core = {
  pasteContentNotSupported: 'Itsasten saiatzen ari zaren edukia ez da testuinguru honetan onartzen',
  pasteTooOld: 'Itsasten saiatzen ari zaren edukia testuinguru honetan (:local) onartzen dena baino bertsio zaharrago bati dagokio (:clip), ahal baduzu eguneratu ezazu testuingurua eta gero saiatu berriro edukia itsasten.',
  pasteTooNew: 'Itsasten saiatzen ari zaren edukia testuinguru honetan (:local) onartzen dena baino bertsio berriago bati dagokio (:clip), ahal baduzu eguneratu ezazu edukia eta gero saiatu berriro edukia itsasten.',
- ok: 'ados'
+ ok: 'ados',
+ avTablistLabel: 'Txertatu hau erabiltzen:',
+ tabTitleBasicFileUpload: 'Igo fitxategia',
+ tabTitleInputLinkURL: 'Esteka/URLa'
 };
