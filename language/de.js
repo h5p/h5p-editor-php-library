@@ -192,6 +192,9 @@ H5PEditor.language.core = {
   pasteError: 'Kann nicht aus der Zwischenablage einfügen',
   pasteContentNotSupported: 'Dieser Inhaltstyp kann an dieser Stelle nicht eingefügt werden.',
   pasteTooOld: 'Der einzufügende Inhalt liegt in einer niedrigeren Version vor (:clip) als an dieser Stelle unterstützt wird (:local). Versuche nach Möglichkeit den gewünschten Inhalt zu aktualisieren und dann erneut in die Zwischenablage zu kopieren und hier einzufügen.',
-  pasteTooNew: 'Der einzufügende Inhalt liegt in einer aktuelleren Version vor (:clip) als an dieser Stelle unterstützt wird (:local). Versuche nach Möglichkeit den Inhalt, in den du etwas einfügen möchtest, zu aktualisieren und dann erneut die Zwischenablage einzufügen.',                
+  pasteTooNew: 'Der einzufügende Inhalt liegt in einer aktuelleren Version vor (:clip) als an dieser Stelle unterstützt wird (:local). Versuche nach Möglichkeit den Inhalt, in den du etwas einfügen möchtest, zu aktualisieren und dann erneut die Zwischenablage einzufügen.',
   ok: 'OK',
+  avTablistLabel: 'Einfügen über',
+  tabTitleBasicFileUpload: 'Datei hochladen',
+  tabTitleInputLinkURL: 'Link/URL'
 };

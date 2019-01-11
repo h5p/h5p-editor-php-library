@@ -194,4 +194,7 @@ H5PEditor.language.core = {
   pasteTooOld: 'Zasób, który próbujesz wkleić, jest w starszej wersji (:clip) niż wspierany w tym kontekście (:local). Jeśli możesz, spróbuj najpierw zaktualizować zasób, a dopiero potem go skopiować i wkleić tutaj.',
   pasteTooNew: 'Zasób, który próbujesz wkleić, jest w nowszej wersji (:clip) niż wspierany w tym kontekście (:local). Jeśli możesz, spróbuj najpierw zaktualizować typ zasobu, a dopiero potem wkleić go tutaj.',
   ok: 'OK',
+  avTablistLabel: 'Insert using',
+  tabTitleBasicFileUpload: 'File Upload',
+  tabTitleInputLinkURL: 'Link/URL'
 };
