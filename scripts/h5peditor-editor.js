@@ -28,7 +28,9 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       left: 0
     },
     'class': 'h5p-editor-iframe',
-    'frameBorder': '0'
+    'frameBorder': '0',
+    'allowfullscreen': 'allowfullscreen',
+    'allow': "fullscreen"
   });
 
   // The DOM element is often used directly
