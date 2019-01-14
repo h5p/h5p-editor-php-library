@@ -207,7 +207,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       }
     });
 
-    this.$addDialog = this.$add.next();
+    this.$addDialog = this.$add.next().children().first();
 
     // Prepare to add the extra tab instances
     const tabInstances = [null, null]; // Add nulls for hard-coded tabs
@@ -559,13 +559,13 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    */
   C.createInsertDialog = function (content, disableInsert) {
     return '<div role="button" tabindex="0" class="h5p-add-file" title="' + H5PEditor.t('core', 'addFile') + '"></div>' +
-      '<div class="h5p-add-dialog">' +
+      '<div class="h5p-dialog-anchor"><div class="h5p-add-dialog">' +
         '<div class="h5p-add-dialog-table">' + content + '</div>' +
         '<div class="h5p-buttons">' +
           '<button class="h5peditor-button-textual h5p-insert"' + (disableInsert ? ' disabled' : '') + '>' + H5PEditor.t('core', 'insert') + '</button>' +
           '<button class="h5peditor-button-textual h5p-cancel">' + H5PEditor.t('core', 'cancel') + '</button>' +
         '</div>' +
-      '</div>';
+      '</div></div>';
   };
 
   /**
