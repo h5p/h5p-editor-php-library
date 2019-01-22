@@ -90,169 +90,40 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
       authorComments: event.h5p.authorComments
     };
 
-    // Look for the best possible upgrade
-    // TODO: Create multiple(at least two) functions for doing this.
-    let possibleUpgrade;
-    for (let i = 0; i < libraries.libraries.length; i++) {
-      const canlib = libraries.libraries[i];
-      if (canlib.machineName === uploadedVersion.machineName &&
-          (canlib.localMajorVersion > uploadedVersion.majorVersion ||
-            (canlib.localMajorVersion == uploadedVersion.majorVersion &&
-             canlib.localMinorVersion > uploadedVersion.minorVersion)
-          )) {
-        // Check if the upgrade is better than the previous upgrade we found
-        if (!possibleUpgrade || canlib.localMajorVersion > possibleUpgrade.localMajorVersion ||
-            (canlib.localMajorVersion == possibleUpgrade.localMajorVersion &&
-             canlib.localMinorVersion > possibleUpgrade.localMinorVersion)) {
-          possibleUpgrade = canlib;
-        }
-      }
-    }
-
-    // TODO: Test with not being able to install old content types - currently only tested with installed content types...
-    // TODO: What happens if the uploaded version is a newer version and the libraries can't be installed?
-    console.log('I want to upgrade to ', possibleUpgrade);
-
-    const librariesCache = {};
-    const librariesLoadedCallbacks = {};
-
     /**
-     * Duplicate from h5p-content-upgrade.js - TODO could we use the editor's cached instead?
-     * @class
+     * Change library immediately or show confirmation dialog
+     * @private
      */
-    const loadLibrary = function (name, version, next) {
-      var key = name + '/' + version.major + '/' + version.minor;
-
-      if (librariesCache[key] === true) {
-        // Library is being loaded, que callback
-        if (librariesLoadedCallbacks[key] === undefined) {
-          librariesLoadedCallbacks[key] = [next];
-          return;
-        }
-        librariesLoadedCallbacks[key].push(next);
-        return;
-      }
-      else if (librariesCache[key] !== undefined) {
-        // Library has been loaded before. Return cache.
-        next(null, librariesCache[key]);
-        return;
-      }
-
-      librariesCache[key] = true;
-      H5P.jQuery.ajax({
-        dataType: 'json',
-        cache: true,
-        // TODO: Use variable instead - Could we make this share the cache + endpoint used by the editor?
-        url: '/wp-admin/admin-ajax.php?action=h5p_content_upgrade_library&library=/' + key
-      }).fail(function () {
-        next('Error loading library ' + name + ' ' + version);
-      }).done(function (library) {
-        librariesCache[key] = library;
-        next(null, library);
-
-        if (librariesLoadedCallbacks[key] !== undefined) {
-          for (var i = 0; i < librariesLoadedCallbacks[key].length; i++) {
-            librariesLoadedCallbacks[key][i](null, library);
-          }
-        }
-        delete librariesLoadedCallbacks[key];
-      });
-    };
-
-    /**
-     * Local version of H5P.Version - TODO merge them?
-     * @class
-     */
-    const Version = function (lib) {
-      if (lib.localMajorVersion !== undefined) {
-        this.major =+ lib.localMajorVersion;
-        this.minor =+ lib.localMinorVersion;
+    const selectLibrary = function () {
+      if (!previousLibrary) {
+        self.trigger('selected');
       }
       else {
-        this.major =+ lib.majorVersion;
-        this.minor =+ lib.minorVersion;
+        changeLibraryDialog.show(ns.$(self.getElement()).offset().top);
       }
-
-      this.toString = function () {
-        return this.major + '.' + this.minor;
-      };
-    }
-
-    const loadedScripts = [];
-
-    /**
-     * Duplicate from h5p-content-upgrade.js - TODO use same function as the editor?
-     * @class
-     */
-    const loadScript = function (url, next) {
-      var self = this;
-
-      if (loadedScripts.indexOf(url) !== -1) {
-        next();
-        return;
-      }
-
-      H5P.jQuery.ajax({
-        dataType: 'script',
-        cache: true,
-        url: url
-      }).fail(function () {
-        next(true);
-      }).done(function () {
-        loadedScripts.push(url);
-        next();
-      });
     };
 
-    // TODO: Use H5PIntegration.editor variables instead
-    const libraryUrl = '/wp-content/plugins/h5p/h5p-php-library/js';
-    const pluginCacheBuster = '?v=0.0.0'
-
-    // TODO: Version must be loaded before upgrade-process.js
-    // TODO: Make this easier to read? At least the first level..
-    // TODO: Avoid stringify and parsing the parameters
-    // TODO: Show throbber while upgrading?
-    // TODO: Use a single web worker to avoid freezing the page while upgrading
-    loadScript(libraryUrl + '/h5p-version.js' + pluginCacheBuster, function (err) { });
-    loadScript(libraryUrl + '/h5p-content-upgrade-process.js' + pluginCacheBuster, function (err) {
-
-      new H5P.ContentUpgradeProcess(uploadedVersion.machineName, new Version(uploadedVersion), new Version(possibleUpgrade), JSON.stringify({params: self.currentParams, metadata: self.currentMetadata}), 1, function (name, version, next) {
-        loadLibrary(name, version, function (err, library) {
-          if (library.upgradesScript) {
-            loadScript(library.upgradesScript, function (err) {
-              if (err) {
-                err = 'Error loading upgrades ' + name + ' ' + version;
-              }
-              next(err, library);
-            });
-          }
-          else {
-            next(null, library);
-          }
-        });
-
-      }, function done(err, result) {
+    // Check if we have any newer versions
+    const upgradeLibrary = ns.ContentType.getPossibleUpgrade(uploadedVersion, libraries.libraries);
+    if (upgradeLibrary) {
+      // We need to run content upgrade before showing the editor
+      ns.upgradeContent(uploadedVersion, upgradeLibrary, {params: self.currentParams, metadata: self.currentMetadata}, function (err, result) {
         if (err) {
-          console.error(err); // How can we bring this news to the user?
+          console.error(err); // How can we bring the news to the user?
           return;
         }
 
-        const final = JSON.parse(result);
-        console.log('Done', final);
-        self.currentParams = final.params;
-        self.currentMetadata = final.metadata;
-        self.currentLibrary = self.createContentTypeId(possibleUpgrade, true);
+        const content = JSON.parse(result);
+        self.currentParams = content.params;
+        self.currentMetadata = content.metadata;
+        self.currentLibrary = self.createContentTypeId(upgradeLibrary, true);
 
-        // Change library immediately or show confirmation dialog
-        if (!previousLibrary) {
-          self.trigger('selected');
-        }
-        else {
-          changeLibraryDialog.show(ns.$(self.getElement()).offset().top);
-        }
-      });
-
-    });
+        selectLibrary();
+      })
+    }
+    else {
+      selectLibrary();
+    }
 
   }, this);
 

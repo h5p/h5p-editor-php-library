@@ -119,6 +119,9 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       iframeLoaded.call(this.contentWindow);
     }
 
+    // Used for accessing resources inside iframe
+    self.iframeWindow = this.contentWindow;
+
     var LibrarySelector = this.contentWindow.H5PEditor.LibrarySelector;
     var $ = this.contentWindow.H5P.jQuery;
     var $container = $('body > .h5p-editor');
@@ -268,6 +271,47 @@ ns.Editor.prototype.getParams = function (notFormSubmit) {
   }
   else {
     console.warn('no selector defined for "getParams"');
+  }
+};
+
+/**
+ * Validate editor data and submit content using callback.
+ *
+ * @alias H5PEditor.Editor#getContent
+ * @param {Function} submit Callback to submit the content data
+ */
+ns.Editor.prototype.getContent = function (submit) {
+  const iframeEditor = this.iframeWindow.H5PEditor;
+
+  const content = {
+    library: this.getLibrary(),
+    params: this.getParams()
+  };
+
+  if (!this.isMainTitleSet() || !content.library || !content.params || !content.params.params) {
+    return;
+  }
+
+  library = new iframeEditor.ContentType(content.library);
+  const upgradeLibrary = iframeEditor.ContentType.getPossibleUpgrade(library, this.selector.libraries.libraries !== undefined ? this.selector.libraries.libraries : this.selector.libraries);
+  if (upgradeLibrary) {
+    // We need to run content upgrade before saving
+    iframeEditor.upgradeContent(library, upgradeLibrary, content.params, function (err, result) {
+      if (err) {
+        console.error(err); // How can we bring the news to the user?
+        return;
+      }
+
+      content.library = iframeEditor.ContentType.getNameVersionString(upgradeLibrary);
+      content.params = result;
+
+      submit(content);
+    })
+  }
+  else {
+    // All OK, store the data
+    content.params = JSON.stringify(content.params);
+    submit(content);
   }
 };
 
