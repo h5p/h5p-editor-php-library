@@ -196,5 +196,9 @@ H5PEditor.language.core = {
   ok: 'OK',
   avTablistLabel: 'Sett inn via',
   tabTitleBasicFileUpload: 'Filopplasting',
-  tabTitleInputLinkURL: 'Lenke/URL'
+  tabTitleInputLinkURL: 'Lenke/URL',
+  errorTooHighVersion: 'Parameters contain %used while only %supported or earlier are supported.',
+  errorNotSupported: 'Parameters contain %used which is not supported.',
+  errorParamsBroken: 'Parameters are broken.',
+  scriptMissing: 'Could not load upgrades script for %lib.'
 };

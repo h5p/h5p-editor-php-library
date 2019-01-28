@@ -194,4 +194,8 @@ H5PEditor.language.core = {
   pasteTooOld: 'Zasób, który próbujesz wkleić, jest w starszej wersji (:clip) niż wspierany w tym kontekście (:local). Jeśli możesz, spróbuj najpierw zaktualizować zasób, a dopiero potem go skopiować i wkleić tutaj.',
   pasteTooNew: 'Zasób, który próbujesz wkleić, jest w nowszej wersji (:clip) niż wspierany w tym kontekście (:local). Jeśli możesz, spróbuj najpierw zaktualizować typ zasobu, a dopiero potem wkleić go tutaj.',
   ok: 'OK',
+  errorTooHighVersion: 'Parameters contain %used while only %supported or earlier are supported.',
+  errorNotSupported: 'Parameters contain %used which is not supported.',
+  errorParamsBroken: 'Parameters are broken.',
+  scriptMissing: 'Could not load upgrades script for %lib.'
 };

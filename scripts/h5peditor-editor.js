@@ -297,15 +297,11 @@ ns.Editor.prototype.getContent = function (submit) {
   if (upgradeLibrary) {
     // We need to run content upgrade before saving
     iframeEditor.upgradeContent(library, upgradeLibrary, content.params, function (err, result) {
-      if (err) {
-        console.error(err); // How can we bring the news to the user?
-        return;
+      if (!err) {
+        content.library = iframeEditor.ContentType.getNameVersionString(upgradeLibrary);
+        content.params = result;
+        submit(content);
       }
-
-      content.library = iframeEditor.ContentType.getNameVersionString(upgradeLibrary);
-      content.params = result;
-
-      submit(content);
     })
   }
   else {

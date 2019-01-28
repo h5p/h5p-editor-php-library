@@ -194,4 +194,8 @@ H5PEditor.language.core = {
   pasteTooOld: 'O conteúdo que você está tentando colar é de uma versão inferior (:clip) à versão suportada neste contexto (:local), se possível, tente atualizar o conteúdo que deseja colar, copie-o novamente e tente colá-lo aqui.',
   pasteTooNew: 'O conteúdo que você está tentando colar é de uma versão superior (:clip) à versão suportada neste contexto (:local), se possível, tente atualizar este conteúdo, e então tente colar novamente.',
   ok: 'OK',
+  errorTooHighVersion: 'Parameters contain %used while only %supported or earlier are supported.',
+  errorNotSupported: 'Parameters contain %used which is not supported.',
+  errorParamsBroken: 'Parameters are broken.',
+  scriptMissing: 'Could not load upgrades script for %lib.'
 };

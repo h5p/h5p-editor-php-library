@@ -109,16 +109,17 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
       // We need to run content upgrade before showing the editor
       ns.upgradeContent(uploadedVersion, upgradeLibrary, {params: self.currentParams, metadata: self.currentMetadata}, function (err, result) {
         if (err) {
-          console.error(err); // How can we bring the news to the user?
-          return;
+          // Reset the Hub
+          var contentType = self.getContentType(self.currentLibrary.split(' ')[0]);
+          self.client.setPanelTitle(contentType.title || contentType.machineName, true);
         }
-
-        const content = JSON.parse(result);
-        self.currentParams = content.params;
-        self.currentMetadata = content.metadata;
-        self.currentLibrary = self.createContentTypeId(upgradeLibrary, true);
-
-        selectLibrary();
+        else {
+          const content = JSON.parse(result);
+          self.currentParams = content.params;
+          self.currentMetadata = content.metadata;
+          self.currentLibrary = self.createContentTypeId(upgradeLibrary, true);
+          selectLibrary();
+        }
       })
     }
     else {

@@ -1679,7 +1679,37 @@ ns.upgradeContent = (function () {
             }
           });
 
-        }, done);
+        }, function (err, result) {
+          if (err) {
+            let header = 'Failed';
+            let message = 'Could not upgrade content';
+            switch (err.type) {
+              case 'errorTooHighVersion':
+                message += ': ' + ns.t('core', 'errorTooHighVersion', {'%used': err.used, '%supported': err.supported});
+                break;
+
+              case 'errorNotSupported':
+                message += ': ' + ns.t('core', 'errorNotSupported', {'%used': err.used});
+                break;
+
+              case 'errorParamsBroken':
+                message += ': ' + ns.t('core', 'errorParamsBroken');
+                break;
+
+              case 'scriptMissing':
+                message += ': ' + ns.t('core', 'scriptMissing', {'%lib': err.library});
+                break;
+            }
+
+            var confirmErrorDialog = new H5P.ConfirmationDialog({
+              headerText: header,
+              dialogText: message,
+              confirmText: 'Continue'
+            }).appendTo(document.body);
+            confirmErrorDialog.show();
+          }
+          done(err, result);
+        });
       });
     });
   };

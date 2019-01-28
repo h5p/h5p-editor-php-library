@@ -195,5 +195,9 @@ H5PEditor.language.core = {
  pasteContentNotSupported: 'Itsasten saiatzen ari zaren edukia ez da testuinguru honetan onartzen',
  pasteTooOld: 'Itsasten saiatzen ari zaren edukia testuinguru honetan (:local) onartzen dena baino bertsio zaharrago bati dagokio (:clip), ahal baduzu eguneratu ezazu testuingurua eta gero saiatu berriro edukia itsasten.',
  pasteTooNew: 'Itsasten saiatzen ari zaren edukia testuinguru honetan (:local) onartzen dena baino bertsio berriago bati dagokio (:clip), ahal baduzu eguneratu ezazu edukia eta gero saiatu berriro edukia itsasten.',
- ok: 'ados'
+ ok: 'ados',
+ errorTooHighVersion: 'Parameters contain %used while only %supported or earlier are supported.',
+ errorNotSupported: 'Parameters contain %used which is not supported.',
+ errorParamsBroken: 'Parameters are broken.',
+ scriptMissing: 'Could not load upgrades script for %lib.'
 };
