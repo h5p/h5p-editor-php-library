@@ -197,8 +197,9 @@ H5PEditor.language.core = {
   avTablistLabel: 'Sett inn via',
   tabTitleBasicFileUpload: 'Filopplasting',
   tabTitleInputLinkURL: 'Lenke/URL',
-  errorTooHighVersion: 'Parameters contain %used while only %supported or earlier are supported.',
-  errorNotSupported: 'Parameters contain %used which is not supported.',
-  errorParamsBroken: 'Parameters are broken.',
-  scriptMissing: 'Could not load upgrades script for %lib.'
+  errorTooHighVersion: 'Parameterene innholder %used mens kunn %supported eller tidligere er støttet.',
+  errorNotSupported: 'Parameterene inneholder %used som ikke er støttet.',
+  errorParamsBroken: 'Parameterene er ødelagt.',
+  libraryMissing: 'Mangler påkrevd bibliotek %lib.',
+  scriptMissing: 'Kunne ikke laste oppgraderingsskript for %lib.'
 };

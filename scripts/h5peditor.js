@@ -1696,6 +1696,10 @@ ns.upgradeContent = (function () {
                 message += ': ' + ns.t('core', 'errorParamsBroken');
                 break;
 
+              case 'libraryMissing':
+                message += ': ' +  ns.t('core', 'libraryMissing', {'%lib': err.library});
+                break;
+
               case 'scriptMissing':
                 message += ': ' + ns.t('core', 'scriptMissing', {'%lib': err.library});
                 break;
