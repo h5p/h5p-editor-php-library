@@ -364,6 +364,16 @@ class H5peditor {
   public function getLibraryData($machineName, $majorVersion, $minorVersion, $languageCode, $prefix = '', $fileDir = '') {
     $libraryData = new stdClass();
 
+    // Include name and version in data object for convenience
+    $libraryData->name = $machineName;
+    $libraryData->version = (object) array('major' => $majorVersion, 'minor' => $minorVersion);
+
+    $libraryData->upgradesScript = $this->h5p->fs->getUpgradeScript($machineName, $majorVersion, $minorVersion);
+    if ($libraryData->upgradesScript !== NULL) {
+      // If valid add URL prefix
+      $libraryData->upgradesScript = $this->h5p->url .  $libraryData->upgradesScript;
+    }
+
     $libraries              = $this->findEditorLibraries($machineName, $majorVersion, $minorVersion);
     $libraryData->semantics = $this->h5p->loadLibrarySemantics($machineName, $majorVersion, $minorVersion);
     $libraryData->language  = $this->getLibraryLanguage($machineName, $majorVersion, $minorVersion, $languageCode);

@@ -196,5 +196,10 @@ H5PEditor.language.core = {
   ok: 'OK',
   avTablistLabel: 'Insert using',
   tabTitleBasicFileUpload: 'File Upload',
-  tabTitleInputLinkURL: 'Link/URL'
+  tabTitleInputLinkURL: 'Link/URL',
+  errorTooHighVersion: 'Parameters contain %used while only %supported or earlier are supported.',
+  errorNotSupported: 'Parameters contain %used which is not supported.',
+  errorParamsBroken: 'Parameters are broken.',
+  libraryMissing: 'Missing required library %lib.',
+  scriptMissing: 'Could not load upgrades script for %lib.'
 };

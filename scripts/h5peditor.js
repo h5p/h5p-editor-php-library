@@ -9,8 +9,8 @@ ns.$ = H5P.jQuery;
 
 // Load needed resources from parent.
 H5PIntegration = H5P.jQuery.extend(false, {}, window.parent.H5PIntegration);
-H5PIntegration.loadedJs = {};
-H5PIntegration.loadedCss = {};
+H5PIntegration.loadedJs = [];
+H5PIntegration.loadedCss = [];
 
 /**
  * Keep track of our widgets.
@@ -48,6 +48,35 @@ ns.isIE = navigator.userAgent.match(/; MSIE \d+.\d+;/) !== null;
 ns.renderableCommonFields = {};
 
 /**
+ * Help load JavaScripts, prevents double loading.
+ *
+ * @param {string} src
+ * @param {Function} done Callback
+ */
+ns.loadJs = function (src, done) {
+  if (H5P.jsLoaded(src)) {
+    // Already loaded
+    done();
+  }
+  else {
+    // Loading using script tag
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.charset = 'UTF-8';
+    script.async = false;
+    script.onload = function () {
+      H5PIntegration.loadedJs.push(src);
+      done();
+    };
+    script.onerror = function (err) {
+      done(err);
+    };
+    script.src = src;
+    document.head.appendChild(script);
+  }
+}
+
+/**
  * Helper function invoked when a library is requested. Will add CSS and eval JS
  * if not already done.
  *
@@ -81,13 +110,11 @@ ns.libraryRequested = function (libraryName, callback) {
       libraryData.javascript.forEach(function (path) {
         if (!H5P.jsLoaded(path)) {
           loadingJs = true;
-          var script = document.createElement('script');
-          script.type = 'text/javascript';
-          script.charset = 'UTF-8';
-          script.async = false;
-
-          script.onload = function () {
-            H5PIntegration.loadedJs.push(path);
+          ns.loadJs(path, function (err) {
+            if (err) {
+              console.error('Error while loading script', err);
+              return;
+            }
 
             var isFinishedLoading = libraryData.javascript.reduce(function (hasLoaded, jsPath) {
               return hasLoaded && H5P.jsLoaded(jsPath);
@@ -105,14 +132,7 @@ ns.libraryRequested = function (libraryName, callback) {
 
               callback(ns.libraryCache[libraryName].semantics);
             }
-          };
-
-          script.onerror = function (e) {
-            console.error("Error while loading scripts:", e);
-          };
-
-          script.src = path;
-          document.head.appendChild(script);
+          });
         }
       });
     }
@@ -1518,4 +1538,183 @@ ns.storage = (function () {
     }
   };
   return instance;
+})();
+
+/**
+ * Small helper class for library data.
+ *
+ * @class
+ * @param {string} nameVersionString
+ */
+ns.ContentType = function ContentType(nameVersionString) {
+  const libraryNameSplit = nameVersionString.split(' ');
+  const libraryVersionSplit = libraryNameSplit[1].split('.');
+
+  this.machineName = libraryNameSplit[0];
+  this.majorVersion = libraryVersionSplit[0];
+  this.minorVersion = libraryVersionSplit[1];
+};
+
+/**
+ * Look for the best possible upgrade for the given library
+ *
+ * @param {ns.ContentType} library
+ * @param {Array} libraries Where to look
+ */
+ns.ContentType.getPossibleUpgrade = function (library, libraries) {
+  let possibleUpgrade;
+
+  for (let i = 0; i < libraries.length; i++) {
+    const candiate = libraries[i];
+    if (ns.ContentType.hasSameName(candiate, library) && ns.ContentType.isHigherVersion(candiate, library)) {
+
+      // Check if the upgrade is better than the previous upgrade we found
+      if (!possibleUpgrade || ns.ContentType.isHigherVersion(candiate, possibleUpgrade)) {
+        possibleUpgrade = candiate;
+      }
+    }
+  }
+
+  return possibleUpgrade;
+};
+
+/**
+ * Check if candiate is a higher version than original.
+ *
+ * @param {Object} candiate Library object
+ * @param {Object} original Library object
+ * @returns {boolean}
+ */
+ns.ContentType.isHigherVersion = function (candiate, original) {
+  return (ns.ContentType.getMajorVersion(candiate) > ns.ContentType.getMajorVersion(original) ||
+    (ns.ContentType.getMajorVersion(candiate) == ns.ContentType.getMajorVersion(original) &&
+     ns.ContentType.getMinorVersion(candiate) > ns.ContentType.getMinorVersion(original)));
+};
+
+/**
+ * Check if candiate has same name as original.
+ *
+ * @param {Object} candiate Library object
+ * @param {Object} original Library object
+ * @returns {boolean}
+ */
+ns.ContentType.hasSameName = function (candiate, original) {
+  return (ns.ContentType.getName(candiate) === ns.ContentType.getName(original));
+};
+
+/**
+ * Check if candiate has same name as original.
+ *
+ * @param {Object} candiate Library object
+ * @param {Object} original Library object
+ * @returns {string}
+ */
+ns.ContentType.getNameVersionString = function (library) {
+  return ns.ContentType.getName(library) + ' ' + ns.ContentType.getMajorVersion(library) + '.' + ns.ContentType.getMinorVersion(library);
+};
+
+/**
+ * Get the major version from a library object.
+ *
+ * @param {Object} library
+ * @returns {number}
+ */
+ns.ContentType.getMajorVersion = function (library) {
+  return parseInt((library.localMajorVersion !== undefined ? library.localMajorVersion : library.majorVersion));
+};
+
+/**
+ * Get the minor version from a library object.
+ *
+ * @param {Object} library
+ * @returns {number}
+ */
+ns.ContentType.getMinorVersion = function (library) {
+  return parseInt((library.localMinorVersion !== undefined ? library.localMinorVersion : library.minorVersion));
+};
+
+/**
+ * Get the name from a library object.
+ *
+ * @param {Object} library
+ * @returns {string}
+ */
+ns.ContentType.getName = function (library) {
+  return (library.machineName !== undefined ? library.machineName : library.name);
+};
+
+
+ns.upgradeContent = (function () {
+
+  /**
+   * A wrapper for loading library data for the content upgrade scripts.
+   *
+   * @param {string} name Library name
+   * @param {H5P.Version} version
+   * @param {Function} next Callback
+   */
+  const loadLibrary = function (name, version, next) {
+    const library = name + ' ' + version.major + '.' + version.minor;
+    ns.loadLibrary(library, function () {
+      next(null, ns.libraryCache[library]);
+    });
+  };
+
+  return function contentUpgrade(fromLibrary, toLibrary, parameters, done) {
+    ns.loadJs(H5PIntegration.libraryUrl + '/h5p-version.js' + H5PIntegration.pluginCacheBuster, function (err) {
+      ns.loadJs(H5PIntegration.libraryUrl + '/h5p-content-upgrade-process.js' + H5PIntegration.pluginCacheBuster, function (err) {
+        // TODO: Avoid stringify the parameters
+        new H5P.ContentUpgradeProcess(ns.ContentType.getName(fromLibrary), new H5P.Version(fromLibrary), new H5P.Version(toLibrary), JSON.stringify(parameters), 1, function (name, version, next) {
+          loadLibrary(name, version, function (err, library) {
+            if (library.upgradesScript) {
+              ns.loadJs(library.upgradesScript, function (err) {
+                if (err) {
+                  err = 'Error loading upgrades ' + name + ' ' + version;
+                }
+                next(err, library);
+              });
+            }
+            else {
+              next(null, library);
+            }
+          });
+
+        }, function (err, result) {
+          if (err) {
+            let header = 'Failed';
+            let message = 'Could not upgrade content';
+            switch (err.type) {
+              case 'errorTooHighVersion':
+                message += ': ' + ns.t('core', 'errorTooHighVersion', {'%used': err.used, '%supported': err.supported});
+                break;
+
+              case 'errorNotSupported':
+                message += ': ' + ns.t('core', 'errorNotSupported', {'%used': err.used});
+                break;
+
+              case 'errorParamsBroken':
+                message += ': ' + ns.t('core', 'errorParamsBroken');
+                break;
+
+              case 'libraryMissing':
+                message += ': ' +  ns.t('core', 'libraryMissing', {'%lib': err.library});
+                break;
+
+              case 'scriptMissing':
+                message += ': ' + ns.t('core', 'scriptMissing', {'%lib': err.library});
+                break;
+            }
+
+            var confirmErrorDialog = new H5P.ConfirmationDialog({
+              headerText: header,
+              dialogText: message,
+              confirmText: 'Continue'
+            }).appendTo(document.body);
+            confirmErrorDialog.show();
+          }
+          done(err, result);
+        });
+      });
+    });
+  };
 })();
