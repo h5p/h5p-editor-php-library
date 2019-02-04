@@ -375,6 +375,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     this.$copyButton.toggleClass('disabled', true);
     this.$pasteButton.text(ns.t('core', 'pasteButton'));
     this.$pasteButton.attr('title', ns.t('core', 'pasteFromClipboard'));
+    this.change();
     return;
   }
 
@@ -487,7 +488,7 @@ ns.Library.prototype.change = function (callback) {
     // Find library
     var library, i;
     for (i = 0; i < this.libraries.length; i++) {
-      if (this.libraries[i].uberName === this.currentLibrary) {
+      if (this.libraries[i].uberName === this.params.library) {
         library = this.libraries[i];
         break;
       }

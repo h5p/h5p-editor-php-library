@@ -250,6 +250,10 @@ ns.Group.prototype.findSummary = function () {
           // The given title usually makes more sense than the type name
           summary = child.params.metadata.title + (!child.libraries || (child.libraries.length > 1 && child.params.metadata.title.indexOf(summary) === -1) ? ' (' +  summary + ')' : '');
         }
+        else if (!child.params.library) {
+          // Nothing selected
+          summary = that.field.label;
+        }
       }
       const setSummary = function () {
         if (child.params && child.params.metadata && child.params.metadata.title) {
@@ -257,7 +261,7 @@ ns.Group.prototype.findSummary = function () {
           that.setSummary(child.params.metadata.title + (child.libraries.length > 1 && child.params.metadata.title.indexOf(lastLib.title) === -1 ? ' (' +  lastLib.title + ')' : ''));
         }
         else {
-          that.setSummary(lastLib.title);
+          that.setSummary(lastLib ? lastLib.title : that.field.label);
         }
       };
       if (child.metadataForm) {
