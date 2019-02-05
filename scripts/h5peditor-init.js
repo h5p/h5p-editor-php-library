@@ -57,6 +57,9 @@
         // Get content from editor
         h5peditor.getContent(function (content) {
 
+          // Set the title field to the metadata title if the field exists
+          $title.val(content.title);
+
           // Set main library
           $library.val(content.library);
 
