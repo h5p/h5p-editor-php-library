@@ -371,7 +371,7 @@ class H5peditor {
     $libraryData->upgradesScript = $this->h5p->fs->getUpgradeScript($machineName, $majorVersion, $minorVersion);
     if ($libraryData->upgradesScript !== NULL) {
       // If valid add URL prefix
-      $libraryData->upgradesScript = $this->h5p->url .  $libraryData->upgradesScript;
+      $libraryData->upgradesScript = $this->h5p->url . $prefix . $libraryData->upgradesScript;
     }
 
     $libraries              = $this->findEditorLibraries($machineName, $majorVersion, $minorVersion);

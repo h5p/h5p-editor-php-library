@@ -286,11 +286,12 @@ ns.Editor.prototype.getContent = function (submit) {
   const iframeEditor = this.iframeWindow.H5PEditor;
 
   const content = {
+    title: this.isMainTitleSet(),
     library: this.getLibrary(),
     params: this.getParams()
   };
 
-  if (!this.isMainTitleSet() || !content.library || !content.params || !content.params.params) {
+  if (!content.title || !content.library || !content.params || !content.params.params) {
     return;
   }
 
