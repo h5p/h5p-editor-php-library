@@ -281,9 +281,17 @@ ns.Editor.prototype.getParams = function (notFormSubmit) {
  *
  * @alias H5PEditor.Editor#getContent
  * @param {Function} submit Callback to submit the content data
+ * @param {Function} [error] Callback on failure
  */
-ns.Editor.prototype.getContent = function (submit) {
+ns.Editor.prototype.getContent = function (submit, error) {
   const iframeEditor = this.iframeWindow.H5PEditor;
+
+  if (!this.selector.form) {
+    if (error) {
+      error('content-not-selected');
+    }
+    return;
+  }
 
   const content = {
     title: this.isMainTitleSet(),
@@ -291,7 +299,28 @@ ns.Editor.prototype.getContent = function (submit) {
     params: this.getParams()
   };
 
-  if (!content.title || !content.library || !content.params || !content.params.params) {
+  if (!content.title) {
+    if (error) {
+      error('missing-title');
+    }
+    return;
+  }
+  if (!content.library) {
+    if (error) {
+      error('missing-library');
+    }
+    return;
+  }
+  if (!content.params) {
+    if (error) {
+      error('missing-params');
+    }
+    return;
+  }
+  if (!content.params.params) {
+    if (error) {
+      error('missing-params-params');
+    }
     return;
   }
 
@@ -305,7 +334,12 @@ ns.Editor.prototype.getContent = function (submit) {
   if (upgradeLibrary) {
     // We need to run content upgrade before saving
     iframeEditor.upgradeContent(library, upgradeLibrary, content.params, function (err, result) {
-      if (!err) {
+      if (err) {
+        if (error) {
+          error(err);
+        }
+      }
+      else {
         content.library = iframeEditor.ContentType.getNameVersionString(upgradeLibrary);
         content.params = result;
         submit(content);
