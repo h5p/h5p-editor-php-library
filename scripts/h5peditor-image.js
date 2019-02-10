@@ -51,19 +51,14 @@ ns.widgets.image = function (parent, field, params, setValue) {
   self.on('upload', function () {
     // Hide edit image button
     self.$editImage.addClass('hidden');
-
-    if (!self.isUploadingData()) {
-      // Uploading new original image
-      self.isOriginalImage = true;
-    }
   });
 
   // When a new file has been uploaded
   self.on('fileUploaded', function (event) {
     // Uploaded new original image
     if (self.isOriginalImage) {
-      self.isOriginalImage = false;
       delete self.params.originalImage;
+      self.editImagePopup.mime = self.params.mime
     }
 
     // Store width and height
@@ -116,7 +111,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
     return false;
   });
 
-  var editImagePopup = new H5PEditor.ImageEditingPopup(this.field.ratio);
+  var editImagePopup = self.editImagePopup = new H5PEditor.ImageEditingPopup(this.field.ratio);
   editImagePopup.on('savedImage', function (e) {
 
     // Not editing any longer
@@ -135,8 +130,10 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
       };
     }
 
+    const filenameparts = self.params.path.match(/([^\/]+)\.([^#]+)/);
+
     // Upload new image
-    self.uploadData(e.data);
+    self.upload(e.data, filenameparts[1] + '-edit.' + filenameparts[2]);
   });
 
   editImagePopup.on('resetImage', function () {
@@ -206,6 +203,7 @@ ns.widgets.image.prototype.addFile = function () {
       )
       .children('.add')
       .click(function () {
+        that.isOriginalImage = true;
         that.openFileSelector();
         return false;
       });
@@ -229,6 +227,7 @@ ns.widgets.image.prototype.addFile = function () {
   this.$file.html(fileHtmlString)
     .children(':eq(0)')
     .click(function () {
+      that.isOriginalImage = true;
       that.openFileSelector();
       return false;
     })

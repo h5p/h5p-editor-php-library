@@ -28,7 +28,9 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       left: 0
     },
     'class': 'h5p-editor-iframe',
-    'frameBorder': '0'
+    'frameBorder': '0',
+    'allowfullscreen': 'allowfullscreen',
+    'allow': "fullscreen"
   });
 
   // The DOM element is often used directly
@@ -78,7 +80,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
    * @private
    */
   var resize = function () {
-    if (!iframe.contentDocument.body) {
+    if (!iframe.contentDocument.body || self.preventResize) {
       return; // Prevent crashing when iframe is unloaded
     }
     if (iframe.clientHeight === iframe.contentDocument.body.scrollHeight &&
@@ -119,11 +121,28 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       iframeLoaded.call(this.contentWindow);
     }
 
+    // Used for accessing resources inside iframe
+    self.iframeWindow = this.contentWindow;
+
     var LibrarySelector = this.contentWindow.H5PEditor.LibrarySelector;
     var $ = this.contentWindow.H5P.jQuery;
     var $container = $('body > .h5p-editor');
 
     this.contentWindow.H5P.$body = $(this.contentDocument.body);
+
+    /**
+     * Trigger semi-fullscreen for $element.
+     *
+     * @param {jQuery} $element Element to put in semi-fullscreen
+     * @param {function} before Callback that runs after entering semi-fullscreen
+     * @param {function} done Callback that runs after exiting semi-fullscreen
+     * @return {function} Exit trigger
+     */
+    this.contentWindow.H5PEditor.semiFullscreen = function ($element, after, done) {
+      const exit = self.semiFullscreen($iframe, $element, done);
+      after();
+      return exit;
+    };
 
     // Load libraries data
     $.ajax({
@@ -258,6 +277,83 @@ ns.Editor.prototype.getParams = function (notFormSubmit) {
 };
 
 /**
+ * Validate editor data and submit content using callback.
+ *
+ * @alias H5PEditor.Editor#getContent
+ * @param {Function} submit Callback to submit the content data
+ * @param {Function} [error] Callback on failure
+ */
+ns.Editor.prototype.getContent = function (submit, error) {
+  const iframeEditor = this.iframeWindow.H5PEditor;
+
+  if (!this.selector.form) {
+    if (error) {
+      error('content-not-selected');
+    }
+    return;
+  }
+
+  const content = {
+    title: this.isMainTitleSet(),
+    library: this.getLibrary(),
+    params: this.getParams()
+  };
+
+  if (!content.title) {
+    if (error) {
+      error('missing-title');
+    }
+    return;
+  }
+  if (!content.library) {
+    if (error) {
+      error('missing-library');
+    }
+    return;
+  }
+  if (!content.params) {
+    if (error) {
+      error('missing-params');
+    }
+    return;
+  }
+  if (!content.params.params) {
+    if (error) {
+      error('missing-params-params');
+    }
+    return;
+  }
+
+  // Convert title to preserve html entities
+  const tmp = document.createElement('div');
+  tmp.innerHTML = content.title;
+  content.title = tmp.textContent; // WARNING: This is text, do NOT insert as HTML.
+
+  library = new iframeEditor.ContentType(content.library);
+  const upgradeLibrary = iframeEditor.ContentType.getPossibleUpgrade(library, this.selector.libraries.libraries !== undefined ? this.selector.libraries.libraries : this.selector.libraries);
+  if (upgradeLibrary) {
+    // We need to run content upgrade before saving
+    iframeEditor.upgradeContent(library, upgradeLibrary, content.params, function (err, result) {
+      if (err) {
+        if (error) {
+          error(err);
+        }
+      }
+      else {
+        content.library = iframeEditor.ContentType.getNameVersionString(upgradeLibrary);
+        content.params = result;
+        submit(content);
+      }
+    })
+  }
+  else {
+    // All OK, store the data
+    content.params = JSON.stringify(content.params);
+    submit(content);
+  }
+};
+
+/**
  * Check if main title is set. If not, focus on it!
  *
  * @return {[type]}
@@ -290,6 +386,171 @@ ns.Editor.prototype.getMaxScore = function (content) {
     return 0;
   }
 };
+
+/**
+ * Trigger semi-fullscreen for $iframe and $element.
+ *
+ * @param {jQuery} $iframe
+ * @param {jQuery} $element
+ * @param {function} done Callback that runs after semi-fullscreen exit
+ * @return {function} Exit trigger
+ */
+ns.Editor.prototype.semiFullscreen = function ($iframe, $element, done) {
+  const self = this;
+
+  // Add class for element to cover all of the page
+  const $classes = $iframe.add($element).addClass('h5peditor-semi-fullscreen');
+  // NOTE: Styling for this class is provided by Core
+
+  // Prevent the resizing loop from messing with the iframe while
+  // the semi-fullscreen is active.
+  self.preventResize = true;
+
+  // Prevent body overflow
+  const bodyOverflowValue = document.body.style.getPropertyValue('overflow');
+  const bodyOverflowPriority = document.body.style.getPropertyPriority('overflow');
+  document.body.style.setProperty('overflow', 'hidden', 'important');
+
+  // Reset the iframe's default CSS props
+  $iframe.css({
+    width: '',
+    height: '',
+    zIndex: '',
+    top: '',
+    left: ''
+  });
+  // NOTE: Style attribute has been used here since June 2014 since there are
+  // no CSS files in H5PEditor loaded outside the iframe.
+
+  // Hide all elements except the iframe and the fullscreen elements
+  // This is to avoid tabbing and readspeakers accessing these while
+  // the semi-fullscreen is active.
+  const iframeWindow = $iframe[0].contentWindow;
+  const restoreOutside = ns.hideAllButOne($iframe[0], iframeWindow);
+  const restoreInside = ns.hideAllButOne($element[0], window);
+
+  /**
+   * Trigger semi-fullscreen exit on ESC key
+   *
+   * @private
+   */
+  const handleKeyup = function (e) {
+    if (e.which === 27) {
+      restore();
+    }
+  }
+  iframeWindow.document.body.addEventListener('keyup', handleKeyup);
+
+  /**
+   * Exit/restore callback returned.
+   *
+   * @private
+   */
+  const restore = function () {
+    // Remove our special class
+    $classes.removeClass('h5peditor-semi-fullscreen');
+
+    // Allow the resizing loop to adjust the iframe
+    self.preventResize = false;
+
+    // Restore body overflow
+    document.body.style.setProperty('overflow', bodyOverflowValue, bodyOverflowPriority);
+
+    // Restore the default style attribute properties
+    $iframe.css({
+      width: '100%',
+      height: '3em',
+      zIndex: 101,
+      top: 0,
+      left: 0
+    });
+
+    // Return all of the elements hidden back to their original state
+    restoreOutside();
+    restoreInside();
+
+    iframeWindow.document.body.removeEventListener('keyup', handleKeyup);
+    done(); // Callback for UI
+  }
+
+  return restore;
+};
+
+/**
+ * Will hide all siblings and ancestor siblings(uncles and aunts) of element.
+ *
+ * @param {Element} element
+ * @param {Window} win Needed to get the correct computed style
+ * @return {function} Restore trigger
+ */
+ns.hideAllButOne = function (element, win) {
+  // Make it easy and quick to restore previous display values
+  const restore = [];
+
+  /**
+   * Check if the given element is visible.
+   *
+   * @private
+   * @param {Element} element
+   */
+  const isVisible = function (element) {
+    if (element.offsetParent === null) {
+      // Must check computed style to be sure in case of fixed element
+      if (win.getComputedStyle(element).display !== 'none') {
+        return true;
+      }
+    }
+    else {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Recusive function going up the DOM tree.
+   * Will hide all siblings of given element.
+   *
+   * @private
+   * @param {Element} element
+   */
+  const recurse = function (element) {
+    // Loop through siblings
+    for (let i = 0; i < element.parentElement.children.length; i++) {
+      let sibling = element.parentElement.children[i];
+      if (sibling === element) {
+        continue; // Skip where we came from
+      }
+
+      // Only hide if sibling is visible
+      if (isVisible(sibling)) {
+        // Make it simple to restore original value
+        restore.push({
+          element: sibling,
+          display: sibling.style.getPropertyValue('display'),
+          priority: sibling.style.getPropertyPriority('display')
+        });
+        sibling.style.setProperty('display', 'none', 'important');
+      }
+    }
+
+    // Climb up the tree until we hit some body
+    if (element.parentElement.tagName !== 'BODY') {
+      recurse(element.parentElement);
+    }
+  }
+  recurse(element); // Start
+
+  /**
+   * Restore callback returned.
+   *
+   * @private
+   */
+  return function () {
+    for (let i = restore.length - 1; i > -1; i--) { // In opposite order
+      restore[i].element.style.setProperty('display', restore[i].display, restore[i].priority);
+    }
+  };
+}
 
 /**
  * Editor translations index by library name or "core".

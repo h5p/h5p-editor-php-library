@@ -57,16 +57,8 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
     const handleSaveButtonClick = function () {
       // If license selected, and there's no authors, add the current one
       if (params.license !== 'U' && params.authors.length === 0) {
-        metadataAuthorWidget.addAuthor(currentUserName, 'Author');
+        metadataAuthorWidget.addDefaultAuthor(currentUserName, 'Author');
       }
-
-      ['licenseVersion', 'licenseExtras', 'source', 'yearFrom', 'yearTo', 'authorComments'].forEach(function (name) {
-        // Can't send undefined, in case the field already has a value, and it
-        // now has been reset
-        if (params[name] === undefined || params[name] === '') {
-          params[name] = null;
-        }
-      });
 
       closePopup();
     };
@@ -88,6 +80,10 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
       if (!params.title && populateTitleField) {
         titleField.$input.val(H5PEditor.LibraryListCache.getDefaultTitle(parent.currentLibrary)).change();
       }
+
+      titleField.$input.change(function () {
+        self.trigger('titlechange');
+      });
     };
 
     /**

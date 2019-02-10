@@ -56,6 +56,11 @@ ns.File = function (parent, field, params, setValue) {
     self.$errors.html('');
   });
 
+  // Monitor upload progress
+  self.on('uploadProgress', function (e) {
+    self.$file.children().html(ns.t('core', 'uploading') + ' ' + Math.round(e.data * 100) + ' %');
+  });
+
   // Handle upload complete
   self.on('uploadComplete', function (event) {
     var result = event.data;

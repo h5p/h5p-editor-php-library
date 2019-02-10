@@ -61,9 +61,13 @@ ns.SelectorLegacy = function (libraries, selectedLibrary, changeLibraryDialog) {
  * Reset selector to provided library
  *
  * @param {string} library
+ * @param {Object} params
+ * @param {Object} metadata
  */
-ns.SelectorLegacy.prototype.resetSelection = function (library) {
+ns.SelectorLegacy.prototype.resetSelection = function (library, params, metadata) {
   this.$selector.val(library);
+  this.currentParams = params;
+  this.currentMetadata = metadata;
   this.currentLibrary = library;
 };
 
@@ -83,21 +87,21 @@ ns.SelectorLegacy.prototype.getSelectedLibrary = function (next) {
 };
 
 /**
- * Not possible to load new params into legacy selector, always returns undefined.
+ * Load new params into legacy selector
  *
  * @returns {undefined}
  */
 ns.SelectorLegacy.prototype.getParams = function () {
-  return undefined;
+  return this.currentParams;
 };
 
 /**
- * Not possible to load new metadata into legacy selector, always returns undefined.
+ * Load new metadata into legacy selector
  *
  * @returns {undefined}
  */
 ns.SelectorLegacy.prototype.getMetadata = function () {
-  return undefined;
+  return this.currentMetadata;
 };
 
 /**

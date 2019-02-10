@@ -330,6 +330,8 @@ ns.LibrarySelector.prototype.loadSemantics = function (library, params, metadata
       that.form.processSemantics(semantics, overrideParams, metadata);
       if (window.localStorage) {
         that.$copyButton.toggleClass('disabled', false);
+        that.$pasteButton.text(ns.t('core', 'pasteAndReplaceButton'));
+        that.$pasteButton.attr('title', ns.t('core', 'pasteAndReplaceFromClipboard'));
       }
     }
 

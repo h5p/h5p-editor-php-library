@@ -152,6 +152,7 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   this.$myField = ns.$(html).appendTo($wrapper);
   this.$select = this.$myField.children('select');
   this.$label = this.$myField.find('.h5peditor-label');
+  this.$clearfix = this.$myField.children('.h5peditor-clearfix');
   this.$libraryWrapper = this.$myField.children('.libwrap');
   if (window.localStorage) {
     this.$copyButton = this.$myField.find('.h5peditor-copy-button').click(function () {
@@ -331,10 +332,12 @@ ns.Library.prototype.librariesLoaded = function (libList) {
 
   if (self.libraries.length === 1) {
     self.$select.hide();
-    self.$myField.children('.h5p-editor-flex-wrapper').add(self.$copyButton).add(self.$pasteButton).hide();
+    self.$myField.children('.h5p-editor-flex-wrapper').hide();
+    self.$clearfix.hide();
     self.loadLibrary(self.$select.children(':last').val(), true);
   }
-  else if (window.localStorage && self.canPaste(H5P.getClipboard())) {
+
+  if (window.localStorage && self.canPaste(H5P.getClipboard())) {
     // Toggle paste button when libraries are loaded
     self.$pasteButton.toggleClass('disabled', false);
   }
@@ -370,10 +373,13 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 
     this.$libraryWrapper.attr('class', 'libwrap');
     this.$copyButton.toggleClass('disabled', true);
+    this.$pasteButton.text(ns.t('core', 'pasteButton'));
+    this.$pasteButton.attr('title', ns.t('core', 'pasteFromClipboard'));
+    this.change();
     return;
   }
 
-  this.$libraryWrapper.html(ns.t('core', 'loading')).attr('class', 'libwrap ' + libraryName.split(' ')[0].toLowerCase().replace('.', '-') + '-editor');
+  this.$libraryWrapper.html(ns.t('core', 'loading')).attr('class', 'libwrap ' + libraryName.split(' ')[0].toLowerCase().replace('.', '-') + '-editor' + (this.libraries.length === 1 ? ' no-margin' : ''));
 
   ns.loadLibrary(libraryName, function (semantics) {
     that.currentLibrary = libraryName;
@@ -413,6 +419,8 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper, that);
     if (window.localStorage) {
       that.$copyButton.toggleClass('disabled', false);
+      that.$pasteButton.text(ns.t('core', 'pasteAndReplaceButton'));
+      that.$pasteButton.attr('title', ns.t('core', 'pasteAndReplaceFromClipboard'));
     }
 
     if (that.metadataForm && metadataSettings.disableExtraTitleField) {
@@ -480,7 +488,7 @@ ns.Library.prototype.change = function (callback) {
     // Find library
     var library, i;
     for (i = 0; i < this.libraries.length; i++) {
-      if (this.libraries[i].uberName === this.currentLibrary) {
+      if (this.libraries[i].uberName === this.params.library) {
         library = this.libraries[i];
         break;
       }

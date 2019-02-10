@@ -20,10 +20,6 @@
     display: inline;
   }
 
-  &.video, &.image, &.file, &.audio {
-    position: relative;
-  }
-
   .h5p-editor-image-buttons {
     float: left;
     clear: both;
@@ -36,6 +32,11 @@
   &.importance-high > .h5peditor-label-wrapper > .h5peditor-label {
     font-size: $font-size-large;
     color: #356593;
+  }
+
+  .h5p-dialog-anchor {
+    position: relative;
+    margin: -16px;
   }
 }
 

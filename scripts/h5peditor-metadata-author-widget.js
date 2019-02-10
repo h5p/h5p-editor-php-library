@@ -26,7 +26,7 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
   var roleField = H5PEditor.findField('role', parent);
 
   var $button = $('<div class="field authorList">' +
-    '<button type="button" class="h5p-metadata-button inverted h5p-add-author">' +
+    '<button type="button" class="h5p-metadata-button inverted h5p-save-author">' +
       H5PEditor.t('core', 'addAuthor') +
     '</button>' +
   '</div>').children('button').click(function (event) {
@@ -63,8 +63,8 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
 
   /**
    * Add an author to the list of authors
-   * @param {string} name
-   * @param {string} role
+   * @param {string} [name]
+   * @param {string} [role]
    */
   function addAuthor(name, role) {
     params.authors.push({
@@ -74,6 +74,28 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
 
     renderAuthorList();
     resetForm();
+  }
+
+  /**
+   * Add default/current author to list of authors
+   *
+   * @param {string} fallbackName Name to fallback to if there is no valid name chosen already
+   * @param {string} fallbackRole Role to fallback to if there is no valid role chosen already
+   */
+  function addDefaultAuthor(fallbackName, fallbackRole) {
+    var name = nameField.validate();
+
+    if (!name) {
+      name = fallbackName;
+    }
+
+    var role = roleField.validate();
+
+    if (!role) {
+      role = fallbackRole;
+    }
+
+    addAuthor(name, role);
   }
 
   /**
@@ -131,6 +153,7 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
   }
 
   return {
-    addAuthor: addAuthor
+    addAuthor: addAuthor,
+    addDefaultAuthor: addDefaultAuthor
   };
 };

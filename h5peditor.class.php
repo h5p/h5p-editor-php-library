@@ -139,10 +139,6 @@ class H5peditor {
    * @param array $oldParameters
    */
   public function processParameters($content, $newLibrary, $newParameters, $oldLibrary = NULL, $oldParameters = NULL) {
-    // Old core versions didn't have params wrapped together with metadata
-    if (isset($newParameters->params) && isset($newParameters->metadata)) {
-      $newParameters = $newParameters->params;
-    }
     $newFiles = array();
     $oldFiles = array();
 
@@ -368,6 +364,16 @@ class H5peditor {
   public function getLibraryData($machineName, $majorVersion, $minorVersion, $languageCode, $prefix = '', $fileDir = '') {
     $libraryData = new stdClass();
 
+    // Include name and version in data object for convenience
+    $libraryData->name = $machineName;
+    $libraryData->version = (object) array('major' => $majorVersion, 'minor' => $minorVersion);
+
+    $libraryData->upgradesScript = $this->h5p->fs->getUpgradeScript($machineName, $majorVersion, $minorVersion);
+    if ($libraryData->upgradesScript !== NULL) {
+      // If valid add URL prefix
+      $libraryData->upgradesScript = $this->h5p->url . $prefix . $libraryData->upgradesScript;
+    }
+
     $libraries              = $this->findEditorLibraries($machineName, $majorVersion, $minorVersion);
     $libraryData->semantics = $this->h5p->loadLibrarySemantics($machineName, $majorVersion, $minorVersion);
     $libraryData->language  = $this->getLibraryLanguage($machineName, $majorVersion, $minorVersion, $languageCode);
@@ -434,6 +440,12 @@ class H5peditor {
     foreach ($libraries as $library) {
       if (empty($library['semantics'])) {
         $translation = $this->getLibraryLanguage($library['machineName'], $library['majorVersion'], $library['minorVersion'], $languageCode);
+
+        // If translation was not found, and this is not the English one, try to load
+        // the English translation
+        if ($translation === NULL && $languageCode !== 'en') {
+          $translation = $this->getLibraryLanguage($library['machineName'], $library['majorVersion'], $library['minorVersion'], 'en');
+        }
 
         if ($translation !== NULL) {
           $translations[$library['machineName']] = json_decode($translation);
