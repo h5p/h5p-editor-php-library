@@ -147,6 +147,7 @@ a {
     color: $form-input-placeholder-color;
   }
   & > select,
+  .h5peditor-language-switcher select,
   h5peditor-select,
   .field > select {
     padding: 10px 30px 10px 8px;
@@ -1230,3 +1231,17 @@ a {
 @import "metadata-changelog-widget";
 @import "metadata-author-widget";
 @import "copy-paste";
+
+.h5peditor .h5peditor-language-switcher {
+  float: right;
+  white-space: nowrap;
+
+  .language-label {
+    padding: 0 10px;
+    font-size: 15px;
+  }
+  select {
+    padding: 6px 30px 6px 8px;
+    font-size: 15px;
+  }
+}

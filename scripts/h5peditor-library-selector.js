@@ -324,7 +324,7 @@ ns.LibrarySelector.prototype.loadSemantics = function (library, params, metadata
         overrideParams = that.defaultParams;
       }
 
-      that.form = new ns.Form();
+      that.form = new ns.Form(library, ['en', 'de']); // TODO: Missing library.languages
       that.form.replace($loading);
       that.form.currentLibrary = library;
       that.form.processSemantics(semantics, overrideParams, metadata);

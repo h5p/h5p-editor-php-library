@@ -201,5 +201,7 @@ H5PEditor.language.core = {
   errorNotSupported: 'Parameterene inneholder %used som ikke er støttet.',
   errorParamsBroken: 'Parameterene er ødelagt.',
   libraryMissing: 'Mangler påkrevd bibliotek %lib.',
-  scriptMissing: 'Kunne ikke laste oppgraderingsskript for %lib.'
+  scriptMissing: 'Kunne ikke laste oppgraderingsskript for %lib.',
+  language: 'Språk',
+  noLanguagesSupported: 'Ingen språk støttet'
 };

@@ -2,7 +2,7 @@
 /**
  * Construct a form from library semantics.
  */
-ns.Form = function () {
+ns.Form = function (library, startLanguages) {
   var self = this;
 
   this.params = {};
@@ -17,6 +17,12 @@ ns.Form = function () {
           '<p class="desc">' +
             ns.t('core', 'commonFieldsDescription') +
           '</p>' +
+          '<div class="h5peditor-language-switcher">' +
+            '<span class="language-label">' + ns.t('core', 'language') + ':</span>' +
+            '<select>' +
+              '<option value="-">' + ns.t('core', 'noLanguagesSupported') + '</option>' +
+            '</select>' +
+          '</div>' +
         '</div>' +
       '</div>' +
     '</div>'
@@ -46,6 +52,79 @@ ns.Form = function () {
 
   // Alternate background colors
   this.zebra = "odd";
+
+  // Locate the language switcher DOM element
+  const $switcher = this.$form.find('.h5peditor-language-switcher select');
+  const languages = {};
+
+  /**
+   * Create options DOM elements
+   *
+   * @private
+   * @return {string}
+   */
+  const createOptions = function (selected) {
+    let options = '';
+    for (let code in languages) {
+      let label = ns.supportedLanguages[code] ? ns.supportedLanguages[code] : code.toLocaleUpperCase();
+      options += '<option value="' + code + '"' + (code === selected ? ' selected' : '') + '>' + label + '</option>';
+    }
+    return options;
+  };
+
+  /**
+   * Add new languages for content type.
+   *
+   * @param {string} lib uberName
+   * @param {Array} langs
+   */
+  self.addLanguages = function (lib, langs) {
+    // Update language counters
+    for (let i = 0; i < langs.length; i++) {
+      const code = langs[i];
+      if (languages[code] === undefined) {
+        languages[code] = [lib];
+      }
+      else {
+        languages[code].push(lib);
+      }
+    }
+
+    // Update
+    $switcher.html(createOptions($switcher.val()));
+  };
+
+  /**
+   * Remove languages for content type.
+   *
+   * @param {string} lib uberName
+   * @param {Array} langs
+   */
+  self.removeLanguages = function (lib, langs) {
+    // Update language counters
+    for (let i = 0; i < langs.length; i++) {
+      const code = langs[i];
+      if (languages[code] !== undefined) {
+        if (languages[code].length === 1) {
+          delete languages[code];
+        }
+        else {
+          languages[code].splice(languages[code].indexOf(lib), 1);
+        }
+      }
+    }
+
+    // Update
+    $switcher.html(createOptions($switcher.val()));
+  };
+
+  // Handle switching language and loading new translations
+  $switcher.change(function () {
+    console.log('Loading new translations', this.value);
+  });
+
+  // Add initial langauges for content type
+  self.addLanguages(library, startLanguages);
 };
 
 /**

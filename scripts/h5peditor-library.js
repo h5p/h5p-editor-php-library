@@ -404,6 +404,12 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     // Locate selected library object
     const library = that.findLibrary(libraryName);
 
+    // Locate form
+    const ancestor = ns.findAncestor(that.parent);
+
+    // Update the main language switcher
+    ancestor.addLanguages(library.uberName, ['en', 'nb']); // TODO: Missing library.languages
+
     // Store selected Content Type title in metadata for Copyright usage
     that.params.metadata.contentType = library.title;
 
@@ -595,6 +601,12 @@ ns.Library.prototype.removeChildren = function () {
       }
     }
   }
+
+  // Locate selected library object
+  const lib = this.findLibrary(this.currentLibrary);
+
+  // Update the main language switcher
+  ancestor.removeLanguages(lib.uberName, ['en', 'nb']); // TODO: Missing library.languages
 
   ns.removeChildren(this.children);
 };
