@@ -203,5 +203,9 @@ H5PEditor.language.core = {
   libraryMissing: 'Mangler påkrevd bibliotek %lib.',
   scriptMissing: 'Kunne ikke laste oppgraderingsskript for %lib.',
   language: 'Språk',
-  noLanguagesSupported: 'Ingen språk støttet'
+  noLanguagesSupported: 'Ingen språk støttet',
+  changeLanguage: 'Bytt språk til :language?',
+  thisWillPotentially: "Dette kan potensielt tilbakestille all teksten og oversettelsene. Du kan ikke omgjøre dette. Innholdet vil ikke bli endret. Vil du fortsette?",
+  notAllTextsChanged: 'Ikke alle tekstene ble endret, det er kun delvis støtte for :language.',
+  ifYouWantTo: 'Hvis du vil fullføre oversettelsen for :language kan du lære mer om <a href=":url" target="_new">bidra med oversettelser til H5P</a>'
 };

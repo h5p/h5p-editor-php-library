@@ -203,5 +203,9 @@ H5PEditor.language.core = {
   libraryMissing: 'Missing required library %lib.',
   scriptMissing: 'Could not load upgrades script for %lib.',
   language: 'Language',
-  noLanguagesSupported: 'No languages supported'
+  noLanguagesSupported: 'No languages supported',
+  changeLanguage: 'Change language to :language?',
+  thisWillPotentially: "This will potentially reset all the text and translations. You can't undo this. The content itself will not be changed. Do you want to proceed?",
+  notAllTextsChanged: 'Not all texts were changed, there is only partial coverage for :language.',
+  ifYouWantTo: 'If you want to complete the translation for :language you can learn about <a href=":url" target="_new">contributing translations to H5P</a>'
 };

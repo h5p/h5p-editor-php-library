@@ -1245,3 +1245,29 @@ a {
     font-size: 15px;
   }
 }
+.h5peditor-language-notice {
+  display: none;
+  clear: both;
+  font-size: 14px;
+  background: #dcf6ff;
+  color: #295b7a;
+  padding: 10px 20px 10px 40px;
+  line-height: 1.5;
+  position: relative;
+
+  &:before {
+    font-family: fixed;
+    content: "(!)";
+    position: absolute;
+    left: 15px;
+  }
+  &.show {
+    display: block;
+  }
+  .first {
+    font-weight: bold;
+  }
+  a {
+    text-decoration: underline;
+  }
+}

@@ -23,6 +23,10 @@ ns.Form = function (library, startLanguages) {
               '<option value="-">' + ns.t('core', 'noLanguagesSupported') + '</option>' +
             '</select>' +
           '</div>' +
+          '<div class="h5peditor-language-notice">' +
+            '<div class="first"></div>' +
+            '<div class="last"></div>' +
+          '</div>' +
         '</div>' +
       '</div>' +
     '</div>'
@@ -55,7 +59,10 @@ ns.Form = function (library, startLanguages) {
 
   // Locate the language switcher DOM element
   const $switcher = this.$form.find('.h5peditor-language-switcher select');
+  const $notice = this.$form.find('.h5peditor-language-notice');
+  const loadedLibs = [];
   const languages = {};
+  let selected = 'en'; // TODO: Get from starting library
 
   /**
    * Create options DOM elements
@@ -63,7 +70,7 @@ ns.Form = function (library, startLanguages) {
    * @private
    * @return {string}
    */
-  const createOptions = function (selected) {
+  const createOptions = function () {
     let options = '';
     for (let code in languages) {
       let label = ns.supportedLanguages[code] ? ns.supportedLanguages[code] : code.toLocaleUpperCase();
@@ -71,6 +78,17 @@ ns.Form = function (library, startLanguages) {
     }
     return options;
   };
+
+  /**
+   * Figure out if all loaded libraries supports the chosen language code
+   *
+   * @private
+   * @param {string} code
+   * @return {boolean}
+   */
+  const isSupportedByAll = function (code) {
+    return (languages[code].length === loadedLibs.length);
+  }
 
   /**
    * Add new languages for content type.
@@ -89,9 +107,10 @@ ns.Form = function (library, startLanguages) {
         languages[code].push(lib);
       }
     }
+    loadedLibs.push(lib);
 
     // Update
-    $switcher.html(createOptions($switcher.val()));
+    $switcher.html(createOptions());
   };
 
   /**
@@ -113,14 +132,39 @@ ns.Form = function (library, startLanguages) {
         }
       }
     }
+    loadedLibs.splice(loadedLibs.indexOf(lib), 1);
 
     // Update
-    $switcher.html(createOptions($switcher.val()));
+    $switcher.html(createOptions());
   };
 
   // Handle switching language and loading new translations
-  $switcher.change(function () {
-    console.log('Loading new translations', this.value);
+  $switcher.change(function (e) {
+    // Create confirmation dialog
+    const confirmDialog = new H5P.ConfirmationDialog({
+      headerText: ns.t('core', 'changeLanguage', {':language': ns.supportedLanguages[this.value]}),
+      dialogText: ns.t('core', 'thisWillPotentially'),
+    }).appendTo(document.body);
+    confirmDialog.on('confirmed', function () {
+      selected = $switcher.val();
+
+      // Figure out if all libraries were supported
+      if (!isSupportedByAll(selected)) {
+        // Show a warning message
+        $notice.children('.first').html(ns.t('core', 'notAllTextsChanged', {':language': ns.supportedLanguages[selected]}));
+        $notice.children('.last').html(ns.t('core', 'ifYouWantTo', {':language': ns.supportedLanguages[selected], ':url': 'https://h5p.org/contributing#translating'}));
+        $notice.addClass('show');
+      }
+      else {
+        // Hide a warning message
+        $notice.removeClass('show');
+      }
+    });
+    confirmDialog.on('canceled', function () {
+      $switcher.val(selected);
+    });
+    // Show
+    confirmDialog.show($switcher.offset().top);
   });
 
   // Add initial langauges for content type

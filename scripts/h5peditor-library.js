@@ -381,6 +381,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 
   this.$libraryWrapper.html(ns.t('core', 'loading')).attr('class', 'libwrap ' + libraryName.split(' ')[0].toLowerCase().replace('.', '-') + '-editor' + (this.libraries.length === 1 ? ' no-margin' : ''));
 
+//TODO: Get language code from ancestor
   ns.loadLibrary(libraryName, function (semantics) {
     that.currentLibrary = libraryName;
     that.params.library = libraryName;
