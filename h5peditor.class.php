@@ -130,6 +130,17 @@ class H5peditor {
   }
 
   /**
+   * Get translations for a language for a list of libraries
+   *
+   * @param array $libraries An array of libraries, in the form "<machineName> <majorVersion>.<minorVersion>
+   * @param string $language_code
+   * @return array
+   */
+  public function getTranslations($libraries, $language_code) {
+    return $this->ajaxInterface->getTranslations($libraries, $language_code);
+  }
+
+  /**
    * Move uploaded files, remove old files and update library usage.
    *
    * @param stdClass $content
