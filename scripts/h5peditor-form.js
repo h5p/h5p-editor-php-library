@@ -62,7 +62,7 @@ ns.Form = function (library, startLanguages) {
   const $notice = this.$form.find('.h5peditor-language-notice');
   const loadedLibs = [];
   const languages = {};
-  let selected = 'en'; // TODO: Get from starting library
+  ns.defaultLanguage = ns.contentLanguage;
 
   /**
    * Create options DOM elements
@@ -74,7 +74,7 @@ ns.Form = function (library, startLanguages) {
     let options = '';
     for (let code in languages) {
       let label = ns.supportedLanguages[code] ? ns.supportedLanguages[code] : code.toLocaleUpperCase();
-      options += '<option value="' + code + '"' + (code === selected ? ' selected' : '') + '>' + label + '</option>';
+      options += '<option value="' + code + '"' + (code === ns.defaultLanguage ? ' selected' : '') + '>' + label + '</option>';
     }
     return options;
   };
@@ -146,13 +146,13 @@ ns.Form = function (library, startLanguages) {
       dialogText: ns.t('core', 'thisWillPotentially'),
     }).appendTo(document.body);
     confirmDialog.on('confirmed', function () {
-      selected = $switcher.val();
+      ns.defaultLanguage = $switcher.val();
 
       // Figure out if all libraries were supported
-      if (!isSupportedByAll(selected)) {
+      if (!isSupportedByAll(ns.defaultLanguage)) {
         // Show a warning message
-        $notice.children('.first').html(ns.t('core', 'notAllTextsChanged', {':language': ns.supportedLanguages[selected]}));
-        $notice.children('.last').html(ns.t('core', 'ifYouWantTo', {':language': ns.supportedLanguages[selected], ':url': 'https://h5p.org/contributing#translating'}));
+        $notice.children('.first').html(ns.t('core', 'notAllTextsChanged', {':language': ns.supportedLanguages[ns.defaultLanguage]}));
+        $notice.children('.last').html(ns.t('core', 'ifYouWantTo', {':language': ns.supportedLanguages[ns.defaultLanguage], ':url': 'https://h5p.org/contributing#translating'}));
         $notice.addClass('show');
       }
       else {
@@ -161,7 +161,7 @@ ns.Form = function (library, startLanguages) {
       }
     });
     confirmDialog.on('canceled', function () {
-      $switcher.val(selected);
+      $switcher.val(ns.defaultLanguage);
     });
     // Show
     confirmDialog.show($switcher.offset().top);

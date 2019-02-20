@@ -409,7 +409,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     const ancestor = ns.findAncestor(that.parent);
 
     // Update the main language switcher
-    ancestor.addLanguages(library.uberName, ['en', 'nb']); // TODO: Missing library.languages
+    ancestor.addLanguages(library.uberName, ns.libraryCache[library.uberName].languages);
 
     // Store selected Content Type title in metadata for Copyright usage
     that.params.metadata.contentType = library.title;
@@ -607,7 +607,7 @@ ns.Library.prototype.removeChildren = function () {
   const lib = this.findLibrary(this.currentLibrary);
 
   // Update the main language switcher
-  ancestor.removeLanguages(lib.uberName, ['en', 'nb']); // TODO: Missing library.languages
+  ancestor.removeLanguages(lib.uberName, ns.libraryCache[lib.uberName].languages);
 
   ns.removeChildren(this.children);
 };
