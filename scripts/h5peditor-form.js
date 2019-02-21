@@ -106,6 +106,9 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
       if (ns.renderableCommonFields[lib] && ns.renderableCommonFields[lib].fields) {
         for (let j = 0; j < ns.renderableCommonFields[lib].fields.length; j++) {
           const field = ns.renderableCommonFields[lib].fields[j];
+          if (field.instance === undefined) {
+            continue; // Skip
+          }
 
           // Determine translation to use
           const translation = ns.libraryCache[lib].translation[lang];
