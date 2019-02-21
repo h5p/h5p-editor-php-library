@@ -324,7 +324,9 @@ ns.LibrarySelector.prototype.loadSemantics = function (library, params, metadata
         overrideParams = that.defaultParams;
       }
 
-      const metadata = overrideParams.metadata;
+      if (!metadata) {
+        metadata = overrideParams.metadata;
+      }
       const defaultLanguage = metadata && metadata.defaultLanguage
         ? metadata.defaultLanguage
         : null;
