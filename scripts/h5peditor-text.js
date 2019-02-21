@@ -109,5 +109,14 @@ ns.Text.prototype.remove = function () {
   this.$item.remove();
 };
 
+/**
+ * When someone from the outside wants to set a value.
+ *
+ * @param {string} value
+ */
+ns.Text.prototype.forceValue = function (value) {
+  this.$input.val(value).change();
+};
+
 // Tell the editor what widget we are.
 ns.widgets.text = ns.Text;

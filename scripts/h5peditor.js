@@ -185,25 +185,28 @@ ns.loadLibrary = function (libraryName, callback) {
         url += (url.indexOf('?') === -1 ? '?' : '&') + 'language=' + ns.contentLanguage;
       }
       // Add common fields default lanuage to URL
+      const defaultLanguage = ns.defaultLanguage; // Avoid changes after sending AJAX
       if (ns.defaultLanguage !== undefined) {
-        url += (url.indexOf('?') === -1 ? '?' : '&') + 'default-language=' + ns.defaultLanguage;
+        url += (url.indexOf('?') === -1 ? '?' : '&') + 'default-language=' + defaultLanguage;
       }
 
       // Fire away!
       ns.$.ajax({
         url: url,
         success: function (libraryData) {
-          libraryData.englishSemantics = libraryData.semantics; // Needed if we switch back to English later
-          var semantics = libraryData.semantics;
+          libraryData.translation = { // Used to cache all the translations
+            en: libraryData.semantics
+          };
+          let languageSemantics = [];
           if (libraryData.language !== null) {
-            var language = JSON.parse(libraryData.language);
+            languageSemantics = JSON.parse(libraryData.language);
             delete libraryData.language; // Avoid caching a lot of unused data
-            semantics = ns.$.extend(true, [], semantics, language.semantics);
           }
+          var semantics = ns.$.extend(true, [], libraryData.semantics, languageSemantics);
           if (libraryData.defaultLanguage !== null) {
-            const defaultLanguage = JSON.parse(libraryData.defaultLanguage);
+            libraryData.translation[defaultLanguage] = JSON.parse(libraryData.defaultLanguage).semantics;
             delete libraryData.defaultLanguage; // Avoid caching a lot of unused data
-            ns.updateCommonFieldsDefault(semantics, defaultLanguage.semantics);
+            ns.updateCommonFieldsDefault(semantics, libraryData.translation[defaultLanguage]);
           }
           libraryData.semantics = semantics;
           ns.libraryCache[libraryName] = libraryData;
@@ -371,6 +374,7 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
                 field: field,
                 instance: commonField.instance
               });
+              field.instance = commonField.instance;
             }
           }
           field.rendered = true;

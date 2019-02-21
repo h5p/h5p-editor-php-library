@@ -91,6 +91,120 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
    */
   const isSupportedByAll = function (code) {
     return (languages[code].length === loadedLibs.length);
+  };
+
+  /**
+   * This function does something different than the other functions.
+   *
+   * @private
+   * @param {string} lang Global value not used to avoid it changing while loading
+   */
+  const updateCommonFields = function (lang) {
+    const libs = languages[lang];
+    for (let i = 0; i < libs.length; i++) {
+      const lib = libs[i];
+      if (ns.renderableCommonFields[lib] && ns.renderableCommonFields[lib].fields) {
+        for (let j = 0; j < ns.renderableCommonFields[lib].fields.length; j++) {
+          const field = ns.renderableCommonFields[lib].fields[j];
+
+          // Determine translation to use
+          const translation = ns.libraryCache[lib].translation[lang];
+
+          // Find the correct translation for the field
+          const fieldTranslation = findFieldDefaultTranslation(field.field, ns.libraryCache[lib].semantics, translation);
+
+          // Extract the default values from the translation
+          const defaultValue = getDefaultValue(fieldTranslation, field.field);
+
+          // Update the widget
+          field.instance.forceValue(defaultValue);
+        }
+      }
+    }
+  };
+
+  /**
+   * Recursivly search for the field's translations
+   *
+   * @private
+   * @param {Object} field The field we're looking for
+   * @param {Array} semantics The fields tree to search amongst
+   * @param {Array} translation The translation tree to search and return from
+   * @return {Object} The translation if found
+   */
+  const findFieldDefaultTranslation = function (field, semantics, translation) {
+    for (let i = 0; i < semantics.length; i++) {
+      if (semantics[i] === field) {
+        return translation[i];
+      }
+      if (semantics[i].fields !== undefined && semantics[i].fields.length &&
+          translation[i].fields !== undefined && translation[i].fields.length) {
+        findFieldDefaultTranslation(field, semantics[i].fields, translation[i].fields);
+      }
+      if (semantics[i].field !== undefined && translation[i].field !== undefined) {
+        findFieldDefaultTranslation(field, [semantics[i].field], [translation[i].field]);
+      }
+    }
+  };
+
+  /**
+   * Recursivly format a default value for a field.
+   *
+   * @private
+   * @param {Object} translation The translation field to extract the default values from
+   * @param {Object} field Needed for field naming
+   * @return {Object} The default value
+   */
+  const getDefaultValue = function (translation, field) {
+    if (translation.default !== undefined) {
+      return translation.default;
+    }
+    if (translation.fields !== undefined && translation.fields.length) {
+      if (translation.fields.length === 1) {
+        return getDefaultValue(translation.fields[0], field.fields[0]);
+      }
+      const values = {};
+      for (let i = 0; i < translation.fields.length; i++) {
+        values[field.fields[i].name] = getDefaultValue(translation.fields[i], field.fields[i]);
+      }
+      return values;
+    }
+    if (translation.field !== undefined) {
+      return getDefaultValue(translation.field, field.field);
+    }
+  };
+
+  /**
+   * Prepares and loads all the missing translations from the server.
+   *
+   * @param {string} lang Global value not used to avoid it changing while loading
+   * @param {function} done Callback
+   */
+  const loadTranslations = function (lang, done) {
+    // Figure out what we actually need to load
+    const libs = languages[lang];
+    const loadLibs = [];
+    for (let i = 0; i < libs.length; i++) {
+      if (ns.libraryCache[libs[i]].translation[lang] === undefined) {
+        loadLibs.push(libs[i]);
+      }
+    }
+
+    if (loadLibs.length) {
+      ns.$.post(
+        ns.getAjaxUrl('translations/' + lang),
+        { libraries: loadLibs },
+        function (res) {
+          for (let lib in res.data) {
+            ns.libraryCache[lib].translation[lang] = res.data[lib].semantics;
+          }
+          done();
+        }
+      );
+    }
+    else {
+      done(); // Continue without loading anything
+    }
   }
 
   /**
@@ -149,22 +263,29 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
       dialogText: ns.t('core', 'thisWillPotentially'),
     }).appendTo(document.body);
     confirmDialog.on('confirmed', function () {
-      ns.defaultLanguage = $switcher.val();
+      const lang = ns.defaultLanguage = $switcher.val();
 
       // Update chosen default language
-      self.metadata.defaultLanguage = ns.defaultLanguage;
+      self.metadata.defaultLanguage = lang;
 
       // Figure out if all libraries were supported
-      if (!isSupportedByAll(ns.defaultLanguage)) {
+      if (!isSupportedByAll(lang)) {
         // Show a warning message
-        $notice.children('.first').html(ns.t('core', 'notAllTextsChanged', {':language': ns.supportedLanguages[ns.defaultLanguage]}));
-        $notice.children('.last').html(ns.t('core', 'contributeTranslations', {':language': ns.supportedLanguages[ns.defaultLanguage], ':url': 'https://h5p.org/contributing#translating'}));
+        $notice.children('.first').html(ns.t('core', 'notAllTextsChanged', {':language': ns.supportedLanguages[lang]}));
+        $notice.children('.last').html(ns.t('core', 'contributeTranslations', {':language': ns.supportedLanguages[lang], ':url': 'https://h5p.org/contributing#translating'}));
         $notice.addClass('show');
       }
       else {
         // Hide a warning message
         $notice.removeClass('show');
       }
+
+      $switcher.prop('disabled', 'disabled');
+      loadTranslations(lang, function () {
+        // Do the actualy update of the field values
+        updateCommonFields(lang);
+        $switcher.prop('disabled', false);
+      });
     });
     confirmDialog.on('canceled', function () {
       $switcher.val(ns.defaultLanguage);
