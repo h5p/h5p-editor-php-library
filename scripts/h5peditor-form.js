@@ -97,9 +97,10 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
    * This function does something different than the other functions.
    *
    * @private
+   * @param {string} lang Global value not used to avoid it changing while loading
    */
-  const updateCommonFields = function () {
-    const libs = languages[ns.defaultLanguage];
+  const updateCommonFields = function (lang) {
+    const libs = languages[lang];
     for (let i = 0; i < libs.length; i++) {
       const lib = libs[i];
       if (ns.renderableCommonFields[lib] && ns.renderableCommonFields[lib].fields) {
@@ -107,7 +108,7 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
           const field = ns.renderableCommonFields[lib].fields[j];
 
           // Determine translation to use
-          const translation = ns.libraryCache[lib].englishSemantics // (ns.defaultLanguage === 'en' ? ns.libraryCache[lib].englishSemantics : [TODO: Pål code here]);
+          const translation = ns.libraryCache[lib].translation[lang];
 
           // Find the correct translation for the field
           const fieldTranslation = findFieldDefaultTranslation(field.field, ns.libraryCache[lib].semantics, translation);
@@ -174,6 +175,39 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
   };
 
   /**
+   * Prepares and loads all the missing translations from the server.
+   *
+   * @param {string} lang Global value not used to avoid it changing while loading
+   * @param {function} done Callback
+   */
+  const loadTranslations = function (lang, done) {
+    // Figure out what we actually need to load
+    const libs = languages[lang];
+    const loadLibs = [];
+    for (let i = 0; i < libs.length; i++) {
+      if (ns.libraryCache[libs[i]].translation[lang] === undefined) {
+        loadLibs.push(libs[i]);
+      }
+    }
+
+    if (loadLibs.length) {
+      ns.$.post(
+        ns.getAjaxUrl('translations/' + lang),
+        { libraries: loadLibs },
+        function (res) {
+          for (let lib in res.data) {
+            ns.libraryCache[lib].translation[lang] = res.data[lib].semantics;
+          }
+          done();
+        }
+      );
+    }
+    else {
+      done(); // Continue without loading anything
+    }
+  }
+
+  /**
    * Add new languages for content type.
    *
    * @param {string} lib uberName
@@ -229,24 +263,29 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
       dialogText: ns.t('core', 'thisWillPotentially'),
     }).appendTo(document.body);
     confirmDialog.on('confirmed', function () {
-      ns.defaultLanguage = $switcher.val();
+      const lang = ns.defaultLanguage = $switcher.val();
 
       // Update chosen default language
-      self.metadata.defaultLanguage = ns.defaultLanguage;
+      self.metadata.defaultLanguage = lang;
 
       // Figure out if all libraries were supported
-      if (!isSupportedByAll(ns.defaultLanguage)) {
+      if (!isSupportedByAll(lang)) {
         // Show a warning message
-        $notice.children('.first').html(ns.t('core', 'notAllTextsChanged', {':language': ns.supportedLanguages[ns.defaultLanguage]}));
-        $notice.children('.last').html(ns.t('core', 'contributeTranslations', {':language': ns.supportedLanguages[ns.defaultLanguage], ':url': 'https://h5p.org/contributing#translating'}));
+        $notice.children('.first').html(ns.t('core', 'notAllTextsChanged', {':language': ns.supportedLanguages[lang]}));
+        $notice.children('.last').html(ns.t('core', 'contributeTranslations', {':language': ns.supportedLanguages[lang], ':url': 'https://h5p.org/contributing#translating'}));
         $notice.addClass('show');
       }
       else {
         // Hide a warning message
         $notice.removeClass('show');
       }
-      // Do the actualy update of the field values
-      updateCommonFields();
+
+      $switcher.prop('disabled', 'disabled');
+      loadTranslations(lang, function () {
+        // Do the actualy update of the field values
+        updateCommonFields(lang);
+        $switcher.prop('disabled', false);
+      });
     });
     confirmDialog.on('canceled', function () {
       $switcher.val(ns.defaultLanguage);
