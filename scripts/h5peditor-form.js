@@ -88,7 +88,87 @@ ns.Form = function (library, startLanguages) {
    */
   const isSupportedByAll = function (code) {
     return (languages[code].length === loadedLibs.length);
-  }
+  };
+
+  /**
+   * This function does something different than the other functions.
+   *
+   * @private
+   */
+  const updateCommonFields = function () {
+    const libs = languages[ns.defaultLanguage];
+    for (let i = 0; i < libs.length; i++) {
+      const lib = libs[i];
+      if (ns.renderableCommonFields[lib] && ns.renderableCommonFields[lib].fields) {
+        for (let j = 0; j < ns.renderableCommonFields[lib].fields.length; j++) {
+          const field = ns.renderableCommonFields[lib].fields[j];
+
+          // Determine translation to use
+          const translation = ns.libraryCache[lib].englishSemantics // (ns.defaultLanguage === 'en' ? ns.libraryCache[lib].englishSemantics : [TODO: Pål code here]);
+
+          // Find the correct translation for the field
+          const fieldTranslation = findFieldDefaultTranslation(field.field, ns.libraryCache[lib].semantics, translation);
+
+          // Extract the default values from the translation
+          const defaultValue = getDefaultValue(fieldTranslation, field.field);
+
+          // Update the widget
+          field.instance.forceValue(defaultValue);
+        }
+      }
+    }
+  };
+
+  /**
+   * Recursivly search for the field's translations
+   *
+   * @private
+   * @param {Object} field The field we're looking for
+   * @param {Array} semantics The fields tree to search amongst
+   * @param {Array} translation The translation tree to search and return from
+   * @return {Object} The translation if found
+   */
+  const findFieldDefaultTranslation = function (field, semantics, translation) {
+    for (let i = 0; i < semantics.length; i++) {
+      if (semantics[i] === field) {
+        return translation[i];
+      }
+      if (semantics[i].fields !== undefined && semantics[i].fields.length &&
+          translation[i].fields !== undefined && translation[i].fields.length) {
+        findFieldDefaultTranslation(field, semantics[i].fields, translation[i].fields);
+      }
+      if (semantics[i].field !== undefined && translation[i].field !== undefined) {
+        findFieldDefaultTranslation(field, [semantics[i].field], [translation[i].field]);
+      }
+    }
+  };
+
+  /**
+   * Recursivly format a default value for a field.
+   *
+   * @private
+   * @param {Object} translation The translation field to extract the default values from
+   * @param {Object} field Needed for field naming
+   * @return {Object} The default value
+   */
+  const getDefaultValue = function (translation, field) {
+    if (translation.default !== undefined) {
+      return translation.default;
+    }
+    if (translation.fields !== undefined && translation.fields.length) {
+      if (translation.fields.length === 1) {
+        return getDefaultValue(translation.fields[0], field.fields[0]);
+      }
+      const values = {};
+      for (let i = 0; i < translation.fields.length; i++) {
+        values[field.fields[i].name] = getDefaultValue(translation.fields[i], field.fields[i]);
+      }
+      return values;
+    }
+    if (translation.field !== undefined) {
+      return getDefaultValue(translation.field, field.field);
+    }
+  };
 
   /**
    * Add new languages for content type.
@@ -159,6 +239,8 @@ ns.Form = function (library, startLanguages) {
         // Hide a warning message
         $notice.removeClass('show');
       }
+      // Do the actualy update of the field values
+      updateCommonFields();
     });
     confirmDialog.on('canceled', function () {
       $switcher.val(ns.defaultLanguage);

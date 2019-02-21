@@ -193,13 +193,13 @@ ns.loadLibrary = function (libraryName, callback) {
       ns.$.ajax({
         url: url,
         success: function (libraryData) {
-          libraryData.englishSemantics = libraryData.semantics; // Needed if we switch back to English later
-          var semantics = libraryData.semantics;
+          libraryData.englishSemantics =  libraryData.semantics; // Needed if we switch back to English later
+          let languageSemantics = [];
           if (libraryData.language !== null) {
-            var language = JSON.parse(libraryData.language);
+            languageSemantics = JSON.parse(libraryData.language);
             delete libraryData.language; // Avoid caching a lot of unused data
-            semantics = ns.$.extend(true, [], semantics, language.semantics);
           }
+          var semantics = ns.$.extend(true, [], libraryData.semantics, languageSemantics);
           if (libraryData.defaultLanguage !== null) {
             const defaultLanguage = JSON.parse(libraryData.defaultLanguage);
             delete libraryData.defaultLanguage; // Avoid caching a lot of unused data
@@ -371,6 +371,7 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
                 field: field,
                 instance: commonField.instance
               });
+              field.instance = commonField.instance;
             }
           }
           field.rendered = true;
