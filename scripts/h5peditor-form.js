@@ -2,7 +2,7 @@
 /**
  * Construct a form from library semantics.
  */
-ns.Form = function (library, startLanguages) {
+ns.Form = function (library, startLanguages, defaultLanguage) {
   var self = this;
 
   this.params = {};
@@ -63,6 +63,9 @@ ns.Form = function (library, startLanguages) {
   const loadedLibs = [];
   const languages = {};
   ns.defaultLanguage = ns.contentLanguage;
+  if (defaultLanguage) {
+    ns.defaultLanguage = defaultLanguage;
+  }
 
   /**
    * Create options DOM elements
@@ -228,11 +231,14 @@ ns.Form = function (library, startLanguages) {
     confirmDialog.on('confirmed', function () {
       ns.defaultLanguage = $switcher.val();
 
+      // Update chosen default language
+      self.metadata.defaultLanguage = ns.defaultLanguage;
+
       // Figure out if all libraries were supported
       if (!isSupportedByAll(ns.defaultLanguage)) {
         // Show a warning message
         $notice.children('.first').html(ns.t('core', 'notAllTextsChanged', {':language': ns.supportedLanguages[ns.defaultLanguage]}));
-        $notice.children('.last').html(ns.t('core', 'ifYouWantTo', {':language': ns.supportedLanguages[ns.defaultLanguage], ':url': 'https://h5p.org/contributing#translating'}));
+        $notice.children('.last').html(ns.t('core', 'contributeTranslations', {':language': ns.supportedLanguages[ns.defaultLanguage], ':url': 'https://h5p.org/contributing#translating'}));
         $notice.addClass('show');
       }
       else {

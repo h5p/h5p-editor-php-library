@@ -324,7 +324,15 @@ ns.LibrarySelector.prototype.loadSemantics = function (library, params, metadata
         overrideParams = that.defaultParams;
       }
 
-      that.form = new ns.Form(library, ns.libraryCache[library].languages);
+      const metadata = overrideParams.metadata;
+      const defaultLanguage = metadata && metadata.defaultLanguage
+        ? metadata.defaultLanguage
+        : null;
+      that.form = new ns.Form(
+        library,
+        ns.libraryCache[library].languages,
+        defaultLanguage
+      );
       that.form.replace($loading);
       that.form.currentLibrary = library;
       that.form.processSemantics(semantics, overrideParams, metadata);
