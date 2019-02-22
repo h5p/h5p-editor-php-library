@@ -269,8 +269,9 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
     confirmDialog.on('confirmed', function () {
       const lang = ns.defaultLanguage = $switcher.val();
 
-      // Update chosen default language
+      // Update chosen default language for main content and sub-content
       self.metadata.defaultLanguage = lang;
+      self.params = self.setSubContentDefaultLanguage(self.params, lang);
 
       // Figure out if all libraries were supported
       if (!isSupportedByAll(lang)) {
@@ -300,6 +301,45 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
 
   // Add initial langauges for content type
   self.addLanguages(library, startLanguages);
+};
+
+/**
+ * Recursively traverse params and sets default language for each sub-content
+ *
+ * @param {Object|Array} params Parameters
+ * @param {string} lang Default language that will be set
+ *
+ * @return {Object|Array} Parameters with default language set for sub-content
+ */
+ns.Form.prototype.setSubContentDefaultLanguage = function (params, lang) {
+  if (!params) {
+    return params;
+  }
+
+  const self = this;
+
+  if (Array.isArray(params)) {
+    params = params.map(function (listItem) {
+      return self.setSubContentDefaultLanguage(listItem, lang);
+    });
+  }
+  else if (typeof params === 'object') {
+    if (params.metadata) {
+      params.metadata.defaultLanguage = lang;
+    }
+
+    for (let parameter in params) {
+      if (!params.hasOwnProperty(parameter)) {
+        continue;
+      }
+      params[parameter] = this.setSubContentDefaultLanguage(
+        params[parameter],
+        lang
+      );
+    }
+  }
+
+  return params;
 };
 
 /**
