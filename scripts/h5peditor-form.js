@@ -101,8 +101,9 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
    */
   const updateCommonFields = function (lang) {
     const libs = languages[lang];
-    for (let i = 0; i < libs.length; i++) {
-      const lib = libs[i];
+    for (let lib in ns.libraryCache) {
+
+      // Update common fields
       if (ns.renderableCommonFields[lib] && ns.renderableCommonFields[lib].fields) {
         for (let j = 0; j < ns.renderableCommonFields[lib].fields.length; j++) {
           const field = ns.renderableCommonFields[lib].fields[j];
@@ -123,6 +124,11 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
           // Update the widget
           field.instance.forceValue(defaultValue);
         }
+      }
+
+      if (ns.libraryCache[lib].translation[lang] !== undefined) {
+        // Update semantics, so that the next time something is inserted it will get the same language
+        ns.updateCommonFieldsDefault(ns.libraryCache[lib].semantics, ns.libraryCache[lib].translation[lang]);
       }
     }
   };
@@ -186,11 +192,10 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
    */
   const loadTranslations = function (lang, done) {
     // Figure out what we actually need to load
-    const libs = languages[lang];
     const loadLibs = [];
-    for (let i = 0; i < libs.length; i++) {
-      if (ns.libraryCache[libs[i]].translation[lang] === undefined) {
-        loadLibs.push(libs[i]);
+    for (let li in ns.libraryCache) {
+      if (ns.libraryCache[li].translation[lang] === undefined) {
+        loadLibs.push(li);
       }
     }
 
