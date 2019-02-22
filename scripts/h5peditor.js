@@ -184,15 +184,29 @@ ns.loadLibrary = function (libraryName, callback) {
       if (ns.contentLanguage !== undefined) {
         url += (url.indexOf('?') === -1 ? '?' : '&') + 'language=' + ns.contentLanguage;
       }
+      // Add common fields default lanuage to URL
+      const defaultLanguage = ns.defaultLanguage; // Avoid changes after sending AJAX
+      if (ns.defaultLanguage !== undefined) {
+        url += (url.indexOf('?') === -1 ? '?' : '&') + 'default-language=' + defaultLanguage;
+      }
 
       // Fire away!
       ns.$.ajax({
         url: url,
         success: function (libraryData) {
-          var semantics = libraryData.semantics;
+          libraryData.translation = { // Used to cache all the translations
+            en: libraryData.semantics
+          };
+          let languageSemantics = [];
           if (libraryData.language !== null) {
-            var language = JSON.parse(libraryData.language);
-            semantics = ns.$.extend(true, [], semantics, language.semantics);
+            languageSemantics = JSON.parse(libraryData.language);
+            delete libraryData.language; // Avoid caching a lot of unused data
+          }
+          var semantics = ns.$.extend(true, [], libraryData.semantics, languageSemantics);
+          if (libraryData.defaultLanguage !== null) {
+            libraryData.translation[defaultLanguage] = JSON.parse(libraryData.defaultLanguage).semantics;
+            delete libraryData.defaultLanguage; // Avoid caching a lot of unused data
+            ns.updateCommonFieldsDefault(semantics, libraryData.translation[defaultLanguage]);
           }
           libraryData.semantics = semantics;
           ns.libraryCache[libraryName] = libraryData;
@@ -218,6 +232,34 @@ ns.loadLibrary = function (libraryName, callback) {
         },
         dataType: 'json'
       });
+  }
+};
+
+/**
+ * Update common fields default values for the given semantics.
+ * Works by reference.
+ *
+ * @param {Array} semantics
+ * @param {Array} translation
+ * @param {boolean} [parentIsCommon] Used to indicated that one of the ancestors is a common field
+ */
+ns.updateCommonFieldsDefault = function (semantics, translation, parentIsCommon) {
+  for (let i = 0; i < semantics.length; i++) {
+    const isCommon = (semantics[i].common === true || parentIsCommon);
+    if (isCommon && semantics[i].default !== undefined &&
+        translation[i] !== undefined && translation[i].default !== undefined) {
+      // Update value
+      semantics[i].default = translation[i].default;
+    }
+    if (semantics[i].fields !== undefined && semantics[i].fields.length &&
+        translation[i].fields !== undefined && translation[i].fields.length) {
+      // Look into sub fields
+      ns.updateCommonFieldsDefault(semantics[i].fields, translation[i].fields, isCommon);
+    }
+    if (semantics[i].field !== undefined && translation[i].field !== undefined ) {
+      // Look into sub field
+      ns.updateCommonFieldsDefault([semantics[i].field], [translation[i].field], isCommon);
+    }
   }
 };
 
@@ -332,6 +374,7 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
                 field: field,
                 instance: commonField.instance
               });
+              field.instance = commonField.instance;
             }
           }
           field.rendered = true;
@@ -1718,3 +1761,193 @@ ns.upgradeContent = (function () {
     });
   };
 })();
+
+// List of language code mappings used by the editor
+ns.supportedLanguages = {
+  'aa': 'Afar',
+  'ab': 'Abkhazian (аҧсуа бызшәа)',
+  'ae': 'Avestan',
+  'af': 'Afrikaans',
+  'ak': 'Akan',
+  'am': 'Amharic (አማርኛ)',
+  'ar': 'Arabic (العربية)',
+  'as': 'Assamese',
+  'ast': 'Asturian',
+  'av': 'Avar',
+  'ay': 'Aymara',
+  'az': 'Azerbaijani (azərbaycan)',
+  'ba': 'Bashkir',
+  'be': 'Belarusian (Беларуская)',
+  'bg': 'Bulgarian (Български)',
+  'bh': 'Bihari',
+  'bi': 'Bislama',
+  'bm': 'Bambara (Bamanankan)',
+  'bn': 'Bengali',
+  'bo': 'Tibetan',
+  'br': 'Breton',
+  'bs': 'Bosnian (Bosanski)',
+  'ca': 'Catalan (Català)',
+  'ce': 'Chechen',
+  'ch': 'Chamorro',
+  'co': 'Corsican',
+  'cr': 'Cree',
+  'cs': 'Czech (Čeština)',
+  'cu': 'Old Slavonic',
+  'cv': 'Chuvash',
+  'cy': 'Welsh (Cymraeg)',
+  'da': 'Danish (Dansk)',
+  'de': 'German (Deutsch)',
+  'dv': 'Maldivian',
+  'dz': 'Bhutani',
+  'ee': 'Ewe (Ɛʋɛ)',
+  'el': 'Greek (Ελληνικά)',
+  'en': 'English',
+  'en-gb': 'English, British',
+  'eo': 'Esperanto',
+  'es': 'Spanish (Español)',
+  'et': 'Estonian (Eesti)',
+  'eu': 'Basque (Euskera)',
+  'fa': 'Persian (فارسی)',
+  'ff': 'Fulah (Fulfulde)',
+  'fi': 'Finnish (Suomi)',
+  'fil': 'Filipino',
+  'fj': 'Fiji',
+  'fo': 'Faeroese',
+  'fr': 'French (Français)',
+  'fy': 'Frisian (Frysk)',
+  'ga': 'Irish (Gaeilge)',
+  'gd': 'Scots Gaelic',
+  'gl': 'Galician (Galego)',
+  'gn': 'Guarani',
+  'gsw-berne': 'Swiss German',
+  'gu': 'Gujarati',
+  'gv': 'Manx',
+  'ha': 'Hausa',
+  'he': 'Hebrew (עברית)',
+  'hi': 'Hindi (हिन्दी)',
+  'ho': 'Hiri Motu',
+  'hr': 'Croatian (Hrvatski)',
+  'ht': 'Haitian Creole',
+  'hu': 'Hungarian (Magyar)',
+  'hy': 'Armenian (Հայերեն)',
+  'hz': 'Herero',
+  'ia': 'Interlingua',
+  'id': 'Indonesian (Bahasa Indonesia)',
+  'ie': 'Interlingue',
+  'ig': 'Igbo',
+  'ik': 'Inupiak',
+  'is': 'Icelandic (Íslenska)',
+  'it': 'Italian (Italiano)',
+  'iu': 'Inuktitut',
+  'ja': 'Japanese (日本語)',
+  'jv': 'Javanese',
+  'ka': 'Georgian',
+  'kg': 'Kongo',
+  'ki': 'Kikuyu',
+  'kj': 'Kwanyama',
+  'kk': 'Kazakh (Қазақ)',
+  'kl': 'Greenlandic',
+  'km': 'Cambodian',
+  'kn': 'Kannada (ಕನ್ನಡ)',
+  'ko': 'Korean (한국어)',
+  'kr': 'Kanuri',
+  'ks': 'Kashmiri',
+  'ku': 'Kurdish (Kurdî)',
+  'kv': 'Komi',
+  'kw': 'Cornish',
+  'ky': 'Kyrgyz (Кыргызча)',
+  'la': 'Latin (Latina)',
+  'lb': 'Luxembourgish',
+  'lg': 'Luganda',
+  'ln': 'Lingala',
+  'lo': 'Laothian',
+  'lt': 'Lithuanian (Lietuvių)',
+  'lv': 'Latvian (Latviešu)',
+  'mg': 'Malagasy',
+  'mh': 'Marshallese',
+  'mi': 'Māori',
+  'mk': 'Macedonian (Македонски)',
+  'ml': 'Malayalam (മലയാളം)',
+  'mn': 'Mongolian',
+  'mo': 'Moldavian',
+  'mr': 'Marathi',
+  'ms': 'Malay (Bahasa Melayu)',
+  'mt': 'Maltese (Malti)',
+  'my': 'Burmese',
+  'na': 'Nauru',
+  'nd': 'North Ndebele',
+  'ne': 'Nepali',
+  'ng': 'Ndonga',
+  'nl': 'Dutch (Nederlands)',
+  'nb': 'Norwegian Bokmål (Bokmål)',
+  'nn': 'Norwegian Nynorsk (Nynorsk)',
+  'nr': 'South Ndebele',
+  'nv': 'Navajo',
+  'ny': 'Chichewa',
+  'oc': 'Occitan',
+  'om': 'Oromo',
+  'or': 'Oriya',
+  'os': 'Ossetian',
+  'pa': 'Punjabi',
+  'pi': 'Pali',
+  'pl': 'Polish (Polski)',
+  'ps': 'Pashto (پښتو)',
+  'pt': 'Portuguese, International',
+  'pt-pt': 'Portuguese, Portugal (Português)',
+  'pt-br': 'Portuguese, Brazil (Português)',
+  'qu': 'Quechua',
+  'rm': 'Rhaeto-Romance',
+  'rn': 'Kirundi',
+  'ro': 'Romanian (Română)',
+  'ru': 'Russian (Русский)',
+  'rw': 'Kinyarwanda',
+  'sa': 'Sanskrit',
+  'sc': 'Sardinian',
+  'sco': 'Scots',
+  'sd': 'Sindhi',
+  'se': 'Northern Sami',
+  'sg': 'Sango',
+  'sh': 'Serbo-Croatian',
+  'si': 'Sinhala (සිංහල)',
+  'sk': 'Slovak (Slovenčina)',
+  'sl': 'Slovenian (Slovenščina)',
+  'sm': 'Samoan',
+  'sn': 'Shona',
+  'so': 'Somali',
+  'sq': 'Albanian (Shqip)',
+  'sr': 'Serbian (Српски)',
+  'ss': 'Siswati',
+  'st': 'Sesotho',
+  'su': 'Sudanese',
+  'sv': 'Swedish (Svenska)',
+  'sw': 'Swahili (Kiswahili)',
+  'ta': 'Tamil (தமிழ்)',
+  'te': 'Telugu (తెలుగు)',
+  'tg': 'Tajik',
+  'th': 'Thai (ภาษาไทย)',
+  'ti': 'Tigrinya',
+  'tk': 'Turkmen',
+  'tl': 'Tagalog',
+  'tn': 'Setswana',
+  'to': 'Tonga',
+  'tr': 'Turkish (Türkçe)',
+  'ts': 'Tsonga',
+  'tt': 'Tatar (Tatarça)',
+  'tw': 'Twi',
+  'ty': 'Tahitian',
+  'ug': 'Uyghur',
+  'uk': 'Ukrainian (Українська)',
+  'ur': 'Urdu (اردو)',
+  'uz': "Uzbek (o'zbek)",
+  've': 'Venda',
+  'vi': 'Vietnamese (Tiếng Việt)',
+  'wo': 'Wolof',
+  'xh': 'Xhosa (isiXhosa)',
+  'xx-lolspeak': 'Lolspeak)',
+  'yi': 'Yiddish',
+  'yo': 'Yoruba (Yorùbá)',
+  'za': 'Zhuang',
+  'zh-hans': 'Chinese, Simplified (简体中文)',
+  'zh-hant': 'Chinese, Traditional (繁體中文)',
+  'zu': 'Zulu (isiZulu)'
+};

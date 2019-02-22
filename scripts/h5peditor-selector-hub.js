@@ -87,7 +87,8 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
       yearTo: event.h5p.yearTo,
       source: event.h5p.source,
       changes: event.h5p.changes,
-      authorComments: event.h5p.authorComments
+      authorComments: event.h5p.authorComments,
+      defaultLanguage: event.h5p.defaultLanguage
     };
 
     /**

@@ -130,6 +130,17 @@ class H5peditor {
   }
 
   /**
+   * Get translations for a language for a list of libraries
+   *
+   * @param array $libraries An array of libraries, in the form "<machineName> <majorVersion>.<minorVersion>
+   * @param string $language_code
+   * @return array
+   */
+  public function getTranslations($libraries, $language_code) {
+    return $this->ajaxInterface->getTranslations($libraries, $language_code);
+  }
+
+  /**
    * Move uploaded files, remove old files and update library usage.
    *
    * @param stdClass $content
@@ -361,7 +372,7 @@ class H5peditor {
    *
    * @return array Libraries that was requested
    */
-  public function getLibraryData($machineName, $majorVersion, $minorVersion, $languageCode, $prefix = '', $fileDir = '') {
+  public function getLibraryData($machineName, $majorVersion, $minorVersion, $languageCode, $prefix = '', $fileDir = '', $defaultLanguage) {
     $libraryData = new stdClass();
 
     // Include name and version in data object for convenience
@@ -377,6 +388,8 @@ class H5peditor {
     $libraries              = $this->findEditorLibraries($machineName, $majorVersion, $minorVersion);
     $libraryData->semantics = $this->h5p->loadLibrarySemantics($machineName, $majorVersion, $minorVersion);
     $libraryData->language  = $this->getLibraryLanguage($machineName, $majorVersion, $minorVersion, $languageCode);
+    $libraryData->defaultLanguage = empty($defaultLanguage) ? NULL : $this->getLibraryLanguage($machineName, $majorVersion, $minorVersion, $defaultLanguage);
+    $libraryData->languages = $this->storage->getAvailableLanguages($machineName, $majorVersion, $minorVersion);
 
     // Temporarily disable asset aggregation
     $aggregateAssets            = $this->h5p->aggregateAssets;

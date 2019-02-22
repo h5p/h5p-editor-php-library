@@ -367,11 +367,13 @@
     border: 1px solid $form-border-color;
     border-top: none;
     background: $form-content-background;
+    position: relative;
 
     & > .desc {
       margin: 0;
       font-size: 0.875em;
       color: #666;
+      float: left;
     }
 
     p:first-child {

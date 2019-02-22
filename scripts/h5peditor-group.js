@@ -369,5 +369,16 @@ ns.Group.prototype.getFields = function () {
   return H5PEditor.$.extend(true, [], this.field.fields);
 };
 
+/**
+ * When someone from the outside wants to set a value.
+ *
+ * @param {Object} value
+ */
+ns.Group.prototype.forceValue = function (value) {
+  for (let i = 0; i < this.children.length; i++) {
+    this.children[i].forceValue(value[this.children[i].field.name]);
+  }
+};
+
 // Tell the editor what widget we are.
 ns.widgets.group = ns.Group;

@@ -147,6 +147,7 @@ a {
     color: $form-input-placeholder-color;
   }
   & > select,
+  .h5peditor-language-switcher select,
   h5peditor-select,
   .field > select {
     padding: 10px 30px 10px 8px;
@@ -1230,3 +1231,43 @@ a {
 @import "metadata-changelog-widget";
 @import "metadata-author-widget";
 @import "copy-paste";
+
+.h5peditor .h5peditor-language-switcher {
+  float: right;
+  white-space: nowrap;
+
+  .language-label {
+    padding: 0 10px;
+    font-size: 15px;
+  }
+  select {
+    padding: 6px 30px 6px 8px;
+    font-size: 15px;
+  }
+}
+.h5peditor-language-notice {
+  display: none;
+  clear: both;
+  font-size: 14px;
+  background: #dcf6ff;
+  color: #295b7a;
+  padding: 10px 20px 10px 40px;
+  line-height: 1.5;
+  position: relative;
+
+  &:before {
+    font-family: fixed;
+    content: "(!)";
+    position: absolute;
+    left: 15px;
+  }
+  &.show {
+    display: block;
+  }
+  .first {
+    font-weight: bold;
+  }
+  a {
+    text-decoration: underline;
+  }
+}
