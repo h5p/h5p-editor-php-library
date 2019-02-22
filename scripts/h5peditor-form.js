@@ -106,12 +106,13 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
       if (ns.renderableCommonFields[lib] && ns.renderableCommonFields[lib].fields) {
         for (let j = 0; j < ns.renderableCommonFields[lib].fields.length; j++) {
           const field = ns.renderableCommonFields[lib].fields[j];
-          if (field.instance === undefined) {
-            continue; // Skip
-          }
 
           // Determine translation to use
           const translation = ns.libraryCache[lib].translation[lang];
+
+          if (field.instance === undefined || translation === undefined) {
+            continue; // Skip
+          }
 
           // Find the correct translation for the field
           const fieldTranslation = findFieldDefaultTranslation(field.field, ns.libraryCache[lib].semantics, translation);
@@ -195,11 +196,11 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
 
     if (loadLibs.length) {
       ns.$.post(
-        ns.getAjaxUrl('translations/' + lang),
+        ns.getAjaxUrl('translations', { language: lang }),
         { libraries: loadLibs },
         function (res) {
           for (let lib in res.data) {
-            ns.libraryCache[lib].translation[lang] = res.data[lib].semantics;
+            ns.libraryCache[lib].translation[lang] = JSON.parse(res.data[lib]).semantics;
           }
           done();
         }
