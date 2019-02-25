@@ -15,7 +15,7 @@ var llc = H5PEditor.LibraryListCache = {
  *
  * @param {Array} libraries - list of libraries to load info for (uber names)
  * @param {Function} handler - Callback when list of libraries is loaded
- * @param {Function} thisArg - Context for the callback function
+ * @param {Function} [thisArg] - Context for the callback function
  */
 llc.getLibraries = function (libraries, handler, thisArg) {
   // Determine whether we're dealing with simple library strings or objects

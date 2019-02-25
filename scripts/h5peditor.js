@@ -13,6 +13,15 @@ H5PIntegration.loadedJs = [];
 H5PIntegration.loadedCss = [];
 
 /**
+ * Constants used within editor
+ *
+ * @type {{otherLibraries: string}}
+ */
+ns.constants = {
+  otherLibraries: 'Other Libraries',
+};
+
+/**
  * Keep track of our widgets.
  */
 ns.widgets = {};
@@ -277,6 +286,98 @@ ns.resetLoadedLibraries = function () {
 };
 
 /**
+ * Render common fields of content type with given machine name
+ *
+ * @param {string} machineName Machine name of content type with common fields
+ * @param {Array} [libraries] Library data for machine name
+ */
+ns.renderCommonField = function (machineName, libraries) {
+  var commonFields = ns.renderableCommonFields[machineName].fields;
+  var renderableCommonFields = [];
+
+  commonFields.forEach(function (field) {
+    if (!field.rendered) {
+      var commonField = ns.addCommonField(field.field, field.parent, field.params, field.ancestor);
+      if (commonField.setValues.length === 1) {
+        renderableCommonFields.push({
+          field: field,
+          instance: commonField.instance
+        });
+        field.instance = commonField.instance;
+      }
+    }
+    field.rendered = true;
+  });
+
+  // Render common fields if found
+  if (renderableCommonFields.length) {
+    var libraryName = machineName === ns.constants.otherLibraries ? machineName
+      : (machineName.length ? machineName.split(' ')[0] : '');
+    if (libraries.length && libraries[0].title) {
+      libraryName = libraries[0].title;
+    }
+
+    // Create a library wrapper
+    var hasLibraryWrapper = !!ns.renderableCommonFields[machineName].wrapper;
+    var commonFieldsLibraryWrapper = ns.renderableCommonFields[machineName].wrapper;
+    if (!hasLibraryWrapper) {
+      commonFieldsLibraryWrapper = document.createElement('fieldset');
+      var libraryWrapperClass = libraryName.replace(/\s+/g, '-').toLowerCase();
+
+      commonFieldsLibraryWrapper.classList.add('common-fields-library-wrapper');
+      commonFieldsLibraryWrapper.classList.add('common-fields-' + libraryWrapperClass);
+
+      var libraryTitle = document.createElement('legend');
+      libraryTitle.classList.add('common-field-legend');
+      libraryTitle.textContent = libraryName;
+      libraryTitle.tabIndex = '0';
+      libraryTitle.setAttribute('role', 'button');
+      libraryTitle.addEventListener('click', function () {
+        commonFieldsLibraryWrapper.classList.toggle('expanded');
+      });
+      libraryTitle.addEventListener('keypress', function (e) {
+        if (e.which === 32) {
+          commonFieldsLibraryWrapper.classList.toggle('expanded');
+        }
+      });
+      commonFieldsLibraryWrapper.appendChild(libraryTitle);
+
+      ns.renderableCommonFields[machineName].wrapper = commonFieldsLibraryWrapper;
+    }
+
+    renderableCommonFields.forEach(function (commonField) {
+      commonField.instance.appendTo(ns.$(commonFieldsLibraryWrapper));
+      // Gather under a common ancestor
+      if (commonField.field && commonField.field.ancestor) {
+        ancestor = commonField.field.ancestor;
+      }
+    });
+
+    if (!hasLibraryWrapper && ancestor) {
+      ancestor.$common[0].appendChild(commonFieldsLibraryWrapper);
+    }
+  }
+};
+
+/**
+ * Recursively traverse parents to find the library our field belongs to
+ *
+ * @param parent
+ * @returns {*}
+ */
+ns.getParentLibrary = function (parent) {
+  if (!parent) {
+    return null;
+  }
+
+  if (parent.currentLibrary) {
+    return parent.currentLibrary;
+  }
+
+  return ns.getParentLibrary(parent.parent);
+};
+
+/**
  * Recursive processing of the semantics chunks.
  *
  * @param {array} semanticsChunk
@@ -329,9 +430,11 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
         ancestor = ns.findAncestor(parent);
       }
 
+      var parentLibrary = ns.getParentLibrary(parent);
       var library = machineName ? machineName
         : (field.library ? field.library
-          : (parent.currentLibrary ? parent.currentLibrary : 'Other libraries'));
+          : (parentLibrary ? parentLibrary
+            : ns.constants.otherLibraries));
       ns.renderableCommonFields[library] = ns.renderableCommonFields[library] || {};
       ns.renderableCommonFields[library].fields = ns.renderableCommonFields[library].fields || [];
 
@@ -361,74 +464,17 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
   // Render all gathered common field
   if (ns.renderableCommonFields) {
     for (var commonFieldMachineName in ns.renderableCommonFields) {
-      // Get title for common fields group
-      H5PEditor.LibraryListCache.getLibraries([commonFieldMachineName], function (libraries) {
-        var commonFields = ns.renderableCommonFields[commonFieldMachineName].fields;
-        var renderableCommonFields = [];
-
-        commonFields.forEach(function (field) {
-          if (!field.rendered) {
-            var commonField = ns.addCommonField(field.field, field.parent, field.params, field.ancestor);
-            if (commonField.setValues.length === 1) {
-              renderableCommonFields.push({
-                field: field,
-                instance: commonField.instance
-              });
-              field.instance = commonField.instance;
-            }
-          }
-          field.rendered = true;
-        });
-
-        // Render common fields if found
-        if (renderableCommonFields.length) {
-          var libraryName = commonFieldMachineName === 'Other libraries' ? commonFieldMachineName
-            : (commonFieldMachineName.length ? commonFieldMachineName.split(' ')[0] : '');
-          if (libraries.length && libraries[0].title) {
-            libraryName = libraries[0].title;
-          }
-
-          // Create a library wrapper
-          var hasLibraryWrapper = !!ns.renderableCommonFields[commonFieldMachineName].wrapper;
-          var commonFieldsLibraryWrapper = ns.renderableCommonFields[commonFieldMachineName].wrapper;
-          if (!hasLibraryWrapper) {
-            commonFieldsLibraryWrapper = document.createElement('fieldset');
-            var libraryWrapperClass = libraryName.replace(/\s+/g, '-').toLowerCase();
-
-            commonFieldsLibraryWrapper.classList.add('common-fields-library-wrapper');
-            commonFieldsLibraryWrapper.classList.add('common-fields-' + libraryWrapperClass);
-
-            var libraryTitle = document.createElement('legend');
-            libraryTitle.classList.add('common-field-legend');
-            libraryTitle.textContent = libraryName;
-            libraryTitle.tabIndex = '0';
-            libraryTitle.setAttribute('role', 'button');
-            libraryTitle.addEventListener('click', function () {
-              commonFieldsLibraryWrapper.classList.toggle('expanded');
-            });
-            libraryTitle.addEventListener('keypress', function (e) {
-              if (e.which === 32) {
-                commonFieldsLibraryWrapper.classList.toggle('expanded');
-              }
-            });
-            commonFieldsLibraryWrapper.appendChild(libraryTitle);
-
-            ns.renderableCommonFields[commonFieldMachineName].wrapper = commonFieldsLibraryWrapper;
-          }
-
-          renderableCommonFields.forEach(function (commonField) {
-            commonField.instance.appendTo(ns.$(commonFieldsLibraryWrapper));
-            // Gather under a common ancestor
-            if (commonField.field && commonField.field.ancestor) {
-              ancestor = commonField.field.ancestor;
-            }
-          });
-
-          if (!hasLibraryWrapper && ancestor) {
-            ancestor.$common[0].appendChild(commonFieldsLibraryWrapper);
-          }
-        }
-      });
+      if (commonFieldMachineName === ns.constants.otherLibraries) {
+        // No need to grab library info
+        ns.renderCommonField(commonFieldMachineName);
+      }
+      else {
+        // Get title for common fields group
+        H5PEditor.LibraryListCache.getLibraries(
+          [commonFieldMachineName],
+          ns.renderCommonField.bind(this, commonFieldMachineName)
+        );
+      }
     }
   }
 
