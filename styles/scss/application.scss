@@ -1156,32 +1156,6 @@ a {
   clear: right;
 }
 
-// Default toast. Should be available.
-.h5p-editor-toast {
-  font-size: 0.75em;
-  background-color: rgba(0, 0, 0, 0.9);
-  color: #fff;
-  z-index: 110;
-  position: absolute;
-  padding: 0 0.5em;
-  line-height: 2;
-  border-radius: 4px;
-  white-space: nowrap;
-  pointer-events: none;
-  top: 0;
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 1s;
-}
-
-.h5p-toast-disabled {
-  opacity: 0;
-  visibility: hidden;
-}
-
-
-
-
 .h5peditor fieldset.common-fields-library-wrapper {
   width: 100%;
   padding: 0 1em 1em;
