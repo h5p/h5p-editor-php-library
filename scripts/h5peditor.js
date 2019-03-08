@@ -1453,7 +1453,7 @@ ns.ContentType.getPossibleUpgrade = function (library, libraries) {
 
   for (let i = 0; i < libraries.length; i++) {
     const candiate = libraries[i];
-    if (ns.ContentType.hasSameName(candiate, library) && ns.ContentType.isHigherVersion(candiate, library)) {
+    if (candiate.installed !== false && ns.ContentType.hasSameName(candiate, library) && ns.ContentType.isHigherVersion(candiate, library)) {
 
       // Check if the upgrade is better than the previous upgrade we found
       if (!possibleUpgrade || ns.ContentType.isHigherVersion(candiate, possibleUpgrade)) {
