@@ -147,6 +147,7 @@ a {
     color: $form-input-placeholder-color;
   }
   & > select,
+  .h5peditor-language-switcher select,
   h5peditor-select,
   .field > select {
     padding: 10px 30px 10px 8px;
@@ -1155,32 +1156,6 @@ a {
   clear: right;
 }
 
-// Default toast. Should be available.
-.h5p-editor-toast {
-  font-size: 0.75em;
-  background-color: rgba(0, 0, 0, 0.9);
-  color: #fff;
-  z-index: 110;
-  position: absolute;
-  padding: 0 0.5em;
-  line-height: 2;
-  border-radius: 4px;
-  white-space: nowrap;
-  pointer-events: none;
-  top: 0;
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 1s;
-}
-
-.h5p-toast-disabled {
-  opacity: 0;
-  visibility: hidden;
-}
-
-
-
-
 .h5peditor fieldset.common-fields-library-wrapper {
   width: 100%;
   padding: 0 1em 1em;
@@ -1230,3 +1205,46 @@ a {
 @import "metadata-changelog-widget";
 @import "metadata-author-widget";
 @import "copy-paste";
+
+.h5peditor .h5peditor-language-switcher {
+  float: right;
+  white-space: nowrap;
+  margin-bottom: 1em;
+
+  .language-label {
+    padding: 0 10px;
+    font-size: 15px;
+  }
+  select {
+    padding: 6px 30px 6px 8px;
+    font-size: 15px;
+  }
+}
+.h5peditor-language-notice {
+  display: none;
+  clear: both;
+  font-size: 14px;
+  background: #dcf6ff;
+  color: #295b7a;
+  padding: 10px 20px 10px 40px;
+  margin: 1em 0;
+  line-height: 1.5;
+  position: relative;
+
+  &:before {
+    font-family: h5p;
+    content: "\e90c";
+    position: absolute;
+    left: 15px;
+    font-size: 1.125em;
+  }
+  &.show {
+    display: block;
+  }
+  .first {
+    font-weight: bold;
+  }
+  a {
+    text-decoration: underline;
+  }
+}

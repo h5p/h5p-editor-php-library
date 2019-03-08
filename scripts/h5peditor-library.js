@@ -381,6 +381,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 
   this.$libraryWrapper.html(ns.t('core', 'loading')).attr('class', 'libwrap ' + libraryName.split(' ')[0].toLowerCase().replace('.', '-') + '-editor' + (this.libraries.length === 1 ? ' no-margin' : ''));
 
+//TODO: Get language code from ancestor
   ns.loadLibrary(libraryName, function (semantics) {
     that.currentLibrary = libraryName;
     that.params.library = libraryName;
@@ -403,6 +404,12 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 
     // Locate selected library object
     const library = that.findLibrary(libraryName);
+
+    // Locate form
+    const ancestor = ns.findAncestor(that.parent);
+
+    // Update the main language switcher
+    ancestor.addLanguages(library.uberName, ns.libraryCache[library.uberName].languages);
 
     // Store selected Content Type title in metadata for Copyright usage
     that.params.metadata.contentType = library.title;
@@ -595,6 +602,12 @@ ns.Library.prototype.removeChildren = function () {
       }
     }
   }
+
+  // Locate selected library object
+  const lib = this.findLibrary(this.currentLibrary);
+
+  // Update the main language switcher
+  ancestor.removeLanguages(lib.uberName, ns.libraryCache[lib.uberName].languages);
 
   ns.removeChildren(this.children);
 };

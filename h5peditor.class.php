@@ -79,7 +79,7 @@ class H5peditor {
       foreach ($_POST['libraries'] as $libraryName) {
         $matches = array();
         preg_match_all('/(.+)\s(\d+)\.(\d+)$/', $libraryName, $matches);
-        if ($matches) {
+        if ($matches && $matches[1] && $matches[2] && $matches[3]) {
           $libraries[] = (object) array(
             'uberName' => $libraryName,
             'name' => $matches[1][0],
@@ -127,6 +127,17 @@ class H5peditor {
     }
 
     return $libraries;
+  }
+
+  /**
+   * Get translations for a language for a list of libraries
+   *
+   * @param array $libraries An array of libraries, in the form "<machineName> <majorVersion>.<minorVersion>
+   * @param string $language_code
+   * @return array
+   */
+  public function getTranslations($libraries, $language_code) {
+    return $this->ajaxInterface->getTranslations($libraries, $language_code);
   }
 
   /**
@@ -361,12 +372,24 @@ class H5peditor {
    *
    * @return array Libraries that was requested
    */
-  public function getLibraryData($machineName, $majorVersion, $minorVersion, $languageCode, $prefix = '', $fileDir = '') {
+  public function getLibraryData($machineName, $majorVersion, $minorVersion, $languageCode, $prefix = '', $fileDir = '', $defaultLanguage) {
     $libraryData = new stdClass();
+
+    // Include name and version in data object for convenience
+    $libraryData->name = $machineName;
+    $libraryData->version = (object) array('major' => $majorVersion, 'minor' => $minorVersion);
+
+    $libraryData->upgradesScript = $this->h5p->fs->getUpgradeScript($machineName, $majorVersion, $minorVersion);
+    if ($libraryData->upgradesScript !== NULL) {
+      // If valid add URL prefix
+      $libraryData->upgradesScript = $this->h5p->url . $prefix . $libraryData->upgradesScript;
+    }
 
     $libraries              = $this->findEditorLibraries($machineName, $majorVersion, $minorVersion);
     $libraryData->semantics = $this->h5p->loadLibrarySemantics($machineName, $majorVersion, $minorVersion);
     $libraryData->language  = $this->getLibraryLanguage($machineName, $majorVersion, $minorVersion, $languageCode);
+    $libraryData->defaultLanguage = empty($defaultLanguage) ? NULL : $this->getLibraryLanguage($machineName, $majorVersion, $minorVersion, $defaultLanguage);
+    $libraryData->languages = $this->storage->getAvailableLanguages($machineName, $majorVersion, $minorVersion);
 
     // Temporarily disable asset aggregation
     $aggregateAssets            = $this->h5p->aggregateAssets;

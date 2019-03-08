@@ -46,36 +46,33 @@
       $type.filter('input[value="create"]').attr('checked', true).change();
     }
 
+    let formIsUpdated = false;
     $form.submit(function (event) {
-      if (h5peditor !== undefined) {
-        var params = h5peditor.getParams();
+      if ($type.length && $type.filter(':checked').val() === 'upload') {
+        return; // Old file upload
+      }
 
-        if (params !== undefined && params.params !== undefined) {
-          // Validate mandatory main title. Prevent submitting if that's not set.
-          // Deliberatly doing it after getParams(), so that any other validation
-          // problems are also revealed
-          if (!h5peditor.isMainTitleSet()) {
-            return event.preventDefault();
-          }
+      if (h5peditor !== undefined && !formIsUpdated) {
+
+        // Get content from editor
+        h5peditor.getContent(function (content) {
 
           // Set the title field to the metadata title if the field exists
-          if ($title && $title.length !== 0) {
-            $title.val(params.metadata.title || '');
-          }
+          $title.val(content.title);
 
           // Set main library
-          $library.val(h5peditor.getLibrary());
+          $library.val(content.library);
 
           // Set params
-          $params.val(JSON.stringify(params));
+          $params.val(content.params);
 
-          // Set max score
-          $maxScore.val(h5peditor.getMaxScore(params.params));
+          // Submit form data
+          formIsUpdated = true;
+          $form.submit();
+        });
 
-          if (submitCallback) {
-            submitCallback(params);
-          }
-        }
+        // Stop default submit
+        event.preventDefault();
       }
     });
   };

@@ -506,4 +506,19 @@ ns.Html.prototype.remove = function () {
   this.$item.remove();
 };
 
+/**
+ * When someone from the outside wants to set a value.
+ *
+ * @param {string} value
+ */
+ns.Html.prototype.forceValue = function (value) {
+  if (this.ckeditor === undefined) {
+    this.$input.html(value);
+  }
+  else {
+    this.ckeditor.setData(value);
+  }
+  this.validate();
+};
+
 ns.widgets.html = ns.Html;

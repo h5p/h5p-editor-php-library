@@ -121,6 +121,9 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       iframeLoaded.call(this.contentWindow);
     }
 
+    // Used for accessing resources inside iframe
+    self.iframeWindow = this.contentWindow;
+
     var LibrarySelector = this.contentWindow.H5PEditor.LibrarySelector;
     var $ = this.contentWindow.H5P.jQuery;
     var $container = $('body > .h5p-editor');
@@ -270,6 +273,83 @@ ns.Editor.prototype.getParams = function (notFormSubmit) {
   }
   else {
     console.warn('no selector defined for "getParams"');
+  }
+};
+
+/**
+ * Validate editor data and submit content using callback.
+ *
+ * @alias H5PEditor.Editor#getContent
+ * @param {Function} submit Callback to submit the content data
+ * @param {Function} [error] Callback on failure
+ */
+ns.Editor.prototype.getContent = function (submit, error) {
+  const iframeEditor = this.iframeWindow.H5PEditor;
+
+  if (!this.selector.form) {
+    if (error) {
+      error('content-not-selected');
+    }
+    return;
+  }
+
+  const content = {
+    title: this.isMainTitleSet(),
+    library: this.getLibrary(),
+    params: this.getParams()
+  };
+
+  if (!content.title) {
+    if (error) {
+      error('missing-title');
+    }
+    return;
+  }
+  if (!content.library) {
+    if (error) {
+      error('missing-library');
+    }
+    return;
+  }
+  if (!content.params) {
+    if (error) {
+      error('missing-params');
+    }
+    return;
+  }
+  if (!content.params.params) {
+    if (error) {
+      error('missing-params-params');
+    }
+    return;
+  }
+
+  // Convert title to preserve html entities
+  const tmp = document.createElement('div');
+  tmp.innerHTML = content.title;
+  content.title = tmp.textContent; // WARNING: This is text, do NOT insert as HTML.
+
+  library = new iframeEditor.ContentType(content.library);
+  const upgradeLibrary = iframeEditor.ContentType.getPossibleUpgrade(library, this.selector.libraries.libraries !== undefined ? this.selector.libraries.libraries : this.selector.libraries);
+  if (upgradeLibrary) {
+    // We need to run content upgrade before saving
+    iframeEditor.upgradeContent(library, upgradeLibrary, content.params, function (err, result) {
+      if (err) {
+        if (error) {
+          error(err);
+        }
+      }
+      else {
+        content.library = iframeEditor.ContentType.getNameVersionString(upgradeLibrary);
+        content.params = result;
+        submit(content);
+      }
+    })
+  }
+  else {
+    // All OK, store the data
+    content.params = JSON.stringify(content.params);
+    submit(content);
   }
 };
 

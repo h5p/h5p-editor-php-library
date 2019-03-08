@@ -9,8 +9,17 @@ ns.$ = H5P.jQuery;
 
 // Load needed resources from parent.
 H5PIntegration = H5P.jQuery.extend(false, {}, window.parent.H5PIntegration);
-H5PIntegration.loadedJs = {};
-H5PIntegration.loadedCss = {};
+H5PIntegration.loadedJs = [];
+H5PIntegration.loadedCss = [];
+
+/**
+ * Constants used within editor
+ *
+ * @type {{otherLibraries: string}}
+ */
+ns.constants = {
+  otherLibraries: 'Other Libraries',
+};
 
 /**
  * Keep track of our widgets.
@@ -48,6 +57,35 @@ ns.isIE = navigator.userAgent.match(/; MSIE \d+.\d+;/) !== null;
 ns.renderableCommonFields = {};
 
 /**
+ * Help load JavaScripts, prevents double loading.
+ *
+ * @param {string} src
+ * @param {Function} done Callback
+ */
+ns.loadJs = function (src, done) {
+  if (H5P.jsLoaded(src)) {
+    // Already loaded
+    done();
+  }
+  else {
+    // Loading using script tag
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.charset = 'UTF-8';
+    script.async = false;
+    script.onload = function () {
+      H5PIntegration.loadedJs.push(src);
+      done();
+    };
+    script.onerror = function (err) {
+      done(err);
+    };
+    script.src = src;
+    document.head.appendChild(script);
+  }
+}
+
+/**
  * Helper function invoked when a library is requested. Will add CSS and eval JS
  * if not already done.
  *
@@ -81,13 +119,11 @@ ns.libraryRequested = function (libraryName, callback) {
       libraryData.javascript.forEach(function (path) {
         if (!H5P.jsLoaded(path)) {
           loadingJs = true;
-          var script = document.createElement('script');
-          script.type = 'text/javascript';
-          script.charset = 'UTF-8';
-          script.async = false;
-
-          script.onload = function () {
-            H5PIntegration.loadedJs.push(path);
+          ns.loadJs(path, function (err) {
+            if (err) {
+              console.error('Error while loading script', err);
+              return;
+            }
 
             var isFinishedLoading = libraryData.javascript.reduce(function (hasLoaded, jsPath) {
               return hasLoaded && H5P.jsLoaded(jsPath);
@@ -105,14 +141,7 @@ ns.libraryRequested = function (libraryName, callback) {
 
               callback(ns.libraryCache[libraryName].semantics);
             }
-          };
-
-          script.onerror = function (e) {
-            console.error("Error while loading scripts:", e);
-          };
-
-          script.src = path;
-          document.head.appendChild(script);
+          });
         }
       });
     }
@@ -164,15 +193,29 @@ ns.loadLibrary = function (libraryName, callback) {
       if (ns.contentLanguage !== undefined) {
         url += (url.indexOf('?') === -1 ? '?' : '&') + 'language=' + ns.contentLanguage;
       }
+      // Add common fields default lanuage to URL
+      const defaultLanguage = ns.defaultLanguage; // Avoid changes after sending AJAX
+      if (ns.defaultLanguage !== undefined) {
+        url += (url.indexOf('?') === -1 ? '?' : '&') + 'default-language=' + defaultLanguage;
+      }
 
       // Fire away!
       ns.$.ajax({
         url: url,
         success: function (libraryData) {
-          var semantics = libraryData.semantics;
+          libraryData.translation = { // Used to cache all the translations
+            en: libraryData.semantics
+          };
+          let languageSemantics = [];
           if (libraryData.language !== null) {
-            var language = JSON.parse(libraryData.language);
-            semantics = ns.$.extend(true, [], semantics, language.semantics);
+            languageSemantics = JSON.parse(libraryData.language);
+            delete libraryData.language; // Avoid caching a lot of unused data
+          }
+          var semantics = ns.$.extend(true, [], libraryData.semantics, languageSemantics);
+          if (libraryData.defaultLanguage !== null) {
+            libraryData.translation[defaultLanguage] = JSON.parse(libraryData.defaultLanguage).semantics;
+            delete libraryData.defaultLanguage; // Avoid caching a lot of unused data
+            ns.updateCommonFieldsDefault(semantics, libraryData.translation[defaultLanguage]);
           }
           libraryData.semantics = semantics;
           ns.libraryCache[libraryName] = libraryData;
@@ -202,6 +245,34 @@ ns.loadLibrary = function (libraryName, callback) {
 };
 
 /**
+ * Update common fields default values for the given semantics.
+ * Works by reference.
+ *
+ * @param {Array} semantics
+ * @param {Array} translation
+ * @param {boolean} [parentIsCommon] Used to indicated that one of the ancestors is a common field
+ */
+ns.updateCommonFieldsDefault = function (semantics, translation, parentIsCommon) {
+  for (let i = 0; i < semantics.length; i++) {
+    const isCommon = (semantics[i].common === true || parentIsCommon);
+    if (isCommon && semantics[i].default !== undefined &&
+        translation[i] !== undefined && translation[i].default !== undefined) {
+      // Update value
+      semantics[i].default = translation[i].default;
+    }
+    if (semantics[i].fields !== undefined && semantics[i].fields.length &&
+        translation[i].fields !== undefined && translation[i].fields.length) {
+      // Look into sub fields
+      ns.updateCommonFieldsDefault(semantics[i].fields, translation[i].fields, isCommon);
+    }
+    if (semantics[i].field !== undefined && translation[i].field !== undefined ) {
+      // Look into sub field
+      ns.updateCommonFieldsDefault([semantics[i].field], [translation[i].field], isCommon);
+    }
+  }
+};
+
+/**
  * Reset loaded libraries - i.e removes CSS added previously.
  * @method
  * @return {[type]}
@@ -212,6 +283,98 @@ ns.resetLoadedLibraries = function () {
   H5PIntegration.loadedJs = [];
   ns.loadedCallbacks = [];
   ns.libraryLoaded = {};
+};
+
+/**
+ * Render common fields of content type with given machine name
+ *
+ * @param {string} machineName Machine name of content type with common fields
+ * @param {Array} [libraries] Library data for machine name
+ */
+ns.renderCommonField = function (machineName, libraries) {
+  var commonFields = ns.renderableCommonFields[machineName].fields;
+  var renderableCommonFields = [];
+
+  commonFields.forEach(function (field) {
+    if (!field.rendered) {
+      var commonField = ns.addCommonField(field.field, field.parent, field.params, field.ancestor);
+      if (commonField.setValues.length === 1) {
+        renderableCommonFields.push({
+          field: field,
+          instance: commonField.instance
+        });
+        field.instance = commonField.instance;
+      }
+    }
+    field.rendered = true;
+  });
+
+  // Render common fields if found
+  if (renderableCommonFields.length) {
+    var libraryName = machineName === ns.constants.otherLibraries ? machineName
+      : (machineName.length ? machineName.split(' ')[0] : '');
+    if (libraries.length && libraries[0].title) {
+      libraryName = libraries[0].title;
+    }
+
+    // Create a library wrapper
+    var hasLibraryWrapper = !!ns.renderableCommonFields[machineName].wrapper;
+    var commonFieldsLibraryWrapper = ns.renderableCommonFields[machineName].wrapper;
+    if (!hasLibraryWrapper) {
+      commonFieldsLibraryWrapper = document.createElement('fieldset');
+      var libraryWrapperClass = libraryName.replace(/\s+/g, '-').toLowerCase();
+
+      commonFieldsLibraryWrapper.classList.add('common-fields-library-wrapper');
+      commonFieldsLibraryWrapper.classList.add('common-fields-' + libraryWrapperClass);
+
+      var libraryTitle = document.createElement('legend');
+      libraryTitle.classList.add('common-field-legend');
+      libraryTitle.textContent = libraryName;
+      libraryTitle.tabIndex = '0';
+      libraryTitle.setAttribute('role', 'button');
+      libraryTitle.addEventListener('click', function () {
+        commonFieldsLibraryWrapper.classList.toggle('expanded');
+      });
+      libraryTitle.addEventListener('keypress', function (e) {
+        if (e.which === 32) {
+          commonFieldsLibraryWrapper.classList.toggle('expanded');
+        }
+      });
+      commonFieldsLibraryWrapper.appendChild(libraryTitle);
+
+      ns.renderableCommonFields[machineName].wrapper = commonFieldsLibraryWrapper;
+    }
+
+    renderableCommonFields.forEach(function (commonField) {
+      commonField.instance.appendTo(ns.$(commonFieldsLibraryWrapper));
+      // Gather under a common ancestor
+      if (commonField.field && commonField.field.ancestor) {
+        ancestor = commonField.field.ancestor;
+      }
+    });
+
+    if (!hasLibraryWrapper && ancestor) {
+      ancestor.$common[0].appendChild(commonFieldsLibraryWrapper);
+    }
+  }
+};
+
+/**
+ * Recursively traverse parents to find the library our field belongs to
+ *
+ * @param parent
+ * @returns {*}
+ */
+ns.getParentLibrary = function (parent) {
+  if (!parent) {
+    return null;
+  }
+
+  if (parent.currentLibrary) {
+    return parent.currentLibrary;
+  }
+
+  return ns.getParentLibrary(parent.parent);
 };
 
 /**
@@ -267,9 +430,11 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
         ancestor = ns.findAncestor(parent);
       }
 
+      var parentLibrary = ns.getParentLibrary(parent);
       var library = machineName ? machineName
         : (field.library ? field.library
-          : (parent.currentLibrary ? parent.currentLibrary : 'Other libraries'));
+          : (parentLibrary ? parentLibrary
+            : ns.constants.otherLibraries));
       ns.renderableCommonFields[library] = ns.renderableCommonFields[library] || {};
       ns.renderableCommonFields[library].fields = ns.renderableCommonFields[library].fields || [];
 
@@ -299,73 +464,17 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
   // Render all gathered common field
   if (ns.renderableCommonFields) {
     for (var commonFieldMachineName in ns.renderableCommonFields) {
-      // Get title for common fields group
-      H5PEditor.LibraryListCache.getLibraries([commonFieldMachineName], function (libraries) {
-        var commonFields = ns.renderableCommonFields[commonFieldMachineName].fields;
-        var renderableCommonFields = [];
-
-        commonFields.forEach(function (field) {
-          if (!field.rendered) {
-            var commonField = ns.addCommonField(field.field, field.parent, field.params, field.ancestor);
-            if (commonField.setValues.length === 1) {
-              renderableCommonFields.push({
-                field: field,
-                instance: commonField.instance
-              });
-            }
-          }
-          field.rendered = true;
-        });
-
-        // Render common fields if found
-        if (renderableCommonFields.length) {
-          var libraryName = commonFieldMachineName === 'Other libraries' ? commonFieldMachineName
-            : (commonFieldMachineName.length ? commonFieldMachineName.split(' ')[0] : '');
-          if (libraries.length && libraries[0].title) {
-            libraryName = libraries[0].title;
-          }
-
-          // Create a library wrapper
-          var hasLibraryWrapper = !!ns.renderableCommonFields[commonFieldMachineName].wrapper;
-          var commonFieldsLibraryWrapper = ns.renderableCommonFields[commonFieldMachineName].wrapper;
-          if (!hasLibraryWrapper) {
-            commonFieldsLibraryWrapper = document.createElement('fieldset');
-            var libraryWrapperClass = libraryName.replace(/\s+/g, '-').toLowerCase();
-
-            commonFieldsLibraryWrapper.classList.add('common-fields-library-wrapper');
-            commonFieldsLibraryWrapper.classList.add('common-fields-' + libraryWrapperClass);
-
-            var libraryTitle = document.createElement('legend');
-            libraryTitle.classList.add('common-field-legend');
-            libraryTitle.textContent = libraryName;
-            libraryTitle.tabIndex = '0';
-            libraryTitle.setAttribute('role', 'button');
-            libraryTitle.addEventListener('click', function () {
-              commonFieldsLibraryWrapper.classList.toggle('expanded');
-            });
-            libraryTitle.addEventListener('keypress', function (e) {
-              if (e.which === 32) {
-                commonFieldsLibraryWrapper.classList.toggle('expanded');
-              }
-            });
-            commonFieldsLibraryWrapper.appendChild(libraryTitle);
-
-            ns.renderableCommonFields[commonFieldMachineName].wrapper = commonFieldsLibraryWrapper;
-          }
-
-          renderableCommonFields.forEach(function (commonField) {
-            commonField.instance.appendTo(ns.$(commonFieldsLibraryWrapper));
-            // Gather under a common ancestor
-            if (commonField.field && commonField.field.ancestor) {
-              ancestor = commonField.field.ancestor;
-            }
-          });
-
-          if (!hasLibraryWrapper && ancestor) {
-            ancestor.$common[0].appendChild(commonFieldsLibraryWrapper);
-          }
-        }
-      });
+      if (commonFieldMachineName === ns.constants.otherLibraries) {
+        // No need to grab library info
+        ns.renderCommonField(commonFieldMachineName);
+      }
+      else {
+        // Get title for common fields group
+        H5PEditor.LibraryListCache.getLibraries(
+          [commonFieldMachineName],
+          ns.renderCommonField.bind(this, commonFieldMachineName)
+        );
+      }
     }
   }
 
@@ -1151,210 +1260,8 @@ ns.enableMetadata = function (library) {
   return false;
 };
 
-/**
- * Show a toast message.
- *
- * The reference element could be dom elements the toast should be attached to,
- * or e.g. the document body for general toast messages.
- *
- * @param {DOM} element Reference element to show toast message for.
- * @param {string} message Message to show.
- * @param {object} [config] Configuration.
- * @param {string} [config.style=h5p-editor-toast] Style name for the tooltip.
- * @param {number} [config.duration=3000] Toast message length in ms.
- * @param {object} [config.position] Relative positioning of the toast.
- * @param {string} [config.position.horizontal=centered] [before|left|centered|right|after].
- * @param {string} [config.position.vertical=below] [above|top|centered|bottom|below].
- * @param {number} [config.position.offsetHorizontal=0] Extra horizontal offset.
- * @param {number} [config.position.offsetVertical=0] Extra vetical offset.
- * @param {boolean} [config.position.noOverflowLeft=false] True to prevent overflow left.
- * @param {boolean} [config.position.noOverflowRight=false] True to prevent overflow right.
- * @param {boolean} [config.position.noOverflowTop=false] True to prevent overflow top.
- * @param {boolean} [config.position.noOverflowBottom=false] True to prevent overflow bottom.
- * @param {boolean} [config.position.noOverflowX=false] True to prevent overflow left and right.
- * @param {boolean} [config.position.noOverflowY=false] True to prevent overflow top and bottom.
- * @param {object} [config.position.overflowReference=document.body] DOM reference for overflow.
- */
-ns.attachToastTo = function (element, message, config) {
-  if (element === undefined || message === undefined) {
-    return;
-  }
-
-  const eventPath = function (evt) {
-    var path = (evt.composedPath && evt.composedPath()) || evt.path;
-    var target = evt.target;
-
-    if (path != null) {
-      // Safari doesn't include Window, but it should.
-      return (path.indexOf(window) < 0) ? path.concat(window) : path;
-    }
-
-    if (target === window) {
-      return [window];
-    }
-
-    function getParents(node, memo) {
-      memo = memo || [];
-      var parentNode = node.parentNode;
-
-      if (!parentNode) {
-        return memo;
-      }
-      else {
-        return getParents(parentNode, memo.concat(parentNode));
-      }
-    }
-
-    return [target].concat(getParents(target), window);
-  };
-
-  /**
-   * Handle click while toast is showing.
-   */
-  const clickHandler = function (event) {
-    /*
-     * A common use case will be to attach toasts to buttons that are clicked.
-     * The click would remove the toast message instantly without this check.
-     * Children of the clicked element are also ignored.
-     */
-    var path = eventPath(event);
-    if (path.indexOf(element) !== -1) {
-      return;
-    }
-    clearTimeout(timer);
-    removeToast();
-  };
-
-
-
-  /**
-   * Remove the toast message.
-   */
-  const removeToast = function () {
-    document.removeEventListener('click', clickHandler);
-    if (toast.parentNode) {
-      toast.parentNode.removeChild(toast);
-    }
-  };
-
-  /**
-   * Get absolute coordinates for the toast.
-   *
-   * @param {DOM} element Reference element to show toast message for.
-   * @param {DOM} toast Toast element.
-   * @param {object} [position={}] Relative positioning of the toast message.
-   * @param {string} [position.horizontal=centered] [before|left|centered|right|after].
-   * @param {string} [position.vertical=below] [above|top|centered|bottom|below].
-   * @param {number} [position.offsetHorizontal=0] Extra horizontal offset.
-   * @param {number} [position.offsetVertical=0] Extra vetical offset.
-   * @param {boolean} [position.noOverflowLeft=false] True to prevent overflow left.
-   * @param {boolean} [position.noOverflowRight=false] True to prevent overflow right.
-   * @param {boolean} [position.noOverflowTop=false] True to prevent overflow top.
-   * @param {boolean} [position.noOverflowBottom=false] True to prevent overflow bottom.
-   * @param {boolean} [position.noOverflowX=false] True to prevent overflow left and right.
-   * @param {boolean} [position.noOverflowY=false] True to prevent overflow top and bottom.
-   * @return {object}
-   */
-  const getToastCoordinates = function (element, toast, position) {
-    position = position || {};
-    position.offsetHorizontal = position.offsetHorizontal || 0;
-    position.offsetVertical = position.offsetVertical || 0;
-
-    const toastRect = toast.getBoundingClientRect();
-    const elementRect = element.getBoundingClientRect();
-
-    let left = 0;
-    let top = 0;
-
-    // Compute horizontal position
-    switch (position.horizontal) {
-      case 'before':
-        left = elementRect.left - toastRect.width - position.offsetHorizontal;
-        break;
-      case 'after':
-        left = elementRect.left + elementRect.width + position.offsetHorizontal;
-        break;
-      case 'left':
-        left = elementRect.left + position.offsetHorizontal;
-        break;
-      case 'right':
-        left = elementRect.left + elementRect.width - toastRect.width - position.offsetHorizontal;
-        break;
-      case 'centered':
-        left = elementRect.left + elementRect.width / 2 - toastRect.width / 2 + position.offsetHorizontal;
-        break;
-      default:
-        left = elementRect.left + elementRect.width / 2 - toastRect.width / 2 + position.offsetHorizontal;
-    }
-
-    // Compute vertical position
-    switch (position.vertical) {
-      case 'above':
-        top = elementRect.top - toastRect.height - position.offsetVertical;
-        break;
-      case 'below':
-        top = elementRect.top + elementRect.height + position.offsetVertical;
-        break;
-      case 'top':
-        top = elementRect.top + position.offsetVertical;
-        break;
-      case 'bottom':
-        top = elementRect.top + elementRect.height - toastRect.height - position.offsetVertical;
-        break;
-      case 'centered':
-        top = elementRect.top + elementRect.height / 2 - toastRect.height / 2 + position.offsetVertical;
-        break;
-      default:
-        top = elementRect.top + elementRect.height + position.offsetVertical;
-    }
-
-    // Prevent overflow
-    const overflowElement = document.body;
-    const bounds = overflowElement.getBoundingClientRect();
-    if ((position.noOverflowLeft || position.noOverflowX) && (left < bounds.x)) {
-      left = bounds.x;
-    }
-    if ((position.noOverflowRight || position.noOverflowX) && ((left + toastRect.width) > (bounds.x + bounds.width))) {
-      left = bounds.x + bounds.width - toastRect.width;
-    }
-    if ((position.noOverflowTop || position.noOverflowY) && (top < bounds.y)) {
-      top = bounds.y;
-    }
-    if ((position.noOverflowBottom || position.noOverflowY) && ((top + toastRect.height) > (bounds.y + bounds.height))) {
-      left = bounds.y + bounds.height - toastRect.height;
-    }
-
-    return {left: left, top: top};
-  };
-
-  // Sanitization
-  config = config || {};
-  config.style = config.style || 'h5p-editor-toast';
-  config.duration = config.duration || 3000;
-
-  // Build toast
-  const toast = document.createElement('div');
-  toast.setAttribute('id', config.style);
-  toast.classList.add('h5p-toast-disabled');
-  toast.classList.add(config.style);
-
-  const msg = document.createElement('span');
-  msg.innerHTML = message;
-  toast.appendChild(msg);
-
-  document.body.appendChild(toast);
-
-  // The message has to be set before getting the coordinates
-  const coordinates = getToastCoordinates(element, toast, config.position);
-  toast.style.left = Math.round(coordinates.left) + 'px';
-  toast.style.top = Math.round(coordinates.top) + 'px';
-
-  toast.classList.remove('h5p-toast-disabled');
-  const timer = setTimeout(removeToast, config.duration);
-
-  // The toast can also be removed by clicking somewhere
-  document.addEventListener('click', clickHandler);
-};
+// Backwards compatibilty
+ns.attachToastTo = H5P.attachToastTo;
 
 /**
  * Check if clipboard can be pasted.
@@ -1519,3 +1426,372 @@ ns.storage = (function () {
   };
   return instance;
 })();
+
+/**
+ * Small helper class for library data.
+ *
+ * @class
+ * @param {string} nameVersionString
+ */
+ns.ContentType = function ContentType(nameVersionString) {
+  const libraryNameSplit = nameVersionString.split(' ');
+  const libraryVersionSplit = libraryNameSplit[1].split('.');
+
+  this.machineName = libraryNameSplit[0];
+  this.majorVersion = libraryVersionSplit[0];
+  this.minorVersion = libraryVersionSplit[1];
+};
+
+/**
+ * Look for the best possible upgrade for the given library
+ *
+ * @param {ns.ContentType} library
+ * @param {Array} libraries Where to look
+ */
+ns.ContentType.getPossibleUpgrade = function (library, libraries) {
+  let possibleUpgrade;
+
+  for (let i = 0; i < libraries.length; i++) {
+    const candiate = libraries[i];
+    if (candiate.installed !== false && ns.ContentType.hasSameName(candiate, library) && ns.ContentType.isHigherVersion(candiate, library)) {
+
+      // Check if the upgrade is better than the previous upgrade we found
+      if (!possibleUpgrade || ns.ContentType.isHigherVersion(candiate, possibleUpgrade)) {
+        possibleUpgrade = candiate;
+      }
+    }
+  }
+
+  return possibleUpgrade;
+};
+
+/**
+ * Check if candiate is a higher version than original.
+ *
+ * @param {Object} candiate Library object
+ * @param {Object} original Library object
+ * @returns {boolean}
+ */
+ns.ContentType.isHigherVersion = function (candiate, original) {
+  return (ns.ContentType.getMajorVersion(candiate) > ns.ContentType.getMajorVersion(original) ||
+    (ns.ContentType.getMajorVersion(candiate) == ns.ContentType.getMajorVersion(original) &&
+     ns.ContentType.getMinorVersion(candiate) > ns.ContentType.getMinorVersion(original)));
+};
+
+/**
+ * Check if candiate has same name as original.
+ *
+ * @param {Object} candiate Library object
+ * @param {Object} original Library object
+ * @returns {boolean}
+ */
+ns.ContentType.hasSameName = function (candiate, original) {
+  return (ns.ContentType.getName(candiate) === ns.ContentType.getName(original));
+};
+
+/**
+ * Check if candiate has same name as original.
+ *
+ * @param {Object} candiate Library object
+ * @param {Object} original Library object
+ * @returns {string}
+ */
+ns.ContentType.getNameVersionString = function (library) {
+  return ns.ContentType.getName(library) + ' ' + ns.ContentType.getMajorVersion(library) + '.' + ns.ContentType.getMinorVersion(library);
+};
+
+/**
+ * Get the major version from a library object.
+ *
+ * @param {Object} library
+ * @returns {number}
+ */
+ns.ContentType.getMajorVersion = function (library) {
+  return parseInt((library.localMajorVersion !== undefined ? library.localMajorVersion : library.majorVersion));
+};
+
+/**
+ * Get the minor version from a library object.
+ *
+ * @param {Object} library
+ * @returns {number}
+ */
+ns.ContentType.getMinorVersion = function (library) {
+  return parseInt((library.localMinorVersion !== undefined ? library.localMinorVersion : library.minorVersion));
+};
+
+/**
+ * Get the name from a library object.
+ *
+ * @param {Object} library
+ * @returns {string}
+ */
+ns.ContentType.getName = function (library) {
+  return (library.machineName !== undefined ? library.machineName : library.name);
+};
+
+
+ns.upgradeContent = (function () {
+
+  /**
+   * A wrapper for loading library data for the content upgrade scripts.
+   *
+   * @param {string} name Library name
+   * @param {H5P.Version} version
+   * @param {Function} next Callback
+   */
+  const loadLibrary = function (name, version, next) {
+    const library = name + ' ' + version.major + '.' + version.minor;
+    ns.loadLibrary(library, function () {
+      next(null, ns.libraryCache[library]);
+    });
+  };
+
+  return function contentUpgrade(fromLibrary, toLibrary, parameters, done) {
+    ns.loadJs(H5PIntegration.libraryUrl + '/h5p-version.js' + H5PIntegration.pluginCacheBuster, function (err) {
+      ns.loadJs(H5PIntegration.libraryUrl + '/h5p-content-upgrade-process.js' + H5PIntegration.pluginCacheBuster, function (err) {
+        // TODO: Avoid stringify the parameters
+        new H5P.ContentUpgradeProcess(ns.ContentType.getName(fromLibrary), new H5P.Version(fromLibrary), new H5P.Version(toLibrary), JSON.stringify(parameters), 1, function (name, version, next) {
+          loadLibrary(name, version, function (err, library) {
+            if (library.upgradesScript) {
+              ns.loadJs(library.upgradesScript, function (err) {
+                if (err) {
+                  err = 'Error loading upgrades ' + name + ' ' + version;
+                }
+                next(err, library);
+              });
+            }
+            else {
+              next(null, library);
+            }
+          });
+
+        }, function (err, result) {
+          if (err) {
+            let header = 'Failed';
+            let message = 'Could not upgrade content';
+            switch (err.type) {
+              case 'errorTooHighVersion':
+                message += ': ' + ns.t('core', 'errorTooHighVersion', {'%used': err.used, '%supported': err.supported});
+                break;
+
+              case 'errorNotSupported':
+                message += ': ' + ns.t('core', 'errorNotSupported', {'%used': err.used});
+                break;
+
+              case 'errorParamsBroken':
+                message += ': ' + ns.t('core', 'errorParamsBroken');
+                break;
+
+              case 'libraryMissing':
+                message += ': ' +  ns.t('core', 'libraryMissing', {'%lib': err.library});
+                break;
+
+              case 'scriptMissing':
+                message += ': ' + ns.t('core', 'scriptMissing', {'%lib': err.library});
+                break;
+            }
+
+            var confirmErrorDialog = new H5P.ConfirmationDialog({
+              headerText: header,
+              dialogText: message,
+              confirmText: 'Continue'
+            }).appendTo(document.body);
+            confirmErrorDialog.show();
+          }
+          done(err, result);
+        });
+      });
+    });
+  };
+})();
+
+// List of language code mappings used by the editor
+ns.supportedLanguages = {
+  'aa': 'Afar',
+  'ab': 'Abkhazian (аҧсуа бызшәа)',
+  'ae': 'Avestan',
+  'af': 'Afrikaans',
+  'ak': 'Akan',
+  'am': 'Amharic (አማርኛ)',
+  'ar': 'Arabic (العربية)',
+  'as': 'Assamese',
+  'ast': 'Asturian',
+  'av': 'Avar',
+  'ay': 'Aymara',
+  'az': 'Azerbaijani (azərbaycan)',
+  'ba': 'Bashkir',
+  'be': 'Belarusian (Беларуская)',
+  'bg': 'Bulgarian (Български)',
+  'bh': 'Bihari',
+  'bi': 'Bislama',
+  'bm': 'Bambara (Bamanankan)',
+  'bn': 'Bengali',
+  'bo': 'Tibetan',
+  'br': 'Breton',
+  'bs': 'Bosnian (Bosanski)',
+  'ca': 'Catalan (Català)',
+  'ce': 'Chechen',
+  'ch': 'Chamorro',
+  'co': 'Corsican',
+  'cr': 'Cree',
+  'cs': 'Czech (Čeština)',
+  'cu': 'Old Slavonic',
+  'cv': 'Chuvash',
+  'cy': 'Welsh (Cymraeg)',
+  'da': 'Danish (Dansk)',
+  'de': 'German (Deutsch)',
+  'dv': 'Maldivian',
+  'dz': 'Bhutani',
+  'ee': 'Ewe (Ɛʋɛ)',
+  'el': 'Greek (Ελληνικά)',
+  'en': 'English',
+  'en-gb': 'English, British',
+  'eo': 'Esperanto',
+  'es': 'Spanish (Español)',
+  'et': 'Estonian (Eesti)',
+  'eu': 'Basque (Euskera)',
+  'fa': 'Persian (فارسی)',
+  'ff': 'Fulah (Fulfulde)',
+  'fi': 'Finnish (Suomi)',
+  'fil': 'Filipino',
+  'fj': 'Fiji',
+  'fo': 'Faeroese',
+  'fr': 'French (Français)',
+  'fy': 'Frisian (Frysk)',
+  'ga': 'Irish (Gaeilge)',
+  'gd': 'Scots Gaelic',
+  'gl': 'Galician (Galego)',
+  'gn': 'Guarani',
+  'gsw-berne': 'Swiss German',
+  'gu': 'Gujarati',
+  'gv': 'Manx',
+  'ha': 'Hausa',
+  'he': 'Hebrew (עברית)',
+  'hi': 'Hindi (हिन्दी)',
+  'ho': 'Hiri Motu',
+  'hr': 'Croatian (Hrvatski)',
+  'ht': 'Haitian Creole',
+  'hu': 'Hungarian (Magyar)',
+  'hy': 'Armenian (Հայերեն)',
+  'hz': 'Herero',
+  'ia': 'Interlingua',
+  'id': 'Indonesian (Bahasa Indonesia)',
+  'ie': 'Interlingue',
+  'ig': 'Igbo',
+  'ik': 'Inupiak',
+  'is': 'Icelandic (Íslenska)',
+  'it': 'Italian (Italiano)',
+  'iu': 'Inuktitut',
+  'ja': 'Japanese (日本語)',
+  'jv': 'Javanese',
+  'ka': 'Georgian',
+  'kg': 'Kongo',
+  'ki': 'Kikuyu',
+  'kj': 'Kwanyama',
+  'kk': 'Kazakh (Қазақ)',
+  'kl': 'Greenlandic',
+  'km': 'Cambodian',
+  'kn': 'Kannada (ಕನ್ನಡ)',
+  'ko': 'Korean (한국어)',
+  'kr': 'Kanuri',
+  'ks': 'Kashmiri',
+  'ku': 'Kurdish (Kurdî)',
+  'kv': 'Komi',
+  'kw': 'Cornish',
+  'ky': 'Kyrgyz (Кыргызча)',
+  'la': 'Latin (Latina)',
+  'lb': 'Luxembourgish',
+  'lg': 'Luganda',
+  'ln': 'Lingala',
+  'lo': 'Laothian',
+  'lt': 'Lithuanian (Lietuvių)',
+  'lv': 'Latvian (Latviešu)',
+  'mg': 'Malagasy',
+  'mh': 'Marshallese',
+  'mi': 'Māori',
+  'mk': 'Macedonian (Македонски)',
+  'ml': 'Malayalam (മലയാളം)',
+  'mn': 'Mongolian',
+  'mo': 'Moldavian',
+  'mr': 'Marathi',
+  'ms': 'Malay (Bahasa Melayu)',
+  'mt': 'Maltese (Malti)',
+  'my': 'Burmese',
+  'na': 'Nauru',
+  'nd': 'North Ndebele',
+  'ne': 'Nepali',
+  'ng': 'Ndonga',
+  'nl': 'Dutch (Nederlands)',
+  'nb': 'Norwegian Bokmål (Bokmål)',
+  'nn': 'Norwegian Nynorsk (Nynorsk)',
+  'nr': 'South Ndebele',
+  'nv': 'Navajo',
+  'ny': 'Chichewa',
+  'oc': 'Occitan',
+  'om': 'Oromo',
+  'or': 'Oriya',
+  'os': 'Ossetian',
+  'pa': 'Punjabi',
+  'pi': 'Pali',
+  'pl': 'Polish (Polski)',
+  'ps': 'Pashto (پښتو)',
+  'pt': 'Portuguese, International',
+  'pt-pt': 'Portuguese, Portugal (Português)',
+  'pt-br': 'Portuguese, Brazil (Português)',
+  'qu': 'Quechua',
+  'rm': 'Rhaeto-Romance',
+  'rn': 'Kirundi',
+  'ro': 'Romanian (Română)',
+  'ru': 'Russian (Русский)',
+  'rw': 'Kinyarwanda',
+  'sa': 'Sanskrit',
+  'sc': 'Sardinian',
+  'sco': 'Scots',
+  'sd': 'Sindhi',
+  'se': 'Northern Sami',
+  'sg': 'Sango',
+  'sh': 'Serbo-Croatian',
+  'si': 'Sinhala (සිංහල)',
+  'sk': 'Slovak (Slovenčina)',
+  'sl': 'Slovenian (Slovenščina)',
+  'sm': 'Samoan',
+  'sn': 'Shona',
+  'so': 'Somali',
+  'sq': 'Albanian (Shqip)',
+  'sr': 'Serbian (Српски)',
+  'ss': 'Siswati',
+  'st': 'Sesotho',
+  'su': 'Sudanese',
+  'sv': 'Swedish (Svenska)',
+  'sw': 'Swahili (Kiswahili)',
+  'ta': 'Tamil (தமிழ்)',
+  'te': 'Telugu (తెలుగు)',
+  'tg': 'Tajik',
+  'th': 'Thai (ภาษาไทย)',
+  'ti': 'Tigrinya',
+  'tk': 'Turkmen',
+  'tl': 'Tagalog',
+  'tn': 'Setswana',
+  'to': 'Tonga',
+  'tr': 'Turkish (Türkçe)',
+  'ts': 'Tsonga',
+  'tt': 'Tatar (Tatarça)',
+  'tw': 'Twi',
+  'ty': 'Tahitian',
+  'ug': 'Uyghur',
+  'uk': 'Ukrainian (Українська)',
+  'ur': 'Urdu (اردو)',
+  'uz': "Uzbek (o'zbek)",
+  've': 'Venda',
+  'vi': 'Vietnamese (Tiếng Việt)',
+  'wo': 'Wolof',
+  'xh': 'Xhosa (isiXhosa)',
+  'xx-lolspeak': 'Lolspeak)',
+  'yi': 'Yiddish',
+  'yo': 'Yoruba (Yorùbá)',
+  'za': 'Zhuang',
+  'zh-hans': 'Chinese, Simplified (简体中文)',
+  'zh-hant': 'Chinese, Traditional (繁體中文)',
+  'zu': 'Zulu (isiZulu)'
+};
