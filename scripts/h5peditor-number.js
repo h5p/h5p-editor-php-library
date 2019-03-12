@@ -112,28 +112,34 @@ ns.Number.prototype.validate = function () {
     // Field must have a value
     this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': ns.t('core', 'numberField')})));
   }
-  else if (decimals && !value.match(new RegExp('^-?[0-9]+(.|,)[0-9]{1,}$'))) {
-    this.$errors.append(ns.createError(ns.t('core', 'onlyNumbers', {':property': propertyName})));
-  }
-  else if (!decimals && !value.match(new RegExp('^-?[0-9]+$'))) {
-    this.$errors.append(ns.createError(ns.t('core', 'onlyNumbers', {':property': propertyName})));
-  }
   else {
-    if (decimals) {
-      value = parseFloat(value.replace(',', '.'));
+    var isInt = value.match(new RegExp('^-?[0-9]+$'));
+    if (decimals && !isInt && !value.match(new RegExp('^-?[0-9]+(.|,)[0-9]{1,' + decimals + '}$'))) {
+      this.$errors.append(ns.createError(ns.t('core', 'illegalDecimalNumber', {
+        ':property': propertyName,
+        ':decimals': decimals
+      })));
+    }
+    else if (!decimals && !isInt) {
+      this.$errors.append(ns.createError(ns.t('core', 'onlyNumbers', {':property': propertyName})));
     }
     else {
-      value = parseInt(value);
-    }
+      if (decimals) {
+        value = parseFloat(value.replace(',', '.'));
+      }
+      else {
+        value = parseInt(value);
+      }
 
-    if (this.field.max !== undefined && value > this.field.max) {
-      this.$errors.append(ns.createError(ns.t('core', 'exceedsMax', {':property': propertyName, ':max': this.field.max})));
-    }
-    else if (this.field.min !== undefined && value < this.field.min) {
-      this.$errors.append(ns.createError(ns.t('core', 'belowMin', {':property': propertyName, ':min': this.field.min})));
-    }
-    else if (this.field.step !== undefined && value % this.field.step)  {
-      this.$errors.append(ns.createError(ns.t('core', 'outOfStep', {':property': propertyName, ':step': this.field.step})));
+      if (this.field.max !== undefined && value > this.field.max) {
+        this.$errors.append(ns.createError(ns.t('core', 'exceedsMax', {':property': propertyName, ':max': this.field.max})));
+      }
+      else if (this.field.min !== undefined && value < this.field.min) {
+        this.$errors.append(ns.createError(ns.t('core', 'belowMin', {':property': propertyName, ':min': this.field.min})));
+      }
+      else if (this.field.step !== undefined && value % this.field.step)  {
+        this.$errors.append(ns.createError(ns.t('core', 'outOfStep', {':property': propertyName, ':step': this.field.step})));
+      }
     }
   }
 

@@ -7,6 +7,7 @@ H5PEditor.language.core = {
   notImageOrDimensionsField: '":path" ei ole kuva eikä mitta.',
   requiredProperty: ':property on pakollinen ja sillä on oltava arvo.',
   onlyNumbers: ':property täytyy sisältää vain numeroita.',
+  illegalDecimalNumber: ':property can only contain numbers with max :decimals decimals.',
   exceedsMax: ':property on suurempi kuin enimmäisarvo :max.',
   listExceedsMax: 'Lista on pidempi kuin enimmäismäärä :max.',
   belowMin: ':property on pienempi kuin vähimmäismäärä :min.',
