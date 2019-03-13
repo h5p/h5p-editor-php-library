@@ -195,7 +195,7 @@ ns.loadLibrary = function (libraryName, callback) {
       }
       // Add common fields default lanuage to URL
       const defaultLanguage = ns.defaultLanguage; // Avoid changes after sending AJAX
-      if (ns.defaultLanguage !== undefined) {
+      if (defaultLanguage !== undefined) {
         url += (url.indexOf('?') === -1 ? '?' : '&') + 'default-language=' + defaultLanguage;
       }
 
@@ -208,7 +208,7 @@ ns.loadLibrary = function (libraryName, callback) {
           };
           let languageSemantics = [];
           if (libraryData.language !== null) {
-            languageSemantics = JSON.parse(libraryData.language);
+            languageSemantics = JSON.parse(libraryData.language).semantics;
             delete libraryData.language; // Avoid caching a lot of unused data
           }
           var semantics = ns.$.extend(true, [], libraryData.semantics, languageSemantics);
