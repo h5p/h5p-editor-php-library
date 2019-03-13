@@ -7,6 +7,7 @@ H5PEditor.language.core = {
   notImageOrDimensionsField: 'Το ":path" δεν είναι εικόνα ή πεδίο διαστάσεων.',
   requiredProperty: 'Η ιδιότητα :property απαιτείται, και πρέπει να έχει μια τιμή.',
   onlyNumbers: 'Η τιμή της ιδιότητας :property μπορεί να περιέχει μόνο αριθμούς.',
+  illegalDecimalNumber: ':property can only contain numbers with max :decimals decimals.',
   exceedsMax: 'Η τιμή της ιδιότητας :property υπερβαίνει το μέγιστο :max.',
   listExceedsMax: 'Ο κατάλογος υπερβαίνει το μέγιστο των :max στοιχείων.',
   belowMin: 'Η τιμή της ιδιότητας :property είναι μικρότερη από το ελάχιστο :min.',

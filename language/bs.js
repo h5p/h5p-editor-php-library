@@ -7,6 +7,7 @@ H5PEditor.language.core = {
   notImageOrDimensionsField: '":path" nije slika niti polje sa dimenzijama.',
   requiredProperty: ':property polje mora biti popunjeno.',
   onlyNumbers: ':property polje može sadržavati samo brojeve.',
+  illegalDecimalNumber: ':property can only contain numbers with max :decimals decimals.',
   exceedsMax: ':property sadržaj polja je veći od maksimuma :max.',
   listExceedsMax: 'Lista je veća od maksimuma :max.',
   belowMin: ':property sadržaj polja je manji od minimuma :min.',
