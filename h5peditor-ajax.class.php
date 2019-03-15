@@ -186,17 +186,20 @@ class H5PEditorAjax {
     $storage->savePackage(NULL, NULL, TRUE);
 
     // Make content available to editor
-    $content = $this->core->fs->moveContentDirectory(
-      $this->core->h5pF->getUploadedH5pFolderPath(),
-      $contentId
-    );
+    $files = $this->core->fs->moveContentDirectory($this->core->h5pF->getUploadedH5pFolderPath(), $contentId);
 
     // Clean up
     $this->storage->removeTemporarilySavedFiles($this->core->h5pF->getUploadedH5pFolderPath());
 
+    // Mark all files as temporary
+    // TODO: Uncomment once moveContentDirectory() is fixed. JI-366
+    /*foreach ($files as $file) {
+      $this->storage->markFileForCleanup($file, 0);
+    }*/
+
     H5PCore::ajaxSuccess(array(
-      'h5p' => json_decode($content->h5pJson),
-      'content' => json_decode($content->contentJson),
+      'h5p' => $this->core->mainJsonData,
+      'content' => $this->core->contentJsonData,
       'contentTypes' => $this->getContentTypeCache()
     ));
   }
