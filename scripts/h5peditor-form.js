@@ -149,10 +149,16 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
       }
       if (semantics[i].fields !== undefined && semantics[i].fields.length &&
           translation[i].fields !== undefined && translation[i].fields.length) {
-        findFieldDefaultTranslation(field, semantics[i].fields, translation[i].fields);
+        const found1 = findFieldDefaultTranslation(field, semantics[i].fields, translation[i].fields);
+        if (found1 !== undefined) {
+          return found1;
+        }
       }
       if (semantics[i].field !== undefined && translation[i].field !== undefined) {
-        findFieldDefaultTranslation(field, [semantics[i].field], [translation[i].field]);
+        const found2 = findFieldDefaultTranslation(field, [semantics[i].field], [translation[i].field]);
+        if (found2 !== undefined) {
+          return found2;
+        }
       }
     }
   };
@@ -194,7 +200,7 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
     // Figure out what we actually need to load
     const loadLibs = [];
     for (let li in ns.libraryCache) {
-      if (ns.libraryCache[li].translation[lang] === undefined) {
+      if (ns.libraryCache[li] === 0 || ns.libraryCache[li].translation[lang] === undefined) {
         loadLibs.push(li);
       }
     }
