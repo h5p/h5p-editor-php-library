@@ -7,6 +7,7 @@ H5PEditor.language.core = {
   notImageOrDimensionsField: '":path" nije slika niti polje sa dimenzijama.',
   requiredProperty: ':property polje mora biti popunjeno.',
   onlyNumbers: ':property polje može sadržavati samo brojeve.',
+  illegalDecimalNumber: ':property can only contain numbers with max :decimals decimals.',
   exceedsMax: ':property sadržaj polja je veći od maksimuma :max.',
   listExceedsMax: 'Lista je veća od maksimuma :max.',
   belowMin: ':property sadržaj polja je manji od minimuma :min.',
@@ -201,5 +202,11 @@ H5PEditor.language.core = {
   errorNotSupported: 'Parameters contain %used which is not supported.',
   errorParamsBroken: 'Parameters are broken.',
   libraryMissing: 'Missing required library %lib.',
-  scriptMissing: 'Could not load upgrades script for %lib.'
+  scriptMissing: 'Could not load upgrades script for %lib.',
+  language: 'Language',
+  noLanguagesSupported: 'No languages supported',
+  changeLanguage: 'Change language to :language?',
+  thisWillPotentially: "This will potentially reset all the text and translations. You can't undo this. The content itself will not be changed. Do you want to proceed?",
+  notAllTextsChanged: 'Not all texts were changed, there is only partial coverage for :language.',
+  contributeTranslations: 'If you want to complete the translation for :language you can learn about <a href=":url" target="_new">contributing translations to H5P</a>'
 };

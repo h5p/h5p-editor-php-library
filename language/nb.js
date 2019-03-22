@@ -7,6 +7,7 @@ H5PEditor.language.core = {
   notImageOrDimensionsField: '":path" er verken et bilde- eller dimensjonsfelt.',
   requiredProperty: '":property" er påkrevd og må ha en verdi.',
   onlyNumbers: '":property" kan bare innholde tall.',
+  illegalDecimalNumber: ':property can only contain numbers with max :decimals decimals.',
   exceedsMax: '":property" overstiger maksverdien på :max.',
   listExceedsMax: 'Antallet elementer i listen overstiger maksantallet på :max elementer.',
   belowMin: '":property" er mindre enn minimumsverdien på :min.',
@@ -201,5 +202,11 @@ H5PEditor.language.core = {
   errorNotSupported: 'Parameterene inneholder %used som ikke er støttet.',
   errorParamsBroken: 'Parameterene er ødelagt.',
   libraryMissing: 'Mangler påkrevd bibliotek %lib.',
-  scriptMissing: 'Kunne ikke laste oppgraderingsskript for %lib.'
+  scriptMissing: 'Kunne ikke laste oppgraderingsskript for %lib.',
+  language: 'Språk',
+  noLanguagesSupported: 'Ingen språk støttet',
+  changeLanguage: 'Bytt språk til :language?',
+  thisWillPotentially: "Dette kan potensielt tilbakestille all teksten og oversettelsene. Du kan ikke omgjøre dette. Innholdet vil ikke bli endret. Vil du fortsette?",
+  notAllTextsChanged: 'Ikke alle tekstene ble endret, det er kun delvis støtte for :language.',
+  contributeTranslations: 'Hvis du vil fullføre oversettelsen for :language kan du lære mer om <a href=":url" target="_new">bidra med oversettelser til H5P</a>'
 };

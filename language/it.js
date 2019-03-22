@@ -7,6 +7,7 @@ H5PEditor.language.core = {
   notImageOrDimensionsField: ":path non è un'immagine o dimensioni campo.",
   requiredProperty: ":property è richiesta e deve avere un valore.",
   onlyNumbers: "Il valore di :property può contenere solo numeri.",
+  illegalDecimalNumber: ':property can only contain numbers with max :decimals decimals.',
   exceedsMax: "Il valore di :property eccede il massimo di :max.",
   listExceedsMax: "The list exceeds the maximum of :max items.",
   belowMin: "Il valore di :property eccede il minimo di :min.",
@@ -201,5 +202,11 @@ H5PEditor.language.core = {
   errorNotSupported: 'Parameters contain %used which is not supported.',
   errorParamsBroken: 'Parameters are broken.',
   libraryMissing: 'Missing required library %lib.',
-  scriptMissing: 'Could not load upgrades script for %lib.'
+  scriptMissing: 'Could not load upgrades script for %lib.',
+  language: 'Language',
+  noLanguagesSupported: 'No languages supported',
+  changeLanguage: 'Change language to :language?',
+  thisWillPotentially: "This will potentially reset all the text and translations. You can't undo this. The content itself will not be changed. Do you want to proceed?",
+  notAllTextsChanged: 'Not all texts were changed, there is only partial coverage for :language.',
+  contributeTranslations: 'If you want to complete the translation for :language you can learn about <a href=":url" target="_new">contributing translations to H5P</a>'
 };
