@@ -274,11 +274,12 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
   $switcher.change(function (e) {
     // Create confirmation dialog
     const confirmDialog = new H5P.ConfirmationDialog({
-      headerText: ns.t('core', 'changeLanguage', {':language': ns.supportedLanguages[this.value]}),
+      headerText: ns.t('core', 'changeLanguage', {':language': (ns.supportedLanguages[this.value] ? ns.supportedLanguages[this.value] : this.value.toLocaleUpperCase())}),
       dialogText: ns.t('core', 'thisWillPotentially'),
     }).appendTo(document.body);
     confirmDialog.on('confirmed', function () {
       const lang = ns.defaultLanguage = $switcher.val();
+      const humanLang = (ns.supportedLanguages[lang] ? ns.supportedLanguages[lang] : lang.toLocaleUpperCase());
 
       // Update chosen default language for main content and sub-content
       self.metadata.defaultLanguage = lang;
@@ -287,8 +288,8 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
       // Figure out if all libraries were supported
       if (!isSupportedByAll(lang)) {
         // Show a warning message
-        $notice.children('.first').html(ns.t('core', 'notAllTextsChanged', {':language': ns.supportedLanguages[lang]}));
-        $notice.children('.last').html(ns.t('core', 'contributeTranslations', {':language': ns.supportedLanguages[lang], ':url': 'https://h5p.org/contributing#translating'}));
+        $notice.children('.first').html(ns.t('core', 'notAllTextsChanged', {':language': humanLang}));
+        $notice.children('.last').html(ns.t('core', 'contributeTranslations', {':language': humanLang, ':url': 'https://h5p.org/contributing#translating'}));
         $notice.addClass('show');
       }
       else {
