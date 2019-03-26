@@ -200,6 +200,47 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
     };
 
     /**
+     * Set metadata from outside. If the values of @param metadata is of prototype 'metadata' then extended
+     * actions is performed. If it's not of prototype 'metadata' then only the value is set.
+     * @param {Object} metadata
+     */
+    self.setMetadata = function (metadata) {
+      if( typeof metadata !== 'object'){
+        return;
+      }
+
+      this.children
+        .filter(element => metadata.hasOwnProperty(element.field.name) && $.inArray(element.field.type, ['select', 'text', 'textarea', 'number']) !== -1)
+        .forEach(function (element) {
+          const metadataValue = metadata[element.field.name];
+          if( typeof metadataValue === 'object' && metadataValue.constructor.name === 'metadata'){ //created with the function MetadataForm.createMetadataObject
+            element.forceValue(metadataValue.value);
+            const inputField = element.getInput();
+            inputField.prop('disabled', metadataValue.readonly);
+          } else {
+            element.forceValue(metadataValue);
+          }
+        });
+
+      if( metadata.hasOwnProperty('authors') && Array.isArray(metadata.authors) ){
+        metadata.authors.forEach(function (author) {
+          metadataAuthorWidget.addAuthor(author.name, author.role, author.readonly);
+        })
+      }
+    };
+
+    self.resetMetadata = function() {
+      this.children.forEach(function (element) {
+        element.forceValue(element.field.hasOwnProperty('default') ? element.field.default : '');
+        if ($.inArray(element.field.type, ['select', 'text', 'textarea', 'number']) !== -1) {
+          const inputField = element.getInput();
+          inputField.prop('disabled', false);
+        }
+      });
+      metadataAuthorWidget.resetAuthors();
+    }
+
+    /**
      * @param {$} $container
      */
     self.appendTo = function ($container) {
@@ -314,6 +355,22 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
 
     return legacyForm;
   };
+
+  /**
+   * Create a metadata dataobject that generalizes the setting of behaviour of metadata fields.
+   * Used as values in the object passed to addMetadata
+   *
+   * @param {Object} metadataValues
+   * @return {metadata}
+   */
+  MetadataForm.createMetadataObject = function(metadataValues) {
+    function metadata(){
+      this.value = null;
+      this.readonly = false;
+    }
+
+    return Object.assign(new metadata, metadataValues);
+  }
 
   /**
    * @return {Object}

@@ -93,5 +93,21 @@ ns.Textarea.prototype.remove = function () {
   this.$item.remove();
 };
 
+/**
+ * When someone from the outside wants to set a value.
+ *
+ * @param {string} value
+ */
+ns.Textarea.prototype.forceValue = function (value) {
+  this.$input.val(value).change();
+};
+
+/**
+ * Common function to get the input object
+ */
+ns.Textarea.prototype.getInput = function () {
+  return this.$input;
+};
+
 // Tell the editor what semantic field we are.
 ns.widgets.textarea = ns.Textarea;

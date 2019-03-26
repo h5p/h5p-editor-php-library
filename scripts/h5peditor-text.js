@@ -118,5 +118,12 @@ ns.Text.prototype.forceValue = function (value) {
   this.$input.val(value).change();
 };
 
+/**
+ * Common function to get the input object
+ */
+ns.Text.prototype.getInput = function () {
+  return this.$input;
+};
+
 // Tell the editor what widget we are.
 ns.widgets.text = ns.Text;

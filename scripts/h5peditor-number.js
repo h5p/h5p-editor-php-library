@@ -155,5 +155,21 @@ ns.Number.prototype.remove = function () {
   this.$item.remove();
 };
 
+/**
+ * When someone from the outside wants to set a value.
+ *
+ * @param {number} value
+ */
+ns.Number.prototype.forceValue = function (value) {
+  this.$input.val(value).change();
+};
+
+/**
+ * Common function to get the input object
+ */
+ns.Number.prototype.getInput = function () {
+  return this.$input;
+};
+
 // Tell the editor what widget we are.
 ns.widgets.number = ns.Number;

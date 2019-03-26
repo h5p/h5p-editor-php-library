@@ -65,11 +65,13 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
    * Add an author to the list of authors
    * @param {string} [name]
    * @param {string} [role]
+   * @param {boolean} [readonly]
    */
-  function addAuthor(name, role) {
+  function addAuthor(name, role, readonly) {
     params.authors.push({
       name: name,
-      role: role
+      role: role,
+      readonly: !!readonly,
     });
 
     renderAuthorList();
@@ -135,16 +137,18 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
         })
       });
 
-      // The delete-button
-      $('<button>', {
-        type: 'button',
-        'class': 'h5p-metadata-icon-button',
-        click: function () {
-          if (confirm(H5PEditor.t('core', 'confirmRemoveAuthor'))) {
-            removeAuthor(author);
-          }
-        }
-      }).appendTo(listItem);
+      if( author.readonly !== true){
+        // The delete-button
+        $('<button>', {
+          type: 'button',
+          'class': 'h5p-metadata-icon-button',
+          click: function () {
+            if (confirm(H5PEditor.t('core', 'confirmRemoveAuthor'))) {
+              removeAuthor(author);
+            }
+          },
+        }).appendTo(listItem);
+      }
 
       authorList.append(listItem);
     });
@@ -152,8 +156,15 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
     wrapper.append(authorList);
   }
 
+  function resetAuthors() {
+    params.authors = [];
+    renderAuthorList();
+    resetForm();
+  }
+
   return {
     addAuthor: addAuthor,
-    addDefaultAuthor: addDefaultAuthor
+    addDefaultAuthor: addDefaultAuthor,
+    resetAuthors: resetAuthors,
   };
 };

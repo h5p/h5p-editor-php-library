@@ -124,5 +124,21 @@ H5PEditor.widgets.select = H5PEditor.Select = (function (E) {
     this.$item.remove();
   };
 
+  /**
+   * When someone from the outside wants to set a value.
+   *
+   * @param {string} value
+   */
+  C.prototype.forceValue = function (value) {
+    this.$select.val(value).change();
+  };
+
+  /**
+   * Common function to get the input object
+   */
+  C.prototype.getInput = function () {
+    return this.$select;
+  };
+
   return C;
 })(H5PEditor);
