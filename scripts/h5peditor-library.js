@@ -385,8 +385,8 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     // Locate selected library object
     const library = that.findLibrary(libraryName);
     if (library === undefined) {
+      that.loadLibrary('-');
       that.$libraryWrapper.html(ns.createError(ns.t('core', 'unknownLibrary', {'%lib': libraryName}))).attr('class', 'libwrap errors ' + libraryName.split(' ')[0].toLowerCase().replace('.', '-') + '-editor' + (that.libraries.length === 1 ? ' no-margin' : ''));
-      that.change();
       return;
     }
 
