@@ -381,8 +381,15 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 
   this.$libraryWrapper.html(ns.t('core', 'loading')).attr('class', 'libwrap ' + libraryName.split(' ')[0].toLowerCase().replace('.', '-') + '-editor' + (this.libraries.length === 1 ? ' no-margin' : ''));
 
-//TODO: Get language code from ancestor
   ns.loadLibrary(libraryName, function (semantics) {
+    // Locate selected library object
+    const library = that.findLibrary(libraryName);
+    if (library === undefined) {
+      that.loadLibrary('-');
+      that.$libraryWrapper.html(ns.createError(ns.t('core', 'unknownLibrary', {'%lib': libraryName}))).attr('class', 'libwrap errors ' + libraryName.split(' ')[0].toLowerCase().replace('.', '-') + '-editor' + (that.libraries.length === 1 ? ' no-margin' : ''));
+      return;
+    }
+
     that.currentLibrary = libraryName;
     that.params.library = libraryName;
 
@@ -401,9 +408,6 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 
     // Reset wrapper content
     that.$libraryWrapper.html('');
-
-    // Locate selected library object
-    const library = that.findLibrary(libraryName);
 
     // Locate form
     const ancestor = ns.findAncestor(that.parent);
