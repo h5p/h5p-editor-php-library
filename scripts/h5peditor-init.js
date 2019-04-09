@@ -47,6 +47,15 @@
       $type.filter('input[value="create"]').attr('checked', true).change();
     }
 
+    // Duplicate the submit button input because it is not posted when calling $form.submit()
+    const $submitters = $form.find('input[type="submit"]');
+    $submitters.click(function () {
+      // Create hidden input and give it the value
+      const name = $(this).prop('name');
+      const value = $(this).prop('value');
+      $('<input type="hidden" name="' + name + '" value="' + value + '" />').appendTo($form);
+    });
+
     let formIsUpdated = false;
     $form.submit(function (event) {
       if ($type.length && $type.filter(':checked').val() === 'upload') {
