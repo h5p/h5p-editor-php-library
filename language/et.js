@@ -111,7 +111,7 @@ H5PEditor.language.core = {
   recentlyUsedFirst: 'Viimati kasutatutest esimene',
   popularFirst: 'Populaarseist esimene',
   newestFirst: 'Uusimaist esimene',
-  aToZ: 'A to Z',
+  aToZ: 'Tähestikulises järjekorras',
   noResultsFound: 'Ei leidnud tulemusi',
   noResultsFoundDesc: 'Otsingutingimustele vastavat sisutüüpi ei ole.',
   readMore: 'Loe rohkem',
