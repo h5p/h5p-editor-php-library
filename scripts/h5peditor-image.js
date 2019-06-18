@@ -137,10 +137,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
   });
 
   editImagePopup.on('resetImage', function () {
-    var imagePath = self.params.originalImage ? self.params.originalImage.path
-      : self.params.path;
-    var imageSrc = H5P.getPath(imagePath, H5PEditor.contentId);
-    editImagePopup.setImage(imageSrc);
+    editImagePopup.setImage(self.params.originalImage ? self.params.originalImage : self.params);
   });
 
   editImagePopup.on('canceled', function () {
@@ -156,7 +153,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
     if (self.params && self.params.path) {
       var imageSrc;
       if (!self.isEditing) {
-        imageSrc = H5P.getPath(self.params.path, H5PEditor.contentId);
+        imageSrc = self.params;
         self.isEditing = true;
       }
       self.$editImage.toggleClass('loading');
@@ -216,7 +213,6 @@ ns.widgets.image.prototype.addFile = function () {
     return false;
   }
 
-  var source = H5P.getPath(this.params.path, H5PEditor.contentId);
   var altText = (this.field.label === undefined ? '' : this.field.label);
   var fileHtmlString =
     '<a href="#" title="' + ns.t('core', 'changeFile') + '" class="thumbnail">' +
@@ -231,9 +227,6 @@ ns.widgets.image.prototype.addFile = function () {
       that.openFileSelector();
       return false;
     })
-    .children('img')
-    .attr('src', source)
-    .end()
     .next()
     .click(function () {
       that.confirmRemovalDialog.show(that.$file.offset().top);
@@ -245,6 +238,8 @@ ns.widgets.image.prototype.addFile = function () {
     // Make editor resize
     $img.addClass('loaded');
   });
+
+  H5P.setSource($img[0], this.params, H5PEditor.contentId);
 
   // Uploading original image
   that.$editImage.removeClass('hidden');
