@@ -213,6 +213,7 @@ ns.widgets.image.prototype.addFile = function () {
     return false;
   }
 
+  var source = H5P.getPath(this.params.path, H5PEditor.contentId);
   var altText = (this.field.label === undefined ? '' : this.field.label);
   var fileHtmlString =
     '<a href="#" title="' + ns.t('core', 'changeFile') + '" class="thumbnail">' +
@@ -227,6 +228,9 @@ ns.widgets.image.prototype.addFile = function () {
       that.openFileSelector();
       return false;
     })
+    .children('img')
+    .attr('src', source)
+    .end()
     .next()
     .click(function () {
       that.confirmRemovalDialog.show(that.$file.offset().top);
@@ -238,8 +242,6 @@ ns.widgets.image.prototype.addFile = function () {
     // Make editor resize
     $img.addClass('loaded');
   });
-
-  H5P.setSource($img[0], this.params, H5PEditor.contentId);
 
   // Uploading original image
   that.$editImage.removeClass('hidden');
