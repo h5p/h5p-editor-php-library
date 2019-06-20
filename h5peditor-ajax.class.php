@@ -39,6 +39,11 @@ abstract class H5PEditorEndpoints {
    * Endpoint for retrieveing translation files
    */
   const TRANSLATIONS = 'translations';
+
+  /**
+   * Endpoint for filtering parameters.
+   */
+  const FILTER = 'filter';
 }
 
 
@@ -132,6 +137,12 @@ class H5PEditorAjax {
       case H5PEditorEndpoints::TRANSLATIONS:
         $language = func_get_arg(1);
         H5PCore::ajaxSuccess($this->editor->getTranslations($_POST['libraries'], $language));
+        break;
+
+      case H5PEditorEndpoints::FILTER:
+        $token = func_get_arg(1);
+        if (!$this->isValidEditorToken($token)) return;
+        $this->filter(func_get_arg(2));
         break;
     }
   }
@@ -272,6 +283,24 @@ class H5PEditorAjax {
 
     // Successfully installed. Refresh content types
     H5PCore::ajaxSuccess($this->getContentTypeCache());
+  }
+
+  /**
+   * End-point for filter parameter values according to semantics.
+   *
+   * @param {string} $libraryParameters
+   */
+  private function filter($libraryParameters) {
+    $libraryParameters = json_decode($libraryParameters);
+    if (!$libraryParameters) {
+      H5PCore::ajaxError($this->core->h5pF->t('Could not parse post data.'), 'NO_LIBRARY_PARAMETERS');
+      exit;
+    }
+
+    // Filter parameters and send back to client
+    $validator = new H5PContentValidator($this->core->h5pF, $this->core);
+    $validator->validateLibrary($libraryParameters, (object) array('options' => array($libraryParameters->library)));
+    H5PCore::ajaxSuccess($libraryParameters);
   }
 
   /**

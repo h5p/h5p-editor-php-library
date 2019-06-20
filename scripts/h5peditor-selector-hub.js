@@ -104,6 +104,38 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
       }
     };
 
+    /**
+     * Use backend to filter parameter values according to semantics
+     *
+     * @private
+     * @param {Object} library
+     */
+    const filterParameters = function (library) {
+      const libraryString = ns.ContentType.getNameVersionString(library);
+
+      var formData = new FormData();
+      formData.append('libraryParameters', JSON.stringify({
+        library: libraryString,
+        params: self.currentParams,
+        metadata: self.currentMetadata
+      }));
+      var request = new XMLHttpRequest();
+      request.onload = function () {
+        try {
+          result = JSON.parse(request.responseText);
+          self.currentLibrary = result.data.library;
+          self.currentParams = result.data.params;
+          self.currentMetadata = result.data.metadata;
+          selectLibrary();
+        }
+        catch (err) {
+          H5P.error(err);
+        }
+      };
+      request.open('POST', H5PEditor.getAjaxUrl('filter'), true);
+      request.send(formData);
+    };
+
     // Check if we have any newer versions
     const upgradeLibrary = ns.ContentType.getPossibleUpgrade(uploadedVersion, libraries.libraries);
     if (upgradeLibrary) {
@@ -119,12 +151,12 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
           self.currentParams = content.params;
           self.currentMetadata = content.metadata;
           self.currentLibrary = self.createContentTypeId(upgradeLibrary, true);
-          selectLibrary();
+          filterParameters(upgradeLibrary);
         }
       })
     }
     else {
-      selectLibrary();
+      filterParameters(uploadedVersion);
     }
 
   }, this);
