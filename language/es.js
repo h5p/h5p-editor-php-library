@@ -7,6 +7,7 @@ H5PEditor.language.core = {
   notImageOrDimensionsField: '":path" no es una imagen o un campo de dimensiones.',
   requiredProperty: 'La :property es requerida y debe tener un valor.',
   onlyNumbers: 'El valor de :property solo puede contener números.',
+  illegalDecimalNumber: ':property can only contain numbers with max :decimals decimals.',
   exceedsMax: 'El valor de :property excede el máximo de :max.',
   listExceedsMax: 'La lista excede el máximo de :max elementos.',
   belowMin: 'El valor de :property excede el mínimo de :min.',
@@ -83,9 +84,11 @@ H5PEditor.language.core = {
   h5pFileWrongExtensionTitle: 'El fichero elegido no se puede subir',
   h5pFileWrongExtensionContent: 'Solo se permiten ficheros con la extensión .h5p.',
   h5pFileValidationFailedTitle: 'No se puede validar el fichero H5P.',
-  h5pFileValidationFailedContent: 'Asegúrese de que el H5P cargado contiene contenido H5P válido. Los archivos H5P que contienen sólo bibliotecas deben cargarse a través de la página Bibliotecas H5P.',
+  h5pFileValidationFailedContent: 'Asegúrese de que el H5P cargado contiene contenido H5P válido. H5P'  +
+  ' Los archivos que contienen sólo bibliotecas deben cargarse a través de la página Bibliotecas H5P.',
   h5pFileUploadServerErrorTitle: 'El fichero H5P no se ha podido cargar',
-  h5pFileUploadServerErrorContent: 'Ocurrió un error inesperado. Compruebe el registro de errores del servidor para obtener más detalles.',
+  h5pFileUploadServerErrorContent: 'Ocurrió un error inesperado. Compruebe el registro de errores del servidor para' +
+  ' obtener más detalles.',
   contentTypeSectionAll: 'Todos los tipos de contenidos',
   searchResults: 'Resultados de búsqueda',
   contentTypeSearchFieldPlaceholder: 'Buscar tipos de contenido',
