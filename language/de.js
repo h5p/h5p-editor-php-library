@@ -209,5 +209,8 @@ H5PEditor.language.core = {
   thisWillPotentially: "Hierdurch werden möglicherweise alle Bezeichnungen und Beschriftungen zurückgesetzt. Dies kann nicht rückgängig gemacht werden. Der Inhalt selbst wird nicht geändert. Möchtest du fortfahren?",
   notAllTextsChanged: 'Nicht alle Texte wurden geändert, da die Übersetzungen in :language nicht vollständig ist.',
   contributeTranslations: 'Wenn du die Übersetzung in :language vervollständigen möchtest, kannst du <a href=":url" target="_new">Übersetzungen zu H5P beisteuern</a>',
-  unknownLibrary: 'Leider ist der ausgewählte Inhaltstyp \'%lib\' auf dieser Seite nicht installiert.'
+  unknownLibrary: 'Leider ist der ausgewählte Inhaltstyp \'%lib\' auf dieser Seite nicht installiert.',
+  proceedButtonLabel: 'Proceed to save',
+  enterFullscreenButtonLabel: 'Enter fullscreen',
+  exitFullscreenButtonLabel: 'Exit fullscreen'
 };

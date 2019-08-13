@@ -209,5 +209,8 @@ H5PEditor.language.core = {
   thisWillPotentially: "Cela réinitialisera potentiellement tout le texte et les traductions. Vous ne pouvez pas annuler cela. Le contenu lui-même ne sera pas changé. Voulez-vous poursuivre ?",
   notAllTextsChanged: 'Les textes n\'ont pas tous été traduits, la traduction pour la langue :language est incomplète.',
   contributeTranslations: 'Si vous souhaitez compléter la traduction de : language, cliquez pour en savoir plus sur la façon de <a href=":url" target="_new"> contribuer aux traductions de H5P </a>.',
-  unknownLibrary: 'Malheureusement, la bibliothèque pour le type de contenu sélectionné \'%lib\' n\'est pas installée sur votre système.'
+  unknownLibrary: 'Malheureusement, la bibliothèque pour le type de contenu sélectionné \'%lib\' n\'est pas installée sur votre système.',
+  proceedButtonLabel: 'Proceed to save',
+  enterFullscreenButtonLabel: 'Enter fullscreen',
+  exitFullscreenButtonLabel: 'Exit fullscreen'
 };

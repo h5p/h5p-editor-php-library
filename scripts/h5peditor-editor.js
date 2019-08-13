@@ -155,6 +155,13 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
         return;
       }
 
+      // Feed editor iframe with content type cache
+      iframe.contentWindow.H5PEditor.libraries = {};
+      data.libraries.forEach(function (lib) {
+        const loopkupName = lib.machineName + ' ' + lib.majorVersion + '.' + lib.minorVersion;
+        iframe.contentWindow.H5PEditor.libraries[loopkupName] = lib;
+      });
+
       // Create library selector
       self.selector = new LibrarySelector(data, library, defaultParams);
       self.selector.appendTo($container.html(''));

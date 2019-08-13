@@ -209,5 +209,8 @@ H5PEditor.language.core = {
   thisWillPotentially: "Tämä mahdollisesti nollaa kaikki tähän asti tehdy kielikäännösmuutokset. Tätä ei voi perua. Itse aineisto ei muutu. Haluatko varmasti jatkaa?",
   notAllTextsChanged: 'Kaikkia tekstejä ei voitu vaihtaa :language kielelle koska niiden käännökset puuttuvat',
   contributeTranslations: 'Jos haluat auttaa käännöstyössä löydät lisätietoja täältä:<a href=":url" target="_new">H5P käännöksissä auttaminen</a>',
-  unknownLibrary: 'Valitettavasti valittua sisältötyyppiä \'%lib\' ei ole asennettuna tähän järjestelmään. Olethan yhteydessä ylläpitoon.
+  unknownLibrary: 'Valitettavasti valittua sisältötyyppiä \'%lib\' ei ole asennettuna tähän järjestelmään. Olethan yhteydessä ylläpitoon.',
+  proceedButtonLabel: 'Proceed to save',
+  enterFullscreenButtonLabel: 'Enter fullscreen',
+  exitFullscreenButtonLabel: 'Exit fullscreen'
 };

@@ -208,5 +208,8 @@ H5PEditor.language.core = {
   thisWillPotentially: 'Esto potencialmente restablecerá todo el texto y las traducciones. No puedes deshacer esto. El contenido en sí no será cambiado. ¿Desea proceder?',
   notAllTextsChanged: 'No todos los textos fueron cambiados, solo hay una cobertura parcial para :language.',
   contributeTranslations: 'Si desea completar la traducción para :language, puede obtener información sobre <a href=":url" target="_new"> contribuir con traducciones al H5P </a>',
-  unknownLibrary: 'Unfortunately, the selected content type \'%lib\' isn\'t installed on this system.'
+  unknownLibrary: 'Unfortunately, the selected content type \'%lib\' isn\'t installed on this system.',
+  proceedButtonLabel: 'Proceed to save',
+  enterFullscreenButtonLabel: 'Enter fullscreen',
+  exitFullscreenButtonLabel: 'Exit fullscreen'
 };

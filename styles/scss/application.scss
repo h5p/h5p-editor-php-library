@@ -1003,9 +1003,28 @@ a {
 
 .h5peditor-form {
   position: relative;
-  padding: 20px;
   background: $form-background;
   border: 1px solid $form-border-color;
+
+  &.h5peditor-form-manager {
+    > .tree,
+    > .common,
+    > .field {
+      max-width: 918px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+  }
+
+  &.h5peditor-semi-fullscreen {
+    margin: 0;
+    position: fixed;
+    overflow-y: scroll;
+    margin-top: 40px;
+    padding-bottom: 40px;
+    box-sizing: border-box;
+    background: #fff;
+  }
 }
 
 .h5peditor-label {
@@ -1035,17 +1054,14 @@ a {
   margin-right: 20px;
   margin-bottom: 11px;
 }
-.h5p-example-url {
-
-}
 
 .h5p-tutorial-url:before {
   font-family: $icon-font-family;
   content: "\e907";
   font-size: 1.5em;
   position: relative;
-  top: .2em;
-  left: .2em;
+  top: 0.2em;
+  left: 0.2em;
   margin-right: 10px;
 }
 
@@ -1054,8 +1070,8 @@ a {
   content: "\e906";
   font-size: 1.5em;
   position: relative;
-  top: .2em;
-  left: .2em;
+  top: 0.2em;
+  left: 0.2em;
   margin-right: 10px;
 }
 
@@ -1205,6 +1221,7 @@ a {
 @import "metadata-changelog-widget";
 @import "metadata-author-widget";
 @import "copy-paste";
+@import "fullscreen-bar";
 
 .h5peditor .h5peditor-language-switcher {
   float: right;

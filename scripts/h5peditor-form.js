@@ -33,6 +33,15 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
   );
   this.$common = this.$form.find('.common > .fields');
 
+  if (ns.FullscreenBar !== undefined) {
+    // Exception from rules
+    if (library.indexOf('H5P.CoursePresentation') === -1 &&
+        library.indexOf('H5P.BranchingScenario') === -1 &&
+        library.indexOf('H5P.InteractiveVideo') === -1) {
+      ns.FullscreenBar(this.$form, library);
+    }
+  }
+
   // Add title expand/collapse button
   ns.$('<div/>', {
     'class': 'h5peditor-label',
