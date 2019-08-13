@@ -21,7 +21,7 @@ class H5peditor {
     'scripts/h5peditor-semantic-structure.js',
     'scripts/h5peditor-editor.js',
     'scripts/h5peditor-library-selector.js',
-    'scripts/h5peditor-fullscreen-bar',
+    'scripts/h5peditor-fullscreen-bar.js',
     'scripts/h5peditor-form.js',
     'scripts/h5peditor-text.js',
     'scripts/h5peditor-html.js',
