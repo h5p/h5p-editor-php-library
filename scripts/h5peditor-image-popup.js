@@ -1,4 +1,4 @@
-/*global H5PEditor, H5P, ns, Darkroom*/
+/* global ns Darkroom */
 H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
   var instanceCounter = 0;
   var scriptsLoaded = false;
@@ -33,7 +33,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
 
     var headerTitle = document.createElement('div');
     headerTitle.className = 'h5p-editing-image-header-title';
-    headerTitle.textContent = 'Edit Image!';
+    headerTitle.textContent = H5PEditor.t('core', 'editImage');
     header.appendChild(headerTitle);
 
     var headerButtons = document.createElement('div');
@@ -173,9 +173,22 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       var canvas = self.darkroom.canvas.getElement();
 
       var convertData = function () {
-        var newImage = self.darkroom.canvas.toDataURL();
-        self.trigger('savedImage', newImage);
-        canvas.removeEventListener('crop:update', convertData, false);
+        const finished = function (blob) {
+          self.trigger('savedImage', blob);
+          canvas.removeEventListener('crop:update', convertData, false);
+        };
+
+        if (self.darkroom.canvas.contextContainer.canvas.toBlob) {
+          // Export canvas as blob to save processing time and bandwidth
+          self.darkroom.canvas.contextContainer.canvas.toBlob(finished, self.mime);
+        }
+        else {
+          // Blob export not supported by canvas, export as dataURL and export
+          // to blob before uploading (saves processing resources on server)
+          finished(dataURLtoBlob(self.darkroom.canvas.toDataURL({
+            format: self.mime.split('/')[1]
+          })));
+        }
       };
 
       // Check if image has changed
@@ -186,7 +199,8 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
           self.darkroom.plugins.crop.cropCurrentZone();
 
           canvas.addEventListener('crop:update', convertData, false);
-        } else {
+        }
+        else {
           convertData();
         }
       }
@@ -263,12 +277,14 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
         darkroom.parentNode.removeChild(darkroom);
       }
 
-      editingImage.src = imgSrc;
+      H5P.setSource(editingImage, imgSrc, H5PEditor.contentId);
+      editingImage.onload = function () {
+        createDarkroom();
+        editingImage.onload = null;
+      };
       imageLoading.classList.remove('hidden');
       editingImage.classList.add('hidden');
       editingContainer.appendChild(editingImage);
-
-      createDarkroom();
     };
 
     /**
@@ -284,7 +300,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
 
         // Load image editing scripts dynamically
         if (!scriptsLoaded) {
-          editingImage.src = imageSrc;
+          H5P.setSource(editingImage, imageSrc, H5PEditor.contentId);
           loadScripts();
         }
         else {
@@ -325,7 +341,8 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     this.toggle = function () {
       if (isShowing) {
         this.hide();
-      } else {
+      }
+      else {
         this.show();
       }
     };
@@ -356,6 +373,33 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     maxScreenHeightPercentage: 0.65,
     popupHeaderHeight: 59
   };
+
+  /**
+   * Convert a data URL(base64) into blob.
+   *
+   * @param {string} dataURL
+   * @return {Blob}
+   */
+  const dataURLtoBlob = function (dataURL) {
+    const split = dataURL.split(',');
+
+    // First part is the mime type
+    const mime = split[0].match(/data:(.*);base64/i)[1];
+
+    // Second part is the base64 data
+    const bytes = atob(split[1]);
+
+    // Convert string into char code array
+    const bits = new Uint8Array(bytes.length);
+    for (let i = 0; i < bytes.length; i++) {
+      bits[i] = bytes.charCodeAt(i);
+    }
+
+    // Make the codes into a Blob, and we're done!
+    return new Blob([bits], {
+      type: mime
+    });
+  }
 
   return ImageEditingPopup;
 
