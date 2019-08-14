@@ -376,9 +376,12 @@ class H5peditor {
   public function getLibraryData($machineName, $majorVersion, $minorVersion, $languageCode, $prefix = '', $fileDir = '', $defaultLanguage) {
     $libraryData = new stdClass();
 
+    $library = $this->h5p->loadLibrary($machineName, $majorVersion, $minorVersion);
+
     // Include name and version in data object for convenience
     $libraryData->name = $machineName;
     $libraryData->version = (object) array('major' => $majorVersion, 'minor' => $minorVersion);
+    $libraryData->title = $library['title'];
 
     $libraryData->upgradesScript = $this->h5p->fs->getUpgradeScript($machineName, $majorVersion, $minorVersion);
     if ($libraryData->upgradesScript !== NULL) {
@@ -402,7 +405,6 @@ class H5peditor {
     $files = $this->h5p->getDependenciesFiles($libraries, $prefix);
     $libraryName = H5PCore::libraryToString(compact('machineName', 'majorVersion', 'minorVersion'), true);
     if ($this->hasPresave($libraryName) === true) {
-      $library = $this->h5p->loadLibrary($machineName, $majorVersion, $minorVersion);
       $this->addPresaveFile($files, $library, $prefix);
     }
     $this->storage->alterLibraryFiles($files, $libraries);

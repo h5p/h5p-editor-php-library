@@ -2,7 +2,7 @@
 H5PEditor.FullscreenBar = (function ($) {
   function FullscreenBar ($mainForm, library) {
 
-    const title = H5PEditor.libraries[library] ? H5PEditor.libraries[library].title : library;
+    const title = H5PEditor.libraryCache[library] ? H5PEditor.libraryCache[library].title : library;
     const iconId = library.split(' ')[0].split('.')[1].toLowerCase();
 
     let isInFullscreen = false;
