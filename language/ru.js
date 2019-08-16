@@ -211,6 +211,7 @@ H5PEditor.language.core = {
   thisWillPotentially: "Это потенциально сбросит весь текст и переводы. Вы не можете отменить это. Сам контент не будет изменен. Вы хотите продолжить?",
   notAllTextsChanged: 'Не все тексты были изменены, есть только частичные переводы для :language.',
   contributeTranslations: 'Если вы хотите завершить перевод для :language вы можете узнать о том как <a href=":url" target="_new">внести переводы в H5P</a>',
+  unknownLibrary: 'Unfortunately, the selected content type \'%lib\' isn\'t installed on this system.',
   proceedButtonLabel: 'Proceed to save',
   enterFullscreenButtonLabel: 'Enter fullscreen',
   exitFullscreenButtonLabel: 'Exit fullscreen'

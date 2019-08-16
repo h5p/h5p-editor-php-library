@@ -153,7 +153,7 @@ H5PEditor.language.core = {
   videoQualityDescription: 'Tämä nimike auttaa käyttäjää tunnistamaan videon nykyisen laadun. Esim. 1080p, 720p, HD tai Mobiili',
   videoQualityDefaultLabel: 'Laatu :index',
   noContentTypesAvailable: 'Sisältötyyppejä ei saatavilla.',
-  noContentTypesAvailableDesc: 'Sivustollasi on ongelmia yhdistettäessä h5p.org-sivustoon ja sisältötyyppien listaus ei tästä syystä toimi.
+  noContentTypesAvailableDesc: 'Sivustollasi on ongelmia yhdistettäessä h5p.org-sivustoon ja sisältötyyppien listaus ei tästä syystä toimi.',
   contentTypeCacheOutdated: 'Sisältötyyppilista on vanhentunut',
   contentTypeCacheOutdatedDesc: 'Sivustollasi on ongelmia yhdistettäessä h5p.org-sivustoon tarkistaakseen onko uusia sisältötyyppipäivityksiä saatavilla. Et välttämättä pysty päivittämään vanhoja etkä lataamaan uusia sisältötyyppejä.',
   tryAgain: 'Yritä uudelleen',
