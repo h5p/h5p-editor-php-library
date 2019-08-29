@@ -212,7 +212,7 @@ H5PEditor.language.core = {
   notAllTextsChanged: 'Ez dira testu guztiak aldatu, :language hizkuntzaren sostengua ez da osoa.',
   contributeTranslations: ':language hizkuntzako itzulpena osatu nahi baduzu <a href=":url" target="_new">contributing translations to H5P</a> estekan nola egin ikasi dezakezu',
   unknownLibrary: 'Tamalez, aukeratutako \'%lib\' eduki-mota ez dago sistema honetan instalatuta.',
-  proceedButtonLabel: 'Proceed to save',
-  enterFullscreenButtonLabel: 'Enter fullscreen',
-  exitFullscreenButtonLabel: 'Exit fullscreen'
+  proceedButtonLabel: 'Jarraitu eta gorde',
+  enterFullscreenButtonLabel: 'Erabili pantaila osoko modura',
+  exitFullscreenButtonLabel: 'Irten pantaila osoko modutik'
 };
