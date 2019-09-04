@@ -7,7 +7,7 @@ H5PEditor.language.core = {
   notImageOrDimensionsField: '":path" no es una imagen o un campo de dimensiones.',
   requiredProperty: 'La :property es requerida y debe tener un valor.',
   onlyNumbers: 'El valor de :property solo puede contener números.',
-  illegalDecimalNumber: ':property can only contain numbers with max :decimals decimals.',
+  illegalDecimalNumber: ':property solamente puede contener númeroscon un máximo de :decimals decimales.',
   exceedsMax: 'El valor de :property excede el máximo de :max.',
   listExceedsMax: 'La lista excede el máximo de :max elementos.',
   belowMin: 'El valor de :property excede el mínimo de :min.',
@@ -125,7 +125,7 @@ H5PEditor.language.core = {
   contentTypeNotInstalled: 'Tipo de contenido no instalado',
   contentTypeNotInstalledDesc: 'No tiene permiso para instalar tipos de contenido.',
   theContentType: 'el tipo de contenido',
-  currentMenuSelected: 'selection actual',
+  currentMenuSelected: 'selección actual',
   errorCommunicatingHubTitle: 'No se puede comunicar con el hub.',
   errorCommunicatingHubContent: 'Ha ocurrido un error. Por favor, inténtelo de nuevo.',
   warningNoContentTypesInstalled: 'No tiene ningún tipo de contenido instalado.',
@@ -200,8 +200,8 @@ H5PEditor.language.core = {
   avTablistLabel: 'Insertar usando',
   tabTitleBasicFileUpload: 'Subir fichero',
   tabTitleInputLinkURL: 'Link/URL',
-  errorTooHighVersion: 'Los parámetros que contienen %used solo se %supported o anterior.',
-  errorNotSupported: 'Los parámetros que contienen %used no estan soportados.',
+  errorTooHighVersion: 'Los parámetros contienen %used mientras que solamente %supported o anteriores están soportados.',
+  errorNotSupported: 'Los parámetros contienen %used que no está soportado.',
   errorParamsBroken: 'Los parámetros están rotos.',
   libraryMissing: 'Falta la biblioteca requerida %lib.',
   scriptMissing: 'No se pudo cargar el script de actualizaciones para %lib.',
@@ -211,5 +211,5 @@ H5PEditor.language.core = {
   thisWillPotentially: 'Esto potencialmente restablecerá todo el texto y las traducciones. No puedes deshacer esto. El contenido en sí no será cambiado. ¿Desea proceder?',
   notAllTextsChanged: 'No todos los textos fueron cambiados, solo hay una cobertura parcial para :language.',
   contributeTranslations: 'Si desea completar la traducción para :language, puede obtener información sobre <a href=":url" target="_new"> contribuir con traducciones al H5P </a>',
-  unknownLibrary: 'Unfortunately, the selected content type \'%lib\' isn\'t installed on this system.'
+  unknownLibrary: 'Desafortunadamente, el tipo de contenido seleccionado \'%lib\' no está instalado en este sistema.'
 };
