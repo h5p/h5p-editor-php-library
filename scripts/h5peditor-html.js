@@ -415,7 +415,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
  * Create HTML for the HTML field.
  */
 ns.Html.prototype.createHtml = function () {
-  var input = '<div class="ckeditor" tabindex="0" contenteditable="true">';
+  var input = '<div class="ckeditor"' + ns.createAriaFriendlyAttributes(this.field) + ' tabindex="0" contenteditable="true">';
   if (this.value !== undefined) {
     input += this.value;
   }

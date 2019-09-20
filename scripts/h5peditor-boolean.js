@@ -34,9 +34,8 @@ ns.Boolean = function (parent, field, params, setValue) {
  * Create HTML for the boolean field.
  */
 ns.Boolean.prototype.createHtml = function () {
-  var checked = (this.value !== undefined && this.value) ? ' checked' : '';
-  var content = '<input type="checkbox"' + checked + ' />';
-
+  const checked = (this.value !== undefined && this.value) ? ' checked' : '';
+  const content = '<input type="checkbox"' + checked + ns.createAriaFriendlyAttributes(this.field) + '/>';
   return ns.createBooleanFieldMarkup(this.field, content);
 };
 

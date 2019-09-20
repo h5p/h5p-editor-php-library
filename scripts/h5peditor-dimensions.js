@@ -116,7 +116,11 @@ ns.Dimensions.prototype.appendTo = function ($wrapper) {
  * Create HTML for the field.
  */
 ns.Dimensions.prototype.createHtml = function () {
-  var input = ns.createText(this.params !== undefined ? this.params.width : undefined, 15, ns.t('core', 'width')) + ' x ' + ns.createText(this.params !== undefined ? this.params.height : undefined, 15, ns.t('core', 'height'));
+  var input =
+    ns.createText(this.params !== undefined ? this.params.width : undefined, 15, ns.t('core', 'width'), this.field) +
+    ' x ' +
+    ns.createText(this.params !== undefined ? this.params.height : undefined, 15, ns.t('core', 'height'), this.field);
+
   return ns.createFieldMarkup(this.field, input);
 };
 

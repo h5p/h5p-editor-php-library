@@ -134,7 +134,11 @@ ns.Coordinates.prototype.appendTo = function ($wrapper) {
  * Create HTML for the coordinates picker.
  */
 ns.Coordinates.prototype.createHtml = function () {
-  var input = ns.createText(this.params !== undefined ? this.params.x : undefined, 15, 'X') + ' , ' + ns.createText(this.params !== undefined ? this.params.y : undefined, 15, 'Y');
+  var input =
+    ns.createText(this.params !== undefined ? this.params.x : undefined, 15, 'X', this.field) +
+    ' , ' +
+    ns.createText(this.params !== undefined ? this.params.y : undefined, 15, 'Y', this.field);
+
   return ns.createFieldMarkup(this.field, input);
 };
 

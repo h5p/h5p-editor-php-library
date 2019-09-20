@@ -180,11 +180,16 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
     $wrapper.appendTo($overlay);
 
     const $button = $(
-      '<div class="h5p-metadata-button-wrapper">' +
+      '<div role="button" tabindex="0" class="h5p-metadata-button-wrapper">' +
         '<div class="h5p-metadata-button-tip"></div>' +
         '<div class="h5p-metadata-toggler">' + t('metadata') + '</div>' +
       '</div>')
-      .click(openPopup);
+      .click(openPopup)
+      .keydown(function (event) {
+        if (event.which == 13 || event.which == 32) {
+          openPopup(event);
+        }
+      });
 
     /**
      * Handle ready callbacks from children

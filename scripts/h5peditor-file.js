@@ -226,7 +226,7 @@ ns.File.prototype.addFile = function () {
 
   if (this.params === undefined) {
     this.$file.html(
-      '<a href="#" class="add" title="' + ns.t('core', 'addFile') + '">' +
+      '<a href="#" class="add"' + ns.createAriaFriendlyAttributes(this.field) +' title="' + ns.t('core', 'addFile') + '">' +
         '<div class="h5peditor-field-file-upload-text">' + ns.t('core', 'add') + '</div>' +
       '</a>'
     ).children('.add').click(function () {

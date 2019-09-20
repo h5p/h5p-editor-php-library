@@ -56,6 +56,8 @@ ns.isIE = navigator.userAgent.match(/; MSIE \d+.\d+;/) !== null;
  */
 ns.renderableCommonFields = {};
 
+ns.fieldCounter = 0;
+
 /**
  * Help load JavaScripts, prevents double loading.
  *
@@ -780,27 +782,6 @@ ns.createImportance = function (importance) {
 };
 
 /**
- * Create HTML wrapper for field items.
- * Makes sure the different elements are placed in an consistent order.
- *
- * @param {string} type
- * @param {string} [label]
- * @param {string} [description]
- * @param {string} [content]
- * @deprecated since version 1.12 (Jan. 2017, will be removed Jan. 2018). Use createFieldMarkup instead.
- * @see createFieldMarkup
- * @returns {string} HTML
- */
-ns.createItem = function (type, label, description, content) {
-  return '<div class="field ' + type + '">' +
-           (label ? label : '') +
-           (description ? '<div class="h5peditor-field-description">' + description + '</div>' : '') +
-           (content ? content : '') +
-           '<div class="h5p-errors"></div>' +
-         '</div>';
-};
-
-/**
  * An object describing the semantics of a field
  * @typedef {Object} SemanticField
  * @property {string} name
@@ -824,7 +805,7 @@ ns.createItem = function (type, label, description, content) {
  */
 ns.createFieldMarkup = function (field, content) {
   content = content || '';
-  var markup = this.createLabel(field) + this.createDescription(field.description) + content;
+  var markup = this.createLabel(field) + this.createDescription(field.description, ns.getFieldId(field)) + content;
 
   return this.wrapFieldMarkup(field, markup);
 };
@@ -838,9 +819,10 @@ ns.createFieldMarkup = function (field, content) {
  * @return {string}
  */
 ns.createBooleanFieldMarkup = function (field, content) {
-  var markup =
-    '<label class="h5peditor-label">' + content + (field.label || field.name || '') + '</label>' +
-    this.createDescription(field.description);
+  const id = ns.getFieldId(field);
+  var markup = '<label class="h5peditor-label" for="' + id + '">' +
+    content + (field.label || field.name || '') + '</label>' +
+    this.createDescription(field.description, id);
 
   return this.wrapFieldMarkup(field, markup);
 };
@@ -901,8 +883,8 @@ ns.createOption = function (value, text, selected) {
  *
  * @returns {String}
  */
-ns.createText = function (value, maxLength, placeholder) {
-  var html = '<input class="h5peditor-text" type="text"';
+ns.createText = function (value, maxLength, placeholder, field) {
+  var html = '<input class="h5peditor-text" type="text"' + ns.createAriaFriendlyAttributes(field);
 
   if (value !== undefined) {
     html += ' value="' + value + '"';
@@ -918,6 +900,19 @@ ns.createText = function (value, maxLength, placeholder) {
 };
 
 /**
+ * If needed, generates an id for the field, and returns it
+ * @param {Object} field
+ * @return {String}
+ */
+ns.getFieldId = function (field) {
+  if (field._id === undefined) {
+    ns.fieldCounter++;
+    field._id = 'field-' + ns.fieldCounter;
+  }
+  return field._id;
+}
+
+/**
  * Create a label to wrap content in.
  *
  * @param {SemanticField} field
@@ -926,7 +921,7 @@ ns.createText = function (value, maxLength, placeholder) {
  */
 ns.createLabel = function (field, content) {
   // New items can be added next to the label within the flex-wrapper
-  var html = '<label class="h5peditor-label-wrapper">';
+  var html = '<label class="h5peditor-label-wrapper" for="' + ns.getFieldId(field) + '">';
 
   // Temporary fix for the old version of CoursePresentation's custom editor
   if (field.widget === 'coursepresentation' && field.name === 'presentation') {
@@ -945,13 +940,32 @@ ns.createLabel = function (field, content) {
  * @param {String} description
  * @returns {string}
  */
-ns.createDescription = function (description) {
+ns.createDescription = function (description, fieldId) {
   var html = '';
   if (description !== undefined) {
-    html += '<div class="h5peditor-field-description">' + description + '</div>';
+    html += '<div class="h5peditor-field-description"';
+    if (fieldId !== undefined) {
+      html += ' id="' + fieldId + '-description"';
+    }
+    html += '>' + description + '</div>';
   }
   return html;
 };
+
+/**
+ * Creates attributes for form elements needed for accessibility
+ * (i.e: id and aria-describedby)
+ * @param {Object} field
+ * @return {String}
+ */
+ns.createAriaFriendlyAttributes = function (field) {
+  const id = ns.getFieldId(field);
+  let html = ' id="' + id + '"';
+  if (field.description) {
+    html += ' aria-describedby="' + id + '-description"';
+  }
+  return html;
+}
 
 /**
  * Create an important description

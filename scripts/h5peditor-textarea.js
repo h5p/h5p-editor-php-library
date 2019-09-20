@@ -45,7 +45,7 @@ ns.Textarea.prototype.appendTo = function ($wrapper) {
  * Create HTML for the text field.
  */
 ns.Textarea.prototype.createHtml = function () {
-  var input = '<textarea cols="30" rows="4"';
+  var input = '<textarea cols="30" rows="4"' + ns.createAriaFriendlyAttributes(this.field);
   if (this.field.placeholder !== undefined) {
     input += ' placeholder="' + this.field.placeholder + '"';
   }

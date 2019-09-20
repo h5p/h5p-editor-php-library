@@ -68,7 +68,7 @@ ns.Text.prototype.change = function (callback) {
  * Create HTML for the text field.
  */
 ns.Text.prototype.createHtml = function () {
-  var input = ns.createText(this.value, this.field.maxLength, this.field.placeholder);
+  var input = ns.createText(this.value, this.field.maxLength, this.field.placeholder, this.field);
   return ns.createFieldMarkup(this.field, input);
 };
 

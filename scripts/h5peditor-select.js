@@ -53,13 +53,12 @@ H5PEditor.widgets.select = H5PEditor.Select = (function (E) {
    * @returns {String} HTML.
    */
   C.prototype.createHtml = function () {
-    var options = '';
+    let options = '';
     if (this.field.optional === true || this.field.default === undefined) {
       options = E.createOption('-', '-');
     }
     options += C.createOptionsHtml(this.field.options, this.value);
-
-    var select = '<select class="h5peditor-select">' + options + '</select>';
+    const select = '<select' + ns.createAriaFriendlyAttributes(this.field) + ' class="h5peditor-select">' + options + '</select>';
 
     return E.createFieldMarkup(this.field, select);
   };

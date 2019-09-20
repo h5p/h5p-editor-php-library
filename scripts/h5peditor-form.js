@@ -18,8 +18,8 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
             ns.t('core', 'commonFieldsDescription') +
           '</p>' +
           '<div class="h5peditor-language-switcher">' +
-            '<span class="language-label">' + ns.t('core', 'language') + ':</span>' +
-            '<select>' +
+            '<label class="language-label" for="h5peditor-language-switcher">' + ns.t('core', 'language') + ':</label>' +
+            '<select id="h5peditor-language-switcher">' +
               '<option value="-">' + ns.t('core', 'noLanguagesSupported') + '</option>' +
             '</select>' +
           '</div>' +
