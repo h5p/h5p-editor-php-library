@@ -43,19 +43,20 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
   }
 
   // Add title expand/collapse button
-  ns.$('<div/>', {
+  self.$commonButton = ns.$('<div/>', {
     'class': 'h5peditor-label',
+    'aria-expanded': 'false',
     title: ns.t('core', 'expandCollapse'),
     role: 'button',
     tabIndex: 0,
     html: '<span class="icon"></span>' + ns.t('core', 'commonFields'),
     on: {
       click: function () {
-        self.$common.parent().toggleClass('collapsed');
+        toggleCommonFields();
       },
       keypress: function (event) {
         if ((event.charCode || event.keyCode) === 32) {
-          self.$common.parent().toggleClass('collapsed');
+          toggleCommonFields();
           event.preventDefault();
         }
       }
@@ -75,6 +76,16 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
   if (defaultLanguage) {
     ns.defaultLanguage = defaultLanguage;
   }
+
+  /**
+   * Toggle common fields group visibility
+   */
+  const toggleCommonFields = function () {
+    const expandedValue = self.$common.parent().hasClass('collapsed')
+      ? 'true' : 'false';
+    self.$commonButton.attr('aria-expanded', expandedValue);
+    self.$common.parent().toggleClass('collapsed');
+  };
 
   /**
    * Create options DOM elements

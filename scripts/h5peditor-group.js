@@ -82,6 +82,7 @@ ns.Group.prototype.appendTo = function ($wrapper) {
   // Add title expand/collapse button
   this.$title = ns.$('<div/>', {
     'class': 'title',
+    'aria-expanded': 'false',
     title: ns.t('core', 'expandCollapse'),
     role: 'button',
     tabIndex: 0,
@@ -194,6 +195,7 @@ ns.Group.prototype.toggle = function () {
  * Expand the given group.
  */
 ns.Group.prototype.expand = function () {
+  this.$title.attr('aria-expanded', 'true');
   this.$group.addClass('expanded');
   this.trigger('expanded');
 };
@@ -210,6 +212,7 @@ ns.Group.prototype.collapse = function () {
     }
   }
   if (valid) {
+    this.$title.attr('aria-expanded', 'false');
     this.$group.removeClass('expanded');
     this.trigger('collapsed');
   }
