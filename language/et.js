@@ -212,7 +212,7 @@ H5PEditor.language.core = {
   notAllTextsChanged: 'Mitte kõiki tekste ei muudetud. Ainult osaliselt on kaetud - :language.',
   contributeTranslations: 'Kui tahad lõpetada tõlge keelele :language, siis vaata lähemalt <a href=":url" target="_new">contributing translations to H5P</a>',
   unknownLibrary: 'Kahjuks ei ole valitud sisutüüp \'%lib\' sellesse süsteemi paigaldatud.',
-  proceedButtonLabel: 'Proceed to save',
-  enterFullscreenButtonLabel: 'Enter fullscreen',
-  exitFullscreenButtonLabel: 'Exit fullscreen'
+  proceedButtonLabel: 'Edasi salvestama',
+  enterFullscreenButtonLabel: 'Ava täisekraanis',
+  exitFullscreenButtonLabel: 'Välju täisekraanist'
 };
