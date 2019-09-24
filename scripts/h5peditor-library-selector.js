@@ -141,6 +141,7 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
       disable = that.canPaste(H5P.getClipboard());
     }
     that.$pasteButton.toggleClass('disabled', !disable);
+    that.$pasteButton.prop('disabled', !disable);
     if (that.selector.setCanPaste) {
       that.selector.setCanPaste(disable);
     }
@@ -235,6 +236,7 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
     if (this.canPaste(H5P.getClipboard())) {
       // Toggle paste button when libraries are loaded
       this.$pasteButton.toggleClass('disabled', false);
+      this.$pasteButton.prop('disabled', false);
       if (this.selector.setCanPaste) {
         this.selector.setCanPaste(true);
       }
@@ -339,6 +341,7 @@ ns.LibrarySelector.prototype.loadSemantics = function (library, params, metadata
       that.form.currentLibrary = library;
       that.form.processSemantics(semantics, overrideParams, metadata);
       if (window.localStorage) {
+        that.$copyButton.prop('disabled', false);
         that.$copyButton.toggleClass('disabled', false);
         that.$pasteButton.text(ns.t('core', 'pasteAndReplaceButton'));
         that.$pasteButton.attr('title', ns.t('core', 'pasteAndReplaceFromClipboard'));

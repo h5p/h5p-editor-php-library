@@ -69,6 +69,7 @@ ns.Library = function (parent, field, params, setValue) {
       // Check if content type is supported here
       canPaste = self.canPaste(H5P.getClipboard());
     }
+    self.$pasteButton.prop('disabled', !canPaste);
     self.$pasteButton.toggleClass('disabled', !canPaste);
   });
 };
@@ -340,6 +341,7 @@ ns.Library.prototype.librariesLoaded = function (libList) {
 
   if (window.localStorage && self.canPaste(H5P.getClipboard())) {
     // Toggle paste button when libraries are loaded
+    self.$pasteButton.prop('disabled', false);
     self.$pasteButton.toggleClass('disabled', false);
   }
 
@@ -373,6 +375,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     delete this.params.metadata;
 
     this.$libraryWrapper.attr('class', 'libwrap');
+    this.$copyButton.prop('disabled', true);
     this.$copyButton.toggleClass('disabled', true);
     this.$pasteButton.text(ns.t('core', 'pasteButton'));
     this.$pasteButton.attr('title', ns.t('core', 'pasteFromClipboard'));
@@ -430,6 +433,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
 
     ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper, that);
     if (window.localStorage) {
+      that.$copyButton.prop('disabled', false);
       that.$copyButton.toggleClass('disabled', false);
       that.$pasteButton.text(ns.t('core', 'pasteAndReplaceButton'));
       that.$pasteButton.attr('title', ns.t('core', 'pasteAndReplaceFromClipboard'));
