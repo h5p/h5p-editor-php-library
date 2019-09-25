@@ -782,6 +782,27 @@ ns.createImportance = function (importance) {
 };
 
 /**
+ * Create HTML wrapper for field items.
+ * Makes sure the different elements are placed in an consistent order.
+ *
+ * @param {string} type
+ * @param {string} [label]
+ * @param {string} [description]
+ * @param {string} [content]
+ * @deprecated since version 1.12 (Jan. 2017, will be removed Jan. 2018). Use createFieldMarkup instead.
+ * @see createFieldMarkup
+ * @returns {string} HTML
+ */
+ns.createItem = function (type, label, description, content) {
+  return '<div class="field ' + type + '">' +
+           (label ? label : '') +
+           (description ? '<div class="h5peditor-field-description">' + description + '</div>' : '') +
+           (content ? content : '') +
+           '<div class="h5p-errors"></div>' +
+         '</div>';
+};
+
+/**
  * An object describing the semantics of a field
  * @typedef {Object} SemanticField
  * @property {string} name
@@ -884,7 +905,11 @@ ns.createOption = function (value, text, selected) {
  * @returns {String}
  */
 ns.createText = function (value, maxLength, placeholder, field) {
-  var html = '<input class="h5peditor-text" type="text"' + ns.createAriaFriendlyAttributes(field);
+  var html = '<input class="h5peditor-text" type="text"';
+
+  if (field !== undefined) {
+    html += ns.createAriaFriendlyAttributes(field);
+  }
 
   if (value !== undefined) {
     html += ' value="' + value + '"';
