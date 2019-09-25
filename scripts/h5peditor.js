@@ -880,7 +880,7 @@ ns.createOption = function (value, text, selected) {
  * @param {String} value
  * @param {number} maxLength
  * @param {String} placeholder
- *
+ * @param {Object} field
  * @returns {String}
  */
 ns.createText = function (value, maxLength, placeholder, field) {
@@ -910,7 +910,7 @@ ns.getFieldId = function (field) {
     field._id = 'field-' + ns.fieldCounter;
   }
   return field._id;
-}
+};
 
 /**
  * Create a label to wrap content in.
@@ -938,6 +938,7 @@ ns.createLabel = function (field, content) {
 /**
  * Create a description
  * @param {String} description
+ * @param {Number} [fieldId]
  * @returns {string}
  */
 ns.createDescription = function (description, fieldId) {
@@ -965,7 +966,7 @@ ns.createAriaFriendlyAttributes = function (field) {
     html += ' aria-describedby="' + id + '-description"';
   }
   return html;
-}
+};
 
 /**
  * Create an important description

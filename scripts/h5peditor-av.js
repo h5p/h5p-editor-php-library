@@ -107,7 +107,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     var imageHtml =
       '<ul class="file list-unstyled"></ul>' +
-      (self.field.widgetExtensions ? this.createTabbedAdd() : this.createAdd())
+      (self.field.widgetExtensions ? this.createTabbedAdd() : this.createAdd());
 
     if (!this.field.disableCopyright) {
       imageHtml += '<a class="h5p-copyright-button" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>';
@@ -557,7 +557,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * Create the HTML for the dialog itself.
    *
    * @param {string} content HTML
-   * @param {boolea} disableInsert
+   * @param {boolean} [disableInsert]
    * @returns {string} HTML
    */
   C.prototype.createInsertDialog = function (content, disableInsert) {
