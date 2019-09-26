@@ -196,8 +196,15 @@ ns.Group.prototype.toggle = function () {
  */
 ns.Group.prototype.expand = function () {
   this.$title.attr('aria-expanded', 'true');
-  this.$group.addClass('expanded');
-  this.trigger('expanded');
+  // Set timeout is necessary because aria-expanded status is not announced
+  // when the :before element changes content because Firefox
+  // re-creates the accessible element..
+  // @see https://github.com/nvaccess/nvda/issues/8341
+  // Should be fixeed by Firefox 70 (https://bugzilla.mozilla.org/show_bug.cgi?id=686400)
+  setTimeout(() => {
+    this.trigger('expanded');
+    this.$group.addClass('expanded');
+  }, 100);
 };
 
 /**
@@ -213,8 +220,16 @@ ns.Group.prototype.collapse = function () {
   }
   if (valid) {
     this.$title.attr('aria-expanded', 'false');
-    this.$group.removeClass('expanded');
-    this.trigger('collapsed');
+    // Set timeout is necessary because aria-expanded status is not announced
+    // when the :before element changes content because Firefox
+    // re-creates the accessible element..
+    // @see https://github.com/nvaccess/nvda/issues/8341
+    // Should be fixeed by Firefox 70 (https://bugzilla.mozilla.org/show_bug.cgi?id=686400)
+    setTimeout(() => {
+      this.trigger('collapsed');
+      this.$group.removeClass('expanded');
+    }, 100);
+
   }
 };
 
