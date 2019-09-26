@@ -84,11 +84,9 @@ H5PEditor.language.core = {
   h5pFileWrongExtensionTitle: 'El fichero elegido no se puede subir',
   h5pFileWrongExtensionContent: 'Solo se permiten ficheros con la extensión .h5p.',
   h5pFileValidationFailedTitle: 'No se puede validar el fichero H5P.',
-  h5pFileValidationFailedContent: 'Asegúrese de que el H5P cargado contiene contenido H5P válido. H5P'  +
-  ' Los archivos que contienen sólo bibliotecas deben cargarse a través de la página Bibliotecas H5P.',
+  h5pFileValidationFailedContent: 'Asegúrese de que el H5P cargado contiene contenido H5P válido. H5P Los archivos que contienen sólo bibliotecas deben cargarse a través de la página Bibliotecas H5P.',
   h5pFileUploadServerErrorTitle: 'El fichero H5P no se ha podido cargar',
-  h5pFileUploadServerErrorContent: 'Ocurrió un error inesperado. Compruebe el registro de errores del servidor para' +
-  ' obtener más detalles.',
+  h5pFileUploadServerErrorContent: 'Ocurrió un error inesperado. Compruebe el registro de errores del servidor para obtener más detalles.',
   contentTypeSectionAll: 'Todos los tipos de contenidos',
   searchResults: 'Resultados de búsqueda',
   contentTypeSearchFieldPlaceholder: 'Buscar tipos de contenido',
@@ -211,5 +209,8 @@ H5PEditor.language.core = {
   thisWillPotentially: 'Esto potencialmente restablecerá todo el texto y las traducciones. No puedes deshacer esto. El contenido en sí no será cambiado. ¿Desea proceder?',
   notAllTextsChanged: 'No todos los textos fueron cambiados, solo hay una cobertura parcial para :language.',
   contributeTranslations: 'Si desea completar la traducción para :language, puede obtener información sobre <a href=":url" target="_new"> contribuir con traducciones al H5P </a>',
-  unknownLibrary: 'Desafortunadamente, el tipo de contenido seleccionado \'%lib\' no está instalado en este sistema.'
+  unknownLibrary: 'Desafortunadamente, el tipo de contenido seleccionado \'%lib\' no está instalado en este sistema.',
+  proceedButtonLabel: 'Proceed to save',
+  enterFullscreenButtonLabel: 'Enter fullscreen',
+  exitFullscreenButtonLabel: 'Exit fullscreen',
 };
