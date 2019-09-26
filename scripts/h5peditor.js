@@ -901,7 +901,7 @@ ns.createOption = function (value, text, selected) {
  * @param {String} value
  * @param {number} maxLength
  * @param {String} placeholder
- * @param {Object} field
+ * @param {Object} [field]
  * @returns {String}
  */
 ns.createText = function (value, maxLength, placeholder, field) {
