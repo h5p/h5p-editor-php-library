@@ -744,7 +744,7 @@ class H5peditor {
    * @param string $prefix
    */
   public function addPresaveFile(&$assets, $library, $prefix = ''){
-    $path = 'libraries' . DIRECTORY_SEPARATOR . H5PCore::libraryToString($library, true);
+    $path = 'libraries' . '/' . H5PCore::libraryToString($library, true);
     if( array_key_exists('path', $library)){
       $path = $library['path'];
     }
@@ -754,7 +754,7 @@ class H5peditor {
     }
 
     $assets['scripts'][] = (object) array(
-      'path' => $prefix . DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR . 'presave.js',
+      'path' => $prefix . '/' . $path . '/' . 'presave.js',
       'version' => $version,
     );
   }
