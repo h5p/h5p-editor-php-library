@@ -24,7 +24,7 @@ H5PEditor.language.core = {
   semanticsError: 'Ошибка семантики: :error',
   missingProperty: 'Поле :index отсутствует это :property свойство.',
   expandCollapse: 'Развернуть/Свернуть',
-  addEntity: 'Добаить :entity',
+  addEntity: 'Добавить :entity',
   tooLong: 'Значение поля слишком длинное, должно содержать :max знаков или меньше.',
   invalidFormat: 'Значение поля содержит неверный формат или символы, которые запрещены.',
   confirmChangeLibrary: 'Делая это, вы потеряете всю работу, выполненную с текущим типом контента. Вы уверены, что хотите изменить тип контента?',
@@ -211,8 +211,8 @@ H5PEditor.language.core = {
   thisWillPotentially: "Это потенциально сбросит весь текст и переводы. Вы не можете отменить это. Сам контент не будет изменен. Вы хотите продолжить?",
   notAllTextsChanged: 'Не все тексты были изменены, есть только частичные переводы для :language.',
   contributeTranslations: 'Если вы хотите завершить перевод для :language вы можете узнать о том как <a href=":url" target="_new">внести переводы в H5P</a>',
-  unknownLibrary: 'Unfortunately, the selected content type \'%lib\' isn\'t installed on this system.',
-  proceedButtonLabel: 'Proceed to save',
-  enterFullscreenButtonLabel: 'Enter fullscreen',
-  exitFullscreenButtonLabel: 'Exit fullscreen'
+  unknownLibrary: 'К сожалению, выбранный тип контента \'%lib\' isn\ не установлен в этой системе.',
+  proceedButtonLabel: 'Перейти к сохранению',
+  enterFullscreenButtonLabel: 'Войти в полноэкранный режим',
+  exitFullscreenButtonLabel: 'Покинуть полноэкранный режим'
 };
