@@ -31,8 +31,10 @@
     background-color: #deeffb
   }
   &.disabled {
-    opacity: 0.3;
-    cursor: auto;
+    color: #707070;
+    background-color: #f5f5f5;
+    border-color: #eeeeee;
+    cursor: not-allowed;
   }
 }
 
@@ -43,13 +45,23 @@
   font-size: 1.5em;
   position: relative;
   top: 0.2em;
-  color: #2d8ad6;
+  color: #1A73B4;
 }
 .h5peditor-copy-button:before {
-  content: "\e905";
+  content: "\e90e";
 }
 .h5peditor-paste-button:before {
-  content: "\e90a";
+  content: "\e910";
+}
+.h5peditor-copy-button.disabled:before
+.h5peditor-paste-button.disabled:before {
+  color: #707070;
+}
+.h5peditor-copy-button.disabled:before {
+  content: "\e90f";
+}
+.h5peditor-paste-button.disabled:before {
+  content: "\e911";
 }
 .h5p-hub .h5peditor-paste-button {
   font-family: $font-family;
@@ -70,9 +82,14 @@
     background: #434b55;
   }
   &.disabled {
-    border-color:transparent;
+    border-color: transparent;
+    background: #2c323b;
+    color: #c3c3c3;
   }
 }
 .h5p-hub .h5peditor-paste-button:before {
   color: #68a9ed;
+}
+.h5p-hub .h5peditor-paste-button.disabled:before {
+  color: #c3c3c3;
 }
