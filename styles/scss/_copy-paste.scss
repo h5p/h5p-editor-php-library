@@ -51,7 +51,7 @@
 .h5peditor-paste-button:before {
   content: "\e910";
 }
-.h5peditor-copy-button.disabled:before
+.h5peditor-copy-button.disabled:before,
 .h5peditor-paste-button.disabled:before {
   color: #707070;
 }
@@ -60,7 +60,6 @@
 }
 .h5peditor-paste-button.disabled:before {
   content: "\e911";
-  color: #707070;
 }
 .h5p-hub .h5peditor-paste-button {
   font-family: $font-family;
@@ -87,7 +86,7 @@
   }
 }
 .h5p-hub .h5peditor-paste-button:before {
-  color: #68a9ed;
+  color: #9fc8f4;
 }
 .h5p-hub .h5peditor-paste-button.disabled:before {
   color: #c3c3c3;
