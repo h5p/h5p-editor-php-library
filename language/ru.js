@@ -24,7 +24,7 @@ H5PEditor.language.core = {
   semanticsError: 'Ошибка семантики: :error',
   missingProperty: 'Поле :index отсутствует это :property свойство.',
   expandCollapse: 'Развернуть/Свернуть',
-  addEntity: 'Добаить :entity',
+  addEntity: 'Добавить :entity',
   tooLong: 'Значение поля слишком длинное, должно содержать :max знаков или меньше.',
   invalidFormat: 'Значение поля содержит неверный формат или символы, которые запрещены.',
   confirmChangeLibrary: 'Делая это, вы потеряете всю работу, выполненную с текущим типом контента. Вы уверены, что хотите изменить тип контента?',
