@@ -21,6 +21,7 @@ ns.widgets.image = function (parent, field, params, setValue) {
   this.params = params;
   this.setValue = setValue;
   this.library = parent.library + '/' + field.name;
+  this.id = ns.getNextFieldId(field);
 
   if (params !== undefined) {
     this.copyright = params.copyright;
@@ -95,7 +96,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
       '<a href="#" class="h5p-close" title="' + ns.t('core', 'close') + '"></a>' +
     '</div>';
 
-  var html = ns.createFieldMarkup(this.field, htmlString);
+  var html = ns.createFieldMarkup(this.field, htmlString, this.id);
 
   var $container = ns.$(html).appendTo($wrapper);
   this.$item = $container;
@@ -192,12 +193,16 @@ ns.widgets.image.prototype.addFile = function () {
   if (this.params === undefined) {
 
     // No image look
+    let html = '<a href="#" id="' + this.id + '" class="add"';
+    if (this.field.description !== undefined) {
+      html += ' aria-describedby="' + ns.getDescriptionId(this.id) + '"';
+    }
+    html += ' title="' + ns.t('core', 'addFile') + '">' +
+      '<div class="h5peditor-field-file-upload-text">' + ns.t('core', 'add') + '</div>' +
+    '</a>'
+
     this.$file
-      .html(
-        '<a href="#" class="add"' + ns.createAriaFriendlyAttributes(this.field) + ' title="' + ns.t('core', 'addFile') + '">' +
-          '<div class="h5peditor-field-file-upload-text">' + ns.t('core', 'add') + '</div>' +
-        '</a>'
-      )
+      .html(html)
       .children('.add')
       .click(function () {
         that.isOriginalImage = true;
@@ -215,10 +220,11 @@ ns.widgets.image.prototype.addFile = function () {
 
   var source = H5P.getPath(this.params.path, H5PEditor.contentId);
   var altText = (this.field.label === undefined ? '' : this.field.label);
-  var fileHtmlString =
-    '<a href="#" title="' + ns.t('core', 'changeFile') + '" class="thumbnail">' +
-      '<img alt="' + altText + '"/>' +
-    '</a>' +
+  var fileHtmlString = '<a href="#" id="' + this.id + '" title="' + ns.t('core', 'changeFile') + '" class="thumbnail"';
+  if (this.field.description !== undefined) {
+    html += ' aria-describedby="' + ns.getDescriptionId(this.id) + '"';
+  }
+  fileHtmlString += '><img alt="' + altText + '"/></a>' +
     '<a href="#" class="remove" title="' + ns.t('core', 'removeFile') + '"></a>';
 
   this.$file.html(fileHtmlString)

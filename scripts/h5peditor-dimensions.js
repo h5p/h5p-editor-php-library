@@ -116,12 +116,15 @@ ns.Dimensions.prototype.appendTo = function ($wrapper) {
  * Create HTML for the field.
  */
 ns.Dimensions.prototype.createHtml = function () {
-  var input =
-    ns.createText(this.params !== undefined ? this.params.width : undefined, 15, ns.t('core', 'width'), this.field) +
-    ' x ' +
-    ns.createText(this.params !== undefined ? this.params.height : undefined, 15, ns.t('core', 'height'), this.field);
+  const id = ns.getNextFieldId(this.field);
+  const descriptionId = (this.field.description !== undefined ? ns.getDescriptionId(id) : undefined)
 
-  return ns.createFieldMarkup(this.field, input);
+  var input =
+    ns.createText(this.params !== undefined ? this.params.width : undefined, 15, ns.t('core', 'width'), id, descriptionId) +
+    ' x ' +
+    ns.createText(this.params !== undefined ? this.params.height : undefined, 15, ns.t('core', 'height'), undefined, descriptionId);
+
+  return ns.createFieldMarkup(this.field, input, id);
 };
 
 /**

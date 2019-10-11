@@ -327,7 +327,7 @@ H5PEditor.ListEditor = (function ($) {
           if ($label.length !== 0) {
             $titleBar.append($('<label/>', {
               'class': 'h5peditor-label',
-              for: ns.getFieldId(item.field),
+              'for': $label.parent().attr('for'),
               html: $label.html()
             }));
 
