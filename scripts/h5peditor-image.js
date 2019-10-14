@@ -222,7 +222,7 @@ ns.widgets.image.prototype.addFile = function () {
   var altText = (this.field.label === undefined ? '' : this.field.label);
   var fileHtmlString = '<a href="#" id="' + this.id + '" title="' + ns.t('core', 'changeFile') + '" class="thumbnail"';
   if (this.field.description !== undefined) {
-    html += ' aria-describedby="' + ns.getDescriptionId(this.id) + '"';
+    fileHtmlString += ' aria-describedby="' + ns.getDescriptionId(this.id) + '"';
   }
   fileHtmlString += '><img alt="' + altText + '"/></a>' +
     '<a href="#" class="remove" title="' + ns.t('core', 'removeFile') + '"></a>';

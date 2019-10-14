@@ -258,7 +258,7 @@ ns.File.prototype.addFile = function () {
 
   var fileHtmlString = '<a href="#" id="' + this.id + '" title="' + ns.t('core', 'changeFile') + '" class="thumbnail"';
   if (this.field.description !== undefined) {
-    html += ' aria-describedby="' + ns.getDescriptionId(this.id) + '"';
+    fileHtmlString += ' aria-describedby="' + ns.getDescriptionId(this.id) + '"';
   }
   fileHtmlString += '><img ' +
       (thumbnail.width === undefined ? '' : ' width="' + thumbnail.width + '"') +
