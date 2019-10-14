@@ -1,5 +1,5 @@
 (function ($, ns) {
-  H5PEditor.init = function ($form, $type, $upload, $create, $editor, $library, $params, $maxScore, $title, submitCallback) {
+  H5PEditor.init = function ($form, $type, $upload, $create, $editor, $library, $params, $maxScore, $title, cancelSubmitCallback) {
     H5PEditor.$ = H5P.jQuery;
     H5PEditor.basePath = H5PIntegration.editor.libraryUrl;
     H5PEditor.fileIcon = H5PIntegration.editor.fileIcon;
@@ -49,17 +49,27 @@
 
     // Duplicate the submit button input because it is not posted when calling $form.submit()
     const $submitters = $form.find('input[type="submit"]');
+    let isCanceling = false;
     $submitters.click(function () {
       // Create hidden input and give it the value
       const name = $(this).prop('name');
       const value = $(this).prop('value');
       $('<input type="hidden" name="' + name + '" value="' + value + '" />').appendTo($form);
+
+      // Allow caller to cancel validation and submission of form on button click
+      if (cancelSubmitCallback) {
+        isCanceling = cancelSubmitCallback($(this));
+      }
     });
 
     let formIsUpdated = false;
     $form.submit(function (event) {
       if ($type.length && $type.filter(':checked').val() === 'upload') {
         return; // Old file upload
+      }
+
+      if (isCanceling) {
+        return;
       }
 
       if (h5peditor !== undefined && !formIsUpdated) {
