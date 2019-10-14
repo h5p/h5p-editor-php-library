@@ -959,7 +959,12 @@ ns.getDescriptionId = function (id) {
  */
 ns.createLabel = function (field, content, inputId) {
   // New items can be added next to the label within the flex-wrapper
-  var html = '<label class="h5peditor-label-wrapper" for="' + inputId + '">';
+  var html = '<label class="h5peditor-label-wrapper"';
+
+  if (inputId !== undefined) {
+    html += ' for="' + inputId + '"';
+  }
+  html+= '>'
 
   // Temporary fix for the old version of CoursePresentation's custom editor
   if (field.widget === 'coursepresentation' && field.name === 'presentation') {
