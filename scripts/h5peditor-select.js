@@ -53,14 +53,21 @@ H5PEditor.widgets.select = H5PEditor.Select = (function (E) {
    * @returns {String} HTML.
    */
   C.prototype.createHtml = function () {
+    const id = ns.getNextFieldId(this.field);
+
     let options = '';
     if (this.field.optional === true || this.field.default === undefined) {
       options = E.createOption('-', '-');
     }
     options += C.createOptionsHtml(this.field.options, this.value);
-    const select = '<select' + ns.createAriaFriendlyAttributes(this.field) + ' class="h5peditor-select">' + options + '</select>';
 
-    return E.createFieldMarkup(this.field, select);
+    let select = '<select id="' + id + '"';
+    if (this.field.description !== undefined) {
+      select += ' aria-describedby="' + ns.getDescriptionId(id) + '"';
+    }
+    select += ' class="h5peditor-select">' + options + '</select>';
+
+    return E.createFieldMarkup(this.field, select, id);
   };
 
   /**

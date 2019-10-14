@@ -104,10 +104,11 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    */
   C.prototype.appendTo = function ($wrapper) {
     var self = this;
+    const id = ns.getNextFieldId(this.field);
 
     var imageHtml =
       '<ul class="file list-unstyled"></ul>' +
-      (self.field.widgetExtensions ? this.createTabbedAdd() : this.createAdd());
+      (self.field.widgetExtensions ? C.createTabbedAdd(self.field.type, self.field.widgetExtensions, id, self.field.description !== undefined) : C.createAdd(self.field.type, id, self.field.description !== undefined))
 
     if (!this.field.disableCopyright) {
       imageHtml += '<a class="h5p-copyright-button" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>';
@@ -117,7 +118,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       '<a href="#" class="h5p-close" title="' + H5PEditor.t('core', 'close') + '"></a>' +
       '</div>';
 
-    var html = H5PEditor.createFieldMarkup(this.field, imageHtml);
+    var html = H5PEditor.createFieldMarkup(this.field, imageHtml, id);
 
     var $container = $(html).appendTo($wrapper);
     this.$files = $container.children('.file');
@@ -557,11 +558,13 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * Create the HTML for the dialog itself.
    *
    * @param {string} content HTML
-   * @param {boolean} [disableInsert]
+   * @param {boolean} disableInsert
+   * @param {string} id
+   * @param {boolean} hasDescription
    * @returns {string} HTML
    */
-  C.prototype.createInsertDialog = function (content, disableInsert) {
-    return '<div role="button" tabindex="0"' + ns.createAriaFriendlyAttributes(this.field) + ' class="h5p-add-file" title="' + H5PEditor.t('core', 'addFile') + '"></div>' +
+  C.createInsertDialog = function (content, disableInsert, id, hasDescription) {
+    return '<div role="button" tabindex="0" id="' + id + '"' + (hasDescription ? ' aria-describedby="' + ns.getDescriptionId(id) + '"' : '') + ' class="h5p-add-file" title="' + H5PEditor.t('core', 'addFile') + '"></div>' +
       '<div class="h5p-dialog-anchor"><div class="h5p-add-dialog">' +
         '<div class="h5p-add-dialog-table">' + content + '</div>' +
         '<div class="h5p-buttons">' +
@@ -575,11 +578,10 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * Creates the HTML needed for the given tab.
    *
    * @param {string} tab Tab Identifier
+   * @param {string} type 'video' or 'audio'
    * @returns {string} HTML
    */
-  C.prototype.createTabContent = function (tab) {
-    const type = this.field.type;
-
+  C.createTabContent = function (tab, type) {
     switch (tab) {
       case 'BasicFileUpload':
         const id = 'av-upload-' + C.getNextId();
@@ -604,12 +606,12 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * Creates the HTML for the tabbed insert media dialog. Only used when there
    * are extra tabs.
    *
+   * @param {string} type 'video' or 'audio'
+   * @param {Array} extraTabs
    * @returns {string} HTML
    */
-  C.prototype.createTabbedAdd = function () {
+  C.createTabbedAdd = function (type, extraTabs, id, hasDescription) {
     let i;
-
-    const extraTabs = this.field.widgetExtensions;
 
     const tabs = [
       'BasicFileUpload',
@@ -630,24 +632,27 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       const title = (i > 1 ? H5PEditor.t('H5PEditor.' + tab, 'title') : H5PEditor.t('core', 'tabTitle' + tab));
 
       tabsHTML += '<div class="av-tab' + (i === 0 ? ' selected' : '') + '" tabindex="' + tabindex + '" role="tab" aria-selected="' + selected + '" aria-controls="av-tabpanel-' + tabId + '" id="av-tab-' + tabId + '">' + title + '</div>';
-      tabpanelsHTML += '<div class="av-tabpanel" tabindex="-1" role="tabpanel" id="av-tabpanel-' + tabId + '" aria-labelledby="av-tab-' + tabId + '"' + (i === 0 ? '' : ' hidden=""') + '>' + this.createTabContent(tab) + '</div>';
+      tabpanelsHTML += '<div class="av-tabpanel" tabindex="-1" role="tabpanel" id="av-tabpanel-' + tabId + '" aria-labelledby="av-tab-' + tabId + '"' + (i === 0 ? '' : ' hidden=""') + '>' + C.createTabContent(tab) + '</div>';
     }
 
-    return this.createInsertDialog(
+    return C.createInsertDialog(
       '<div class="av-tablist" role="tablist" aria-label="' + H5PEditor.t('core', 'avTablistLabel') + '">' + tabsHTML + '</div>' + tabpanelsHTML,
-      true
+      true, id, hasDescription
     );
   };
 
   /**
    * Creates the HTML for the basic 'Upload or URL' dialog.
    *
+   * @param {string} type 'video' or 'audio'
+   * @param {string} id
+   * @param {boolean} hasDescription
    * @returns {string} HTML
    */
-  C.prototype.createAdd = function () {
-    return this.createInsertDialog(
+  C.createAdd = function (type, id, hasDescription) {
+    return C.createInsertDialog(
       '<div class="h5p-dialog-box">' +
-        this.createTabContent('BasicFileUpload') +
+        C.createTabContent('BasicFileUpload') +
       '</div>' +
       '<div class="h5p-or-vertical">' +
         '<div class="h5p-or-vertical-line"></div>' +
@@ -656,8 +661,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         '</div>' +
       '</div>' +
       '<div class="h5p-dialog-box">' +
-          this.createTabContent('InputLinkURL') +
-      '</div>'
+          C.createTabContent('InputLinkURL') +
+      '</div>',
+      false, id, hasDescription
     );
   };
 

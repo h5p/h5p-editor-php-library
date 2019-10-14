@@ -56,8 +56,6 @@ ns.isIE = navigator.userAgent.match(/; MSIE \d+.\d+;/) !== null;
  */
 ns.renderableCommonFields = {};
 
-ns.fieldCounter = 0;
-
 /**
  * Help load JavaScripts, prevents double loading.
  *
@@ -821,12 +819,12 @@ ns.createItem = function (type, label, description, content) {
  * @since 1.12
  * @param  {SemanticField} field
  * @param  {string} content
- *
+ * @param  {string} [inputId]
  * @return {string}
  */
-ns.createFieldMarkup = function (field, content) {
+ns.createFieldMarkup = function (field, content, inputId) {
   content = content || '';
-  var markup = this.createLabel(field) + this.createDescription(field.description, ns.getFieldId(field)) + content;
+  var markup = this.createLabel(field, '', inputId) + this.createDescription(field.description, inputId) + content;
 
   return this.wrapFieldMarkup(field, markup);
 };
@@ -836,14 +834,14 @@ ns.createFieldMarkup = function (field, content) {
  *
  * @param  {SemanticField} field
  * @param  {string} content
+ * @param  {string} [inputId]
  *
  * @return {string}
  */
-ns.createBooleanFieldMarkup = function (field, content) {
-  const id = ns.getFieldId(field);
-  var markup = '<label class="h5peditor-label" for="' + id + '">' +
+ns.createBooleanFieldMarkup = function (field, content, inputId) {
+  var markup = '<label class="h5peditor-label">' +
     content + (field.label || field.name || '') + '</label>' +
-    this.createDescription(field.description, id);
+    this.createDescription(field.description, inputId);
 
   return this.wrapFieldMarkup(field, markup);
 };
@@ -901,14 +899,19 @@ ns.createOption = function (value, text, selected) {
  * @param {String} value
  * @param {number} maxLength
  * @param {String} placeholder
- * @param {Object} [field]
+ * @param {number} [id]
+ * @param {number} [describedby]
  * @returns {String}
  */
-ns.createText = function (value, maxLength, placeholder, field) {
+ns.createText = function (value, maxLength, placeholder, id, describedby) {
   var html = '<input class="h5peditor-text" type="text"';
 
-  if (field !== undefined) {
-    html += ns.createAriaFriendlyAttributes(field);
+  if (id !== undefined) {
+    html += ' id="' + id + '"';
+  }
+
+  if (describedby !== undefined) {
+    html += ' aria-describedby="' + describedby + '"';
   }
 
   if (value !== undefined) {
@@ -924,17 +927,26 @@ ns.createText = function (value, maxLength, placeholder, field) {
   return html;
 };
 
+ns.getNextFieldId = (function (counter) {
+  /**
+   * Generates a consistent and unique field ID for the given field.
+   *
+   * @param {Object} field
+   * @return {number}
+   */
+  return function (field) {
+    return 'field-' + field.name.toLowerCase() +  '-' + (counter++);
+  };
+})(-1);
+
 /**
- * If needed, generates an id for the field, and returns it
- * @param {Object} field
- * @return {String}
+ * Helps generates a consistent description ID across fields.
+ *
+ * @param {string} id
+ * @return {string}
  */
-ns.getFieldId = function (field) {
-  if (field._id === undefined) {
-    ns.fieldCounter++;
-    field._id = 'field-' + ns.fieldCounter;
-  }
-  return field._id;
+ns.getDescriptionId = function (id) {
+  return id + '-description';
 };
 
 /**
@@ -942,11 +954,17 @@ ns.getFieldId = function (field) {
  *
  * @param {SemanticField} field
  * @param {String} [content]
+ * @param {String} [inputId]
  * @returns {String}
  */
-ns.createLabel = function (field, content) {
+ns.createLabel = function (field, content, inputId) {
   // New items can be added next to the label within the flex-wrapper
-  var html = '<label class="h5peditor-label-wrapper" for="' + ns.getFieldId(field) + '">';
+  var html = '<label class="h5peditor-label-wrapper"';
+
+  if (inputId !== undefined) {
+    html += ' for="' + inputId + '"';
+  }
+  html+= '>'
 
   // Temporary fix for the old version of CoursePresentation's custom editor
   if (field.widget === 'coursepresentation' && field.name === 'presentation') {
@@ -963,32 +981,17 @@ ns.createLabel = function (field, content) {
 /**
  * Create a description
  * @param {String} description
- * @param {Number} [fieldId]
+ * @param {number} [inputId] Used to reference description from input
  * @returns {string}
  */
-ns.createDescription = function (description, fieldId) {
+ns.createDescription = function (description, inputId) {
   var html = '';
   if (description !== undefined) {
     html += '<div class="h5peditor-field-description"';
-    if (fieldId !== undefined) {
-      html += ' id="' + fieldId + '-description"';
+    if (inputId !== undefined) {
+      html += ' id="' + ns.getDescriptionId(inputId) + '"';
     }
     html += '>' + description + '</div>';
-  }
-  return html;
-};
-
-/**
- * Creates attributes for form elements needed for accessibility
- * (i.e: id and aria-describedby)
- * @param {Object} field
- * @return {String}
- */
-ns.createAriaFriendlyAttributes = function (field) {
-  const id = ns.getFieldId(field);
-  let html = ' id="' + id + '"';
-  if (field.description) {
-    html += ' aria-describedby="' + id + '-description"';
   }
   return html;
 };

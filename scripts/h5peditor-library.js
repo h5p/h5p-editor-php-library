@@ -86,11 +86,11 @@ ns.Library.prototype.constructor = ns.Library;
 ns.Library.prototype.appendTo = function ($wrapper) {
   var that = this;
   var html = '<div class="field ' + this.field.type + '">';
-  const fieldId = ns.getFieldId(this.field);
+  const id = ns.getNextFieldId(this.field);
 
   if (this.field.label !== 0 && this.field.label !== undefined) {
     html += '<div class="h5p-editor-flex-wrapper">' +
-        '<label class="h5peditor-label-wrapper" for="' + fieldId + '">' +
+        '<label class="h5peditor-label-wrapper" for="' + id + '">' +
           '<span class="h5peditor-label' +
             (this.field.optional ? '' : ' h5peditor-required') + '">' +
               this.field.label +
@@ -99,11 +99,13 @@ ns.Library.prototype.appendTo = function ($wrapper) {
       '</div>';
   }
 
-  if (this.field.description) {
-    html += ns.createDescription(this.field.description, fieldId);
-  }
+  html += ns.createDescription(this.field.description, id);
 
-  html += '<select ' + ns.createAriaFriendlyAttributes(this.field) + '>' + ns.createOption('-', 'Loading...') + '</select>';
+  html += '<select id="' + id + '"';
+  if (this.field.description !== undefined) {
+    html += ' aria-describedby="' + ns.getDescriptionId(id) + '"';
+  }
+  html += '>' + ns.createOption('-', 'Loading...') + '</select>';
 
   /**
    * For some content types with custom editors, we don't want to add the copy

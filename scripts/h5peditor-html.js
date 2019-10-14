@@ -415,7 +415,12 @@ ns.Html.prototype.appendTo = function ($wrapper) {
  * Create HTML for the HTML field.
  */
 ns.Html.prototype.createHtml = function () {
-  var input = '<div class="ckeditor"' + ns.createAriaFriendlyAttributes(this.field) + ' tabindex="0" contenteditable="true">';
+  const id = ns.getNextFieldId(this.field);
+  var input = '<div id="' + id + '"';
+  if (this.field.description !== undefined) {
+    input += ' aria-describedby="' + ns.getDescriptionId(id) + '"';
+  }
+  input += ' class="ckeditor" tabindex="0" contenteditable="true">';
   if (this.value !== undefined) {
     input += this.value;
   }
@@ -424,7 +429,7 @@ ns.Html.prototype.createHtml = function () {
   }
   input += '</div>';
 
-  return ns.createFieldMarkup(this.field, ns.createImportantDescription(this.field.important) + input);
+  return ns.createFieldMarkup(this.field, ns.createImportantDescription(this.field.important) + input, id);
 };
 
 /**
