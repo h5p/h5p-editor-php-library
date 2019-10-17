@@ -632,7 +632,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       const title = (i > 1 ? H5PEditor.t('H5PEditor.' + tab, 'title') : H5PEditor.t('core', 'tabTitle' + tab));
 
       tabsHTML += '<div class="av-tab' + (i === 0 ? ' selected' : '') + '" tabindex="' + tabindex + '" role="tab" aria-selected="' + selected + '" aria-controls="av-tabpanel-' + tabId + '" id="av-tab-' + tabId + '">' + title + '</div>';
-      tabpanelsHTML += '<div class="av-tabpanel" tabindex="-1" role="tabpanel" id="av-tabpanel-' + tabId + '" aria-labelledby="av-tab-' + tabId + '"' + (i === 0 ? '' : ' hidden=""') + '>' + C.createTabContent(tab) + '</div>';
+      tabpanelsHTML += '<div class="av-tabpanel" tabindex="-1" role="tabpanel" id="av-tabpanel-' + tabId + '" aria-labelledby="av-tab-' + tabId + '"' + (i === 0 ? '' : ' hidden=""') + '>' + C.createTabContent(tab, type) + '</div>';
     }
 
     return C.createInsertDialog(
@@ -652,7 +652,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   C.createAdd = function (type, id, hasDescription) {
     return C.createInsertDialog(
       '<div class="h5p-dialog-box">' +
-        C.createTabContent('BasicFileUpload') +
+        C.createTabContent('BasicFileUpload', type) +
       '</div>' +
       '<div class="h5p-or-vertical">' +
         '<div class="h5p-or-vertical-line"></div>' +
@@ -661,7 +661,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         '</div>' +
       '</div>' +
       '<div class="h5p-dialog-box">' +
-          C.createTabContent('InputLinkURL') +
+          C.createTabContent('InputLinkURL', type) +
       '</div>',
       false, id, hasDescription
     );
