@@ -201,10 +201,10 @@ ns.Group.prototype.expand = function () {
   // re-creates the accessible element..
   // @see https://github.com/nvaccess/nvda/issues/8341
   // Should be fixeed by Firefox 70 (https://bugzilla.mozilla.org/show_bug.cgi?id=686400)
-  setTimeout(() => {
+  setTimeout(function () {
     this.trigger('expanded');
     this.$group.addClass('expanded');
-  }, 100);
+  }.bind(this), 100);
 };
 
 /**
@@ -225,10 +225,10 @@ ns.Group.prototype.collapse = function () {
     // re-creates the accessible element..
     // @see https://github.com/nvaccess/nvda/issues/8341
     // Should be fixeed by Firefox 70 (https://bugzilla.mozilla.org/show_bug.cgi?id=686400)
-    setTimeout(() => {
+    setTimeout(function () {
       this.trigger('collapsed');
       this.$group.removeClass('expanded');
-    }, 100);
+    }.bind(this), 100);
 
   }
 };
