@@ -59,23 +59,39 @@ ns.Library = function (parent, field, params, setValue) {
     self.$select.val(self.currentLibrary);
   });
 
-  H5P.externalDispatcher.on('datainclipboard', function (event) {
-    if (!self.libraries) {
-      return; // Libraries not loaded yet.
-    }
-
-    var canPaste = !event.data.reset;
-    if (canPaste) {
-      // Check if content type is supported here
-      canPaste = self.canPaste(H5P.getClipboard());
-    }
-    self.$pasteButton.prop('disabled', !canPaste);
-    self.$pasteButton.toggleClass('disabled', !canPaste);
-  });
+  H5P.externalDispatcher.on('datainclipboard', this.updateCopyPasteButtons.bind(this));
 };
 
 ns.Library.prototype = Object.create(H5P.EventDispatcher.prototype);
 ns.Library.prototype.constructor = ns.Library;
+
+
+/**
+ * Update state of copy and paste buttons dependent on what is currently in
+ * the clipboard
+ */
+ns.Library.prototype.updateCopyPasteButtons = function () {
+  if (!window.localStorage || !this.libraries) {
+    return;
+  }
+
+  // Check if content type is supported here
+  const pasteCheck = ns.canPastePlus(H5P.getClipboard(), this.libraries);
+  const canPaste = pasteCheck.canPaste;
+  const canCopy = (this.currentLibrary !== undefined && this.currentLibrary !== '-');
+
+  console.log(this, this.currentLibrary, canCopy);
+
+  this.$copyButton
+    .prop('disabled', !canCopy)
+    .toggleClass('disabled', !canCopy);
+
+  this.$pasteButton
+    .text(ns.t('core', canCopy ? 'pasteAndReplaceButton' : 'pasteButton'))
+    .attr('title', canPaste ? H5PEditor.t('core', 'pasteFromClipboard') : pasteCheck.description)
+    .toggleClass('disabled', !canPaste)
+    .prop('disabled', !canPaste);
+};
 
 /**
  * Append the library selector to the form.
@@ -160,10 +176,6 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   this.$libraryWrapper = this.$myField.children('.libwrap');
   if (window.localStorage) {
     this.$copyButton = this.$myField.find('.h5peditor-copy-button').click(function () {
-      if (this.classList.contains('disabled')) {
-        return;
-      }
-
       that.validate(); // Make sure all values are up-to-date
       H5P.clipboardify(that.params);
 
@@ -173,47 +185,10 @@ ns.Library.prototype.appendTo = function ($wrapper) {
         {position: {horizontal: 'center', vertical: 'above', noOverflowX: true}}
       );
     });
-    this.$pasteButton = this.$myField.find('.h5peditor-paste-button').click(function () {
-
-      // Inform user why paste is not possible
-      if (this.classList.contains('disabled')) {
-        const pasteCheck = ns.canPastePlus(H5P.getClipboard(), that.libraries);
-        if (pasteCheck.canPaste !== true) {
-          if (pasteCheck.reason === 'pasteTooOld' || pasteCheck.reason === 'pasteTooNew') {
-            that.confirmPasteError(pasteCheck.description, that.$select.offset().top, function () {});
-          }
-          else {
-            ns.attachToastTo(
-              this,
-              pasteCheck.description,
-              {position: {horizontal: 'center', vertical: 'above', noOverflowX: true}}
-            );
-          }
-          return;
-        }
-      }
-      that.replaceContent(H5P.getClipboard());
-    });
+    this.$pasteButton = this.$myField.find('.h5peditor-paste-button')
+      .click(that.pasteContent.bind(this));
   }
   ns.LibraryListCache.getLibraries(that.field.options, that.librariesLoaded, that);
-};
-
-/**
- * Check if the clipboard can be pasted into this selector.
- *
- * @param {Object} [clipboard]
- * @return {boolean}
- */
-ns.Library.prototype.canPaste = function (clipboard) {
-  if (clipboard && clipboard.generic) {
-    for (var i = 0; i < this.libraries.length; i++) {
-      if (this.libraries[i].uberName === clipboard.generic.library) {
-        return true;
-      }
-    }
-  }
-
-  return false;
 };
 
 /**
@@ -241,15 +216,15 @@ ns.Library.prototype.hideCopyPaste = function () {
 };
 
 /**
- * Replace library content using given clipboard
- *
- * @param {Object} [clipboard]
+ * Replace library content using the object in clipboard
  */
-ns.Library.prototype.replaceContent = function (clipboard) {
+ns.Library.prototype.pasteContent = function () {
   var self = this;
 
+  const clipboard = H5P.getClipboard();
+
   // Check if content type is supported here
-  if (!self.canPaste(clipboard)) {
+  if (!ns.canPaste(clipboard, self.libraries)) {
     console.error('Tried to paste unsupported sub-content');
     return;
   }
@@ -341,11 +316,7 @@ ns.Library.prototype.librariesLoaded = function (libList) {
     self.loadLibrary(self.$select.children(':last').val(), true);
   }
 
-  if (window.localStorage && self.canPaste(H5P.getClipboard())) {
-    // Toggle paste button when libraries are loaded
-    self.$pasteButton.prop('disabled', false);
-    self.$pasteButton.toggleClass('disabled', false);
-  }
+  self.updateCopyPasteButtons();
 
   if (self.runChangeCallback === true) {
     // In case a library has been selected programmatically trigger change events, e.g. a default library.
@@ -377,10 +348,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     delete this.params.metadata;
 
     this.$libraryWrapper.attr('class', 'libwrap');
-    this.$copyButton.prop('disabled', true);
-    this.$copyButton.toggleClass('disabled', true);
-    this.$pasteButton.text(ns.t('core', 'pasteButton'));
-    this.$pasteButton.attr('title', ns.t('core', 'pasteFromClipboard'));
+    this.updateCopyPasteButtons();
     this.change();
     return;
   }
@@ -434,12 +402,7 @@ ns.Library.prototype.loadLibrary = function (libraryName, preserveParams) {
     }
 
     ns.processSemanticsChunk(semantics, that.params.params, that.$libraryWrapper, that);
-    if (window.localStorage) {
-      that.$copyButton.prop('disabled', false);
-      that.$copyButton.toggleClass('disabled', false);
-      that.$pasteButton.text(ns.t('core', 'pasteAndReplaceButton'));
-      that.$pasteButton.attr('title', ns.t('core', 'pasteAndReplaceFromClipboard'));
-    }
+    that.updateCopyPasteButtons();
 
     if (that.metadataForm && metadataSettings.disableExtraTitleField) {
       // Find another location for the metadata button
