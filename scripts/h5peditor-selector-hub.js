@@ -200,9 +200,10 @@ ns.SelectorHub.prototype.resetSelection = function (library, params, metadata, e
  * Reset current library to the provided library.
  *
  * @param {boolean} canPaste
+ * @param {string} [title]
  */
-ns.SelectorHub.prototype.setCanPaste = function (canPaste) {
-  this.client.setCanPaste(canPaste);
+ns.SelectorHub.prototype.setCanPaste = function (canPaste, title) {
+  this.client.setCanPaste(canPaste, title);
 };
 
 /**
