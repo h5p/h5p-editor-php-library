@@ -104,6 +104,9 @@ ns.Html.prototype.createToolbar = function () {
     ns.$.merge(this.tags, ["tr", "td", "th", "colgroup", "thead", "tbody", "tfoot"]);
   }
   if (this.inTags("hr")) inserts.push("HorizontalRule");
+  if (this.inTags('code')) {
+    inserts.push('Code');
+  }
   if (inserts.length > 0) {
     toolbar.push({
       name: "insert",
@@ -294,7 +297,8 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     startupFocus: true,
     enterMode: CKEDITOR.ENTER_DIV,
     allowedContent: true, // Disables the ckeditor content filter, might consider using it later... Must make sure it doesn't remove math...
-    protectedSource: []
+    protectedSource: [],
+    contentsCss: ns.basePath + 'styles/css/cke-contents.css' // We want to customize the CSS inside the editor
   };
   ns.$.extend(ckConfig, this.createToolbar());
 
