@@ -40,5 +40,5 @@ CKEDITOR.editorConfig = function( config ) {
 	config.autoGrow_onStartup = true;
 	config.autoGrow_maxHeight = 500;
 	config.colorButton_enableMore = true;
-	config.plugins += ',removeRedundantNBSP';
+	config.plugins += ',removeRedundantNBSP,customCodeHighlighter';
 };

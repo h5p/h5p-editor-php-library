@@ -301,7 +301,8 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     enterMode: CKEDITOR.ENTER_DIV,
     allowedContent: true, // Disables the ckeditor content filter, might consider using it later... Must make sure it doesn't remove math...
     protectedSource: [],
-    contentsCss: ns.basePath + 'styles/css/cke-contents.css' // We want to customize the CSS inside the editor
+    contentsCss: ns.basePath + 'styles/css/cke-contents.css', // We want to customize the CSS inside the editor
+    codeSnippet_codeClass: 'h5p-hl'
   };
   ns.$.extend(ckConfig, this.createToolbar());
 
