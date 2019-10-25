@@ -106,6 +106,9 @@ ns.Html.prototype.createToolbar = function () {
   if (this.inTags("hr")) inserts.push("HorizontalRule");
   if (this.inTags('code')) {
     inserts.push('Code');
+    if (this.inTags('pre')) {
+      inserts.push('CodeSnippet');
+    }
   }
   if (inserts.length > 0) {
     toolbar.push({
