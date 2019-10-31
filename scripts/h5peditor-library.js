@@ -80,8 +80,6 @@ ns.Library.prototype.updateCopyPasteButtons = function () {
   const canPaste = pasteCheck.canPaste;
   const canCopy = (this.currentLibrary !== undefined && this.currentLibrary !== '-');
 
-  console.log(this, this.currentLibrary, canCopy);
-
   this.$copyButton
     .prop('disabled', !canCopy)
     .toggleClass('disabled', !canCopy);
