@@ -25,6 +25,16 @@ ns.Html.prototype.inTags = function (value) {
   return (ns.$.inArray(value.toLowerCase(), this.tags) >= 0);
 };
 
+/**
+ * Check if the provided button is enabled by config.
+ *
+ * @param {string} value
+ * @return {boolean}
+ */
+ns.Html.prototype.inButtons = function (button) {
+  return (H5PIntegration.wysiwygButtons !== undefined && H5PIntegration.wysiwygButtons.indexOf(button) !== -1);
+};
+
 ns.Html.prototype.createToolbar = function () {
   var basicstyles = [];
   var paragraph = [];
@@ -105,8 +115,10 @@ ns.Html.prototype.createToolbar = function () {
   }
   if (this.inTags("hr")) inserts.push("HorizontalRule");
   if (this.inTags('code')) {
-    inserts.push('Code');
-    if (this.inTags('pre')) {
+    if (this.inButtons('inlineCode')) {
+      inserts.push('Code');
+    }
+    if (this.inTags('pre') && this.inButtons('codeSnippet')) {
       inserts.push('CodeSnippet');
     }
   }
