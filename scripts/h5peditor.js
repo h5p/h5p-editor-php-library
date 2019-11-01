@@ -1383,11 +1383,21 @@ ns.canPastePlus = function (clipboard, libs) {
 
   // Check if clipboard library version is available
   const versionClip = clipboard.generic.library.split(' ')[1];
-  const match = candidates.some(function (candidate) {
-    return ('' + candidate.majorVersion + '.' + candidate.minorVersion) === versionClip;
-  });
-  if (match) {
-    return {canPaste: true};
+  for (let i = 0; i < candidates.length; i++) {
+    if (candidates[i].majorVersion + '.' + candidates[i].minorVersion === versionClip) {
+      if (candidates[i].restricted !== true) {
+        return {
+          canPaste: true
+        };
+      }
+      else {
+        return {
+          canPaste: false,
+          reason: 'pasteContentRestricted',
+          description: ns.t('core', 'pasteContentRestricted')
+        };
+      }
+    }
   }
 
   // Sort remaining candidates by version number

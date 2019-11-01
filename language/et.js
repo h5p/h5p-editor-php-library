@@ -194,6 +194,7 @@ H5PEditor.language.core = {
   pasteNoContent: 'Mälus ei ole H5P sisu',
   pasteError: 'Ei saa mälust kleepida',
   pasteContentNotSupported: 'The content in the H5P clipboard is not supported in this context',
+  pasteContentRestricted: 'The content in the clipboard has been restricted on this site',
   pasteTooOld: 'The content in the H5P clipboard is of a lower version (:clip) than what is supported in this context (:local), if possible try to have the content you want to paste upgraded, copy it again and try pasting it here.',
   pasteTooNew: 'The content in the H5P clipboard is of a higher version (:clip) than what is supported in this context (:local), if possible try to have this content upgraded first, and then try pasting the content here again.',
   ok: 'Hästi',
