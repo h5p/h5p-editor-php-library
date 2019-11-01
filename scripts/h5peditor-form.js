@@ -413,6 +413,11 @@ ns.Form.prototype.remove = function () {
 ns.Form.prototype.processSemantics = function (semantics, defaultParams, metadata) {
   this.metadata = (metadata ? metadata : defaultParams.metadata || {});
 
+  // Set language initially used
+  if (!this.metadata.defaultLanguage) {
+    this.metadata.defaultLanguage = ns.defaultLanguage;
+  }
+
   if (ns.enableMetadata(this.currentLibrary)) {
     this.metadataForm = new ns.MetadataForm(this, this.metadata, this.$form.children('.tree'), true);
   }
