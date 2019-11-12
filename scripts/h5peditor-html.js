@@ -32,7 +32,7 @@ ns.Html.prototype.inTags = function (value) {
  * @return {boolean}
  */
 ns.Html.prototype.inButtons = function (button) {
-  return (H5PIntegration.editor.wysiwygButtons !== undefined && H5PIntegration.editor.wysiwygButtons.indexOf(button) !== -1);
+  return (H5PIntegration.editor !== undefined && H5PIntegration.editor.wysiwygButtons !== undefined && H5PIntegration.editor.wysiwygButtons.indexOf(button) !== -1);
 };
 
 ns.Html.prototype.createToolbar = function () {
