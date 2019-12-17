@@ -582,20 +582,22 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * @returns {string} HTML
    */
   C.createTabContent = function (tab, type) {
+    const isAudio = (type === 'audio');
+
     switch (tab) {
       case 'BasicFileUpload':
         const id = 'av-upload-' + C.getNextId();
-        return '<h3 id="' + id + '">' + H5PEditor.t('core', type === 'audio' ? 'uploadAudioTitle' : 'uploadVideoTitle') + '</h3>' +
+        return '<h3 id="' + id + '">' + H5PEditor.t('core', isAudio ? 'uploadAudioTitle' : 'uploadVideoTitle') + '</h3>' +
           '<div class="h5p-file-drop-upload" tabindex="0" role="button" aria-labelledby="' + id + '">' +
-            '<div class="h5p-file-drop-upload-inner"/>' +
+            '<div class="h5p-file-drop-upload-inner ' + type + '"/>' +
           '</div>';
 
       case 'InputLinkURL':
-        return '<h3>' + H5PEditor.t('core', type === 'audio' ? 'enterAudioTitle' : 'enterVideoTitle') + '</h3>' +
-          '<div class="h5p-file-url-wrapper">' +
-            '<input type="text" placeholder="' + H5PEditor.t('core', type === 'audio' ? 'enterAudioUrl' : 'enterVideoUrl') + '" class="h5p-file-url h5peditor-text"/>' +
+        return '<h3>' + H5PEditor.t('core', isAudio ? 'enterAudioTitle' : 'enterVideoTitle') + '</h3>' +
+          '<div class="h5p-file-url-wrapper ' + type + '">' +
+            '<input type="text" placeholder="' + H5PEditor.t('core', isAudio ? 'enterAudioUrl' : 'enterVideoUrl') + '" class="h5p-file-url h5peditor-text"/>' +
           '</div>' +
-          (type === 'audio' ? '' : '<div class="h5p-errors"></div><div class="h5peditor-field-description">' + H5PEditor.t('core', 'addVideoDescription') + '</div>');
+          (isAudio ? '' : '<div class="h5p-errors"></div><div class="h5peditor-field-description">' + H5PEditor.t('core', 'addVideoDescription') + '</div>');
 
       default:
         return '';
