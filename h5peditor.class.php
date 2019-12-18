@@ -596,6 +596,9 @@ class H5peditor {
     if (!empty($cached_library->example)) {
       $lib['example'] = $cached_library->example;
     }
+    if (!empty($cached_library->icons)) {
+      $lib['icons'] = json_decode($cached_library->icons);
+    }
 
     return $lib;
   }
