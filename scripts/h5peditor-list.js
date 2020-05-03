@@ -231,6 +231,7 @@ H5PEditor.List = (function ($) {
         var params = parameters.splice(currentIndex, 1);
         parameters.splice(newIndex, 0, params[0]);
       }
+      self.trigger('movedItem', {from: currentIndex, to: newIndex});
     };
 
     /**
