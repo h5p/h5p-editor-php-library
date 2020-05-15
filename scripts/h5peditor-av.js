@@ -589,7 +589,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         const id = 'av-upload-' + C.getNextId();
         return '<h3 id="' + id + '">' + H5PEditor.t('core', isAudio ? 'uploadAudioTitle' : 'uploadVideoTitle') + '</h3>' +
           '<div class="h5p-file-drop-upload" tabindex="0" role="button" aria-labelledby="' + id + '">' +
-            '<div class="h5p-file-drop-upload-inner ' + type + '"/>' +
+            '<div class="h5p-file-drop-upload-inner ' + type + '"></div>' +
           '</div>';
 
       case 'InputLinkURL':
