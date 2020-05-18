@@ -119,8 +119,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       '</div>';
 
     var html = H5PEditor.createFieldMarkup(this.field, imageHtml, id);
-
     var $container = $(html).appendTo($wrapper);
+
     this.$files = $container.children('.file');
     this.$add = $container.children('.h5p-add-file').click(function () {
       self.$addDialog.addClass('h5p-open');
@@ -587,7 +587,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         const id = 'av-upload-' + C.getNextId();
         return '<h3 id="' + id + '">' + H5PEditor.t('core', type === 'audio' ? 'uploadAudioTitle' : 'uploadVideoTitle') + '</h3>' +
           '<div class="h5p-file-drop-upload" tabindex="0" role="button" aria-labelledby="' + id + '">' +
-            '<div class="h5p-file-drop-upload-inner"/>' +
+            '<div class="h5p-file-drop-upload-inner ' + type + '"></div>' +
           '</div>';
 
       case 'InputLinkURL':
