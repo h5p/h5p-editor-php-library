@@ -324,11 +324,6 @@ ns.Editor.prototype.getContent = function (submit, error) {
     return;
   }
 
-  // Convert title to preserve html entities
-  const tmp = document.createElement('div');
-  tmp.innerHTML = content.title;
-  content.title = tmp.textContent; // WARNING: This is text, do NOT insert as HTML.
-
   library = new iframeEditor.ContentType(content.library);
   const upgradeLibrary = iframeEditor.ContentType.getPossibleUpgrade(library, this.selector.libraries.libraries !== undefined ? this.selector.libraries.libraries : this.selector.libraries);
   if (upgradeLibrary) {
