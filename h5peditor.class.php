@@ -157,6 +157,12 @@ class H5peditor {
     // Keep track of current content ID (used when processing files)
     $this->content = $content;
 
+    // Keep track of files already found in content folder.
+    // The reason for doing this is that a single file can be used several times
+    // in an H5P, and checking each file is time consuming if located on an
+    // external service (e.g. S3)
+    $this->filesInContentFolder = [];
+
     // Find new libraries/content dependencies and files.
     // Start by creating a fake library field to process. This way we get all the dependencies of the main library as well.
     $field = (object) array(
@@ -287,12 +293,17 @@ class H5peditor {
       // Update Params with correct filename
       $params->path = $matches[5];
     }
-    else {
+    // If file is already found in content folder, there's no need to check again
+    elseif (!in_array($params->path, $this->filesInContentFolder)) {
       // Check if file exists in content folder
       $fileId = $this->h5p->fs->getContentFile($params->path, $this->content);
       if ($fileId) {
         // Mark the file as a keeper
         $this->storage->keepFile($fileId);
+
+        // Mark the file as existing in the content folder.
+        // (to avoid invoking getContentFile more than needed)
+        $this->filesInContentFolder[] = $params->path;
       }
       else {
         // File is not in content folder, try to copy it from the editor tmp dir
