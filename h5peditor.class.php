@@ -50,7 +50,7 @@ class H5peditor {
     'scripts/h5peditor-pre-save.js',
     'ckeditor/ckeditor.js',
   );
-  private $h5p, $storage;
+  private $h5p, $storage, $filesInContentFolder;
   public $ajax, $ajaxInterface, $content;
 
   /**
@@ -66,6 +66,7 @@ class H5peditor {
     $this->storage = $storage;
     $this->ajaxInterface = $ajaxInterface;
     $this->ajax = new H5PEditorAjax($h5p, $this, $storage);
+    $this->filesInContentFolder = [];
   }
 
   /**
@@ -287,8 +288,11 @@ class H5peditor {
     $matches = array();
     if (preg_match($this->h5p->relativePathRegExp, $params->path, $matches)) {
 
-      // Create a copy of the file
-      $this->h5p->fs->cloneContentFile($matches[5], $matches[4], $this->content);
+      if (!in_array($matches[5], $this->filesInContentFolder)) {
+        // Create a copy of the file
+        $this->h5p->fs->cloneContentFile($matches[5], $matches[4], $this->content);
+        $this->filesInContentFolder[] = $matches[5];
+      }
 
       // Update Params with correct filename
       $params->path = $matches[5];
@@ -309,6 +313,7 @@ class H5peditor {
         // File is not in content folder, try to copy it from the editor tmp dir
         // to content folder.
         $this->h5p->fs->cloneContentFile($params->path, 'editor', $this->content);
+        $this->filesInContentFolder[] = $params->path;
         // (not removed in case someone has copied it)
         // (will automatically be removed after 24 hours)
       }
