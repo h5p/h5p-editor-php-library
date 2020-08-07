@@ -174,10 +174,12 @@ class H5peditor {
       'params' => $newParameters
     );
     $this->processField($field, $libraryParams, $newFiles);
+    $this->h5p->fs->waitForPendingPromises();
 
     if ($oldLibrary !== NULL) {
       // Find old files and libraries.
       $this->processSemantics($oldFiles, $this->h5p->loadLibrarySemantics($oldLibrary['name'], $oldLibrary['majorVersion'], $oldLibrary['minorVersion']), $oldParameters);
+      $this->h5p->fs->waitForPendingPromises();
 
       // Remove old files.
       for ($i = 0, $s = count($oldFiles); $i < $s; $i++) {
@@ -299,24 +301,16 @@ class H5peditor {
     }
     // If file is already found in content folder, there's no need to check again
     elseif (!in_array($params->path, $this->filesInContentFolder)) {
-      // Check if file exists in content folder
-      $fileId = $this->h5p->fs->getContentFile($params->path, $this->content);
-      if ($fileId) {
-        // Mark the file as a keeper
-        $this->storage->keepFile($fileId);
+      // If file is already in content folder the cloning will fail silently,
+      // but that is better than checking if the file already exists in the
+      // content folder for every file..
 
-        // Mark the file as existing in the content folder.
-        // (to avoid invoking getContentFile more than needed)
-        $this->filesInContentFolder[] = $params->path;
-      }
-      else {
-        // File is not in content folder, try to copy it from the editor tmp dir
-        // to content folder.
-        $this->h5p->fs->cloneContentFile($params->path, 'editor', $this->content);
-        $this->filesInContentFolder[] = $params->path;
-        // (not removed in case someone has copied it)
-        // (will automatically be removed after 24 hours)
-      }
+      // File is not in content folder, try to copy it from the editor tmp dir
+      // to content folder.
+      $this->h5p->fs->cloneContentFile($params->path, 'editor', $this->content);
+      $this->filesInContentFolder[] = $params->path;
+      // (not removed in case someone has copied it)
+      // (will automatically be removed after 24 hours)
     }
 
     $files[] = $params->path;
