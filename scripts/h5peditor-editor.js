@@ -243,7 +243,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
 
   // Need to put this after the above replaceAll(), since that one makes Safari
   // 11 trigger a load event for the iframe
-  $iframe.load(load);
+  $iframe.on('load', load);
 
   // Populate iframe with the H5P Editor
   // (should not really be done until 'load', but might be here in case the iframe is reloaded?)
@@ -336,11 +336,6 @@ ns.Editor.prototype.getContent = function (submit, error) {
     }
     return;
   }
-
-  // Convert title to preserve html entities
-  const tmp = document.createElement('div');
-  tmp.innerHTML = content.title;
-  content.title = tmp.textContent; // WARNING: This is text, do NOT insert as HTML.
 
   library = new iframeEditor.ContentType(content.library);
   const upgradeLibrary = iframeEditor.ContentType.getPossibleUpgrade(library, this.selector.libraries.libraries !== undefined ? this.selector.libraries.libraries : this.selector.libraries);

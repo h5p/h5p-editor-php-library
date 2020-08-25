@@ -192,6 +192,7 @@ H5PEditor.language.core = {
   pasteNoContent: 'Nenhum conteúdo H5P na área de transferência',
   pasteError: 'Não foi possível colar',
   pasteContentNotSupported: 'O conteúdo que está a tentar colar não é suportado neste contexto',
+  pasteContentRestricted: 'The content in the clipboard has been restricted on this site',
   pasteTooOld: 'O conteúdo que está a tentar colar é de uma versão inferior (:clip) à versão suportada neste contexto (:local). Se possível, tente atualizar o conteúdo que deseja colar, copie-o novamente e tente colá-lo aqui.',
   pasteTooNew: 'O conteúdo que está a tentar colar é de uma versão superior (:clip) à versão suportada neste contexto (:local). Se possível, tente atualizar este conteúdo, e depois tente colar novamente.',
   ok: 'OK',
@@ -206,11 +207,11 @@ H5PEditor.language.core = {
   language: 'Idioma',
   noLanguagesSupported: 'Nenhum idioma suportado',
   changeLanguage: 'Alterar idioma para :language?',
-  thisWillPotentially: "Isto redefinirá potencialmente todos os textos e traduções. Não pode desfazer esta ação. O conteúdo em si não será alterado. Pretende prosseguir?",
+  thisWillPotentially: 'Isto redefinirá potencialmente todos os textos e traduções. Não pode desfazer esta ação. O conteúdo em si não será alterado. Pretende prosseguir?',
   notAllTextsChanged: 'Nem todos os textos foram alterados. Existe apenas uma tradução parcial para :language.',
   contributeTranslations: 'Se pretende completar a tradução para :language, clique para obter informações sobre <a href=":url" target="_new">contribuir com traduções para H5P</a>',
   unknownLibrary: 'Infelizmente, o tipo de conteúdo selecionado \'%lib\' não está instalado neste sistema.',
   proceedButtonLabel: 'Prosseguir para guardar',
   enterFullscreenButtonLabel: 'Mostrar em ecrã inteiro',
-  exitFullscreenButtonLabel: 'Sair de ecrã inteiro'
+  exitFullscreenButtonLabel: 'Sair de ecrã inteiro',
 };

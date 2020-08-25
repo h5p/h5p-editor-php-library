@@ -192,6 +192,7 @@ H5PEditor.language.core = {
   pasteNoContent: 'Panoda H5P içeriği yok',
   pasteError: 'Panodan H5P içeriği yapıştırılamadı',
   pasteContentNotSupported: 'H5P panosundaki içerik bu bağlamda desteklenmiyor',
+  pasteContentRestricted: 'The content in the clipboard has been restricted on this site',
   pasteTooOld: 'H5P panosundaki içerik, bu bağlamda (:local) desteklenenden daha düşük bir sürümdür (:clip) mümkünse yapıştırmak istediğiniz içeriğin yükseltilmesini sağlayın , tekrar kopyalayın ve buraya yapıştırmayı deneyin.',
   pasteTooNew: 'H5P panosundaki içerik, bu bağlamda (:local) desteklenenden daha yüksek bir versiyona (:clip) sahiptir, mümkünse önce bu içeriğin yükseltilmesini sağlayın ve ardından içeriği buraya yapıştırmayı deneyin.',
   ok: 'TAMAM',
@@ -206,11 +207,11 @@ H5PEditor.language.core = {
   language: 'Dil',
   noLanguagesSupported: 'Desteklenen Dil Yok',
   changeLanguage: 'Dili değiştir :language?',
-  thisWillPotentially: "Bu, tüm metni ve çevirileri potansiyel olarak sıfırlayacaktır. Bu değişikliği sıfırlayamazsınız. İçeriğin kendisi değişmeyecek. Devam etmek istiyor musunuz?",
+  thisWillPotentially: 'Bu, tüm metni ve çevirileri potansiyel olarak sıfırlayacaktır. Bu değişikliği sıfırlayamazsınız. İçeriğin kendisi değişmeyecek. Devam etmek istiyor musunuz?',
   notAllTextsChanged: 'Metinlerin tümü değişmedi, yalnızca kısmi kapsama alanı var :language.',
   contributeTranslations: 'Çeviriyi tamamlamak istiyorsanız :language hakkında bilgi edinebilirsiniz <a href=":url" target="_new">H5P’ye çevirilerde katkıda bulunmak</a>',
   unknownLibrary: 'Ne yazık ki, seçilen içerik türü \'%lib \' bu sisteme yüklenmedi.',
   proceedButtonLabel: 'Kaydetmeye devam et',
   enterFullscreenButtonLabel: 'Tam ekran yap',
-  exitFullscreenButtonLabel: 'Tam ekrandan çık'
+  exitFullscreenButtonLabel: 'Tam ekrandan çık',
 };
