@@ -6,7 +6,7 @@ window.ns = window.H5PEditor = window.H5PEditor || {};
  *
  * @class H5PEditor.Editor
  * @param {string} library
- * @param {Object} defaultParams
+ * @param {string} defaultParams
  * @param {Element} replace
  * @param {Function} iframeLoaded
  */
@@ -15,6 +15,14 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
 
   // Library may return "0", make sure this doesn't return true in checks
   library = library && library != 0 ? library : '';
+
+  let parsedParams = {};
+  try {
+    parsedParams = JSON.parse(defaultParams);
+  }
+  catch (e) {
+    // Ignore failed parses, this should be handled elsewhere
+  }
 
   // Define iframe DOM Element through jQuery
   var $iframe = ns.$('<iframe/>', {
@@ -32,6 +40,11 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     'allowfullscreen': 'allowfullscreen',
     'allow': "fullscreen"
   });
+  const language = (parsedParams.metadata && parsedParams.metadata.defaultLanguage)
+    ? parsedParams.metadata.defaultLanguage
+    : ns.contentLanguage;
+  $iframe.attr('lang', language);
+
 
   // The DOM element is often used directly
   var iframe = $iframe.get(0);
