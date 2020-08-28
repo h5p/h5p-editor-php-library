@@ -40,10 +40,22 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     'allowfullscreen': 'allowfullscreen',
     'allow': "fullscreen"
   });
-  const language = (parsedParams.metadata && parsedParams.metadata.defaultLanguage)
-    ? parsedParams.metadata.defaultLanguage
+  const metadata = parsedParams.metadata;
+  const language = (metadata && metadata.defaultLanguage)
+    ? metadata.defaultLanguage
     : ns.contentLanguage;
   $iframe.attr('lang', language);
+
+  let title = ''
+  if (metadata) {
+    if (metadata.a11yTitle) {
+      title = metadata.a11yTitle;
+    }
+    else if (metadata.title) {
+      title = metadata.title;
+    }
+  }
+  $iframe.attr('title', title);
 
 
   // The DOM element is often used directly
@@ -147,7 +159,8 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
      * Trigger semi-fullscreen for $element.
      *
      * @param {jQuery} $element Element to put in semi-fullscreen
-     * @param {function} before Callback that runs after entering semi-fullscreen
+     * @param {function} before Callback that runs after entering
+     *   semi-fullscreen
      * @param {function} done Callback that runs after exiting semi-fullscreen
      * @return {function} Exit trigger
      */
@@ -574,7 +587,8 @@ ns.language = {};
  * @param {string} library The library name(machineName), or "core".
  * @param {string} key Translation string identifier.
  * @param {Object} [vars] Placeholders and values to replace in the text.
- * @returns {string} Translated string, or a text if string translation is missing.
+ * @returns {string} Translated string, or a text if string translation is
+ *   missing.
  */
 ns.t = function (library, key, vars) {
   if (ns.language[library] === undefined) {

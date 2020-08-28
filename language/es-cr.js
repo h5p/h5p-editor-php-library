@@ -214,4 +214,6 @@ H5PEditor.language.core = {
   proceedButtonLabel: 'Proceed to save',
   enterFullscreenButtonLabel: 'Enter fullscreen',
   exitFullscreenButtonLabel: 'Exit fullscreen',
+  a11yTitleShowLabel: 'Show label for AT',
+  a11yTitleHideLabel: 'Hide label for AT',
 };

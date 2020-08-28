@@ -215,5 +215,7 @@ H5PEditor.language.core = {
   unknownLibrary: 'Tamalez, aukeratutako \'%lib\' eduki-mota ez dago sistema honetan instalatuta.',
   proceedButtonLabel: 'Jarraitu eta gorde',
   enterFullscreenButtonLabel: 'Erabili pantaila osoko modura',
-  exitFullscreenButtonLabel: 'Irten pantaila osoko modutik'
+  exitFullscreenButtonLabel: 'Irten pantaila osoko modutik',
+  a11yTitleShowLabel: 'Show label for AT',
+  a11yTitleHideLabel: 'Hide label for AT',
 };

@@ -213,5 +213,7 @@ H5PEditor.language.core = {
   unknownLibrary: 'Jammer genoeg is het geselecteerde content type \'%lib\' niet geïnstalleerd op dit systeem.',
   proceedButtonLabel: 'Doorgaan naar opslaan',
   enterFullscreenButtonLabel: 'In volledig scherm werken',
-  exitFullscreenButtonLabel: 'Volledig scherm afsluiten'
+  exitFullscreenButtonLabel: 'Volledig scherm afsluiten',
+  a11yTitleShowLabel: 'Show label for AT',
+  a11yTitleHideLabel: 'Hide label for AT',
 };

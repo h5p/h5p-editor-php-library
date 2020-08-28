@@ -214,4 +214,6 @@ H5PEditor.language.core = {
   proceedButtonLabel: 'Kaydetmeye devam et',
   enterFullscreenButtonLabel: 'Tam ekran yap',
   exitFullscreenButtonLabel: 'Tam ekrandan çık',
+  a11yTitleShowLabel: 'Show label for AT',
+  a11yTitleHideLabel: 'Hide label for AT',
 };

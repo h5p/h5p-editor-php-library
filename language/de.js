@@ -194,7 +194,7 @@ H5PEditor.language.core = {
   pasteContentNotSupported: 'Der Inhalt der Zwischenablage kann an dieser Stelle nicht eingefügt werden',
   pasteContentRestricted: 'Der Inhalt der Zwischenlage kann auf dieser Seite nicht eingefügt werden, da die Nutzung des Inhaltstyps von den Administratoren eingeschränkt wurde',
   pasteTooOld: 'Der Inhalt in der Zwischenablage liegt in einer zu alten Version vor (:clip), die nicht an dieser Stelle eingefügt werden kann (erfordert :local). Aktualisiere bitte den Inhalt, den du einfügen möchtest, kopiere ihn erneut und füge ihn dann hier wieder ein.',
-  pasteTooNew: 'Der Inhalt in der Zwischenablage liegt in einer zu neuen Version vor (:clip), die nicht an dieser Stelle eingefügt werden kann (erfordert: local). Aktualisiere bitte den Inhalt, in den du hineinkopieren möchtest und versuche es dann erneut. ',  
+  pasteTooNew: 'Der Inhalt in der Zwischenablage liegt in einer zu neuen Version vor (:clip), die nicht an dieser Stelle eingefügt werden kann (erfordert: local). Aktualisiere bitte den Inhalt, in den du hineinkopieren möchtest und versuche es dann erneut. ',
   ok: 'OK',
   avTablistLabel: 'Einfügen über',
   tabTitleBasicFileUpload: 'Datei hochladen',
@@ -213,5 +213,7 @@ H5PEditor.language.core = {
   unknownLibrary: 'Leider ist der ausgewählte Inhaltstyp \'%lib\' auf dieser Seite nicht installiert.',
   proceedButtonLabel: 'Weiter zum Speichern',
   enterFullscreenButtonLabel: 'Vollbild',
-  exitFullscreenButtonLabel: 'Vollbild beenden'
+  exitFullscreenButtonLabel: 'Vollbild beenden',
+  a11yTitleShowLabel: 'Show label for AT',
+  a11yTitleHideLabel: 'Hide label for AT',
 };

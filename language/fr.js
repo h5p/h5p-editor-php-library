@@ -213,5 +213,7 @@ H5PEditor.language.core = {
   unknownLibrary: 'Malheureusement, la bibliothèque pour le type de contenu sélectionné \'%lib\' n\'est pas installée sur votre système.',
   proceedButtonLabel: 'Enregistrer',
   enterFullscreenButtonLabel: 'Afficher en plein écran',
-  exitFullscreenButtonLabel: 'Quitter le mode plein écran'
+  exitFullscreenButtonLabel: 'Quitter le mode plein écran',
+  a11yTitleShowLabel: 'Show label for AT',
+  a11yTitleHideLabel: 'Hide label for AT',
 };

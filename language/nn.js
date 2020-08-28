@@ -213,5 +213,7 @@ H5PEditor.language.core = {
   unknownLibrary: 'Dessverre var ikke den valgte \'%lib\'-innholdstypen installert på dette systemet.',
   proceedButtonLabel: 'Proceed to save',
   enterFullscreenButtonLabel: 'Enter fullscreen',
-  exitFullscreenButtonLabel: 'Exit fullscreen'
+  exitFullscreenButtonLabel: 'Exit fullscreen',
+  a11yTitleShowLabel: 'Show label for AT',
+  a11yTitleHideLabel: 'Hide label for AT',
 };
