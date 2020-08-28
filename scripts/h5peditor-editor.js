@@ -41,11 +41,6 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     'allow': "fullscreen"
   });
   const metadata = parsedParams.metadata;
-  const language = (metadata && metadata.defaultLanguage)
-    ? metadata.defaultLanguage
-    : ns.contentLanguage;
-  $iframe.attr('lang', language);
-
   let title = ''
   if (metadata) {
     if (metadata.a11yTitle) {
@@ -70,9 +65,11 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     if (!iframe.contentDocument) {
       return; // Not possible, iframe 'load' hasn't been triggered yet
     }
+    const language = metadata && metadata.defaultLanguage
+      ? metadata.defaultLanguage : ns.contentLanguage;
     iframe.contentDocument.open();
     iframe.contentDocument.write(
-      '<!doctype html><html>' +
+      '<!doctype html><html lang="' + language + '">' +
       '<head>' +
       ns.wrap('<link rel="stylesheet" href="', ns.assets.css, '">') +
       ns.wrap('<script src="', ns.assets.js, '"></script>') +
