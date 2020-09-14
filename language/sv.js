@@ -215,5 +215,6 @@ H5PEditor.language.core = {
   unknownLibrary: 'Tyvärr, innehållstypen \'%lib\' är inte installerad på denna webbplats.',
   proceedButtonLabel: 'Fortsätt för att spara',
   enterFullscreenButtonLabel: 'Helskärmsläge',
-  exitFullscreenButtonLabel: 'Avsluta helskärm'
+  exitFullscreenButtonLabel: 'Avsluta helskärm',
+  reuseSuccess: ':title was successfully reused!',
 };

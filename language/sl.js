@@ -215,5 +215,6 @@ H5PEditor.language.core = {
   unknownLibrary: 'Na žalost izbran tip vsebine \'%lib\' ni nameščen na tem spletnem mestu',
   proceedButtonLabel: 'Shrani',
   enterFullscreenButtonLabel: 'Vklopi celozaslonski način',
-  exitFullscreenButtonLabel: 'Izklopi celozaslonski način'
+  exitFullscreenButtonLabel: 'Izklopi celozaslonski način',
+  reuseSuccess: ':title was successfully reused!',
 };

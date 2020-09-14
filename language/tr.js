@@ -216,4 +216,5 @@ H5PEditor.language.core = {
   exitFullscreenButtonLabel: 'Tam ekrandan çık',
   a11yTitleShowLabel: 'Show label for AT',
   a11yTitleHideLabel: 'Hide label for AT',
+  reuseSuccess: ':title was successfully reused!',
 };

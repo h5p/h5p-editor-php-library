@@ -215,5 +215,6 @@ H5PEditor.language.core = {
   unknownLibrary: 'Bohužel vybraný typ obsahu  \'%lib\' není v tomto systému nainstalován.',
   proceedButtonLabel: 'Pokračovat k uložení',
   enterFullscreenButtonLabel: 'Přejít na celou obrazovku',
-  exitFullscreenButtonLabel: 'Ukončit celou obrazovku'
+  exitFullscreenButtonLabel: 'Ukončit celou obrazovku',
+  reuseSuccess: ':title was successfully reused!',
 };

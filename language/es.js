@@ -218,4 +218,5 @@ H5PEditor.language.core = {
   exitFullscreenButtonLabel: 'Salir de pantalla completa',
   a11yTitleShowLabel: 'Show label for AT',
   a11yTitleHideLabel: 'Hide label for AT',
+  reuseSuccess: ':title was successfully reused!',
 };
