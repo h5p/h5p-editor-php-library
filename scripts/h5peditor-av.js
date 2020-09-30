@@ -673,11 +673,18 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * Providers incase mime type is unknown.
    * @public
    */
-  C.providers = [{
-    name: 'YouTube',
-    regexp: /(?:https?:\/\/)?(?:www\.)?(?:(?:youtube.com\/(?:attribution_link\?(?:\S+))?(?:v\/|embed\/|watch\/|(?:user\/(?:\S+)\/)?watch(?:\S+)v\=))|(?:youtu.be\/|y2u.be\/))([A-Za-z0-9_-]{11})/i,
-    aspectRatio: '16:9',
-  }];
+  C.providers = [
+    {
+      name: 'YouTube',
+      regexp: /(?:https?:\/\/)?(?:www\.)?(?:(?:youtube.com\/(?:attribution_link\?(?:\S+))?(?:v\/|embed\/|watch\/|(?:user\/(?:\S+)\/)?watch(?:\S+)v\=))|(?:youtu.be\/|y2u.be\/))([A-Za-z0-9_-]{11})/i,
+      aspectRatio: '16:9',
+    },
+    {
+      name: 'Panopto',
+      regexp: /^[^\/]+:\/\/([^\/]*panopto\.[^\/]+)\/Panopto\/.+\?id=(.+)$/i,
+      aspectRatio: '16:9',
+    }
+  ];
 
   // Avoid ID attribute collisions
   let idCounter = 0;
