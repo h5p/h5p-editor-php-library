@@ -114,7 +114,7 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
 
       switch (field.type) {
         case 'image':
-          return 'image/jpeg,image/png,image/gif';
+          return 'image/jpeg,image/png,image/gif,image/svg+xml';
         case 'audio':
           return 'audio/mpeg,audio/x-wav,audio/ogg,audio/mp4';
         case 'video':

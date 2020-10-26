@@ -121,14 +121,20 @@ class H5peditorFile {
           'image/png' => 'png',
           'image/jpeg' => array('jpg', 'jpeg'),
           'image/gif' => 'gif',
+          'image/svg+xml' => 'svg',
         );
         if (!$this->check($allowed)) {
-          $this->result->error = $this->interface->t('Invalid image file format. Use jpg, png or gif.');
+          $this->result->error = $this->interface->t('Invalid image file format. Use jpg, png, gif or svg.');
           return FALSE;
         }
 
         // Image size from temp file
-        $image = @getimagesize($_FILES['file']['tmp_name']);
+        if (strtolower($this->extension) === 'svg') {
+          $image = $this->getSVGimagesize($_FILES['file']['tmp_name']);
+        }
+        else {
+          $image = @getimagesize($_FILES['file']['tmp_name']);
+        }
 
         if (!$image) {
           $this->result->error = $this->interface->t('File is not an image.');
@@ -231,5 +237,102 @@ class H5peditorFile {
     header('Content-Type: text/plain; charset=utf-8');
 
     print $this->getResult();
+  }
+
+  /**
+   * Get imagesize like getimagesize would for non-SVG images.
+   * Tries to determine fixed dimensions, then ratio or uses fallback.
+   * @param {string} $filename File name.
+   * @param {int[]} [$fallbackSize=[300,150]] Fallback size.
+   * @return {int[]} Width and height of image.
+   */
+  private function getSVGimagesize($filename, $fallbackSize = [300, 150]) {
+    if (!function_exists('simplexml_load_file')) {
+      return $fallbackSize;
+    }
+
+    $xmlget = simplexml_load_file($filename);
+
+    if (!$xmlget || $xmlget->attributes() === null) {
+      return $fallbackSize;
+    }
+
+    $width = $this->getPixelValue($xmlget->attributes()->width);
+    $height = $this->getPixelValue($xmlget->attributes()->height);
+
+    // Can use fixed dimensions
+    if ($width && $height) {
+      return [$width, $height];
+    }
+
+    if (!isset($xmlget->attributes()->viewBox)) {
+      return $fallbackSize;
+    }
+
+    $viewBoxSegements = explode(' ', $xmlget->attributes()->viewBox);
+    if (sizeof($viewBoxSegements) < 4) {
+      return $fallbackSize;
+    }
+
+    $viewBoxWidth = (float) $viewBoxSegements[2];
+    $viewBoxHeight = (float) $viewBoxSegements[3];
+
+    // Fixed width set, scale height accordingly
+    if ($width) {
+      return [$width, $width / $viewBoxWidth * $viewBoxHeight];
+    }
+
+    // Fixed height set, scale width accordingly
+    if ($height) {
+      return [$height / $viewBoxHeight * $viewBoxWidth, $height];
+    }
+
+    // Scale to fallback size using given ratio
+    $ratioImage = $viewBoxWidth / $viewBoxHeight;
+    $ratioFallback = $fallbackSize[0] / $fallbackSize[1];
+
+    if ($ratioImage - $ratioFallback > 0) {
+      return [$fallbackSize[0], $viewBoxHeight * $fallbackSize[0] / $viewBoxWidth];
+    }
+    else {
+      return [$viewBoxWidth * $fallbackSize[1] / $viewBoxHeight, $fallbackSize[1]];
+    }
+  }
+
+  /**
+   * Convert size measurements to pixels.
+   * @param {string} [$size=0] Size (1em, 12in, 3cm etc.).
+   * @return {int} Size as pixel value.
+   */
+  private function getPixelValue($size = 0) {
+    // Cmp. https://www.w3.org/Style/Examples/007/units.en.html, assuming 96dpi
+    $map = [
+      'px' => 1,
+      'em' => 16, // common default font size display
+      'ex' => 8, // uncommon value, best guess
+      'pt' => 4 / 3,
+      'pc' => 16,
+      'in' => 96,
+      'cm' => 96 / 2.54,
+      'mm' => 96 / 25.4,
+    ];
+
+    $size = trim($size);
+
+    // Assuming valid unit is always 2 chars long
+    $value = substr($size, 0, -2);
+    $unit = substr($size, -2);
+
+    // Mapping found
+    if (is_numeric($value) && isset($map[$unit])) {
+      $size = $value * $map[$unit];
+    }
+
+    // Interpret input as pixels
+    if (is_numeric($size)) {
+      return (int) round($size);
+    }
+
+    return 0;
   }
 }
