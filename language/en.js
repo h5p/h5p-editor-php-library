@@ -291,5 +291,5 @@ H5PEditor.language.core = {
   navigateToParent: 'Navigate to parent',
   a11yTitleShowLabel: 'Show label for AT',
   a11yTitleHideLabel: 'Hide label for AT',
-  reuseSuccess: ':title was successfully reused!',
+  reuseSuccess: ':title was successfully imported from the H5P Hub.',
 };

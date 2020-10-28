@@ -216,5 +216,5 @@ H5PEditor.language.core = {
   proceedButtonLabel: 'Fortsätt för att spara',
   enterFullscreenButtonLabel: 'Helskärmsläge',
   exitFullscreenButtonLabel: 'Avsluta helskärm',
-  reuseSuccess: ':title was successfully reused!',
+  reuseSuccess: ':title was successfully imported from the H5P Hub.',
 };

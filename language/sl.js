@@ -216,5 +216,5 @@ H5PEditor.language.core = {
   proceedButtonLabel: 'Shrani',
   enterFullscreenButtonLabel: 'Vklopi celozaslonski način',
   exitFullscreenButtonLabel: 'Izklopi celozaslonski način',
-  reuseSuccess: ':title was successfully reused!',
+  reuseSuccess: ':title was successfully imported from the H5P Hub.',
 };

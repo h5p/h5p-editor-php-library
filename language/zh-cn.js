@@ -216,5 +216,5 @@ H5PEditor.language.core = {
   proceedButtonLabel: '继续保存',
   enterFullscreenButtonLabel: '进入全屏',
   exitFullscreenButtonLabel: '退出全屏',
-  reuseSuccess: ':title was successfully reused!',
+  reuseSuccess: ':title was successfully imported from the H5P Hub.',
 };
