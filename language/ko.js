@@ -291,5 +291,5 @@ H5PEditor.language.core = {
   navigateToParent: '상위 탐색',
   a11yTitleShowLabel: 'AT 에 대한 라벨 표시',
   a11yTitleHideLabel: 'AT 에 대한 레이블 숨기기',
-  reuseSuccess: ':title was successfully imported from the H5P Hub.',
+  reuseSuccess: ':title was successfully imported from the H5P Hub.'
 };
