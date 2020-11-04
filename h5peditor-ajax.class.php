@@ -502,36 +502,4 @@ class H5PEditorAjax {
       'details' => $this->core->h5pF->getMessages('info')
     );
   }
-
-  /**
-   * Get updated content hub metadata cache
-   *
-   * @param  string  $lang Language as ISO 639-1 code
-   *
-   * @return JsonSerializable|string
-   */
-  private function getUpdatedContentHubMetadataCache($lang = 'en') {
-    $lastUpdate = $this->core->h5pF->getOption("content_hub_metadata:{$lang}", null);
-    if (!$lastUpdate) {
-      return $this->core->updateContentHubMetadataCache($lang);
-    }
-    else {
-      $lastUpdate = new DateTime($lastUpdate);
-      $expirationTime = $lastUpdate->getTimestamp() + (60 * 60 * 24); // Check once per day
-      if (time() > $expirationTime) {
-        $update = $this->core->updateContentHubMetadataCache($lang);
-        if (!empty($update)) {
-          return $update;
-        }
-      }
-    }
-
-    $storedCache = $this->editor->ajaxInterface->getContentHubMetadataCache($lang);
-    if (!$storedCache) {
-      // We don't have the value stored for some reason, reset last update and re-fetch
-      $this->core->h5pF->setOption("content_hub_metadata:{$lang}", null);
-      return $this->core->updateContentHubMetadataCache($lang);
-    }
-    return $storedCache;
-  }
 }
