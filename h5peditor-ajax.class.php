@@ -118,10 +118,9 @@ class H5PEditorAjax {
 
       case H5PEditorEndpoints::CONTENT_HUB_METADATA_CACHE:
         if (!$this->isHubOn()) return;
-        global $user;
         header('Cache-Control: no-cache');
         header('Content-Type: application/json; charset=utf-8');
-        print '{"success":true,"data":' . $this->core->getUpdatedContentHubMetadataCache($user->language) . '}';
+        print '{"success":true,"data":' . $this->core->getUpdatedContentHubMetadataCache(func_get_arg(1)) . '}';
         break;
 
       case H5PEditorEndpoints::LIBRARY_INSTALL:
