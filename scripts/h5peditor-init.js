@@ -22,6 +22,12 @@
       H5PEditor.contentId = H5PIntegration.editor.nodeVersionId;
     }
 
+    if (H5PIntegration.editor.hub !== undefined) {
+      H5PIntegration.Hub = {
+        contentSearchUrl: H5PIntegration.editor.hub.contentSearchUrl
+      };
+    }
+
     var h5peditor;
     $create.hide();
     var library = $library.val();
