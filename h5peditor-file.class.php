@@ -246,7 +246,7 @@ class H5peditorFile {
    * @param {int[]} [$fallbackSize=[300,150]] Fallback size.
    * @return {int[]} Width and height of image.
    */
-  private function getSVGimagesize($filename, $fallbackSize = [300, 150]) {
+  private function getSVGimagesize($filename, $fallbackSize = array(300, 150)) {
     if (!function_exists('simplexml_load_file')) {
       return $fallbackSize;
     }
@@ -262,7 +262,7 @@ class H5peditorFile {
 
     // Can use fixed dimensions
     if ($width && $height) {
-      return [$width, $height];
+      return array($width, $height);
     }
 
     if (!isset($xmlget->attributes()->viewBox)) {
@@ -279,12 +279,12 @@ class H5peditorFile {
 
     // Fixed width set, scale height accordingly
     if ($width) {
-      return [$width, $width / $viewBoxWidth * $viewBoxHeight];
+      return array($width, $width / $viewBoxWidth * $viewBoxHeight);
     }
 
     // Fixed height set, scale width accordingly
     if ($height) {
-      return [$height / $viewBoxHeight * $viewBoxWidth, $height];
+      return array($height / $viewBoxHeight * $viewBoxWidth, $height);
     }
 
     // Scale to fallback size using given ratio
@@ -292,10 +292,10 @@ class H5peditorFile {
     $ratioFallback = $fallbackSize[0] / $fallbackSize[1];
 
     if ($ratioImage - $ratioFallback > 0) {
-      return [$fallbackSize[0], $viewBoxHeight * $fallbackSize[0] / $viewBoxWidth];
+      return array($fallbackSize[0], $viewBoxHeight * $fallbackSize[0] / $viewBoxWidth);
     }
     else {
-      return [$viewBoxWidth * $fallbackSize[1] / $viewBoxHeight, $fallbackSize[1]];
+      return array($viewBoxWidth * $fallbackSize[1] / $viewBoxHeight, $fallbackSize[1]);
     }
   }
 
@@ -306,7 +306,7 @@ class H5peditorFile {
    */
   private function getPixelValue($size = 0) {
     // Cmp. https://www.w3.org/Style/Examples/007/units.en.html, assuming 96dpi
-    $map = [
+    $map = array(
       'px' => 1,
       'em' => 16, // common default font size display
       'ex' => 8, // uncommon value, best guess
@@ -315,7 +315,7 @@ class H5peditorFile {
       'in' => 96,
       'cm' => 96 / 2.54,
       'mm' => 96 / 25.4,
-    ];
+    );
 
     $size = trim($size);
 
