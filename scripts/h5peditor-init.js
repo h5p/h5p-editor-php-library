@@ -17,6 +17,7 @@
 
     // Required for assets
     H5PEditor.baseUrl = '';
+    H5PEditor.enableContentHub = H5PIntegration.editor.enableContentHub;
 
     if (H5PIntegration.editor.nodeVersionId !== undefined) {
       H5PEditor.contentId = H5PIntegration.editor.nodeVersionId;
