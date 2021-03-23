@@ -358,13 +358,21 @@ a {
 
         &:before {
           font-family: 'H5P';
-          content: "\e904";
           position: absolute;
-          color: #dd0505;
           left: 0;
           top: 0.083em;
           font-size: 3.8em;
           line-height: 1;
+        }
+
+        &.video:before {
+          content: "\e904";
+          color: #dd0505;
+        }
+
+        &.audio:before {
+          content: "\e913";
+          color: #747275;
         }
 
         input {
@@ -396,10 +404,17 @@ a {
 
           &:after {
             font-family: "H5P";
-            content: "\e903";
             line-height: 1.4em;
             font-size: 3.5em;
             color: #bbb;
+          }
+
+          &.video:after {
+            content: "\e903";
+          }
+
+          &.audio:after {
+            content: "\e914";
           }
         }
 
