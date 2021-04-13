@@ -653,6 +653,10 @@ ns.findField = function (path, parent) {
     path = path.split('/');
   }
 
+  if (path[0] === '.') {
+    path.splice(0, 1);
+    return ns.findField(path, parent);
+  }
   if (path[0] === '..') {
     path.splice(0, 1);
     return ns.findField(path, parent.parent);
