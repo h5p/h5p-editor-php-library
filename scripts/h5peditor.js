@@ -283,6 +283,7 @@ ns.resetLoadedLibraries = function () {
   H5PIntegration.loadedJs = [];
   ns.loadedCallbacks = [];
   ns.libraryLoaded = {};
+  ns.libraryCache = {};
 };
 
 /**
