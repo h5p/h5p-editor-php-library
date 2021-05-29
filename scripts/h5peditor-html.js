@@ -328,7 +328,9 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     ns.Html.removeWysiwyg();
 
     CKEDITOR.document.getBody = function () {
-      return new CKEDITOR.dom.element(that.$item[0]);
+      // Have to attach to an element that does not get hidden or removed, since an internal "calculator" element
+      // inside CKeditor relies on this element to always exist and not be hidden.
+      return new CKEDITOR.dom.element(window.document.body);
     };
 
     ns.Html.current = that;
