@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2019, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/license
  */
 
@@ -13,10 +13,10 @@
  * (1) https://ckeditor.com/cke4/builder
  *     Visit online builder to build CKEditor from scratch.
  *
- * (2) https://ckeditor.com/cke4/builder/d5a8e6ba8b97eef6fe69e57d3dd6d8b7
+ * (2) https://ckeditor.com/cke4/builder/f6426997d3353d1e6e286844a75d3a45
  *     Visit online builder to build CKEditor, starting with the same setup as before.
  *
- * (3) https://ckeditor.com/cke4/builder/download/d5a8e6ba8b97eef6fe69e57d3dd6d8b7
+ * (3) https://ckeditor.com/cke4/builder/download/f6426997d3353d1e6e286844a75d3a45
  *     Straight download link to the latest version of CKEditor (Optimized) with the same setup as before.
  *
  * NOTE:
@@ -39,8 +39,8 @@ var CKBUILDER_CONFIG = {
 		'.jshintrc',
 		'.mailmap',
 		'.npm',
+		'.nvmrc',
 		'.travis.yml',
-		'README.md',
 		'bender-err.log',
 		'bender-out.log',
 		'bender.ci.js',
@@ -49,6 +49,7 @@ var CKBUILDER_CONFIG = {
 		'gruntfile.js',
 		'less',
 		'node_modules',
+		'package-lock.json',
 		'package.json',
 		'tests'
 	],
@@ -58,6 +59,8 @@ var CKBUILDER_CONFIG = {
 		'basicstyles' : 1,
 		'bidi' : 1,
 		'clipboard' : 1,
+		'codeTag' : 1,
+		'codesnippet' : 1,
 		'colorbutton' : 1,
 		'colordialog' : 1,
 		'elementspath' : 1,
