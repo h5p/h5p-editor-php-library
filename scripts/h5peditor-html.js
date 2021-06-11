@@ -361,7 +361,23 @@ ns.Html.prototype.appendTo = function ($wrapper) {
       blurFired = false;
     });
 
+    /**
+     * Resize the CKEditor container.
+     */
+    const resizeInputArea = function () {
+      const ckeContainer = that.ckeditor.container.$;
+      ckeContainer.style.width = '';
+      window.requestAnimationFrame(function () {
+        ckeContainer.style.width = ckeContainer.parentNode.offsetWidth - 8 + 'px';
+      });
+    };
+
+    that.ckeditor.once('instanceReady', function () {
+      window.addEventListener('resize', resizeInputArea);
+    });
+
     that.ckeditor.once('destroy', function () {
+      window.removeEventListener('resize', resizeInputArea);
 
       // In some cases, the blur event is not fired. Need to be sure it is, so that
       // validation and saving is done
