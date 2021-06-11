@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2020, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/license
  */
 
@@ -13,10 +13,10 @@
  * (1) https://ckeditor.com/cke4/builder
  *     Visit online builder to build CKEditor from scratch.
  *
- * (2) https://ckeditor.com/cke4/builder/26d35941743b3e63c2c10ce38258a0d6
+ * (2) https://ckeditor.com/cke4/builder/f6426997d3353d1e6e286844a75d3a45
  *     Visit online builder to build CKEditor, starting with the same setup as before.
  *
- * (3) https://ckeditor.com/cke4/builder/download/26d35941743b3e63c2c10ce38258a0d6
+ * (3) https://ckeditor.com/cke4/builder/download/f6426997d3353d1e6e286844a75d3a45
  *     Straight download link to the latest version of CKEditor (Optimized) with the same setup as before.
  *
  * NOTE:
@@ -39,8 +39,8 @@ var CKBUILDER_CONFIG = {
 		'.jshintrc',
 		'.mailmap',
 		'.npm',
+		'.nvmrc',
 		'.travis.yml',
-		'README.md',
 		'bender-err.log',
 		'bender-out.log',
 		'bender.ci.js',
@@ -49,6 +49,7 @@ var CKBUILDER_CONFIG = {
 		'gruntfile.js',
 		'less',
 		'node_modules',
+		'package-lock.json',
 		'package.json',
 		'tests'
 	],
@@ -72,7 +73,6 @@ var CKBUILDER_CONFIG = {
 		'htmlwriter' : 1,
 		'indentlist' : 1,
 		'justify' : 1,
-		'language' : 1,
 		'lineheight' : 1,
 		'link' : 1,
 		'list' : 1,

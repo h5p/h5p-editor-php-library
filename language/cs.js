@@ -216,5 +216,5 @@ H5PEditor.language.core = {
   proceedButtonLabel: 'Pokračovat k uložení',
   enterFullscreenButtonLabel: 'Přejít na celou obrazovku',
   exitFullscreenButtonLabel: 'Ukončit celou obrazovku',
-  reuseSuccess: ':title was successfully reused!',
+  reuseSuccess: ':title was successfully imported from the H5P Hub.',
 };

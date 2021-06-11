@@ -236,7 +236,7 @@ H5PEditor.language.core = {
       dropdownLabel: 'Language',
       dialogHeader: 'Select language(s)',
       dialogButtonLabel: 'Filter languages',
-      searchPlaceholder: 'Select one or more languages'
+      searchPlaceholder: 'Type to search for languages'
     },
     reviewed: {
       dropdownLabel: 'Reviewed',
@@ -248,13 +248,13 @@ H5PEditor.language.core = {
       dropdownLabel: 'Content types',
       dialogHeader: 'Select Content type(s)',
       dialogButtonLabel: 'Filter Content Types',
-      searchPlaceholder: 'Select one or more content types'
+      searchPlaceholder: 'Type to search for content types'
     },
     disciplines: {
       dropdownLabel: 'Discipline',
       dialogHeader: 'Select Your Discipline',
       dialogButtonLabel: 'Filter Disciplines',
-      searchPlaceholder: 'Select one or more disciplines'
+      searchPlaceholder: 'Type to search for disciplines'
     },
     licenses: {
       dropdownLabel: 'License',
@@ -291,5 +291,5 @@ H5PEditor.language.core = {
   navigateToParent: 'Navigate to parent',
   a11yTitleShowLabel: 'Show label for AT',
   a11yTitleHideLabel: 'Hide label for AT',
-  reuseSuccess: ':title was successfully reused!',
+  reuseSuccess: ':title was successfully imported from the H5P Hub.',
 };
