@@ -273,6 +273,7 @@ a {
       visibility: visible;
       opacity: 1;
       @include transition(visibility 0s 0s, opacity 0.2s);
+      z-index: 2;
     }
 
     .h5p-add-dialog-table {
