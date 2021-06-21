@@ -97,6 +97,15 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
   };
 
   /**
+   * Object for keeping the scrollHeight + clientHeight used when the previous resize occurred
+   * This is used to skip handling resize when nothing actually is resized.
+   */
+  const previousHeight = {
+    scroll: 0,
+    client: 0
+  };
+
+  /**
    * Checks if iframe needs resizing, and then resize it.
    *
    * @private
@@ -105,13 +114,23 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     if (!iframe.contentDocument || !iframe.contentDocument.body || self.preventResize) {
       return; // Prevent crashing when iframe is unloaded
     }
-    if (iframe.clientHeight === iframe.contentDocument.body.scrollHeight &&
-      (iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight ||
-       iframe.contentDocument.body.scrollHeight - 1 === iframe.contentWindow.document.body.clientHeight ||
-       iframe.contentDocument.body.scrollHeight === iframe.contentWindow.document.body.clientHeight - 1)) {
+
+    // Has height changed?
+    const heightNotChanged =
+      previousHeight.scroll === iframe.contentDocument.body.scrollHeight &&
+      previousHeight.client === iframe.contentWindow.document.body.clientHeight;
+
+    if (heightNotChanged || (
+        iframe.clientHeight === iframe.contentDocument.body.scrollHeight &&
+        Math.abs(iframe.contentDocument.body.scrollHeight - iframe.contentWindow.document.body.clientHeight) <= 1
+    )) {
       return; // Do not resize unless page and scrolling differs
       // Note: ScrollHeight may be 1px larger in some cases(Edge) where the actual height is a fraction.
     }
+
+    // Save the current scrollHeight/clientHeight
+    previousHeight.scroll = iframe.contentDocument.body.scrollHeight;
+    previousHeight.client = iframe.contentWindow.document.body.clientHeight;
 
     // Retain parent size to avoid jumping/scrolling
     var parentHeight = iframe.parentElement.style.height;
