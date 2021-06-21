@@ -108,9 +108,12 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
   /**
    * Checks if iframe needs resizing, and then resize it.
    *
-   * @private
+   * @public
+   * @param {bool} force If true, force resizing
    */
-  var resize = function () {
+  self.resize = function (force) {
+    force = (force === undefined ? false : force);
+
     if (!iframe.contentDocument || !iframe.contentDocument.body || self.preventResize) {
       return; // Prevent crashing when iframe is unloaded
     }
@@ -120,10 +123,10 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       previousHeight.scroll === iframe.contentDocument.body.scrollHeight &&
       previousHeight.client === iframe.contentWindow.document.body.clientHeight;
 
-    if (heightNotChanged || (
+    if (!force && (heightNotChanged || (
         iframe.clientHeight === iframe.contentDocument.body.scrollHeight &&
         Math.abs(iframe.contentDocument.body.scrollHeight - iframe.contentWindow.document.body.clientHeight) <= 1
-    )) {
+    ))) {
       return; // Do not resize unless page and scrolling differs
       // Note: ScrollHeight may be 1px larger in some cases(Edge) where the actual height is a fraction.
     }
@@ -202,7 +205,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       self.selector.appendTo($container.html(''));
 
       // Resize iframe when selector resizes
-      self.selector.on('resize', resize);
+      self.selector.on('resize', self.resize.bind(self));
 
       /**
        * Event handler for exposing events
@@ -229,7 +232,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       var limitedResize = function () {
         if (!running) {
           running = setTimeout(function () {
-            resize();
+            self.resize();
             running = null;
           }, 40); // 25 fps cap
         }
@@ -245,12 +248,12 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       });
 
       H5P.$window.resize(limitedResize);
-      resize();
+      self.resize();
     }
     else {
       // Use an interval for resizing the iframe
       (function resizeInterval() {
-        resize();
+        self.resize();
         setTimeout(resizeInterval, 40); // No more than 25 times per second
       })();
     }
@@ -508,6 +511,8 @@ ns.Editor.prototype.semiFullscreen = function ($iframe, $element, done) {
 
     iframeWindow.document.body.removeEventListener('keyup', handleKeyup);
     done(); // Callback for UI
+
+    self.resize(true);
   }
 
   return restore;
