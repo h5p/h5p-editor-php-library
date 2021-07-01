@@ -6,7 +6,7 @@ $h5p-example-url-label-color: #422447;
 $h5p-example-icon-color: #f8d4ff;
 $h5p-example-icon-bg-color: #8f4f9c;
 
-$h5p-tutorial-icon-diameter: 2.5rem;
+$h5p-tutorial-icon-diameter: 2rem;
 
 @mixin h5p-tutorial-focus-shadow() {
   box-shadow: 0px 0px 5px rgba(22,52,247,1);
@@ -20,6 +20,7 @@ $h5p-tutorial-icon-diameter: 2.5rem;
   line-height: 1;
   margin-right: 1em;
   margin-bottom: 0.5em;
+  margin-left: 0.25em;
   height: $h5p-tutorial-icon-diameter;
   border-radius: $h5p-tutorial-icon-diameter / 2;
 
@@ -33,7 +34,7 @@ $h5p-tutorial-icon-diameter: 2.5rem;
 
   &::before {
     font-family: $icon-font-family;
-    font-size: 1.625em;
+    font-size: 1.25em;
     border-radius: 50%;
     width: $h5p-tutorial-icon-diameter;
     height: $h5p-tutorial-icon-diameter;
@@ -56,8 +57,6 @@ $h5p-tutorial-icon-diameter: 2.5rem;
 }
 
 .h5p-tutorial-url {
-  margin-left: 0.25em;
-
   &:active,
   &:hover {
     background-color: $h5p-tutorial-icon-color;
@@ -82,7 +81,7 @@ $h5p-tutorial-icon-diameter: 2.5rem;
 
   &::before {
     content: "\e93d";
-    font-size: 1.2em;
+    font-size: 1em;
     color: $h5p-example-icon-color;
     background-color: $h5p-example-icon-bg-color;
   }
