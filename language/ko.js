@@ -91,7 +91,7 @@ H5PEditor.language.core = {
   ' 더 자세한 내용.',
   contentTypeSectionAll: '모든 콘텐츠 유형',
   searchResults: '검색 결과',
-  contentTypeSearchFieldPlaceholder: '콘텐츠 유형 검사',
+  contentTypeSearchFieldPlaceholder: '콘텐츠 유형 검색',
   contentTypeInstallButtonLabel: '설치',
   contentTypeInstallingButtonLabel: '설치 중',
   contentTypeUseButtonLabel: '사용',
