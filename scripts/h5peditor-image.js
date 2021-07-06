@@ -59,7 +59,7 @@ ns.widgets.image = function (parent, field, params, setValue) {
     // Uploaded new original image
     if (self.isOriginalImage) {
       delete self.params.originalImage;
-      self.editImagePopup.mime = self.params.mime
+      self.editImagePopup.mime = self.params.mime;
     }
 
     // Store width and height
@@ -123,6 +123,12 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
 
     // Set current source as original image, if no original image
     if (!self.params.originalImage) {
+      // Need to convert SVG to PNG
+      if (self.params.mime === 'image/svg+xml') {
+        self.params.path = self.params.path.replace(/svg$/, 'png').replace(/svg#tmp$/, 'png#tmp');
+        self.params.mime = 'image/png';
+      }
+
       self.params.originalImage = {
         path: self.params.path,
         mime: self.params.mime,
@@ -245,6 +251,17 @@ ns.widgets.image.prototype.addFile = function () {
 
   var $img = this.$file.find('img');
   $img.one('load', function () {
+    // IE11 needs explicit dimensions for SVGs, can't use 'auto' value
+    if (that.params.mime === 'image/svg+xml') {
+      width = that.params.width;
+      height = that.params.height;
+
+      if (height > parseInt($img.css('maxHeight'))) {
+        width = width * parseInt($img.css('maxHeight')) / height;
+      }
+      $img.css('width', width + 'px');
+    }
+
     // Make editor resize
     $img.addClass('loaded');
   });
