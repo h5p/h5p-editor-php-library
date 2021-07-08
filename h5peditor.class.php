@@ -342,6 +342,16 @@ class H5peditor {
         $key = 'editor-' . $addon['machineName'];
         $dependencies[$key]['weight'] = sizeof($dependencies)+1;
         $dependencies[$key]['type'] = 'editor';
+        if (isset($this->h5p->h5pD)) {
+          $library = $this->h5p->h5pD->getLibrary(
+            $addon['machineName'],
+            $addon['majorVersion'],
+            $addon['minorVersion']
+          );
+          if (isset($library)) {
+            $addon = $library;
+          }
+        }
         $dependencies[$key]['library'] = $addon;
       }
     }
