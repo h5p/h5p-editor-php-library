@@ -217,4 +217,7 @@ H5PEditor.language.core = {
   a11yTitleShowLabel: 'Toon label voor AT',
   a11yTitleHideLabel: 'Verberg label voor AT',
   reuseSuccess: ':title is met succes geïmporteerd van de H5P Hub.',
+  deleteAuthorTitle: 'Deleting author',
+  deleteAuthorChangeLogTitle: 'Deleting changelog',
+  confirm: 'Confirm'
 };

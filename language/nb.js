@@ -290,4 +290,7 @@ H5PEditor.language.core = {
   a11yTitleShowLabel: 'Show label for AT',
   a11yTitleHideLabel: 'Hide label for AT',
   reuseSuccess: ':title was successfully imported from the H5P Hub.',
+  deleteAuthorTitle: 'Deleting author',
+  deleteAuthorChangeLogTitle: 'Deleting changelog',
+  confirm: 'Confirm'
 };
