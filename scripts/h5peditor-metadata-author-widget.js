@@ -140,12 +140,9 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
         type: 'button',
         'class': 'h5p-metadata-icon-button',
         click: function () {
-          showConfirmationDialog({
-            headerText: H5PEditor.t('core', 'deleteAuthorTitle'),
-            dialogText: H5PEditor.t('core', 'confirmRemoveAuthor'),
-            cancelText: H5PEditor.t('core', 'cancel'),
-            confirmText: H5PEditor.t('core', 'confirm'),
-          }, handleFormDiaologActions);
+          if (confirm(H5PEditor.t('core', 'confirmRemoveAuthor'))) {
+            removeAuthor(author);
+          }
         }
       }).appendTo(listItem);
 
@@ -153,40 +150,6 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
     });
 
     wrapper.append(authorList);
-  }
-
-  /**
-   * Callback confirm/cancel action
-   * @param {boolean} [confirmFlag] Which button is clicked
-   */
-  function handleFormDiaologActions(confirmFlag) {
-    if (confirmFlag) {
-      removeAuthor(author);
-    }
-  }
-
-  /**
-   * Add confirmation dialog to button.
-   * @param {object} dialogOptions Dialog options.
-   * @param {function} handleActions Handle both actions Confirmed and Canceled.
-   */
-  function showConfirmationDialog(dialogOptions, handleActions) {
-    const confirmationDialog = new H5P.ConfirmationDialog(dialogOptions)
-    .appendTo(document.body);
-
-    confirmationDialog.on('confirmed', () => {
-      if (handleActions) {
-        handleActions(true);
-      }
-    });
-
-    confirmationDialog.on('canceled', () => {
-      if (handleActions) {
-        handleActions(false);
-      }
-    });
-
-    confirmationDialog.show();
   }
 
   return {

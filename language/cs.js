@@ -217,7 +217,4 @@ H5PEditor.language.core = {
   enterFullscreenButtonLabel: 'Přejít na celou obrazovku',
   exitFullscreenButtonLabel: 'Ukončit celou obrazovku',
   reuseSuccess: ':title was successfully imported from the H5P Hub.',
-  deleteAuthorTitle: 'Deleting author',
-  deleteAuthorChangeLogTitle: 'Deleting changelog',
-  confirm: 'Confirm'
 };

@@ -217,7 +217,4 @@ H5PEditor.language.core = {
   enterFullscreenButtonLabel: 'Vklopi celozaslonski način',
   exitFullscreenButtonLabel: 'Izklopi celozaslonski način',
   reuseSuccess: ':title was successfully imported from the H5P Hub.',
-  deleteAuthorTitle: 'Deleting author',
-  deleteAuthorChangeLogTitle: 'Deleting changelog',
-  confirm: 'Confirm'
 };

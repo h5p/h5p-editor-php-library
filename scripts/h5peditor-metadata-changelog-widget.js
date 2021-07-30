@@ -169,12 +169,11 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
 
         logButtons.find('.h5p-metadata-delete').click(function () {
           // Ask for confirmation
-          showConfirmationDialog({
-            headerText: H5PEditor.t('core', 'deleteAuthorChangeLogTitle'),
-            dialogText: H5PEditor.t('core', 'confirmDeleteChangeLog'),
-            cancelText: H5PEditor.t('core', 'cancel'),
-            confirmText: H5PEditor.t('core', 'confirm'),
-          }, handleFormDiaologActions);
+          if (confirm(H5PEditor.t('core', 'confirmDeleteChangeLog'))) {
+            var wrapper = $(this).closest('.h5p-metadata-log');
+            var index = $(wrapper).data('index');
+            deleteLog(index);
+          }
         });
 
         logButtons.find('.h5p-metadata-edit').click(function () {
@@ -194,18 +193,6 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
 
         logList.prepend(logContent);
       }
-    }
-  }
-
-  /**
-   * Callback confirm/cancel action
-   * @param {boolean} [confirmFlag] Which button is clicked
-   */
-   function handleFormDiaologActions (confirmFlag) {
-    if (confirmFlag) {
-      var wrapper = $(this).closest('.h5p-metadata-log');
-      var index = $(wrapper).data('index');
-      deleteLog(index);
     }
   }
 
@@ -283,29 +270,5 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
       },
       async: true
     });
-  }
-  
-  /**
-   * Add confirmation dialog to button.
-   * @param {object} dialogOptions Dialog options.
-   * @param {function} handleActions Handle both actions Confirmed and Canceled.
-   */
-  function showConfirmationDialog (dialogOptions, handleActions) {
-    const confirmationDialog = new H5P.ConfirmationDialog(dialogOptions)
-    .appendTo(document.body);
-
-    confirmationDialog.on('confirmed', () => {
-      if (handleActions) {
-        handleActions(true);
-      }
-    });
-
-    confirmationDialog.on('canceled', () => {
-      if (handleActions) {
-        handleActions(false);
-      }
-    });
-
-    confirmationDialog.show();
   }
 };
