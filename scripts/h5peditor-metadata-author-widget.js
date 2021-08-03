@@ -145,7 +145,7 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
             dialogText: H5PEditor.t('core', 'confirmRemoveAuthor'),
             cancelText: H5PEditor.t('core', 'cancel'),
             confirmText: H5PEditor.t('core', 'confirm'),
-          }, handleFormDialogActions);
+          }, handleRemoveActionForMetadataAuthor);
         }
       }).appendTo(listItem);
 
@@ -159,7 +159,7 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
    * Callback confirm/cancel action
    * @param {boolean} [confirmFlag] Which button is clicked
    */
-  function handleFormDialogActions(confirmFlag) {
+  function handleRemoveActionForMetadataAuthor(confirmFlag) {
     if (confirmFlag) {
       removeAuthor(author);
     }

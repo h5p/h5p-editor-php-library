@@ -174,7 +174,7 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
             dialogText: H5PEditor.t('core', 'confirmDeleteChangeLog'),
             cancelText: H5PEditor.t('core', 'cancel'),
             confirmText: H5PEditor.t('core', 'confirm'),
-          }, handleFormDialogActions);
+          }, handleRemoveActionForMetadataChangelog);
         });
 
         logButtons.find('.h5p-metadata-edit').click(function () {
@@ -201,7 +201,7 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
    * Callback confirm/cancel action
    * @param {boolean} [confirmFlag] Which button is clicked
    */
-  function handleFormDialogActions (confirmFlag) {
+  function handleRemoveActionForMetadataChangelog(confirmFlag) {
     if (confirmFlag) {
       var wrapper = $(this).closest('.h5p-metadata-log');
       var index = $(wrapper).data('index');
