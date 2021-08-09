@@ -174,7 +174,7 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
             dialogText: H5PEditor.t('core', 'confirmDeleteChangeLog'),
             cancelText: H5PEditor.t('core', 'cancel'),
             confirmText: H5PEditor.t('core', 'confirm'),
-          }, handleRemoveActionForMetadataChangelog);
+          }, handleRemoveActionForMetadataChangelog, $(this).closest('.h5p-metadata-log'));
         });
 
         logButtons.find('.h5p-metadata-edit').click(function () {
@@ -200,10 +200,10 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
   /**
    * Callback confirm/cancel action
    * @param {boolean} [confirmFlag] Which button is clicked
+   * @param {Element} [wrapper] DOM element.
    */
-  function handleRemoveActionForMetadataChangelog(confirmFlag) {
+  function handleRemoveActionForMetadataChangelog(confirmFlag, wrapper) {
     if (confirmFlag) {
-      var wrapper = $(this).closest('.h5p-metadata-log');
       var index = $(wrapper).data('index');
       deleteLog(index);
     }
@@ -289,14 +289,15 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
    * Add confirmation dialog to button.
    * @param {object} dialogOptions Dialog options.
    * @param {function} handleActions Handle both actions Confirmed and Canceled.
+   * @param {Element} wrapper DOM element.
    */
-   function showConfirmationDialog(dialogOptions, handleActions) {
+   function showConfirmationDialog(dialogOptions, handleActions, wrapper) {
     const confirmationDialog = new H5P.ConfirmationDialog(dialogOptions)
     .appendTo(document.body);
 
     confirmationDialog.on('confirmed', () => {
       if (handleActions) {
-        handleActions(true);
+        handleActions(true, wrapper);
       }
     });
 
