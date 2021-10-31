@@ -93,7 +93,7 @@ H5PEditor.language.core = {
   contentTypeInstallButtonLabel: 'Asenna',
   contentTypeInstallingButtonLabel: 'Asentaa',
   contentTypeUseButtonLabel: 'Valitse',
-  contentTypeDetailButtonLabel: 'Ykstyiskohdat',
+  contentTypeDetailButtonLabel: 'Yksityiskohdat',
   contentTypeUpdateButtonLabel: 'Päivitä',
   contentTypeUpdatingButtonLabel: 'Päivittää',
   contentTypeGetButtonLabel: 'Hae',
