@@ -150,7 +150,7 @@ H5PEditor.language.core = {
   screenshots: 'Captures d\'écran',
   reloadButtonLabel: 'Recharger',
   videoVersion: 'Video version label',
-  videoVersionDescription: 'This label helps the user identify the current version of the video. Could e.g. be "1080p" or "Mobile" if your versions represent different video qualities or "Normal" or "sign language" if your versions represent different levels of accessibility.',
+  videoVersionDescription: 'This label helps the user identify the current version of the video. Could e.g. be "1080p" or "Mobile" if your versions represent different video qualities or "Without sign language" or "With sign language" if your versions represent different levels of accessibility.',
   videoVersionDefaultLabel: 'Version :index',
   noContentTypesAvailable: 'Aucun type de contenu disponible',
   noContentTypesAvailableDesc: 'Votre site rencontre des difficultés pour se connecter à H5P.org et afficher la liste des types d\'activités disponibles.',

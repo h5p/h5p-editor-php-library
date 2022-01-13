@@ -150,7 +150,7 @@ H5PEditor.language.core = {
   screenshots: 'Kuvakaappaukset',
   reloadButtonLabel: 'Lataa uudelleen',
   videoVersion: 'Video version label',
-  videoVersionDescription: 'This label helps the user identify the current version of the video. Could e.g. be "1080p" or "Mobile" if your versions represent different video qualities or "Normal" or "sign language" if your versions represent different levels of accessibility.',
+  videoVersionDescription: 'This label helps the user identify the current version of the video. Could e.g. be "1080p" or "Mobile" if your versions represent different video qualities or "Without sign language" or "With sign language" if your versions represent different levels of accessibility.',
   videoVersionDefaultLabel: 'Version :index',
   noContentTypesAvailable: 'Sisältötyyppejä ei saatavilla.',
   noContentTypesAvailableDesc: 'Sivustollasi on ongelmia yhdistettäessä h5p.org-sivustoon ja sisältötyyppien listaus ei tästä syystä toimi.',

@@ -150,7 +150,7 @@ H5PEditor.language.core = {
   screenshots: 'Screenshots',
   reloadButtonLabel: 'Opnieuw laden',
   videoVersion: 'Video version label',
-  videoVersionDescription: 'This label helps the user identify the current version of the video. Could e.g. be "1080p" or "Mobile" if your versions represent different video qualities or "Normal" or "sign language" if your versions represent different levels of accessibility.',
+  videoVersionDescription: 'This label helps the user identify the current version of the video. Could e.g. be "1080p" or "Mobile" if your versions represent different video qualities or "Without sign language" or "With sign language" if your versions represent different levels of accessibility.',
   videoVersionDefaultLabel: 'Version :index',
   noContentTypesAvailable: 'Geen content types beschikbaar',
   noContentTypesAvailableDesc: 'Je site heeft problemen bij het verbinden met H5P.org en het tonen van de beschikbare content types.',

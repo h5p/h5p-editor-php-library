@@ -150,7 +150,7 @@ H5PEditor.language.core = {
   screenshots: 'Screenshots',
   reloadButtonLabel: 'Reload',
   videoVersion: 'Video version label',
-  videoVersionDescription: 'This label helps the user identify the current version of the video. Could e.g. be "1080p" or "Mobile" if your versions represent different video qualities or "Normal" or "sign language" if your versions represent different levels of accessibility.',
+  videoVersionDescription: 'This label helps the user identify the current version of the video. Could e.g. be "1080p" or "Mobile" if your versions represent different video qualities or "Without sign language" or "With sign language" if your versions represent different levels of accessibility.',
   videoVersionDefaultLabel: 'Version :index',
   noContentTypesAvailable: 'Ingen innhaldstyper er tilgjengeleg',
   noContentTypesAvailableDesc: 'Nettstedet ditt har problemer med å koble til H5P.org og liste tilgjengelege innhaldstyper.',

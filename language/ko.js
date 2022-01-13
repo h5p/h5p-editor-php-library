@@ -152,7 +152,7 @@ H5PEditor.language.core = {
   screenshots: '스크린샷',
   reloadButtonLabel: '재로드',
   videoVersion: 'Video version label',
-  videoVersionDescription: 'This label helps the user identify the current version of the video. Could e.g. be "1080p" or "Mobile" if your versions represent different video qualities or "Normal" or "sign language" if your versions represent different levels of accessibility.',
+  videoVersionDescription: 'This label helps the user identify the current version of the video. Could e.g. be "1080p" or "Mobile" if your versions represent different video qualities or "Without sign language" or "With sign language" if your versions represent different levels of accessibility.',
   videoVersionDefaultLabel: 'Version :index',
   noContentTypesAvailable: '사용할 수 있는 콘텐츠 유형 없음',
   noContentTypesAvailableDesc: '당신의 사이트는 H5P.org에 접속하여 사용 가능한 콘텐츠 유형을 나열하는 데 어려움을 겪고 있음.',
