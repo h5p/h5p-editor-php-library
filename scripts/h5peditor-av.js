@@ -315,7 +315,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     var fileHtml;
     var file = this.params[index];
     var rowInputId = 'h5p-av-' + C.getNextId();
-    var defaultQualityName = H5PEditor.t('core', 'videoQualityDefaultLabel', { ':index': index + 1 });
+    var defaultQualityName = H5PEditor.t('core', 'videoVersionDefaultLabel', { ':index': index + 1 });
     var qualityName = (file.metadata && file.metadata.qualityName) ? file.metadata.qualityName : defaultQualityName;
 
     // Check if source is provider (Vimeo, YouTube, Panopto)
@@ -354,8 +354,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           '</div>' +
         '</div>' +
         '<div class="h5p-video-quality">' +
-          '<div class="h5p-video-quality-title">' + H5PEditor.t('core', 'videoQuality') + '</div>' +
-          '<label class="h5peditor-field-description" for="' + rowInputId + '">' + H5PEditor.t('core', 'videoQualityDescription') + '</label>' +
+          '<div class="h5p-video-quality-title">' + H5PEditor.t('core', 'videoVersion') + '</div>' +
+          '<label class="h5peditor-field-description" for="' + rowInputId + '">' + H5PEditor.t('core', 'videoVersionDescription') + '</label>' +
           '<input id="' + rowInputId + '" class="h5peditor-text" type="text" maxlength="60" value="' + qualityName + '">' +
         '</div>' +
       '</li>';
