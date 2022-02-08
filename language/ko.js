@@ -133,8 +133,8 @@ H5PEditor.language.core = {
   warningUpdateAvailableTitle: '새로운 버전의 :content 유형을 사용할 수 있음',
   warningUpdateAvailableBody: '더 나은 경험을 위해 최신 버전으로 업데이트',
   licenseDescription: '이 라이선스의 일부 기능은 다음과 같다. 원래 라이센스 텍스트를 읽으려면 위의 정보 아이콘을 클릭하십시오.',
-  licenseModalTitle: '라이센스 세부 정보',
-  licenseModalSubtitle: '적절한 사용에 대한 정보를 보려면 라이센스를 선택하십시오.',
+  licenseModalTitle: '라이선스 세부 정보',
+  licenseModalSubtitle: '적절한 사용에 대한 정보를 보려면 라이선스를 선택하십시오.',
   licenseUnspecified: '지정되지 않음',
   licenseCanUseCommercially: '상업적으로 사용할 수 있음',
   licenseCanModify: '수정 가능',
@@ -172,7 +172,7 @@ H5PEditor.language.core = {
   confirmRemoveAuthor: '이 작성자를 제거하시겠습니까?',
   addNewChange: '새 변화 추가',
   confirmDeleteChangeLog: '이 변경 로그 항목을 삭제하시겠습니까?',
-  changelogDescription: '일부 라이센스는 원본 작업에 대한 변경 사항을 요구하거나 파생 모델을 기록하여 표시해야 한다. 라이센싱상의 이유로 변경사항을 여기에 기록하거나 자신과 다른 사람이 이 콘텐츠에 대한 변경사항을 추적할 수 있도록 허용하십시오.',
+  changelogDescription: '일부 라이선스는 원본 작업에 대한 변경 사항을 요구하거나 파생 모델을 기록하여 표시해야 한다. 라이센싱상의 이유로 변경사항을 여기에 기록하거나 자신과 다른 사람이 이 콘텐츠에 대한 변경사항을 추적할 수 있도록 허용하십시오.',
   logThisChange: '변경 기록',
   newChangeHasBeenLogged: '새 변경 사항이 기록됨',
   loggedChanges: '변경 기록',
@@ -257,7 +257,7 @@ H5PEditor.language.core = {
       searchPlaceholder: '하나 이상의 과목 선택'
     },
     licenses: {
-      dropdownLabel: '라이선츠',
+      dropdownLabel: '라이선스',
       dialogHeader: '선호하는 사용 권한 선택',
       dialogButtonLabel: '라이선스에 따라 검색',
       options: {
@@ -291,5 +291,5 @@ H5PEditor.language.core = {
   navigateToParent: '상위 탐색',
   a11yTitleShowLabel: 'AT 에 대한 라벨 표시',
   a11yTitleHideLabel: 'AT 에 대한 레이블 숨기기',
-  reuseSuccess: ':title was successfully imported from the H5P Hub.'
+  reuseSuccess: ':title 이 H5P 허브에서 성공적으로 가져오기 되었습니다.'
 };
