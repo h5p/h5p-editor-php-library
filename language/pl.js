@@ -159,6 +159,8 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'Ta etykieta pomaga użytkownikowi zorientować się w jakości wideo, np. 1080p, 720p, HD lub mobilne',
   videoQualityDefaultLabel: 'Jakość :index',
+  usedForSignLanguage: 'Used for sign language',
+  usedForSignLanguageDescription: 'Used to signal that this video is supposed to provide a video that contains sign language.',
   noContentTypesAvailable: 'Żaden typ zasobu nie jest dostępny',
   noContentTypesAvailableDesc: 'Twoja strona nie może połączyć się z H5P.org, aby wyświetlić dostępne typy zasobu.',
   contentTypeCacheOutdated: 'Lista typów zasobu jest nieaktualna',

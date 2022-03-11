@@ -160,6 +160,8 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'Dit label helpt de gebruiker bij het vaststelllen van de huidige kwaliteit van de video. Bijv. 1080p, 720p, HD of Mobile',
   videoQualityDefaultLabel: 'Kwaliteit :index',
+  usedForSignLanguage: 'Used for sign language',
+  usedForSignLanguageDescription: 'Used to signal that this video is supposed to provide a video that contains sign language.',
   noContentTypesAvailable: 'Geen content types beschikbaar',
   noContentTypesAvailableDesc:
     'Je site heeft problemen bij het verbinden met H5P.org en het tonen van de beschikbare content types.',

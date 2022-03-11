@@ -159,6 +159,8 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'Tento popisek pomáhá uživateli zjistit aktuální kvalitu videa. Např. 1080p, 720p, HD nebo Mobile',
   videoQualityDefaultLabel: 'Kvalita :index',
+  usedForSignLanguage: 'Used for sign language',
+  usedForSignLanguageDescription: 'Used to signal that this video is supposed to provide a video that contains sign language.',
   noContentTypesAvailable: 'Nejsou k dispozici žádné typy obsahu',
   noContentTypesAvailableDesc: 'Váš web má potíže s připojením k H5P.org a se seznamem dostupných typů obsahu.',
   contentTypeCacheOutdated: 'Seznam typů obsahu je zastaralý',

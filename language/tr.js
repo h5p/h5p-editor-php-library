@@ -159,6 +159,8 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'Bu etiket kullanıcının mevcut videonun kalitesini tanımlamasına yardımcı olur. Örn: 1080p, 720p, HD veya Mobil',
   videoQualityDefaultLabel: 'Kalite :index',
+  usedForSignLanguage: 'Used for sign language',
+  usedForSignLanguageDescription: 'Used to signal that this video is supposed to provide a video that contains sign language.',
   noContentTypesAvailable: 'Hiçbir içerik mevcut değil',
   noContentTypesAvailableDesc:
     'Web siteniz H5P.org sitesine bağlanmada ve mevcut içerik türlerini listelemede zorluk yaşıyor.',

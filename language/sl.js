@@ -159,6 +159,8 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'Ta oznaka pomaga uporabniku prepoznati trenutno kakovost videoposnetka. Npr. 1080p, 720p, HD ali Mobilne naprave',
   videoQualityDefaultLabel: 'Kakovost :index',
+  usedForSignLanguage: 'Used for sign language',
+  usedForSignLanguageDescription: 'Used to signal that this video is supposed to provide a video that contains sign language.',
   noContentTypesAvailable: 'Na voljo ni nobenega tipa vsebine',
   noContentTypesAvailableDesc:
     'Vaše spletno mesto ima težave pri povezovanju s H5P.org in pripravo seznama razpoložljivih tipov vsebine.',
