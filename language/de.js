@@ -158,24 +158,12 @@ H5PEditor.language.core = {
   previousImage: 'Vorheriges Bild',
   screenshots: 'Bildschirmfotos',
   reloadButtonLabel: 'Neu laden',
-<<<<<<< HEAD
-<<<<<<< HEAD
   videoQuality: 'Beschreibung der Videoqualität',
   videoQualityDescription:
     'An dieser Beschreibung kann der Benutzer die Qualität des hochgeladenen Videos erkennen. Beispiele: 1080p, 720p, HD oder mobil',
   videoQualityDefaultLabel: 'Videoqualität :index',
-=======
-  videoVersion: 'Video version label',
-  videoVersionDescription: 'This label helps the user identify the current version of the video. Could e.g. be "1080p" or "Mobile" if your versions represent different video qualities or "Without sign language" or "With sign language" if your versions represent different levels of accessibility.',
-  videoVersionDefaultLabel: 'Version :index',
->>>>>>> Add support for multiple YouTube videos
-=======
-  videoQuality: 'Beschreibung der Videoqualität',
-  videoQualityDescription: 'An dieser Beschreibung kann der Benutzer die Qualität des hochgeladenen Videos erkennen. Beispiele: 1080p, 720p, HD oder Mobil',
-  videoQualityDefaultLabel: 'Videoqualität :index',
   usedForSignLanguage: 'Used for sign language',
   usedForSignLanguageDescription: 'Used to signal that this video is supposed to provide a video that contains sign language.',
->>>>>>> Update translations for sign language support
   noContentTypesAvailable: 'Keine Inhaltstypen verfügbar',
   noContentTypesAvailableDesc:
     'Es können keine Inhaltstypen aufgelistet werden, da Verbindungsprobleme zu H5P.org bestehen.',
