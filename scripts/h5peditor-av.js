@@ -351,12 +351,19 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       this.updateIndex = undefined;
     }
 
-    // Alternative videos for YouTube are sign language videos automatically
     var isSignLanguage = (file.metadata && file.metadata.isSignLanguage) || false;
     var signLanguageChecked = isSignLanguage ? ' checked="checked"' : '';
 
     // Create file with customizable quality if enabled and not youtube
     if (this.field.enableCustomQualityLabel === true && !isProvider) {
+      var signLanguageHTML = '<div class="field field-name-sign-language boolean">' +
+        '<label class="h5peditor-label">' +
+          '<input id="field-sign-language-' + rowInputId + '" class="h5peditor-sign-language" type="checkbox" aria-describedby="field-sign-language-' + rowInputId + '-description" + ' + signLanguageChecked + '>' +
+            H5PEditor.t('core', 'usedForSignLanguage') +
+        '</label>' +
+        '<div class="h5peditor-field-description" id="field-sign-language-' + rowInputId + '-description">' + H5PEditor.t('core', 'usedForSignLanguageDescription') + '</div>' +
+        '</div>'
+
       fileHtml = '<li class="h5p-av-row">' +
         '<div class="h5p-thumbnail">' +
           '<div class="h5p-type" title="' + file.mime + '">' + file.mime.split('/')[1] + '</div>' +
@@ -367,13 +374,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           '<div class="h5p-video-quality-title">' + H5PEditor.t('core', 'videoQuality') + '</div>' +
           '<label class="h5peditor-field-description" for="' + rowInputId + '">' + H5PEditor.t('core', 'videoQualityDescription') + '</label>' +
           '<input id="' + rowInputId + '" class="h5peditor-text" type="text" maxlength="60" value="' + qualityName + '">' +
-          '<div class="field field-name-sign-language boolean">' +
-            '<label class="h5peditor-label">' +
-              '<input id="field-sign-language-' + rowInputId + '" class="h5peditor-sign-language" type="checkbox" aria-describedby="field-sign-language-' + rowInputId + '-description" + ' + signLanguageChecked + '>' +
-              H5PEditor.t('core', 'usedForSignLanguage') +
-            '</label>' +
-            '<div class="h5peditor-field-description" id="field-sign-language-' + rowInputId + '-description">' + H5PEditor.t('core', 'usedForSignLanguageDescription') + '</div>' +
-          '</div>' +
+          signLanguageHTML +
         '</div>' +
       '</li>';
     }
