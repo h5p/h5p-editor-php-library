@@ -54,7 +54,7 @@ H5PEditor.language.core = {
   enterVideoTitle: '粘贴YouTube链接或其他视频源URL',
   uploadAudioTitle: '上传音频文件',
   uploadVideoTitle: '上传视频文件',
-  addVideoDescription: 'H5P 支持格式为 mp4、webm 或 ogv 的所有外部视频源，如 Vimeo Pro，并支持 YouTube 和 Panopto 链接。',
+  addVideoDescription: 'H5P 支持格式为 mp4、webm 或 ogv 的所有外部视频源，如 Vimeo Pro，并支持 YouTube 和 Panopto 和 Warpwire 链接。',
   insert: '插入',
   cancel: '取消',
   height: '高度',

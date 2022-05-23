@@ -318,7 +318,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     var defaultQualityName = H5PEditor.t('core', 'videoQualityDefaultLabel', { ':index': index + 1 });
     var qualityName = (file.metadata && file.metadata.qualityName) ? file.metadata.qualityName : defaultQualityName;
 
-    // Check if source is provider (Vimeo, YouTube, Panopto)
+    // Check if source is provider (Vimeo, YouTube, Panopto, Warpwire)
     const isProvider = file.path && C.findProvider(file.path);
 
     // Only allow single source if YouTube
@@ -682,6 +682,11 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     {
       name: 'Vimeo',
       regexp: /^.*(vimeo\.com\/)((channels\/[A-z]+\/)|(groups\/[A-z]+\/videos\/))?([0-9]+)/,
+      aspectRatio: '16:9',
+    },
+    {
+      name: 'Warpwire',
+      regexp: /^[^\/]+:\/\/([^.]+\.[^\/]+)\/w\/([-_a-zA-Z0-9]{6})\/(.*)$/,
       aspectRatio: '16:9',
     }
   ];

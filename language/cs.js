@@ -54,7 +54,7 @@ H5PEditor.language.core = {
   enterVideoTitle: 'Vložte odkaz na YouTube nebo jinou adresu URL zdroje videa',
   uploadAudioTitle: 'Nahrajte zvukový soubor',
   uploadVideoTitle: 'Nahrajte soubor videa',
-  addVideoDescription: 'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube and Panopto links.',
+  addVideoDescription: 'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube, Panopto and Warpwire links.',
   insert: 'Vložit',
   cancel: 'Zrušit',
   height: 'výška',

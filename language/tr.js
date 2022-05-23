@@ -54,7 +54,7 @@ H5PEditor.language.core = {
   enterVideoTitle: 'Youtube linkini ya da diğer video kaynağının URLsini yapıştırın',
   uploadAudioTitle: 'Ses dosyası yükle',
   uploadVideoTitle: 'Video dosyası yükle',
-  addVideoDescription: 'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube and Panopto links.',
+  addVideoDescription: 'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube, Panopto and Warpwire links.',
   insert: 'Ekle',
   cancel: 'Vazgeç',
   height: 'yükseklik',
