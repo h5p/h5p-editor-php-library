@@ -1755,6 +1755,7 @@ ns.supportedLanguages = {
   'hi': 'Hindi (हिन्दी)',
   'ho': 'Hiri Motu',
   'hr': 'Croatian (Hrvatski)',
+  'hsb': 'Upper Sorbian (hornjoserbšćina)',
   'ht': 'Haitian Creole',
   'hu': 'Hungarian (Magyar)',
   'hy': 'Armenian (Հայերեն)',
