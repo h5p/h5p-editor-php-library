@@ -54,7 +54,8 @@ H5PEditor.language.core = {
   enterVideoTitle: '粘贴YouTube链接或其他视频源URL',
   uploadAudioTitle: '上传音频文件',
   uploadVideoTitle: '上传视频文件',
-  addVideoDescription: 'H5P 支持格式为 mp4、webm 或 ogv 的所有外部视频源，如 Vimeo Pro，并支持 YouTube 和 Panopto 链接。',
+  addVideoDescription:
+    'H5P 支持格式为 mp4、webm 或 ogv 的所有外部视频源，如 Vimeo Pro，并支持 YouTube 和 Panopto 链接。',
   insert: '插入',
   cancel: '取消',
   height: '高度',
@@ -74,7 +75,8 @@ H5PEditor.language.core = {
   uploadTabLabel: '上传',
   uploadPlaceholder: '没有选择文件',
   uploadInstructionsTitle: '上传H5P文件。',
-  uploadInstructionsContent: '您可以从<a href="https://h5p.org/content-types-and-applications" target="blank">H5P.org</a>中的示例开始。',
+  uploadInstructionsContent:
+    '您可以从<a href="https://h5p.org/content-types-and-applications" target="blank">H5P.org</a>中的示例开始。',
   uploadFileButtonLabel: '上传文件',
   uploadFileButtonChangeLabel: '替换文件',
   uploadingThrobber: '正在上传...',
@@ -84,11 +86,9 @@ H5PEditor.language.core = {
   h5pFileWrongExtensionTitle: '所选文件无法上传',
   h5pFileWrongExtensionContent: '仅允许使用扩展名为.h5p的文件。',
   h5pFileValidationFailedTitle: '无法验证H5P文件。',
-  h5pFileValidationFailedContent: '确保上传的H5P包含有效的H5P内容。如果H5P' +
-  '仅包含库文件，则应通过“ H5P库”页面上载。',
+  h5pFileValidationFailedContent: '确保上传的H5P包含有效的H5P内容。如果H5P仅包含库文件，则应通过“ H5P库”页面上载。',
   h5pFileUploadServerErrorTitle: '无法上传H5P文件',
-  h5pFileUploadServerErrorContent: '发生意外错误。 请检查服务器错误日志中是否有' +
-  '更多信息。',
+  h5pFileUploadServerErrorContent: '发生意外错误。 请检查服务器错误日志中是否有更多信息。',
   contentTypeSectionAll: '所有内容类型',
   searchResults: '搜索结果',
   contentTypeSearchFieldPlaceholder: '搜索内容类型',
@@ -128,7 +128,7 @@ H5PEditor.language.core = {
   currentMenuSelected: '当前选择',
   errorCommunicatingHubTitle: '无法与H5P Hub通信。',
   errorCommunicatingHubContent: '出错了，请再试一次。',
-  warningNoContentTypesInstalled: "您没有安装任何内容类型。",
+  warningNoContentTypesInstalled: '您没有安装任何内容类型。',
   warningChangeBrowsingToSeeResults: '单击<em>全部</em>以获取可以安装的所有内容类型的列表。',
   warningUpdateAvailableTitle: '有:contentType的更新可用。',
   warningUpdateAvailableBody: '更新到最新版本以获得更好的使用体验。',
@@ -166,13 +166,14 @@ H5PEditor.language.core = {
   addTitle: '添加标题',
   usedForSearchingReportsAndCopyrightInformation: '用于搜索，报告和版权信息',
   metadataSharingAndLicensingInfo: '元数据（共享和许可信息）',
-  fillInTheFieldsBelow : '请填写下面的字段',
+  fillInTheFieldsBelow: '请填写下面的字段',
   saveMetadata: '保存元数据',
   addAuthor: '保存作者',
   confirmRemoveAuthor: '您确定要删除这个作者吗？',
   addNewChange: '新增变更',
   confirmDeleteChangeLog: '您确定要删除这个更新日志条目吗？',
-  changelogDescription: '有些许可证要求记录并显示对原始作品或衍生作品所做的更改。 您可以根据许可证要求的原因在此处记录您的更改，或者只是为了让自己和他人跟踪对此内容所做的更改。',
+  changelogDescription:
+    '有些许可证要求记录并显示对原始作品或衍生作品所做的更改。 您可以根据许可证要求的原因在此处记录您的更改，或者只是为了让自己和他人跟踪对此内容所做的更改。',
   logThisChange: '记录此更改',
   newChangeHasBeenLogged: '已记录新的更改',
   loggedChanges: '已记录的更改',
@@ -195,8 +196,10 @@ H5PEditor.language.core = {
   pasteError: '无法从剪贴板粘贴',
   pasteContentNotSupported: '当前环境不支持H5P剪贴板中的内容',
   pasteContentRestricted: '剪贴板中的内容已在此站点上受到限制',
-  pasteTooOld: 'H5P剪贴板中的内容（:clip）的版本低于当前环境（:local）中支持的版本，如果可能，请尝试升级要粘贴的内容，然后再次复制并尝试将其粘贴到此处。',
-  pasteTooNew: 'H5P剪贴板中的内容（：clip）的版本高于当前环境（：local）中支持的版本，如果可能，请尝试先升级此内容，然后再尝试将其粘贴到此处。',
+  pasteTooOld:
+    'H5P剪贴板中的内容（:clip）的版本低于当前环境（:local）中支持的版本，如果可能，请尝试升级要粘贴的内容，然后再次复制并尝试将其粘贴到此处。',
+  pasteTooNew:
+    'H5P剪贴板中的内容（：clip）的版本高于当前环境（：local）中支持的版本，如果可能，请尝试先升级此内容，然后再尝试将其粘贴到此处。',
   ok: '我知道了',
   avTablistLabel: '插入使用',
   tabTitleBasicFileUpload: '上传文件',
@@ -209,10 +212,11 @@ H5PEditor.language.core = {
   language: '语言',
   noLanguagesSupported: '没有支持的语言',
   changeLanguage: '更改语言为 :language？',
-  thisWillPotentially: "这可能会重置所有文本和翻译。 您无法撤消此操作。 内容本身不会被更改。 您要继续吗？",
+  thisWillPotentially: '这可能会重置所有文本和翻译。 您无法撤消此操作。 内容本身不会被更改。 您要继续吗？',
   notAllTextsChanged: '并非所有文本都已更改，:language仅部分覆盖。',
-  contributeTranslations: '如果您想完善或帮助 :language的语言翻译，可以了解有关<a href=":url" target="_new">为H5P贡献翻译的信息</a>',
-  unknownLibrary: '很遗憾，此系统上未安装选定的内容类型 \'%lib\'。',
+  contributeTranslations:
+    '如果您想完善或帮助 :language的语言翻译，可以了解有关<a href=":url" target="_new">为H5P贡献翻译的信息</a>',
+  unknownLibrary: "很遗憾，此系统上未安装选定的内容类型 '%lib'。",
   proceedButtonLabel: '继续保存',
   enterFullscreenButtonLabel: '进入全屏',
   exitFullscreenButtonLabel: '退出全屏',
@@ -227,44 +231,37 @@ H5PEditor.language.core = {
   filterBy: '筛选条件',
   filter: '筛选',
   filters: {
-    level: {
-      dropdownLabel: '程度',
-      dialogHeader: '选择教育程度',
-      dialogButtonLabel: '按教育程度'
-    },
+    level: { dropdownLabel: '程度', dialogHeader: '选择教育程度', dialogButtonLabel: '按教育程度' },
     language: {
       dropdownLabel: '语言',
       dialogHeader: '选择语言',
       dialogButtonLabel: '按语言',
-      searchPlaceholder: '键入以搜索语言'
+      searchPlaceholder: '键入以搜索语言',
     },
     reviewed: {
       dropdownLabel: '已审核',
       dialogHeader: '已审核内容',
       dialogButtonLabel: '筛选',
-      optionLabel: '仅显示已审核的内容'
+      optionLabel: '仅显示已审核的内容',
     },
     contentTypes: {
       dropdownLabel: '内容类型',
       dialogHeader: '选择内容类型',
       dialogButtonLabel: '按内容类型',
-      searchPlaceholder: '键入以搜索内容类型'
+      searchPlaceholder: '键入以搜索内容类型',
     },
     disciplines: {
       dropdownLabel: '学科',
       dialogHeader: '选择学科',
       dialogButtonLabel: '按学科',
-      searchPlaceholder: '键入以搜索学科'
+      searchPlaceholder: '键入以搜索学科',
     },
     licenses: {
       dropdownLabel: '许可证',
       dialogHeader: '选择许可证类型',
       dialogButtonLabel: '按许可证类型',
-      options: {
-        modified: '可以修改',
-        commercial: '允许商业用途'
-      }
-    }
+      options: { modified: '可以修改', commercial: '允许商业用途' },
+    },
   },
   clearFilters: '清除所有过滤器',
   contentSearchFieldPlaceholder: '搜索内容',
