@@ -321,8 +321,16 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     // Check if source is provider (Vimeo, YouTube, Panopto)
     const isProvider = file.path && C.findProvider(file.path);
 
+    // Check if source is YouTube
+    var youtubeRegex = C.providers.filter(function (provider) {
+      return provider.name === 'YouTube';
+    })[0].regexp;
+    var isYoutube = file.path && youtubeRegex.test(file.path);
+
+    console.log(isYoutube);
+
     // Only allow single source if YouTube
-    if (isProvider) {
+    if (isProvider && !isYoutube) {
       // Remove all other files except this one
       that.$files.children().each(function (i) {
         if (i !== that.updateIndex) {
@@ -336,13 +344,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       // This is now the first and only file
       index = 0;
     }
-    this.$add.toggleClass('hidden', isProvider);
-
-    // Check if source is YouTube
-    var youtubeRegex = C.providers.filter(function (provider) {
-      return provider.name === 'YouTube';
-    })[0].regexp;
-    var isYoutube = file.path && youtubeRegex.test(file.path);
+    this.$add.toggleClass('hidden', isProvider && !isYoutube);
 
     // If updating remove and recreate element
     if (that.updateIndex !== undefined) {
