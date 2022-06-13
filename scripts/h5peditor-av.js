@@ -342,7 +342,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     var youtubeRegex = C.providers.filter(function (provider) {
       return provider.name === 'YouTube';
     })[0].regexp;
-    var isYoutube = file.path && file.path.match(youtubeRegex);
+    var isYoutube = file.path && youtubeRegex.test(file.path);
 
     // If updating remove and recreate element
     if (that.updateIndex !== undefined) {
@@ -354,8 +354,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     var isSignLanguage = (file.metadata && file.metadata.isSignLanguage) || false;
     var signLanguageChecked = isSignLanguage ? ' checked="checked"' : '';
 
-    // Create file with customizable quality if enabled and not youtube
-    if (this.field.enableCustomQualityLabel === true && !isProvider) {
+    // Create file with customizable quality if enabled and supported
+    if (this.field.enableCustomQualityLabel === true && (!isProvider || isYoutube)) {
       var signLanguageHTML = '<div class="field field-name-sign-language boolean">' +
         '<label class="h5peditor-label">' +
           '<input id="field-sign-language-' + rowInputId + '" class="h5peditor-sign-language" type="checkbox" aria-describedby="field-sign-language-' + rowInputId + '-description" + ' + signLanguageChecked + '>' +
