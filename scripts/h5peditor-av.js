@@ -327,8 +327,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     })[0].regexp;
     var isYoutube = file.path && youtubeRegex.test(file.path);
 
-    console.log(isYoutube);
-
     // Only allow single source if YouTube
     if (isProvider && !isYoutube) {
       // Remove all other files except this one
