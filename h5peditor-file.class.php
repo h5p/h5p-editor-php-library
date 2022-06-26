@@ -40,6 +40,7 @@ class H5peditorFile {
       $this->type = $_FILES['file']['type'];
     }
 
+    $this->name = pathinfo($_FILES['file']['name'], PATHINFO_BASENAME);
     $this->extension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
     $this->size = $_FILES['file']['size'];
   }
