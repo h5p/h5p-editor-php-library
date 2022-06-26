@@ -224,12 +224,21 @@ class H5peditorFile {
    * Print result from file processing.
    */
   public function printResult() {
-    $this->result->path = $this->getType() . 's/' . $this->getName() . '#tmp';
+    $this->result->path = $this->getResultPath();
 
     // text/plain is used to support IE
     header('Cache-Control: no-cache');
     header('Content-Type: text/plain; charset=utf-8');
 
     print $this->getResult();
+  }
+
+  /**
+   * Get result file path
+   * @return string
+   */
+  protected function getResultPath()
+  {
+      return $this->getType() . 's/' . $this->getName() . '#tmp';
   }
 }
