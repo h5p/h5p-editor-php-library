@@ -180,11 +180,11 @@ class H5PEditorAjax {
    *
    * @param int $contentId Id of content if already existing content
    */
-  private function fileUpload($contentId = NULL) {
-    $file = new H5peditorFile($this->core->h5pF);
-    if (!$file->isLoaded()) {
-      H5PCore::ajaxError($this->core->h5pF->t('File not found on server. Check file upload settings.'));
-      return;
+  protected function fileUpload($contentId = NULL) {
+    $file = $this->getUploadedFileModel();
+    if (!$file) {
+        H5PCore::ajaxError($this->core->h5pF->t('File not found on server. Check file upload settings.'));
+        return;
     }
 
     // Make sure file is valid and mark it for cleanup at a later time
@@ -193,6 +193,18 @@ class H5PEditorAjax {
       $this->storage->markFileForCleanup($file_id, 0);
     }
     $file->printResult();
+  }
+
+  /**
+   * Get uploaded file
+   * @return H5peditorFile|null
+   */
+  protected function getUploadedFileModel() {
+    $file = new H5peditorFile($this->core->h5pF);
+    if (!$file->isLoaded()) {
+      return null;
+    }
+    return $file;
   }
 
   /**
