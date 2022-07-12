@@ -56,7 +56,7 @@ H5PEditor.language.core = {
   uploadAudioTitle: 'Upload audiobestand',
   uploadVideoTitle: 'Upload videobestand',
   addVideoDescription:
-    'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube and Panopto links.',
+	'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube, Panopto and Warpwire links.',
   insert: 'Invoegen',
   cancel: 'Annuleren',
   height: 'hoogte',
