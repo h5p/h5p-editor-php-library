@@ -451,8 +451,14 @@ class H5peditor {
     }
 
     $translations = array();
+    $directories = array();
+
     // Add translations for libraries.
     foreach ($libraries as $library) {
+      // Add directory to lookup array
+      $key = "{$library['machineName']}-{$library['majorVersion']}.{$library['minorVersion']}";
+      $directories[$key] = $key . ($library['patchVersionInFolderName'] ? ".{$library['patchVersion']}" : '');
+
       if (empty($library['semantics'])) {
         $translation = $this->getLibraryLanguage($library['machineName'], $library['majorVersion'], $library['minorVersion'], $languageCode);
 
@@ -469,6 +475,7 @@ class H5peditor {
     }
 
     $libraryData->translations = $translations;
+    $libraryData->directories = $directories;
 
     return $libraryData;
   }

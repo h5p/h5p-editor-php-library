@@ -112,6 +112,16 @@ ns.libraryRequested = function (libraryName, callback) {
   var libraryData = ns.libraryCache[libraryName];
 
   if (!ns.libraryLoaded[libraryName]) {
+    // Add directories to lookup object
+    if (libraryData.directories !== undefined) {
+      if (H5PIntegration.libraryDirectories === undefined) {
+        H5PIntegration.libraryDirectories = {};
+      }
+      for (let key in libraryData.directories) {
+        H5PIntegration.libraryDirectories[key] = libraryData.directories[key];
+      }
+    }
+
     // Add CSS.
     if (libraryData.css !== undefined) {
       libraryData.css.forEach(function (path) {
