@@ -171,7 +171,7 @@ H5PEditor.language.core = {
   metadata: 'Metadata',
   addTitle: 'Legg til tittel',
   usedForSearchingReportsAndCopyrightInformation: 'Brukes til søk, rapporter og copyright-informasjon',
-  metadataSharingAndLicensingInfo: 'Metadata (deling- og lisensinformasjon))',
+  metadataSharingAndLicensingInfo: 'Metadata (deling- og lisensinformasjon)',
   fillInTheFieldsBelow: 'Fyll inn feltene nedenfor',
   saveMetadata: 'Lagre metadata',
   addAuthor: 'Lagre forfatter',
