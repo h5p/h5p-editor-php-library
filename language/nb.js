@@ -259,7 +259,7 @@ H5PEditor.language.core = {
     },
     contentTypes: {
       dropdownLabel: 'Innholdstyper',
-      dialogHeader: 'Velg innholdstypere(r)',
+      dialogHeader: 'Velg innholdstype(r)',
       dialogButtonLabel: 'Filtrer på innholdstyper',
       searchPlaceholder: 'Velg en eller flere innholdstyper',
     },
