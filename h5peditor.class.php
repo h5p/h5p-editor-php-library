@@ -50,7 +50,7 @@ class H5peditor {
     'scripts/h5peditor-pre-save.js',
     'ckeditor/ckeditor.js',
   );
-  private $h5p, $storage, $filesInContentFolder;
+  private $h5p, $storage, $filesInContentFolder, $pass;
   public $ajax, $ajaxInterface, $content;
 
   /**
@@ -154,6 +154,7 @@ class H5peditor {
   public function processParameters($content, $newLibrary, $newParameters, $oldLibrary = NULL, $oldParameters = NULL) {
     $newFiles = array();
     $oldFiles = array();
+    $this->pass = 0;
 
     // Keep track of current content ID (used when processing files)
     $this->content = $content;
@@ -177,6 +178,9 @@ class H5peditor {
     $this->h5p->fs->waitForPendingPromises();
 
     if ($oldLibrary !== NULL) {
+      // Prevent file actions when processing old parameters
+      $this->pass++;
+
       // Find old files and libraries.
       $this->processSemantics($oldFiles, $this->h5p->loadLibrarySemantics($oldLibrary['name'], $oldLibrary['majorVersion'], $oldLibrary['minorVersion']), $oldParameters);
       $this->h5p->fs->waitForPendingPromises();
@@ -282,7 +286,8 @@ class H5peditor {
     }
 
     // Remove temporary files suffix
-    if (substr($params->path, -4, 4) === '#tmp') {
+    $isTmp = (substr($params->path, -4, 4) === '#tmp');
+    if ($isTmp) {
       $params->path = substr($params->path, 0, strlen($params->path) - 4);
     }
 
@@ -290,7 +295,7 @@ class H5peditor {
     $matches = array();
     if (preg_match($this->h5p->relativePathRegExp, $params->path, $matches)) {
 
-      if (!in_array($matches[5], $this->filesInContentFolder)) {
+      if (!in_array($matches[5], $this->filesInContentFolder) && $this->pass === 0) {
         // Create a copy of the file
         $this->h5p->fs->cloneContentFile($matches[5], $matches[4], $this->content);
         $this->filesInContentFolder[] = $matches[5];
@@ -300,7 +305,7 @@ class H5peditor {
       $params->path = $matches[5];
     }
     // If file is already found in content folder, there's no need to check again
-    elseif (!in_array($params->path, $this->filesInContentFolder)) {
+    elseif ($isTmp && !in_array($params->path, $this->filesInContentFolder) && $this->pass === 0) {
       // If file is already in content folder the cloning will fail silently,
       // but that is better than checking if the file already exists in the
       // content folder for every file..
