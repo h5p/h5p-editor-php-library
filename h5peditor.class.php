@@ -51,7 +51,7 @@ class H5peditor {
     'ckeditor/ckeditor.js',
   );
   private $h5p, $storage;
-  public $ajax, $ajaxInterface;
+  public $ajax, $ajaxInterface, $content;
 
   /**
    * Constructor for the core editor library.
