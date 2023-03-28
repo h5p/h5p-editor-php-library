@@ -351,9 +351,9 @@ ns.Form.prototype.setSubContentDefaultLanguage = function (params, lang) {
   const self = this;
 
   if (Array.isArray(params)) {
-    for (let i; i < params.length; i++) { 
-      params[i] = self.setSubContentDefaultLanguage(params[i], lang);
-    }
+    params = params.map(function (listItem) {
+      return self.setSubContentDefaultLanguage(listItem, lang);
+    });
   }
   else if (typeof params === 'object') {
     if (params.metadata) {
@@ -412,11 +412,6 @@ ns.Form.prototype.remove = function () {
  */
 ns.Form.prototype.processSemantics = function (semantics, defaultParams, metadata) {
   this.metadata = (metadata ? metadata : defaultParams.metadata || {});
-
-  // Set language initially used
-  if (!this.metadata.defaultLanguage) {
-    this.metadata.defaultLanguage = ns.defaultLanguage;
-  }
 
   if (ns.enableMetadata(this.currentLibrary)) {
     this.metadataForm = new ns.MetadataForm(this, this.metadata, this.$form.children('.tree'), true);

@@ -313,7 +313,7 @@ ns.Group.prototype.setSummary = function (summary) {
   // Parse html
   var summaryTextNode = ns.$.parseHTML(summary);
 
-  if (summaryTextNode !== null && summaryTextNode.length) {
+  if (summaryTextNode !== null) {
     summaryText = summaryTextNode[0].nodeValue;
   }
 
