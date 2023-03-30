@@ -206,8 +206,13 @@ H5PEditor.SemanticStructure = (function ($) {
      * @param {jQuery} $container
      */
     self.appendTo = function ($container) {
-      // Use first widget by default
-      changeWidget(widgets[0].name);
+      if (widgets.name) {
+          changeWidget(widgets.name);
+      } else if (typeof widgets[0] === "object") {
+          changeWidget(widgets[0].name);
+      } else {
+          //
+      }
 
       $wrapper.appendTo($container);
     };
