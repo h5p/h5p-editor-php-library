@@ -1818,6 +1818,8 @@ ns.supportedLanguages = {
   'or': 'Oriya',
   'os': 'Ossetian',
   'pa': 'Punjabi',
+  'pap-cw': 'Papiamento (Curaçao and Bonaire)',
+  'pap-aw': 'Papiamento (Aruba)',
   'pi': 'Pali',
   'pl': 'Polish (Polski)',
   'ps': 'Pashto (پښتو)',
