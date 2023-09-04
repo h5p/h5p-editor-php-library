@@ -221,6 +221,7 @@ ns.SelectorHub.prototype.getSelectedLibrary = function (next) {
   if (contentType) {
     selected.tutorialUrl = contentType.tutorial;
     selected.exampleUrl = contentType.example;
+    selected.title = contentType.title;
   }
 
   return next(selected);

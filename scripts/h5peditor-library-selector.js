@@ -43,6 +43,14 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
       '</span>' +
     '</a>'
   ).hide();
+  this.$a11yUrl = ns.$(
+    '<a class="h5p-a11y-url" target="_blank">' +
+      '<span class="h5p-a11y-url-label">' + 
+        'Accessibility' +
+      '</span>' +
+    '</a>'
+  );
+  //this.$a11yUrl = ns.$('<a class="h5p-a11y-url" target="_blank"><span class="h5p-a11y-url-label">' + ns.t('core', 'Accessibility') + '</span></a>').hide();
 
   // Create confirm dialog
   var changeLibraryDialog = new H5P.ConfirmationDialog({
@@ -67,8 +75,11 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
     that.currentLibrary = library.uberName;
     that.loadSemantics(library.uberName, that.selector.getParams(), that.selector.getMetadata());
 
+    let libraryTitle = library.title.replace(/\W+/g, '-').toLowerCase();
+
     that.$tutorialUrl.attr('href', library.tutorialUrl ? library.tutorialUrl : '#').toggle(!!library.tutorialUrl);
     that.$exampleUrl.attr('href', library.exampleUrl ? library.exampleUrl : '#').toggle(!!library.exampleUrl);
+    that.$a11yUrl.attr('href', library.a11yUrl ? library.a11yUrl : 'https://studio.libretexts.org/help/h5p-accessibility/' + libraryTitle);
   };
 
   /**
@@ -144,6 +155,7 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
   this.$selector.appendTo($element);
   this.$tutorialUrl.appendTo($element);
   this.$exampleUrl.appendTo($element);
+  this.$a11yUrl.appendTo($element);
 
   if (window.localStorage) {
     var $buttons = ns.$(ns.createCopyPasteButtons()).appendTo($element);
