@@ -330,6 +330,15 @@ H5PEditor.List = (function ($) {
       return $.extend(true, {}, field.field);
     };
 
+    /**
+     * Get copy of list's field semantics holding its configuration.
+     *
+     * @returns {Object}
+     */
+    self.getConfig = function () {
+      return $.extend(true, {}, field);
+    };
+
     // Start the party!
     init();
   }
