@@ -455,7 +455,10 @@ ns.Html.prototype.validate = function () {
   }
 
   // Get contents from editor
-  var value = this.ckeditor !== undefined ? this.ckeditor.getData() : this.$input.html();
+  // If there are more than one ckeditor, getData() might be undefined when ckeditor is not
+  let value = ((this.ckeditor !== undefined && this.ckeditor.getData() !== undefined)
+    ? this.ckeditor.getData()
+    : this.$input.html());
 
   value = value
     // Remove placeholder text if any:
