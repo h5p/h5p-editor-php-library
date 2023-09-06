@@ -287,6 +287,13 @@ ns.Html.prototype.getCKEditorConfig = function () {
     }
   }
 
+  if (this.field.enterMode === 'p') {
+    this.tags.push('p');
+  }
+  else {
+    this.tags.push('div');
+  }
+
   return config;
 };
 
@@ -363,6 +370,16 @@ ns.Html.prototype.appendTo = function ($wrapper) {
           view: 'em',
           converterPriority: 'high'
         });
+
+        // Mimic old enter_mode behaviour if not specifically set to 'p'
+        if (that.field.enterMode !== 'p') {
+          // Use <div> elements instead of <p>
+          editor.conversion.for('downcast').elementToElement({
+            model: 'paragraph',
+            view: 'div',
+            converterPriority: 'high'
+          });
+        }
 
         that.ckeditor = editor;
         const editable = editor.ui.view.editable;
