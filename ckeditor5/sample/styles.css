@@ -47,10 +47,14 @@ main .ck-editor[role='application'] .ck.ck-content,
 .editor-container {
 	display: flex;
 	flex-direction: row;
-    flex-wrap: nowrap;
-    position: relative;
+	flex-wrap: nowrap;
+	position: relative;
 	width: 100%;
 	justify-content: center;
+}
+
+.editor-container--with-sidebar > .ck.ck-editor {
+	width: calc( 100% - var(--ck-sample-sidebar-width) );
 }
 
 /* --------- DECOUPLED (DOCUMENT) BUILD. ---------------------------------------------*/
@@ -324,6 +328,8 @@ body[data-editor='InlineEditor'] .collaboration-demo__row {
 
 .revision-viewer-container {
     display: none;
+    max-width: 100%;
+    word-wrap: break-word;
 }
 
 .revision-viewer-sidebar {
