@@ -117,7 +117,7 @@ ns.Html.prototype.getCKEditorConfig = function () {
   // Links.
   if (this.inTags("a")) {
     const items = ["link"];
-    plugins.push('Link'); // TODO: add plugin 'AutoLink' once available in h5p-ckeditor repo
+    plugins.push('Link', 'AutoLink');
     toolbar.push("|", ...items);
   }
 
@@ -128,10 +128,18 @@ ns.Html.prototype.getCKEditorConfig = function () {
     plugins.push('Image');
   }
   // Include table plugins to avoid errors when creating the editor
-  plugins.push('Table', 'TableToolbar');
+  plugins.push(
+    'Table',
+    'TableToolbar',
+    'TableProperties',
+    'TableCellProperties',
+    'TableColumnResize',
+    'TableCaption'
+  );
+
   if (this.inTags("table")) {
     inserts.push("insertTable");
-    ns.$.merge(this.tags, ["tr", "td", "th", "colgroup", "thead", "tbody", "tfoot"]);
+    ns.$.merge(this.tags, ["tr", "td", "th", "colgroup", "col", "thead", "tbody", "tfoot"]);
   }
   if (this.inTags("hr")) {
     inserts.push("horizontalLine");
@@ -157,7 +165,14 @@ ns.Html.prototype.getCKEditorConfig = function () {
     alignment: alignments,
     toolbar: toolbar,
     table: {
-      contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
+      contentToolbar: [
+        'tableCaption',
+        'tableColumn',
+        'tableRow',
+        'mergeTableCells',
+        'tableProperties',
+        'tableCellProperties'
+      ]
     }
   };
 
@@ -489,8 +504,8 @@ ns.Html.prototype.validate = function () {
   // Check if we have any text at all.
   if (!this.field.optional && !textValue.length) {
     // We can accept empty text, if there's an image instead.
-    if (! (this.inTags("img") && $value.find('img').length > 0)) {
-      this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': ns.t('core', 'textField')})));
+    if (!(this.inTags("img") && $value.find('img').length > 0)) {
+      this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', { ':property': ns.t('core', 'textField') })));
     }
   }
 
@@ -498,7 +513,7 @@ ns.Html.prototype.validate = function () {
   // the tag's content.  So if we get an unallowed container, the contents
   // will remain, without the container.
   $value.find('*').each(function () {
-    if (! that.inTags(this.tagName)) {
+    if (!that.inTags(this.tagName)) {
       ns.$(this).replaceWith(ns.$(this).contents());
     }
   });
