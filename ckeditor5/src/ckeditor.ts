@@ -133,7 +133,7 @@ class Editor extends ClassicEditor {
 		},
 		table: {
 			contentToolbar: [
-				'tableCaption',
+				'toggleTableCaption',
 				'tableColumn',
 				'tableRow',
 				'mergeTableCells',
