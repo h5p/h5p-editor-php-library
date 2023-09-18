@@ -172,7 +172,7 @@ ns.Html.prototype.getCKEditorConfig = function () {
         'tableCellProperties'
       ]
     }
-    ns.$.merge(this.tags, ["tr", "td", "th", "colgroup", "thead", "tbody", "tfoot"]);
+    ns.$.merge(this.tags, ["tr", "td", "th", "colgroup", "col", "thead", "tbody", "tfoot", "figure", "figcaption"]);
   }
 
   // Add dropdown to toolbar if formatters in tags (h1, h2, etc).

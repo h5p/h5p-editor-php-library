@@ -96,6 +96,40 @@ a {
     font-size: 16px;
     word-wrap: break-word;
 
+    // The figure around the table
+    & .table {
+      display: table;
+      table-layout: fixed;
+      margin-left: auto;
+      margin-right: auto;
+
+      // The actual table
+      & table {
+        border-collapse: collapse;
+        height: 100%;
+        width: 100%;
+        border-spacing: 0;
+        border: 1px double #b3b3b3;
+
+        & td {
+          padding: .4em;
+          border: 1px solid #bfbfbf;
+        }
+      }
+
+      & figcaption {
+        background-color: #f7f7f7;
+        caption-side: top;
+        color: #333;
+        display: table-caption;
+        font-size: .75em;
+        outline-offset: -1px;
+        padding: .6em;
+        text-align: center;
+        word-break: break-word;
+      }
+    }
+
     &.error {
       border-color: red;
     }
