@@ -127,20 +127,6 @@ ns.Html.prototype.getCKEditorConfig = function () {
     // For now, we just include the plugin to prevent data loss
     plugins.push('Image');
   }
-  // Include table plugins to avoid errors when creating the editor
-  plugins.push(
-    'Table',
-    'TableToolbar',
-    'TableProperties',
-    'TableCellProperties',
-    'TableColumnResize',
-    'TableCaption'
-  );
-
-  if (this.inTags("table")) {
-    inserts.push("insertTable");
-    ns.$.merge(this.tags, ["tr", "td", "th", "colgroup", "col", "thead", "tbody", "tfoot"]);
-  }
   if (this.inTags("hr")) {
     inserts.push("horizontalLine");
     plugins.push('HorizontalLine');
@@ -163,10 +149,22 @@ ns.Html.prototype.getCKEditorConfig = function () {
     updateSourceElementOnDestroy: true,
     plugins: plugins,
     alignment: alignments,
-    toolbar: toolbar,
-    table: {
+    toolbar: toolbar
+  };
+
+  if (this.inTags("table")) {
+    config.toolbar.push("insertTable");
+    config.plugins.push(
+      'Table',
+      'TableToolbar',
+      'TableProperties',
+      'TableCellProperties',
+      'TableColumnResize',
+      'TableCaption'
+    );
+    config.table = {
       contentToolbar: [
-        'tableCaption',
+        'toggleTableCaption',
         'tableColumn',
         'tableRow',
         'mergeTableCells',
@@ -174,7 +172,8 @@ ns.Html.prototype.getCKEditorConfig = function () {
         'tableCellProperties'
       ]
     }
-  };
+    ns.$.merge(this.tags, ["tr", "td", "th", "colgroup", "thead", "tbody", "tfoot"]);
+  }
 
   // Add dropdown to toolbar if formatters in tags (h1, h2, etc).
   for (let index = 1; index < 7; index++) {
