@@ -109,11 +109,11 @@ a {
         height: 100%;
         width: 100%;
         border-spacing: 0;
-        border: 1px double #b3b3b3;
+        border: 3px double #b3b3b3;
 
         & td {
           padding: .4em;
-          border: 1px solid #bfbfbf;
+          border: 3px double #bfbfbf;
         }
       }
 
@@ -134,6 +134,18 @@ a {
       border-color: red;
     }
   }
+
+  // Inside ckeditor, needed for changes to default
+  .ck-content .table table {
+    border-style: double;
+    border-width: 3px;
+
+    & td {
+      border-style: double;
+      border-width: 3px;
+    }
+  }
+
   .h5peditor-text, textarea {
     width: 100%;
     box-sizing: border-box;

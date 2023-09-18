@@ -170,7 +170,19 @@ ns.Html.prototype.getCKEditorConfig = function () {
         'mergeTableCells',
         'tableProperties',
         'tableCellProperties'
-      ]
+      ],
+      tableProperties: {
+        defaultProperties: {
+          borderStyle: 'double',
+          borderWidth: '3px'
+        }
+      },
+      tableCellProperties: {
+        defaultProperties: {
+          borderStyle: 'double',
+          borderWidth: '3px'
+        }
+      }
     }
     ns.$.merge(this.tags, ["tr", "td", "th", "colgroup", "col", "thead", "tbody", "tfoot", "figure", "figcaption"]);
   }
