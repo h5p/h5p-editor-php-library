@@ -135,6 +135,10 @@ a {
       }
     }
 
+    & .table-overflow-protection {
+      clear: both;
+    }
+
     &.error {
       border-color: red;
     }

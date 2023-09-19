@@ -438,6 +438,11 @@ ns.Html.prototype.appendTo = function ($wrapper) {
           if (that.$placeholder.length !== 0 && (value === undefined || value.length === 0) && (that.value === undefined || that.value.length === 0)) {
             that.$placeholder.appendTo(that.$item.find('.ckeditor'));
           }
+          // Add overflow protection if chance of aligned tables
+          // CKEditor removes it when opening
+          else if(that.inTags('table') && !value.includes('table-overflow-protection')) {
+            that.$item.find('.ckeditor').append('<div class="table-overflow-protection"/>');
+          }
         });
 
         var blur = function () {
@@ -480,6 +485,10 @@ ns.Html.prototype.createHtml = function () {
   }
   else if (this.field.placeholder !== undefined) {
     input += '<span class="h5peditor-ckeditor-placeholder">' + this.field.placeholder + '</span>';
+  }
+  // Add overflow protection if table
+  if (this.field.tags.includes('table') && !input.includes('table-overflow-protection')) {
+    input += '<div class="table-overflow-protection"/>';
   }
   input += '</div>';
 
