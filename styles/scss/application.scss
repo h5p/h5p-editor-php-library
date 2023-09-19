@@ -111,9 +111,14 @@ a {
         border-spacing: 0;
         border: 3px double #b3b3b3;
 
-        & td {
+        & td, th {
           padding: .4em;
           border: 3px double #bfbfbf;
+        }
+  
+        & th {
+          text-align: center;
+          background-color: #0000000d;
         }
       }
 
@@ -140,9 +145,13 @@ a {
     border-style: double;
     border-width: 3px;
 
-    & td {
+    & td, th {
       border-style: double;
       border-width: 3px;
+    }
+
+    & th {
+      text-align: center;
     }
   }
 
