@@ -97,32 +97,32 @@ a {
     word-wrap: break-word;
 
     // The figure around the table
-    & .table {
+    figure.table {
       display: table;
       table-layout: fixed;
       margin-left: auto;
       margin-right: auto;
 
       // The actual table
-      & table {
+      table {
         border-collapse: collapse;
         height: 100%;
         width: 100%;
         border-spacing: 0;
         border: 3px double #b3b3b3;
 
-        & td, th {
+        td, th {
           padding: .4em;
           border: 3px double #bfbfbf;
         }
   
-        & th {
+        th {
           text-align: center;
           background-color: #0000000d;
         }
       }
 
-      & figcaption {
+      figcaption {
         background-color: #f7f7f7;
         caption-side: top;
         color: #333;
@@ -135,7 +135,7 @@ a {
       }
     }
 
-    & .table-overflow-protection {
+    .table-overflow-protection {
       clear: both;
     }
 
@@ -145,16 +145,16 @@ a {
   }
 
   // Inside ckeditor, needed for changes to default
-  .ck-content .table table {
+  .ck-content figure.table table {
     border-style: double;
     border-width: 3px;
 
-    & td, th {
+    td, th {
       border-style: double;
       border-width: 3px;
     }
 
-    & th {
+    th {
       text-align: center;
     }
   }
@@ -167,6 +167,7 @@ a {
       border-color: red;
     }
   }
+
   /* Placeholders - need to be on separate lines. If not,
      the browsers will invalidate them */
   textarea:focus::-webkit-input-placeholder,
