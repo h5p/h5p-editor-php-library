@@ -17,6 +17,6 @@ You first need to install ruby and compass:
 - `sudo apt install build-essential`
 - `sudo gem install compass`
 
-Then cd to `h5pcom-editor-php-library/syles` and compile the scss files:
+Then cd to `h5p-editor-php-library/styles` and compile the scss files:
 - `compass watch` to continuely compile changes
 - or `compass clean && compass compile` to delete the css files and compile new ones
