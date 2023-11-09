@@ -46,7 +46,7 @@ import {
 	TableColumnResize,
 	TableProperties,
 	TableToolbar
-} from '@ckeditor/ckeditor5-table';
+} from '@h5p/ckeditor5-table';
 import { TextTransformation } from '@ckeditor/ckeditor5-typing';
 
 // You can read more about extending the build with additional plugins in the "Installing plugins" guide.
