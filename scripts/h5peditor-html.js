@@ -309,10 +309,19 @@ ns.Html.prototype.appendTo = function ($wrapper) {
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$input = this.$item.children('.ckeditor');
   this.$errors = this.$item.children('.h5p-errors');
+  this.ckeditor = undefined;
 
   ns.bindImportantDescriptionEvents(this, this.field.name, this.parent);
 
   this.ckEditorConfig = this.getCKEditorConfig();
+
+  const supportedLanguages = [];
+  for (const langCode in ns.supportedLanguages) {
+    if (ns.supportedLanguages.hasOwnProperty(langCode)) {
+      supportedLanguages.push({title: ns.supportedLanguages[langCode], languageCode: langCode});
+    }
+  }
+  this.ckEditorConfig['language'] = {textPartLanguage: supportedLanguages};
 
   this.$input.focus(function () {
     // Blur is not fired on destroy. Therefore we need to keep track of it!
@@ -364,6 +373,17 @@ ns.Html.prototype.appendTo = function ($wrapper) {
           return ratio * innerHeight * 0.85;
         }
 
+        const getColors = () => {
+          if (newStyles) {
+            return newStyles;
+          } else if (that.ckeditor.config.get('ckeStyles')) {
+            return that.ckeditor.config.get('ckeStyles');
+          } else {
+            return {};
+          }
+        }
+
+
         // Use <em> elements for italic text instead of <i>
         editor.conversion.for('downcast').attributeToElement( {
           model: 'italic',
@@ -385,10 +405,28 @@ ns.Html.prototype.appendTo = function ($wrapper) {
         const editable = editor.ui.view.editable;
         editorElement = editable.element;
         editorElement.style.maxHeight = getEditorHeight() + 'px';
+        editorElement.style.backgroundColor = getColors().backgroundColor;;
+        editorElement.style.color = getColors().color;
+
+        let newStyles;
+        document.addEventListener('ckeStylesChanged', (event) => {
+          newStyles = event.detail;
+          if (that.ckeditor) {
+            const editorElement = that.ckeditor.ui.view.editable.element;
+            editorElement.style.backgroundColor = newStyles.backgroundColor || '';
+            editorElement.style.color = newStyles.color || '';
+          }
+        });
 
         editable.on('change', (event) => {
           editorElement = event.source.element;
           editorElement.style.maxHeight = getEditorHeight() + 'px';
+        });
+
+        editable.on('change:isFocused', (event) => {
+          editorElement = event.source.element;
+          editorElement.style.backgroundColor = getColors().backgroundColor;
+          editorElement.style.color = getColors().color;
         });
 
         editor.editing.view.focus();
@@ -489,8 +527,8 @@ ns.Html.prototype.validate = function () {
   // Check if we have any text at all.
   if (!this.field.optional && !textValue.length) {
     // We can accept empty text, if there's an image instead.
-    if (! (this.inTags("img") && $value.find('img').length > 0)) {
-      this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': ns.t('core', 'textField')})));
+    if (!(this.inTags("img") && $value.find('img').length > 0)) {
+      this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', { ':property': ns.t('core', 'textField') })));
     }
   }
 
@@ -498,7 +536,7 @@ ns.Html.prototype.validate = function () {
   // the tag's content.  So if we get an unallowed container, the contents
   // will remain, without the container.
   $value.find('*').each(function () {
-    if (! that.inTags(this.tagName)) {
+    if (!that.inTags(this.tagName)) {
       ns.$(this).replaceWith(ns.$(this).contents());
     }
   });
@@ -512,7 +550,6 @@ ns.Html.prototype.validate = function () {
     this.$input.removeClass('error');
   }
 
-  this.value = value;
   this.setValue(this.field, value);
   this.$input.change(); // Trigger change event.
 
@@ -558,3 +595,4 @@ ns.Html.prototype.forceValue = function (value) {
 };
 
 ns.widgets.html = ns.Html;
+
