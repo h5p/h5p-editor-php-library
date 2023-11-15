@@ -315,14 +315,6 @@ ns.Html.prototype.appendTo = function ($wrapper) {
 
   this.ckEditorConfig = this.getCKEditorConfig();
 
-  const supportedLanguages = [];
-  for (const langCode in ns.supportedLanguages) {
-    if (ns.supportedLanguages.hasOwnProperty(langCode)) {
-      supportedLanguages.push({title: ns.supportedLanguages[langCode], languageCode: langCode});
-    }
-  }
-  this.ckEditorConfig['language'] = {textPartLanguage: supportedLanguages};
-
   this.$input.focus(function () {
     // Blur is not fired on destroy. Therefore we need to keep track of it!
     var blurFired = false;
@@ -550,6 +542,7 @@ ns.Html.prototype.validate = function () {
     this.$input.removeClass('error');
   }
 
+  this.value = value;
   this.setValue(this.field, value);
   this.$input.change(); // Trigger change event.
 
