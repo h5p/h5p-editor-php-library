@@ -173,14 +173,18 @@ ns.Html.prototype.getCKEditorConfig = function () {
       ],
       tableProperties: {
         defaultProperties: {
-          borderStyle: 'double',
-          borderWidth: '3px'
+          borderStyle: 'underline',
+          borderWidth: '0.083em',
+          borderColor: '#494949',
+          padding: '0'
         }
       },
       tableCellProperties: {
         defaultProperties: {
-          borderStyle: 'double',
-          borderWidth: '3px'
+          borderStyle: 'underline',
+          borderWidth: '0.083em',
+          borderColor: '#494949',
+          padding: '1px'
         }
       }
     }

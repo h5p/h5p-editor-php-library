@@ -96,34 +96,44 @@ a {
     font-size: 16px;
     word-wrap: break-word;
 
-    // The figure around the table
+    /* The figure around the table */
     figure.table {
       display: table;
       table-layout: fixed;
-      margin-left: auto;
-      margin-right: auto;
+      margin: 0 auto;
+      padding: 0;
 
-      // The actual table
+      /* The actual table */
       table {
         border-collapse: collapse;
         height: 100%;
         width: 100%;
         border-spacing: 0;
-        border: 3px double #b3b3b3;
+        border-width: 1px;
+        border-color:  #494949;
 
         td, th {
-          padding: .4em;
-          border: 3px double #bfbfbf;
+          padding: 1px;
+          border-color:  #494949;
+          border-bottom-style: solid;
         }
-  
+
+        td {
+          border-width: 0.083em;
+        }
+
         th {
           text-align: center;
-          background-color: #0000000d;
+          border-width: .167em;
+        }
+
+        tr:last-child td {
+          border-bottom: 0;
         }
       }
 
       figcaption {
-        background-color: #f7f7f7;
+        background-color: transparent;
         caption-side: top;
         color: #333;
         display: table-caption;
@@ -145,17 +155,36 @@ a {
   }
 
   // Inside ckeditor, needed for changes to default
-  .ck-content figure.table table {
-    border-style: double;
-    border-width: 3px;
+  .ck-content figure.table {
+    table {
+      border-width: 1px;
+      border-color:  #494949;
+      border-style: none;
 
-    td, th {
-      border-style: double;
-      border-width: 3px;
+      td, th {
+        padding: 1px;
+        border-style: none;
+        border-color:  #494949;
+        border-bottom-style: solid;
+      }
+
+      td {
+        border-width: 0.083em;
+      }
+
+      th {
+        text-align: center;
+        border-width: .167em;
+        background-color: transparent;
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
     }
 
-    th {
-      text-align: center;
+    figcaption {
+      background-color: transparent;
     }
   }
 
