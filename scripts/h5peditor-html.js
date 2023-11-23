@@ -225,7 +225,24 @@ ns.Html.prototype.getCKEditorConfig = function () {
         const fontSizes = [];
 
         // Standard font sizes that are available.
-        const defaultAvailable = [8, 9, 10, 11, 12, 14, 'default', 18, 20, 22, 24, 26, 28, 36, 48, 72];
+        const defaultAvailable = [
+          { title: '450%', model: '4.5em' },
+          { title: '300%', model: '3em' },
+          { title: '225%', model: '2.25em' },
+          { title: '175%', model: '1.75em' },
+          { title: '162.5%', model: '1.625em' },
+          { title: '150%', model: '1.5em' },
+          { title: '137.5%', model: '1.375em' },
+          { title: '112.5%', model: '1.125em' },
+          { title: '100%', model: '1em' },
+          { title: '87.5%', model: '0.875em' },
+          { title: '75%', model: '0.75em' },
+          { title: '68.75%', model: '0.6875em' },
+          { title: '62.5%', model: '0.625em' },
+          { title: '56.25%', model: '0.5625em' },
+          { title: '50%', model: '0.5em' },
+          { title: 'Default', model: '1em' },
+        ]
 
         for (let i = 0; i < defaultAvailable.length; i++) {
           fontSizes.push(defaultAvailable[i]);
