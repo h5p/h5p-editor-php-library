@@ -394,8 +394,13 @@ ns.Html.prototype.appendTo = function ($wrapper) {
           return ratio * innerHeight * 0.85;
         }
 
+        that.ckeditor = editor;
+        const editable = editor.ui.view.editable;
+        editorElement = editable.element;
+        editorElement.style.maxHeight = getEditorHeight() + 'px';
+
         // Use <em> elements for italic text instead of <i>
-        editor.conversion.for('downcast').attributeToElement( {
+        editor.conversion.for('downcast').attributeToElement({
           model: 'italic',
           view: 'em',
           converterPriority: 'high'
@@ -409,16 +414,25 @@ ns.Html.prototype.appendTo = function ($wrapper) {
             view: 'div',
             converterPriority: 'high'
           });
-        }
 
-        that.ckeditor = editor;
-        const editable = editor.ui.view.editable;
-        editorElement = editable.element;
-        editorElement.style.maxHeight = getEditorHeight() + 'px';
+          // Weird CKE behaviour makes all existing divs p's,
+          // so make stubborn p's look like divs in editor
+          // until they get downcast to divs on CKE destroy
+          editorElement.classList.add('enter-mode-div');
+        }
 
         editable.on('change', (event) => {
           editorElement = event.source.element;
           editorElement.style.maxHeight = getEditorHeight() + 'px';
+        });
+
+        // CKE elements lose style and classes on focus change, need to reapply them
+        editable.on('change:isFocused', (event) => {
+          editorElement = event.source.element;
+
+          if (that.field.enterMode !== 'p') {
+            editorElement.classList.add('enter-mode-div');
+          }
         });
 
         editor.editing.view.focus();
