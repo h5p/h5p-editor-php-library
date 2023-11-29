@@ -117,7 +117,7 @@ ns.Html.prototype.getCKEditorConfig = function () {
   // Links.
   if (this.inTags("a")) {
     const items = ["link"];
-    plugins.push('Link'); // TODO: add plugin 'AutoLink' once available in h5p-ckeditor repo
+    plugins.push('Link', 'AutoLink');
     toolbar.push("|", ...items);
   }
 
@@ -126,12 +126,6 @@ ns.Html.prototype.getCKEditorConfig = function () {
     // TODO: Include toolbar functionality to insert and edit images
     // For now, we just include the plugin to prevent data loss
     plugins.push('Image');
-  }
-  // Include table plugins to avoid errors when creating the editor
-  plugins.push('Table', 'TableToolbar');
-  if (this.inTags("table")) {
-    inserts.push("insertTable");
-    ns.$.merge(this.tags, ["tr", "td", "th", "colgroup", "thead", "tbody", "tfoot"]);
   }
   if (this.inTags("hr")) {
     inserts.push("horizontalLine");
@@ -155,11 +149,47 @@ ns.Html.prototype.getCKEditorConfig = function () {
     updateSourceElementOnDestroy: true,
     plugins: plugins,
     alignment: alignments,
-    toolbar: toolbar,
-    table: {
-      contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
-    }
+    toolbar: toolbar
   };
+
+  if (this.inTags("table")) {
+    config.toolbar.push("insertTable");
+    config.plugins.push(
+      'Table',
+      'TableToolbar',
+      'TableProperties',
+      'TableCellProperties',
+      'TableColumnResize',
+      'TableCaption'
+    );
+    config.table = {
+      contentToolbar: [
+        'toggleTableCaption',
+        'tableColumn',
+        'tableRow',
+        'mergeTableCells',
+        'tableProperties',
+        'tableCellProperties'
+      ],
+      tableProperties: {
+        defaultProperties: {
+          borderStyle: 'underline',
+          borderWidth: '0.083em',
+          borderColor: '#494949',
+          padding: '0'
+        }
+      },
+      tableCellProperties: {
+        defaultProperties: {
+          borderStyle: 'underline',
+          borderWidth: '0.083em',
+          borderColor: '#494949',
+          padding: '1px'
+        }
+      }
+    }
+    ns.$.merge(this.tags, ["tr", "td", "th", "colgroup", "col", "thead", "tbody", "tfoot", "figure", "figcaption"]);
+  }
 
   // Add dropdown to toolbar if formatters in tags (h1, h2, etc).
   for (let index = 1; index < 7; index++) {
@@ -455,6 +485,10 @@ ns.Html.prototype.createHtml = function () {
   else if (this.field.placeholder !== undefined) {
     input += '<span class="h5peditor-ckeditor-placeholder">' + this.field.placeholder + '</span>';
   }
+  // Add overflow protection if table
+  if (this.field.tags.includes('table') && !input.includes('table-overflow-protection')) {
+    input += '<div class="table-overflow-protection"></div>';
+  }
   input += '</div>';
 
   return ns.createFieldMarkup(this.field, ns.createImportantDescription(this.field.important) + input, id);
@@ -489,8 +523,8 @@ ns.Html.prototype.validate = function () {
   // Check if we have any text at all.
   if (!this.field.optional && !textValue.length) {
     // We can accept empty text, if there's an image instead.
-    if (! (this.inTags("img") && $value.find('img').length > 0)) {
-      this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', {':property': ns.t('core', 'textField')})));
+    if (!(this.inTags("img") && $value.find('img').length > 0)) {
+      this.$errors.append(ns.createError(ns.t('core', 'requiredProperty', { ':property': ns.t('core', 'textField') })));
     }
   }
 
@@ -498,10 +532,18 @@ ns.Html.prototype.validate = function () {
   // the tag's content.  So if we get an unallowed container, the contents
   // will remain, without the container.
   $value.find('*').each(function () {
-    if (! that.inTags(this.tagName)) {
+    if (!that.inTags(this.tagName)) {
       ns.$(this).replaceWith(ns.$(this).contents());
     }
   });
+
+  // Add overflow protection if chance of aligned tables
+  // CKEditor removes it when opening
+  if(that.inTags('table') && !value.includes('table-overflow-protection')) {
+    this.$input.append('<div class="table-overflow-protection"></div>');
+    $value.append('<div class="table-overflow-protection"></div>');
+  }
+
   value = $value.html();
 
   // Display errors and bail if set.
