@@ -233,6 +233,7 @@ ns.Html.prototype.getCKEditorConfig = function () {
           { title: '162.5%', model: '1.625em' },
           { title: '150%', model: '1.5em' },
           { title: '137.5%', model: '1.375em' },
+          { title: '125%', model: '1.25em' },
           { title: '112.5%', model: '1.125em' },
           { title: '100%', model: '1em' },
           { title: '87.5%', model: '0.875em' },
