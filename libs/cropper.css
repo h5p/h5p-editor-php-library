@@ -1,0 +1,40 @@
+.cropper-canvas-container {
+  position: relative;
+}
+.cropper-selector-border {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  left: -2px;
+  top: -2px;
+  border: 2px dashed orange;
+}
+.cropper-selector {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  left: 0px;
+  top: 0px;
+  background-color: transparent;
+  cursor: move;
+}
+.cropper-selector .cropper-handle {
+  background-color: white;
+  width: 10px;
+  height: 10px;
+  border: 1px solid black;
+  cursor: move;
+}
+.cropper-selector .cropper-top-left {
+  position: absolute;
+  left: -6px;
+  top: -6px;
+  cursor: nwse-resize;
+}
+.cropper-selector .cropper-bottom-right {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  cursor: nwse-resize;
+}
+

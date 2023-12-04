@@ -1,4 +1,4 @@
-/* global ns Darkroom */
+/* global ns Cropper */
 H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
   var instanceCounter = 0;
   var scriptsLoaded = false;
@@ -10,14 +10,20 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
    * @constructor
    */
   function ImageEditingPopup(ratio) {
-    EventDispatcher.call(this);
     var self = this;
+    EventDispatcher.call(this);
     var uniqueId = instanceCounter;
     var isShowing = false;
     var isReset = false;
     var topOffset = 0;
     var maxWidth;
     var maxHeight;
+    const ids = {
+      canvas: `canvas-${uniqueId}`,
+      selector: `selector-${uniqueId}`,
+      tl: `tl-${uniqueId}`,
+      br: `br-${uniqueId}`
+    }
 
     // Create elements
     var background = document.createElement('div');
@@ -43,6 +49,16 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     var editingContainer = document.createElement('div');
     editingContainer.className = 'h5p-editing-image-editing-container';
     popup.appendChild(editingContainer);
+
+    editingContainer.innerHTML =
+    `<div class="cropper-canvas-container">
+      <canvas id="${ids.canvas}"></canvas>
+      <div id="${ids.selector}" class="cropper-selector">
+        <div class="cropper-selector-border"></div>
+        <div id="${ids.tl}" class="cropper-handle cropper-top-left"></div>
+        <div id="${ids.br}" class="cropper-handle cropper-bottom-right"></div>
+      </div>
+    </div>`;
 
     var imageLoading = document.createElement('div');
     imageLoading.className = 'h5p-editing-image-loading';
@@ -86,50 +102,20 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     /**
      * Set max width and height for image editing tool
      */
-    var setDarkroomDimensions = function () {
+    var setCropperDimensions = function () {
       // Set max dimensions
       var dims = ImageEditingPopup.staticDimensions;
-      maxWidth = background.offsetWidth - dims.backgroundPaddingWidth -
-        dims.darkroomPadding;
+      maxWidth = background.offsetWidth - dims.backgroundPaddingWidth;
 
       // Only use 65% of screen height
       var maxScreenHeight = screen.height * dims.maxScreenHeightPercentage;
 
       // Calculate editor max height
-      var editorHeight = background.offsetHeight -
-        dims.backgroundPaddingHeight - dims.popupHeaderHeight -
-        dims.darkroomToolbarHeight - dims.darkroomPadding;
+      var editorHeight = background.offsetHeight - dims.backgroundPaddingHeight - dims.popupHeaderHeight;
 
       // Use smallest of screen height and editor height,
       // we don't want to overflow editor or screen
       maxHeight = maxScreenHeight < editorHeight ? maxScreenHeight : editorHeight;
-    };
-
-    /**
-     * Create image editing tool from image.
-     */
-    var createDarkroom = function () {
-      window.requestAnimationFrame(function () {
-        self.darkroom = new Darkroom('#h5p-editing-image-' + uniqueId, {
-          initialize: function () {
-            // Reset transformations
-            this.transformations = [];
-
-            H5P.$body.get(0).classList.add('h5p-editor-image-popup');
-            background.classList.remove('hidden');
-            imageLoading.classList.add('hidden');
-            self.trigger('initialized');
-          },
-          maxWidth: maxWidth,
-          maxHeight: maxHeight,
-          plugins: {
-            crop: {
-              ratio: ratio || null
-            },
-            save : false
-          }
-        });
-      });
     };
 
     /**
@@ -154,56 +140,37 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     /**
      * Load scripts dynamically
      */
-    var loadScripts = function () {
-      loadScript(H5PEditor.basePath + 'libs/fabric.js', function () {
-        loadScript(H5PEditor.basePath + 'libs/darkroom.js', function () {
-          createDarkroom();
-          scriptsLoaded = true;
-        });
+    var loadScripts = function (callback) {
+      loadScript(H5PEditor.basePath + 'libs/cropper.js', function () {
+        console.log('scripts loaded');
+        scriptsLoaded = true;
+        if (callback) {
+          callback();
+        }
       });
     };
 
     /**
      * Grab canvas data and pass data to listeners.
      */
-    var saveImage = function () {
-
-      var isCropped = self.darkroom.plugins.crop.hasFocus();
-      var canvas = self.darkroom.canvas.getElement();
-
+    var saveImage = () => {
       var convertData = function () {
         const finished = function (blob) {
           self.trigger('savedImage', blob);
-          canvas.removeEventListener('crop:update', convertData, false);
         };
-
-        if (self.darkroom.canvas.contextContainer.canvas.toBlob) {
+        if (self.cropper.mirror.toBlob) {
           // Export canvas as blob to save processing time and bandwidth
-          self.darkroom.canvas.contextContainer.canvas.toBlob(finished, self.mime);
+          self.cropper.mirror.toBlob(finished, self.mime);
         }
         else {
           // Blob export not supported by canvas, export as dataURL and export
           // to blob before uploading (saves processing resources on server)
-          finished(dataURLtoBlob(self.darkroom.canvas.toDataURL({
+          finished(dataURLtoBlob(this.cropper.mirror.toDataURL({
             format: self.mime.split('/')[1]
           })));
         }
       };
-
-      // Check if image has changed
-      if (self.darkroom.transformations.length || isReset || isCropped) {
-
-        if (isCropped) {
-          //self.darkroom.plugins.crop.okButton.element.click();
-          self.darkroom.plugins.crop.cropCurrentZone();
-
-          canvas.addEventListener('crop:update', convertData, false);
-        }
-        else {
-          convertData();
-        }
-      }
-
+      convertData();
       isReset = false;
     };
 
@@ -225,8 +192,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       // Calculate editor max height
       var dims = ImageEditingPopup.staticDimensions;
       var backgroundHeight = H5P.$body.get(0).offsetHeight - dims.backgroundPaddingHeight;
-      var popupHeightNoImage = dims.darkroomToolbarHeight + dims.popupHeaderHeight +
-        dims.darkroomPadding;
+      var popupHeightNoImage = dims.darkroomToolbarHeight + dims.popupHeaderHeight;
       var editorHeight =  backgroundHeight - popupHeightNoImage;
 
       // Available editor height
@@ -265,21 +231,38 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     };
 
     /**
+     * Create image editing tool from image.
+     */
+    const createCropper = (image) => {
+      this.cropper = new Cropper({
+        canvas: {
+          id: ids.canvas,
+          width: maxWidth,
+          height: maxHeight,
+          image
+        },
+        selector: {
+          id: ids.selector,
+          handles: {
+            tl: ids.tl,
+            br: ids.br
+          }
+        }
+      });
+    };
+
+    /**
      * Set new image in editing tool
      *
      * @param {string} imgSrc Source of new image
      */
     this.setImage = function (imgSrc) {
-      // Set new image
-      var darkroom = popup.querySelector('.darkroom-container');
-      if (darkroom) {
-        darkroom.parentNode.removeChild(darkroom);
-      }
-
       H5P.setSource(editingImage, imgSrc, H5PEditor.contentId);
       editingImage.onload = function () {
-        createDarkroom();
+        console.log('image loaded');
+        createCropper(editingImage);
         editingImage.onload = null;
+        imageLoading.classList.add('hidden');
       };
       imageLoading.classList.remove('hidden');
       editingImage.classList.add('hidden');
@@ -295,33 +278,25 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     this.show = function (offset, imageSrc) {
       H5P.$body.get(0).appendChild(background);
       background.classList.remove('hidden');
-      setDarkroomDimensions();
+      setCropperDimensions();
       background.classList.add('hidden');
       if (imageSrc) {
         // Load image editing scripts dynamically
         if (!scriptsLoaded) {
-          H5P.setSource(editingImage, imageSrc, H5PEditor.contentId);
-          loadScripts();
+          console.log('loading scripts');
+          loadScripts(() => self.setImage(imageSrc));
         }
-        else {
-          self.setImage(imageSrc);
-        }
-
         if (offset) {
           var imageLoaded = function () {
             this.adjustPopupOffset(offset);
             editingImage.removeEventListener('load', imageLoaded);
           }.bind(this);
-
           editingImage.addEventListener('load', imageLoaded);
         }
       }
-      else {
-        H5P.$body.get(0).classList.add('h5p-editor-image-popup');
-        background.classList.remove('hidden');
-        self.trigger('initialized');
-      }
-
+      H5P.$body.get(0).classList.add('h5p-editor-image-popup');
+      background.classList.remove('hidden');
+      self.trigger('initialized');
       isShowing = true;
     };
 
@@ -348,6 +323,12 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     };
 
     // Create header buttons
+    createButton('crop', 'h5p-editing-image-save-button h5p-done', () => {
+      this.cropper.crop();
+    });
+    createButton('rotate', 'h5p-editing-image-save-button h5p-done', () => {
+      this.cropper.rotate(1);
+    });
     createButton('resetToOriginalLabel', 'h5p-editing-image-reset-button h5p-remove', function () {
       self.trigger('resetImage');
       isReset = true;
@@ -368,10 +349,8 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
   ImageEditingPopup.staticDimensions = {
     backgroundPaddingWidth: 32,
     backgroundPaddingHeight: 96,
-    darkroomPadding: 64,
-    darkroomToolbarHeight: 40,
     maxScreenHeightPercentage: 0.65,
-    popupHeaderHeight: 59
+    popupHeaderHeight: 60
   };
 
   /**
@@ -404,3 +383,4 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
   return ImageEditingPopup;
 
 }(H5P.jQuery, H5P.EventDispatcher));
+
