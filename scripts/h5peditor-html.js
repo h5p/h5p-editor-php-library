@@ -216,40 +216,28 @@ ns.Html.prototype.getCKEditorConfig = function () {
       styles.push('fontSize');
       config['plugins'].push('FontSize');
 
+      let fontSizes = [];
+      const convertToEm = (percent) => parseFloat(percent) / 100 + 'em';
+
       if (this.field.font.size instanceof Array) {
         // Use specified sizes
-        // TODO: likely not backwards compatible as is
-        setValues(this.field.font.size, 'fontSize');
+        fontSizes = this.field.font.size.map(size => ({
+          title: size.label,
+          model: convertToEm(size.css)
+        }));
+      } else {
+        // Standard font sizes that are available
+        fontSizes = [
+          '450%', '300%', '225%', '175%', '162.5%', '150%', '137.5%',
+          '125%', '112.5%', '100%', '87.5%', '75%', '68.75%', '62.5%',
+          '56.25%', '50%', 'Default'
+        ].map(percent => ({
+          title: percent,
+          model: percent === 'Default' ? '1em' : convertToEm(percent)
+        }));
       }
-      else {
-        const fontSizes = [];
 
-        // Standard font sizes that are available.
-        const defaultAvailable = [
-          { title: '450%', model: '4.5em' },
-          { title: '300%', model: '3em' },
-          { title: '225%', model: '2.25em' },
-          { title: '175%', model: '1.75em' },
-          { title: '162.5%', model: '1.625em' },
-          { title: '150%', model: '1.5em' },
-          { title: '137.5%', model: '1.375em' },
-          { title: '125%', model: '1.25em' },
-          { title: '112.5%', model: '1.125em' },
-          { title: '100%', model: '1em' },
-          { title: '87.5%', model: '0.875em' },
-          { title: '75%', model: '0.75em' },
-          { title: '68.75%', model: '0.6875em' },
-          { title: '62.5%', model: '0.625em' },
-          { title: '56.25%', model: '0.5625em' },
-          { title: '50%', model: '0.5em' },
-          { title: 'Default', model: '1em' },
-        ]
-
-        for (let i = 0; i < defaultAvailable.length; i++) {
-          fontSizes.push(defaultAvailable[i]);
-        }
-        setValues(fontSizes, 'fontSize');
-      }
+      setValues(fontSizes, 'fontSize');
     }
 
     /**
