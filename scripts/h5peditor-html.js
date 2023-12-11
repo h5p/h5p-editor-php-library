@@ -246,22 +246,28 @@ ns.Html.prototype.getCKEditorConfig = function () {
       styles.push('fontSize');
       config['plugins'].push('FontSize');
 
+      let fontSizes = [];
+      const convertToEm = (percent) => parseFloat(percent) / 100 + 'em';
+
       if (this.field.font.size instanceof Array) {
         // Use specified sizes
-        // TODO: likely not backwards compatible as is
-        setValues(this.field.font.size, 'fontSize');
+        fontSizes = this.field.font.size.map(size => ({
+          title: size.label,
+          model: convertToEm(size.css)
+        }));
+      } else {
+        // Standard font sizes that are available
+        fontSizes = [
+          '450%', '300%', '225%', '175%', '162.5%', '150%', '137.5%',
+          '125%', '112.5%', '100%', '87.5%', '75%', '68.75%', '62.5%',
+          '56.25%', '50%', 'Default'
+        ].map(percent => ({
+          title: percent,
+          model: percent === 'Default' ? '1em' : convertToEm(percent)
+        }));
       }
-      else {
-        const fontSizes = [];
 
-        // Standard font sizes that are available.
-        const defaultAvailable = [8, 9, 10, 11, 12, 14, 'default', 18, 20, 22, 24, 26, 28, 36, 48, 72];
-
-        for (let i = 0; i < defaultAvailable.length; i++) {
-          fontSizes.push(defaultAvailable[i]);
-        }
-        setValues(fontSizes, 'fontSize');
-      }
+      setValues(fontSizes, 'fontSize');
     }
 
     /**
