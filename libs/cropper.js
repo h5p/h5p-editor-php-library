@@ -1,4 +1,5 @@
 function Cropper(options) {
+  this.options = options;
   this.selector = document.getElementById(options.selector.id);
   this.canvas = document.getElementById(options.canvas.id);
   this.handles = {

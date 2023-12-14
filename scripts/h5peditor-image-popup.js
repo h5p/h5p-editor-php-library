@@ -234,6 +234,12 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
      * Create image editing tool from image.
      */
     const createCropper = (image) => {
+      console.log('create cropper');
+      if (this.cropper) {
+        this.cropper.options.image = image;
+        this.cropper.reset();
+        return;
+      }
       this.cropper = new Cropper({
         canvas: {
           id: ids.canvas,
@@ -257,9 +263,10 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
      * @param {string} imgSrc Source of new image
      */
     this.setImage = function (imgSrc) {
+      console.log('set image');
       H5P.setSource(editingImage, imgSrc, H5PEditor.contentId);
       editingImage.onload = function () {
-        console.log('image loaded');
+        console.log('image set');
         createCropper(editingImage);
         editingImage.onload = null;
         imageLoading.classList.add('hidden');
@@ -280,11 +287,15 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       background.classList.remove('hidden');
       setCropperDimensions();
       background.classList.add('hidden');
+      console.log('show', offset, imageSrc);
       if (imageSrc) {
         // Load image editing scripts dynamically
         if (!scriptsLoaded) {
           console.log('loading scripts');
           loadScripts(() => self.setImage(imageSrc));
+        }
+        else {
+          self.setImage(imageSrc);
         }
         if (offset) {
           var imageLoaded = function () {
