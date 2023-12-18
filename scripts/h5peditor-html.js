@@ -368,6 +368,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     // Remove existing CK instance.
     ns.Html.removeWysiwyg();
 
+    that.inputWidth = that.$input[0].getBoundingClientRect().width;
     ns.Html.current = that;
 
     ClassicEditor
@@ -403,6 +404,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
         that.ckeditor = editor;
         const editable = editor.ui.view.editable;
         editorElement = editable.element;
+        editor.ui.view.element.style.maxWidth = that.inputWidth + 'px';
         editorElement.style.maxHeight = getEditorHeight() + 'px';
 
         // Use <em> elements for italic text instead of <i>
