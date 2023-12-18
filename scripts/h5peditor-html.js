@@ -229,17 +229,33 @@ ns.Html.prototype.getCKEditorConfig = function () {
     };
 
     // Font family chooser
-    // TODO: not used in any official h5p content types
-    // TODO: Data loss risk for open source types that use it
-    // if (this.field.font.family) {
-    //   styles.push('fontFamily');
-    //   config['plugins'].push('FontFamily');
+    if (this.field.font.family) {
+      styles.push('fontFamily');
+      config['plugins'].push('FontFamily');
 
-    //   if (this.field.font.family instanceof Array) {
-    //     // Use specified families
-    //     setValues(this.field.font.family, 'fontFamily');
-    //   }
-    // }
+      let fontFamilies = [
+        'default',
+        'Arial, Helvetica, sans-serif',
+        'Comic Sans MS, Cursive, sans-serif',
+        'Courier New, Courier, monospace',
+        'Georgia, serif',
+        'Lucida Sans Unicode, Lucida Grande, sans-serif',
+        'Tahoma, Geneva, sans-serif',
+        'Times New Roman, Times, serif',
+        'Trebuchet MS, Helvetica, sans-serif',
+        'Verdana, Geneva, sans-serif'
+      ]
+
+      // If custom fonts are set, use those
+      if (this.field.font.family instanceof Array) {
+        fontFamilies = ['default', ...this.field.font.family.map(font => (
+          font.label + ', ' + font.css
+        ))];
+      }
+
+      setValues(fontFamilies, 'fontFamily');
+      config['fontFamily']['supportAllValues'] = true;
+    }
 
     // Font size chooser
     if (this.field.font.size) {
