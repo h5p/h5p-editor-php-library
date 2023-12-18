@@ -102,6 +102,7 @@ a {
       table-layout: fixed;
       margin: 0 auto;
       padding: 0;
+      float: left;
 
       /* The actual table */
       table {
@@ -156,6 +157,8 @@ a {
 
   // Inside ckeditor, needed for changes to default
   .ck-content figure.table {
+    float: left;
+
     table {
       border-width: 1px;
       border-color:  #494949;
