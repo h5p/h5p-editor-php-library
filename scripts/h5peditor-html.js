@@ -202,6 +202,7 @@ ns.Html.prototype.getCKEditorConfig = function () {
     // If the formats are shown, always have a paragraph
     formats.push({ model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' });
     this.tags.push("p");
+    this.field.enterMode = "p";
     config['heading'] = {options: formats};
     config['plugins'].push('Heading');
     config['toolbar'].push('heading');
