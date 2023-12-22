@@ -197,6 +197,11 @@ ns.Html.prototype.getCKEditorConfig = function () {
       formats.push({ model: 'heading' + index, view: 'h' + index, title: 'Heading ' + index, class: 'ck-heading_heading' + index });
     }
   }
+  
+  if (this.inTags('pre')) {
+    formats.push({ model: 'formatted', view: 'pre', title: 'Formatted', class: 'ck-heading_formatted' });
+  }
+  
   // if (this.inTags("address")) formats.push("address"); // TODO: potential data loss
   if (formats.length > 0 || this.inTags('p') || this.inTags('div')) {
     // If the formats are shown, always have a paragraph
