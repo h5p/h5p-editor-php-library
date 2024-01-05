@@ -4,6 +4,12 @@ function Cropper(options) {
   this.canvas = document.getElementById(options.canvas.id);
   this.handles = {
     tl: document.getElementById(options.selector.handles.tl),
+    t: document.getElementById(options.selector.handles.t),
+    tr: document.getElementById(options.selector.handles.tr),
+    l: document.getElementById(options.selector.handles.l),
+    r: document.getElementById(options.selector.handles.r),
+    bl: document.getElementById(options.selector.handles.bl),
+    b: document.getElementById(options.selector.handles.b),
     br: document.getElementById(options.selector.handles.br)
   }
   this.margins = {
@@ -22,6 +28,8 @@ function Cropper(options) {
       event.stopPropagation();
       this.pointerOffset.x = event.clientX - this.selector.offsetLeft;
       this.pointerOffset.y = event.clientY - this.selector.offsetTop;
+      this.pointerOffset.xSpan = this.selector.offsetLeft + this.selector.offsetWidth;
+      this.pointerOffset.ySpan = this.selector.offsetTop + this.selector.offsetHeight;
       window.onpointerup = onPointerUp;
       window.onpointermove = onPointerMove;
     }
@@ -56,60 +64,83 @@ function Cropper(options) {
     const onPointerDown = (event) => {
       event.preventDefault();
       event.stopPropagation();
+      this.pointerOffset.xSpan = this.selector.offsetLeft + this.selector.offsetWidth - options.selector.min.width;
+      this.pointerOffset.ySpan = this.selector.offsetTop + this.selector.offsetHeight - options.selector.min.height;
       window.onpointerup = onPointerUp;
       window.onpointermove = onPointerMove;
     }
-    const onPointerMove = (event) => {
+    const handleAll = (top, left, bottom, right) => {
       let width;
       let height;
       const parentBounds = this.canvas.parentElement.getBoundingClientRect();
-      const selectorBounds = this.selector.getBoundingClientRect();
-      switch (type) {
-        case 'tl':
-          const xSpan = this.selector.offsetLeft + this.selector.offsetWidth;
-          const ySpan = this.selector.offsetTop + this.selector.offsetHeight;
-          let left = event.pageX - parentBounds.left;
-          let top = event.pageY - parentBounds.top;
-          if (left < 0) {
-            left = 0;
-          }
-          if (left > xSpan) {
-            left = xSpan;
-          }
-          if (top < 0) {
-            top = 0;
-          }
-          if (top > ySpan) {
-            top = ySpan;
-          }
-          width = xSpan - left;
-          height = ySpan - top;
-          this.selector.style.left = left + 'px';
-          this.selector.style.top = top + 'px';
-          this.selector.style.width = width + 'px';
-          this.selector.style.height = height + 'px';
-          break;
-        case 'br':
-          const maxWidth = this.canvas.offsetWidth - this.selector.offsetLeft;
-          const maxHeight = this.canvas.offsetHeight - this.selector.offsetTop;
-          width = event.pageX - parentBounds.left - this.selector.offsetLeft;
-          height = event.pageY - parentBounds.top - this.selector.offsetTop;
-          if (width < 0) {
-            width = 0;
-          }
-          if (this.selector.offsetLeft + width > this.canvas.offsetWidth) {
-            width = maxWidth;
-          }
-          if (height < 0) {
-            height = 0;
-          }
-          if (this.selector.offsetTop + height > this.canvas.offsetHeight) {
-            height = maxHeight;
-          }
-          this.selector.style.width = width + 'px';
-          this.selector.style.height = height + 'px';
-          break;
+      if (top) {
+        const ySpan = this.selector.offsetTop + this.selector.offsetHeight;
+        let top = event.pageY - parentBounds.top;
+        if (top < 0) {
+          top = 0;
+        }
+        if (top > this.pointerOffset.ySpan) {
+          top = this.pointerOffset.ySpan;
+        }
+        height = ySpan - top;
+        this.selector.style.top = top + 'px';
       }
+      if (left) {
+        const xSpan = this.selector.offsetLeft + this.selector.offsetWidth;
+        let left = event.pageX - parentBounds.left;
+        if (left < 0) {
+          left = 0;
+        }
+        if (left > this.pointerOffset.xSpan) {
+          left = this.pointerOffset.xSpan;
+        }
+        width = xSpan - left;
+        this.selector.style.left = left + 'px';
+      }
+      if (bottom) {
+        const maxHeight = this.canvas.offsetHeight - this.selector.offsetTop;
+        height = event.pageY - parentBounds.top - this.selector.offsetTop;
+        if (height < 0) {
+          height = 0;
+        }
+        if (this.selector.offsetTop + height > this.canvas.offsetHeight) {
+          height = maxHeight;
+        }
+      }
+      if (right) {
+        const maxWidth = this.canvas.offsetWidth - this.selector.offsetLeft;
+        width = event.pageX - parentBounds.left - this.selector.offsetLeft;
+        if (width < 0) {
+          width = 0;
+        }
+        if (this.selector.offsetLeft + width > this.canvas.offsetWidth) {
+          width = maxWidth;
+        }
+      }
+      if (width) {
+        if (width < options.selector.min.width) {
+          width = options.selector.min.width;
+        }
+        this.selector.style.width = width + 'px';
+      }
+      if (height) {
+        if (height < options.selector.min.height) {
+          height = options.selector.min.height;
+        }
+        this.selector.style.height = height + 'px';
+      }
+    }
+    const onPointerMove = (event) => {
+      const map = {
+        t: false,
+        l: false,
+        b: false,
+        r: false
+      }
+      for (let item of type) {
+        map[item] = true;
+      }
+      handleAll(map.t, map.l, map.b, map.r);
     }
     const onPointerUp = () => {
       window.onpointerup = undefined;
@@ -238,6 +269,7 @@ function Cropper(options) {
   }
   this.reset();
   handleMove();
-  handleResize('tl');
-  handleResize('br');
+  for (let item in this.handles) {
+    handleResize(item);
+  }
 }

@@ -22,6 +22,12 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       canvas: `canvas-${uniqueId}`,
       selector: `selector-${uniqueId}`,
       tl: `tl-${uniqueId}`,
+      t: `t-${uniqueId}`,
+      tr: `tr-${uniqueId}`,
+      l: `l-${uniqueId}`,
+      r: `r-${uniqueId}`,
+      bl: `bl-${uniqueId}`,
+      b: `b-${uniqueId}`,
       br: `br-${uniqueId}`
     }
 
@@ -54,8 +60,18 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     `<div class="cropper-canvas-container">
       <canvas id="${ids.canvas}"></canvas>
       <div id="${ids.selector}" class="cropper-selector">
-        <div class="cropper-selector-border"></div>
+        <div class="cropper-selector-border">
+          <div class="top-left"></div><div class="top"></div><div class="top-right"></div>
+          <div class="center-left"></div><div class="center"></div><div class="center-right"></div>
+          <div class="bottom-left"></div><div class="bottom"></div><div class="bottom-right"></div>
+        </div>
         <div id="${ids.tl}" class="cropper-handle cropper-top-left"></div>
+        <div id="${ids.t}" class="cropper-handle cropper-top"></div>
+        <div id="${ids.tr}" class="cropper-handle cropper-top-right"></div>
+        <div id="${ids.l}" class="cropper-handle cropper-left"></div>
+        <div id="${ids.r}" class="cropper-handle cropper-right"></div>
+        <div id="${ids.bl}" class="cropper-handle cropper-bottom-left"></div>
+        <div id="${ids.b}" class="cropper-handle cropper-bottom"></div>
         <div id="${ids.br}" class="cropper-handle cropper-bottom-right"></div>
       </div>
     </div>`;
@@ -249,8 +265,18 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
         },
         selector: {
           id: ids.selector,
+          min: {
+            width: 50,
+            height: 50
+          },
           handles: {
             tl: ids.tl,
+            t: ids.t,
+            tr: ids.tr,
+            l: ids.l,
+            r: ids.r,
+            bl: ids.bl,
+            b: ids.b,
             br: ids.br
           }
         }

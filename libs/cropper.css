@@ -7,7 +7,42 @@
   position: relative;
   left: -2px;
   top: -2px;
-  border: 2px dashed orange;
+  border: 1px solid #3c7eff;
+  display: grid;
+  grid-template-areas:
+    "top-left top top-righ"
+    "center-left center center-right"
+    "bottom-left bottom bottom-right";
+  grid-template-rows: calc(100% / 3) calc(100% / 3) calc(100% / 3);
+  grid-template-columns: calc(100% / 3) calc(100% / 3) calc(100% / 3);
+}
+.cropper-selector-border div {
+  border: dashed #3c7eff;
+  border-width: 0;
+}
+.cropper-selector-border .top-left {
+  border-width: 0 1px 1px 0;
+}
+.cropper-selector-border .top {
+  border-width: 0 0 1px 0;
+}
+.cropper-selector-border .top-right {
+  border-width: 0 0 1px 1px;
+}
+.cropper-selector-border .center-left {
+  border-width: 0 1px 0 0;
+}
+.cropper-selector-border .center-right {
+  border-width: 0 0 0 1px;
+}
+.cropper-selector-border .bottom-left {
+  border-width: 1px 1px 0 0;
+}
+.cropper-selector-border .bottom {
+  border-width: 1px 0 0 0;
+}
+.cropper-selector-border .bottom-right {
+  border-width: 1px 0 0 1px;
 }
 .cropper-selector {
   position: absolute;
@@ -19,22 +54,56 @@
   cursor: move;
 }
 .cropper-selector .cropper-handle {
+  position: absolute;
   background-color: white;
-  width: 10px;
-  height: 10px;
-  border: 1px solid black;
+  width: 8px;
+  height: 8px;
+  border: 1px solid #3c7eff;
+  border-radius: 4px;
   cursor: move;
 }
 .cropper-selector .cropper-top-left {
-  position: absolute;
   left: -6px;
   top: -6px;
-  cursor: nwse-resize;
+  cursor: nw-resize;
+}
+.cropper-selector .cropper-top {
+  left: calc(50% - 17px);
+  top: -6px;
+  width: 30px;
+  cursor: n-resize;
+}
+.cropper-selector .cropper-top-right {
+  right: -4px;
+  top: -6px;
+  cursor: ne-resize;
+}
+.cropper-selector .cropper-left {
+  left: -6px;
+  top: calc(50% - 17px);
+  height: 30px;
+  cursor: w-resize;
+}
+.cropper-selector .cropper-right {
+  right: -4px;
+  top: calc(50% - 17px);
+  height: 30px;
+  cursor: e-resize;
+}
+.cropper-selector .cropper-bottom-left {
+  left: -6px;
+  bottom: -4px;
+  cursor: sw-resize;
+}
+.cropper-selector .cropper-bottom {
+  left: calc(50% - 17px);
+  bottom: -4px;
+  width: 30px;
+  cursor: s-resize;
 }
 .cropper-selector .cropper-bottom-right {
-  position: absolute;
-  right: -6px;
-  bottom: -6px;
-  cursor: nwse-resize;
+  right: -4px;
+  bottom: -4px;
+  cursor: se-resize;
 }
 
