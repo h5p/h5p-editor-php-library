@@ -30,6 +30,7 @@ function Cropper(options) {
       this.pointerOffset.y = event.clientY - this.selector.offsetTop;
       this.pointerOffset.xSpan = this.selector.offsetLeft + this.selector.offsetWidth;
       this.pointerOffset.ySpan = this.selector.offsetTop + this.selector.offsetHeight;
+      this.toggleHandles(false);
       window.onpointerup = onPointerUp;
       window.onpointermove = onPointerMove;
     }
@@ -51,9 +52,12 @@ function Cropper(options) {
       this.selector.style.left = x + 'px';
       this.selector.style.top = y + 'px';
     }
-    const onPointerUp = () => {
+    const onPointerUp = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       window.onpointerup = undefined;
       window.onpointermove = undefined;
+      this.toggleHandles(true);
     }
     this.selector.onpointerdown = onPointerDown;
   }
@@ -66,6 +70,7 @@ function Cropper(options) {
       event.stopPropagation();
       this.pointerOffset.xSpan = this.selector.offsetLeft + this.selector.offsetWidth - options.selector.min.width;
       this.pointerOffset.ySpan = this.selector.offsetTop + this.selector.offsetHeight - options.selector.min.height;
+      this.toggleHandles(false, type);
       window.onpointerup = onPointerUp;
       window.onpointermove = onPointerMove;
     }
@@ -131,6 +136,8 @@ function Cropper(options) {
       }
     }
     const onPointerMove = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       const map = {
         t: false,
         l: false,
@@ -142,9 +149,12 @@ function Cropper(options) {
       }
       handleAll(map.t, map.l, map.b, map.r);
     }
-    const onPointerUp = () => {
+    const onPointerUp = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       window.onpointerup = undefined;
       window.onpointermove = undefined;
+      this.toggleHandles(true, type);
     }
     this.handles[type].onpointerdown = onPointerDown;
   }
@@ -156,6 +166,14 @@ function Cropper(options) {
       this.loadImage();
     }
     this.image.src = url;
+  }
+  this.toggleHandles = (on, except) => {
+    for (let item in this.handles) {
+      if (item === except) {
+        continue;
+      }
+      this.handles[item].style.opacity = on ? 1 : 0;
+    }
   }
   this.fit = (image, canvas) => {
     if (!canvas) {
