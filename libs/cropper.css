@@ -1,6 +1,9 @@
 .cropper-canvas-container {
   position: relative;
 }
+.cropper-canvas-container canvas {
+  display: block;
+}
 .cropper-selector-border {
   width: 100%;
   height: 100%;
@@ -110,4 +113,9 @@
   bottom: -5px;
   cursor: se-resize;
 }
-
+.cropper-mask {
+  position: absolute;
+  background-color: black;
+  opacity: 0.5;
+  display: none;
+}

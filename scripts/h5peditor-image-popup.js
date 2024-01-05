@@ -21,14 +21,22 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     const ids = {
       canvas: `canvas-${uniqueId}`,
       selector: `selector-${uniqueId}`,
-      tl: `tl-${uniqueId}`,
-      t: `t-${uniqueId}`,
-      tr: `tr-${uniqueId}`,
-      l: `l-${uniqueId}`,
-      r: `r-${uniqueId}`,
-      bl: `bl-${uniqueId}`,
-      b: `b-${uniqueId}`,
-      br: `br-${uniqueId}`
+      handles: {
+        tl: `tl-${uniqueId}`,
+        t: `t-${uniqueId}`,
+        tr: `tr-${uniqueId}`,
+        l: `l-${uniqueId}`,
+        r: `r-${uniqueId}`,
+        bl: `bl-${uniqueId}`,
+        b: `b-${uniqueId}`,
+        br: `br-${uniqueId}`
+      },
+      masks: {
+        top: `top-mask-${uniqueId}`,
+        right: `tight-mask-${uniqueId}`,
+        bottom: `bottom-mask-${uniqueId}`,
+        left: `left-mask-${uniqueId}`
+      }
     }
 
     // Create elements
@@ -59,20 +67,24 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     editingContainer.innerHTML =
     `<div class="cropper-canvas-container">
       <canvas id="${ids.canvas}"></canvas>
+      <div class="cropper-mask top" id="${ids.masks.top}"></div>
+      <div class="cropper-mask right" id="${ids.masks.right}"></div>
+      <div class="cropper-mask bottom" id="${ids.masks.bottom}"></div>
+      <div class="cropper-mask left" id="${ids.masks.left}"></div>
       <div id="${ids.selector}" class="cropper-selector">
         <div class="cropper-selector-border">
           <div class="top-left"></div><div class="top"></div><div class="top-right"></div>
           <div class="center-left"></div><div class="center"></div><div class="center-right"></div>
           <div class="bottom-left"></div><div class="bottom"></div><div class="bottom-right"></div>
         </div>
-        <div id="${ids.tl}" class="cropper-handle cropper-top-left"></div>
-        <div id="${ids.t}" class="cropper-handle cropper-top"></div>
-        <div id="${ids.tr}" class="cropper-handle cropper-top-right"></div>
-        <div id="${ids.l}" class="cropper-handle cropper-left"></div>
-        <div id="${ids.r}" class="cropper-handle cropper-right"></div>
-        <div id="${ids.bl}" class="cropper-handle cropper-bottom-left"></div>
-        <div id="${ids.b}" class="cropper-handle cropper-bottom"></div>
-        <div id="${ids.br}" class="cropper-handle cropper-bottom-right"></div>
+        <div id="${ids.handles.tl}" class="cropper-handle cropper-top-left"></div>
+        <div id="${ids.handles.t}" class="cropper-handle cropper-top"></div>
+        <div id="${ids.handles.tr}" class="cropper-handle cropper-top-right"></div>
+        <div id="${ids.handles.l}" class="cropper-handle cropper-left"></div>
+        <div id="${ids.handles.r}" class="cropper-handle cropper-right"></div>
+        <div id="${ids.handles.bl}" class="cropper-handle cropper-bottom-left"></div>
+        <div id="${ids.handles.b}" class="cropper-handle cropper-bottom"></div>
+        <div id="${ids.handles.br}" class="cropper-handle cropper-bottom-right"></div>
       </div>
     </div>`;
 
@@ -158,7 +170,6 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
      */
     var loadScripts = function (callback) {
       loadScript(H5PEditor.basePath + 'libs/cropper.js', function () {
-        console.log('scripts loaded');
         scriptsLoaded = true;
         if (callback) {
           callback();
@@ -250,7 +261,6 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
      * Create image editing tool from image.
      */
     const createCropper = (image) => {
-      console.log('create cropper');
       if (this.cropper) {
         this.cropper.options.image = image;
         this.cropper.reset();
@@ -269,16 +279,8 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
             width: 50,
             height: 50
           },
-          handles: {
-            tl: ids.tl,
-            t: ids.t,
-            tr: ids.tr,
-            l: ids.l,
-            r: ids.r,
-            bl: ids.bl,
-            b: ids.b,
-            br: ids.br
-          }
+          handles: ids.handles,
+          masks: ids.masks
         }
       });
     };
@@ -289,10 +291,8 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
      * @param {string} imgSrc Source of new image
      */
     this.setImage = function (imgSrc) {
-      console.log('set image');
       H5P.setSource(editingImage, imgSrc, H5PEditor.contentId);
       editingImage.onload = function () {
-        console.log('image set');
         createCropper(editingImage);
         editingImage.onload = null;
         imageLoading.classList.add('hidden');
@@ -313,11 +313,9 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       background.classList.remove('hidden');
       setCropperDimensions();
       background.classList.add('hidden');
-      console.log('show', offset, imageSrc);
       if (imageSrc) {
         // Load image editing scripts dynamically
         if (!scriptsLoaded) {
-          console.log('loading scripts');
           loadScripts(() => self.setImage(imageSrc));
         }
         else {

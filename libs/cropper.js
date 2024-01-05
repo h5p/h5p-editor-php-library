@@ -12,6 +12,12 @@ function Cropper(options) {
     b: document.getElementById(options.selector.handles.b),
     br: document.getElementById(options.selector.handles.br)
   }
+  this.masks = {
+    top: document.getElementById(options.selector.masks.top),
+    right: document.getElementById(options.selector.masks.right),
+    bottom: document.getElementById(options.selector.masks.bottom),
+    left: document.getElementById(options.selector.masks.left)
+  }
   this.margins = {
     left: 0,
     top: 0
@@ -51,6 +57,7 @@ function Cropper(options) {
       }
       this.selector.style.left = x + 'px';
       this.selector.style.top = y + 'px';
+      this.updateMasks();
     }
     const onPointerUp = (event) => {
       event.preventDefault();
@@ -148,6 +155,7 @@ function Cropper(options) {
         map[item] = true;
       }
       handleAll(map.t, map.l, map.b, map.r);
+      this.updateMasks();
     }
     const onPointerUp = (event) => {
       event.preventDefault();
@@ -166,6 +174,37 @@ function Cropper(options) {
       this.loadImage();
     }
     this.image.src = url;
+  }
+  this.toggleMasks = (on) => {
+    for (let item in this.masks) {
+      this.masks[item].style.display = on ? 'block' : 'none';
+    }
+  }
+  this.updateMasks = () => {
+    if (this.masks.top) {
+      this.masks.top.style.width = this.selector.offsetWidth + 'px';
+      this.masks.top.style.height = this.selector.offsetTop + 'px';
+      this.masks.top.style.top = 0;
+      this.masks.top.style.left = this.selector.offsetLeft + 'px';
+    }
+    if (this.masks.right) {
+      this.masks.right.style.width = this.canvas.width - (this.selector.offsetLeft + this.selector.offsetWidth) + 'px';
+      this.masks.right.style.height = this.canvas.height + 'px';
+      this.masks.right.style.right = 0;
+      this.masks.right.style.top = 0;
+    }
+    if (this.masks.bottom) {
+      this.masks.bottom.style.width = this.selector.offsetWidth + 'px';
+      this.masks.bottom.style.height = this.canvas.height - (this.selector.offsetTop + this.selector.offsetHeight) + 'px';
+      this.masks.bottom.style.bottom = 0;
+      this.masks.bottom.style.left = this.selector.offsetLeft + 'px';
+    }
+    if (this.masks.left) {
+      this.masks.left.style.width = this.selector.offsetLeft + 'px';
+      this.masks.left.style.height = this.canvas.height + 'px';
+      this.masks.left.style.left = 0;
+      this.masks.left.style.top = 0;
+    }
   }
   this.toggleHandles = (on, except) => {
     for (let item in this.handles) {
@@ -290,4 +329,5 @@ function Cropper(options) {
   for (let item in this.handles) {
     handleResize(item);
   }
+  this.toggleMasks(true);
 }
