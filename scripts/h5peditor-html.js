@@ -176,7 +176,8 @@ ns.Html.prototype.getCKEditorConfig = function () {
           borderStyle: 'underline',
           borderWidth: '0.083em',
           borderColor: '#494949',
-          padding: '0'
+          padding: '0',
+          alignment: 'left'
         }
       },
       tableCellProperties: {
