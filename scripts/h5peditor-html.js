@@ -198,11 +198,17 @@ ns.Html.prototype.getCKEditorConfig = function () {
       formats.push({ model: 'heading' + index, view: 'h' + index, title: 'Heading ' + index, class: 'ck-heading_heading' + index });
     }
   }
+  
+  if (this.inTags('pre')) {
+    formats.push({ model: 'formatted', view: 'pre', title: 'Formatted', class: 'ck-heading_formatted' });
+  }
+  
   // if (this.inTags("address")) formats.push("address"); // TODO: potential data loss
   if (formats.length > 0 || this.inTags('p') || this.inTags('div')) {
     // If the formats are shown, always have a paragraph
     formats.push({ model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' });
     this.tags.push("p");
+    this.field.enterMode = "p";
     config['heading'] = {options: formats};
     config['plugins'].push('Heading');
     config['toolbar'].push('heading');
@@ -230,17 +236,33 @@ ns.Html.prototype.getCKEditorConfig = function () {
     };
 
     // Font family chooser
-    // TODO: not used in any official h5p content types
-    // TODO: Data loss risk for open source types that use it
-    // if (this.field.font.family) {
-    //   styles.push('fontFamily');
-    //   config['plugins'].push('FontFamily');
+    if (this.field.font.family) {
+      styles.push('fontFamily');
+      config['plugins'].push('FontFamily');
 
-    //   if (this.field.font.family instanceof Array) {
-    //     // Use specified families
-    //     setValues(this.field.font.family, 'fontFamily');
-    //   }
-    // }
+      let fontFamilies = [
+        'default',
+        'Arial, Helvetica, sans-serif',
+        'Comic Sans MS, Cursive, sans-serif',
+        'Courier New, Courier, monospace',
+        'Georgia, serif',
+        'Lucida Sans Unicode, Lucida Grande, sans-serif',
+        'Tahoma, Geneva, sans-serif',
+        'Times New Roman, Times, serif',
+        'Trebuchet MS, Helvetica, sans-serif',
+        'Verdana, Geneva, sans-serif'
+      ]
+
+      // If custom fonts are set, use those
+      if (this.field.font.family instanceof Array) {
+        fontFamilies = ['default', ...this.field.font.family.map(font => (
+          font.label + ', ' + font.css
+        ))];
+      }
+
+      setValues(fontFamilies, 'fontFamily');
+      config['fontFamily']['supportAllValues'] = true;
+    }
 
     // Font size chooser
     if (this.field.font.size) {
@@ -369,6 +391,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     // Remove existing CK instance.
     ns.Html.removeWysiwyg();
 
+    that.inputWidth = that.$input[0].getBoundingClientRect().width;
     ns.Html.current = that;
 
     ClassicEditor
@@ -404,6 +427,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
         that.ckeditor = editor;
         const editable = editor.ui.view.editable;
         editorElement = editable.element;
+        editor.ui.view.element.style.maxWidth = that.inputWidth + 'px';
         editorElement.style.maxHeight = getEditorHeight() + 'px';
 
         // Use <em> elements for italic text instead of <i>

@@ -209,6 +209,13 @@ a {
         margin-bottom: 0;
       }
     }
+
+    .ck-content pre {
+      background: initial;
+      border: initial;
+      border-radius: initial;
+      padding: 0;
+    }
   }
 
   /* Placeholders - need to be on separate lines. If not,
