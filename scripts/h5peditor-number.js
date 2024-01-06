@@ -109,7 +109,7 @@ ns.Number.prototype.validate = function () {
     if (that.field.optional === true) {
       // Field is optional and does not have a value, nothing more to validate
       this.$input.removeClass('error');
-      return;
+      return true;
     }
 
     // Field must have a value
