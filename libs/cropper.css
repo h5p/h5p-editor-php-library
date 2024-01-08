@@ -1,3 +1,45 @@
+.cropper-buttons {
+  font-size: 0;
+  background-color: #2f323a;
+  text-align: center;
+  padding: 30px;
+}
+.cropper-image-button {
+  display: inline-block;
+  border: 3px solid #2f323a;
+  border-radius: 11px;
+  margin: 0 5px 0 5px;
+}
+.cropper-image-button::before {
+  display: block;
+  width: 23px;
+  height: 23px;
+  padding: 10px;
+}
+.cropper-image-button:hover {
+  background-color: #111111;
+  border: 3px solid #9096a8;
+  cursor: pointer;
+}
+.cropper-rotate-left::before {
+  content: url("../images/cropper/rotate-left.svg");
+}
+.cropper-rotate-right::before {
+  content: url("../images/cropper/rotate-right.svg");
+}
+.cropper-crop::before {
+  content: url("../images/cropper/crop.svg");
+}
+.cropper-text-button {
+  display: inline-block;
+  border: 3px solid #2f323a;
+  border-radius: 5px;
+  padding: 5px;
+}
+.cropper-text-button:hover {
+  background-color: #111111;
+  border: 3px solid #9096a8;
+}
 .cropper-canvas-container {
   position: relative;
 }
@@ -23,28 +65,28 @@
   border: dashed #3c7eff;
   border-width: 0;
 }
-.cropper-selector-border .top-left {
+.cropper-selector-border .cropper-border-top-left {
   border-width: 0 1px 1px 0;
 }
-.cropper-selector-border .top {
+.cropper-selector-border .cropper-border-top {
   border-width: 0 0 1px 0;
 }
-.cropper-selector-border .top-right {
+.cropper-selector-border .cropper-border-top-right {
   border-width: 0 0 1px 1px;
 }
-.cropper-selector-border .center-left {
+.cropper-selector-border .cropper-border-center-left {
   border-width: 0 1px 0 0;
 }
-.cropper-selector-border .center-right {
+.cropper-selector-border .cropper-border-center-right {
   border-width: 0 0 0 1px;
 }
-.cropper-selector-border .bottom-left {
+.cropper-selector-border .cropper-border-bottom-left {
   border-width: 1px 1px 0 0;
 }
-.cropper-selector-border .bottom {
+.cropper-selector-border .cropper-border-bottom {
   border-width: 1px 0 0 0;
 }
-.cropper-selector-border .bottom-right {
+.cropper-selector-border .cropper-border-bottom-right {
   border-width: 1px 0 0 1px;
 }
 .cropper-selector {
@@ -116,7 +158,7 @@
 }
 .cropper-mask {
   position: absolute;
-  background-color: black;
+  background-color: #2f323a;
   opacity: 0.5;
   display: none;
 }

@@ -228,6 +228,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
         canvas: {
           width: maxWidth,
           height: maxHeight,
+          background: '#2f323a',
           image
         },
         selector: {
@@ -236,6 +237,10 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
             height: 50
           },
           mask: true
+        },
+        labels: {
+          save: 'save crop',
+          cancel: 'cancel crop !!!'
         }
       });
     };
