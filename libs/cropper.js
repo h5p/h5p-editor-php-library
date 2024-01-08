@@ -347,10 +347,10 @@ function Cropper(options) {
     this.mirror.toBlob(handleBlob, 'image/png', 1);
   }
   this.resetSelector = () => {
-    this.selector.style.width = this.canvas.width / 2;
-    this.selector.style.height = this.canvas.height / 2;
-    this.selector.style.left = this.canvas.offsetLeft + this.canvas.width / 4;
-    this.selector.style.top = this.canvas.offsetTop + this.canvas.height / 4;
+    this.selector.style.width = (options.selector.initial?.width || this.canvas.width / 2) + 'px';
+    this.selector.style.height = (options.selector.initial?.height || this.canvas.height / 2) + 'px';
+    this.selector.style.left = (options.selector.initial?.left || this.canvas.offsetLeft + this.canvas.width / 4) + 'px';
+    this.selector.style.top = (options.selector.initial?.top || this.canvas.offsetTop + this.canvas.height / 4) + 'px';
   }
   this.reset = () => {
     if (options.canvas.image) {
