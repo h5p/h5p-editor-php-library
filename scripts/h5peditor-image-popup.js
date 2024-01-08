@@ -234,7 +234,8 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
           min: {
             width: 50,
             height: 50
-          }
+          },
+          mask: true
         }
       });
     };
