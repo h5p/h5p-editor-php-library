@@ -1,22 +1,69 @@
 function Cropper(options) {
   this.options = options;
-  this.selector = document.getElementById(options.selector.id);
-  this.canvas = document.getElementById(options.canvas.id);
+  this.container = options.container;
+  this.ids = {
+    canvas: `canvas-${options.uniqueId}`,
+    selector: `selector-${options.uniqueId}`,
+    handles: {
+      tl: `tl-${options.uniqueId}`,
+      t: `t-${options.uniqueId}`,
+      tr: `tr-${options.uniqueId}`,
+      l: `l-${options.uniqueId}`,
+      r: `r-${options.uniqueId}`,
+      bl: `bl-${options.uniqueId}`,
+      b: `b-${options.uniqueId}`,
+      br: `br-${options.uniqueId}`
+    },
+    masks: {
+      top: `top-mask-${options.uniqueId}`,
+      right: `tight-mask-${options.uniqueId}`,
+      bottom: `bottom-mask-${options.uniqueId}`,
+      left: `left-mask-${options.uniqueId}`
+    }
+  }
+  this.initialize = () => {
+    this.container.innerHTML =
+    `<div class="cropper-canvas-container">
+    <canvas id="${this.ids.canvas}"></canvas>
+    <div class="cropper-mask top" id="${this.ids.masks.top}"></div>
+    <div class="cropper-mask right" id="${this.ids.masks.right}"></div>
+    <div class="cropper-mask bottom" id="${this.ids.masks.bottom}"></div>
+    <div class="cropper-mask left" id="${this.ids.masks.left}"></div>
+    <div id="${this.ids.selector}" class="cropper-selector">
+    <div class="cropper-selector-border">
+    <div class="top-left"></div><div class="top"></div><div class="top-right"></div>
+    <div class="center-left"></div><div class="center"></div><div class="center-right"></div>
+    <div class="bottom-left"></div><div class="bottom"></div><div class="bottom-right"></div>
+    </div>
+    <div id="${this.ids.handles.tl}" class="cropper-handle cropper-top-left"></div>
+    <div id="${this.ids.handles.t}" class="cropper-handle cropper-top"></div>
+    <div id="${this.ids.handles.tr}" class="cropper-handle cropper-top-right"></div>
+    <div id="${this.ids.handles.l}" class="cropper-handle cropper-left"></div>
+    <div id="${this.ids.handles.r}" class="cropper-handle cropper-right"></div>
+    <div id="${this.ids.handles.bl}" class="cropper-handle cropper-bottom-left"></div>
+    <div id="${this.ids.handles.b}" class="cropper-handle cropper-bottom"></div>
+    <div id="${this.ids.handles.br}" class="cropper-handle cropper-bottom-right"></div>
+    </div>
+    </div>`;
+  }
+  this.initialize();
+  this.selector = document.getElementById(this.ids.selector);
+  this.canvas = document.getElementById(this.ids.canvas);
   this.handles = {
-    tl: document.getElementById(options.selector.handles.tl),
-    t: document.getElementById(options.selector.handles.t),
-    tr: document.getElementById(options.selector.handles.tr),
-    l: document.getElementById(options.selector.handles.l),
-    r: document.getElementById(options.selector.handles.r),
-    bl: document.getElementById(options.selector.handles.bl),
-    b: document.getElementById(options.selector.handles.b),
-    br: document.getElementById(options.selector.handles.br)
+    tl: document.getElementById(this.ids.handles.tl),
+    t: document.getElementById(this.ids.handles.t),
+    tr: document.getElementById(this.ids.handles.tr),
+    l: document.getElementById(this.ids.handles.l),
+    r: document.getElementById(this.ids.handles.r),
+    bl: document.getElementById(this.ids.handles.bl),
+    b: document.getElementById(this.ids.handles.b),
+    br: document.getElementById(this.ids.handles.br)
   }
   this.masks = {
-    top: document.getElementById(options.selector.masks.top),
-    right: document.getElementById(options.selector.masks.right),
-    bottom: document.getElementById(options.selector.masks.bottom),
-    left: document.getElementById(options.selector.masks.left)
+    top: document.getElementById(this.ids.masks.top),
+    right: document.getElementById(this.ids.masks.right),
+    bottom: document.getElementById(this.ids.masks.bottom),
+    left: document.getElementById(this.ids.masks.left)
   }
   this.margins = {
     left: 0,
@@ -244,7 +291,6 @@ function Cropper(options) {
     this.margins.top = (this.canvas.height - height) / 2;
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.context.drawImage(this.image, this.margins.left, this.margins.top, width, height);
-    this.resetSelector();
     this.image.onload = undefined;
   }
   this.loadMirror = () => {
@@ -323,6 +369,7 @@ function Cropper(options) {
     else {
       console.log('no image provided');
     }
+    this.resetSelector();
   }
   this.reset();
   handleMove();
