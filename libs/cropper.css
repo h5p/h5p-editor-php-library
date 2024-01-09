@@ -1,44 +1,59 @@
+.cropper-inline {
+  display: inline-block;
+}
+.cropper-hidden {
+  display: none;
+}
 .cropper-buttons {
-  font-size: 0;
   background-color: #2f323a;
   text-align: center;
-  padding: 30px;
+  padding: 35px;
 }
-.cropper-image-button {
-  display: inline-block;
+.cropper-button {
+  position: relative;
   border: 3px solid #2f323a;
   border-radius: 11px;
   margin: 0 5px 0 5px;
-}
-.cropper-image-button::before {
-  display: block;
-  width: 23px;
-  height: 23px;
   padding: 10px;
+  display: inline-grid;
+  align-items: center;
+  grid-template-columns: 23px auto;
+  column-gap: 5px;
 }
-.cropper-image-button:hover {
+.cropper-image-button {
+  column-gap: 0;
+}
+.cropper-button:hover {
   background-color: #111111;
   border: 3px solid #9096a8;
   cursor: pointer;
 }
-.cropper-rotate-left::before {
-  content: url("../images/cropper/rotate-left.svg");
-}
-.cropper-rotate-right::before {
-  content: url("../images/cropper/rotate-right.svg");
-}
-.cropper-crop::before {
-  content: url("../images/cropper/crop.svg");
-}
-.cropper-text-button {
+.cropper-icon {
   display: inline-block;
-  border: 3px solid #2f323a;
-  border-radius: 5px;
-  padding: 5px;
+  min-width: 23px;
+  height: 23px;
+  background-repeat: no-repeat;
 }
-.cropper-text-button:hover {
-  background-color: #111111;
-  border: 3px solid #9096a8;
+.cropper-rotate-left {
+  background-image: url("../images/cropper/rotate-left.svg");
+}
+.cropper-rotate-right {
+  background-image: url("../images/cropper/rotate-right.svg");
+}
+.cropper-crop {
+  background-image: url("../images/cropper/crop.svg");
+}
+.cropper-confirm {
+  background-image: url("../images/cropper/confirm.svg");
+}
+.cropper-confirm-text {
+  color: #a0e9a3;
+}
+.cropper-cancel {
+  background-image: url("../images/cropper/cancel.svg");
+}
+.cropper-cancel-text {
+  color: #fcaaaa;
 }
 .cropper-canvas-container {
   position: relative;
@@ -161,4 +176,10 @@
   background-color: #2f323a;
   opacity: 0.5;
   display: none;
+}
+.h5p-tooltip {
+  bottom: unset;
+  top: -30px;
+  border-radius: 5px;
+  animation: none;
 }

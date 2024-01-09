@@ -195,7 +195,12 @@ function Cropper(options) {
     this.selector.style.display = on ? 'block' : 'none';
     if (options.selector.mask) {
       this.updateMask();
-      this.toggleMask(true);
+      this.toggleMask(on);
+    }
+  }
+  this.toggleSection = (section) => {
+    for (let item in this.sections) {
+      this.sections[item].style.display = section === item ? 'inline-block' : 'none';
     }
   }
   this.fit = (image, canvas) => {
@@ -313,44 +318,76 @@ function Cropper(options) {
   const parseIds = (list, target) => {
     for (let item in list) {
       if (typeof list[item] === 'object') {
-        target[item] = {}
-        parseIds(list[item], target[item]);
+        if (target) {
+          target[item] = {}
+        }
+        parseIds(list[item], target?.[item]);
         continue;
       }
-      target[item] = document.getElementById(list[item]);
+      if (!target) {
+        list[item] += `-${options.uniqueId}`;
+      }
+      else {
+        target[item] = document.getElementById(list[item]);
+      }
     }
   }
   this.initialize = () => {
     this.ids = {
-      canvas: `cropper-canvas-${options.uniqueId}`,
-      selector: `cropper-selector-${options.uniqueId}`,
+      canvas: 'cropper-canvas',
+      selector: 'cropper-selector',
+      sections: {
+        tools: 'cropper-tools',
+        crop: 'cropper-crop-decision'
+      },
       buttons: {
-        rotateLeft: `cropper-button-rotate-left-${options.uniqueId}`,
-        rotateRight: `cropper-button-rotate-right-${options.uniqueId}`,
-        crop: `cropper-button-crop-${options.uniqueId}`
+        rotateLeft: 'cropper-button-rotate-left',
+        rotateRight: 'cropper-button-rotate-right',
+        crop: 'cropper-button-crop',
+        confirmCrop: 'cropper-button-confirm',
+        cancelCrop: 'cropper-button-cancel'
       },
       handles: {
-        tl: `cropper-handle-tl-${options.uniqueId}`,
-        t: `cropper-handle-t-${options.uniqueId}`,
-        tr: `cropper-handle-tr-${options.uniqueId}`,
-        l: `cropper-handle-l-${options.uniqueId}`,
-        r: `cropper-handle-r-${options.uniqueId}`,
-        bl: `cropper-handle-bl-${options.uniqueId}`,
-        b: `cropper-handle-b-${options.uniqueId}`,
-        br: `cropper-handle-br-${options.uniqueId}`
+        tl: 'cropper-handle-tl',
+        t: 'cropper-handle-t',
+        tr: 'cropper-handle-tr',
+        l: 'cropper-handle-l',
+        r: 'cropper-handle-r',
+        bl: 'cropper-handle-bl',
+        b: 'cropper-handle-b',
+        br: 'cropper-handle-br'
       },
       masks: {
-        top: `cropper-mask-top-${options.uniqueId}`,
-        right: `cropper-mask-right-${options.uniqueId}`,
-        bottom: `cropper-mask-bottom-${options.uniqueId}`,
-        left: `cropper-mask-left-${options.uniqueId}`
+        top: 'cropper-mask-top',
+        right: 'cropper-mask-right',
+        bottom: 'cropper-mask-bottom',
+        left: 'cropper-mask-left'
       }
     }
+    parseIds(this.ids);
     this.container.innerHTML =
-    `<div class="cropper-buttons" id="${this.ids.buttons.rotateLeft}">
-      <div class="cropper-image-button cropper-rotate-left" id="${this.ids.buttons.rotateLeft}"></div>
-      <div class="cropper-image-button cropper-rotate-right" id="${this.ids.buttons.rotateRight}"></div>
-      <div class="cropper-image-button cropper-crop" id="${this.ids.buttons.crop}"></div>
+    `<div class="cropper-buttons">
+      <div class="cropper-inline" id="${this.ids.sections.tools}">
+        <div class="cropper-button cropper-image-button" id="${this.ids.buttons.rotateLeft}">
+          <div class="cropper-icon cropper-rotate-left"></div>
+        </div>
+        <div class="cropper-button cropper-image-button" id="${this.ids.buttons.rotateRight}">
+          <div class="cropper-icon cropper-rotate-right"></div>
+        </div>
+        <div class="cropper-button cropper-image-button" id="${this.ids.buttons.crop}">
+          <div class="cropper-icon cropper-crop"></div>
+        </div>
+      </div>
+      <div class="cropper-hidden" id="${this.ids.sections.crop}">
+        <div class="cropper-button" id="${this.ids.buttons.confirmCrop}">
+          <div class="cropper-icon cropper-confirm"></div>
+          <div class="cropper-icon cropper-confirm-text">${options.labels.confirmCrop}</div>
+        </div>
+        <div class="cropper-button" id="${this.ids.buttons.cancelCrop}">
+          <div class="cropper-icon cropper-cancel"></div>
+          <div class="cropper-icon cropper-cancel-text">${options.labels.cancelCrop}</div>
+        </div>
+      </div>
     </div>
     <div class="cropper-canvas-container">
       <canvas id="${this.ids.canvas}"></canvas>
@@ -376,11 +413,6 @@ function Cropper(options) {
     </div>`;
     this.selector = document.getElementById(this.ids.selector);
     this.canvas = document.getElementById(this.ids.canvas);
-    this.buttons = {
-      rotateLeft: document.getElementById(this.ids.buttons.rotateLeft),
-      rotateRight: document.getElementById(this.ids.buttons.rotateRight),
-      rotateLeft: document.getElementById(this.ids.buttons.rotateLeft)
-    }
     parseIds(this.ids, this);
     this.margins = {
       left: 0,
@@ -392,7 +424,21 @@ function Cropper(options) {
     this.mirror = document.createElement('canvas');
     this.mirrorContext = this.mirror.getContext('2d');
     this.pointerOffset = {};
-    this.buttons.crop.onclick = () => this.toggleSelector(true);
+    this.buttons.rotateLeft.onclick = () => this.rotate(-1);
+    this.buttons.rotateRight.onclick = () => this.rotate(1);
+    this.buttons.crop.onclick = () => {
+      this.toggleSection('crop');
+      this.toggleSelector(true);
+    }
+    this.buttons.confirmCrop.onclick = () => {
+      this.crop();
+      this.toggleSection('tools');
+      this.toggleSelector(false);
+    }
+    this.buttons.cancelCrop.onclick = () => {
+      this.toggleSection('tools');
+      this.toggleSelector(false);
+    }
   }
   this.initialize();
   this.reset();

@@ -239,10 +239,13 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
           mask: true
         },
         labels: {
-          save: 'save crop',
-          cancel: 'cancel crop !!!'
+          confirmCrop: H5P.t('confirmCrop'),
+          cancelCrop: H5P.t('cancelCrop')
         }
       });
+      H5P.Tooltip(this.cropper.buttons.rotateLeft, { text: H5P.t('rotateLeft') });
+      H5P.Tooltip(this.cropper.buttons.rotateRight, { text: H5P.t('rotateRight') });
+      H5P.Tooltip(this.cropper.buttons.crop, { text: H5P.t('cropImage') });
     };
 
     /**
@@ -318,12 +321,6 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     };
 
     // Create header buttons
-    createButton('crop', 'h5p-editing-image-save-button h5p-done', () => {
-      this.cropper.crop();
-    });
-    createButton('rotate', 'h5p-editing-image-save-button h5p-done', () => {
-      this.cropper.rotate(1);
-    });
     createButton('resetToOriginalLabel', 'h5p-editing-image-reset-button h5p-remove', function () {
       self.trigger('resetImage');
       isReset = true;
@@ -331,10 +328,12 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     createButton('cancelLabel', 'h5p-editing-image-cancel-button', function () {
       self.trigger('canceled');
       self.hide();
+      self.cropper.toggleSelector(false);
     });
     createButton('saveLabel', 'h5p-editing-image-save-button h5p-done', function () {
       saveImage();
       self.hide();
+      self.cropper.toggleSelector(false);
     });
   }
 
