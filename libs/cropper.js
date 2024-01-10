@@ -496,8 +496,6 @@ function Cropper(options) {
         <div id="${this.ids.handles.br}" class="cropper-handle cropper-bottom-right"></div>
       </div>
     </div>`;
-    this.selector = document.getElementById(this.ids.selector);
-    this.canvas = document.getElementById(this.ids.canvas);
     parseIds(this.ids, this);
     this.margins = {
       left: 0,
