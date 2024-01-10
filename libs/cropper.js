@@ -1,6 +1,12 @@
+/**
+ * Simple image cropping tool.
+ */
 function Cropper(options) {
   this.options = options;
   this.container = options.container;
+  /**
+   * Set of pointer event handler functions for moving the selector.
+   */
   const handleMove = () => {
     const onPointerDown = (event) => {
       event.preventDefault();
@@ -43,6 +49,11 @@ function Cropper(options) {
     }
     this.selector.onpointerdown = onPointerDown;
   }
+  /**
+   * Set of pointer event handling functions for resizing the selector.
+   *
+   * @param {string} type String containing characters that denote the resizing handle location.
+   */
   const handleResize = (type) => {
     if (!this.handles[type]) {
       return;
@@ -56,6 +67,14 @@ function Cropper(options) {
       window.onpointerup = onPointerUp;
       window.onpointermove = onPointerMove;
     }
+    /**
+     * Generic selector resizing handler.
+     *
+     * @param {boolean} top Flag denoting top handle location.
+     * @param {boolean} left Flag denoting left handle location.
+     * @param {boolean} bottom Flag denoting bottom handle location.
+     * @param {boolean} right Flag denoting right handle location.
+     */
     const handleAll = (top, left, bottom, right) => {
       let width;
       let height;
@@ -143,6 +162,11 @@ function Cropper(options) {
     }
     this.handles[type].onpointerdown = onPointerDown;
   }
+  /**
+   * Callback for canvas.context.toBlob image retrieval.
+   *
+   * @param {Blob} blob Raw image data.
+   */
   const handleBlob = (blob) => {
     const url = URL.createObjectURL(blob);
     this.image = new Image();
@@ -152,11 +176,19 @@ function Cropper(options) {
     }
     this.image.src = url;
   }
+  /**
+   * Shows/hides mask around selector.
+   *
+   * @param {boolean} on true/false denotes on/off
+   */
   this.toggleMask = (on) => {
     for (let item in this.masks) {
       this.masks[item].style.display = on ? 'block' : 'none';
     }
   }
+  /**
+   * Updates the size & position of the 4 mask areas.
+   */
   this.updateMask = () => {
     if (this.masks.top) {
       this.masks.top.style.width = this.selector.offsetWidth + 'px';
@@ -183,6 +215,11 @@ function Cropper(options) {
       this.masks.left.style.top = 0;
     }
   }
+  /**
+   * Shows/hides selector handles.
+   *
+   * @param {boolean} on true/false denotes on/off
+   */
   this.toggleHandles = (on, except) => {
     for (let item in this.handles) {
       if (item === except) {
@@ -191,6 +228,11 @@ function Cropper(options) {
       this.handles[item].style.opacity = on ? 1 : 0;
     }
   }
+  /**
+   * Shows/hides selector.
+   *
+   * @param {boolean} on true/false denotes on/off
+   */
   this.toggleSelector = (on) => {
     this.selector.style.display = on ? 'block' : 'none';
     if (options.selector.mask) {
@@ -198,11 +240,22 @@ function Cropper(options) {
       this.toggleMask(on);
     }
   }
+  /**
+   * Shows one buttons section and hides the other.
+   *
+   * @param {string} section Buttons section to be shown.
+   */
   this.toggleSection = (section) => {
     for (let item in this.sections) {
       this.sections[item].style.display = section === item ? 'inline-block' : 'none';
     }
   }
+  /**
+   * Computes width & height for an image so that it fits within the canvvas.
+   *
+   * @param {Image} image image to fit
+   * @param {Canvas} canvas to fit image in
+   */
   this.fit = (image, canvas) => {
     if (!canvas) {
       canvas = this.canvas;
@@ -227,6 +280,9 @@ function Cropper(options) {
     }
     return { width, height };
   }
+  /**
+   * Draws image within canvas.
+   */
   this.loadImage = () => {
     const { width, height } = this.fit(this.image);
     this.margins.left = (this.canvas.width - width) / 2;
@@ -237,11 +293,18 @@ function Cropper(options) {
     this.context.drawImage(this.image, this.margins.left, this.margins.top, width, height);
     this.image.onload = undefined;
   }
+  /**
+   * Draws raw image in mirror canvas. Mirror is used for output.
+   */
   this.loadMirror = () => {
     this.mirror.width = this.image.width;
     this.mirror.height = this.image.height;
     this.mirrorContext.drawImage(this.image, 0, 0);
   }
+  /**
+   * Crops image based on selector size & position relative to image location within canvas.
+   * The output is generated from the mirror canvas based on scaled selector dimensions.
+   */
   this.crop = () => {
     const maxSelectedWidth = this.canvas.width - this.margins.left * 2;
     const maxSelectedHeight = this.canvas.height - this.margins.top * 2;
@@ -274,6 +337,11 @@ function Cropper(options) {
     this.mirrorContext.drawImage(this.image, sx, sy, sw, sh, 0, 0, width, height);
     this.mirror.toBlob(handleBlob, 'image/png', 1);
   }
+  /**
+   * Rotates image in increments of 90 degrees.
+   *
+   * @param {integer} rotation Clockwise rotation for positive numbers. Counterclockwise for negative numbers.
+   */
   this.rotate = (rotation) => {
     rotation %= 4;
     if (rotation % 2) {
@@ -290,12 +358,19 @@ function Cropper(options) {
     this.mirrorContext.drawImage(this.image, 0, 0);
     this.mirror.toBlob(handleBlob, 'image/png', 1);
   }
+  /**
+   * Resets selector size & position based on optional initial dimensions.
+   * If no initial data is provided selector will be centered within the canvas.
+   */
   this.resetSelector = () => {
     this.selector.style.width = (options.selector.initial?.width || this.canvas.width / 2) + 'px';
     this.selector.style.height = (options.selector.initial?.height || this.canvas.height / 2) + 'px';
     this.selector.style.left = (options.selector.initial?.left || this.canvas.offsetLeft + this.canvas.width / 4) + 'px';
     this.selector.style.top = (options.selector.initial?.top || this.canvas.offsetTop + this.canvas.height / 4) + 'px';
   }
+  /**
+   * Reload input image and reset selector.
+   */
   this.reset = () => {
     if (options.canvas.image) {
       this.image = options.canvas.image;
@@ -315,6 +390,13 @@ function Cropper(options) {
     }
     this.resetSelector();
   }
+  /**
+   * Runs document.getElementById and builds a tree structure of elements based on the tree structure of the provided list.
+   *
+   * @param {Object} list Input tree structure of ids.
+   * @param {Object} target Output object to store the resulting DOM elements.
+   * Ids are suffixed with uniqueId if no target is provided.
+   */
   const parseIds = (list, target) => {
     for (let item in list) {
       if (typeof list[item] === 'object') {
@@ -332,6 +414,9 @@ function Cropper(options) {
       }
     }
   }
+  /**
+   * Creates cropper instance data structure injects HTML in container and starts image loading.
+   */
   this.initialize = () => {
     this.ids = {
       canvas: 'cropper-canvas',
