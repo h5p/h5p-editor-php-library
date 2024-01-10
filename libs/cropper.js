@@ -328,14 +328,14 @@ function Cropper(options) {
       selectedHeight = maxSelectedHeight - selectedY;
     }
     const ICRatio = this.image.width / (this.canvas.width - this.margins.left * 2);
-    let sx = ICRatio * selectedX;
-    let sy = ICRatio * selectedY;
-    let sw = ICRatio * selectedWidth;
-    let sh = ICRatio * selectedHeight;
-    const { width, height } = this.fit({ width: sw, height: sh });
+    selectedX = ICRatio * selectedX;
+    selectedY = ICRatio * selectedY;
+    selectedWidth = ICRatio * selectedWidth;
+    selectedHeight = ICRatio * selectedHeight;
+    const { width, height } = this.fit({ width: selectedWidth, height: selectedHeight });
     this.mirror.width = width;
     this.mirror.height = height;
-    this.mirrorContext.drawImage(this.image, sx, sy, sw, sh, 0, 0, width, height);
+    this.mirrorContext.drawImage(this.image, selectedX, selectedY, selectedWidth, selectedHeight, 0, 0, width, height);
     this.mirror.toBlob(handleBlob, 'image/png', 1);
   }
   /**
