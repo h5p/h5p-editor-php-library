@@ -4,18 +4,26 @@
 function Cropper(options) {
   this.options = options;
   this.container = options.container;
-  const onPointerUp = (type) => {
+
+  /**
+   * Generic pointerup event handler.
+   *
+   * @param {string} handle String name for selector handle not to be hidden.
+   */
+  const onPointerUp = (handle) => {
     return (event) => {
       event.preventDefault();
       event.stopPropagation();
       window.onpointerup = undefined;
       window.onpointermove = undefined;
-      this.toggleHandles(true, type);
+      this.toggleHandles(true, handle);
     }
   }
+
   /**
    * Set of pointer event handler functions for moving the selector.
    */
+
   const handleMove = () => {
     const onPointerDown = (event) => {
       event.preventDefault();
@@ -28,6 +36,7 @@ function Cropper(options) {
       window.onpointerup = onPointerUp();
       window.onpointermove = onPointerMove;
     }
+
     const onPointerMove = (event) => {
       let x = event.clientX - this.pointerOffset.x;
       let y = event.clientY - this.pointerOffset.y;
@@ -49,18 +58,21 @@ function Cropper(options) {
         this.updateMask();
       }
     }
+
     this.selector.onpointerdown = onPointerDown;
   }
+
   /**
    * Set of pointer event handling functions for resizing the selector.
    *
-   * @param {string} type String containing characters that denote the resizing handle location.
+   * @param {string} type String containing labels that denote the resizing handle location.
    */
   const handleResize = (type) => {
     if (!this.handles[type]) {
       return;
     }
     const types = type.split('_');
+
     const onPointerDown = (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -70,6 +82,7 @@ function Cropper(options) {
       window.onpointerup = onPointerUp(type);
       window.onpointermove = onPointerMove;
     }
+
     /**
      * Generic selector resizing handler.
      *
@@ -139,6 +152,7 @@ function Cropper(options) {
         this.selector.style.height = height + 'px';
       }
     }
+
     const onPointerMove = (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -156,8 +170,10 @@ function Cropper(options) {
         this.updateMask();
       }
     }
+
     this.handles[type].onpointerdown = onPointerDown;
   }
+
   /**
    * Callback for canvas.context.toBlob image retrieval.
    *
@@ -172,6 +188,7 @@ function Cropper(options) {
     }
     this.image.src = url;
   }
+
   /**
    * Shows/hides mask around selector.
    *
@@ -182,6 +199,7 @@ function Cropper(options) {
       this.masks[item].style.display = on ? 'block' : 'none';
     }
   }
+
   /**
    * Updates the size & position of the 4 mask areas.
    */
@@ -216,6 +234,7 @@ function Cropper(options) {
       item.style.top = 0;
     }
   }
+
   /**
    * Shows/hides selector handles.
    *
@@ -229,6 +248,7 @@ function Cropper(options) {
       this.handles[item].style.opacity = on ? 1 : 0;
     }
   }
+
   /**
    * Shows/hides selector.
    *
@@ -241,6 +261,7 @@ function Cropper(options) {
       this.toggleMask(on);
     }
   }
+
   /**
    * Shows one buttons section and hides the other.
    *
@@ -251,6 +272,7 @@ function Cropper(options) {
       this.sections[item].style.display = section === item ? 'inline-block' : 'none';
     }
   }
+
   /**
    * Computes width & height for an image so that it fits within the canvvas.
    *
@@ -281,6 +303,7 @@ function Cropper(options) {
     }
     return { width, height };
   }
+
   /**
    * Draws image within canvas.
    */
@@ -294,6 +317,7 @@ function Cropper(options) {
     this.context.drawImage(this.image, this.margins.left, this.margins.top, width, height);
     this.image.onload = undefined;
   }
+
   /**
    * Draws raw image in mirror canvas. Mirror is used for output.
    */
@@ -302,6 +326,7 @@ function Cropper(options) {
     this.mirror.height = this.image.height;
     this.mirrorContext.drawImage(this.image, 0, 0);
   }
+
   /**
    * Crops image based on selector size & position relative to image location within canvas.
    * The output is generated from the mirror canvas based on scaled selector dimensions.
@@ -338,6 +363,7 @@ function Cropper(options) {
     this.mirrorContext.drawImage(this.image, selectedX, selectedY, selectedWidth, selectedHeight, 0, 0, width, height);
     this.mirror.toBlob(handleBlob, 'image/png', 1);
   }
+
   /**
    * Rotates image in increments of 90 degrees.
    *
@@ -359,6 +385,7 @@ function Cropper(options) {
     this.mirrorContext.drawImage(this.image, 0, 0);
     this.mirror.toBlob(handleBlob, 'image/png', 1);
   }
+
   /**
    * Resets selector size & position based on optional initial dimensions.
    * If no initial data is provided selector will be centered within the canvas.
@@ -369,6 +396,7 @@ function Cropper(options) {
     this.selector.style.left = (options.selector.initial?.left || this.canvas.offsetLeft + this.canvas.width / 4) + 'px';
     this.selector.style.top = (options.selector.initial?.top || this.canvas.offsetTop + this.canvas.height / 4) + 'px';
   }
+
   /**
    * Reload input image and reset selector.
    */
@@ -391,6 +419,7 @@ function Cropper(options) {
     }
     this.resetSelector();
   }
+
   /**
    * Runs document.getElementById and builds a tree structure of elements based on the tree structure of the provided list.
    *
@@ -415,8 +444,9 @@ function Cropper(options) {
       }
     }
   }
+
   /**
-   * Creates cropper instance data structure injects HTML in container and starts image loading.
+   * Creates cropper instance data structure, injects HTML in container and starts image loading.
    */
   this.initialize = () => {
     this.ids = {
@@ -524,6 +554,7 @@ function Cropper(options) {
       this.toggleSelector(false);
     }
   }
+
   this.initialize();
   this.reset();
   handleMove();
