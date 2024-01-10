@@ -4,6 +4,15 @@
 function Cropper(options) {
   this.options = options;
   this.container = options.container;
+  const onPointerUp = (type) => {
+    return (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      window.onpointerup = undefined;
+      window.onpointermove = undefined;
+      this.toggleHandles(true, type);
+    }
+  }
   /**
    * Set of pointer event handler functions for moving the selector.
    */
@@ -16,7 +25,7 @@ function Cropper(options) {
       this.pointerOffset.xSpan = this.selector.offsetLeft + this.selector.offsetWidth;
       this.pointerOffset.ySpan = this.selector.offsetTop + this.selector.offsetHeight;
       this.toggleHandles(false);
-      window.onpointerup = onPointerUp;
+      window.onpointerup = onPointerUp();
       window.onpointermove = onPointerMove;
     }
     const onPointerMove = (event) => {
@@ -40,13 +49,6 @@ function Cropper(options) {
         this.updateMask();
       }
     }
-    const onPointerUp = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      window.onpointerup = undefined;
-      window.onpointermove = undefined;
-      this.toggleHandles(true);
-    }
     this.selector.onpointerdown = onPointerDown;
   }
   /**
@@ -65,7 +67,7 @@ function Cropper(options) {
       this.pointerOffset.xSpan = this.selector.offsetLeft + this.selector.offsetWidth - options.selector.min.width;
       this.pointerOffset.ySpan = this.selector.offsetTop + this.selector.offsetHeight - options.selector.min.height;
       this.toggleHandles(false, type);
-      window.onpointerup = onPointerUp;
+      window.onpointerup = onPointerUp(type);
       window.onpointermove = onPointerMove;
     }
     /**
@@ -153,13 +155,6 @@ function Cropper(options) {
       if (options.selector.mask) {
         this.updateMask();
       }
-    }
-    const onPointerUp = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      window.onpointerup = undefined;
-      window.onpointermove = undefined;
-      this.toggleHandles(true, type);
     }
     this.handles[type].onpointerdown = onPointerDown;
   }
