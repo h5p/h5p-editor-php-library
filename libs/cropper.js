@@ -186,29 +186,34 @@ function Cropper(options) {
    * Updates the size & position of the 4 mask areas.
    */
   this.updateMask = () => {
+    let item;
     if (this.masks.top) {
-      this.masks.top.style.width = this.selector.offsetWidth + 'px';
-      this.masks.top.style.height = this.selector.offsetTop + 'px';
-      this.masks.top.style.top = 0;
-      this.masks.top.style.left = this.selector.offsetLeft + 'px';
+      item = this.masks.top;
+      item.style.width = this.selector.offsetWidth + 'px';
+      item.style.height = this.selector.offsetTop + 'px';
+      item.style.top = 0;
+      item.style.left = this.selector.offsetLeft + 'px';
     }
     if (this.masks.right) {
-      this.masks.right.style.width = this.canvas.width - (this.selector.offsetLeft + this.selector.offsetWidth) + 'px';
-      this.masks.right.style.height = this.canvas.height + 'px';
-      this.masks.right.style.right = 0;
-      this.masks.right.style.top = 0;
+      item = this.masks.right;
+      item.style.width = this.canvas.width - (this.selector.offsetLeft + this.selector.offsetWidth) + 'px';
+      item.style.height = this.canvas.height + 'px';
+      item.style.right = 0;
+      item.style.top = 0;
     }
     if (this.masks.bottom) {
-      this.masks.bottom.style.width = this.selector.offsetWidth + 'px';
-      this.masks.bottom.style.height = this.canvas.height - (this.selector.offsetTop + this.selector.offsetHeight) + 'px';
-      this.masks.bottom.style.bottom = 0;
-      this.masks.bottom.style.left = this.selector.offsetLeft + 'px';
+      item = this.masks.bottom;
+      item.style.width = this.selector.offsetWidth + 'px';
+      item.style.height = this.canvas.height - (this.selector.offsetTop + this.selector.offsetHeight) + 'px';
+      item.style.bottom = 0;
+      item.style.left = this.selector.offsetLeft + 'px';
     }
     if (this.masks.left) {
-      this.masks.left.style.width = this.selector.offsetLeft + 'px';
-      this.masks.left.style.height = this.canvas.height + 'px';
-      this.masks.left.style.left = 0;
-      this.masks.left.style.top = 0;
+      item = this.masks.left;
+      item.style.width = this.selector.offsetLeft + 'px';
+      item.style.height = this.canvas.height + 'px';
+      item.style.left = 0;
+      item.style.top = 0;
     }
   }
   /**
