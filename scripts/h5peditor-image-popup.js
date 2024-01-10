@@ -214,11 +214,24 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     };
 
     /**
+     * Resize cropper canvas, selector and mask.
+     */
+    this.resizeCropper = () => {
+      setCropperDimensions();
+      this.cropper.canvas.width = maxWidth;
+      this.cropper.canvas.height = maxHeight;
+      this.cropper.loadImage();
+      this.cropper.loadMirror();
+      this.cropper.toggleSection('tools');
+      this.cropper.toggleSelector(false);
+    }
+
+    /**
      * Create image editing tool from image.
      */
     const createCropper = (image) => {
       if (this.cropper) {
-        this.cropper.options.image = image;
+        this.cropper.options.canvas.image = image;
         this.cropper.reset();
         return;
       }
@@ -253,12 +266,15 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
      *
      * @param {string} imgSrc Source of new image
      */
-    this.setImage = function (imgSrc) {
+    this.setImage = function (imgSrc, callback) {
       H5P.setSource(editingImage, imgSrc, H5PEditor.contentId);
-      editingImage.onload = function () {
+      editingImage.onload = () => {
         createCropper(editingImage);
         editingImage.onload = null;
         imageLoading.classList.add('hidden');
+        if (callback) {
+          callback();
+        }
       };
       imageLoading.classList.remove('hidden');
       editingImage.classList.add('hidden');
@@ -277,6 +293,14 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
         background.classList.remove('hidden');
         self.trigger('initialized');
       }
+      const imageLoaded = () => {
+        if (offset) {
+          self.adjustPopupOffset(offset);
+          openImageEditor();
+          self.resizeCropper();
+          window.addEventListener('resize', this.resizeCropper);
+        }
+      }
       H5P.$body.get(0).appendChild(background);
       background.classList.remove('hidden');
       setCropperDimensions();
@@ -284,18 +308,10 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       if (imageSrc) {
         // Load image editing scripts dynamically
         if (!scriptsLoaded) {
-          loadScripts(() => self.setImage(imageSrc));
+          loadScripts(() => self.setImage(imageSrc, imageLoaded));
         }
         else {
-          self.setImage(imageSrc);
-        }
-        if (offset) {
-          const imageLoaded = function () {
-            this.adjustPopupOffset(offset);
-            editingImage.removeEventListener('load', imageLoaded);
-            openImageEditor();
-          }.bind(this);
-          editingImage.addEventListener('load', imageLoaded);
+          self.setImage(imageSrc, imageLoaded);
         }
       }
       else {
@@ -307,11 +323,12 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     /**
      * Hide popup
      */
-    this.hide = function () {
+    this.hide = () => {
       isShowing = false;
       H5P.$body.get(0).classList.remove('h5p-editor-image-popup');
       background.classList.add('hidden');
       H5P.$body.get(0).removeChild(background);
+      window.removeEventListener('resize', this.resizeCropper);
     };
 
     /**
