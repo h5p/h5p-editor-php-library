@@ -58,6 +58,7 @@ function Cropper(options) {
     if (!this.handles[type]) {
       return;
     }
+    const types = type.split('_');
     const onPointerDown = (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -140,15 +141,15 @@ function Cropper(options) {
       event.preventDefault();
       event.stopPropagation();
       const map = {
-        t: false,
-        l: false,
-        b: false,
-        r: false
+        top: false,
+        left: false,
+        bottom: false,
+        right: false
       }
-      for (let item of type) {
+      for (let item of types) {
         map[item] = true;
       }
-      handleAll(map.t, map.l, map.b, map.r);
+      handleAll(map.top, map.left, map.bottom, map.right);
       if (options.selector.mask) {
         this.updateMask();
       }
@@ -433,14 +434,14 @@ function Cropper(options) {
         cancelCrop: 'cropper-button-cancel'
       },
       handles: {
-        tl: 'cropper-handle-tl',
-        t: 'cropper-handle-t',
-        tr: 'cropper-handle-tr',
-        l: 'cropper-handle-l',
-        r: 'cropper-handle-r',
-        bl: 'cropper-handle-bl',
-        b: 'cropper-handle-b',
-        br: 'cropper-handle-br'
+        top_left: 'cropper-handle-top-left',
+        top: 'cropper-handle-top',
+        top_right: 'cropper-handle-top-right',
+        left: 'cropper-handle-left',
+        right: 'cropper-handle-right',
+        bottom_left: 'cropper-handle-bottom-left',
+        bottom: 'cropper-handle-bottom',
+        bottom_right: 'cropper-handle-bottom-right'
       },
       masks: {
         top: 'cropper-mask-top',
@@ -486,14 +487,14 @@ function Cropper(options) {
           <div class="cropper-border-center-left"></div><div class="cropper-border-center"></div><div class="cropper-border-center-right"></div>
           <div class="cropper-border-bottom-left"></div><div class="cropper-border-bottom"></div><div class="cropper-border-bottom-right"></div>
         </div>
-        <div id="${this.ids.handles.tl}" class="cropper-handle cropper-top-left"></div>
-        <div id="${this.ids.handles.t}" class="cropper-handle cropper-top"></div>
-        <div id="${this.ids.handles.tr}" class="cropper-handle cropper-top-right"></div>
-        <div id="${this.ids.handles.l}" class="cropper-handle cropper-left"></div>
-        <div id="${this.ids.handles.r}" class="cropper-handle cropper-right"></div>
-        <div id="${this.ids.handles.bl}" class="cropper-handle cropper-bottom-left"></div>
-        <div id="${this.ids.handles.b}" class="cropper-handle cropper-bottom"></div>
-        <div id="${this.ids.handles.br}" class="cropper-handle cropper-bottom-right"></div>
+        <div id="${this.ids.handles.top_left}" class="cropper-handle cropper-top-left"></div>
+        <div id="${this.ids.handles.top}" class="cropper-handle cropper-top"></div>
+        <div id="${this.ids.handles.top_right}" class="cropper-handle cropper-top-right"></div>
+        <div id="${this.ids.handles.left}" class="cropper-handle cropper-left"></div>
+        <div id="${this.ids.handles.right}" class="cropper-handle cropper-right"></div>
+        <div id="${this.ids.handles.bottom_left}" class="cropper-handle cropper-bottom-left"></div>
+        <div id="${this.ids.handles.bottom}" class="cropper-handle cropper-bottom"></div>
+        <div id="${this.ids.handles.bottom_right}" class="cropper-handle cropper-bottom-right"></div>
       </div>
     </div>`;
     parseIds(this.ids, this);
