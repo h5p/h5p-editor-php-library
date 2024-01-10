@@ -272,6 +272,11 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
      * @param {string} [imageSrc] Source of image that will be edited
      */
     this.show = function (offset, imageSrc) {
+      const openImageEditor = () => {
+        H5P.$body.get(0).classList.add('h5p-editor-image-popup');
+        background.classList.remove('hidden');
+        self.trigger('initialized');
+      }
       H5P.$body.get(0).appendChild(background);
       background.classList.remove('hidden');
       setCropperDimensions();
@@ -285,16 +290,17 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
           self.setImage(imageSrc);
         }
         if (offset) {
-          var imageLoaded = function () {
+          const imageLoaded = function () {
             this.adjustPopupOffset(offset);
             editingImage.removeEventListener('load', imageLoaded);
+            openImageEditor();
           }.bind(this);
           editingImage.addEventListener('load', imageLoaded);
         }
       }
-      H5P.$body.get(0).classList.add('h5p-editor-image-popup');
-      background.classList.remove('hidden');
-      self.trigger('initialized');
+      else {
+        openImageEditor();
+      }
       isShowing = true;
     };
 
