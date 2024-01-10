@@ -387,7 +387,7 @@ function Cropper(options) {
       this.image.src = options.canvas.imgSrc;
     }
     else {
-      console.log('no image provided');
+      console.warn('cropper:no_image_provided');
     }
     this.resetSelector();
   }
