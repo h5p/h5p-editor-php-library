@@ -259,9 +259,10 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
           cancelCrop: H5P.t('cancelCrop')
         }
       });
-      H5P.Tooltip(this.cropper.buttons.rotateLeft, { text: H5P.t('rotateLeft') });
-      H5P.Tooltip(this.cropper.buttons.rotateRight, { text: H5P.t('rotateRight') });
-      H5P.Tooltip(this.cropper.buttons.crop, { text: H5P.t('cropImage') });
+      const classes = ['cropper-h5p-tooltip'];
+      H5P.Tooltip(this.cropper.buttons.rotateLeft, { text: H5P.t('rotateLeft'), classes });
+      H5P.Tooltip(this.cropper.buttons.rotateRight, { text: H5P.t('rotateRight'), classes });
+      H5P.Tooltip(this.cropper.buttons.crop, { text: H5P.t('cropImage'), classes });
     };
 
     /**

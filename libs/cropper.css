@@ -177,7 +177,7 @@
   opacity: 0.5;
   display: none;
 }
-.h5p-tooltip {
+.cropper-h5p-tooltip {
   bottom: unset;
   top: -30px;
   border-radius: 5px;
