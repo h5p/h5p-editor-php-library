@@ -182,4 +182,5 @@
   top: -30px;
   border-radius: 5px;
   animation: none;
+  z-index: 999;
 }
