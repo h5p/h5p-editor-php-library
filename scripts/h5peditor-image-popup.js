@@ -252,6 +252,9 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
           mask: true
         },
         labels: {
+          rotateLeft: H5P.t('rotateLeft'),
+          rotateRight: H5P.t('rotateRight'),
+          cropImage: H5P.t('cropImage'),
           confirmCrop: H5P.t('confirmCrop'),
           cancelCrop: H5P.t('cancelCrop')
         }

@@ -206,32 +206,32 @@ function Cropper(options) {
   this.updateMask = () => {
     let item;
     if (this.masks.top) {
-      item = this.masks.top;
-      item.style.width = this.selector.offsetWidth + 'px';
-      item.style.height = this.selector.offsetTop + 'px';
-      item.style.top = 0;
-      item.style.left = this.selector.offsetLeft + 'px';
+      item = this.masks.top.style;
+      item.width = this.selector.offsetWidth + 'px';
+      item.height = this.selector.offsetTop + 'px';
+      item.top = 0;
+      item.left = this.selector.offsetLeft + 'px';
     }
     if (this.masks.right) {
-      item = this.masks.right;
-      item.style.width = this.canvas.width - (this.selector.offsetLeft + this.selector.offsetWidth) + 'px';
-      item.style.height = this.canvas.height + 'px';
-      item.style.right = 0;
-      item.style.top = 0;
+      item = this.masks.right.style;
+      item.width = this.canvas.width - (this.selector.offsetLeft + this.selector.offsetWidth) + 'px';
+      item.height = this.canvas.height + 'px';
+      item.right = 0;
+      item.top = 0;
     }
     if (this.masks.bottom) {
-      item = this.masks.bottom;
-      item.style.width = this.selector.offsetWidth + 'px';
-      item.style.height = this.canvas.height - (this.selector.offsetTop + this.selector.offsetHeight) + 'px';
-      item.style.bottom = 0;
-      item.style.left = this.selector.offsetLeft + 'px';
+      item = this.masks.bottom.style;
+      item.width = this.selector.offsetWidth + 'px';
+      item.height = this.canvas.height - (this.selector.offsetTop + this.selector.offsetHeight) + 'px';
+      item.bottom = 0;
+      item.left = this.selector.offsetLeft + 'px';
     }
     if (this.masks.left) {
-      item = this.masks.left;
-      item.style.width = this.selector.offsetLeft + 'px';
-      item.style.height = this.canvas.height + 'px';
-      item.style.left = 0;
-      item.style.top = 0;
+      item = this.masks.left.style;
+      item.width = this.selector.offsetLeft + 'px';
+      item.height = this.canvas.height + 'px';
+      item.left = 0;
+      item.top = 0;
     }
   }
 
@@ -446,6 +446,21 @@ function Cropper(options) {
   }
 
   /**
+   * Returns key up handler for given list of keys that runs given action if any of the keys are pressed.
+   *
+   * @param {array} keys Array of keys that will trigger given action.
+   * @param {function} action Function to run if any of the given keys is pressed.
+   * Ids are suffixed with uniqueId if no target is provided.
+   */
+  const onKeyUp = (keys, action) => {
+    return (event) => {
+      if (keys.indexOf(event.keyCode) !== -1) {
+        action();
+      }
+    }
+  }
+
+  /**
    * Creates cropper instance data structure, injects HTML in container and starts image loading.
    */
   this.initialize = () => {
@@ -484,22 +499,22 @@ function Cropper(options) {
     this.container.innerHTML =
     `<div class="cropper-buttons">
       <div class="cropper-inline" id="${this.ids.sections.tools}">
-        <div class="cropper-button cropper-image-button" id="${this.ids.buttons.rotateLeft}">
+        <div class="cropper-button cropper-image-button" id="${this.ids.buttons.rotateLeft}" tabindex=0 aria-label="${options.labels.rotateLeft}">
           <div class="cropper-icon cropper-rotate-left"></div>
         </div>
-        <div class="cropper-button cropper-image-button" id="${this.ids.buttons.rotateRight}">
+        <div class="cropper-button cropper-image-button" id="${this.ids.buttons.rotateRight}" tabindex=0 aria-label="${options.labels.rotateRight}">
           <div class="cropper-icon cropper-rotate-right"></div>
         </div>
-        <div class="cropper-button cropper-image-button" id="${this.ids.buttons.crop}">
+        <div class="cropper-button cropper-image-button" id="${this.ids.buttons.crop}" tabindex=0 aria-label="${options.labels.cropImage}">
           <div class="cropper-icon cropper-crop"></div>
         </div>
       </div>
       <div class="cropper-hidden" id="${this.ids.sections.crop}">
-        <div class="cropper-button" id="${this.ids.buttons.confirmCrop}">
+        <div class="cropper-button" id="${this.ids.buttons.confirmCrop}" tabindex=0 aria-label="${options.labels.confirmCrop}">
           <div class="cropper-icon cropper-confirm"></div>
           <div class="cropper-icon cropper-confirm-text">${options.labels.confirmCrop}</div>
         </div>
-        <div class="cropper-button" id="${this.ids.buttons.cancelCrop}">
+        <div class="cropper-button" id="${this.ids.buttons.cancelCrop}" tabindex=0 aria-label="${options.labels.cancelCrop}">
           <div class="cropper-icon cropper-cancel"></div>
           <div class="cropper-icon cropper-cancel-text">${options.labels.cancelCrop}</div>
         </div>
@@ -538,6 +553,8 @@ function Cropper(options) {
     this.mirror = document.createElement('canvas');
     this.mirrorContext = this.mirror.getContext('2d');
     this.pointerOffset = {};
+
+    // button click handlers
     this.buttons.rotateLeft.onclick = () => this.rotate(-1);
     this.buttons.rotateRight.onclick = () => this.rotate(1);
     this.buttons.crop.onclick = () => {
@@ -552,6 +569,14 @@ function Cropper(options) {
     this.buttons.cancelCrop.onclick = () => {
       this.toggleSection('tools');
       this.toggleSelector(false);
+    }
+
+    // button keyUp handlers
+    for (let item in this.buttons) {
+      const button = this.buttons[item];
+      if (typeof button.onclick === 'function' && button.getAttribute('tabindex') == 0) {
+        button.onkeyup = onKeyUp([13, 32], button.onclick);
+      }
     }
   }
 
