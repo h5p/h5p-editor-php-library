@@ -260,6 +260,7 @@ function Cropper(options) {
       this.updateMask();
       this.toggleMask(on);
     }
+    this.resetSelector();
   }
 
   /**
@@ -310,7 +311,8 @@ function Cropper(options) {
   this.loadImage = () => {
     const { width, height } = this.fit(this.image);
     this.margins.left = (this.canvas.width - width) / 2;
-    this.margins.top = (this.canvas.height - height) / 2;
+    // this.margins.top = (this.canvas.height - height) / 2;
+    this.margins.top = 0; // position image at top of canvas for better mobile visibility
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.context.fillStyle = options.canvas.background;
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
