@@ -100,6 +100,9 @@ a {
       border-color: red;
     }
   }
+  .ckeditor {
+    overflow-wrap: anywhere;
+  }
   .h5peditor-text, textarea {
     width: 100%;
     box-sizing: border-box;
