@@ -9,7 +9,7 @@ class H5peditor {
   );
 
   public static $styles = array(
-    'libs/darkroom.css',
+    'libs/cropper.css',
     'styles/css/h5p-hub-client.css',
     'styles/css/fonts.css',
     'styles/css/application.css',
