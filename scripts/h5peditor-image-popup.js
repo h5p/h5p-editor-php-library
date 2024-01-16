@@ -303,6 +303,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
           openImageEditor();
           self.resizeCropper();
           window.addEventListener('resize', this.resizeCropper);
+          this.cropper.sections.tools.scrollIntoView();
         }
       }
       H5P.$body.get(0).appendChild(background);
