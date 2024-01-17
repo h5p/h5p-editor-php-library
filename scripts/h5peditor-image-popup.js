@@ -296,6 +296,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
         H5P.$body.get(0).classList.add('h5p-editor-image-popup');
         background.classList.remove('hidden');
         self.trigger('initialized');
+        this.cropper.sections.tools.scrollIntoView();
       }
       const imageLoaded = () => {
         if (offset) {
@@ -303,7 +304,6 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
           openImageEditor();
           self.resizeCropper();
           window.addEventListener('resize', this.resizeCropper);
-          this.cropper.sections.tools.scrollIntoView();
         }
       }
       H5P.$body.get(0).appendChild(background);
