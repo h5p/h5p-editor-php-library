@@ -304,6 +304,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
           self.resizeCropper();
           window.addEventListener('resize', this.resizeCropper);
         }
+        getElementsByClassName('h5p-editing-image-header-buttons')[0].scrollIntoView();
       }
       H5P.$body.get(0).appendChild(background);
       background.classList.remove('hidden');
@@ -320,6 +321,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       }
       else {
         openImageEditor();
+        getElementsByClassName('h5p-editing-image-header-buttons')[0].scrollIntoView();
       }
       isShowing = true;
     };
