@@ -23,7 +23,6 @@ function Cropper(options) {
   /**
    * Set of pointer event handler functions for moving the selector.
    */
-
   const handleMove = () => {
     const onPointerDown = (event) => {
       event.preventDefault();
@@ -175,21 +174,6 @@ function Cropper(options) {
   }
 
   /**
-   * Callback for canvas.context.toBlob image retrieval.
-   *
-   * @param {Blob} blob Raw image data.
-   */
-  const handleBlob = (blob) => {
-    const url = URL.createObjectURL(blob);
-    this.image = new Image();
-    this.image.onload = () => {
-      URL.revokeObjectURL(url);
-      this.loadImage();
-    }
-    this.image.src = url;
-  }
-
-  /**
    * Shows/hides mask around selector.
    *
    * @param {boolean} on true/false denotes on/off
@@ -306,6 +290,21 @@ function Cropper(options) {
   }
 
   /**
+   * Callback for canvas.context.toBlob image retrieval.
+   *
+   * @param {Blob} blob Raw image data.
+   */
+  const handleBlob = (blob) => {
+    const url = URL.createObjectURL(blob);
+    this.image = new Image();
+    this.image.onload = () => {
+      URL.revokeObjectURL(url);
+      this.loadImage();
+    }
+    this.image.src = url;
+  }
+
+  /**
    * Draws image within canvas.
    */
   this.loadImage = () => {
@@ -334,8 +333,9 @@ function Cropper(options) {
    * The output is generated from the mirror canvas based on scaled selector dimensions.
    */
   this.crop = () => {
-    const maxSelectedWidth = this.canvas.width - this.margins.left * 2;
-    const maxSelectedHeight = this.canvas.height - this.margins.top * 2;
+    let painted = this.fit(this.image);
+    const maxSelectedWidth = painted.width - this.margins.left * 2;
+    const maxSelectedHeight = painted.height - this.margins.top * 2;
     let selectedX = this.selector.offsetLeft - this.margins.left;
     let selectedY = this.selector.offsetTop - this.margins.top;
     let selectedWidth = this.selector.offsetWidth;
