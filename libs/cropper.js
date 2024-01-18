@@ -334,25 +334,23 @@ function Cropper(options) {
    */
   this.crop = () => {
     let painted = this.fit(this.image);
-    const maxSelectedWidth = painted.width - this.margins.left * 2;
-    const maxSelectedHeight = painted.height - this.margins.top * 2;
     let selectedX = this.selector.offsetLeft - this.margins.left;
     let selectedY = this.selector.offsetTop - this.margins.top;
     let selectedWidth = this.selector.offsetWidth;
     let selectedHeight = this.selector.offsetHeight;
-    if (selectedX < 0) {
-      selectedWidth += selectedX;
+    if (this.selector.offsetLeft < this.margins.left) {
       selectedX = 0;
+      selectedWidth -= this.margins.left - this.selector.offsetLeft;
     }
-    if (selectedY < 0) {
-      selectedHeight += selectedY;
+    if (this.selector.offsetTop < this.margins.top) {
       selectedY = 0;
+      selectedHeight -= this.margins.top - this.selector.offsetTop;
     }
-    if (selectedX + selectedWidth > maxSelectedWidth) {
-      selectedWidth = maxSelectedWidth - selectedX;
+    if (selectedX + selectedWidth > painted.width) {
+      selectedWidth -= selectedX + selectedWidth - painted.width;
     }
-    if (selectedY + selectedHeight > maxSelectedHeight) {
-      selectedHeight = maxSelectedHeight - selectedY;
+    if (selectedY + selectedHeight > painted.height) {
+      selectedHeight -= selectedY + selectedHeight - painted.height;
     }
     const ICRatio = this.image.width / (this.canvas.width - this.margins.left * 2);
     selectedX = ICRatio * selectedX;
