@@ -351,6 +351,17 @@ ns.Html.prototype.getCKEditorConfig = function () {
   }
   else {
     this.tags.push('div');
+
+    // Without this, empty divs get deleted on init of cke
+    config['plugins'].push('GeneralHtmlSupport');
+    config['htmlSupport'] = { 
+      allow: [{
+        name: 'div',
+        attributes: true,
+        classes: true,
+        styles: true 
+      }]
+    };
   }
 
   return config;
@@ -430,6 +441,13 @@ ns.Html.prototype.appendTo = function ($wrapper) {
         editor.ui.view.element.style.maxWidth = that.inputWidth + 'px';
         editorElement.style.maxHeight = getEditorHeight() + 'px';
 
+        // Remove overflow protection on startup
+        let initialData = editor.getData();
+        if (initialData.includes('table-overflow-protection')) {
+          initialData = initialData.replace(/<div class=\"table-overflow-protection\">.*<\/div>/, '');
+          editor.setData(initialData);
+        }
+
         // Use <em> elements for italic text instead of <i>
         editor.conversion.for('downcast').attributeToElement({
           model: 'italic',
@@ -445,25 +463,11 @@ ns.Html.prototype.appendTo = function ($wrapper) {
             view: 'div',
             converterPriority: 'high'
           });
-
-          // Weird CKE behaviour makes all existing divs p's,
-          // so make stubborn p's look like divs in editor
-          // until they get downcast to divs on CKE destroy
-          editorElement.classList.add('enter-mode-div');
         }
 
         editable.on('change', (event) => {
           editorElement = event.source.element;
           editorElement.style.maxHeight = getEditorHeight() + 'px';
-        });
-
-        // CKE elements lose style and classes on focus change, need to reapply them
-        editable.on('change:isFocused', (event) => {
-          editorElement = event.source.element;
-
-          if (that.field.enterMode !== 'p') {
-            editorElement.classList.add('enter-mode-div');
-          }
         });
 
         editor.editing.view.focus();
@@ -583,7 +587,6 @@ ns.Html.prototype.validate = function () {
   });
 
   // Add overflow protection if chance of aligned tables
-  // CKEditor removes it when opening
   if(that.inTags('table') && !value.includes('table-overflow-protection')) {
     this.$input.append('<div class="table-overflow-protection"></div>');
     $value.append('<div class="table-overflow-protection"></div>');

@@ -199,23 +199,11 @@ a {
   }
 
   // The actual ck editor
-  .ck {
-    .enter-mode-div p {
-      &:not(:first-child) {
-        margin-top: 0;
-      }
-
-      &:not(:last-child) {
-        margin-bottom: 0;
-      }
-    }
-
-    .ck-content pre {
+  .ck .ck-content pre {
       background: initial;
       border: initial;
       border-radius: initial;
       padding: 0;
-    }
   }
 
   /* Placeholders - need to be on separate lines. If not,
