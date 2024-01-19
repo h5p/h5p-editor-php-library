@@ -218,7 +218,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
      */
     this.resizeCropper = () => {
       setCropperDimensions();
-      this.cropper.canvas.width = maxWidth;
+      this.cropper.canvas.width = maxWidth - 2; // leave out 2px for container css border
       this.cropper.canvas.height = maxHeight;
       this.cropper.loadImage();
       this.cropper.loadMirror();
@@ -297,12 +297,22 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
         background.classList.remove('hidden');
         self.trigger('initialized');
       }
+      const alignPopup = () => {
+        const button = document.getElementsByClassName('h5p-editing-image-button')[0];
+        let top = window.top.scrollY - self.cropper.sections.tools.parentElement.offsetHeight
+        - document.getElementsByClassName('h5p-editing-image-header')[0].offsetHeight;
+        if (top < 20) {
+          top = 20;
+        }
+        popup.style.top = top + 'px';
+      }
       const imageLoaded = () => {
         if (offset) {
           self.adjustPopupOffset(offset);
           openImageEditor();
           self.resizeCropper();
           window.addEventListener('resize', this.resizeCropper);
+          alignPopup();
         }
       }
       H5P.$body.get(0).appendChild(background);
@@ -320,6 +330,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       }
       else {
         openImageEditor();
+        alignPopup();
       }
       isShowing = true;
     };

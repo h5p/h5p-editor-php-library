@@ -57,6 +57,7 @@
 }
 .cropper-canvas-container {
   position: relative;
+  border: 1px solid #9e9e9e;
 }
 .cropper-canvas-container canvas {
   display: block;
