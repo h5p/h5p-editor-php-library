@@ -297,17 +297,12 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
         background.classList.remove('hidden');
         self.trigger('initialized');
       }
-      const alignPopup = () => {
-        let top = document.getElementsByClassName('h5p-editing-image-button')[0].offsetTop;
-        popup.style.top = top + 'px';
-      }
       const imageLoaded = () => {
         if (offset) {
           self.adjustPopupOffset(offset);
           openImageEditor();
           self.resizeCropper();
           window.addEventListener('resize', this.resizeCropper);
-          alignPopup();
         }
       }
       H5P.$body.get(0).appendChild(background);
@@ -325,7 +320,6 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       }
       else {
         openImageEditor();
-        alignPopup();
       }
       isShowing = true;
     };
