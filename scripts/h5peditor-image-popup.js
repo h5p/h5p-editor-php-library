@@ -298,12 +298,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
         self.trigger('initialized');
       }
       const alignPopup = () => {
-        const button = document.getElementsByClassName('h5p-editing-image-button')[0];
-        let top = window.top.scrollY - self.cropper.sections.tools.parentElement.offsetHeight
-        - document.getElementsByClassName('h5p-editing-image-header')[0].offsetHeight;
-        if (top < 20) {
-          top = 20;
-        }
+        let top = document.getElementsByClassName('h5p-editing-image-button')[0].offsetTop;
         popup.style.top = top + 'px';
       }
       const imageLoaded = () => {
@@ -369,9 +364,17 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       self.cropper.toggleSelector(false);
     });
     createButton('saveLabel', 'h5p-editing-image-save-button h5p-done', function () {
-      saveImage();
-      self.hide();
-      self.cropper.toggleSelector(false);
+      if (self.cropper.selector.style.display !== 'none') {
+        self.cropper.crop(() => {
+          self.cropper.toggleSelector(false);
+          saveImage();
+          self.hide();
+        });
+      }
+      else {
+        saveImage();
+        self.hide();
+      }
     });
   }
 
