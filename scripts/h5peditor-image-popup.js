@@ -291,11 +291,20 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
      * @param {Object} [offset] Offset that popup should center on.
      * @param {string} [imageSrc] Source of image that will be edited
      */
-    this.show = function (offset, imageSrc) {
+    this.show = function (offset, imageSrc, event) {
       const openImageEditor = () => {
         H5P.$body.get(0).classList.add('h5p-editor-image-popup');
         background.classList.remove('hidden');
         self.trigger('initialized');
+      }
+      const alignPopup = () => {
+        if (event) {
+          let top = event.target.getBoundingClientRect().top + window.scrollY;
+          if (window.innerHeight - top < popup.offsetHeight) {
+            top = window.innerHeight - popup.offsetHeight - 58; // 48px background padding + 10px so that the popup does not touch the bottom
+          }
+          popup.style.top = top + 'px';
+        }
       }
       const imageLoaded = () => {
         if (offset) {
@@ -304,6 +313,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
           self.resizeCropper();
           window.addEventListener('resize', this.resizeCropper);
         }
+        alignPopup();
       }
       H5P.$body.get(0).appendChild(background);
       background.classList.remove('hidden');
@@ -320,6 +330,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       }
       else {
         openImageEditor();
+        alignPopup();
       }
       isShowing = true;
     };
