@@ -96,7 +96,7 @@ function Cropper(options) {
       const parentBounds = this.canvas.parentElement.getBoundingClientRect();
       if (top) {
         const ySpan = this.selector.offsetTop + this.selector.offsetHeight;
-        let top = event.pageY - parentBounds.top;
+        let top = Math.round(event.pageY) - parentBounds.top;
         if (top < 0) {
           top = 0;
         }
@@ -108,7 +108,7 @@ function Cropper(options) {
       }
       if (left) {
         const xSpan = this.selector.offsetLeft + this.selector.offsetWidth;
-        let left = event.pageX - parentBounds.left;
+        let left = Math.round(event.pageX) - parentBounds.left;
         if (left < 0) {
           left = 0;
         }
@@ -120,7 +120,7 @@ function Cropper(options) {
       }
       if (bottom) {
         const maxHeight = this.canvas.offsetHeight - this.selector.offsetTop;
-        height = event.pageY - parentBounds.top - this.selector.offsetTop;
+        height = Math.round(event.pageY) - parentBounds.top - this.selector.offsetTop;
         if (height < 0) {
           height = 0;
         }
@@ -130,7 +130,7 @@ function Cropper(options) {
       }
       if (right) {
         const maxWidth = this.canvas.offsetWidth - this.selector.offsetLeft;
-        width = event.pageX - parentBounds.left - this.selector.offsetLeft;
+        width = Math.round(event.pageX) - parentBounds.left - this.selector.offsetLeft;
         if (width < 0) {
           width = 0;
         }
@@ -366,7 +366,7 @@ function Cropper(options) {
     this.mirror.width = width;
     this.mirror.height = height;
     this.mirrorContext.drawImage(this.image, selectedX, selectedY, selectedWidth, selectedHeight, 0, 0, width, height);
-    this.mirror.toBlob(handleBlob(callback), 'image/png', 1);
+    this.mirror.toBlob(handleBlob(callback), 'image/png');
   }
 
   /**
@@ -388,7 +388,7 @@ function Cropper(options) {
     this.mirrorContext.rotate(90 * rotation * Math.PI / 180);
     this.mirrorContext.translate(-this.image.width / 2, -this.image.height / 2);
     this.mirrorContext.drawImage(this.image, 0, 0);
-    this.mirror.toBlob(handleBlob(callback), 'image/png', 1);
+    this.mirror.toBlob(handleBlob(callback), 'image/png');
   }
 
   /**

@@ -302,7 +302,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
         if (event) {
           let top = event.target.getBoundingClientRect().top + window.scrollY;
           if (window.innerHeight - top < popup.offsetHeight) {
-            top = window.innerHeight - popup.offsetHeight - 58; // 48px background padding + 10px so that the popup does not touch the bottom
+            top = window.innerHeight - popup.offsetHeight;
           }
           popup.style.top = top + 'px';
         }
