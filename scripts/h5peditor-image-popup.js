@@ -290,6 +290,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
      *
      * @param {Object} [offset] Offset that popup should center on.
      * @param {string} [imageSrc] Source of image that will be edited
+     * @param {Event} [event] Event object (button) for positioning the popup
      */
     this.show = function (offset, imageSrc, event) {
       const openImageEditor = () => {
