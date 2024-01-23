@@ -218,7 +218,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
      */
     this.resizeCropper = () => {
       setCropperDimensions();
-      this.cropper.canvas.width = maxWidth;
+      this.cropper.canvas.width = maxWidth - 2; // leave out 2px for container css border
       this.cropper.canvas.height = maxHeight;
       this.cropper.loadImage();
       this.cropper.loadMirror();
@@ -290,12 +290,22 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
      *
      * @param {Object} [offset] Offset that popup should center on.
      * @param {string} [imageSrc] Source of image that will be edited
+     * @param {Event} [event] Event object (button) for positioning the popup
      */
-    this.show = function (offset, imageSrc) {
+    this.show = function (offset, imageSrc, event) {
       const openImageEditor = () => {
         H5P.$body.get(0).classList.add('h5p-editor-image-popup');
         background.classList.remove('hidden');
         self.trigger('initialized');
+      }
+      const alignPopup = () => {
+        if (event) {
+          let top = event.target.getBoundingClientRect().top + window.scrollY;
+          if (window.innerHeight - top < popup.offsetHeight) {
+            top = window.innerHeight - popup.offsetHeight - 58; // 48px background padding + 10px so that the popup does not touch the bottom
+          }
+          popup.style.top = top + 'px';
+        }
       }
       const imageLoaded = () => {
         if (offset) {
@@ -304,6 +314,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
           self.resizeCropper();
           window.addEventListener('resize', this.resizeCropper);
         }
+        alignPopup();
       }
       H5P.$body.get(0).appendChild(background);
       background.classList.remove('hidden');
@@ -320,6 +331,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       }
       else {
         openImageEditor();
+        alignPopup();
       }
       isShowing = true;
     };
@@ -358,9 +370,17 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       self.cropper.toggleSelector(false);
     });
     createButton('saveLabel', 'h5p-editing-image-save-button h5p-done', function () {
-      saveImage();
-      self.hide();
-      self.cropper.toggleSelector(false);
+      if (self.cropper.selector.style.display !== 'none') {
+        self.cropper.crop(() => {
+          self.cropper.toggleSelector(false);
+          saveImage();
+          self.hide();
+        });
+      }
+      else {
+        saveImage();
+        self.hide();
+      }
     });
   }
 
