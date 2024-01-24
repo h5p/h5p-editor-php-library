@@ -8,6 +8,7 @@
   background-color: #2f323a;
   text-align: center;
   padding: 35px;
+  user-select: none;
 }
 .cropper-button {
   position: relative;
@@ -57,7 +58,6 @@
 }
 .cropper-canvas-container {
   position: relative;
-  border: 1px solid #9e9e9e;
 }
 .cropper-canvas-container canvas {
   display: block;
@@ -184,4 +184,7 @@
   border-radius: 5px;
   animation: none;
   z-index: 999;
+}
+.h5p-editing-image-popup {
+  border: 1px solid #9e9e9e;
 }
