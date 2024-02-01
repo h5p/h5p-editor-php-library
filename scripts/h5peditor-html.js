@@ -125,11 +125,11 @@ ns.Html.prototype.getCKEditorConfig = function () {
     config.plugins.push('Link', 'AutoLink');
     config.toolbar.push("|", ...items);
     config.link = {
-			// Automatically add target="_blank" and rel="noopener noreferrer" to all external links.
-			addTargetToExternalLinks: true,
-			// Automatically add protocol if not present
+      // Automatically add target="_blank" and rel="noopener noreferrer" to all external links.
+      addTargetToExternalLinks: true,
+      // Automatically add protocol if not present
       defaultProtocol: 'http://',
-		}
+    }
   }
 
   // Inserts
