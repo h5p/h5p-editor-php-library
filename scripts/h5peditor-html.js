@@ -36,35 +36,36 @@ ns.Html.prototype.inButtons = function (button) {
 };
 
 ns.Html.prototype.getCKEditorConfig = function () {
-  const basicstyles = [];
-  const plugins = ['Essentials', 'Paragraph'];
-  const alignments = { options: ["left", "center", "right"] };
-  const paragraph = [];
-  const formats = [];
-  const inserts = [];
-  const toolbar = [];
+  const config = {
+    updateSourceElementOnDestroy: true,
+    plugins: ['Essentials', 'Paragraph'],
+    alignment: { options: ["left", "center", "right"] },
+    toolbar: [],
+  };
 
   // Basic styles
+  const basicstyles = [];
+  const basicstylesPlugins = [];
   if (this.inTags("strong") || this.inTags("b")) {
     basicstyles.push('bold');
-    plugins.push('Bold');
+    basicstylesPlugins.push('Bold');
     // Might make "strong" duplicated in the tag lists. Which doesn't really
     // matter. Note: CKeditor will only make strongs.
     this.tags.push("strong");
   }
   if (this.inTags("em") || this.inTags("i")) {
     basicstyles.push('italic');
-    plugins.push('Italic');
+    basicstylesPlugins.push('Italic');
     this.tags.push("i");
   }
   if (this.inTags("u")) {
     basicstyles.push('underline');
-    plugins.push('Underline');
+    basicstylesPlugins.push('Underline');
     this.tags.push("u");
   }
   if (this.inTags("strike") || this.inTags("del") || this.inTags("s")) {
     basicstyles.push('strikethrough');
-    plugins.push('Strikethrough');
+    basicstylesPlugins.push('Strikethrough');
     // Might make "strike" or "del" or both duplicated in the tag lists. Which
     // again doesn't really matter.
     this.tags.push("strike");
@@ -73,25 +74,28 @@ ns.Html.prototype.getCKEditorConfig = function () {
   }
   if (this.inTags("sub")) {
     basicstyles.push("subscript");
-    plugins.push('Subscript');
+    basicstylesPlugins.push('Subscript');
   }
   if (this.inTags("sup")) {
     basicstyles.push("superscript");
-    plugins.push('Superscript');
+    basicstylesPlugins.push('Superscript');
   }
   if (basicstyles.length > 0) {
     basicstyles.push('|', 'removeFormat');
-    plugins.push('RemoveFormat');
-    toolbar.push(...basicstyles);
+    basicstylesPlugins.push('RemoveFormat');
+    config.plugins.push(...basicstylesPlugins);
+    config.toolbar.push(...basicstyles);
   }
 
   // Alignment is added to all wysiwygs
-  plugins.push('Alignment');
-  toolbar.push('|', 'alignment');
+  config.plugins.push('Alignment');
+  config.toolbar.push('|', 'alignment');
 
   // Paragraph styles
+  const paragraph = [];
+  const paragraphPlugins = [];
   if (this.inTags("ul") || this.inTags("ol")) {
-    plugins.push('List');
+    paragraphPlugins.push('List');
   }
   if (this.inTags("ul")) {
     paragraph.push("bulletedList");
@@ -103,54 +107,59 @@ ns.Html.prototype.getCKEditorConfig = function () {
   }
   if (this.inTags("blockquote")) {
     paragraph.push("blockquote");
-    plugins.push('BlockQuote');
+    paragraphPlugins.push('BlockQuote');
   }
   if (this.inButtons('language')) {
     this.tags.push('span');
     paragraph.push('textPartLanguage');
-    plugins.push('TextPartLanguage');
+    paragraphPlugins.push('TextPartLanguage');
   }
   if (paragraph.length > 0) {
-    toolbar.push(...paragraph);
+    config.plugins.push(...paragraphPlugins);
+    config.toolbar.push(...paragraph);
   }
 
   // Links.
   if (this.inTags("a")) {
     const items = ["link"];
-    plugins.push('Link', 'AutoLink');
-    toolbar.push("|", ...items);
+    config.plugins.push('Link', 'AutoLink');
+    config.toolbar.push("|", ...items);
+    config.link = {
+			// Automatically add target="_blank" and rel="noopener noreferrer" to all external links.
+			addTargetToExternalLinks: true,
+			// Automatically add protocol if not present
+      defaultProtocol: 'http://',
+		}
   }
 
   // Inserts
+  const inserts = [];
+  const insertsPlugins = [];
   if (this.inTags('img')) {
     // TODO: Include toolbar functionality to insert and edit images
     // For now, we just include the plugin to prevent data loss
-    plugins.push('Image');
+    insertsPlugins.push('Image');
   }
   if (this.inTags("hr")) {
     inserts.push("horizontalLine");
-    plugins.push('HorizontalLine');
+    insertsPlugins.push('HorizontalLine');
   }
   if (this.inTags('code')) {
     if (this.inButtons('inlineCode')) {
       inserts.push('code');
-      plugins.push('Code');
+      insertsPlugins.push('Code');
     }
     if (this.inTags('pre') && this.inButtons('codeSnippet')) {
       inserts.push('codeBlock');
-      plugins.push('CodeBlock');
+      insertsPlugins.push('CodeBlock');
     }
   }
   if (inserts.length > 0) {
-    toolbar.push("|", ...inserts);
+    config.toolbar.push("|", ...inserts);
   }
-
-  const config = {
-    updateSourceElementOnDestroy: true,
-    plugins: plugins,
-    alignment: alignments,
-    toolbar: toolbar
-  };
+  if (insertsPlugins.length > 0) {
+    config.plugins.push(...insertsPlugins);
+  }
 
   if (this.inTags("table")) {
     config.toolbar.push("insertTable");
@@ -193,25 +202,26 @@ ns.Html.prototype.getCKEditorConfig = function () {
   }
 
   // Add dropdown to toolbar if formatters in tags (h1, h2, etc).
+  const formats = [];
   for (let index = 1; index < 7; index++) {
     if (this.inTags('h' + index)) {
       formats.push({ model: 'heading' + index, view: 'h' + index, title: 'Heading ' + index, class: 'ck-heading_heading' + index });
     }
   }
-  
+
   if (this.inTags('pre')) {
     formats.push({ model: 'formatted', view: 'pre', title: 'Formatted', class: 'ck-heading_formatted' });
   }
-  
+
   // if (this.inTags("address")) formats.push("address"); // TODO: potential data loss
   if (formats.length > 0 || this.inTags('p') || this.inTags('div')) {
     // If the formats are shown, always have a paragraph
     formats.push({ model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' });
     this.tags.push("p");
     this.field.enterMode = "p";
-    config['heading'] = {options: formats};
-    config['plugins'].push('Heading');
-    config['toolbar'].push('heading');
+    config.heading = {options: formats};
+    config.plugins.push('Heading');
+    config.toolbar.push('heading');
   }
 
   if (this.field.font !== undefined) {
@@ -238,7 +248,7 @@ ns.Html.prototype.getCKEditorConfig = function () {
     // Font family chooser
     if (this.field.font.family) {
       styles.push('fontFamily');
-      config['plugins'].push('FontFamily');
+      config.plugins.push('FontFamily');
 
       let fontFamilies = [
         'default',
@@ -261,13 +271,13 @@ ns.Html.prototype.getCKEditorConfig = function () {
       }
 
       setValues(fontFamilies, 'fontFamily');
-      config['fontFamily']['supportAllValues'] = true;
+      config.fontFamily.supportAllValues = true;
     }
 
     // Font size chooser
     if (this.field.font.size) {
       styles.push('fontSize');
-      config['plugins'].push('FontSize');
+      config.plugins.push('FontSize');
 
       let fontSizes = [];
       const convertToEm = (percent) => parseFloat(percent) / 100 + 'em';
@@ -320,29 +330,29 @@ ns.Html.prototype.getCKEditorConfig = function () {
     // Text color chooser
     if (this.field.font.color) {
       colors.push('fontColor');
-      config['plugins'].push('FontColor');
+      config.plugins.push('FontColor');
 
       if (this.field.font.color instanceof Array) {
-        config['fontColor'] = { colors: getColors(this.field.font.color) };
+        config.fontColor = { colors: getColors(this.field.font.color) };
       }
     }
 
     // Text background color chooser
     if (this.field.font.background) {
       colors.push('fontBackgroundColor');
-      config['plugins'].push('FontBackgroundColor');
+      config.plugins.push('FontBackgroundColor');
 
       if (this.field.font.background instanceof Array) {
-        config['fontBackgroundColor'] = { colors: getColors(this.field.font.color) };
+        config.fontBackgroundColor = { colors: getColors(this.field.font.color) };
       }
     }
 
     // Add the text styling options
     if (styles.length) {
-      toolbar.push(...styles);
+      config.toolbar.push(...styles);
     }
     if (colors.length) {
-      toolbar.push(...colors);
+      config.toolbar.push(...colors);
     }
   }
 
@@ -353,13 +363,13 @@ ns.Html.prototype.getCKEditorConfig = function () {
     this.tags.push('div');
 
     // Without this, empty divs get deleted on init of cke
-    config['plugins'].push('GeneralHtmlSupport');
-    config['htmlSupport'] = { 
+    config.plugins.push('GeneralHtmlSupport');
+    config.htmlSupport = {
       allow: [{
         name: 'div',
         attributes: true,
         classes: true,
-        styles: true 
+        styles: true
       }]
     };
   }
