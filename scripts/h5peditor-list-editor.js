@@ -367,6 +367,10 @@ H5PEditor.ListEditor = (function ($) {
      * @param {jQuery} $container
      */
     self.appendTo = function ($container) {
+      if (list.field?.field?.type === 'group') {
+        self.addToggleButton($container[0]);
+      }
+
       $list.appendTo($container);
       $button.appendTo($container);
     };
@@ -379,6 +383,59 @@ H5PEditor.ListEditor = (function ($) {
     self.remove = function () {
       $list.remove();
       $button.remove();
+    };
+
+    /**
+     * Add toggle button for collapsing/expanding groups to container.
+     * @param {HTMLElement} container Container to add toggle button to.
+     */
+    self.addToggleButton = (container) => {
+      /*
+       * Adding the same flex-wrapper approach that's used for the content title
+       * label and the metadata button, so the "collapse/expand" button can be
+       * aligned as required.
+       */
+      const labelWrapper = document.createElement('div');
+      labelWrapper.classList.add('h5p-editor-flex-wrapper');
+      // HINT: Additional CSS would be put into an extra class, of course
+      labelWrapper.style.width = '100%';
+      labelWrapper.style.justifyContent = 'space-between';
+      labelWrapper.style.marginBottom = '0.5rem';
+
+      const label = container.parentNode?.querySelector('.h5peditor-label') ??
+        document.createElement('div');
+      labelWrapper.append(label);
+
+      /*
+       * Expand/Collapse button that could get an extra aria-label. Would need
+       * to be added to the translation file of the H5P integrations.
+       */
+      const expandCollapseButton = document.createElement('button');
+      expandCollapseButton.classList.add(
+        'h5peditor-button', 'h5peditor-button-textual'
+      );
+      // HINT: Additional CSS would be put into an extra class, of course
+      expandCollapseButton.style.margin = '0';
+      /*
+       * HINT. Button label is only hardcoded here for demonstration purposes.
+       * Would need to be added to the translation file.
+       */
+      expandCollapseButton.innerText = 'Collapse';
+
+      expandCollapseButton.addEventListener('click', () => {
+        const isCollapsed = list.toggleItemCollapsed(
+          // The current state would be kept in a variable.
+          expandCollapseButton.innerText === 'Collapse'
+        );
+        // See above.
+        if (typeof isCollapsed === 'boolean') {
+          expandCollapseButton.innerText = isCollapsed ? 'Expand' : 'Collapse';
+        }
+      });
+
+      labelWrapper.append(expandCollapseButton);
+
+      container.parentNode?.prepend(labelWrapper);
     };
   }
 

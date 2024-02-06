@@ -17,6 +17,7 @@ H5PEditor.List = (function ($) {
       label: H5PEditor.t('core', 'listLabel')
     });
 
+    self.field = field;
     // Make it possible to travel up tree.
     self.parent = parent; // (Could this be done a better way in the future?)
 
@@ -232,6 +233,37 @@ H5PEditor.List = (function ($) {
         parameters.splice(newIndex, 0, params[0]);
       }
     };
+
+    /**
+     * Toggle the collapsed state of all group items in list.
+     * @param {boolean} [shouldBeCollapsed] True to collapse all, false to expand.
+     * @returns {boolean|undefined} New state or undefined if unclear.
+     */
+    this.toggleItemCollapsed = (shouldBeCollapsed) => {
+      if (typeof shouldBeCollapsed !== 'boolean') {
+        return;
+      }
+
+      this.forEachChild((child) => {
+        if (!(child instanceof H5PEditor.Group)) {
+          return;
+        }
+
+        if (shouldBeCollapsed) {
+          child.collapse();
+        }
+        else {
+          child.expand();
+        }
+      });
+
+      /*
+       * HINT: Return state could be omitted, because the success of collapsing
+       * or expanding is not checked for. It's good style for a toggle function
+       * though.
+       */
+      return shouldBeCollapsed;
+    }
 
     /**
      * Allows ancestors and widgets to do stuff with our children.
