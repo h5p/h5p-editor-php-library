@@ -263,6 +263,29 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       H5P.Tooltip(this.cropper.buttons.rotateLeft, { text: H5P.t('rotateLeft'), classes });
       H5P.Tooltip(this.cropper.buttons.rotateRight, { text: H5P.t('rotateRight'), classes });
       H5P.Tooltip(this.cropper.buttons.crop, { text: H5P.t('cropImage'), classes });
+
+      // set before & after rotation events
+      const beforeRotation = () => {
+        this.cropper.sections.tools.classList.add('hidden');
+        this.rotationTimer = setTimeout(() => {
+          this.cropper.sections.tools.classList.add('wait');
+          this.cropper.container.style.cursor = 'wait';
+          this.cropper.masks.left.style.display = 'block';
+          this.cropper.masks.left.style.width = '100%';
+          this.cropper.masks.left.style.height = '100%';
+        }, 1000);
+      }
+      const afterRotation = () => {
+        clearTimeout(this.rotationTimer);
+        this.cropper.container.style.cursor = 'auto';
+        this.cropper.sections.tools.classList.remove('hidden', 'wait');
+        this.cropper.masks.left.style.display = 'none';
+      }
+      const oldRotate = this.cropper.rotate;
+      this.cropper.rotate = (rotation) => {
+        beforeRotation();
+        oldRotate(rotation, afterRotation);
+      }
     };
 
     /**
