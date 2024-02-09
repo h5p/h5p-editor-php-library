@@ -22,6 +22,7 @@ html, body {
   max-width: 960px;
   position: relative;
 }
+
 a {
   text-decoration: none;
 }
@@ -95,6 +96,10 @@ a {
     outline: none;
     font-size: 16px;
     word-wrap: break-word;
+
+    a {
+      text-decoration: underline;
+    }
 
     /* The figure around the table */
     figure.table {
@@ -199,11 +204,17 @@ a {
   }
 
   // The actual ck editor
-  .ck .ck-content pre {
+  .ck {
+    a {
+      text-decoration: underline;
+    }
+
+    .ck-content pre {
       background: initial;
       border: initial;
       border-radius: initial;
       padding: 0;
+    }
   }
 
   /* Placeholders - need to be on separate lines. If not,
