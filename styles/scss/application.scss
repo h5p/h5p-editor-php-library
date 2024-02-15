@@ -209,6 +209,12 @@ a {
       text-decoration: underline;
     }
 
+    .ck-font-size-dropdown .ck-dropdown__panel,
+    .ck-text-fragment-language-dropdown .ck-dropdown__panel {
+      max-height: 20em;
+      overflow-y: scroll;
+    }
+
     .ck-content pre {
       background: initial;
       border: initial;
