@@ -18,6 +18,7 @@ import {
 } from '@ckeditor/ckeditor5-basic-styles';
 import { BlockQuote } from '@ckeditor/ckeditor5-block-quote';
 import { CodeBlock } from '@ckeditor/ckeditor5-code-block';
+import type { EditorConfig } from '@ckeditor/ckeditor5-core';
 import { Essentials } from '@ckeditor/ckeditor5-essentials';
 import { FontBackgroundColor, FontColor, FontFamily, FontSize } from '@ckeditor/ckeditor5-font';
 import { Heading } from '@ckeditor/ckeditor5-heading';
@@ -98,7 +99,7 @@ class Editor extends ClassicEditor {
 		Underline
 	];
 
-	public static override defaultConfig = {
+	public static override defaultConfig: EditorConfig = {
 		toolbar: {
 			items: [
 				'heading',

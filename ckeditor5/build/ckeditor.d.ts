@@ -8,6 +8,7 @@ import { Autoformat } from '@ckeditor/ckeditor5-autoformat';
 import { Bold, Code, Italic, Strikethrough, Subscript, Superscript, Underline } from '@ckeditor/ckeditor5-basic-styles';
 import { BlockQuote } from '@ckeditor/ckeditor5-block-quote';
 import { CodeBlock } from '@ckeditor/ckeditor5-code-block';
+import type { EditorConfig } from '@ckeditor/ckeditor5-core';
 import { Essentials } from '@ckeditor/ckeditor5-essentials';
 import { FontBackgroundColor, FontColor, FontFamily, FontSize } from '@ckeditor/ckeditor5-font';
 import { Heading } from '@ckeditor/ckeditor5-heading';
@@ -27,17 +28,6 @@ import { Table, TableCaption, TableCellProperties, TableColumnResize, TablePrope
 import { TextTransformation } from '@ckeditor/ckeditor5-typing';
 declare class Editor extends ClassicEditor {
     static builtinPlugins: (typeof Alignment | typeof AutoLink | typeof Autoformat | typeof BlockQuote | typeof Bold | typeof Code | typeof CodeBlock | typeof Essentials | typeof FontBackgroundColor | typeof FontColor | typeof FontFamily | typeof FontSize | typeof GeneralHtmlSupport | typeof Heading | typeof Highlight | typeof HorizontalLine | typeof Image | typeof ImageCaption | typeof ImageStyle | typeof ImageToolbar | typeof ImageUpload | typeof Indent | typeof IndentBlock | typeof Italic | typeof Link | typeof List | typeof MediaEmbed | typeof Paragraph | typeof PasteFromOffice | typeof RemoveFormat | typeof SelectAll | typeof Strikethrough | typeof Subscript | typeof Superscript | typeof Table | typeof TableCaption | typeof TableCellProperties | typeof TableColumnResize | typeof TableProperties | typeof TableToolbar | typeof TextTransformation | typeof Underline)[];
-    static defaultConfig: {
-        toolbar: {
-            items: string[];
-        };
-        language: string;
-        image: {
-            toolbar: string[];
-        };
-        table: {
-            contentToolbar: string[];
-        };
-    };
+    static defaultConfig: EditorConfig;
 }
 export default Editor;

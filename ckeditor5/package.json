@@ -30,12 +30,13 @@
     "@ckeditor/ckeditor5-remove-format": "41.1.0",
     "@ckeditor/ckeditor5-select-all": "41.1.0",
     "@ckeditor/ckeditor5-typing": "41.1.0",
-    "@h5p/ckeditor5-table": "github:h5p/h5p-ckeditor-table#0.0.7"
+    "@h5p/ckeditor5-table": "github:h5p/h5p-ckeditor-table#0.0.8"
   },
   "devDependencies": {
+    "@ckeditor/ckeditor5-core": "41.1.0",
     "@ckeditor/ckeditor5-dev-translations": "^32.1.2",
     "@ckeditor/ckeditor5-dev-utils": "^32.1.2",
-    "@ckeditor/ckeditor5-theme-lark": "^39.0.2",
+    "@ckeditor/ckeditor5-theme-lark": "41.1.0",
     "css-loader": "^5.2.7",
     "postcss": "^8.4.29",
     "postcss-loader": "^4.3.0",
@@ -43,12 +44,12 @@
     "style-loader": "^2.0.0",
     "terser-webpack-plugin": "^4.2.3",
     "ts-loader": "^9.4.4",
-    "typescript": "^4.9.5",
+    "typescript": "5.0.4",
     "webpack": "^5.88.2",
     "webpack-cli": "^4.10.0"
   },
   "scripts": {
     "build": "webpack --mode production",
-    "postbuild": "tsc -p ./tsconfig.types.json"
+    "postbuild": "tsc --declaration --declarationDir build --stripInternal --emitDeclarationOnly"
   }
 }
