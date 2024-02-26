@@ -367,7 +367,12 @@ H5PEditor.ListEditor = (function ($) {
      * @param {jQuery} $container
      */
     self.appendTo = function ($container) {
-      if (list.field?.field?.type === 'group') {
+      const isChildGroup = list.field?.field?.type === 'group';
+      const hasToggleButton = $container[0].parentNode.querySelector(
+        '.h5p-editor-flex-wrapper .h5peditor-button-collapse'
+      );
+
+      if (isChildGroup && !hasToggleButton) {
         self.addToggleButton($container[0]);
       }
 
@@ -412,7 +417,9 @@ H5PEditor.ListEditor = (function ($) {
        */
       const expandCollapseButton = document.createElement('button');
       expandCollapseButton.classList.add(
-        'h5peditor-button', 'h5peditor-button-textual'
+        'h5peditor-button',
+        'h5peditor-button-textual',
+        'h5peditor-button-collapse'
       );
       // HINT: Additional CSS would be put into an extra class, of course
       expandCollapseButton.style.margin = '0';
