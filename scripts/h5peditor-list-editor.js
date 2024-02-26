@@ -21,6 +21,10 @@ H5PEditor.ListEditor = (function ($) {
     // Create add button
     var $button = ns.createButton(list.getImportance(), H5PEditor.t('core', 'addEntity', {':entity': entity}), function () {
       list.addItem();
+
+      if ((list.getValue() ?? []).length === 1) {
+        self.addToggleButton();
+      }
     }, true);
 
     // Used when dragging items around
@@ -289,6 +293,10 @@ H5PEditor.ListEditor = (function ($) {
         confirmHandler(item, $item.index(), $(this).offset(), function () {
           list.removeItem($item.index());
           $item.remove();
+
+          if (!(list.getValue() ?? []).length) {
+            self.removeToggleButton();
+          }
         });
       }).appendTo($listActions);
 
@@ -367,13 +375,13 @@ H5PEditor.ListEditor = (function ($) {
      * @param {jQuery} $container
      */
     self.appendTo = function ($container) {
-      const isChildGroup = list.field?.field?.type === 'group';
-      const hasToggleButton = $container[0].parentNode.querySelector(
-        '.h5p-editor-flex-wrapper .h5peditor-button-collapse'
-      );
+      self.container = $container[0];
 
-      if (isChildGroup && !hasToggleButton) {
-        self.addToggleButton($container[0]);
+      if (
+        list.field?.field?.type === 'group' &&
+        (list.getValue() ?? []).length
+      ) {
+        self.addToggleButton();
       }
 
       $list.appendTo($container);
@@ -392,9 +400,16 @@ H5PEditor.ListEditor = (function ($) {
 
     /**
      * Add toggle button for collapsing/expanding groups to container.
-     * @param {HTMLElement} container Container to add toggle button to.
      */
-    self.addToggleButton = (container) => {
+    self.addToggleButton = () => {
+      const hasToggleButton = self.container.parentNode.querySelector(
+        '.h5p-editor-flex-wrapper .h5peditor-button-collapse'
+      );
+
+      if (hasToggleButton) {
+        return; // Don't add extra button
+      }
+
       /*
        * Adding the same flex-wrapper approach that's used for the content title
        * label and the metadata button, so the "collapse/expand" button can be
@@ -407,7 +422,7 @@ H5PEditor.ListEditor = (function ($) {
       labelWrapper.style.justifyContent = 'space-between';
       labelWrapper.style.marginBottom = '0.5rem';
 
-      const label = container.parentNode?.querySelector('.h5peditor-label') ??
+      const label = self.container.parentNode?.querySelector('.h5peditor-label') ??
         document.createElement('div');
       labelWrapper.append(label);
 
@@ -442,7 +457,25 @@ H5PEditor.ListEditor = (function ($) {
 
       labelWrapper.append(expandCollapseButton);
 
-      container.parentNode?.prepend(labelWrapper);
+      self.container.parentNode?.prepend(labelWrapper);
+    };
+
+    /**
+     * Add toggle button for collapsing/expanding groups to container.
+     */
+    self.removeToggleButton = () => {
+      toggleButton = self.container.parentNode?.querySelector(
+        '.h5p-editor-flex-wrapper .h5peditor-button-collapse'
+      );
+      if (!toggleButton) {
+        return;
+      }
+
+      label = toggleButton.parentNode?.querySelector('.h5peditor-label');
+      if (label) {
+        self.container.parentNode?.prepend(label);
+      }
+      toggleButton.parentNode.remove();
     };
   }
 
