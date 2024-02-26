@@ -215,6 +215,10 @@ a {
       overflow-y: scroll;
     }
 
+    .ck-fontsize-option .ck-button__label {
+      line-height: normal !important;
+    }
+
     .ck-content pre {
       background: initial;
       border: initial;

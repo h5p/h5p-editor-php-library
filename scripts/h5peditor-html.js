@@ -291,9 +291,9 @@ ns.Html.prototype.getCKEditorConfig = function () {
       } else {
         // Standard font sizes that are available
         fontSizes = [
-          '450%', '300%', '225%', '175%', '162.5%', '150%', '137.5%',
-          '125%', '112.5%', '100%', '87.5%', '75%', '68.75%', '62.5%',
-          '56.25%', '50%', 'Default'
+          'Default', '50%', '56.25%', '62.5%', '68.75%', '75%', '87.5%',
+          '100%', '112.5%', '125%', '137.5%', '150%', '162.5%', '175%',
+          '225%', '300%', '450%'
         ].map(percent => ({
           title: percent,
           model: percent === 'Default' ? '1em' : convertToEm(percent)
