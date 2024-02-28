@@ -451,6 +451,11 @@ ns.Html.prototype.appendTo = function ($wrapper) {
         editor.ui.view.element.style.maxWidth = that.inputWidth + 'px';
         editorElement.style.maxHeight = getEditorHeight() + 'px';
 
+        // Readjust toolbar's grouped item dropdown panel,
+        // since it can overflow the parent iframe element by using default positioning
+        const dropdownPanel = editor.ui.view.toolbar._behavior.groupedItemsDropdown;
+        dropdownPanel.panelPosition = 'auto';
+
         // Remove overflow protection on startup
         let initialData = editor.getData();
         if (initialData.includes('table-overflow-protection')) {
