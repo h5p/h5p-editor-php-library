@@ -506,6 +506,14 @@ ns.Html.prototype.appendTo = function ($wrapper) {
           if (that.$placeholder.length !== 0 && (value === undefined || value.length === 0) && (that.value === undefined || that.value.length === 0)) {
             that.$placeholder.appendTo(that.$item.find('.ckeditor'));
           }
+
+          // Since validate() is not always run,
+          // make sure tabe overflow protection is added always when editor is destroyed
+          if (value.includes('table') && !value.includes('table-overflow-protection')) {
+            that.value = value + '<div class="table-overflow-protection"></div>';
+            that.setValue(that.field, that.value);
+            that.$input.html(that.value).change();
+          }
         });
 
         var blur = function () {
