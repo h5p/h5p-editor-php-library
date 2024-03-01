@@ -159,6 +159,13 @@ a {
     }
   }
 
+  .ck.ck-content {
+    max-height: 25vh;
+    @media (min-height: 900px) {
+      max-height: 35vh;
+    }
+  }
+
   // Inside ckeditor, needed for changes to default
   .ck-content figure.table {
     float: left;

@@ -418,38 +418,10 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     ClassicEditor
       .create(this, that.ckEditorConfig)
       .then(editor => {
-        const getEditorHeight = () => {
-          const { innerHeight, innerWidth } = window;
-          let ratio = 0.5;
-
-          switch (true) {
-            case innerHeight < 560:
-              ratio = 0.2
-              break;
-            case innerHeight < 768 && innerWidth < 576:
-              ratio = 0.25
-              break;
-            case innerHeight < 768:
-              ratio = 0.3
-              break;
-            case innerHeight < 1024 && innerWidth < 576:
-              ratio = 0.3;
-              break;
-            case innerHeight < 1024:
-              ratio = 0.45;
-              break;
-            default:
-              break;
-          }
-
-          return ratio * innerHeight * 0.85;
-        }
-
         that.ckeditor = editor;
         const editable = editor.ui.view.editable;
         editorElement = editable.element;
         editor.ui.view.element.style.maxWidth = that.inputWidth + 'px';
-        editorElement.style.maxHeight = getEditorHeight() + 'px';
 
         // Readjust toolbar's grouped item dropdown panel,
         // since it can overflow the parent iframe element by using default positioning
@@ -479,11 +451,6 @@ ns.Html.prototype.appendTo = function ($wrapper) {
             converterPriority: 'high'
           });
         }
-
-        editable.on('change', (event) => {
-          editorElement = event.source.element;
-          editorElement.style.maxHeight = getEditorHeight() + 'px';
-        });
 
         editor.editing.view.focus();
 
