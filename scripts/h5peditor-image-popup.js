@@ -240,7 +240,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
         container: editingContainer,
         canvas: {
           width: maxWidth,
-          height: maxHeight,
+          height: maxHeight - 120,
           background: '#2f323a',
           image
         },
@@ -391,7 +391,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
     backgroundPaddingWidth: 32,
     backgroundPaddingHeight: 96,
     maxScreenHeightPercentage: 0.65,
-    popupHeaderHeight: 60
+    popupHeaderHeight: 62
   };
 
   /**
