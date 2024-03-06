@@ -100,6 +100,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       // Use smallest of screen height and editor height,
       // we don't want to overflow editor or screen
       maxHeight = maxScreenHeight < editorHeight ? maxScreenHeight : editorHeight;
+      maxHeight = Math.min(maxHeight, maxWidth); // prevent maxHeight from getting too big in long editors like h5p column
     };
 
     /**
