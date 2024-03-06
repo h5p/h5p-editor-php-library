@@ -24,6 +24,7 @@ ns.Group = function (parent, field, params, setValue) {
   this.params = params;
   this.setValue = setValue;
   this.library = parent.library + '/' + field.name;
+  this.expandedState = false;
 
   if (field.deprecated !== undefined && field.deprecated) {
     this.field = H5P.cloneObject(field, true);
@@ -183,7 +184,7 @@ ns.Group.prototype.toggle = function () {
     return;
   }
 
-  if (this.$group.hasClass('expanded')) {
+  if (this.isExpanded()) {
     this.collapse();
   }
   else {
@@ -202,6 +203,7 @@ ns.Group.prototype.expand = function () {
   // @see https://github.com/nvaccess/nvda/issues/8341
   // Should be fixeed by Firefox 70 (https://bugzilla.mozilla.org/show_bug.cgi?id=686400)
   setTimeout(function () {
+    this.expandedState = true;
     this.trigger('expanded');
     this.$group.addClass('expanded');
   }.bind(this), 100);
@@ -226,11 +228,20 @@ ns.Group.prototype.collapse = function () {
     // @see https://github.com/nvaccess/nvda/issues/8341
     // Should be fixeed by Firefox 70 (https://bugzilla.mozilla.org/show_bug.cgi?id=686400)
     setTimeout(function () {
+      this.expandedState = false;
       this.trigger('collapsed');
       this.$group.removeClass('expanded');
     }.bind(this), 100);
 
   }
+};
+
+/**
+ * Determine if the group is collapsed.
+ * @returns {boolean} True, if the group is collapsed. False, otherwise.
+ */
+ns.Group.prototype.isExpanded = function () {
+  return this.expandedState;
 };
 
 /**

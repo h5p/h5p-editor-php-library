@@ -89,6 +89,20 @@ H5PEditor.List = (function ($) {
     };
 
     /**
+     * Handle group collapsed state change.
+     * Used when children are groups to determine if all groups are collapsed.
+     */
+    const handleGroupCollapsedStateChanged = () => {
+      const areAllGroupsCollapsed = !children.some(
+        (child) => child.isExpanded()
+      );
+
+      this.trigger('groupCollapsedStateChanged', {
+        allGroupsCollapsed: areAllGroupsCollapsed
+      });
+    };
+
+    /**
      * Add item to list.
      *
      * @private
@@ -112,6 +126,16 @@ H5PEditor.List = (function ($) {
         var i = findIndex(child);
         setParameters(i === undefined ? index : i, value);
       });
+
+      if (child instanceof H5PEditor.Group) {
+        child.on('collapsed', () => {
+          handleGroupCollapsedStateChanged();
+        });
+
+        child.on('expanded', () => {
+          handleGroupCollapsedStateChanged();
+        });
+      }
 
       return child;
     };
@@ -236,12 +260,12 @@ H5PEditor.List = (function ($) {
 
     /**
      * Toggle the collapsed state of all group items in list.
-     * @param {boolean} [shouldBeCollapsed] True to collapse all, false to expand.
-     * @returns {boolean|undefined} New state or undefined if unclear.
+     * @param {boolean|undefined} [shouldBeCollapsed] True to collapse all, false to expand.
+     * @returns {boolean} New state or undefined if unclear.
      */
     this.toggleItemCollapsed = (shouldBeCollapsed) => {
       if (typeof shouldBeCollapsed !== 'boolean') {
-        return;
+        shouldBeCollapsed = children.some((child) => child.isExpanded());
       }
 
       this.forEachChild((child) => {

@@ -22,7 +22,11 @@ H5PEditor.ListEditor = (function ($) {
     var $button = ns.createButton(list.getImportance(), H5PEditor.t('core', 'addEntity', {':entity': entity}), function () {
       list.addItem();
 
-      if ((list.getValue() ?? []).length === 1) {
+      if (
+        list.field?.field?.type === 'group' &&
+        (list.getValue() ?? []).length === 1
+      ) {
+        self.addGroupCollapseListener();
         self.addToggleButton();
       }
     }, true);
@@ -381,6 +385,7 @@ H5PEditor.ListEditor = (function ($) {
         list.field?.field?.type === 'group' &&
         (list.getValue() ?? []).length
       ) {
+        self.addGroupCollapseListener();
         self.addToggleButton();
       }
 
@@ -402,11 +407,7 @@ H5PEditor.ListEditor = (function ($) {
      * Add toggle button for collapsing/expanding groups to container.
      */
     self.addToggleButton = () => {
-      const hasToggleButton = self.container.parentNode.querySelector(
-        '.h5p-editor-flex-wrapper .h5peditor-button-collapse'
-      );
-
-      if (hasToggleButton) {
+      if (this.hasExpandCollapseCapabilities()) {
         return; // Don't add extra button
       }
 
@@ -430,34 +431,72 @@ H5PEditor.ListEditor = (function ($) {
        * Expand/Collapse button that could get an extra aria-label. Would need
        * to be added to the translation file of the H5P integrations.
        */
-      const expandCollapseButton = document.createElement('button');
-      expandCollapseButton.classList.add(
+      this.expandCollapseButton = document.createElement('button');
+      this.expandCollapseButton.classList.add(
         'h5peditor-button',
         'h5peditor-button-textual',
         'h5peditor-button-collapse'
       );
       // HINT: Additional CSS would be put into an extra class, of course
-      expandCollapseButton.style.margin = '0';
+      this.expandCollapseButton.style.margin = '0';
       /*
        * HINT. Button label is only hardcoded here for demonstration purposes.
        * Would need to be added to the translation file.
        */
-      expandCollapseButton.innerText = 'Collapse';
+      this.expandCollapseButton.innerText = 'Collapse';
 
-      expandCollapseButton.addEventListener('click', () => {
-        const isCollapsed = list.toggleItemCollapsed(
-          // The current state would be kept in a variable.
-          expandCollapseButton.innerText === 'Collapse'
-        );
-        // See above.
-        if (typeof isCollapsed === 'boolean') {
-          expandCollapseButton.innerText = isCollapsed ? 'Expand' : 'Collapse';
-        }
+      this.expandCollapseButton.addEventListener('click', () => {
+        list.toggleItemCollapsed();
       });
 
-      labelWrapper.append(expandCollapseButton);
+      labelWrapper.append(this.expandCollapseButton);
 
       self.container.parentNode?.prepend(labelWrapper);
+    };
+
+    /**
+     * Determine whether widget has expand/collapse capabilities.
+     * @returns {boolean} True if widget has expand/collapse capabilities. False otherwise.
+     */
+    self.hasExpandCollapseCapabilities = () => {
+      return self.container?.parentNode.querySelector(
+        '.h5p-editor-flex-wrapper .h5peditor-button-collapse'
+      ) instanceof HTMLElement;
+    }
+
+    /**
+     * Add group collapse listener.
+     */
+    self.addGroupCollapseListener = () => {
+      if (this.hasExpandCollapseCapabilities()) {
+        return; // Don't add extra listener
+      }
+
+      list.on('groupCollapsedStateChanged', (event) => {
+        this.setToggleButtonCollapsed(event.data.allGroupsCollapsed);
+      });
+    }
+
+    /**
+     * Set toggle button collapsed state.
+     * @param {boolean} shouldBeCollapsed True if the toggle button should be collapsed.
+     */
+    self.setToggleButtonCollapsed = (shouldBeCollapsed) => {
+      if (!this.expandCollapseButton) {
+        return; // No button added
+      }
+
+      if (typeof shouldBeCollapsed !== 'boolean') {
+        return; // Invalid type
+      }
+
+      /*
+       * HINT. Button label is only hardcoded here for demonstration purposes.
+       * Would need to be added to the translation file.
+       */
+      this.expandCollapseButton.innerText = shouldBeCollapsed ?
+        'Expand' :
+        'Collapse';
     };
 
     /**
