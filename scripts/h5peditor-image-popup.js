@@ -91,8 +91,8 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       var dims = ImageEditingPopup.staticDimensions;
       maxWidth = background.offsetWidth - dims.backgroundPaddingWidth;
 
-      // Only use 65% of screen height
-      var maxScreenHeight = screen.height * dims.maxScreenHeightPercentage;
+      // Only use 65% of window height
+      var maxScreenHeight = window.innerHeight * dims.maxScreenHeightPercentage;
 
       // Calculate editor max height
       var editorHeight = background.offsetHeight - dims.backgroundPaddingHeight - dims.popupHeaderHeight;
@@ -100,6 +100,7 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
       // Use smallest of screen height and editor height,
       // we don't want to overflow editor or screen
       maxHeight = maxScreenHeight < editorHeight ? maxScreenHeight : editorHeight;
+      maxHeight = Math.min(maxHeight, maxWidth); // prevent maxHeight from getting too big in long editors like h5p column
     };
 
     /**
@@ -169,8 +170,8 @@ H5PEditor.ImageEditingPopup = (function ($, EventDispatcher) {
         topOffset = offset.top;
       }
 
-      // Only use 65% of screen height
-      var maxScreenHeight = screen.height * 0.65;
+      // Only use 65% of window height
+      var maxScreenHeight = window.innerHeight * 0.65;
 
       // Calculate editor max height
       var dims = ImageEditingPopup.staticDimensions;
