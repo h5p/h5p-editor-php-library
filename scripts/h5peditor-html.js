@@ -419,7 +419,9 @@ ns.Html.prototype.appendTo = function ($wrapper) {
       .create(this, that.ckEditorConfig)
       .then(editor => {
         const getEditorHeight = () => {
-          const { innerHeight, innerWidth } = window;
+          // Use the dimensions of the H5P iframe, not the editor iframe
+          const { innerHeight, innerWidth } = window.parent;
+
           let ratio = 0.5;
 
           switch (true) {
