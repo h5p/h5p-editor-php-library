@@ -444,14 +444,14 @@ ns.Html.prototype.appendTo = function ($wrapper) {
               break;
           }
 
-          return ratio * innerHeight * 0.85;
+          return (ratio * innerHeight * 0.85) + 'px';
         }
 
         that.ckeditor = editor;
         const editable = editor.ui.view.editable;
         editorElement = editable.element;
         editor.ui.view.element.style.maxWidth = that.inputWidth + 'px';
-        editorElement.style.maxHeight = getEditorHeight() + 'px';
+        editorElement.style.maxHeight = getEditorHeight();
 
         // Readjust toolbar's grouped item dropdown panel,
         // since it can overflow the parent iframe element by using default positioning
@@ -482,15 +482,15 @@ ns.Html.prototype.appendTo = function ($wrapper) {
           });
         }
 
-        editable.on('change', (event) => {
-          editorElement = event.source.element;
-          editorElement.style.maxHeight = getEditorHeight() + 'px';
+        editor.ui.on('update', () => {
+          editorElement.style.maxHeight = getEditorHeight();
         });
 
         editor.editing.view.focus();
 
         editor.on('focus', function () {
           blurFired = false;
+          editorElement.style.maxHeight = getEditorHeight();
         });
 
         editor.once('destroy', function () {
