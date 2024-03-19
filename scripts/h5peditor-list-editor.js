@@ -19,6 +19,38 @@ H5PEditor.ListEditor = (function ($) {
     });
 
     /**
+     * Determine whether widget has expand/collapse capabilities.
+     * @returns {boolean} True if widget has expand/collapse capabilities. False otherwise.
+     */
+    self.hasExpandCollapseCapabilities = () => {
+      return self.container?.parentNode.querySelector(
+        '.h5p-editor-flex-wrapper .h5peditor-button-collapse'
+      ) instanceof HTMLElement;
+    }
+
+    /**
+     * Set toggle button collapsed state.
+     * @param {boolean} shouldBeCollapsed True if the toggle button should be collapsed.
+     */
+    self.setToggleButtonCollapsed = (shouldBeCollapsed) => {
+      if (!this.expandCollapseButton) {
+        return; // No button added
+      }
+
+      if (typeof shouldBeCollapsed !== 'boolean') {
+        return; // Invalid type
+      }
+
+      /*
+       * HINT. Button label is only hardcoded here for demonstration purposes.
+       * Would need to be added to the translation file.
+       */
+      this.expandCollapseButton.innerText = shouldBeCollapsed ?
+        'Expand' :
+        'Collapse';
+    };
+
+    /**
      * Add group collapse listener.
      */
     self.addGroupCollapseListener = () => {
@@ -465,38 +497,6 @@ H5PEditor.ListEditor = (function ($) {
     self.remove = function () {
       $list.remove();
       $button.remove();
-    };
-
-    /**
-     * Determine whether widget has expand/collapse capabilities.
-     * @returns {boolean} True if widget has expand/collapse capabilities. False otherwise.
-     */
-    self.hasExpandCollapseCapabilities = () => {
-      return self.container?.parentNode.querySelector(
-        '.h5p-editor-flex-wrapper .h5peditor-button-collapse'
-      ) instanceof HTMLElement;
-    }
-
-    /**
-     * Set toggle button collapsed state.
-     * @param {boolean} shouldBeCollapsed True if the toggle button should be collapsed.
-     */
-    self.setToggleButtonCollapsed = (shouldBeCollapsed) => {
-      if (!this.expandCollapseButton) {
-        return; // No button added
-      }
-
-      if (typeof shouldBeCollapsed !== 'boolean') {
-        return; // Invalid type
-      }
-
-      /*
-       * HINT. Button label is only hardcoded here for demonstration purposes.
-       * Would need to be added to the translation file.
-       */
-      this.expandCollapseButton.innerText = shouldBeCollapsed ?
-        'Expand' :
-        'Collapse';
     };
 
     /**
