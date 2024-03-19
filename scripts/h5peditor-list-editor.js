@@ -18,6 +18,70 @@ H5PEditor.ListEditor = (function ($) {
       'class': 'h5p-ul'
     });
 
+    /**
+     * Add group collapse listener.
+     */
+    self.addGroupCollapseListener = () => {
+      if (this.hasExpandCollapseCapabilities()) {
+        return; // Don't add extra listener
+      }
+
+      list.on('groupCollapsedStateChanged', (event) => {
+        this.setToggleButtonCollapsed(event.data.allGroupsCollapsed);
+      });
+    }
+
+    /**
+     * Add toggle button for collapsing/expanding groups to container.
+     */
+    self.addToggleButton = () => {
+      if (this.hasExpandCollapseCapabilities()) {
+        return; // Don't add extra button
+      }
+
+      /*
+       * Adding the same flex-wrapper approach that's used for the content title
+       * label and the metadata button, so the "collapse/expand" button can be
+       * aligned as required.
+       */
+      const labelWrapper = document.createElement('div');
+      labelWrapper.classList.add('h5p-editor-flex-wrapper');
+      // HINT: Additional CSS would be put into an extra class, of course
+      labelWrapper.style.width = '100%';
+      labelWrapper.style.justifyContent = 'space-between';
+      labelWrapper.style.marginBottom = '0.5rem';
+
+      const label = self.container.parentNode?.querySelector('.h5peditor-label') ??
+        document.createElement('div');
+      labelWrapper.append(label);
+
+      /*
+       * Expand/Collapse button that could get an extra aria-label. Would need
+       * to be added to the translation file of the H5P integrations.
+       */
+      this.expandCollapseButton = document.createElement('button');
+      this.expandCollapseButton.classList.add(
+        'h5peditor-button',
+        'h5peditor-button-textual',
+        'h5peditor-button-collapse'
+      );
+      // HINT: Additional CSS would be put into an extra class, of course
+      this.expandCollapseButton.style.margin = '0';
+      /*
+       * HINT. Button label is only hardcoded here for demonstration purposes.
+       * Would need to be added to the translation file.
+       */
+      this.expandCollapseButton.innerText = 'Collapse';
+
+      this.expandCollapseButton.addEventListener('click', () => {
+        list.toggleItemCollapsed();
+      });
+
+      labelWrapper.append(this.expandCollapseButton);
+
+      self.container.parentNode?.prepend(labelWrapper);
+    };
+
     // Create add button
     var $button = ns.createButton(list.getImportance(), H5PEditor.t('core', 'addEntity', {':entity': entity}), function () {
       list.addItem();
@@ -404,57 +468,6 @@ H5PEditor.ListEditor = (function ($) {
     };
 
     /**
-     * Add toggle button for collapsing/expanding groups to container.
-     */
-    self.addToggleButton = () => {
-      if (this.hasExpandCollapseCapabilities()) {
-        return; // Don't add extra button
-      }
-
-      /*
-       * Adding the same flex-wrapper approach that's used for the content title
-       * label and the metadata button, so the "collapse/expand" button can be
-       * aligned as required.
-       */
-      const labelWrapper = document.createElement('div');
-      labelWrapper.classList.add('h5p-editor-flex-wrapper');
-      // HINT: Additional CSS would be put into an extra class, of course
-      labelWrapper.style.width = '100%';
-      labelWrapper.style.justifyContent = 'space-between';
-      labelWrapper.style.marginBottom = '0.5rem';
-
-      const label = self.container.parentNode?.querySelector('.h5peditor-label') ??
-        document.createElement('div');
-      labelWrapper.append(label);
-
-      /*
-       * Expand/Collapse button that could get an extra aria-label. Would need
-       * to be added to the translation file of the H5P integrations.
-       */
-      this.expandCollapseButton = document.createElement('button');
-      this.expandCollapseButton.classList.add(
-        'h5peditor-button',
-        'h5peditor-button-textual',
-        'h5peditor-button-collapse'
-      );
-      // HINT: Additional CSS would be put into an extra class, of course
-      this.expandCollapseButton.style.margin = '0';
-      /*
-       * HINT. Button label is only hardcoded here for demonstration purposes.
-       * Would need to be added to the translation file.
-       */
-      this.expandCollapseButton.innerText = 'Collapse';
-
-      this.expandCollapseButton.addEventListener('click', () => {
-        list.toggleItemCollapsed();
-      });
-
-      labelWrapper.append(this.expandCollapseButton);
-
-      self.container.parentNode?.prepend(labelWrapper);
-    };
-
-    /**
      * Determine whether widget has expand/collapse capabilities.
      * @returns {boolean} True if widget has expand/collapse capabilities. False otherwise.
      */
@@ -462,19 +475,6 @@ H5PEditor.ListEditor = (function ($) {
       return self.container?.parentNode.querySelector(
         '.h5p-editor-flex-wrapper .h5peditor-button-collapse'
       ) instanceof HTMLElement;
-    }
-
-    /**
-     * Add group collapse listener.
-     */
-    self.addGroupCollapseListener = () => {
-      if (this.hasExpandCollapseCapabilities()) {
-        return; // Don't add extra listener
-      }
-
-      list.on('groupCollapsedStateChanged', (event) => {
-        this.setToggleButtonCollapsed(event.data.allGroupsCollapsed);
-      });
     }
 
     /**
