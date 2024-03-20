@@ -54,8 +54,18 @@ ns.Html.prototype.getCKEditorConfig = function () {
     this.tags.push("strong");
   }
   if (this.inTags("em") || this.inTags("i")) {
+    // Use <em> elements for italic text instead of CKE's default <i>
+    // Has to be a plugin to work
+    const ItalicAsEmPlugin = ( editor ) => {
+      editor.conversion.for('downcast').attributeToElement({
+        model: 'italic',
+        view: 'em',
+        converterPriority: 'high',
+      });
+    }
+
     basicstyles.push('italic');
-    basicstylesPlugins.push('Italic');
+    basicstylesPlugins.push('Italic', ItalicAsEmPlugin);
     this.tags.push("i");
   }
   if (this.inTags("u")) {
@@ -464,13 +474,6 @@ ns.Html.prototype.appendTo = function ($wrapper) {
           initialData = initialData.replace(/<div class=\"table-overflow-protection\">.*<\/div>/, '');
           editor.setData(initialData);
         }
-
-        // Use <em> elements for italic text instead of <i>
-        editor.conversion.for('downcast').attributeToElement({
-          model: 'italic',
-          view: 'em',
-          converterPriority: 'high'
-        });
 
         // Mimic old enter_mode behaviour if not specifically set to 'p'
         if (that.field.enterMode !== 'p') {
