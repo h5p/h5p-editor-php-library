@@ -41,6 +41,9 @@ H5PEditor.ListEditor = (function ($) {
         return; // Invalid type
       }
 
+      this.expandCollapseButton.classList.toggle(
+        'collapsed', shouldBeCollapsed
+      );
       this.expandCollapseButton.innerText = shouldBeCollapsed ?
         H5PEditor.t('core', 'expandAllContent') :
         H5PEditor.t('core', 'collapseAllContent');

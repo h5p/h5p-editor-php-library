@@ -48,6 +48,35 @@ a {
   .h5p-editor-flex-wrapper {
     display: flex;
     flex-direction: row;
+
+    .h5peditor-button-collapse {
+      background-color:$group-collapse-button-color;
+      background-image:none;
+      border: 3px solid $group-collapse-button-color;
+      border-radius:0.4rem;
+      box-sizing: border-box;
+      font-size:0.815rem;
+      height: 2.6rem;
+      line-height: normal;
+      padding: 0 0.6rem;
+
+      &.collapsed::before {
+        content:"\e93f";
+        font-family:"H5P";
+        padding: 0 0.6rem 0 0.2rem;
+      }
+
+      &:not(.collapsed)::before {
+        content:"\e940";
+        font-family:"H5P";
+        padding: 0 0.6rem 0 0.2rem;
+      }
+
+      &:hover:not([disabled]) {
+        background-color: $group-collapse-button-color;
+        background-image:none; border: 3px solid $group-collapse-button-color-light;
+      }
+    }
   }
 
   .h5peditor-label-wrapper {
