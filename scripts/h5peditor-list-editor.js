@@ -41,13 +41,9 @@ H5PEditor.ListEditor = (function ($) {
         return; // Invalid type
       }
 
-      /*
-       * HINT. Button label is only hardcoded here for demonstration purposes.
-       * Would need to be added to the translation file.
-       */
       this.expandCollapseButton.innerText = shouldBeCollapsed ?
-        'Expand' :
-        'Collapse';
+        H5PEditor.t('core', 'expandAllContent') :
+        H5PEditor.t('core', 'collapseAllContent');
     };
 
     /**
