@@ -494,6 +494,7 @@ H5PEditor.ListEditor = (function ($) {
      * @public
      */
     self.remove = function () {
+      this.removeToggleButton();
       $list.remove();
       $button.remove();
     };
