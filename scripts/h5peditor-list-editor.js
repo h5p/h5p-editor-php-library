@@ -77,10 +77,7 @@ H5PEditor.ListEditor = (function ($) {
        */
       const labelWrapper = document.createElement('div');
       labelWrapper.classList.add('h5p-editor-flex-wrapper');
-      // HINT: Additional CSS would be put into an extra class, of course
-      labelWrapper.style.width = '100%';
-      labelWrapper.style.justifyContent = 'space-between';
-      labelWrapper.style.marginBottom = '0.5rem';
+      labelWrapper.classList.add('has-button-collapse');
 
       const label = self.container.parentNode?.querySelector('.h5peditor-label') ??
         document.createElement('div');
@@ -96,8 +93,6 @@ H5PEditor.ListEditor = (function ($) {
         'h5peditor-button-textual',
         'h5peditor-button-collapse'
       );
-      // HINT: Additional CSS would be put into an extra class, of course
-      this.expandCollapseButton.style.margin = '0';
       this.expandCollapseButton.innerText = H5PEditor.t('core', 'collapseAllContent');
 
       this.expandCollapseButton.addEventListener('click', () => {

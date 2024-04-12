@@ -49,6 +49,12 @@ a {
     display: flex;
     flex-direction: row;
 
+    &.has-button-collapse {
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      width: 100%;
+    }
+
     .h5peditor-button-collapse {
       background-color:$group-collapse-button-color;
       background-image:none;
@@ -58,6 +64,7 @@ a {
       font-size:0.815rem;
       height: 2.6rem;
       line-height: normal;
+      margin: 0;
       padding: 0 0.6rem;
 
       &.collapsed::before {

@@ -282,7 +282,7 @@ H5PEditor.List = (function ($) {
       });
 
       /*
-       * HINT: Return state could be omitted, because the success of collapsing
+       * Return state could be omitted, because the success of collapsing
        * or expanding is not checked for. It's good style for a toggle function
        * though.
        */
