@@ -98,11 +98,7 @@ H5PEditor.ListEditor = (function ($) {
       );
       // HINT: Additional CSS would be put into an extra class, of course
       this.expandCollapseButton.style.margin = '0';
-      /*
-       * HINT. Button label is only hardcoded here for demonstration purposes.
-       * Would need to be added to the translation file.
-       */
-      this.expandCollapseButton.innerText = 'Collapse';
+      this.expandCollapseButton.innerText = H5PEditor.t('core', 'collapseAllContent');
 
       this.expandCollapseButton.addEventListener('click', () => {
         list.toggleItemCollapsed();
