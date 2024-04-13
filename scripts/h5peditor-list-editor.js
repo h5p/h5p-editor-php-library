@@ -19,11 +19,24 @@ H5PEditor.ListEditor = (function ($) {
     });
 
     /**
+     * Add group collapse functionality to list editor if items are groups.
+     */
+    const addGroupCollapseFunctionality = () => {
+      if (
+        list.field?.field?.type === 'group' &&
+        (list.getValue() ?? []).length
+      ) {
+        self.addGroupCollapseListener();
+        self.addToggleButton();
+      }
+    }
+
+    /**
      * Determine whether widget has expand/collapse capabilities.
      * @returns {boolean} True if widget has expand/collapse capabilities. False otherwise.
      */
     self.hasExpandCollapseCapabilities = () => {
-      return self.container?.parentNode.querySelector(
+      return this.container?.parentNode.querySelector(
         '.h5p-editor-flex-wrapper .h5peditor-button-collapse'
       ) instanceof HTMLElement;
     }
@@ -76,8 +89,9 @@ H5PEditor.ListEditor = (function ($) {
        * aligned as required.
        */
       const collapseButtonWrapper = document.createElement('div');
-      collapseButtonWrapper.classList.add('h5p-editor-flex-wrapper');
-      collapseButtonWrapper.classList.add('has-button-collapse');
+      collapseButtonWrapper.classList.add(
+        'h5p-editor-flex-wrapper', 'has-button-collapse'
+      );
 
       const label =
         self.container.parentNode?.querySelector('.h5peditor-label') ??
@@ -93,10 +107,6 @@ H5PEditor.ListEditor = (function ($) {
         collapseButtonWrapper.append(label);
       }
 
-      /*
-       * Expand/Collapse button that could get an extra aria-label. Would need
-       * to be added to the translation file of the H5P integrations.
-       */
       this.expandCollapseButton = document.createElement('button');
       this.expandCollapseButton.classList.add(
         'h5peditor-button',
@@ -118,12 +128,8 @@ H5PEditor.ListEditor = (function ($) {
     var $button = ns.createButton(list.getImportance(), H5PEditor.t('core', 'addEntity', {':entity': entity}), function () {
       list.addItem();
 
-      if (
-        list.field?.field?.type === 'group' &&
-        (list.getValue() ?? []).length === 1
-      ) {
-        self.addGroupCollapseListener();
-        self.addToggleButton();
+      if (!self.hasExpandCollapseCapabilities()) {
+        addGroupCollapseFunctionality();
       }
     }, true);
 
@@ -477,13 +483,7 @@ H5PEditor.ListEditor = (function ($) {
     self.appendTo = function ($container) {
       self.container = $container[0];
 
-      if (
-        list.field?.field?.type === 'group' &&
-        (list.getValue() ?? []).length
-      ) {
-        self.addGroupCollapseListener();
-        self.addToggleButton();
-      }
+      addGroupCollapseFunctionality();
 
       $list.appendTo($container);
       $button.appendTo($container);
@@ -501,7 +501,7 @@ H5PEditor.ListEditor = (function ($) {
     };
 
     /**
-     * Add toggle button for collapsing/expanding groups to container.
+     * Remove toggle button for collapsing/expanding groups from container.
      */
     self.removeToggleButton = () => {
       toggleButton = self.container.parentNode?.querySelector(
@@ -511,6 +511,7 @@ H5PEditor.ListEditor = (function ($) {
         return;
       }
 
+      // Put label back in original position if had been moved to button wrapper
       label = toggleButton.parentNode?.querySelector('.h5peditor-label');
       if (label) {
         self.container.parentNode?.prepend(label);

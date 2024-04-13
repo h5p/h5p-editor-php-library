@@ -241,8 +241,8 @@ ns.Group.prototype.collapse = function () {
 };
 
 /**
- * Determine if the group is collapsed.
- * @returns {boolean} True, if the group is collapsed. False, otherwise.
+ * Determine if the group is expanded.
+ * @returns {boolean} True, if the group is expanded. False, otherwise.
  */
 ns.Group.prototype.isExpanded = function () {
   return this.expandedState;

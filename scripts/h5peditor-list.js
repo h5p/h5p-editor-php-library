@@ -260,7 +260,7 @@ H5PEditor.List = (function ($) {
 
     /**
      * Toggle the collapsed state of all group items in list.
-     * @param {boolean|undefined} [shouldBeCollapsed] True to collapse all, false to expand.
+     * @param {boolean|undefined} [shouldBeCollapsed] If set explicitly, true to collapse all, false to expand.
      * @returns {boolean} New state or undefined if unclear.
      */
     this.toggleItemCollapsed = (shouldBeCollapsed) => {
@@ -282,8 +282,8 @@ H5PEditor.List = (function ($) {
       });
 
       /*
-       * Return state could be omitted, because the success of collapsing
-       * or expanding is not checked for. It's good style for a toggle function
+       * Return state could be omitted, because the success of collapsing or
+       * expanding is not checked for. It's good style for a toggle function
        * though.
        */
       return shouldBeCollapsed;
