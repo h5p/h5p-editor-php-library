@@ -50,6 +50,7 @@ a {
     flex-direction: row;
 
     &.has-button-collapse {
+      align-items: flex-end;
       justify-content: space-between;
       margin-bottom: 0.5rem;
       width: 100%;
