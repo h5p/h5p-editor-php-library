@@ -75,13 +75,23 @@ H5PEditor.ListEditor = (function ($) {
        * label and the metadata button, so the "collapse/expand" button can be
        * aligned as required.
        */
-      const labelWrapper = document.createElement('div');
-      labelWrapper.classList.add('h5p-editor-flex-wrapper');
-      labelWrapper.classList.add('has-button-collapse');
+      const collapseButtonWrapper = document.createElement('div');
+      collapseButtonWrapper.classList.add('h5p-editor-flex-wrapper');
+      collapseButtonWrapper.classList.add('has-button-collapse');
 
-      const label = self.container.parentNode?.querySelector('.h5peditor-label') ??
-        document.createElement('div');
-      labelWrapper.append(label);
+      const label =
+        self.container.parentNode?.querySelector('.h5peditor-label') ??
+          document.createElement('div');
+
+      /*
+       * If label is directly before the list editor container, put it next to
+       * the button. Otherwise, e. g. when there are list widgets, use button
+       * alone on top of those.
+       */
+      if (self.container.previousSibling === label) {
+        collapseButtonWrapper.classList.add('has-label');
+        collapseButtonWrapper.append(label);
+      }
 
       /*
        * Expand/Collapse button that could get an extra aria-label. Would need
@@ -99,9 +109,9 @@ H5PEditor.ListEditor = (function ($) {
         list.toggleItemCollapsed();
       });
 
-      labelWrapper.append(this.expandCollapseButton);
+      collapseButtonWrapper.append(this.expandCollapseButton);
 
-      self.container.parentNode?.prepend(labelWrapper);
+      self.container.parentNode?.prepend(collapseButtonWrapper);
     };
 
     // Create add button

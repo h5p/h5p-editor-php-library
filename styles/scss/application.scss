@@ -51,9 +51,16 @@ a {
 
     &.has-button-collapse {
       align-items: flex-end;
-      justify-content: space-between;
       margin-bottom: 0.5rem;
       width: 100%;
+
+      &.has-label {
+        justify-content: space-between;
+      }
+
+      &:not(.has-label) {
+        justify-content: flex-end;
+      }
     }
 
     .h5peditor-button-collapse {
