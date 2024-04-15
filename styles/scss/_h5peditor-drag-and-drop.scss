@@ -1,0 +1,340 @@
+.h5p-editor-dnd-container {
+    border: dashed 2px #D0CFD4;
+    border-radius: 6px;
+    padding: 0;
+    margin: 2rem 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-flow: column;
+    gap: 1rem;
+    min-height: 150px; // not sure if needed
+    position: relative;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    box-sizing: border-box;
+    * {
+      box-sizing: border-box;
+    }
+  
+    &.has-image {
+      display: inline-flex;
+      margin: 2rem 0 0;
+      min-height: auto;
+      width: min-content;
+      gap: 0;
+  
+      &:focus .h5p-editor-dnd-wrapper {
+        position: relative;
+      }
+  
+      &.is-dropping {
+        .h5p-editor-image-container {
+          &:before {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            background: #1670DF;
+            opacity: 0.9;
+            color: #fff;
+            border-radius: 6px;
+            font-family: $icon-font-family;
+            content: "\e85d";
+            font-size: 4em;
+          }
+        }
+      }
+  
+      &:hover:not(.is-dropping),
+      &:has(.h5p-editor-dnd-image-button:focus) {
+        .h5p-editor-dnd-wrapper > div {
+          position: relative;
+        }
+  
+        .h5p-editor-image-container:before {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: #1B1B1B;
+          opacity: 0.9;
+          color: #fff;
+          border-radius: 6px;
+          content: "";
+        }
+  
+        .h5p-editor-dnd-image-button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 8px 10px;
+          gap: 10px;
+          border-radius: 4px;
+          border: 1px solid #1F67A8;
+          background: #2579C6;
+          font-family: 'Open Sans', sans-serif;
+          font-size: 14px;
+          font-weight: 600;
+          color: #fff;
+          outline: solid 2px #1F67A8;
+          outline-offset: 2px;
+  
+          &:before {
+            font-family: $icon-font-family;
+            content: "\e85d";
+            vertical-align: middle;
+            font-size: 2em;
+            line-height: 0.9;
+          }
+        }
+      }
+  
+      &:not(:hover) {
+        .h5p-editor-dnd-image-button {
+          &:not(:focus) {
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+          }
+        }
+      }
+  
+      .h5p-editor-dnd-button-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+  
+      .h5p-editor-dnd-image-button {
+        appearance: none;
+        outline: none;
+        border: 0;
+        background: none;
+        padding: 0;
+        margin: 0;
+      }
+  
+      &:focus {
+        .h5p-editor-dnd-text {
+          display: block;
+        }
+      }
+  
+      .h5p-editor-dnd-text {
+        display: none;
+        padding: 0 10px 10px;
+        text-align: center;
+      }
+    }
+  
+    &.is-dropping:not(.has-image) {
+      border: solid 2px #1570df;
+      align-items: initial;
+      flex-flow: row;
+      padding: 10px;
+  
+      .h5p-editor-dnd-wrapper {
+        display: none;
+      }
+      & button,
+      & .h5p-editor-dnd-text,
+      & .h5p-editor-dnd-divider,
+      & .h5p-editor-dnd-column-1,
+      & .h5p-editor-dnd-column-2 {
+        display: none;
+      }
+      & .h5p-editor-dnd-droptext {
+        display: flex;
+        background: #f8fbff;
+        flex: 1;
+        font-size: 16px;
+  
+        > div {
+          margin: 0 auto;
+          display: flex;
+          flex-flow: column;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5em;
+  
+          &:before {
+            font-family: $icon-font-family;
+            content: "\e85d";
+            color: #666;
+            padding-right: 0.3em;
+            padding-left: 0.45em;
+            vertical-align: middle;
+            font-size: 2.5em;
+            line-height: 0.9;
+          }
+        }
+      }
+    }
+    
+    &:focus {
+      border: solid 2px #1570df;
+      
+      .h5p-editor-dnd-column-2 {
+        background: #f6faff
+      }
+      .h5p-editor-dnd-column-1 {
+        background: #fff;
+      }
+    }
+  
+    &:not(.is-dropping):hover {
+      border: dashed 2px #ACACAC;
+  
+      & .h5p-editor-dnd-column-1 {
+        background: #f6faff
+      }
+    }
+  
+    & .h5p-editor-dnd-column-1,
+    & .h5p-editor-dnd-column-2 {
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+    }
+  
+    & .h5p-editor-dnd-column-1 {
+      flex: 0 1 150px;
+      background: #f6faff;
+    }
+  
+    & .h5p-editor-dnd-column-2 {
+      flex: 1;
+    }
+  
+    & .h5p-editor-dnd-text {
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+    }
+  
+    & .h5p-editor-dnd-droptext {
+      display: none;
+      pointer-events: none;
+    }
+  
+    & .h5p-editor-dnd-preview {
+      max-height: 150px;
+    }
+  
+    & .h5p-editor-dnd-actions {
+      display: flex;
+      flex-flow: row;
+    }
+  
+    .h5p-editor-dnd-pill {
+      background: #E7E9EE;
+      border-radius: 6px;
+      color: #434446;
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 900;
+      padding: 3px 8px;
+    }
+  
+    .h5p-editor-image-preview {
+      max-width: 175px;
+      border-radius: 6px;
+    }
+    .h5p-errors {
+      display: none;
+    }
+  }
+  
+  .h5p-editor-dnd-container.has-error,
+  .h5p-editor-dnd-container.has-error + .h5p-image-action-container
+   {
+     .h5p-errors {
+      margin-top: 1em;
+      display: flex;
+      align-items: center;
+      &:before {
+        font-family: $icon-font-family;
+        content: "\e859";
+        font-size: 1.5em;
+        vertical-align: middle;
+      }
+    }
+  }
+  
+  .h5p-upload-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 10px;
+    gap: 10px;
+    border-radius: 4px;
+    border: 1px solid #1F67A8;
+    background: #2579C6;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+  
+    &:hover {
+      background: #1F67A8;
+    }
+  
+    &:focus {
+      outline: solid 2px #1F67A8;
+      outline-offset: 2px;
+    }
+  
+    &:before {
+      font-family: $icon-font-family;
+      content: "\e85d";
+      color: #fff;
+      vertical-align: middle;
+      font-size: 1.5em;
+    }
+  }
+  
+  .h5p-editor-dnd-wrapper {
+    display: flex;
+    align-items: stretch;
+    flex-flow: row;
+    gap: 1rem;
+    width: 100%;
+    flex: 1;
+    padding: 10px;
+  }
+  
+  
+  .h5p-dnd-block {
+    position: absolute;
+    // Should match the border size of .h5p-editor-dnd-container
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+  
+    display: none;
+    z-index: 2;
+    &.show {
+      display: block;
+    }
+  }
+  
