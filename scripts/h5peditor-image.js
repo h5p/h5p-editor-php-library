@@ -104,7 +104,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
     </div>
     <div class="h5p-editor-image-buttons">
       ${!this.field.disableCopyright ? (
-        <button class="h5peditor-button-textual h5p-copyright-button">${ns.t('core', 'editCopyright')}</button>
+        `<button class="h5peditor-button-textual h5p-copyright-button">${ns.t('core', 'editCopyright')}</button>`
       ): ''} 
     </div>
     <div class="h5p-editor-dialog">
