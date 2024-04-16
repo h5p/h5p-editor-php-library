@@ -36,6 +36,6 @@ module.exports = [
       path: path.resolve(__dirname, './libs'),
       filename: 'zebra_datepicker.min.js'
     },
-    mode: process.env.NODE_ENV || 'production',
+    mode: 'production',
   }
 ];
