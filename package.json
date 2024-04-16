@@ -10,6 +10,8 @@
     "author": "",
     "license": "SEE LICENSE IN README.md",
     "devDependencies": {
+      "jquery": "3.5.1",
+      "zebra_datepicker": "1.9.11",
       "css-loader": "^6.10.0",
       "mini-css-extract-plugin": "^2.8.1",
       "sass": "^1.72.0",
