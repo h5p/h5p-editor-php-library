@@ -147,7 +147,7 @@ a {
     padding: 10px 30px 10px 8px;
     font-family: $font-family;
     font-size: 16px;
-    border: 1px solid $form-border-color;;
+    border: 1px solid $form-border-color;
     background: $form-input-color inline-image('down.png') no-repeat;
     background-position: calc(100% - 10px);
     box-shadow: $form-input-box-shadow;
@@ -388,7 +388,7 @@ a {
         border: 1px solid #bbb;
 
         .h5p-file-drop-upload-inner {
-          border: 2px dashed #bbb;;
+          border: 2px dashed #bbb;
           background-color: white;
           position: absolute;
           top: 3px;

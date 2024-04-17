@@ -194,7 +194,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
     }
   });
 
-  this.$container.on("click", ".h5p-dnd__btn__upload", (event) => {
+  this.$container.on('click', '.h5p-dnd__btn__upload', (event) => {
     event.preventDefault();
     event.stopPropagation();
     this.isOriginalImage = true;
@@ -329,17 +329,17 @@ ns.widgets.image.prototype.handleDragAndDrop = function (e) {
   e.preventDefault();
   e.stopPropagation();
 
-  const container = e.target.closest(".h5p-dnd__container");
-  const boxBlock = container.querySelector(".h5p-dnd__box__block");
+  const container = e.target.closest('.h5p-dnd__container');
+  const boxBlock = container.querySelector('.h5p-dnd__box__block');
   
   if (e.type === 'dragenter') {
-    this.boxEl.classList.add("h5p-dnd__box--is-dragging")
+    this.boxEl.classList.add('h5p-dnd__box--is-dragging')
   }
   else if (e.type === 'dragend' || (e.type === 'dragleave' && boxBlock === e.target)) {
-	  this.boxEl.classList.remove("h5p-dnd__box--is-dragging");
+	  this.boxEl.classList.remove('h5p-dnd__box--is-dragging');
   }
   else if (e.type === 'drop') {
-    this.boxEl.classList.remove("h5p-dnd__box--is-dragging");
+    this.boxEl.classList.remove('h5p-dnd__box--is-dragging');
     this.uploadOrReplaceImage(e.dataTransfer.files);
   }
 };
@@ -436,8 +436,8 @@ ns.widgets.image.prototype.handleUploadProgress = function (progress) {
     this.setAriaLiveErrorMessage(ns.t('core', 'uploadingImage'));
 
     this.boxEl.innerHTML = this.getUploadingMarkup();
-    this.boxEl.classList.add("h5p-dnd__box--is-uploading");
-    this.boxEl.classList.remove("h5p-dnd__box--is-dragging")
+    this.boxEl.classList.add('h5p-dnd__box--is-uploading');
+    this.boxEl.classList.remove('h5p-dnd__box--is-dragging')
   }
 };
 
