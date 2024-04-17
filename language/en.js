@@ -52,6 +52,7 @@ H5PEditor.language.core = {
   noSemantics: 'Error, could not load the content type form.',
   editImage: 'Edit image',
   saveLabel: 'Save',
+  image: 'Image',
   cancelLabel: 'Cancel',
   deleteLabel: 'Delete',
   resetToOriginalLabel: 'Reset to original',
