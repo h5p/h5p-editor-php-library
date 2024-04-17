@@ -1,202 +1,57 @@
-.h5p-dnd__container {
-  &.has-error .h5p-errors {
-    margin-top: 1em;
-    display: flex;
-    align-items: center;
-    &:before {
-      font-family: $icon-font-family;
-      content: "\e859";
-      font-size: 1.5em;
-      vertical-align: middle;
+@import 'variables';
+
+.h5peditor {
+  .h5p-delete-image-button,
+  .h5p-editing-image-button {
+    background: linear-gradient(to bottom, #fff 0, #f2f2f2 100%);
+    font-size: $font-size-small;
+    color: $black;
+    line-height: $form-item-height-small;
+    padding-right: $padding;
+    margin-right: 0.5em;
+    height: 30px;
+    padding-left: 0;
+    font-weight: normal;
+
+    &:hover:not([disabled]) {
+      background: linear-gradient(to bottom, #fff 0, #d0d0d1 100%);
+      border-color: #999;
     }
   }
-  .h5p-errors {
-    display: none;
-  }
-}
 
-.h5p-dnd__box {
-  display: flex;
-  flex-flow: row;
-  align-items: stretch;
-  justify-content: center;
-  border: solid 2px #D0CFD4;
-  border-radius: 6px;
-  flex: 1;
-  min-height: 150px;
-  position: relative;
-  background: none;
-}
-
-.h5p-dnd__box--is-dashed {
-  border: dashed 2px #D0CFD4;
-}
-
-.h5p-dnd__box--is-inline {
-  display: inline-flex;
-}
-
-.h5p-dnd__box--has-image {
-  flex-flow: column;
-  width: min-content;
-}
-
-.h5p-dnd__box:focus-visible {
-  outline: none;
-}
-
-.h5p-dnd__box:not(.h5p-dnd__box--is-uploading):hover {
-  border: dashed 2px #ACACAC;
-}
-
-.h5p-dnd__box--has-image:not(.h5p-dnd__box--is-uploading):hover,
-.h5p-dnd__box.h5p-dnd__box--is-focused:not(.h5p-dnd__box--is-uploading),
-.h5p-dnd__box:not(.h5p-dnd__box--is-uploading):focus,
-.h5p-dnd__box.h5p-dnd__box--is-dragging:not(.h5p-dnd__box--is-uploading) {
-  border: solid 2px #1570df;
-}
-
-.h5p-dnd__box:has(.h5p-dnd__btn__upload:focus) {
-  .h5p-dnd__column--is-highlighted {
-    background: #fff;
-  }
-  .h5p-dnd__column:not(.h5p-dnd__column--is-highlighted) {
-    background: #f6faff;
-  }
-}
-
-.h5p-dnd__box__block {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: none;
-  z-index: 2;
-}
-
-.h5p-dnd__box--is-dragging .h5p-dnd__box__block {
-  display: block;
-}
-
-.h5p-dnd__column {
-  margin: 10px;
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  flex: 1;
-}
-
-.h5p-dnd__column--is-highlighted {
-  background: #f6faff;
-}
-
-.h5p-dnd__column--is-fixed {
-  flex: 0 0 150px;
-}
-
-.h5p-dnd__column--is-full-width {
-  flex: 1;
-}
-.h5p-dnd__column--show-when-focus {
-  display: none;
-}
-
-.h5p-dnd__box--is-dragging .h5p-dnd__column--hide-when-focus {
-  display: none;
-}
-
-.h5p-dnd__box:not(.h5p-dnd__box--is-uploading).h5p-dnd__box--is-dragging .h5p-dnd__column--show-when-focus,
-.h5p-dnd__box:not(.h5p-dnd__box--is-uploading).h5p-dnd__box--has-image:focus .h5p-dnd__column--show-when-focus {
-  display: flex;
-}
-
-.h5p-dnd__btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 10px;
-  gap: 5px;
-  border-radius: 4px;
-  border: 1px solid #1F67A8;
-  background: #2579C6;
-  font-family: 'Open Sans', sans-serif;
-  font-size: 0.8em;
-  font-weight: 600;
-  color: #fff;
-
-  &:focus {
-    outline: solid 2px #1F67A8;
-    outline-offset: 2px;
-  }
-
-  &:before {
+  .h5p-delete-image-button:before,
+  .h5p-editing-image-button:before {
     font-family: $icon-font-family;
-    content: "\e85d";
+    color: #666;
+    padding-right: 0.3em;
+    padding-left: 0.45em;
     vertical-align: middle;
     font-size: 1.5em;
     line-height: 0.9;
   }
-}
-
-.h5p-dnd__btn:hover {
-  background: #1F67A8;
-}
-
-.h5p-dnd__btn:focus {
-  outline: solid 2px #1F67A8;
-  outline-offset: 2px;
-}
-
-
-.h5p-dnd__pill {
-  background: #E7E9EE;
-  color: #434446;
-  text-transform: uppercase;
-  font-weight: 700;
-  font-size: 12px;
-  border-radius: 6px;
-  padding: 3px 8px;
-}
-
-.h5p-dnd__img {
-  max-width: 175px;
-  border-radius: 6px;
-}
-
-.h5p-dnd__img__container {
-  position: relative;
-}
-
-.h5p-dnd__img__overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 6px;
-  background: #1670DF;
-  opacity: 0.9;
-  color: #fff;
-  display: none;
-  &:before {
-    font-family: $icon-font-family;
-    content: "\e85d";
-    font-size: 4em;
+  
+  .h5p-delete-image-button:before {
+    content: "\e85f";
   }
-}
 
-.h5p-dnd__box--has-image:hover .h5p-dnd__img__overlay,
-.h5p-dnd__box:focus:not(.h5p-dnd__box--is-uploading) .h5p-dnd__img__overlay,
-.h5p-dnd__box.h5p-dnd__box--is-dragging:not(.h5p-dnd__box--is-uploading) .h5p-dnd__img__overlay {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+  .h5p-editing-image-button:before {
+    content : "\e85e";
+  }
+  
+  .h5p-delete-image-button.loading:before,
+  .h5p-editing-image-button.loading:before {
+    content: "\e901";
+  }
 
-.h5p-dnd__text {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 1em;
+  .h5p-delete-image-button.hidden,
+  .h5p-editing-image-button.hidden,
+  .h5p-copyright-button.hidden {
+    display: none !important;
+  }
+
+  .ui-dialog .h5p-delete-image-button,
+  .ui-dialog .h5p-editing-image-button,
+  .ui-dialog .h5p-copyright-button {
+    padding-left: 0.5em;
+  }
 }
