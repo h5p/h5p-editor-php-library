@@ -33,7 +33,7 @@ module.exports = {
       patterns: [
         {
           from: path.join(path.resolve(__dirname, 'node_modules'), 'zebra_datepicker', 'dist', 'zebra_datepicker.min.js'),
-          to: path.join(path.resolve(__dirname, 'libs'), 'original_zebra_datepicker.min.js')
+          to: path.join(path.resolve(__dirname, 'libs'), 'zebra_datepicker.min.js')
         },
         {
           from: path.join(path.resolve(__dirname, 'node_modules'), 'zebra_datepicker', 'dist', 'css', 'bootstrap', 'zebra_datepicker.min.css'),
