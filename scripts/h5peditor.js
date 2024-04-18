@@ -6,7 +6,7 @@
 // Grab common resources set in parent window, but avoid sharing back resources set in iframe)
 window.ns = window.H5PEditor = H5P.jQuery.extend(false, {}, window.parent.H5PEditor);
 ns.$ = H5P.jQuery;
-const jQuery = H5P.jQuery; // JI-4001 global variable required by zebra_datepicker
+window.jQuery = H5P.jQuery;
 
 // Load needed resources from parent.
 H5PIntegration = H5P.jQuery.extend(false, {}, window.parent.H5PIntegration);
