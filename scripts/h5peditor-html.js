@@ -468,6 +468,10 @@ ns.Html.prototype.appendTo = function ($wrapper) {
         const dropdownPanel = editor.ui.view.toolbar._behavior.groupedItemsDropdown;
         dropdownPanel.panelPosition = 'auto';
 
+        // Disable sticky toolbar, since it has problem within iframes
+        editor.ui.view.stickyPanel.unbind('isActive');
+        editor.ui.view.stickyPanel.isActive = false;
+
         // Remove overflow protection on startup
         let initialData = editor.getData();
         if (initialData.includes('table-overflow-protection')) {
