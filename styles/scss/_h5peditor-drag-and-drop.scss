@@ -53,15 +53,15 @@
 .h5p-dnd__box.h5p-dnd__box--is-focused:not(.h5p-dnd__box--is-uploading),
 .h5p-dnd__box:not(.h5p-dnd__box--is-uploading):focus,
 .h5p-dnd__box.h5p-dnd__box--is-dragging:not(.h5p-dnd__box--is-uploading) {
-  border: solid 2px #1570df;
+  border: solid 2px $dnd-blue;
 }
 
-.h5p-dnd__box:has(.h5p-dnd__btn__upload:focus) {
+.h5p-dnd__box:focus:not(.h5p-dnd__box--has-image) {
   .h5p-dnd__column--is-highlighted {
     background: #fff;
   }
   .h5p-dnd__column:not(.h5p-dnd__column--is-highlighted) {
-    background: #f6faff;
+    background: $dnd-blue-faded;
   }
 }
 
@@ -90,7 +90,7 @@
 }
 
 .h5p-dnd__column--is-highlighted {
-  background: #f6faff;
+  background: $dnd-blue-faded;
 }
 
 .h5p-dnd__column--is-fixed {
@@ -123,9 +123,10 @@
   border: 1px solid #1F67A8;
   background: #2579C6;
   font-family: 'Open Sans', sans-serif;
-  font-size: 0.8em;
+  font-size: 0.9em;
   font-weight: 600;
   color: #fff;
+  cursor: pointer;
 
   &:focus {
     outline: solid 2px #1F67A8;
@@ -151,7 +152,7 @@
 }
 
 
-.h5p-dnd__pill {
+.h5p-dnd__badge {
   background: #E7E9EE;
   color: #434446;
   text-transform: uppercase;
@@ -164,6 +165,7 @@
 .h5p-dnd__img {
   max-width: 175px;
   border-radius: 6px;
+  display: block;
 }
 
 .h5p-dnd__img__container {
@@ -177,18 +179,20 @@
   right: 0;
   bottom: 0;
   border-radius: 6px;
-  background: #1670DF;
+  background: $dnd-blue;
   opacity: 0.9;
   color: #fff;
   display: none;
+  cursor: pointer;
   &:before {
     font-family: $icon-font-family;
     content: "\e85d";
-    font-size: 4em;
+    font-size: 2.5em;
   }
 }
 
-.h5p-dnd__box--has-image:hover .h5p-dnd__img__overlay,
+.h5p-dnd__img__overlay:hover,
+.h5p-dnd__box--has-image:has(.h5p-dnd__img:hover) .h5p-dnd__img__overlay,
 .h5p-dnd__box:focus:not(.h5p-dnd__box--is-uploading) .h5p-dnd__img__overlay,
 .h5p-dnd__box.h5p-dnd__box--is-dragging:not(.h5p-dnd__box--is-uploading) .h5p-dnd__img__overlay {
   display: flex;
@@ -198,5 +202,31 @@
 
 .h5p-dnd__text {
   font-family: 'Open Sans', sans-serif;
-  font-size: 1em;
+  font-size: 14px;
+  text-align: center;
+  color: $dnd-text-color;
+}
+
+.h5p-dnd__upload-image-svg {
+  background: url("../../images/drag-and-drop/upload-image.svg") no-repeat;
+  width: 60px;
+  height: 43px;
+  margin-bottom: 13px;
+}
+
+.h5p-dnd__drop-text {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9em;
+
+  &:before {
+    font-size: 3.9em;
+    font-family: $icon-font-family;
+    content: "\e85d";
+    color: #3B435A;
+    line-height: 0.9;
+    margin-bottom: 10px;
+  }
 }
