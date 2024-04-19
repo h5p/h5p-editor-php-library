@@ -56,7 +56,7 @@
   border: solid 2px $dnd-blue;
 }
 
-.h5p-dnd__box:focus:not(.h5p-dnd__box--has-image) {
+.h5p-dnd__box:focus:not(.h5p-dnd__box--has-image):not(.h5p-dnd__box--is-uploading) {
   .h5p-dnd__column--is-highlighted {
     background: #fff;
   }
