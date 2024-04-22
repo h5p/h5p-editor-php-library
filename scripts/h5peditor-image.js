@@ -287,7 +287,7 @@ ns.widgets.image.prototype.uploadOrReplaceImage = function (files) {
     this.previousParams = this.params;
     this.confirmReplaceDialog.show(this.$imageDropContainer.offset().top);
   } else {
-    this.previousState.NO_IMAGE;
+    this.previousState.NO_IMAGE = this.STATE.NO_IMAGE;
     this.previousParams = null;
     this.uploadFile(files);
   }
