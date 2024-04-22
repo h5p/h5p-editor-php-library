@@ -5,6 +5,7 @@
 @import "form-groups";
 @import "h5peditor-image-edit";
 @import "h5peditor-image-edit-popup";
+@import "h5peditor-drag-and-drop";
 @import "deprecated";
 
 html, body {
@@ -1255,4 +1256,45 @@ a {
   a {
     text-decoration: underline;
   }
+}
+
+.h5p-loader__wrapper {
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  min-width: 180px;
+
+  .h5p-loader__icon {
+    border: 8px solid #d0cfd4;
+    border-bottom-color: #554e4a;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: rotation linear 1s infinite;
+    margin: 0 auto;
+  }
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.h5p-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
