@@ -41,18 +41,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       self.replaceCallback();
     });
 
-    // When uploading starts
-    self.on('upload', function () {
-      // // Insert throbber
-      // self.$uploading = $('<div class="h5peditor-uploading h5p-throbber">' + H5PEditor.t('core', 'uploading') + '</div>').insertAfter(self.$add.hide());
-
-      // // Clear old error messages
-      // self.$errors.html('');
-
-      // // Close dialog
-      // self.closeDialog();
-    });
-
     // Monitor upload progress
     self.on('uploadProgress', function (e) {
       // New upload, i.e. not update existing box.
@@ -68,6 +56,14 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
       // Clear out add dialog
       this.$addDialog.find('.h5p-file-url').val('');
+      
+      const index = event.data?.updateIndex ?? self.updateIndex ?? self.params.length;
+
+      let boxEl = self.boxEl;
+      if (index >= 0) {
+        const boxesEl = Array.from(self.$files.get(0).querySelectorAll('.h5p-dnd__videobox-wrapper:not(.h5p-dnd__videobox-wrapper--is-provider)'));
+        boxEl = boxesEl[index] ?? self.boxEl;
+      }
 
       try {
         if (result.error) {
@@ -88,8 +84,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         };
         self.updateIndex = event.data?.updateIndex;
 
-        const index = event.data?.updateIndex ?? self.updateIndex ?? self.params.length;
-
         self.params[index] = file;
         self.addFile(index);
 
@@ -97,10 +91,12 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         for (var i = 0; i < self.changes.length; i++) {
           self.changes[i](file);
         }
+
+        const errorEls = Array.from(self.$files.get(0).querySelectorAll('.has-error'));
+        errorEls.forEach(errorEl => errorEl.classList.remove('has-error'));
       }
       catch (error) {
-        // Display errors
-        self.$errors.append(H5PEditor.createError(error));QQ
+        self.setErrorMessage(result.error, boxEl);
       }
 
       if (self.$uploading !== undefined && self.$uploading.length !== 0) {
@@ -109,14 +105,39 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         self.$add.show();
       }
 
-      if (!isUpdate) {
-        self.handleUploadComplete(self.boxEl);
+      if (boxEl.classList.contains('h5p-dnd__videobox-wrapper')) {
+        boxEl = boxEl.querySelector('.h5p-dnd__box');
       }
+
+      self.handleUploadComplete(boxEl);
+
     });
   }
 
   C.prototype = Object.create(ns.FileUploader.prototype);
   C.prototype.constructor = C;
+
+  C.prototype.setErrorMessage = function (message, boxEl) {
+    const errorEl = boxEl.querySelector('.h5p-errors');
+
+    if (errorEl) {
+      errorEl.innerText = message;
+    }
+
+    if (boxEl) {
+      boxEl.classList.add('has-error');
+    }
+
+    this.setAriaLiveErrorMessage(message)
+  };
+  
+  C.prototype.setAriaLiveErrorMessage = function (message) {
+    this.ariaLiveEl.innerText = message;
+    // Note: Should last long enough for the screen reader to read the text above.
+    setTimeout(() => {
+      this.ariaLiveEl.innerText = "";
+    }, 5000);
+  };
 
   /**
    * Append widget to given wrapper.
@@ -149,6 +170,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
             <div class="text-center">
               ${isAudio ? H5PEditor.t('core', 'dragAndDropAndPasteAudio') : H5PEditor.t('core', 'dragAndDropAndPasteVideo')} <span class="h5p-dnd__badge">ctrl&nbsp;(⌘)</span>&nbsp;+&nbsp;<span class="h5p-dnd__badge">v</span>
             </div>
+          </div>
+          <div class="h5p-dnd__row h5p-dnd__column--hide-when-focus">
             <div class="h5p-errors"></div>
           </div>
       
@@ -178,6 +201,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
             </div>
           </div>
         </div>
+        <div class="h5p-sr-only" aria-live="polite"></div>
       </div>
     `
 
@@ -198,6 +222,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     });
 
     this.boxEl = this.$files.find('.h5p-dnd__box__url.h5p-dnd__box--is-dashed').get(0);
+    this.ariaLiveEl = this.$files.find('.h5p-sr-only[aria-live]').get(0);
+
     const blockEl = this.boxEl.querySelector('.h5p-dnd__box__block');
     this.addDragAndDropListeners(this.boxEl, blockEl);
 
@@ -448,7 +474,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     if (this.field.enableCustomQualityLabel === true && !isProvider) {
       fileHtml = `
         <div style="min-width: 400px; flex: 1;" class="h5p-dnd__videobox-wrapper ${isProvider ? 'h5p-dnd__videobox-wrapper--is-provider' : ''}">
-          <div class="h5p-dnd__box h5p-dnd__box--has-video ${isProvider ? '' : 'h5p-dnd__box--is-dashed'} h5p-dnd__box--is-inline" tabindex="0">
+          <div class="h5p-dnd__box h5p-dnd__box--has-video ${isProvider ? '' : 'h5p-dnd__box--is-dashed'} h5p-dnd__box--is-inline" tabindex="0" role="button">
             <div class="h5p-dnd__box__block"></div>
             <div class="h5p-dnd__row">
               <div class="h5p-dnd__column" style="max-height: 130px; margin-right: 0;">

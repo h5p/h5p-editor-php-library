@@ -1,4 +1,5 @@
-.h5p-dnd__container {
+.h5p-dnd__container,
+.h5p-dnd__box {
   &.has-error .h5p-errors {
     margin-top: 1em;
     display: flex;
@@ -411,7 +412,6 @@
   }
 }
 
-/* @todo add to existing */
 .h5p-dnd__box:not(.h5p-dnd__box--is-uploading).h5p-dnd__box--has-image:focus .h5p-dnd__column--show-when-focus,
 .h5p-dnd__box:not(.h5p-dnd__box--is-uploading).h5p-dnd__box--has-video:focus .h5p-dnd__column--show-when-focus
 {
