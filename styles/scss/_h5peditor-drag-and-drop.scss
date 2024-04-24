@@ -57,7 +57,6 @@
   border: solid 2px $dnd-blue;
 }
 
-.h5p-dnd__box:focus:not(.h5p-dnd__box--has-video):not(.h5p-dnd__box--is-uploading)
 .h5p-dnd__box:focus:not(.h5p-dnd__box--has-image):not(.h5p-dnd__box--is-uploading) {
   .h5p-dnd__column--is-highlighted {
     background: #fff;
@@ -293,6 +292,7 @@
   font-family: "Open Sans", sans-serif;
 }
 
+.h5p-dnd__box.h5p-dnd__box__url,
 .h5p-dnd__box__url {
   display: flex;
   flex-flow: column;
