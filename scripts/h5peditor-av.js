@@ -299,7 +299,11 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     this.$files.find('.h5p-dnd__btn__insert-url').on('click', (e) => {
       const url = this.$files.find('.input-video').val().trim();
       if (url) {
-        this.useUrl(url);
+        if (this.params?.length > 0) {
+          this.replaceUrl(url);
+        } else {
+          this.useUrl(url);
+        }
       }
     });
 
@@ -692,6 +696,33 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       this.changes[i](file);
     }
   };
+
+  C.prototype.replaceUrl = function (url) {
+    var mime;
+    var aspectRatio;
+    var i;
+    var matches = url.match(/\.(webm|mp4|ogv|m4a|mp3|ogg|oga|wav)/i);
+    if (matches !== null) {
+      mime = matches[matches.length - 1];
+    }
+    else {
+      // Try to find a provider
+      const provider = C.findProvider(url);
+      if (provider) {
+        mime = provider.name;
+        aspectRatio = provider.aspectRatio;
+      }
+    }
+
+    var file = {
+      path: url,
+      mime: this.field.type + '/' + (mime ? mime : 'unknown'),
+      copyright: this.copyright,
+      aspectRatio: aspectRatio ? aspectRatio : undefined,
+    };
+
+    this.params[0] = file;
+  }
 
   /**
    * Validate the field/widget.
