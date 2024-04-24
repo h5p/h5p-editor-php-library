@@ -247,11 +247,6 @@
   }
 }
 
-
-
-
-
-/* new */
 .input-container {
   display: flex;
   align-items: center;
@@ -316,7 +311,8 @@
   height: 248px;
   box-sizing: border-box;
 
-  &:focus:not(.h5p-dnd__box__video-paste), &:focus-within:not(.h5p-dnd__box__video-paste) {
+  &:focus:not(.h5p-dnd__box__video-paste):not(.h5p-dnd__box--is-dragging),
+  &:focus-within:not(.h5p-dnd__box__video-paste):not(.h5p-dnd__box--is-dragging) {
     background: #F2F8FF;
     border: solid 2px #1570df;
   }
@@ -481,5 +477,9 @@
   display: inline-block;
   font-family: 'Open Sans', sans-serif;
 }
-/* end new */
+
+.h5p-dnd__box__url.h5p-dnd__box--is-dragging .h5p-dnd__column.h5p-dnd__column--is-highlighted {
+  width: 100%;
+  margin: 0;
+}
 

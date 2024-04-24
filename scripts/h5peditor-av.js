@@ -52,7 +52,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     // Handle upload complete
     self.on('uploadComplete', function (event) {
       const result = event.data;
-      const index = event.data?.updateIndex ?? self.updateIndex ?? self.params.length;
+      const index = event.data?.updateIndex ?? self.updateIndex ?? self.params?.length ?? 0;
 
       let boxEl = self.boxEl;
       if (index >= 0) {
@@ -142,7 +142,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   C.prototype.appendTo = function ($wrapper) {
     var self = this;
     const id = ns.getNextFieldId(this.field);
-    const isAudio = this.field.type === 'video';
+    const isAudio = this.field.type === 'audio';
 
     let imageHtml = `
       <div class="h5p-dnd__av-container">
@@ -180,7 +180,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         </div>
         <div class="h5p-dnd__box__url h5p-dnd__box__video-paste">
           <div class="h5p-dnd__row">
-            <div class="h5p-dnd__box__title">${H5PEditor.t('core', 'pasteYoutubeLink')}</div>
+            <div class="h5p-dnd__box__title">${isAudio ? H5PEditor.t('core', 'pasteAudioLink') : H5PEditor.t('core', 'pasteVideoLink')}</div>
           </div>
           <div class="h5p-dnd__row">
             <div class="input-container">
@@ -188,11 +188,13 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
               <button class="h5p-dnd__btn h5p-dnd__btn__primary h5p-dnd__btn__insert-url" type="button">${H5PEditor.t('core', 'insertUrl')}</button>
             </div>
           </div>
-          <div class="h5p-dnd__row">
-            <div class="text-muted">
-              ${isAudio ? '' : H5PEditor.t('core', 'supportedVideoFormats')}
+          ${!isAudio ? `
+            <div class="h5p-dnd__row">
+              <div class="text-muted">
+                ${H5PEditor.t('core', 'supportedVideoFormats')}
+              </div>
             </div>
-          </div>
+          `: ''}
         </div>
         <div class="h5p-sr-only" aria-live="polite"></div>
       </div>
@@ -376,8 +378,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * Add drag and drop listeners to the appropriate DOM elements.
    */
   C.prototype.addDragAndDropListeners = function (boxEl, blockEl, shouldReplace = false) {
-    // const boundedHandleDnD = this.handleDragAndDrop.bind(this, ...arguments, boxEl, blockEl);
-
     boxEl.addEventListener('dragenter', (e) => this.handleDragAndDrop(e, boxEl, blockEl, shouldReplace));
     blockEl.addEventListener('dragover', (e) => this.handleDragAndDrop(e, boxEl, blockEl, shouldReplace));
     blockEl.addEventListener('dragend', (e) => this.handleDragAndDrop(e, boxEl, blockEl, shouldReplace));
@@ -421,7 +421,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       // Need to make a copy of the file since Firefox loses the reference to it during the confirm replace dialog.
       const filesBackup = [new File([files[0]], files[0].name, { type: files[0].type })];
       this.replaceCallback = () => {
-        // this.removeImage();
         this.handleUploadProgress(boxEl);
         this.updateIndex = indexToReplace;
         this.uploadFiles(filesBackup, { updateIndex: indexToReplace });
