@@ -63,57 +63,55 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     // Handle upload complete
     self.on('uploadComplete', function (event) {
-      setTimeout(() => {
-        var result = event.data;
-        let isUpdate = typeof event.data?.updateIndex !== 'undefined';
+      var result = event.data;
+      let isUpdate = typeof event.data?.updateIndex !== 'undefined';
 
-        // Clear out add dialog
-        this.$addDialog.find('.h5p-file-url').val('');
-  
-        try {
-          if (result.error) {
-            throw result.error;
-          }
-  
-          // Set params if none is set
-          if (self.params === undefined) {
-            self.params = [];
-            self.setValue(self.field, self.params);
-          }
-  
-          // Add a new file/source
-          var file = {
-            path: result.data.path,
-            mime: result.data.mime,
-            copyright: self.copyright
-          };
-          self.updateIndex = event.data?.updateIndex;
+      // Clear out add dialog
+      this.$addDialog.find('.h5p-file-url').val('');
 
-          const index = event.data?.updateIndex ?? self.updateIndex ?? self.params.length;
-
-          self.params[index] = file;
-          self.addFile(index);
-  
-          // Trigger change callbacks (old event system)
-          for (var i = 0; i < self.changes.length; i++) {
-            self.changes[i](file);
-          }
-        }
-        catch (error) {
-          // Display errors
-          self.$errors.append(H5PEditor.createError(error));QQ
-        }
-  
-        if (self.$uploading !== undefined && self.$uploading.length !== 0) {
-          // Hide throbber and show add button
-          self.$uploading.remove();
-          self.$add.show();
+      try {
+        if (result.error) {
+          throw result.error;
         }
 
-        if (!isUpdate) {
-          self.handleUploadComplete(self.boxEl);
+        // Set params if none is set
+        if (self.params === undefined) {
+          self.params = [];
+          self.setValue(self.field, self.params);
         }
-      }, 3000)
+
+        // Add a new file/source
+        var file = {
+          path: result.data.path,
+          mime: result.data.mime,
+          copyright: self.copyright
+        };
+        self.updateIndex = event.data?.updateIndex;
+
+        const index = event.data?.updateIndex ?? self.updateIndex ?? self.params.length;
+
+        self.params[index] = file;
+        self.addFile(index);
+
+        // Trigger change callbacks (old event system)
+        for (var i = 0; i < self.changes.length; i++) {
+          self.changes[i](file);
+        }
+      }
+      catch (error) {
+        // Display errors
+        self.$errors.append(H5PEditor.createError(error));QQ
+      }
+
+      if (self.$uploading !== undefined && self.$uploading.length !== 0) {
+        // Hide throbber and show add button
+        self.$uploading.remove();
+        self.$add.show();
+      }
+
+      if (!isUpdate) {
+        self.handleUploadComplete(self.boxEl);
+      }
     });
   }
 
@@ -128,6 +126,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   C.prototype.appendTo = function ($wrapper) {
     var self = this;
     const id = ns.getNextFieldId(this.field);
+    const isAudio = this.field.type === 'audio';
 
     let imageHtml = `
       <div class="h5p-dnd__av-container">
@@ -138,21 +137,23 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
             <div class="h5p-dnd__upload-video-svg">
               ${C.getUploadSVG()}
             </div>
-            <button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Upload video</button>
+            <button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">
+              ${isAudio ? H5PEditor.t('core', 'uploadAudio') : H5PEditor.t('core', 'uploadVideo')}
+            </button>
           </div>
       
           <div class="h5p-dnd__row h5p-dnd__column--hide-when-focus">
-            <span class="divider"></span> or <span class="divider"></span>
+            <span class="divider"></span> ${H5PEditor.t('core', 'uploadOr')} <span class="divider"></span>
           </div>
           <div class="h5p-dnd__row h5p-dnd__column--hide-when-focus">
             <div class="text-center">
-              Drag and drop video file here to upload or paste by <span class="h5p-dnd__badge">ctrl&nbsp;(⌘)</span>&nbsp;+&nbsp;<span class="h5p-dnd__badge">v</span>
+              ${isAudio ? H5PEditor.t('core', 'dragAndDropAndPasteAudio') : H5PEditor.t('core', 'dragAndDropAndPasteVideo')} <span class="h5p-dnd__badge">ctrl&nbsp;(⌘)</span>&nbsp;+&nbsp;<span class="h5p-dnd__badge">v</span>
             </div>
             <div class="h5p-errors"></div>
           </div>
       
           <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--show-when-focus h5p-dnd__column--is-full-width">
-            Drop video file here to upload
+            ${isAudio ? H5PEditor.t('core', 'dropAudio') : H5PEditor.t('core', 'dropVideo')}
           </div>
 
           <div class="h5p-dnd__loader h5p-dnd__column h5p-dnd__column--is-full-width" style="display: none;">
@@ -163,19 +164,17 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         </div>
         <div class="h5p-dnd__box__url h5p-dnd__box__video-paste">
           <div class="h5p-dnd__row">
-            <div class="h5p-dnd__box__title">
-              Paste Youtube link or other video source
-            </div>
+            <div class="h5p-dnd__box__title">${H5PEditor.t('core', 'pasteYoutubeLink')}</div>
           </div>
           <div class="h5p-dnd__row">
             <div class="input-container">
-              <input class="input-video" type="text" placeholder="Enter a video link" />
-              <button class="h5p-dnd__btn h5p-dnd__btn__primary h5p-dnd__btn__insert-url" type="button">Insert url</button>
+              <input class="input-video" type="text" placeholder="${isAudio ? H5PEditor.t('core', 'enterAudioLink') : H5PEditor.t('core', 'enterVideoLink')}" />
+              <button class="h5p-dnd__btn h5p-dnd__btn__primary h5p-dnd__btn__insert-url" type="button">${H5PEditor.t('core', 'insertUrl')}</button>
             </div>
           </div>
           <div class="h5p-dnd__row">
             <div class="text-muted">
-              H5P supports all external video sources formatted as <span class="h5p-bold">mp4</span>, <span class="h5p-bold">webm</span> or <span class="h5p-bold">ogv</span>, like Vimeo Pro, and has support for YouTube and Panopto links.
+              ${isAudio ? '' : H5PEditor.t('core', 'supportedVideoFormats')}
             </div>
           </div>
         </div>
@@ -434,6 +433,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     // Check if source is provider (Vimeo, YouTube, Panopto)
     const isProvider = file.path && C.findProvider(file.path);
+    const isAudio = this.field.type === 'audio';
 
     this.$add.toggleClass('hidden', isProvider);
 
@@ -469,9 +469,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
             </div>
             
             <div class="h5p-dnd__column h5p-dnd__column--show-when-focus">
-              <div class="h5p-dnd__text">
-                Drag and drop video file here to replace  
-              </div>
+              <div class="h5p-dnd__text">${isAudio ? H5PEditor.t('core', 'dragAndDropToReplaceAudio') : H5PEditor.t('core', 'dragAndDropToReplaceVideo')}</div>
             </div>
 
             <div class="h5p-dnd__loader h5p-dnd__column h5p-dnd__column--is-full-width" style="display: none;">
@@ -503,9 +501,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
             </div>
             ${!isProvider ? `
               <div class="h5p-dnd__column h5p-dnd__column--show-when-focus">
-                <div class="h5p-dnd__text">
-                  Drag and drop video file here to replace  
-                </div>
+                <div class="h5p-dnd__text">${isAudio ? H5PEditor.t('core', 'dragAndDropToReplaceAudio') : H5PEditor.t('core', 'dragAndDropToReplaceVideo')}</div>
               </div>
               <div class="h5p-dnd__loader h5p-dnd__column h5p-dnd__column--is-full-width" style="display: none;">
                 <div class="h5p-loader__wrapper">
