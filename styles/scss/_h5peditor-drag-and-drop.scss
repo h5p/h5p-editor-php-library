@@ -209,11 +209,25 @@
   color: $dnd-text-color;
 }
 
-.h5p-dnd__upload-image-svg {
-  background: url("../../images/drag-and-drop/upload-image.svg") no-repeat;
+.h5p-dnd__upload-image-svg,
+.h5p-dnd__upload-audio-svg,
+.h5p-dnd__upload-video-svg {
   width: 60px;
   height: 43px;
   margin-bottom: 13px;
+}
+
+
+.h5p-dnd__upload-image-svg {
+  background: url("../../images/drag-and-drop/upload-image.svg") no-repeat;
+}
+
+.h5p-dnd__upload-video-svg {
+  background: url("../../images/drag-and-drop/upload-video.svg") no-repeat;
+}
+
+.h5p-dnd__upload-audio-svg {
+  background: url("../../images/drag-and-drop/upload-audio.svg") no-repeat;
 }
 
 .h5p-dnd__drop-text {
@@ -320,6 +334,8 @@
   height: 154px;
   min-height: 110px;
   min-width: 440px;
+
+  .h5p-dnd__upload-audio-svg,
   .h5p-dnd__upload-video-svg {
     display: none;
   }
@@ -423,6 +439,7 @@
   align-items: flex-start;
   gap: 11px;
   flex-flow: row wrap;
+  margin-bottom: 20px;
 }
 
 .h5p-dnd__videobox-wrapper:not(.h5p-dnd__videobox-wrapper--is-provider) ~ .h5p-dnd__box__video-paste,
