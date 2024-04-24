@@ -133,6 +133,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       <div class="h5p-dnd__av-container">
         <div class="h5p-dnd__box h5p-dnd__box__url h5p-dnd__box--is-dashed h5p-dnd__box--is-inline" tabindex="0">
           <div class="h5p-dnd__box__block"></div>
+          
           <div class="h5p-dnd__column h5p-dnd__column--hide-when-focus">
             <div class="h5p-dnd__upload-video-svg">
               ${C.getUploadSVG()}
@@ -200,6 +201,22 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     this.boxEl = this.$files.find('.h5p-dnd__box__url.h5p-dnd__box--is-dashed').get(0);
     const blockEl = this.boxEl.querySelector('.h5p-dnd__box__block');
     this.addDragAndDropListeners(this.boxEl, blockEl);
+
+    document.addEventListener('paste', (e) => {
+      const activeElement = document.activeElement.closest('.h5p-dnd__box');
+      if (activeElement && e.clipboardData.files.length > 0) {
+        const children = Array.from(activeElement.parentElement.parentElement.querySelectorAll('.h5p-dnd__box--has-video'));
+        let index = -1;
+        children.forEach((child, i) => {
+          if (child === activeElement) {
+            index = i;
+          }
+        })
+
+        this.uploadOrReplaceImage(e.clipboardData.files, index, activeElement);
+      }
+    });
+
     // Tabs that are hard-coded into this widget. Any other tab must be an extension.
     const TABS = {
       UPLOAD: 0,
@@ -216,71 +233,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     const isExtension = function (tab) {
       return tab > TABS.INPUT; // Always last tab
     };
-
-    /**
-     * Toggle the currently active tab.
-     */
-    const toggleTab = function () {
-      // Pause the last active tab
-      if (isExtension(activeTab)) {
-        tabInstances[activeTab].pause();
-      }
-
-      // Update tab
-      this.parentElement.querySelector('.selected').classList.remove('selected');
-      this.classList.add('selected');
-
-      // Update tab panel
-      const el = document.getElementById(this.getAttribute('aria-controls'));
-      el.parentElement.querySelector('.av-tabpanel:not([hidden])').setAttribute('hidden', '');
-      el.removeAttribute('hidden');
-
-      // Set active tab index
-      for (let i = 0; i < el.parentElement.children.length; i++) {
-        if (el.parentElement.children[i] === el) {
-          activeTab = i - 1; // Compensate for .av-tablist in the same wrapper
-          break;
-        }
-      }
-
-      // Toggle insert button disabled
-      if (activeTab === TABS.UPLOAD) {
-        self.$insertButton[0].disabled = true;
-      }
-      else if (activeTab === TABS.INPUT) {
-        self.$insertButton[0].disabled = false;
-      }
-      else {
-        self.$insertButton[0].disabled = !tabInstances[activeTab].hasMedia();
-      }
-    }
-
-    /**
-     * Switch focus between the buttons in the tablist
-     */
-    const moveFocus = function (el) {
-      if (el) {
-        this.setAttribute('tabindex', '-1');
-        el.setAttribute('tabindex', '0');
-        el.focus();
-      }
-    }
-
-    // Register event listeners to tab DOM elements
-    $container.find('.av-tab').click(toggleTab).keydown(function (e) {
-      if (e.which === 13 || e.which === 32) { // Enter or Space
-        toggleTab.call(this, e);
-        e.preventDefault();
-      }
-      else if (e.which === 37 || e.which === 38) { // Left or Up
-        moveFocus.call(this, this.previousSibling);
-        e.preventDefault();
-      }
-      else if (e.which === 39 || e.which === 40) { // Right or Down
-        moveFocus.call(this, this.nextSibling);
-        e.preventDefault();
-      }
-    });
 
     this.$addDialog = this.$add.next().children().first();
 
@@ -319,25 +271,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       self.closeDialog();
     });
 
-    // this.$addDialog.find('.h5p-file-drop-upload')
-    //   .addClass('has-advanced-upload')
-    //   .on('drag dragstart dragend dragover dragenter dragleave drop', function (e) {
-    //     e.preventDefault();
-    //     e.stopPropagation();
-    //   })
-    //   .on('dragover dragenter', function (e) {
-    //     $(this).addClass('over');
-    //     e.originalEvent.dataTransfer.dropEffect = 'copy';
-    //   })
-    //   .on('dragleave', function () {
-    //     $(this).removeClass('over');
-    //   })
-    //   .on('drop', function (e) {
-    //     self.uploadFiles(e.originalEvent.dataTransfer.files);
-    //   })
-    //   .click(function () {
-    //     self.openFileSelector();
-    //   });
     this.$files.find('.h5p-dnd__btn__upload').on('click', (e) => {
       e.preventDefault();
       this.openFileSelector();
