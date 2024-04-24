@@ -32,6 +32,18 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         {
+          from: path.join(path.resolve(__dirname, 'node_modules'), 'h5p-image-cropper', 'cropper.js'),
+          to: path.join(path.resolve(__dirname, 'libs'), 'cropper.js')
+        },
+        {
+          from: path.join(path.resolve(__dirname, 'node_modules'), 'h5p-image-cropper', 'cropper.css'),
+          to: path.join(path.resolve(__dirname, 'libs'), 'cropper.css')
+        },
+        {
+          from: path.join(path.resolve(__dirname, 'node_modules'), 'h5p-image-cropper', 'images'),
+          to: path.join(path.resolve(__dirname, 'images'), 'cropper')
+        },
+        {
           from: path.join(path.resolve(__dirname, 'node_modules'), 'zebra_datepicker', 'dist', 'zebra_datepicker.min.js'),
           to: path.join(path.resolve(__dirname, 'libs'), 'zebra_datepicker.min.js')
         },
