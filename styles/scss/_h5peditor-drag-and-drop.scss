@@ -39,6 +39,7 @@
 .h5p-dnd__box--has-image {
   flex-flow: column;
   width: min-content;
+  min-height: auto;
 }
 
 .h5p-dnd__box:focus-visible {
@@ -139,6 +140,7 @@
     vertical-align: middle;
     font-size: 1.5em;
     line-height: 0.9;
+    font-weight: 400;
   }
 }
 
@@ -164,6 +166,7 @@
 
 .h5p-dnd__img {
   max-width: 175px;
+  max-height: 120px;
   border-radius: 6px;
   display: block;
 }

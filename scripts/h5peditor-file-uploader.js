@@ -84,13 +84,16 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
     /**
      * Open the file selector and trigger upload upon selecting file.
      */
-    self.openFileSelector = function () {
+    self.openFileSelector = function ({ onChangeCallback } = {}) {
       // Create a file selector
       const input = document.createElement('input');
       input.type = 'file';
       input.setAttribute('accept', determineAllowedMimeTypes());
       input.style='display:none';
       input.addEventListener('change', function () {
+        if (typeof onChangeCallback === 'function') {
+          onChangeCallback();
+        }
         // When files are selected, upload them
         self.uploadFiles(this.files);
         document.body.removeChild(input);

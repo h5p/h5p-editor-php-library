@@ -217,7 +217,11 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
     if (this.boxEl.classList.contains('h5p-dnd__box--has-image')) {
       if ((e.code === 'Space' || e.code === 'Enter')) {
         this.isOriginalImage = true;
-        this.openFileSelector();
+        this.openFileSelector({
+          onChangeCallback: () => {
+            this.removeImage();
+          }
+        });
       }
     }
   });
@@ -231,7 +235,11 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
     if (this.boxEl.classList.contains('h5p-dnd__box--has-image')
       && e.target.closest('.h5p-dnd__img__container') === imageContainerEl) {
       this.isOriginalImage = true;
-      this.openFileSelector();
+      this.openFileSelector({
+        onChangeCallback: () => {
+          this.removeImage();
+        }
+      });
     }
   });
 
@@ -352,7 +360,7 @@ ns.widgets.image.prototype.handleDragAndDrop = function (e) {
 ns.widgets.image.prototype.getBaseMarkup = function () {
   return `
     <div class="h5p-dnd__box__block"></div>
-    <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--is-fixed h5p-dnd__column--hide-when-focus">
+    <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--is-fixed h5p-dnd__column--hide-when-focus" style="padding: 0 20px;">
       <div class="h5p-dnd__upload-image-svg"></div>
       <button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">${ns.t('core', 'uploadImage')}</button>
     </div>
@@ -402,7 +410,7 @@ ns.widgets.image.prototype.getUploadedMarkup = function () {
           <img class="h5p-dnd__img" src="${source}" alt="${altText}" />
         </div>
       </div>
-      <div class="h5p-dnd__column h5p-dnd__column--show-when-focus">
+      <div class="h5p-dnd__column h5p-dnd__column--show-when-focus" style="margin-top: -5px;">
         <div class="h5p-dnd__text">
           ${ns.t('core', 'dragAndDropAndPasteReplaceImage')}
         </div>
