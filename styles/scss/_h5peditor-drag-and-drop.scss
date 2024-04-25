@@ -163,6 +163,20 @@
   font-family: 'Arial Black';
   border-radius: 6px;
   padding: 3px 8px;
+  display: inline-flex;
+
+  .h5p-dnd__badge__separator {
+    border-left: solid 2px rgba(67, 68, 70, 0.25);
+    margin: 3px 6px;
+    overflow: hidden;
+    display: inline-block;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: relative;
+  }
 }
 
 .h5p-dnd__img {

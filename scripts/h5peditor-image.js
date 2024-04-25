@@ -367,7 +367,7 @@ ns.widgets.image.prototype.getBaseMarkup = function () {
 
     <div class="h5p-dnd__column h5p-dnd__column--hide-when-focus" style="padding: 0 20px;">
       <div>
-        ${ns.t('core', 'dragAndDropAndPasteImage')} <span class="h5p-dnd__badge">ctrl&nbsp⌘</span> + <span class="h5p-dnd__badge">v</span>
+        ${ns.t('core', 'dragAndDropAndPasteImage')} <span class="h5p-dnd__badge">ctrl<span class="h5p-dnd__badge__separator"></span>⌘</span> + <span class="h5p-dnd__badge">v</span>
       </div>
       <div class="h5p-errors"></div>
     </div>
