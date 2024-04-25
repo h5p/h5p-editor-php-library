@@ -365,9 +365,9 @@ ns.widgets.image.prototype.getBaseMarkup = function () {
       <button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">${ns.t('core', 'uploadImage')}</button>
     </div>
 
-    <div class="h5p-dnd__column h5p-dnd__column--hide-when-focus">
+    <div class="h5p-dnd__column h5p-dnd__column--hide-when-focus" style="padding: 0 20px;">
       <div>
-        ${ns.t('core', 'dragAndDropAndPasteImage')} <span class="h5p-dnd__badge">ctrl&nbsp;(⌘)</span> + <span class="h5p-dnd__badge">v</span>
+        ${ns.t('core', 'dragAndDropAndPasteImage')} <span class="h5p-dnd__badge">ctrl&nbsp⌘</span> + <span class="h5p-dnd__badge">v</span>
       </div>
       <div class="h5p-errors"></div>
     </div>
@@ -479,6 +479,12 @@ ns.widgets.image.prototype.addFile = function () {
   const actionsContainerEl = document.createElement('div');
   actionsContainerEl.classList.add('h5p-image-action-container');
   actionsContainerEl.innerHTML = this.getImageActionMarkup();
+
+  const editBtnEl = actionsContainerEl.querySelector('.h5p-editing-image-button');
+  // Need some time to change focus
+  setTimeout(() => {
+    editBtnEl.focus({focusVisible: true});
+  }, 100);
 
   this.boxContainerEl.insertBefore(actionsContainerEl, this.boxEl.nextElementSibling);
 
