@@ -105,6 +105,10 @@
   display: none;
 }
 
+.h5p-dnd__column--is-padded {
+  padding: 0 20px;
+}
+
 .h5p-dnd__box--is-dragging .h5p-dnd__column--hide-when-focus {
   display: none;
 }
@@ -112,6 +116,10 @@
 .h5p-dnd__box:not(.h5p-dnd__box--is-uploading).h5p-dnd__box--is-dragging .h5p-dnd__column--show-when-focus,
 .h5p-dnd__box:not(.h5p-dnd__box--is-uploading).h5p-dnd__box--has-image:focus .h5p-dnd__column--show-when-focus {
   display: flex;
+}
+
+.h5p-dnd__column__drag-text {
+  margin-top: -5px;
 }
 
 .h5p-dnd__btn {

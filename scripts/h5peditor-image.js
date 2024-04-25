@@ -360,12 +360,12 @@ ns.widgets.image.prototype.handleDragAndDrop = function (e) {
 ns.widgets.image.prototype.getBaseMarkup = function () {
   return `
     <div class="h5p-dnd__box__block"></div>
-    <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--is-fixed h5p-dnd__column--hide-when-focus" style="padding: 0 20px;">
+    <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--is-fixed h5p-dnd__column--hide-when-focus h5p-dnd__column--is-padded">
       <div class="h5p-dnd__upload-image-svg"></div>
       <button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">${ns.t('core', 'uploadImage')}</button>
     </div>
 
-    <div class="h5p-dnd__column h5p-dnd__column--hide-when-focus" style="padding: 0 20px;">
+    <div class="h5p-dnd__column h5p-dnd__column--hide-when-focus h5p-dnd__column--is-padded">
       <div>
         ${ns.t('core', 'dragAndDropAndPasteImage')} <span class="h5p-dnd__badge">ctrl<span class="h5p-dnd__badge__separator"></span>⌘</span> + <span class="h5p-dnd__badge">v</span>
       </div>
@@ -410,7 +410,7 @@ ns.widgets.image.prototype.getUploadedMarkup = function () {
           <img class="h5p-dnd__img" src="${source}" alt="${altText}" />
         </div>
       </div>
-      <div class="h5p-dnd__column h5p-dnd__column--show-when-focus" style="margin-top: -5px;">
+      <div class="h5p-dnd__column h5p-dnd__column--show-when-focus h5p-dnd__column__drag-text">
         <div class="h5p-dnd__text">
           ${ns.t('core', 'dragAndDropAndPasteReplaceImage')}
         </div>
