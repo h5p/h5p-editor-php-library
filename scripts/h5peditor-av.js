@@ -468,9 +468,10 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     // Create file with customizable quality if enabled and not youtube
     if (this.field.enableCustomQualityLabel === true) {
+      const ariaLabel = `${qualityName}. ${ns.t('core', 'dragAndDropToReplaceVideo')}`
       fileHtml = `
         <div class="h5p-dnd__videobox-wrapper ${isProvider ? 'h5p-dnd__videobox-wrapper--is-provider' : ''} h5p-dnd__videobox-wrapper--has-label">
-          <div class="h5p-dnd__box h5p-dnd__box--has-video ${isProvider ? '' : 'h5p-dnd__box--is-dashed'} h5p-dnd__box--is-inline" tabindex="0" role="button">
+          <div class="h5p-dnd__box h5p-dnd__box--has-video ${isProvider ? '' : 'h5p-dnd__box--is-dashed'} h5p-dnd__box--is-inline" tabindex="0" aria-label="${ariaLabel}">
             <div class="h5p-dnd__box__block"></div>
             <div class="h5p-dnd__row">
               <div class="h5p-dnd__column h5p-dnd__column--tight">
@@ -511,7 +512,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     else {
       fileHtml = `
         <div class="h5p-dnd__videobox-wrapper ${isProvider ? 'h5p-dnd__videobox-wrapper--is-provider' : ''}">
-          <div class="h5p-dnd__box h5p-dnd__box--has-video ${isProvider ? '' : 'h5p-dnd__box--is-dashed'} h5p-dnd__box--is-inline" tabindex="0">
+          <div class="h5p-dnd__box h5p-dnd__box--has-video ${isProvider ? '' : 'h5p-dnd__box--is-dashed'} h5p-dnd__box--is-inline" tabindex="0" role="button">
             <div class="h5p-dnd__box__block"></div>
             <div class="h5p-dnd__column">
               <div class="h5p-dnd__video-container">
@@ -561,7 +562,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     // Handle space/enter on frame/box
     boxEl.addEventListener('keydown', (e) => {
-      if (!isProvider) {
+      if (!isProvider && e.target?.nodeName !== 'INPUT') {
         if ((e.code === 'Space' || e.code === 'Enter')) {
           this.openFileSelector({
             onChangeCallback: () => {
