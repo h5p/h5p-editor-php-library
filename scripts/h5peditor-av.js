@@ -467,13 +467,13 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     }
 
     // Create file with customizable quality if enabled and not youtube
-    if (this.field.enableCustomQualityLabel === true && !isProvider) {
+    if (this.field.enableCustomQualityLabel === true) {
       fileHtml = `
-        <div style="min-width: 400px; flex: 1;" class="h5p-dnd__videobox-wrapper ${isProvider ? 'h5p-dnd__videobox-wrapper--is-provider' : ''}">
+        <div class="h5p-dnd__videobox-wrapper ${isProvider ? 'h5p-dnd__videobox-wrapper--is-provider' : ''} h5p-dnd__videobox-wrapper--has-label">
           <div class="h5p-dnd__box h5p-dnd__box--has-video ${isProvider ? '' : 'h5p-dnd__box--is-dashed'} h5p-dnd__box--is-inline" tabindex="0" role="button">
             <div class="h5p-dnd__box__block"></div>
             <div class="h5p-dnd__row">
-              <div class="h5p-dnd__column" style="max-height: 130px; margin-right: 0;">
+              <div class="h5p-dnd__column h5p-dnd__column--tight">
                 <div class="h5p-dnd__video-container">
                   <div class="h5p-dnd__video-overlay">
                     ${file.mime.split('/')[1]}
@@ -481,7 +481,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
                   <div class="h5p-dnd__video-placeholder"></div>
                 </div>
               </div>
-              <div class="h5p-dnd__column" style="max-height: 130px">
+              <div class="h5p-dnd__column h5p-dnd__column--tight">
                 <div class="h5p-dnd__video-quality">
                   <div class="h5p-dnd__video-quality-title">${H5PEditor.t('core', 'videoQuality')}</div>
                   <label class="h5p-dnd__video-quality-description" for="${rowInputId}">${H5PEditor.t('core', 'videoQualityDescription')}</label>
