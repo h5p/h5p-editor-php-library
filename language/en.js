@@ -33,7 +33,7 @@ H5PEditor.language.core = {
   uploadOr: 'or',
   dragAndDropAndPasteVideo: 'Drag and drop video file here to upload or paste by',
   dragAndDropAndPasteAudio: 'Drag and drop audio file here to upload or paste by',
-  pasteVideoLink: 'Paste Youtube link or other video source',
+  pasteVideoLink: 'Paste YouTube link or other video source',
   pasteAudioLink: 'Paste link or other audio source URL',
   dropVideo: "Drop video file here to upload",
   dropAudio: "Drop audio file here to upload",
