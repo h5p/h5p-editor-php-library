@@ -348,7 +348,7 @@
   background: none;
   padding: 20px;
   gap: 7px;
-  min-width: 210px;
+  min-width: 300px;
   height: 248px;
   box-sizing: border-box;
 
@@ -363,14 +363,14 @@
   }
 
   &.h5p-dnd__box__video-paste {
-    border: solid 2px #D0CFD4;
+    border: solid 1px #D0CFD4;
   }
 }
 
 .h5p-dnd__videobox-wrapper ~ .h5p-dnd__box__url {
   height: 154px;
   min-height: 110px;
-  min-width: 440px;
+  min-width: 360px;
 
   .h5p-dnd__upload-audio-svg,
   .h5p-dnd__upload-video-svg {

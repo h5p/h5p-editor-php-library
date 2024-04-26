@@ -163,7 +163,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           </div>
           <div class="h5p-dnd__row h5p-dnd__column--hide-when-focus">
             <div class="text-center">
-              ${isAudio ? H5PEditor.t('core', 'dragAndDropAndPasteAudio') : H5PEditor.t('core', 'dragAndDropAndPasteVideo')} <span class="h5p-dnd__badge">ctrl&nbsp;(⌘)</span>&nbsp;+&nbsp;<span class="h5p-dnd__badge">v</span>
+              ${isAudio ? H5PEditor.t('core', 'dragAndDropAndPasteAudio') : H5PEditor.t('core', 'dragAndDropAndPasteVideo')} <span class="h5p-dnd__badge">ctrl<span class="h5p-dnd__badge__separator"></span>⌘</span> + <span class="h5p-dnd__badge">v</span>
             </div>
           </div>
           <div class="h5p-dnd__row h5p-dnd__column--hide-when-focus">
