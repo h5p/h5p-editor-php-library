@@ -471,6 +471,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
               <div class="h5p-dnd__column h5p-dnd__column--tight">
                 <div class="h5p-dnd__video-container">
                   <div class="h5p-dnd__video-overlay">
+                    <div class="h5p-dnd__play-icon-svg"></div>
                     ${videoText}
                   </div>
                   <div class="h5p-dnd__video-placeholder"></div>
@@ -511,6 +512,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
             <div class="h5p-dnd__column">
               <div class="h5p-dnd__video-container">
                 <div class="h5p-dnd__video-overlay">
+                  <div class="h5p-dnd__play-icon-svg"></div>
                   ${videoText}
                 </div>
                 <div class="h5p-dnd__video-placeholder"></div>
@@ -520,12 +522,12 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
               <div class="h5p-dnd__column h5p-dnd__column--show-when-focus">
                 <div class="h5p-dnd__text">${isAudio ? H5PEditor.t('core', 'dragAndDropToReplaceAudio') : H5PEditor.t('core', 'dragAndDropToReplaceVideo')}</div>
               </div>
-              <div class="h5p-dnd__loader h5p-dnd__column h5p-dnd__column--is-full-width" style="display: none;">
-                <div class="h5p-loader__wrapper">
-                  <div class="h5p-loader__icon"></div>
-                </div>
-              </div>
             ` : ''}
+            <div class="h5p-dnd__loader h5p-dnd__column h5p-dnd__column--is-full-width" style="display: none;">
+              <div class="h5p-loader__wrapper">
+                <div class="h5p-loader__icon"></div>
+              </div>
+            </div>
             
           </div>
 
@@ -708,7 +710,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   C.prototype.replaceUrl = function (url) {
     var mime;
     var aspectRatio;
-    var i;
     var matches = url.match(/\.(webm|mp4|ogv|m4a|mp3|ogg|oga|wav)/i);
     if (matches !== null) {
       mime = matches[matches.length - 1];
@@ -730,6 +731,13 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     };
 
     this.params[0] = file;
+
+    // Simulating loading to give some feedback to user since this is actually instant.
+    const boxEl = this.$files.get(0).querySelector('.h5p-dnd__videobox-wrapper--is-provider .h5p-dnd__box');
+    this.handleUploadProgress(boxEl);
+    setTimeout(() => {
+      this.handleUploadComplete(boxEl)
+    }, 500);
   }
 
   /**

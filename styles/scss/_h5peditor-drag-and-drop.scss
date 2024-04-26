@@ -264,6 +264,11 @@
 .h5p-dnd__upload-audio-svg {
   background: url("../css/fonts/upload-audio.svg") no-repeat;
 }
+.h5p-dnd__play-icon-svg {
+  background: url("../css/fonts/play-icon.svg") no-repeat;
+  width: 28px;
+  height: 29px;
+}
 
 .h5p-dnd__drop-text {
   display: flex;
@@ -462,6 +467,14 @@
   align-items: center;
   justify-content: center;
   color: #fff;
+}
+
+.h5p-dnd__video-overlay {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
 .h5p-dnd__box--has-video.h5p-dnd__box--is-dragging {
