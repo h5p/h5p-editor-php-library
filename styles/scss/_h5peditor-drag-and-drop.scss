@@ -21,7 +21,7 @@
   flex-flow: row;
   align-items: stretch;
   justify-content: center;
-  border: solid 2px #D0CFD4;
+  border: solid 2px $dnd-gray-light;
   border-radius: 6px;
   flex: 1;
   min-height: 150px;
@@ -30,7 +30,7 @@
 }
 
 .h5p-dnd__box--is-dashed {
-  border: dashed 2px #D0CFD4;
+  border: dashed 2px $dnd-gray-light;
 }
 
 .h5p-dnd__box--is-inline {
@@ -40,6 +40,7 @@
 .h5p-dnd__box--has-image {
   flex-flow: column;
   width: min-content;
+  min-height: auto;
 }
 
 .h5p-dnd__box:focus-visible {
@@ -47,7 +48,7 @@
 }
 
 .h5p-dnd__box:not(.h5p-dnd__box--is-uploading):hover {
-  border: dashed 2px #ACACAC;
+  border: dashed 2px $dnd-gray-dark;
 }
 
 .h5p-dnd__box--has-image:not(.h5p-dnd__box--is-uploading):hover,
@@ -106,6 +107,10 @@
   display: none;
 }
 
+.h5p-dnd__column--is-padded {
+  padding: 0 20px;
+}
+
 .h5p-dnd__box--is-dragging .h5p-dnd__column--hide-when-focus {
   display: none;
 }
@@ -120,6 +125,10 @@
   &:has(.h5p-dnd__video-container) {
     margin-right: 0;
   }
+}
+
+.h5p-dnd__column__drag-text {
+  margin-top: -5px;
 }
 
 .h5p-dnd__btn {
@@ -148,6 +157,7 @@
     vertical-align: middle;
     font-size: 1.5em;
     line-height: 0.9;
+    font-weight: 400;
   }
 }
 
@@ -165,14 +175,32 @@
   background: #E7E9EE;
   color: #434446;
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 12px;
+  font-family: 'Arial Black';
   border-radius: 6px;
   padding: 3px 8px;
+  display: inline-flex;
+
+  .h5p-dnd__badge__separator {
+    border-left: solid 2px rgba(67, 68, 70, 0.25);
+    margin: 3px 6px;
+    overflow: hidden;
+    display: inline-block;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: relative;
+  }
 }
 
 .h5p-dnd__img {
   max-width: 175px;
+  max-height: 120px;
+  min-width: 40px;
+  min-height: 40px;
   border-radius: 6px;
   display: block;
 }
