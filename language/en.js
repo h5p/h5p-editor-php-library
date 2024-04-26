@@ -40,6 +40,7 @@ H5PEditor.language.core = {
   enterVideoLink: "Enter a video link",
   enterAudioLink: "Enter an audio link",
   insertUrl: 'Insert url',
+  replaceUrl: 'Replace url',
   supportedVideoFormats: 'H5P supports all external video sources formatted as <span class="h5p-bold">mp4</span>, <span class="h5p-bold">webm</span> or <span class="h5p-bold">ogv</span>, like Vimeo Pro, and has support for YouTube and Panopto links.',
   dragAndDropToReplaceVideo: 'Drag and drop video file here to replace',
   dragAndDropToReplaceAudio: 'Drag and drop audio file here to replace',

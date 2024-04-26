@@ -143,6 +143,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     var self = this;
     const id = ns.getNextFieldId(this.field);
     const isAudio = this.field.type === 'audio';
+    const firstFile =  Array.isArray(this.params) ? this.params[0] : undefined;
+    const isProvider = firstFile?.path && C.findProvider(firstFile.path);
 
     let imageHtml = `
       <div class="h5p-dnd__av-container">
@@ -184,8 +186,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           </div>
           <div class="h5p-dnd__row">
             <div class="input-container">
-              <input class="input-video" type="text" placeholder="${isAudio ? H5PEditor.t('core', 'enterAudioLink') : H5PEditor.t('core', 'enterVideoLink')}" />
-              <button class="h5p-dnd__btn h5p-dnd__btn__primary h5p-dnd__btn__insert-url" type="button">${H5PEditor.t('core', 'insertUrl')}</button>
+              <input class="input-video" type="text" placeholder="${isAudio ? H5PEditor.t('core', 'enterAudioLink') : H5PEditor.t('core', 'enterVideoLink')}" value="${isProvider ? firstFile.path : ''}"/>
+              <button class="h5p-dnd__btn h5p-dnd__btn__primary h5p-dnd__btn__insert-url" type="button">${firstFile ? H5PEditor.t('core', 'replaceUrl') : H5PEditor.t('core', 'insertUrl')}</button>
             </div>
           </div>
           ${!isAudio ? `
@@ -304,6 +306,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         } else {
           this.useUrl(url);
         }
+        this.updatePasteBox(true);
       }
     });
 
@@ -311,26 +314,14 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       if (e.code === 'Enter') {
         const url = this.$files.find('.input-video').val().trim();
         if (url) {
-          this.useUrl(url);
+          if (this.params?.length > 0) {
+            this.replaceUrl(url);
+          } else {
+            this.useUrl(url);
+          }
+          this.updatePasteBox(true);
         }
       }
-    });
-
-    this.$insertButton = this.$addDialog.find('.h5p-insert').click(function () {
-      if (isExtension(activeTab)) {
-        const media = tabInstances[activeTab].getMedia();
-        if (media) {
-          self.upload(media.data, media.name);
-        }
-      }
-      else {
-        const url = $url.val().trim();
-        if (url) {
-          self.useUrl(url);
-        }
-      }
-
-      self.closeDialog();
     });
 
     this.$errors = $container.children('.h5p-errors');
@@ -466,6 +457,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       this.updateIndex = undefined;
     }
 
+    const mimeType = file.mime.split('/')[1];
+    const videoText = C.providers.map(p => p.name).includes(mimeType) ? mimeType : `.${mimeType.toUpperCase()}`;
+
     // Create file with customizable quality if enabled and not youtube
     if (this.field.enableCustomQualityLabel === true) {
       const ariaLabel = `${qualityName}. ${ns.t('core', 'dragAndDropToReplaceVideo')}`
@@ -477,7 +471,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
               <div class="h5p-dnd__column h5p-dnd__column--tight">
                 <div class="h5p-dnd__video-container">
                   <div class="h5p-dnd__video-overlay">
-                    ${file.mime.split('/')[1]}
+                    ${videoText}
                   </div>
                   <div class="h5p-dnd__video-placeholder"></div>
                 </div>
@@ -517,7 +511,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
             <div class="h5p-dnd__column">
               <div class="h5p-dnd__video-container">
                 <div class="h5p-dnd__video-overlay">
-                  ${file.mime.split('/')[1]}
+                  ${videoText}
                 </div>
                 <div class="h5p-dnd__video-placeholder"></div>
               </div>
@@ -655,11 +649,24 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     $file.remove();
     this.$add.removeClass('hidden');
 
+    if (this.params === undefined) {
+      this.updatePasteBox(false);
+    }
+
     // Notify change listeners
     for (var i = 0; i < this.changes.length; i++) {
       this.changes[i]();
     }
   };
+
+  C.prototype.updatePasteBox = function (isReplace) {
+    const pasteBoxEl = this.$files.get(0).querySelector('.h5p-dnd__box__video-paste');
+    const inputEl = pasteBoxEl.querySelector('.input-video');
+    const btnEl = pasteBoxEl.querySelector('.h5p-dnd__btn__insert-url');
+    
+    btnEl.innerText = isReplace ? H5PEditor.t('core', 'replaceUrl') : H5PEditor.t('core', 'insertUrl');
+    inputEl.value = isReplace ? inputEl.value : "";
+  }
 
   C.prototype.useUrl = function (url) {
     if (this.params === undefined) {
