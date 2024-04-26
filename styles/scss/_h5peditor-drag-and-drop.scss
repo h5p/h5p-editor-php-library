@@ -352,12 +352,12 @@
   height: 248px;
   box-sizing: border-box;
 
-  &:focus:not(.h5p-dnd__box__video-paste):not(.h5p-dnd__box--is-dragging),
-  &:focus-within:not(.h5p-dnd__box__video-paste):not(.h5p-dnd__box--is-dragging) {
+  &:focus:not(.h5p-dnd__box__video-paste):not(.h5p-dnd__box--is-dragging):not(.h5p-dnd__box--is-uploading),
+  &:focus-within:not(.h5p-dnd__box__video-paste):not(.h5p-dnd__box--is-dragging):not(.h5p-dnd__box--is-uploading) {
     background: #F2F8FF;
     border: solid 2px #1570df;
   }
-  &:focus-visible:not(.h5p-dnd__box__video-paste) {
+  &:focus-visible:not(.h5p-dnd__box__video-paste):not(.h5p-dnd__box--is-uploading) {
     outline: 0;
     border: solid 2px #1570df;
   }
