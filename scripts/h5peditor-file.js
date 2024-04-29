@@ -60,7 +60,7 @@ ns.File = function (parent, field, params, setValue) {
   // Monitor upload progress
   self.on('uploadProgress', function (e) {
     if (typeof self.handleUploadProgress === 'function') {
-      self.handleUploadProgress(Math.round(e.data*100));
+      self.handleUploadProgress(Math.round(e.data.progress*100));
     }
     self.$file.children().html(ns.t('core', 'uploading') + ' ' + Math.round(e.data * 100) + ' %');
   });
