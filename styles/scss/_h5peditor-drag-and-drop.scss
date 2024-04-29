@@ -41,6 +41,7 @@
   flex-flow: column;
   width: min-content;
   min-height: auto;
+  min-width: 140px;
 }
 
 .h5p-dnd__box:focus-visible {
@@ -170,6 +171,9 @@
   outline-offset: 2px;
 }
 
+.h5p-dnd__column--is-padded:has(.h5p-dnd__badge) {
+  line-height: 1.7;
+}
 
 .h5p-dnd__badge {
   background: #E7E9EE;
@@ -181,6 +185,7 @@
   border-radius: 6px;
   padding: 3px 8px;
   display: inline-flex;
+  line-height: 1.4;
 
   .h5p-dnd__badge__separator {
     border-left: solid 2px rgba(67, 68, 70, 0.25);
@@ -207,6 +212,10 @@
 
 .h5p-dnd__img__container {
   position: relative;
+  min-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .h5p-dnd__img__overlay {
@@ -228,8 +237,7 @@
   }
 }
 
-.h5p-dnd__img__overlay:hover,
-.h5p-dnd__box--has-image:has(.h5p-dnd__img:hover) .h5p-dnd__img__overlay,
+.h5p-dnd__img__container:hover .h5p-dnd__img__overlay,
 .h5p-dnd__box:focus:not(.h5p-dnd__box--is-uploading) .h5p-dnd__img__overlay,
 .h5p-dnd__box.h5p-dnd__box--is-dragging:not(.h5p-dnd__box--is-uploading) .h5p-dnd__img__overlay {
   display: flex;
@@ -545,5 +553,11 @@
 .h5p-dnd__btn__insert-url {
   &:before {
     content: '\e85c';
+  }
+}
+
+@media (max-width: 525px) {
+  .h5p-dnd__box {
+    flex-flow: column;
   }
 }

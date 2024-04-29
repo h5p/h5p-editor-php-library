@@ -104,13 +104,8 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
         ${this.getBaseMarkup()}
       </div>
     </div>
-    <div class="h5p-editor-image-buttons">
-      ${!this.field.disableCopyright ? (
-        `<button class="h5peditor-button-textual h5p-copyright-button">${ns.t('core', 'editCopyright')}</button>`
-      ): ''} 
-    </div>
     <div class="h5p-editor-dialog">
-      <a href="#" class="h5p-close" title="${ns.t('core', 'close')}"></a>'
+      <a href="#" class="h5p-close" title="${ns.t('core', 'close')}"></a>
     </div>
     <div class="h5p-sr-only" aria-live="polite"></div>
   `
@@ -136,7 +131,8 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
   this.addFile();
   
   const $dialog = this.$container.find('.h5p-editor-dialog');
-  this.$container.find('.h5p-copyright-button').add($dialog.find('.h5p-close')).click(function () {
+  
+  this.$container.parent().on('click', '.h5p-copyright-button, .h5p-editor-dialog .h5p-close', () => {
     $dialog.toggleClass('h5p-open');
     return false;
   });
@@ -429,6 +425,7 @@ ns.widgets.image.prototype.getImageActionMarkup = function () {
     <div class="h5p-editor-image-actions">
       <button class="edit h5p-editing-image-button h5peditor-button-textual" type="button">${ns.t('core', 'editImage')}</button>
       <button class="delete h5p-delete-image-button h5peditor-button-textual" type="button">${ns.t('core', 'deleteLabel')}</button>
+      <button class="h5peditor-button-textual h5p-copyright-button">${ns.t('core', 'editCopyright')}</button>
     </div>
   `;
 };
