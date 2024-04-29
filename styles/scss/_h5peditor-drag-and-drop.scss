@@ -542,4 +542,8 @@
   margin: 0;
 }
 
-
+.h5p-dnd__btn__insert-url {
+  &:before {
+    content: '\e85c';
+  }
+}
