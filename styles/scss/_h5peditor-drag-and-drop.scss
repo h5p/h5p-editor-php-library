@@ -237,8 +237,7 @@
   }
 }
 
-.h5p-dnd__img__overlay:hover,
-.h5p-dnd__box--has-image:has(.h5p-dnd__img:hover) .h5p-dnd__img__overlay,
+.h5p-dnd__img__container:hover .h5p-dnd__img__overlay,
 .h5p-dnd__box:focus:not(.h5p-dnd__box--is-uploading) .h5p-dnd__img__overlay,
 .h5p-dnd__box.h5p-dnd__box--is-dragging:not(.h5p-dnd__box--is-uploading) .h5p-dnd__img__overlay {
   display: flex;
@@ -557,7 +556,7 @@
   }
 }
 
-@media (max-width: 570px) {
+@media (max-width: 525px) {
   .h5p-dnd__box {
     flex-flow: column;
   }
