@@ -27,6 +27,7 @@
   min-height: 150px;
   position: relative;
   background: none;
+  font-size: 14px;
 }
 
 .h5p-dnd__box--is-dashed {
@@ -142,7 +143,7 @@
   border: 1px solid #1F67A8;
   background: #2579C6;
   font-family: 'Open Sans', sans-serif;
-  font-size: 0.9em;
+  font-size: 1em;
   font-weight: 600;
   color: #fff;
   cursor: pointer;
@@ -171,9 +172,11 @@
   outline-offset: 2px;
 }
 
+div:has(> .h5p-dnd__badge),
 .h5p-dnd__column--is-padded:has(.h5p-dnd__badge) {
   line-height: 1.7;
 }
+
 
 .h5p-dnd__badge {
   background: #E7E9EE;

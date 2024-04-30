@@ -20,7 +20,7 @@ H5PEditor.language.core = {
   browseFiles: "Búsqueda de archivos",
   removeImage: '¿Eliminar imagen?',
   confirmImageRemoval: '¿Estás seguro que deseas eliminar esta imagen?',
-  dragAndDropAndPasteImage: 'Para subir o pegar la imagen, arrástrala y suéltala',
+  dragAndDropAndPasteImage: 'Para subir o pegar la imagen, arrástrala y suéltala <span class="h5p-dnd__badge">ctrl<span class="h5p-dnd__badge__separator"></span>⌘</span> + <span class="h5p-dnd__badge">v</span>',
   dragAndDropAndPasteReplaceImage: 'Arrastra o pega la imagen aquí para reemplazar',
   dropImage: "Suelta la imagen aquí para subirla",
   uploadImage: 'Subir imagen',

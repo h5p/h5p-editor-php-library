@@ -26,15 +26,16 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     this.params = params;
     this.setValue = setValue;
     this.changes = [];
-
     if (params !== undefined && params[0] !== undefined) {
       this.setCopyright(params[0].copyright);
     }
 
+    const isAudio = this.field.type === 'audio';
+
     this.replaceCallback = () => {};
     this.confirmReplaceDialog = new H5P.ConfirmationDialog({
-      headerText: H5PEditor.t('core', 'replaceImage'),
-      dialogText: H5PEditor.t('core', 'confirmReplaceImage')
+      headerText: H5PEditor.t('core', isAudio ? 'replaceAudio' : 'replaceVideo'),
+      dialogText: H5PEditor.t('core', isAudio ? 'confirmReplaceAudio' : 'confirmReplaceVideo')
     }).appendTo(document.body);
 
     this.confirmReplaceDialog.on('confirmed', function () {
@@ -163,7 +164,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           </div>
           <div class="h5p-dnd__row h5p-dnd__column--hide-when-focus">
             <div class="text-center">
-              ${isAudio ? H5PEditor.t('core', 'dragAndDropAndPasteAudio') : H5PEditor.t('core', 'dragAndDropAndPasteVideo')} <span class="h5p-dnd__badge">ctrl<span class="h5p-dnd__badge__separator"></span>⌘</span> + <span class="h5p-dnd__badge">v</span>
+              ${isAudio ? H5PEditor.t('core', 'dragAndDropAndPasteAudio') : H5PEditor.t('core', 'dragAndDropAndPasteVideo')}
             </div>
           </div>
           <div class="h5p-dnd__row h5p-dnd__column--hide-when-focus">
@@ -226,7 +227,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     document.addEventListener('paste', (e) => {
       const activeElement = document.activeElement.closest('.h5p-dnd__box');
-      if (activeElement && e.clipboardData.files.length > 0) {
+      if (this.$files.get(0).contains(activeElement) && activeElement && e.clipboardData.files.length > 0) {
         const children = Array.from(activeElement.parentElement.parentElement.querySelectorAll('.h5p-dnd__box--has-video'));
         let index = -1;
         children.forEach((child, i) => {
@@ -461,11 +462,11 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     const videoText = C.providers.map(p => p.name).includes(mimeType) ? mimeType : `.${mimeType.toUpperCase()}`;
 
     // Create file with customizable quality if enabled and not youtube
-    if (this.field.enableCustomQualityLabel === true) {
+    if (this.field.enableCustomQualityLabel === true && !isProvider) {
       const ariaLabel = `${qualityName}. ${ns.t('core', 'dragAndDropToReplaceVideo')}`
       fileHtml = `
-        <div class="h5p-dnd__videobox-wrapper ${isProvider ? 'h5p-dnd__videobox-wrapper--is-provider' : ''} h5p-dnd__videobox-wrapper--has-label">
-          <div class="h5p-dnd__box h5p-dnd__box--has-video ${isProvider ? '' : 'h5p-dnd__box--is-dashed'} h5p-dnd__box--is-inline" tabindex="0" aria-label="${ariaLabel}">
+        <div class="h5p-dnd__videobox-wrapper h5p-dnd__videobox-wrapper--has-label">
+          <div class="h5p-dnd__box h5p-dnd__box--has-video h5p-dnd__box--is-dashed h5p-dnd__box--is-inline" tabindex="0" aria-label="${ariaLabel}">
             <div class="h5p-dnd__box__block"></div>
             <div class="h5p-dnd__row">
               <div class="h5p-dnd__column h5p-dnd__column--tight">
@@ -486,7 +487,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
               </div>
             </div>
             
-            <div class="h5p-dnd__column h5p-dnd__column--show-when-focus">
+            <div class="h5p-dnd__column h5p-dnd__column--show-when-focus h5p-dnd__column__drag-text">
               <div class="h5p-dnd__text">${isAudio ? H5PEditor.t('core', 'dragAndDropToReplaceAudio') : H5PEditor.t('core', 'dragAndDropToReplaceVideo')}</div>
             </div>
 
@@ -519,7 +520,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
               </div>
             </div>
             ${!isProvider ? `
-              <div class="h5p-dnd__column h5p-dnd__column--show-when-focus">
+              <div class="h5p-dnd__column h5p-dnd__column--show-when-focus h5p-dnd__column__drag-text">
                 <div class="h5p-dnd__text">${isAudio ? H5PEditor.t('core', 'dragAndDropToReplaceAudio') : H5PEditor.t('core', 'dragAndDropToReplaceVideo')}</div>
               </div>
             ` : ''}
@@ -854,7 +855,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     UPLOADING: 'UPLOADING',
     HAS_IMAGE: 'HAS_IMAGE'
   };
-  
 
   return C;
 })(H5P.jQuery);
