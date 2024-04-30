@@ -354,6 +354,8 @@ ns.widgets.image.prototype.handleDragAndDrop = function (e) {
  * @returns string The HTML for the NO_IMAGE state
  */
 ns.widgets.image.prototype.getBaseMarkup = function () {
+  const copyPasteString = `<span class="h5p-dnd__badge">${ns.t('core', 'ctrlKey')}<span class="h5p-dnd__badge__separator"></span>${ns.t('core', 'commandKey')}</span> + <span class="h5p-dnd__badge">${ns.t('core', 'pasteKey')}</span>`;
+  const dragCopyPasteString = ns.t('core', 'dragAndDropAndPasteImage', { ':keyCombination': copyPasteString });
   return `
     <div class="h5p-dnd__box__block"></div>
     <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--is-fixed h5p-dnd__column--hide-when-focus h5p-dnd__column--is-padded">
@@ -363,7 +365,7 @@ ns.widgets.image.prototype.getBaseMarkup = function () {
 
     <div class="h5p-dnd__column h5p-dnd__column--hide-when-focus h5p-dnd__column--is-padded">
       <div>
-        ${ns.t('core', 'dragAndDropAndPasteImage')} <span class="h5p-dnd__badge">ctrl<span class="h5p-dnd__badge__separator"></span>⌘</span> + <span class="h5p-dnd__badge">v</span>
+        ${dragCopyPasteString}
       </div>
       <div class="h5p-errors"></div>
     </div>
