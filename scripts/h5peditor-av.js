@@ -242,53 +242,11 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       }
     });
 
-    // Tabs that are hard-coded into this widget. Any other tab must be an extension.
-    const TABS = {
-      UPLOAD: 0,
-      INPUT: 1
-    };
-
-    // The current active tab
-    let activeTab = TABS.UPLOAD;
-
-    /**
-     * @param {number} tab
-     * @return {boolean}
-     */
-    const isExtension = function (tab) {
-      return tab > TABS.INPUT; // Always last tab
-    };
-
     this.$addDialog = this.$add.next().children().first();
 
     // Prepare to add the extra tab instances
     const tabInstances = [null, null]; // Add nulls for hard-coded tabs
     self.tabInstances = tabInstances;
-
-    if (self.field.widgetExtensions) {
-
-      /**
-       * @param {string} type Constructor name scoped inside this widget
-       * @param {number} index
-       */
-      const createTabInstance = function (type, index) {
-        const tabInstance = new H5PEditor.AV[type]();
-        tabInstance.appendTo(self.$addDialog[0].children[0].children[index + 1]); // Compensate for .av-tablist in the same wrapper
-        tabInstance.on('hasMedia', function (e) {
-          if (index === activeTab) {
-            self.$insertButton[0].disabled = !e.data;
-          }
-        });
-        tabInstances.push(tabInstance);
-      }
-
-      // Append extra tabs
-      for (let i = 0; i < self.field.widgetExtensions.length; i++) {
-        if (H5PEditor.AV[self.field.widgetExtensions[i]]) {
-          createTabInstance(self.field.widgetExtensions[i], i + 2); // Compensate for the number of hard-coded tabs
-        }
-      }
-    }
 
     var $url = this.$url = this.$addDialog.find('.h5p-file-url');
     this.$addDialog.find('.h5p-cancel').click(function () {
