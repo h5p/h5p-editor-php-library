@@ -263,7 +263,7 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
      * @param {$} $element
      */
     self.appendButtonTo = function ($item) {
-      $button.appendTo($item.children('.h5peditor-label-wrapper').wrap('<div class="h5p-editor-flex-wrapper"/>').parent());
+      $button.appendTo($item.parent().find('.h5peditor-label-wrapper').first());
     };
 
     /**
