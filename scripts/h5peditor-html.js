@@ -56,7 +56,7 @@ ns.Html.prototype.getCKEditorConfig = function () {
   if (this.inTags("em") || this.inTags("i")) {
     // Use <em> elements for italic text instead of CKE's default <i>
     // Has to be a plugin to work
-    const ItalicAsEmPlugin = ( editor ) => {
+    const ItalicAsEmPlugin = function (editor) {
       editor.conversion.for('downcast').attributeToElement({
         model: 'italic',
         view: 'em',
