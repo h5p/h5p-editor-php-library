@@ -19,7 +19,7 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
      * @param {Blob|File} file
      * @param {string} filename Required due to validation
      */
-    self.upload = function (file, filename) {
+    self.upload = function (file, filename, context = {}) {
       var formData = new FormData();
       formData.append('file', file, filename);
       formData.append('field', JSON.stringify(field));
@@ -29,12 +29,16 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
       var request = new XMLHttpRequest();
       request.upload.onprogress = function (e) {
         if (e.lengthComputable) {
-          self.trigger('uploadProgress', (e.loaded / e.total));
+          self.trigger('uploadProgress', {
+            ...context,
+            progress: (e.loaded / e.total)
+          });
         }
       };
       request.onload = function () {
         var result;
         var uploadComplete = {
+          ...context,
           error: null,
           data: null
         };
@@ -77,22 +81,25 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
      *
      * @param {File[]} files
      */
-    self.uploadFiles = function (files) {
-      self.upload(files[0], files[0].name);
+    self.uploadFiles = function (files, context = {}) {
+      self.upload(files[0], files[0].name, context);
     };
 
     /**
      * Open the file selector and trigger upload upon selecting file.
      */
-    self.openFileSelector = function () {
+    self.openFileSelector = function ({ onChangeCallback, context } = {}) {
       // Create a file selector
       const input = document.createElement('input');
       input.type = 'file';
       input.setAttribute('accept', determineAllowedMimeTypes());
       input.style='display:none';
       input.addEventListener('change', function () {
+        if (typeof onChangeCallback === 'function') {
+          onChangeCallback();
+        }
         // When files are selected, upload them
-        self.uploadFiles(this.files);
+        self.uploadFiles(this.files, context);
         document.body.removeChild(input);
       });
 
