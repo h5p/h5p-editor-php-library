@@ -70,6 +70,7 @@ a {
       border-radius:0.4rem;
       box-sizing: border-box;
       font-size:0.815rem;
+      font-weight: bold;
       height: 2.6rem;
       line-height: 1.2rem;
       margin: 0;
@@ -79,7 +80,8 @@ a {
         content:"\e942";
         font-family:"H5P";
         font-size: 1.2rem;
-        padding: 0 0.6rem 0 0.2rem;
+        font-weight: normal;
+        padding: 0 0.2rem 0 0.2rem;
         vertical-align: middle;
       }
 
@@ -87,7 +89,8 @@ a {
         content:"\e941";
         font-family:"H5P";
         font-size: 1.2rem;
-        padding: 0 0.6rem 0 0.2rem;
+        font-weight: normal;
+        padding: 0 0.2rem 0 0.2rem;
         vertical-align: middle;
       }
 
