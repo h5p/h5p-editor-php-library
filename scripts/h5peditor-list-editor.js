@@ -32,6 +32,52 @@ H5PEditor.ListEditor = (function ($) {
     }
 
     /**
+     * Find closest parent list.
+     * @param {object} library H5PEditor field instance.
+     * @returns {object|boolean} Closest parent list or false if none found.
+     */
+    const findClosestParentList = (library) => {
+      const parent = library?.parent;
+      if (!parent) {
+        return false;
+      }
+
+      if (!parent.field?.type) {
+        return false;
+      }
+
+      if (parent.field.type === 'list') {
+        return parent;
+      }
+
+      return findClosestParentList(parent);
+    }
+
+    /**
+     * Determine whether list should get a collapse button.
+     *
+     * List should get a collapse button if it's the topmost list or if its
+     * parent list has a VerticalTabs widget.
+     * @returns {boolean} True if list should get a collapse button. Else false.
+     */
+    shouldListGetCollapseButton = () => {
+      const closestParentList = findClosestParentList(list);
+      if (!closestParentList) {
+        return true;
+      }
+
+      /*
+       * Note: Currently, the only widget that changes the list editor
+       * appearance to not make the collapse button suitable is the
+       * VerticalTabs widget. In the future, this might change as other list
+       * widgets get developed so the following exception may not suffice then.
+       * There's no good way to determine this automatically, however.
+       */
+      return H5PEditor.VerticalTabs &&
+        closestParentList.widget instanceof H5PEditor.VerticalTabs;
+    }
+
+    /**
      * Determine whether widget has expand/collapse capabilities.
      * @returns {boolean} True if widget has expand/collapse capabilities. False otherwise.
      */
@@ -79,6 +125,10 @@ H5PEditor.ListEditor = (function ($) {
      * Add toggle button for collapsing/expanding groups to container.
      */
     self.addToggleButton = () => {
+      if (!shouldListGetCollapseButton()) {
+        return; // Don't add button
+      }
+
       if (this.hasExpandCollapseCapabilities()) {
         return; // Don't add extra button
       }
