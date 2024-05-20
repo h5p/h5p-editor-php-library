@@ -29,7 +29,7 @@ H5PEditor.ListEditor = (function ($) {
         self.addGroupCollapseListener();
         self.addToggleButton();
       }
-    }
+    };
 
     /**
      * Find closest parent list.
@@ -51,7 +51,69 @@ H5PEditor.ListEditor = (function ($) {
       }
 
       return findClosestParentList(parent);
-    }
+    };
+
+    /**
+     * Set width of collapse button.
+     *
+     * The width of the button should not change when the label is changed,
+     * so the button is rendered offsite with both labels and the longest one
+     * is used to determine the button width.
+     */
+    const setExpandCollapseButtonWidth = () => {
+      const offsiteH5PEditorDOM = document.createElement('div');
+      offsiteH5PEditorDOM.classList.add('h5peditor', 'offsite');
+
+      const offsiteH5PEditorFlexWrapper = document.createElement('div');
+      offsiteH5PEditorFlexWrapper.classList.add('h5p-editor-flex-wrapper');
+      offsiteH5PEditorDOM.append(offsiteH5PEditorFlexWrapper);
+
+      const offsiteButton1 = document.createElement('button');
+      offsiteButton1.classList.add(
+        'h5peditor-button',
+        'h5peditor-button-textual',
+        'h5peditor-button-collapse',
+        'collapsed'
+      );
+      offsiteH5PEditorFlexWrapper.append(offsiteButton1);
+
+      const offsiteIcon1 = document.createElement('span');
+      offsiteIcon1.classList.add('icon');
+      offsiteButton1.append(offsiteIcon1);
+
+      const offsiteLabel1 = document.createElement('div');
+      offsiteLabel1.classList.add('label');
+      offsiteLabel1.style.whiteSpace = 'nowrap';
+      offsiteLabel1.innerText = H5PEditor.t('core', 'expandAllContent');
+      offsiteButton1.append(offsiteLabel1);
+
+      const offsiteButton2 = document.createElement('button');
+      offsiteButton2.classList.add(
+        'h5peditor-button',
+        'h5peditor-button-textual',
+        'h5peditor-button-collapse'
+      );
+      offsiteH5PEditorFlexWrapper.append(offsiteButton2);
+
+      const offsiteIcon2 = document.createElement('span');
+      offsiteIcon2.classList.add('icon');
+      offsiteButton2.append(offsiteIcon2);
+
+      const offsiteLabel2 = document.createElement('div');
+      offsiteLabel2.classList.add('label');
+      offsiteLabel2.style.whiteSpace = 'nowrap';
+      offsiteLabel2.innerText = H5PEditor.t('core', 'collapseAllContent');
+      offsiteButton2.append(offsiteLabel2);
+
+      document.body.append(offsiteH5PEditorDOM);
+
+      window.requestAnimationFrame(() => {
+        this.expandCollapseButton.style.width =
+         `${Math.max(offsiteButton1.offsetWidth, offsiteButton2.offsetWidth) + 1}px`;
+
+         offsiteH5PEditorDOM.remove();
+      });
+    };
 
     /**
      * Determine whether list should get a collapse button.
@@ -103,7 +165,7 @@ H5PEditor.ListEditor = (function ($) {
       this.expandCollapseButton.classList.toggle(
         'collapsed', shouldBeCollapsed
       );
-      this.expandCollapseButton.innerText = shouldBeCollapsed ?
+      this.expandCollapseButtonLabel.innerText = shouldBeCollapsed ?
         H5PEditor.t('core', 'expandAllContent') :
         H5PEditor.t('core', 'collapseAllContent');
     };
@@ -163,7 +225,21 @@ H5PEditor.ListEditor = (function ($) {
         'h5peditor-button-textual',
         'h5peditor-button-collapse'
       );
-      this.expandCollapseButton.innerText = H5PEditor.t('core', 'collapseAllContent');
+
+      // Icon
+      const icon = document.createElement('div');
+      icon.classList.add('icon');
+      this.expandCollapseButton.append(icon);
+
+      // Label
+      this.expandCollapseButtonLabel = document.createElement('div');
+      this.expandCollapseButtonLabel.classList.add('label');
+      this.expandCollapseButton.append(this.expandCollapseButtonLabel);
+
+      this.expandCollapseButtonLabel.innerText =
+        H5PEditor.t('core', 'collapseAllContent');
+
+      setExpandCollapseButtonWidth();
 
       this.expandCollapseButton.addEventListener('click', () => {
         list.toggleItemCollapsed();

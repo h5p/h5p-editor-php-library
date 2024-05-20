@@ -23,6 +23,13 @@ a {
 .h5peditor {
   font-size: 16px;
 
+  &.offsite {
+    left: -9999px;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+  }
+
   .h5p-more-libraries {
     font-size: 0.875em;
     margin-top: 0.4em;
@@ -64,19 +71,22 @@ a {
     }
 
     .h5peditor-button-collapse {
+      align-items: center;
       background-color:$group-collapse-button-color;
       background-image:none;
       border: 3px solid $group-collapse-button-color;
       border-radius:0.4rem;
       box-sizing: border-box;
+      display: grid;
       font-size:0.815rem;
       font-weight: bold;
+      grid-template-columns: auto 1fr;
       height: 2.6rem;
       line-height: 1.2rem;
       margin: 0;
-      padding: 0 0.6rem;
+      padding: 0 0.6rem 0 0.2rem;
 
-      &.collapsed::before {
+      &.collapsed .icon::before {
         content:"\e942";
         font-family:"H5P";
         font-size: 1.2rem;
@@ -85,7 +95,7 @@ a {
         vertical-align: middle;
       }
 
-      &:not(.collapsed)::before {
+      &:not(.collapsed) .icon::before {
         content:"\e941";
         font-family:"H5P";
         font-size: 1.2rem;
