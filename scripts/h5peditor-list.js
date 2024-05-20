@@ -274,7 +274,11 @@ H5PEditor.List = (function ($) {
         }
 
         if (shouldBeCollapsed) {
-          child.collapse();
+          const valid = child.collapse();
+
+          if (!valid) {
+            this.trigger('cannotCollapseAll');
+          }
         }
         else {
           child.expand();

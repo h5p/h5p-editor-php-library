@@ -181,6 +181,19 @@ H5PEditor.ListEditor = (function ($) {
       list.on('groupCollapsedStateChanged', (event) => {
         this.setToggleButtonCollapsed(event.data.allGroupsCollapsed);
       });
+
+      /*
+       * This is a workaround to scroll to the first error message found.
+       * Ideally, this would not be done via the DOM (and the failing item might
+       * get focus), but then lots of editor widgets need to be changed to allow
+       * retrieving the element that fails.
+       */
+      list.on('cannotCollapseAll', () => {
+        [... this.container.querySelectorAll('.h5p-errors')]
+        .filter((error) => error.innerHTML.length > 0)
+        .shift()
+        ?.scrollIntoView();
+      });
     }
 
     /**
