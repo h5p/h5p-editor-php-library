@@ -27,7 +27,7 @@ H5PEditor.ListEditor = (function ($) {
         (list.getValue() ?? []).length
       ) {
         self.addGroupCollapseListener();
-        self.addToggleButton();
+        self.addCollapseButtons();
       }
     };
 
@@ -60,7 +60,7 @@ H5PEditor.ListEditor = (function ($) {
      * so the button is rendered offsite with both labels and the longest one
      * is used to determine the button width.
      */
-    const setExpandCollapseButtonWidth = () => {
+    const setcollapseButtonMainWidth = () => {
       const offsiteH5PEditorDOM = document.createElement('div');
       offsiteH5PEditorDOM.classList.add('h5peditor', 'offsite');
 
@@ -107,12 +107,12 @@ H5PEditor.ListEditor = (function ($) {
 
       document.body.append(offsiteH5PEditorDOM);
 
-      // FontFaceSet API is used to ensure the font if icon is loaded
+      // FontFaceSet API is used to ensure font of icon is loaded
       document.fonts.ready.then(() => {
         const width1 = offsiteButton1.getBoundingClientRect().width;
         const width2 = offsiteButton2.getBoundingClientRect().width;
 
-        this.expandCollapseButton.style.width =
+        this.collapseButtonMain.style.width =
           `${Math.ceil(Math.max(width1, width2))}px`;
       });
     };
@@ -120,11 +120,11 @@ H5PEditor.ListEditor = (function ($) {
     /**
      * Determine whether list should get a collapse button.
      *
-     * List should get a collapse button if it's the topmost list or if its
-     * parent list has a VerticalTabs widget.
+     * List should get a collapse button if it's the topmost list only - or if
+     * its on the 2nd leven and the parent list has a VerticalTabs widget.
      * @returns {boolean} True if list should get a collapse button. Else false.
      */
-    shouldListGetCollapseButton = (list) => {
+    shouldListGetCollapseButtonMain = (list) => {
       const closestParentList = findClosestParentList(list);
       if (!closestParentList) {
         return true; // Is topmost list
@@ -143,54 +143,53 @@ H5PEditor.ListEditor = (function ($) {
           H5PEditor.VerticalTabs &&
           closestParentList.widget instanceof H5PEditor.VerticalTabs
       );
-    }
+    };
 
     /**
      * Determine whether widget has expand/collapse capabilities.
-     * @returns {boolean} True if widget has expand/collapse capabilities. False otherwise.
+     * @returns {boolean} True if widget has collapse capabilities. Else false.
      */
-    self.hasExpandCollapseCapabilities = () => {
+    self.hasCollapseCapabilities = () => {
       return (
         this.container?.parentNode.querySelector(
-        '.h5p-editor-flex-wrapper .h5peditor-button-collapse'
+          '.h5p-editor-flex-wrapper .h5peditor-button-collapse'
         ) instanceof HTMLElement ||
         this.container?.parentNode.querySelector(
           '.h5peditor-label-button'
-          ) instanceof HTMLElement
+        ) instanceof HTMLElement
       );
-    }
+    };
 
     /**
      * Set toggle button collapsed state.
-     * @param {boolean} shouldBeCollapsed True if the toggle button should be collapsed.
+     * @param {boolean} shouldBeCollapsed True for collapsed state.
      */
-    self.setToggleButtonCollapsed = (shouldBeCollapsed) => {
-      if (!this.collapseButtonWrapper) {
-        return; // No button added
-      }
-
+    self.setButtonsCollapsed = (shouldBeCollapsed) => {
       if (typeof shouldBeCollapsed !== 'boolean') {
         return; // Invalid type
       }
-
-      this.labelButton.classList.toggle(
-        'collapsed', shouldBeCollapsed
-      );
 
       const ariaActionText = shouldBeCollapsed ?
         H5PEditor.t('core', 'expandAllContent') :
         H5PEditor.t('core', 'collapseAllContent');
 
-      this.labelButton.setAttribute(
-        'aria-label', `${this.labelButton.innerText}. ${ariaActionText}`
-      );
+      if (this.collapseButtonList) {
+        this.collapseButtonList.classList.toggle(
+          'collapsed', shouldBeCollapsed
+        );
 
-      this.expandCollapseButton?.classList.toggle(
-        'collapsed', shouldBeCollapsed
-      );
+        this.collapseButtonList.setAttribute(
+          'aria-label',
+          `${this.collapseButtonList.innerText}. ${ariaActionText}`
+        );
+      }
 
-      if (this.expandCollapseButtonLabel) {
-        this.expandCollapseButtonLabel.innerText = ariaActionText
+      if (this.collapseButtonMain) {
+        this.collapseButtonMain.classList.toggle(
+          'collapsed', shouldBeCollapsed
+        );
+
+        this.collapseButtonMainLabel.innerText = ariaActionText;
       }
     };
 
@@ -198,12 +197,12 @@ H5PEditor.ListEditor = (function ($) {
      * Add group collapse listener.
      */
     self.addGroupCollapseListener = () => {
-      if (this.hasExpandCollapseCapabilities()) {
+      if (this.hasCollapseCapabilities()) {
         return; // Don't add extra listener
       }
 
       list.on('groupCollapsedStateChanged', (event) => {
-        this.setToggleButtonCollapsed(event.data.allGroupsCollapsed);
+        this.setButtonsCollapsed(event.data.allGroupsCollapsed);
       });
 
       /*
@@ -214,18 +213,21 @@ H5PEditor.ListEditor = (function ($) {
        */
       list.on('cannotCollapseAll', () => {
         [... this.container.querySelectorAll('.h5p-errors')]
-        .filter((error) => error.innerHTML.length > 0)
-        .shift()
-        ?.scrollIntoView();
+          .filter((error) => error.innerHTML.length > 0)
+          .shift()
+          ?.scrollIntoView();
       });
-    }
+    };
 
     /**
-     * Add toggle button for collapsing/expanding groups to container.
+     * Add toggle buttons for collapsing/expanding groups to container.
+     *
+     * There's a main button for the topmost list with groups and a button that
+     * replaces the original list title for all other lists.
      */
-    self.addToggleButton = () => {
-      if (this.hasExpandCollapseCapabilities()) {
-        return; // Don't add extra button
+    self.addCollapseButtons = () => {
+      if (this.hasCollapseCapabilities()) {
+        return; // Don't add extra buttons
       }
 
       /*
@@ -233,83 +235,95 @@ H5PEditor.ListEditor = (function ($) {
        * label and the metadata button, so the "collapse/expand" button can be
        * aligned as required.
        */
-      this.collapseButtonWrapper = document.createElement('div');
-      this.collapseButtonWrapper.classList.add(
+      this.collapseButtonsWrapper = document.createElement('div');
+      this.collapseButtonsWrapper.classList.add(
         'h5p-editor-flex-wrapper', 'has-button-collapse'
       );
 
+      /*
+       * Move original label offsite, because it is used as a <label> for screen
+       * readers and display list title collapse button instead.
+       */
       this.originalLabel =
         this.container.parentNode?.querySelector('.h5peditor-label');
       this.originalLabel.classList.add('offsite');
 
-      this.labelButton = document.createElement('button');
-      this.labelButton.classList.add('h5peditor-label-button', 'h5peditor-required');
-      this.labelButton.innerText = this.originalLabel.innerText;
-      this.labelButton.setAttribute(
+      this.collapseButtonList = document.createElement('button');
+      this.collapseButtonList.classList.add(
+        'h5peditor-label-button', 'h5peditor-required'
+      );
+      this.collapseButtonList.innerText = this.originalLabel.innerText;
+      this.collapseButtonList.setAttribute(
         'aria-label',
-        `${this.labelButton.innerText}. ${H5PEditor.t('core', 'collapseAllContent')}`
+        `${this.collapseButtonList.innerText}. ${H5PEditor.t('core', 'collapseAllContent')}`
       );
 
-      this.labelButton.addEventListener('click', () => {
+      this.collapseButtonList.addEventListener('click', () => {
         list.toggleItemCollapsed();
       });
 
       /*
        * If label is directly before the list editor container, put it next to
        * the button. Otherwise, e. g. when there are list widgets, use button
-       * alone on top of those.
+       * alone on top of those and leave the "label" where it was.
        */
       if (self.container.previousSibling === this.originalLabel) {
-        this.collapseButtonWrapper.classList.add('has-label');
-        this.collapseButtonWrapper.append(this.labelButton);
+        this.collapseButtonsWrapper.classList.add('has-label');
+        this.collapseButtonsWrapper.append(this.collapseButtonList);
       }
       else {
         self.container.previousSibling.parentNode?.insertBefore(
-          this.labelButton, self.container.previousSibling
+          this.collapseButtonList, self.container.previousSibling
         );
       }
 
-      if (shouldListGetCollapseButton(list)) {
-        this.expandCollapseButton = document.createElement('button');
-        this.expandCollapseButton.classList.add(
+      if (shouldListGetCollapseButtonMain(list)) {
+        this.collapseButtonMain = document.createElement('button');
+        this.collapseButtonMain.classList.add(
           'h5peditor-button',
           'h5peditor-button-textual',
           'h5peditor-button-collapse'
         );
 
-        // Icon
+        // Icon fixed left aligned
         const icon = document.createElement('div');
         icon.classList.add('icon');
-        this.expandCollapseButton.append(icon);
+        this.collapseButtonMain.append(icon);
 
-        // Label
-        this.expandCollapseButtonLabel = document.createElement('div');
-        this.expandCollapseButtonLabel.classList.add('label');
-        this.expandCollapseButton.append(this.expandCollapseButtonLabel);
+        // Label centered in remaining space
+        this.collapseButtonMainLabel = document.createElement('div');
+        this.collapseButtonMainLabel.classList.add('label');
+        this.collapseButtonMain.append(this.collapseButtonMainLabel);
 
-        this.expandCollapseButtonLabel.innerText =
+        this.collapseButtonMainLabel.innerText =
           H5PEditor.t('core', 'collapseAllContent');
 
-        setExpandCollapseButtonWidth();
+        // Longest label should fit inside button
+        setcollapseButtonMainWidth();
 
-        this.expandCollapseButton.addEventListener('click', () => {
+        this.collapseButtonMain.addEventListener('click', () => {
           list.toggleItemCollapsed();
         });
 
-        this.collapseButtonWrapper.append(this.expandCollapseButton);
+        this.collapseButtonsWrapper.append(this.collapseButtonMain);
       }
 
-      self.container.parentNode?.prepend(this.collapseButtonWrapper);
+      self.container.parentNode?.prepend(this.collapseButtonsWrapper);
     };
 
     // Create add button
-    var $button = ns.createButton(list.getImportance(), H5PEditor.t('core', 'addEntity', {':entity': entity}), function () {
-      list.addItem();
+    var $button = ns.createButton(
+      list.getImportance(),
+      H5PEditor.t('core', 'addEntity', { ':entity': entity }),
+      () => {
+        list.addItem();
 
-      if (!self.hasExpandCollapseCapabilities()) {
-        addGroupCollapseFunctionality();
-      }
-    }, true);
+        if (!this.hasCollapseCapabilities()) {
+          addGroupCollapseFunctionality();
+        }
+      },
+      true
+    );
 
     // Used when dragging items around
     var adjustX, adjustY, marginTop, formOffset;
@@ -345,7 +359,10 @@ H5PEditor.ListEditor = (function ($) {
 
       // Try to move down.
       var $next = $item.next();
-      if ($next.length && y + $item.height() > $next.offset().top + ($next.height() / 2)) {
+      if (
+        $next.length && y + $item.height() >
+          $next.offset().top + ($next.height() / 2)
+      ) {
         $next.insertBefore($placeholder);
 
         currentIndex = $item.index() - 2;
@@ -364,7 +381,7 @@ H5PEditor.ListEditor = (function ($) {
     self.defaultConfirmHandler = function (item, id, buttonOffset, confirm) {
       // Create default confirmation dialog for removing list item
       const confirmRemovalDialog = new H5P.ConfirmationDialog({
-        dialogText: H5PEditor.t('core', 'confirmRemoval', {':type': entity})
+        dialogText: H5PEditor.t('core', 'confirmRemoval', { ':type': entity })
       }).appendTo(document.body);
 
       // Remove list item on confirmation
@@ -376,7 +393,7 @@ H5PEditor.ListEditor = (function ($) {
     let confirmHandler = self.defaultConfirmHandler;
 
     /**
-     * Set a custom confirmation handler callback (instead of the default dialog)
+     * Set custom confirmation handler callback (instead of the default dialog)
      *
      * @public
      * @param {function} confirmHandler
@@ -407,8 +424,12 @@ H5PEditor.ListEditor = (function ($) {
         if (mouseDownAt) {
           // Have not started moving yet
 
-          if (! (event.pageX > mouseDownAt.x + 5 || event.pageX < mouseDownAt.x - 5 ||
-                 event.pageY > mouseDownAt.y + 5 || event.pageY < mouseDownAt.y - 5) ) {
+          if (! (
+            event.pageX > mouseDownAt.x + 5 ||
+            event.pageX < mouseDownAt.x - 5 ||
+            event.pageY > mouseDownAt.y + 5 ||
+            event.pageY < mouseDownAt.y - 5
+          )) {
             return; // Not ready to start moving
           }
 
@@ -464,7 +485,8 @@ H5PEditor.ListEditor = (function ($) {
             'user-select': '',
             '-ms-user-select': ''
           })
-          .attr('unselectable', 'off')[0].onselectstart = H5P.$body[0].ondragstart = null;
+          .attr('unselectable', 'off')[0]
+          .onselectstart = H5P.$body[0].ondragstart = null;
 
         if (!mouseDownAt) {
           // Not your regular click, we have been moving
@@ -509,7 +531,8 @@ H5PEditor.ListEditor = (function ($) {
             'user-select': 'none',
             '-ms-user-select': 'none'
           })
-          .attr('unselectable', 'on')[0].onselectstart = H5P.$body[0].ondragstart = function () {
+          .attr('unselectable', 'on')[0]
+          .onselectstart = H5P.$body[0].ondragstart = () => {
             return false;
           };
       };
@@ -570,19 +593,25 @@ H5PEditor.ListEditor = (function ($) {
         appendTo: $listActions
       });
 
-      H5PEditor.createButton('order-up', H5PEditor.t('core', 'orderItemUp'), moveItemUp).appendTo($orderGroup);
-      H5PEditor.createButton('order-down', H5PEditor.t('core', 'orderItemDown'), moveItemDown).appendTo($orderGroup);
+      H5PEditor.createButton(
+        'order-up', H5PEditor.t('core', 'orderItemUp'), moveItemUp
+      ).appendTo($orderGroup);
+      H5PEditor.createButton(
+        'order-down', H5PEditor.t('core', 'orderItemDown'), moveItemDown
+      ).appendTo($orderGroup);
 
-      H5PEditor.createButton('remove', H5PEditor.t('core', 'removeItem'), function () {
-        confirmHandler(item, $item.index(), $(this).offset(), function () {
-          list.removeItem($item.index());
-          $item.remove();
+      H5PEditor.createButton(
+        'remove', H5PEditor.t('core', 'removeItem'), function () {
+          confirmHandler(item, $item.index(), $(this).offset(), function () {
+            list.removeItem($item.index());
+            $item.remove();
 
-          if (!(list.getValue() ?? []).length) {
-            self.removeToggleButton();
-          }
-        });
-      }).appendTo($listActions);
+            if (!(list.getValue() ?? []).length) {
+              self.removeCollapseButtons();
+            }
+          });
+        }
+      ).appendTo($listActions);
 
       // Append new field item to content wrapper
       if (item instanceof H5PEditor.Group) {
@@ -592,7 +621,9 @@ H5PEditor.ListEditor = (function ($) {
         $titleBar.addClass(list.getImportance());
 
         // Move label
-        $item.children('.field').children('.title').appendTo($titleBar).addClass('h5peditor-label');
+        $item
+          .children('.field').children('.title')
+          .appendTo($titleBar).addClass('h5peditor-label');
 
         // Handle expand and collapse
         item.on('expanded', function () {
@@ -616,7 +647,8 @@ H5PEditor.ListEditor = (function ($) {
 
         if (item.field.label !== 0) {
           // Try to find and move the label to the title bar
-          const $label = $content.children('.field').find('.h5peditor-label:first');
+          const $label =
+            $content.children('.field').find('.h5peditor-label:first');
 
           if ($label.length !== 0) {
             $titleBar.append($('<label/>', {
@@ -634,7 +666,10 @@ H5PEditor.ListEditor = (function ($) {
       $item.appendTo($list);
 
       if (item instanceof H5PEditor.Group && item.field.expanded !== false) {
-        // Good UX: automatically expand groups if not explicitly disabled by semantics
+        /*
+         * Good UX: automatically expand groups if not explicitly disabled by
+         * semantics
+         */
         item.expand();
       }
 
@@ -673,19 +708,19 @@ H5PEditor.ListEditor = (function ($) {
      * @public
      */
     self.remove = function () {
-      this.removeToggleButton();
+      this.removeCollapseButtons();
       $list.remove();
       $button.remove();
     };
 
     /**
-     * Remove toggle button for collapsing/expanding groups from container.
+     * Remove collapse buttons from container.
      */
-    self.removeToggleButton = () => {
+    self.removeCollapseButtons = () => {
       this.originalLabel?.classList.remove('offsite');
-      this.labelButton?.remove();
-      this.expandCollapseButton?.remove();
-      this.collapseButtonWrapper?.remove();
+      this.collapseButtonList?.remove();
+      this.collapseButtonMain?.remove();
+      this.collapseButtonsWrapper?.remove();
     };
   }
 
