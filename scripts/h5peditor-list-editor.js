@@ -206,16 +206,40 @@ H5PEditor.ListEditor = (function ($) {
       });
 
       /*
-       * This is a workaround to scroll to the first error message found.
-       * Ideally, this would not be done via the DOM (and the failing item might
-       * get focus), but then lots of editor widgets need to be changed to allow
-       * retrieving the element that fails.
+       * Note: This is a workaround. It determines the element to focus
+       * by finding the first contained error message and then choosing the
+       * first element with the `.error` class that is commonly used by H5P
+       * editor widgets. This may fail if an editor widget does not put the
+       * `.error` class on the element however. If no such element is found,
+       * the error message will at least be scrolled into view.
+       * Ideally, every widget would have a method to return fields that do
+       * not validate, but that would require to change every widget and should
+       * be documented in the H5P core API.
        */
       list.on('cannotCollapseAll', () => {
-        [... this.container.querySelectorAll('.h5p-errors')]
-          .filter((error) => error.innerHTML.length > 0)
-          .shift()
-          ?.scrollIntoView();
+        const errorMessageDOM =
+          [... this.container.querySelectorAll('.h5p-errors')]
+            .filter((error) => error.innerHTML.length > 0)
+            .shift();
+
+        if (!errorMessageDOM) {
+          return;
+        }
+
+        let errorDOM;
+        let parentNode = errorMessageDOM.parentNode;
+
+        while (!errorDOM && parentNode) {
+          errorDOM = parentNode.querySelector('.error');
+          parentNode = parentNode.parentNode;
+        }
+
+        if (errorDOM) {
+          errorDOM?.focus();
+        }
+        else {
+          errorMessageDOM.scrollIntoView();
+        }
       });
     };
 
