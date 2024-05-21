@@ -5,7 +5,7 @@
  */
 class H5peditorFile {
   private $result, $field, $interface;
-  public $type, $name, $path, $mime, $size;
+  public $type, $name, $path, $mime, $size, $extension;
 
   /**
    * Constructor. Process data for file uploaded through the editor.
@@ -104,7 +104,7 @@ class H5peditorFile {
     // Check if mime type is allowed.
     $isValidMime = !isset($this->field->mimes) || in_array($this->type, $this->field->mimes);
     $isPhp = substr($this->extension, 0, 3) === 'php';
-    $isWhitelisted = in_array($this->extension, $whitelist);
+    $isWhitelisted = in_array(strtolower($this->extension), $whitelist);
     if (!$isValidMime || !$isWhitelisted || $isPhp) {
       $this->result->error = $this->interface->t("File type isn't allowed.");
       return FALSE;
