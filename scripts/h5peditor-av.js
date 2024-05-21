@@ -691,10 +691,19 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       aspectRatio: aspectRatio ? aspectRatio : undefined,
     };
 
+    const mimeType = file.mime.split('/')[1];
+    const videoText = C.providers.map(p => p.name).includes(mimeType) ? mimeType : `.${mimeType.toUpperCase()}`;
+
     this.params[0] = file;
 
     // Simulating loading to give some feedback to user since this is actually instant.
     const boxEl = this.$files.get(0).querySelector('.h5p-dnd__videobox-wrapper--is-provider .h5p-dnd__box');
+    const videoOverlayEl = boxEl.querySelector('.h5p-dnd__video-overlay');
+    videoOverlayEl.innerHTML = `
+      <div class="h5p-dnd__play-icon-svg"></div>
+      ${videoText}
+    `;
+
     this.handleUploadProgress(boxEl);
     setTimeout(() => {
       this.handleUploadComplete(boxEl)
