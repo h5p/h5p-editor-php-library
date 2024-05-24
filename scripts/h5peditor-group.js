@@ -214,7 +214,9 @@ ns.Group.prototype.expand = function () {
 };
 
 /**
- * Collapse the given group (if valid)
+ * Collapse the given group (if valid).
+ *
+ * @returns {boolean} True, if the group is valid. False, otherwise.
  */
 ns.Group.prototype.collapse = function () {
   // Do not collapse before valid!
@@ -236,8 +238,9 @@ ns.Group.prototype.collapse = function () {
       this.trigger('collapsed');
       this.$group.removeClass('expanded');
     }.bind(this), 100);
-
   }
+
+  return valid;
 };
 
 /**
