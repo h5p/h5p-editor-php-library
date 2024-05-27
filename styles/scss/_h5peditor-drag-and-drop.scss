@@ -118,6 +118,10 @@
   padding: 0 20px;
 }
 
+.h5p-dnd__column--is-padded-small {
+  padding: 0 10px;
+}
+
 .h5p-dnd__box--is-dragging .h5p-dnd__column--hide-when-focus {
   display: none;
 }
@@ -178,6 +182,7 @@
 }
 
 div:has(> .h5p-dnd__badge),
+div:has(> .h5p-dnd-nowrap),
 .h5p-dnd__column--is-padded:has(.h5p-dnd__badge) {
   line-height: 1.7;
 }
@@ -323,8 +328,6 @@ div:has(> .h5p-dnd__badge),
   border: 0;
   flex: 1;
   outline: 0;
-  // padding-right: 7px;
-  // padding-left: 14px;
   font-size: 1em;
   box-shadow: none;
 
@@ -338,7 +341,6 @@ div:has(> .h5p-dnd__badge),
   color: #454347;
   text-align: center;
   font-family: "Open Sans", sans-serif;
-  // font-size: 0.8em;
   font-size: 0.85em;
   font-weight: 400;
   line-height: normal;
@@ -390,11 +392,9 @@ div:has(> .h5p-dnd__badge),
 }
 
 .h5p-dnd__box.h5p-dnd__box__action {
-  // flex: 1.6;
-  flex: 1.4;
-  // flex: 2;
-  // With .is-padded: padding: 0 10px;
+  flex: 2;
 }
+
 .h5p-dnd__box.h5p-dnd__box__video-paste {
   flex: 1 0 fit-content;
 }
@@ -623,9 +623,8 @@ div:has(> .h5p-dnd__badge),
   }
 }
 
-/* 560px ? */
+
 @container h5p-dnd__av-container (max-width: 760px) {
-// @container h5p-dnd__av-container ((min-width: 560px) and (max-width: 799px)) or (max-width: 291px) {
   .h5p-dnd__badge,
   .h5p-dnd__column,
   .h5p-dnd__row {
@@ -641,7 +640,6 @@ div:has(> .h5p-dnd__badge),
   }
 }
 
-
 @container h5p-dnd__av-container (max-width: 250px) {
   .h5p-dnd__box__url,
   .h5p-dnd__box.h5p-dnd__box__url {
@@ -656,24 +654,7 @@ div:has(> .h5p-dnd__badge),
   .h5p-dnd__box__url.h5p-dnd__box__video-paste {
     padding: 10px;
   }
-
-  // Only necessary for dnd image
-  // .h5p-dnd__column--is-padded {
-  //   padding: 0 10px;
-  // }
 }
-
-// @container h5p-dnd__box__image (max-width: 760px) {
-//   .h5p-dnd__badge,
-//   .h5p-dnd__column,
-//   .h5p-dnd__row {
-//     font-size: 0.8em;
-//   }
-
-//   .h5p-dnd__btn__insert-url {
-//     max-width: 110px;
-//   }
-// }
 
 .h5p-dnd__videobox-wrapper ~ .h5p-dnd__box__url {
   &.h5p-dnd__box.h5p-dnd__box__action {
@@ -693,13 +674,6 @@ div:has(> .h5p-dnd__badge),
   }
 }
 
-
-/* tmp*/
-
-// .field-name-interactiveVideo {
-//   width: 593px;
-
-//   /* Column, interactive video
-//   width: 832px;
-//   */
-// }
+.h5p-dnd-nowrap {
+  white-space: nowrap;
+}

@@ -146,7 +146,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     const isAudio = this.field.type === 'audio';
     const firstFile =  Array.isArray(this.params) ? this.params[0] : undefined;
     const isProvider = firstFile?.path && C.findProvider(firstFile.path);
-    const copyPasteString = `<span class="h5p-dnd__badge">${ns.t('core', 'ctrlKey')}<span class="h5p-dnd__badge__separator"></span>${ns.t('core', 'commandKey')}</span> + <span class="h5p-dnd__badge">${ns.t('core', 'pasteKey')}</span>`;
+    const copyPasteString = `<span class="h5p-dnd-nowrap"><span class="h5p-dnd__badge">${ns.t('core', 'ctrlKey')}<span class="h5p-dnd__badge__separator"></span>${ns.t('core', 'commandKey')}</span> + <span class="h5p-dnd__badge">${ns.t('core', 'pasteKey')}</span></span>`;
     const dragCopyPasteString = ns.t('core', isAudio ? 'dragAndDropAndPasteAudio' : 'dragAndDropAndPasteVideo', { ':keyCombination': copyPasteString });
 
     let imageHtml = `
@@ -170,7 +170,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           <div class="h5p-dnd__row h5p-dnd__column--hide-when-focus h5p-dnd__row--when-small">
             <span class="divider"></span> ${H5PEditor.t('core', 'uploadOr')} <span class="divider"></span>
           </div>
-          <div class="h5p-dnd__row h5p-dnd__column--hide-when-focus h5p-dnd__column--is-padded">
+          <div class="h5p-dnd__row h5p-dnd__column--hide-when-focus h5p-dnd__column--is-padded-small">
             <div class="text-center">
               ${dragCopyPasteString}
             </div>
