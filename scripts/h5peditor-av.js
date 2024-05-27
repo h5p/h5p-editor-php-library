@@ -170,12 +170,10 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           <div class="h5p-dnd__row h5p-dnd__column--hide-when-focus h5p-dnd__row--when-small">
             <span class="divider"></span> ${H5PEditor.t('core', 'uploadOr')} <span class="divider"></span>
           </div>
-          <div class="h5p-dnd__row h5p-dnd__column--hide-when-focus h5p-dnd__column--is-padded-small">
+          <div class="h5p-dnd__column h5p-dnd__column--hide-when-focus h5p-dnd__column--is-padded-small">
             <div class="text-center">
               ${dragCopyPasteString}
             </div>
-          </div>
-          <div class="h5p-dnd__row h5p-dnd__column--hide-when-focus h5p-dnd__row--when-small">
             <div class="h5p-errors"></div>
           </div>
       
