@@ -61,6 +61,16 @@ H5PEditor.ListEditor = (function ($) {
      * is used to determine the button width.
      */
     const setcollapseButtonMainWidth = () => {
+      if (!this.collapseButtonMain) {
+        return; // Button not available
+      }
+
+      // The width should not need to be computed more than once
+      if (this.fixedMainButtonWidth) {
+        this.collapseButtonMain.style.width = `${this.fixedMainButtonWidth}px`;
+        return;
+      }
+
       const offsiteH5PEditorDOM = document.createElement('div');
       offsiteH5PEditorDOM.classList.add('h5peditor', 'offsite');
 
@@ -83,7 +93,6 @@ H5PEditor.ListEditor = (function ($) {
 
       const offsiteLabel1 = document.createElement('div');
       offsiteLabel1.classList.add('label');
-      offsiteLabel1.style.whiteSpace = 'nowrap';
       offsiteLabel1.innerText = H5PEditor.t('core', 'expandAllContent');
       offsiteButton1.append(offsiteLabel1);
 
@@ -101,7 +110,6 @@ H5PEditor.ListEditor = (function ($) {
 
       const offsiteLabel2 = document.createElement('div');
       offsiteLabel2.classList.add('label');
-      offsiteLabel2.style.whiteSpace = 'nowrap';
       offsiteLabel2.innerText = H5PEditor.t('core', 'collapseAllContent');
       offsiteButton2.append(offsiteLabel2);
 
@@ -112,8 +120,11 @@ H5PEditor.ListEditor = (function ($) {
         const width1 = offsiteButton1.getBoundingClientRect().width;
         const width2 = offsiteButton2.getBoundingClientRect().width;
 
-        this.collapseButtonMain.style.width =
-          `${Math.ceil(Math.max(width1, width2))}px`;
+        this.fixedMainButtonWidth = Math.ceil(Math.max(width1, width2));
+
+        this.collapseButtonMain.style.width = `${this.fixedMainButtonWidth}px`;
+
+        offsiteH5PEditorDOM?.remove();
       });
     };
 
@@ -159,6 +170,56 @@ H5PEditor.ListEditor = (function ($) {
         ) instanceof HTMLElement
       );
     };
+
+    /**
+     * Toggle collapse button main label visibility.
+     * @param {boolean} visible True to show label. False to hide.
+     */
+    self.toggleCollapseButtonMainLabel = (visible) => {
+      if (typeof visible !== 'boolean') {
+        return;
+      }
+
+      if (!visible) {
+        this.collapseButtonMain.style.width = '';
+      }
+      else {
+        setcollapseButtonMainWidth();
+      }
+
+      this.collapseButtonMain.classList.toggle('no-label', !visible);
+    }
+
+    /**
+     * Resize handler.
+     */
+    self.handleResize = () => {
+      /*
+       * When the two buttons for collapsing/expanding groups are in the same
+       * container and the horizontal space does not suffice, first the main
+       * button should loose its label. If there's still not enough space, the
+       * list button label will wrap.
+       * Can't be done in CSS alone, unfortunately, because the main button
+       * needs a fixed width.
+       */
+      const wrapperRect = this.collapseButtonsWrapper.getBoundingClientRect();
+      if (wrapperRect.width === 0) {
+        return; // Not visible
+      }
+
+      this.collapseButtonsGap = this.collapseButtonsGap ?? parseFloat(
+        window.getComputedStyle(this.collapseButtonsWrapper).gap ?? 0
+      );
+
+      const listButtonRect = this.collapseButtonList.getBoundingClientRect();
+
+      const hasSpaceForBothButtons =
+        wrapperRect.width - listButtonRect.width - this.collapseButtonsGap >=
+        this.fixedMainButtonWidth;
+
+      this.toggleCollapseButtonMainLabel(hasSpaceForBothButtons);
+    };
+    self.handleResize = self.handleResize.bind(self);
 
     /**
      * Set toggle button collapsed state.
@@ -298,7 +359,10 @@ H5PEditor.ListEditor = (function ($) {
        * the button. Otherwise, e. g. when there are list widgets, use button
        * alone on top of those and leave the "label" where it was.
        */
-      if (self.container.previousSibling === this.originalLabel) {
+      const bothsButtonsInSameContainer =
+        self.container.previousSibling === this.originalLabel;
+
+      if (bothsButtonsInSameContainer) {
         this.collapseButtonsWrapper.classList.add('has-label');
         this.collapseButtonsWrapper.append(this.collapseButtonList);
       }
@@ -337,6 +401,11 @@ H5PEditor.ListEditor = (function ($) {
         });
 
         this.collapseButtonsWrapper.append(this.collapseButtonMain);
+
+        if (bothsButtonsInSameContainer) {
+          // We may need to hide the main button's label
+          H5P.$window.get(0).addEventListener('resize', self.handleResize);
+        }
       }
 
       self.container.parentNode?.prepend(this.collapseButtonsWrapper);
@@ -752,6 +821,7 @@ H5PEditor.ListEditor = (function ($) {
       this.collapseButtonList?.remove();
       this.collapseButtonMain?.remove();
       this.collapseButtonsWrapper?.remove();
+      H5P.$window.get(0).removeEventListener('resize', self.handleResize);
     };
   }
 

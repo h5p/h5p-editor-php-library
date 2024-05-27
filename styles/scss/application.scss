@@ -63,6 +63,7 @@ a {
 
       &.has-label {
         justify-content: space-between;
+        gap: 0.5rem;
       }
 
       &:not(.has-label) {
@@ -86,6 +87,10 @@ a {
       margin: 0;
       padding: 0 0.6rem 0 0.2rem;
 
+      .label {
+        white-space: nowrap;
+      }
+
       &.collapsed .icon::before {
         content:"\e942";
         font-family:"H5P";
@@ -107,6 +112,16 @@ a {
       &:hover:not([disabled]) {
         background-color: $group-collapse-button-color;
         background-image:none; border: 3px solid $group-collapse-button-color-light;
+      }
+
+      &.no-label {
+        grid-template-columns: auto;
+        padding: 0 0.2rem;
+        width: auto;
+
+        .label {
+          display: none;
+        }
       }
     }
   }
