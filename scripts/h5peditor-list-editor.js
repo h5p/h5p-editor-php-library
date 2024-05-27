@@ -273,10 +273,17 @@ H5PEditor.ListEditor = (function ($) {
       this.originalLabel.classList.add('offsite');
 
       this.collapseButtonList = document.createElement('button');
-      this.collapseButtonList.classList.add(
-        'h5peditor-label-button', 'h5peditor-required'
-      );
-      this.collapseButtonList.innerText = this.originalLabel.innerText;
+      this.collapseButtonList.classList.add('h5peditor-label-button');
+
+      const icon = document.createElement('div');
+      icon.classList.add('icon');
+      this.collapseButtonList.append(icon);
+
+      const label = document.createElement('div');
+      label.classList.add('label', 'h5peditor-required');
+      label.innerText = this.originalLabel.innerText;
+      this.collapseButtonList.append(label);
+
       this.collapseButtonList.setAttribute(
         'aria-label',
         `${this.collapseButtonList.innerText}. ${H5PEditor.t('core', 'collapseAllContent')}`

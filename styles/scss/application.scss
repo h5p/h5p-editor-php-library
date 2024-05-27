@@ -52,20 +52,6 @@ a {
     resize: vertical;
   }
 
-  .h5peditor-label-button {
-    &.collapsed::before {
-      content: "\e566";
-      font-family: $icon-font-family;
-      margin-right: calc($min-padding / 2);
-    }
-
-    &:not(.collapsed)::before {
-      content: "\e565";
-      font-family: $icon-font-family;
-      margin-right: calc($min-padding / 2);
-    }
-  }
-
   .h5p-editor-flex-wrapper {
     display: flex;
     flex-direction: row;
@@ -1136,12 +1122,26 @@ a {
   border: none;
   color: $form-label;
   cursor: pointer;
-  display: block;
+  display: flex;
+  flex-direction: row;
   font-family: inherit;
   font-weight: 600;
   font-size: $font-size-normal;
   margin-bottom: 6px;
   padding: 0;
+  text-align: left;
+
+  &.collapsed .icon::before {
+    content: "\e566";
+    font-family: $icon-font-family;
+    margin-right: calc($min-padding / 2);
+  }
+
+  &:not(.collapsed) .icon::before {
+    content: "\e565";
+    font-family: $icon-font-family;
+    margin-right: calc($min-padding / 2);
+  }
 }
 
 #h5peditor-uploader {
