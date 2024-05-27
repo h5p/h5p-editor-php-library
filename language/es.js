@@ -44,6 +44,7 @@ H5PEditor.language.core = {
   ctrlKey: 'ctrl',
   commandKey: '⌘',
   pasteKey: 'v',
+  supportedVideoFormats: 'H5P soporta las siguientes fuentes de vídeo: <span class="h5p-bold">Youtube</span>, <span class="h5p-bold">Panopto</span> y <span class="h5p-bold">Vimeo</span>.',
   changeFile: 'Cambiar archivo',
   changeLibrary: 'Cambiar el tipo de contenido',
   semanticsError: 'Error en semántica: :error',
