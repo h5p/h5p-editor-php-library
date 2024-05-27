@@ -84,6 +84,12 @@ ns.widgets.image = function (parent, field, params, setValue) {
     // Show edit image button
     self.$editImage.removeClass('hidden');
     self.isEditing = false;
+
+    window.requestAnimationFrame(() => {
+      this.$container.get(0)
+        .querySelector('.h5p-editing-image-button')
+        .focus({focusVisible: true});
+    });
   });
 };
 
@@ -478,12 +484,6 @@ ns.widgets.image.prototype.addFile = function () {
   const actionsContainerEl = document.createElement('div');
   actionsContainerEl.classList.add('h5p-image-action-container');
   actionsContainerEl.innerHTML = this.getImageActionMarkup();
-
-  const editBtnEl = actionsContainerEl.querySelector('.h5p-editing-image-button');
-  // Need some time to change focus
-  setTimeout(() => {
-    editBtnEl.focus({focusVisible: true});
-  }, 100);
 
   this.boxContainerEl.insertBefore(actionsContainerEl, this.boxEl.nextElementSibling);
 
