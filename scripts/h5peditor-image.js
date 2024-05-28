@@ -100,7 +100,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
 
   var htmlString = `
     <div class="h5p-dnd__container">
-      <div class="h5p-dnd__box h5p-dnd__box--is-dashed h5p-dnd__box__image" tabindex="0">
+      <div class="h5p-dnd__box h5p-dnd__box--is-dashed" tabindex="0">
         ${this.getBaseMarkup()}
       </div>
     </div>
