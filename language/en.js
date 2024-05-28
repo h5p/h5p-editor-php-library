@@ -48,7 +48,7 @@ H5PEditor.language.core = {
   ctrlKey: 'ctrl',
   commandKey: '⌘',
   pasteKey: 'v',
-  supportedVideoFormats: 'H5P supports all external video sources formatted as <span class="h5p-bold">mp4</span>, <span class="h5p-bold">webm</span> or <span class="h5p-bold">ogv</span>, like Vimeo Pro, and has support for YouTube and Panopto links.',
+  supportedVideoFormats: 'H5P supports the following external video sources: <span class="h5p-bold">Youtube</span>, <span class="h5p-bold">Panopto</span> and <span class="h5p-bold">Vimeo</span>.',
   dragAndDropToReplaceVideo: 'Drag and drop video file here to replace',
   dragAndDropToReplaceAudio: 'Drag and drop audio file here to replace',
   changeFile: 'Change file',

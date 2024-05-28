@@ -118,6 +118,14 @@
   padding: 0 20px;
 }
 
+.h5p-dnd__column--is-padded-small {
+  padding: 0 10px;
+}
+
+.h5p-dnd__column.h5p-dnd__column--is-padded-small {
+  margin: 0;
+}
+
 .h5p-dnd__box--is-dragging .h5p-dnd__column--hide-when-focus {
   display: none;
 }
@@ -178,6 +186,7 @@
 }
 
 div:has(> .h5p-dnd__badge),
+div:has(> .h5p-dnd-nowrap),
 .h5p-dnd__column--is-padded:has(.h5p-dnd__badge) {
   line-height: 1.7;
 }
@@ -323,9 +332,7 @@ div:has(> .h5p-dnd__badge),
   border: 0;
   flex: 1;
   outline: 0;
-  padding-right: 7px;
-  padding-left: 14px;
-  font-size: 1.2em;
+  font-size: 1em;
   box-shadow: none;
 
   &:focus {
@@ -338,7 +345,7 @@ div:has(> .h5p-dnd__badge),
   color: #454347;
   text-align: center;
   font-family: "Open Sans", sans-serif;
-  font-size: 11px;
+  font-size: 0.85em;
   font-weight: 400;
   line-height: normal;
 }
@@ -364,13 +371,12 @@ div:has(> .h5p-dnd__badge),
   font-size: 14px;
   border-radius: 6px;
   flex: 1;
-  min-height: 150px;
+  min-height: 169px;
   position: relative;
   background: none;
-  padding: 20px;
+  padding: 10px;
   gap: 7px;
-  min-width: 300px;
-  height: 248px;
+  min-width: 271px;
   box-sizing: border-box;
 
   &:focus:not(.h5p-dnd__box__video-paste):not(.h5p-dnd__box--is-dragging):not(.h5p-dnd__box--is-uploading),
@@ -385,7 +391,16 @@ div:has(> .h5p-dnd__badge),
 
   &.h5p-dnd__box__video-paste {
     border: solid 1px #D0CFD4;
+    padding: 20px;
   }
+}
+
+.h5p-dnd__box.h5p-dnd__box__action {
+  flex: 2;
+}
+
+.h5p-dnd__box.h5p-dnd__box__video-paste {
+  flex: 1 0 fit-content;
 }
 
 .h5p-dnd__videobox-wrapper ~ .h5p-dnd__box__url {
@@ -511,6 +526,7 @@ div:has(> .h5p-dnd__badge),
   gap: 11px;
   flex-flow: row wrap;
   margin-bottom: 20px;
+  container: h5p-dnd__av-container / inline-size;
 }
 
 .h5p-dnd__videobox-wrapper:not(.h5p-dnd__videobox-wrapper--is-provider) ~ .h5p-dnd__box__video-paste,
@@ -559,6 +575,11 @@ div:has(> .h5p-dnd__badge),
 }
 
 .h5p-dnd__btn__insert-url {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 150px;
   &:before {
     content: '\e85c';
   }
@@ -568,4 +589,119 @@ div:has(> .h5p-dnd__badge),
   .h5p-dnd__box {
     flex-flow: column;
   }
+}
+
+.h5p-dnd__box__url {
+  container: h5p-dnd__box__url / inline-size;
+}
+
+.h5p-dnd__row--when-wide,
+.h5p-dnd__column--when-wide {
+  display: none;
+}
+
+.h5p-dnd__row:has(.input-container) {
+  flex: 0;
+}
+
+@container h5p-dnd__av-container (min-width: 760px) {
+  .h5p-dnd__box.h5p-dnd__box__action {
+    flex-flow: row;
+    align-items: stretch;
+    padding: 0;
+  }
+
+  .h5p-dnd__row--when-wide,
+  .h5p-dnd__column--when-wide {
+    display: flex;
+  }
+
+  .h5p-dnd__row--when-small,
+  .h5p-dnd__column--when-small {
+    display: none;
+  }
+
+  .h5p-dnd__box.h5p-dnd__box__action,
+  .h5p-dnd__box__action {
+    background: #fff;
+
+    &:focus:not(.h5p-dnd__box__video-paste):not(.h5p-dnd__box--is-dragging):not(.h5p-dnd__box--is-uploading) {
+      border: solid 2px #1570df;
+      background: #fff;
+      .h5p-dnd__column:not(.h5p-dnd__column--is-highlighted):not(.h5p-dnd__column--tight) {
+        background: $dnd-blue-faded;
+      }
+      .h5p-dnd__column--is-highlighted {
+        background: #fff;
+      }
+    }
+
+    .h5p-dnd__column.h5p-dnd__column--is-padded-small {
+      margin: 10px;
+    }
+
+    &:focus:not(.h5p-dnd__box--has-image):not(.h5p-dnd__box--is-uploading):not(.h5p-dnd__box--is-inline) .h5p-dnd__column:not(.h5p-dnd__column--is-highlighted):not(.h5p-dnd__column--tight) {
+      background: $dnd-blue-faded;
+    }
+
+    &:has(.h5p-dnd__btn__upload:focus):not(.h5p-dnd__box__video-paste):not(.h5p-dnd__box--is-dragging):not(.h5p-dnd__box--is-uploading) {
+      border: dashed 2px $dnd-gray-light;
+      background: #fff;
+    }
+  }
+}
+
+
+@container h5p-dnd__av-container (max-width: 760px) {
+  .h5p-dnd__badge,
+  .h5p-dnd__column,
+  .h5p-dnd__row {
+    font-size: 0.85em;
+  }
+
+  .text-muted {
+    font-size: 1em;
+  }
+
+  .h5p-dnd__btn__insert-url {
+    max-width: 110px;
+  }
+}
+
+@container h5p-dnd__av-container (max-width: 250px) {
+  .h5p-dnd__box__url,
+  .h5p-dnd__box.h5p-dnd__box__url {
+    min-width: 0;
+    flex-basis: 100%;
+  }
+
+  .h5p-dnd__btn__insert-url {
+    max-width: 90px;
+  }
+
+  .h5p-dnd__box__url.h5p-dnd__box__video-paste {
+    padding: 10px;
+  }
+}
+
+.h5p-dnd__videobox-wrapper ~ .h5p-dnd__box__url {
+  &.h5p-dnd__box.h5p-dnd__box__action {
+    flex-flow: column;
+    align-items: center;
+    padding: 10px;
+  }
+
+  .h5p-dnd__row--when-wide,
+  .h5p-dnd__column--when-wide {
+    display: none;
+  }
+
+  .h5p-dnd__row--when-small,
+  .h5p-dnd__column--when-small {
+    display: flex;
+  }
+}
+
+.h5p-dnd-nowrap {
+  white-space: nowrap;
 }
