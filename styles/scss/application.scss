@@ -20,6 +20,13 @@ a {
   text-decoration: none;
 }
 
+.offsite {
+  left: -9999px;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+}
+
 .h5peditor {
   font-size: 16px;
 
@@ -45,6 +52,20 @@ a {
     resize: vertical;
   }
 
+  .h5peditor-label-button {
+    &.collapsed::before {
+      content: "\e566";
+      font-family: $icon-font-family;
+      margin-right: calc($min-padding / 2);
+    }
+
+    &:not(.collapsed)::before {
+      content: "\e565";
+      font-family: $icon-font-family;
+      margin-right: calc($min-padding / 2);
+    }
+  }
+
   .h5p-editor-flex-wrapper {
     display: flex;
     flex-direction: row;
@@ -64,30 +85,36 @@ a {
     }
 
     .h5peditor-button-collapse {
+      align-items: center;
       background-color:$group-collapse-button-color;
       background-image:none;
       border: 3px solid $group-collapse-button-color;
       border-radius:0.4rem;
       box-sizing: border-box;
+      display: grid;
       font-size:0.815rem;
+      font-weight: bold;
+      grid-template-columns: auto 1fr;
       height: 2.6rem;
       line-height: 1.2rem;
       margin: 0;
-      padding: 0 0.6rem;
+      padding: 0 0.6rem 0 0.2rem;
 
-      &.collapsed::before {
+      &.collapsed .icon::before {
         content:"\e942";
         font-family:"H5P";
         font-size: 1.2rem;
-        padding: 0 0.6rem 0 0.2rem;
+        font-weight: normal;
+        padding: 0 0.2rem 0 0.2rem;
         vertical-align: middle;
       }
 
-      &:not(.collapsed)::before {
+      &:not(.collapsed) .icon::before {
         content:"\e941";
         font-family:"H5P";
         font-size: 1.2rem;
-        padding: 0 0.6rem 0 0.2rem;
+        font-weight: normal;
+        padding: 0 0.2rem 0 0.2rem;
         vertical-align: middle;
       }
 
@@ -1104,6 +1131,19 @@ a {
   color: $form-label;
 }
 
+.h5peditor-label-button {
+  background: transparent;
+  border: none;
+  color: $form-label;
+  cursor: pointer;
+  display: block;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: $font-size-normal;
+  margin-bottom: 6px;
+  padding: 0;
+}
+
 #h5peditor-uploader {
   position: absolute;
   width: 1px;
@@ -1116,13 +1156,15 @@ a {
 @import "tutorial-and-example-links";
 
 .h5peditor-widget-select {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: end;
   overflow: hidden;
   margin: 0 0 -1px;
   padding: 0;
   list-style: none;
 }
 .h5peditor-widget-option {
-  float: right;
   border: 1px solid #ccc;
   border-bottom: 0;
   margin-left: 0.5em;
@@ -1149,7 +1191,8 @@ a {
   margin: 0 0 0.25em;
   padding: 0.5em;
 }
-.h5peditor-widgets > .h5peditor-label {
+.h5peditor-widgets > .h5peditor-label,
+.h5peditor-widgets > .h5peditor-label-button {
   float: left;
   margin-top: 5px;
 }
