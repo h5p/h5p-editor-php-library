@@ -381,7 +381,7 @@ div:has(> .h5p-dnd-nowrap),
 
   &:focus:not(.h5p-dnd__box__video-paste):not(.h5p-dnd__box--is-dragging):not(.h5p-dnd__box--is-uploading),
   &:focus-within:not(.h5p-dnd__box__video-paste):not(.h5p-dnd__box--is-dragging):not(.h5p-dnd__box--is-uploading) {
-    background: #F2F8FF;
+    background: $dnd-blue-faded;
     border: solid 2px #1570df;
   }
   &:focus-visible:not(.h5p-dnd__box__video-paste):not(.h5p-dnd__box--is-uploading) {
@@ -406,13 +406,18 @@ div:has(> .h5p-dnd-nowrap),
 .h5p-dnd__videobox-wrapper ~ .h5p-dnd__box__url {
   height: 154px;
   min-height: 110px;
-  min-width: 360px;
+  min-width: 260px;
 
   .h5p-dnd__upload-audio-svg,
   .h5p-dnd__upload-video-svg {
     display: none;
   }
 }
+
+.h5p-dnd__videobox-wrapper~.h5p-dnd__box__url.h5p-dnd__box.has-error {
+  height: auto;
+}
+
 .h5p-dnd__box--is-dashed:not(.h5p-dnd__box--is-uploading):hover {
   border: dashed 2px #ACACAC;
 }
@@ -604,6 +609,11 @@ div:has(> .h5p-dnd-nowrap),
   flex: 0;
 }
 
+.h5p-dnd__column--no-margin,
+.h5p-dnd__column--no-margin.h5p-dnd__column {
+  margin: 0;
+}
+
 @container h5p-dnd__av-container (min-width: 760px) {
   .h5p-dnd__box.h5p-dnd__box__action {
     flex-flow: row;
@@ -624,30 +634,6 @@ div:has(> .h5p-dnd-nowrap),
   .h5p-dnd__box.h5p-dnd__box__action,
   .h5p-dnd__box__action {
     background: #fff;
-
-    &:focus:not(.h5p-dnd__box__video-paste):not(.h5p-dnd__box--is-dragging):not(.h5p-dnd__box--is-uploading) {
-      border: solid 2px #1570df;
-      background: #fff;
-      .h5p-dnd__column:not(.h5p-dnd__column--is-highlighted):not(.h5p-dnd__column--tight) {
-        background: $dnd-blue-faded;
-      }
-      .h5p-dnd__column--is-highlighted {
-        background: #fff;
-      }
-    }
-
-    .h5p-dnd__column.h5p-dnd__column--is-padded-small {
-      margin: 10px;
-    }
-
-    &:focus:not(.h5p-dnd__box--has-image):not(.h5p-dnd__box--is-uploading):not(.h5p-dnd__box--is-inline) .h5p-dnd__column:not(.h5p-dnd__column--is-highlighted):not(.h5p-dnd__column--tight) {
-      background: $dnd-blue-faded;
-    }
-
-    &:has(.h5p-dnd__btn__upload:focus):not(.h5p-dnd__box__video-paste):not(.h5p-dnd__box--is-dragging):not(.h5p-dnd__box--is-uploading) {
-      border: dashed 2px $dnd-gray-light;
-      background: #fff;
-    }
   }
 }
 
@@ -664,13 +650,14 @@ div:has(> .h5p-dnd-nowrap),
   }
 
   .h5p-dnd__btn__insert-url {
-    max-width: 110px;
+    max-width: 120px;
   }
 }
 
 @container h5p-dnd__av-container (max-width: 250px) {
   .h5p-dnd__box__url,
-  .h5p-dnd__box.h5p-dnd__box__url {
+  .h5p-dnd__box.h5p-dnd__box__url,
+  .h5p-dnd__videobox-wrapper~.h5p-dnd__box__url {
     min-width: 0;
     flex-basis: 100%;
   }
