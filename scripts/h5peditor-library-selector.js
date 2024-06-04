@@ -29,20 +29,8 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   this.defaultLibraryParameterized = defaultLibrary ? defaultLibrary.replace('.', '-').toLowerCase() : undefined;
 
   //Add tutorial and example link:
-  this.$tutorialUrl = ns.$(
-    '<a class="h5p-tutorial-url" target="_blank">' + 
-      '<span class="h5p-tutorial-url-label">' + 
-        ns.t('core', 'tutorial') + 
-      '</span>' +
-    '</a>'
-  ).hide();
-  this.$exampleUrl = ns.$(
-    '<a class="h5p-example-url" target="_blank">' + 
-      '<span class="h5p-example-url-label">' + 
-        ns.t('core', 'example') + 
-      '</span>' +
-    '</a>'
-  ).hide();
+  this.$tutorialUrl = ns.$('<a class="h5p-tutorial-url" target="_blank">' + ns.t('core', 'tutorial') + '</a>').hide();
+  this.$exampleUrl = ns.$('<a class="h5p-example-url" target="_blank">' + ns.t('core', 'example') + '</a>').hide();
 
   // Create confirm dialog
   var changeLibraryDialog = new H5P.ConfirmationDialog({

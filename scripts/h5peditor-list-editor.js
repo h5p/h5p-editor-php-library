@@ -18,119 +18,9 @@ H5PEditor.ListEditor = (function ($) {
       'class': 'h5p-ul'
     });
 
-    /**
-     * Add group collapse functionality to list editor if items are groups.
-     */
-    const addGroupCollapseFunctionality = () => {
-      if (
-        list.field?.field?.type === 'group' &&
-        (list.getValue() ?? []).length
-      ) {
-        self.addGroupCollapseListener();
-        self.addToggleButton();
-      }
-    }
-
-    /**
-     * Determine whether widget has expand/collapse capabilities.
-     * @returns {boolean} True if widget has expand/collapse capabilities. False otherwise.
-     */
-    self.hasExpandCollapseCapabilities = () => {
-      return this.container?.parentNode.querySelector(
-        '.h5p-editor-flex-wrapper .h5peditor-button-collapse'
-      ) instanceof HTMLElement;
-    }
-
-    /**
-     * Set toggle button collapsed state.
-     * @param {boolean} shouldBeCollapsed True if the toggle button should be collapsed.
-     */
-    self.setToggleButtonCollapsed = (shouldBeCollapsed) => {
-      if (!this.expandCollapseButton) {
-        return; // No button added
-      }
-
-      if (typeof shouldBeCollapsed !== 'boolean') {
-        return; // Invalid type
-      }
-
-      this.expandCollapseButton.classList.toggle(
-        'collapsed', shouldBeCollapsed
-      );
-      this.expandCollapseButton.innerText = shouldBeCollapsed ?
-        H5PEditor.t('core', 'expandAllContent') :
-        H5PEditor.t('core', 'collapseAllContent');
-    };
-
-    /**
-     * Add group collapse listener.
-     */
-    self.addGroupCollapseListener = () => {
-      if (this.hasExpandCollapseCapabilities()) {
-        return; // Don't add extra listener
-      }
-
-      list.on('groupCollapsedStateChanged', (event) => {
-        this.setToggleButtonCollapsed(event.data.allGroupsCollapsed);
-      });
-    }
-
-    /**
-     * Add toggle button for collapsing/expanding groups to container.
-     */
-    self.addToggleButton = () => {
-      if (this.hasExpandCollapseCapabilities()) {
-        return; // Don't add extra button
-      }
-
-      /*
-       * Adding the same flex-wrapper approach that's used for the content title
-       * label and the metadata button, so the "collapse/expand" button can be
-       * aligned as required.
-       */
-      const collapseButtonWrapper = document.createElement('div');
-      collapseButtonWrapper.classList.add(
-        'h5p-editor-flex-wrapper', 'has-button-collapse'
-      );
-
-      const label =
-        self.container.parentNode?.querySelector('.h5peditor-label') ??
-          document.createElement('div');
-
-      /*
-       * If label is directly before the list editor container, put it next to
-       * the button. Otherwise, e. g. when there are list widgets, use button
-       * alone on top of those.
-       */
-      if (self.container.previousSibling === label) {
-        collapseButtonWrapper.classList.add('has-label');
-        collapseButtonWrapper.append(label);
-      }
-
-      this.expandCollapseButton = document.createElement('button');
-      this.expandCollapseButton.classList.add(
-        'h5peditor-button',
-        'h5peditor-button-textual',
-        'h5peditor-button-collapse'
-      );
-      this.expandCollapseButton.innerText = H5PEditor.t('core', 'collapseAllContent');
-
-      this.expandCollapseButton.addEventListener('click', () => {
-        list.toggleItemCollapsed();
-      });
-
-      collapseButtonWrapper.append(this.expandCollapseButton);
-
-      self.container.parentNode?.prepend(collapseButtonWrapper);
-    };
-
     // Create add button
     var $button = ns.createButton(list.getImportance(), H5PEditor.t('core', 'addEntity', {':entity': entity}), function () {
       list.addItem();
-
-      if (!self.hasExpandCollapseCapabilities()) {
-        addGroupCollapseFunctionality();
-      }
     }, true);
 
     // Used when dragging items around
@@ -399,10 +289,6 @@ H5PEditor.ListEditor = (function ($) {
         confirmHandler(item, $item.index(), $(this).offset(), function () {
           list.removeItem($item.index());
           $item.remove();
-
-          if (!(list.getValue() ?? []).length) {
-            self.removeToggleButton();
-          }
         });
       }).appendTo($listActions);
 
@@ -481,10 +367,6 @@ H5PEditor.ListEditor = (function ($) {
      * @param {jQuery} $container
      */
     self.appendTo = function ($container) {
-      self.container = $container[0];
-
-      addGroupCollapseFunctionality();
-
       $list.appendTo($container);
       $button.appendTo($container);
     };
@@ -495,28 +377,8 @@ H5PEditor.ListEditor = (function ($) {
      * @public
      */
     self.remove = function () {
-      this.removeToggleButton();
       $list.remove();
       $button.remove();
-    };
-
-    /**
-     * Remove toggle button for collapsing/expanding groups from container.
-     */
-    self.removeToggleButton = () => {
-      toggleButton = self.container.parentNode?.querySelector(
-        '.h5p-editor-flex-wrapper .h5peditor-button-collapse'
-      );
-      if (!toggleButton) {
-        return;
-      }
-
-      // Put label back in original position if had been moved to button wrapper
-      label = toggleButton.parentNode?.querySelector('.h5peditor-label');
-      if (label) {
-        self.container.parentNode?.prepend(label);
-      }
-      toggleButton.parentNode.remove();
     };
   }
 
