@@ -162,10 +162,10 @@ H5PEditor.ListEditor = (function ($) {
      */
     self.hasCollapseCapabilities = () => {
       return (
-        this.container?.parentNode.querySelector(
+        this.container?.parentNode.firstChild.querySelector(
           '.h5p-editor-flex-wrapper .h5peditor-button-collapse'
         ) instanceof HTMLElement ||
-        this.container?.parentNode.querySelector(
+        this.container?.parentNode.firstChild.querySelector(
           '.h5peditor-label-button'
         ) instanceof HTMLElement
       );
