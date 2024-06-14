@@ -322,6 +322,17 @@ ns.Library.prototype.librariesLoaded = function (libList) {
     self.runChangeCallback = false;
   }
   // Load default library.
+  if (typeof this.params === 'string') {
+    this.params = {
+      library: this.params,
+      metadata: {},
+      params: {},
+      subContentId: H5P.createUUID()
+    };
+
+    self.$select.val(this.params.library);
+  }
+  
   if (this.params.library !== undefined) {
     self.loadLibrary(this.params.library, true);
   }
