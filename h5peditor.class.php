@@ -50,7 +50,7 @@ class H5peditor {
     'scripts/h5peditor-pre-save.js',
     'ckeditor/ckeditor.js',
   );
-  private $h5p, $storage;
+  private $h5p, $storage, $content;
   public $ajax, $ajaxInterface, $content;
 
   /**
