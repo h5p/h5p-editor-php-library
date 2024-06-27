@@ -194,6 +194,11 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
               <button class="h5p-dnd__btn h5p-dnd__btn__primary h5p-dnd__btn__insert-url" type="button">${firstFile ? H5PEditor.t('core', 'replaceUrl') : H5PEditor.t('core', 'insertUrl')}</button>
             </div>
           </div>
+          <div class="h5p-dnd__row">
+            <div id="errorContainer" class="video-url-error-container hidden">
+              <div class="h5p-errors"></div>
+            </div>
+          </div>
           ${!isAudio ? `
             <div class="h5p-dnd__row">
               <div class="text-muted">
@@ -262,7 +267,14 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     this.$files.find('.h5p-dnd__btn__insert-url').on('click', (e) => {
       const url = this.$files.find('.input-video').val().trim();
-      if (url) {
+      const urlErrorContainer = this.$files.find('.video-url-error-container');
+      if (!url || !C.findProvider(url)) {
+        urlErrorContainer.removeClass('hidden');
+        urlErrorContainer.addClass("has-error");
+        urlErrorContainer.find('.h5p-errors').text(ns.t('core', 'enterVideoTitle'));
+      }
+      else {
+        urlErrorContainer.addClass('hidden');
         if (this.params?.length > 0) {
           this.replaceUrl(url);
         } else {
