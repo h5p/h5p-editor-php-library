@@ -271,7 +271,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       if (!url || !C.findProvider(url)) {
         urlErrorContainer.removeClass('hidden');
         urlErrorContainer.addClass("has-error");
-        urlErrorContainer.find('.h5p-errors').text(ns.t('core', 'enterVideoTitle'));
+        urlErrorContainer.find('.h5p-errors').text(ns.t('core', 'unsupportedVideoSource'));
       }
       else {
         urlErrorContainer.addClass('hidden');

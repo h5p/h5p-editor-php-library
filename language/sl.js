@@ -57,6 +57,7 @@ H5PEditor.language.core = {
   uploadVideoTitle: 'Naloži videoposnetek',
   addVideoDescription:
     'H5P podpira vse zunanje videoposnetke v formatu mp4, webm ali ogv. Tudi povezave do posnetkov na Vimeo Pro, YouTube in Panopto.',
+  unsupportedVideoSource: "Unsupported video source",
   insert: 'Vstavi',
   cancel: 'Prekliči',
   height: 'višina',
