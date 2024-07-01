@@ -57,7 +57,7 @@ H5PEditor.language.core = {
   uploadVideoTitle: 'Last opp videofil',
   addVideoDescription:
     'H5P støtter alle eksterne videokilder på formatene mp4, webm eller ogv, slik som Vimeo Pro, og har støtte for YouTube-lenker og Panopto-lenker.',
-  unsupportedVideoSource: "Videokjelde er ikkje støtta",
+  unsupportedVideoSource: "Videokjelda er ikkje støtta",
   insert: 'Sett inn',
   cancel: 'Avbryt',
   height: 'Høyde',

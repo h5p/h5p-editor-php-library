@@ -345,9 +345,9 @@ div:has(> .h5p-dnd-nowrap),
 .video-url-error-container {
   display: flex;
   flex-direction: row;
-  position: absolute;
   align-items: center;
   justify-content: center;
+  margin-bottom: 5px;
   width: 100%;
 
   &.hidden {
