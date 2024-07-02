@@ -57,6 +57,7 @@ H5PEditor.language.core = {
   uploadVideoTitle: 'Lataa videotiedosto',
   addVideoDescription:
     'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube and Panopto links.',
+  unsupportedVideoSource: "Unsupported video source",
   insert: 'Lisää',
   cancel: 'Peruuta',
   height: 'korkeus',

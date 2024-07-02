@@ -4,7 +4,8 @@
 }
 
 .h5p-dnd__container,
-.h5p-dnd__box {
+.h5p-dnd__box,
+.video-url-error-container {
   &.has-error .h5p-errors {
     margin-top: 1em;
     display: flex;
@@ -341,6 +342,19 @@ div:has(> .h5p-dnd-nowrap),
   }
 }
 
+.video-url-error-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
+  width: 100%;
+
+  &.hidden {
+    display: none;
+  }
+}
+
 .text-muted {
   color: #454347;
   text-align: center;
@@ -605,7 +619,8 @@ div:has(> .h5p-dnd-nowrap),
   display: none;
 }
 
-.h5p-dnd__row:has(.input-container) {
+.h5p-dnd__row:has(.input-container),
+.h5p-dnd__row:has(.video-url-error-container) {
   flex: 0;
 }
 
