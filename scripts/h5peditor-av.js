@@ -249,6 +249,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     });
 
     this.$addDialog = this.$add.next().children().first();
+    this.$videoUrlErrorContainer = this.$files.find('.video-url-error-container');
 
     // Prepare to add the extra tab instances
     const tabInstances = [null, null]; // Add nulls for hard-coded tabs
@@ -267,14 +268,17 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     this.$files.find('.h5p-dnd__btn__insert-url').on('click', (e) => {
       const url = this.$files.find('.input-video').val().trim();
-      const urlErrorContainer = this.$files.find('.video-url-error-container');
-      if (!url || !C.findProvider(url)) {
-        urlErrorContainer.removeClass('hidden');
-        urlErrorContainer.addClass("has-error");
-        urlErrorContainer.find('.h5p-errors').text(ns.t('core', 'unsupportedVideoSource'));
+      if (url.length === 0) {
+        return;
+      }
+
+      else if (!C.findProvider(url)) {
+        this.$videoUrlErrorContainer.removeClass('hidden');
+        this.$videoUrlErrorContainer.addClass("has-error");
+        this.$videoUrlErrorContainer.find('.h5p-errors').text(ns.t('core', 'unsupportedVideoSource'));
       }
       else {
-        urlErrorContainer.addClass('hidden');
+        this.$videoUrlErrorContainer.addClass('hidden');
         if (this.params?.length > 0) {
           this.replaceUrl(url);
         } else {
@@ -285,9 +289,19 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     });
 
     this.$files.find('.input-video').on('keydown', (e) => {
+      this.$videoUrlErrorContainer.addClass('hidden');
       if (e.code === 'Enter') {
         const url = this.$files.find('.input-video').val().trim();
-        if (url) {
+        if (url.length === 0) {
+          return;
+        }
+        
+        if (!C.findProvider(url)) {
+          this.$videoUrlErrorContainer.removeClass('hidden');
+          this.$videoUrlErrorContainer.addClass("has-error");
+          this.$videoUrlErrorContainer.find('.h5p-errors').text(ns.t('core', 'unsupportedVideoSource'));
+        }
+        else {
           if (this.params?.length > 0) {
             this.replaceUrl(url);
           } else {
@@ -553,6 +567,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       .on('click', (e) => {
         e.preventDefault();
         confirmRemovalDialog.show($file.offset().top);
+        this.$videoUrlErrorContainer.addClass('hidden');
       });
 
     // Handle click on thumbnail
