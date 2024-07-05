@@ -567,7 +567,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       .on('click', (e) => {
         e.preventDefault();
         confirmRemovalDialog.show($file.offset().top);
-        this.$videoUrlErrorContainer.addClass('hidden');
       });
 
     // Handle click on thumbnail
@@ -642,6 +641,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     if (this.params === undefined) {
       this.updatePasteBox(false);
+      this.$videoUrlErrorContainer.addClass('hidden');
     }
 
     // Notify change listeners
