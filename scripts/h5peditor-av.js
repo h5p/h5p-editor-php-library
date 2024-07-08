@@ -194,6 +194,11 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
               <button class="h5p-dnd__btn h5p-dnd__btn__primary h5p-dnd__btn__insert-url" type="button">${firstFile ? H5PEditor.t('core', 'replaceUrl') : H5PEditor.t('core', 'insertUrl')}</button>
             </div>
           </div>
+          <div class="h5p-dnd__row">
+            <div id="errorContainer" class="video-url-error-container hidden">
+              <div class="h5p-errors"></div>
+            </div>
+          </div>
           ${!isAudio ? `
             <div class="h5p-dnd__row">
               <div class="text-muted">
@@ -244,6 +249,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     });
 
     this.$addDialog = this.$add.next().children().first();
+    this.$videoUrlErrorContainer = this.$files.find('.video-url-error-container');
 
     // Prepare to add the extra tab instances
     const tabInstances = [null, null]; // Add nulls for hard-coded tabs
@@ -262,7 +268,17 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     this.$files.find('.h5p-dnd__btn__insert-url').on('click', (e) => {
       const url = this.$files.find('.input-video').val().trim();
-      if (url) {
+      if (url.length === 0) {
+        return;
+      }
+
+      if (!C.findProvider(url)) {
+        this.$videoUrlErrorContainer.removeClass('hidden');
+        this.$videoUrlErrorContainer.addClass("has-error");
+        this.$videoUrlErrorContainer.find('.h5p-errors').text(ns.t('core', 'unsupportedVideoSource'));
+      }
+      else {
+        this.$videoUrlErrorContainer.addClass('hidden');
         if (this.params?.length > 0) {
           this.replaceUrl(url);
         } else {
@@ -273,9 +289,19 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     });
 
     this.$files.find('.input-video').on('keydown', (e) => {
+      this.$videoUrlErrorContainer.addClass('hidden');
       if (e.code === 'Enter') {
         const url = this.$files.find('.input-video').val().trim();
-        if (url) {
+        if (url.length === 0) {
+          return;
+        }
+        
+        if (!C.findProvider(url)) {
+          this.$videoUrlErrorContainer.removeClass('hidden');
+          this.$videoUrlErrorContainer.addClass("has-error");
+          this.$videoUrlErrorContainer.find('.h5p-errors').text(ns.t('core', 'unsupportedVideoSource'));
+        }
+        else {
           if (this.params?.length > 0) {
             this.replaceUrl(url);
           } else {
@@ -615,6 +641,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     if (this.params === undefined) {
       this.updatePasteBox(false);
+      this.$videoUrlErrorContainer.addClass('hidden');
     }
 
     // Notify change listeners
