@@ -128,30 +128,25 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     var html = H5PEditor.createFieldMarkup(this.field, imageHtml, id);
     var $container = $(html).appendTo($wrapper);
 
-    // C.prepareTabContents();
-    // const container = document.getElementById(this.getAttribute(''));
-    // that = this;
-    // console.log("prepareTabContents this.$addDialogTable:", this.$addDialogTable);
-    // const el = document.getElementById(this.getAttribute('aria-controls'));
+    // DND logic
+    this.$tabContainer = $container.children('.h5p-add-dialog-table');
+    this.$activeTabPanel = this.$dndTabPanel = $('.av-tabpanel:not([hidden])');
+    this.$activeFiles = this.$dndFiles = this.$activeTabPanel.children('.h5p-dnd__av-container');
+
+    // this.$urlFiles =
+    this.$urlTabPanel = this.$tabContainer.children('.av-tabpanel hidden');
+    this.$urlFiles = this.$urlTabPanel.children('.h5p-dnd__av-container');
     
-    this.$tabTable = $container.children('.h5p-add-dialog-table');
-    this.$activeTaabPanel = $('.av-tabpanel:not([hidden])');
-    this.$activeFiles = this.$activeTaabPanel.children('.h5p-dnd__av-container');
+    
     console.log("this.$activeFiles::", this.$activeFiles);
 
     this.$add = $container.children('.h5p-add-file').click(function () {
       self.$addDialog.addClass('h5p-open');
     });
 
-    // this.boxEl = this.$activeFiles.find('.h5p-dnd__box__url.h5p-dnd__box--is-dashed');
-    // this.boxEl = $('.h5p-dnd__box__url.h5p-dnd__box--is-dashed').get(0);
-    this.boxEl = this.$activeFiles.children('.h5p-dnd__box__url.h5p-dnd__box--is-dashed').get(0); //('.h5p-dnd__box__url.h5p-dnd__box--is-dashed').get(0);
-    // this.ariaLiveEl = this.$activeFiles.find('.h5p-sr-only[aria-live]').get(0);
-    // this.ariaLiveEl = $('.h5p-sr-only[aria-live]').get(0);
+    this.boxEl = this.$activeFiles.children('.h5p-dnd__box__url.h5p-dnd__box--is-dashed').get(0);
     this.ariaLiveEl = this.$activeFiles.find('.h5p-sr-only[aria-live]').get(0);
 
-    // const blockEl = this.boxEl.children('.h5p-dnd__box__block');
-    // const blockEl = $('.h5p-dnd__box__block');
     const blockEl = this.boxEl.querySelector('.h5p-dnd__box__block');
     this.addDragAndDropListeners(this.boxEl, blockEl);
 
@@ -178,6 +173,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     // var tabInstances = [null, null]; // Add nulls for hard-coded tabs
     // self.tabInstances = tabInstances;
 
+    // URL input logic
     var $url = this.$url = this.$addDialog.find('.h5p-file-url');
     this.$addDialog.find('.h5p-cancel').click(function () {
       self.updateIndex = undefined;
@@ -185,12 +181,19 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     });
 
     this.$activeFiles.find('.h5p-dnd__btn__upload').on('click', (e) => {
+      debugger;
       e.preventDefault();
       this.openFileSelector();
     });
 
+    // this.$urlFiles.find('.h5p-dnd__btn__upload').on('click', (e) => {
+    //   e.preventDefault();
+    //   this.openFileSelector();
+    // });
+
     this.$activeFiles.find('.h5p-dnd__btn__insert-url').on('click', (e) => {
-      const url = this.$activeFiles.find('.input-video').val().trim();
+      debugger;
+      const url = this.$urlFiles.find('.input-video').val().trim();
       if (url.length === 0) {
         return;
       }
@@ -211,10 +214,10 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       }
     });
 
-    this.$activeFiles.find('.input-video').on('keydown', (e) => {
+    this.$urlFiles.find('.input-video').on('keydown', (e) => {
       this.$videoUrlErrorContainer.addClass('hidden');
       if (e.code === 'Enter') {
-        const url = this.$activeFiles.find('.input-video').val().trim();
+        const url = this.$urlFiles.find('.input-video').val().trim();
         if (url.length === 0) {
           return;
         }
@@ -260,18 +263,18 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     
     // C.prepareTabContents();
     
-    this.$addDialog = $container.children('.h5p-add-dialog');
-    this.$addDialogTable = this.$addDialog.children('.h5p-add-dialog-table');
-    console.log("this.$addDialogTable:", this.$addDialogTable);
+    // this.$addDialog = $container.children('.h5p-add-dialog');
+    // this.$addDialogTable = this.$addDialog.children('.h5p-add-dialog-table');
+    // console.log("this.$addDialogTable:", this.$addDialogTable);
     
-    // Get list of tabs and active tab
-    this.$tabList = this.$addDialogTable.children('.av-tablist');
-    this.$selectedTab = this.$tabList.children('.av-tab selected');
-    console.log("this.$selectedTab:", this.$selectedTab);
+    // // Get list of tabs and active tab
+    // this.$tabList = this.$addDialogTable.children('.av-tablist');
+    // this.$selectedTab = this.$tabList.children('.av-tab selected');
+    // console.log("this.$selectedTab:", this.$selectedTab);
     
-    // Get active tab panel
-    this.$activeTabPanel = this.$addDialogTable.children('.av-tabpanel:not([hidden])');
-    console.log("this.$activeTabPanel:", this.$activeTabPanel);
+    // // Get active tab panel
+    // this.$activeTaabPanel = this.$addDialogTable.children('.av-tabpanel:not([hidden])');
+    // console.log("this.$activeTabPanel:", this.$activeTaabPanel);
 
 
 
@@ -284,7 +287,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     // const el = document.getElementById(this.getAttribute('aria-controls'));
     // const tabPanel = el.parentElement.querySelector('.av-tabpanel:not([hidden])');
-    // this.$activeFiles = $activeTabPanel.children('.h5p-dnd__av-container');
+    // this.$activeFiles = $activeTaabPanel.children('.h5p-dnd__av-container');
     // console.log("this.$activeFiles 1", this.$activeFiles);
 
     // debugger;
@@ -292,8 +295,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     // this.$add = $container.children('.h5p-add-file').click(function () {
     //   self.$addDialog.addClass('h5p-open');
     // });
-    this.$tabContainer = $container.children('.h5p-add-dialog');
-    console.log(this.$tabContainer);
+    // this.$tabTable = $container.children('.h5p-add-dialog');
+    // console.log(this.$tabContainer);
     
 
     // Tabs that are hard-coded into this widget. Any other tab must be an extension.
@@ -327,34 +330,33 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       this.classList.add('selected');
       
       // Update tab panel
-      const el = document.getElementById(this.getAttribute('aria-controls'));
-      const tabPanel = el.parentElement.querySelector('.av-tabpanel:not([hidden])');
-      tabPanel.setAttribute('hidden', '');
-      el.removeAttribute('hidden');
+      const inactiveTabPanel = document.getElementById(this.getAttribute('aria-controls'));
+      const activeTabPanel = inactiveTabPanel.parentElement.querySelector('.av-tabpanel:not([hidden])');
+      activeTabPanel.setAttribute('hidden', '');
+      inactiveTabPanel.removeAttribute('hidden');
 
       // Update tab files
-      // this.$activeTabFiles = this.children('.h5p-dnd__av-container');
-      this.$activeTabFiles = tabPanel.children('.h5p-dnd__av-container');
-      console.log("this.$activeFiles 2", this.$activeFiles);
+      this.$activeTabPanel = activeTabPanel;
+      this.$activeFiles = activeTabPanel.querySelector('.h5p-dnd__av-container');
 
       // Set active tab index
-      for (let i = 0; i < el.parentElement.children.length; i++) {
-        if (el.parentElement.children[i] === el) {
+      for (let i = 0; i < inactiveTabPanel.parentElement.children.length; i++) {
+        if (inactiveTabPanel.parentElement.children[i] === inactiveTabPanel) {
           activeTab = i - 1; // Compensate for .av-tablist in the same wrapper
           break;
         }
       }
 
       // Toggle insert button disabled
-      if (activeTab === TABS.UPLOAD) {
-        self.$insertButton[0].disabled = true;
-      }
-      else if (activeTab === TABS.INPUT) {
-        self.$insertButton[0].disabled = false;
-      }
-      else {
-        self.$insertButton[0].disabled = !tabInstances[activeTab].hasMedia();
-      }
+      // if (activeTab === TABS.UPLOAD) {
+      //   self.$insertButton[0].disabled = true;
+      // }
+      // else if (activeTab === TABS.INPUT) {
+      //   self.$insertButton[0].disabled = false;
+      // }
+      // else {
+      //   self.$insertButton[0].disabled = !tabInstances[activeTab].hasMedia();
+      // }
     }
 
     /**
@@ -385,8 +387,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     });
 
     self.$addDialog = this.$tabContainer.next().children().first();
-    console.log('this.$tabContainer', this.$tabContainer);
-    debugger;
+    // console.log('this.$tabContainer', this.$tabTable);
+    // debugger;
 
     // Open dialog logic : setting the dialog open from beginning
     self.$addDialog.addClass('h5p-open');
@@ -410,7 +412,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         tabInstance.appendTo(self.$addDialog[0].children[0].children[index + 1]); // Compensate for .av-tablist in the same wrapper
         tabInstance.on('hasMedia', function (e) {
           if (index === activeTab) {
-            self.$insertButton[0].disabled = !e.data;
+            // self.$insertButton[0].disabled = !e.data;
           }
         });
         debugger;
@@ -424,7 +426,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         }
       }
     }
-
+ // Checkout
     var $url = this.$url = this.$addDialog.find('.h5p-file-url');
     
     //Open dialog logic
@@ -452,7 +454,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       .click(function () {
         self.openFileSelector();
       });
-
+    
+    // DND and video url should not have the $insertButton
     this.$insertButton = this.$addDialog.find('.h5p-insert').click(function () {
       if (isExtension(activeTab)) {
         const media = tabInstances[activeTab].getMedia();
@@ -806,11 +809,12 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         </div>
       `;
     }
+    console.log("this.$activeFiles", this.$activeFiles);
 
     // Insert file element in appropriate order
     var $file = $(fileHtml);
-    if (index >= that.$activeFiles.children().length) {
-      $file.appendTo(that.$activeFiles);
+    if (index >= this.$activeFiles.children().length) {
+      $file.appendTo(this.$activeFiles);
     }
     else {
       $file.insertBefore(that.$activeFiles.children().eq(index));
@@ -957,6 +961,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   };
 
   C.prototype.useUrl = function (url) {
+    debugger;
     if (this.params === undefined) {
       this.params = [];
       this.setValue(this.field, this.params);
@@ -1173,7 +1178,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
               `: ''}
             </div>
           </div>
-          `;
+          `; //h5p-dnd__videobox-wrapper h5p-dnd__videobox-wrapper--has-label
 
       default:
         return '';
@@ -1250,125 +1255,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   //     // '</div>',
   //     false, id, hasDescription);
   // };
-
-  C.prepareTabContents = function() {
-    // const container = document.getElementById(this.getAttribute(''));
-    that = this;
-    console.log("prepareTabContents this.$addDialogTable:", that.$addDialogTable);
-    const el = document.getElementById(this.getAttribute('aria-controls'));
-    const tabPanel = el.parentElement.querySelector('.av-tabpanel:not([hidden])');
-    this.$activeFiles = tabPanel.children('.h5p-dnd__av-container');
-
-    this.$add = $container.children('.h5p-add-file').click(function () {
-      self.$addDialog.addClass('h5p-open');
-    });
-
-    this.boxEl = this.$activeFiles.find('.h5p-dnd__box__url.h5p-dnd__box--is-dashed').get(0);
-    this.ariaLiveEl = this.$activeFiles.find('.h5p-sr-only[aria-live]').get(0);
-
-    const blockEl = this.boxEl.querySelector('.h5p-dnd__box__block');
-    this.addDragAndDropListeners(this.boxEl, blockEl);
-
-    document.addEventListener('paste', (e) => {
-      const activeElement = document.activeElement.closest('.h5p-dnd__box');
-      if (this.$activeFiles.get(0).contains(activeElement) && activeElement && e.clipboardData.files.length > 0) {
-        const children = Array.from(activeElement.parentElement.parentElement.querySelectorAll('.h5p-dnd__box--has-video'));
-        let index = -1;
-        children.forEach((child, i) => {
-          if (child === activeElement) {
-            index = i;
-          }
-        })
-
-        this.uploadOrReplaceImage(e.clipboardData.files, index, activeElement);
-      }
-    });
-
-    this.$addDialog = this.$add.next().children().first();
-    this.$videoUrlErrorContainer = this.$activeFiles.find('.video-url-error-container');
-
-    // Prepare to add the extra tab instances
-    const testtabInstances = [null, null]; // Add nulls for hard-coded tabs
-    self.testtabInstances = tabInstances;
-
-    var $url = this.$url = this.$addDialog.find('.h5p-file-url');
-    this.$addDialog.find('.h5p-cancel').click(function () {
-      self.updateIndex = undefined;
-      self.closeDialog();
-    });
-
-    this.$activeFiles.find('.h5p-dnd__btn__upload').on('click', (e) => {
-      e.preventDefault();
-      this.openFileSelector();
-    });
-
-    this.$activeFiles.find('.h5p-dnd__btn__insert-url').on('click', (e) => {
-      const url = this.$activeFiles.find('.input-video').val().trim();
-      if (url.length === 0) {
-        return;
-      }
-
-      if (!C.findProvider(url)) {
-        this.$videoUrlErrorContainer.removeClass('hidden');
-        this.$videoUrlErrorContainer.addClass("has-error");
-        this.$videoUrlErrorContainer.find('.h5p-errors').text(ns.t('core', 'unsupportedVideoSource'));
-      }
-      else {
-        this.$videoUrlErrorContainer.addClass('hidden');
-        if (this.params?.length > 0) {
-          this.replaceUrl(url);
-        } else {
-          this.useUrl(url);
-        }
-        this.updatePasteBox(true);
-      }
-    });
-
-    this.$activeFiles.find('.input-video').on('keydown', (e) => {
-      this.$videoUrlErrorContainer.addClass('hidden');
-      if (e.code === 'Enter') {
-        const url = this.$activeFiles.find('.input-video').val().trim();
-        if (url.length === 0) {
-          return;
-        }
-        
-        if (!C.findProvider(url)) {
-          this.$videoUrlErrorContainer.removeClass('hidden');
-          this.$videoUrlErrorContainer.addClass("has-error");
-          this.$videoUrlErrorContainer.find('.h5p-errors').text(ns.t('core', 'unsupportedVideoSource'));
-        }
-        else {
-          if (this.params?.length > 0) {
-            this.replaceUrl(url);
-          } else {
-            this.useUrl(url);
-          }
-          this.updatePasteBox(true);
-        }
-      }
-    });
-
-    this.$errors = $container.children('.h5p-errors');
-
-    if (this.params !== undefined) {
-      for (var i = 0; i < this.params.length; i++) {
-        this.addFile(i);
-      }
-    }
-    else {
-      $container.find('.h5p-copyright-button').addClass('hidden');
-    }
-
-    var $dialog = $container.find('.h5p-editor-dialog');
-    $container.find('.h5p-copyright-button').add($dialog.find('.h5p-close')).click(function () {
-      $dialog.toggleClass('h5p-open');
-      return false;
-    });
-
-    ns.File.addCopyright(self, $dialog, function (field, value) {
-      self.setCopyright(value);
-    });
-  };
 
   /**
    * Providers incase mime type is unknown.
