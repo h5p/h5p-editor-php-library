@@ -171,7 +171,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       '</div>';
 
 
-    // debugger;
     var html = H5PEditor.createFieldMarkup(this.field, imageHtml, id);
     var $container = $(html).appendTo($wrapper);
     this.$dialogAnchor = $container.children('.h5p-dialog-anchor');
@@ -1349,15 +1348,30 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     let tabpanelsHTML = '';
 
     for (i = 0; i < tabs.length; i++) {
+      let title = '';
       const tab = tabs[i];
       const tabId = C.getNextId();
       const tabindex = (i === 0 ? 0 : -1)
       const selected = (i === 0 ? 'true' : 'false');
-      const title = (i > 1 ? H5PEditor.t('H5PEditor.' + tab, 'title') : H5PEditor.t('core', 'tabTitle' + tab));
 
-      tabsHTML += '<div class="av-tab' + (i === 0 ? ' selected' : '') + '" tabindex="' + tabindex + '" role="tab" aria-selected="' + selected + '" aria-controls="av-tabpanel-' + tabId + '" id="av-tab-' + tabId + '">' + title + '</div>';
+      switch (tab) {
+        case 'BasicFileUpload':
+          title = H5PEditor.t('core', 'fileUploadTitle');
+          tabsHTML +='<div class="av-tab av-tab__file-upload' + (i === 0 ? ' selected' : '') + '" tabindex="' + tabindex + '" role="tab" aria-selected="' + selected + '" aria-controls="av-tabpanel-' + tabId + '" id="av-tab-' + tabId + '">' + title + '</div>';
+          break;
+        case 'InputLinkURL':
+          title = H5PEditor.t('core', 'insertLinkTitle');
+          tabsHTML +='<div class="av-tab av-tab__insert-url' + (i === 0 ? ' selected' : '') + '" tabindex="' + tabindex + '" role="tab" aria-selected="' + selected + '" aria-controls="av-tabpanel-' + tabId + '" id="av-tab-' + tabId + '">' + title + '</div>';
+          break;
+        case 'AudioRecorder':
+          title = H5PEditor.t('core', 'recordAudioTitle');
+          tabsHTML +='<div class="av-tab av-tab__record-audio' + (i === 0 ? ' selected' : '') + '" tabindex="' + tabindex + '" role="tab" aria-selected="' + selected + '" aria-controls="av-tabpanel-' + tabId + '" id="av-tab-' + tabId + '">' + title + '</div>';
+          break;
+        default:
+          title = H5PEditor.t('H5PEditor.' + tab, 'title')
+          break;
+        }
       tabpanelsHTML += '<div class="av-tabpanel" tabindex="-1" role="tabpanel" id="av-tabpanel-' + tabId + '" aria-labelledby="av-tab-' + tabId + '"' + (i === 0 ? '' : ' hidden=""') + '>' + C.createTabContent(tab, type) + '</div>';
-
     }
 
     return C.createInsertDialog(
