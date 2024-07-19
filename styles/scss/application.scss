@@ -371,7 +371,8 @@ a {
         font-family: 'Open Sans', sans-serif;
         color: #000;
         background: $av-tab-button-color;
-        z-index: 1;
+        z-index: 3;
+        border-bottom: 1px solid #ccc;
 
         &::before {
           font-family: $icon-font-family;
@@ -386,19 +387,8 @@ a {
           color: #333;
           background: #fff;
           border-bottom: none;
-          z-index: 3;
-          
-          &::after {
-            content: '';
-            // Hiding top border of the av-tabpanel;
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            width: 100%;
-            background-color: #fff;
-            height: 3px;
-          }
         }
+
         &:last-child {
           border-right:none;
 
@@ -432,7 +422,7 @@ a {
 
       .av-tabpanel {
         border: 1px solid #ccc;
-        border-radius: 1px 5px 5px 5px;
+        border-radius: 0 0 5px 5px;
         margin-top: 1px;
         position: relative;
         overflow: visible;
