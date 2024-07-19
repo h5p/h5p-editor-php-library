@@ -360,10 +360,10 @@ a {
         float: left;
         display: inline-table;
         padding: 0.5em 0.75em;
+        box-sizing: content-box;
+        border-bottom: none;
         border-top: 1px solid #ccc;
         border-right: 1px solid #ccc;
-        // border-left: 1px solid #ccc;
-        border-bottom: none;
         margin-bottom: 2px;
         position: relative;
         font-weight: bold;
@@ -386,11 +386,11 @@ a {
           color: #333;
           background: #fff;
           border-bottom: none;
-          border-right: none;
           z-index: 3;
           
           &::after {
             content: '';
+            // Hiding top border of the av-tabpanel;
             position: absolute;
             bottom: -1px;
             left: 0;
@@ -399,31 +399,11 @@ a {
             height: 3px;
           }
         }
-        &:not(:first-child),
-        &:not(:last-child) {
-          border-left: 1px solid #ccc;
-          border-right: none;
-
-          &.selected {
-            border-left: none;
-          }
-        }
-        &:first-child {
-          // border-left: 1px solid #ccc;
-          // border-right: 1px solid #ccc;
-          border-left: none;
-          border-right: 1px solid #ccc;
-          &.selected {
-            border-left:none;
-            // border-left: 1px solid #ccc;
-            border-right: none;
-          }
-        }
         &:last-child {
           border-right:none;
-          border-left: 1px solid #ccc;
 
           &::before {
+            // Icon stuff
             font-family: $icon-font-family;
             color: #2579C6;
             vertical-align: middle;
@@ -434,8 +414,8 @@ a {
           }
 
           &.selected {
-            border-left: none;            
             &::after {
+              // Hiding top border of the av-tabpanel
               content: '';
               position: absolute;
               bottom: -2.5px;
