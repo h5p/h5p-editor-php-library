@@ -325,7 +325,7 @@ a {
     text-align: center;
   }
   .h5p-add-dialog {
-    position: absolute;
+    position: inherit;
     z-index: 1;
     visibility: hidden;
     opacity: 0;
@@ -333,6 +333,7 @@ a {
     left: 1em;
     right: 1em;
     top: 1em;
+    margin-bottom: 1rem;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     transition: visibility 0s 0.2s, opacity 0.2s;
