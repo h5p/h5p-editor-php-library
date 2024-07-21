@@ -78,6 +78,8 @@ H5PEditor.language.core = {
   image: 'Image',
   cancelLabel: 'Cancel',
   deleteLabel: 'Delete',
+  deleteAudioLabel: 'Delete Audio',
+  deleteVideoLabel: 'Delete Video',
   resetToOriginalLabel: 'Reset to original',
   loadingImageEditor: 'Loading image editor, please wait...',
   selectFiletoUpload: 'Select file to upload',
