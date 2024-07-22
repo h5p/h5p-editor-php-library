@@ -58,6 +58,7 @@ H5PEditor.language.core = {
   addVideoDescription:
     'H5P는 비메오 프로처럼 mp4, webm 또는 ogv로 포맷된 모든 외부 비디오 소스를 지원하며, 유튜브 링크를 지원함.',
   unsupportedVideoSource: "Unsupported video source",
+  unsupportedAudioSource: "Unsupported audio source",
   insert: '삽입',
   cancel: '취소',
   height: '높이',

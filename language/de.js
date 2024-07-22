@@ -59,6 +59,7 @@ H5PEditor.language.core = {
   addVideoDescription:
     'H5P unterstützt alle externen Videoquellen, die das mp4-, webm- or ogv-Format haben, wie Vimeo Pro, und unterstützt YouTube- und Panopto-Links.',
   unsupportedVideoSource: "Unsupported video source",
+  unsupportedAudioSource: "Unsupported audio source",
   insert: 'Einfügen',
   cancel: 'Abbrechen',
   height: 'Höhe',
