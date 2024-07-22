@@ -349,29 +349,20 @@ a {
       position: relative;
 
       .av-tablist {
-        position: relative;
         display: inline-flex;
-        max-width: fit-content;
-        flex-direction: row;
         border-left: 1px solid #ccc;
       }
+
       .av-tab {
         cursor: pointer;
-        float: left;
-        display: inline-table;
         padding: 0.5em 0.75em;
-        box-sizing: content-box;
-        border-bottom: none;
         border-top: 1px solid #ccc;
         border-right: 1px solid #ccc;
-        margin-bottom: 2px;
         position: relative;
         font-weight: 600;
         font-size: 15px;
-        font-family: 'Open Sans', sans-serif;
-        color: #000;
         background: $av-tab-button-color;
-        z-index: 3;
+        z-index: 1;
 
         &::before {
           font-family: $icon-font-family;
@@ -380,10 +371,10 @@ a {
           font-size: 1.8em;
           margin-right: 4px;
         }
+
         &.selected {
           color: #333;
           background: #fff;
-          border-bottom: none;
 
           &::after {
             content: "";
@@ -395,17 +386,6 @@ a {
             background: #fff;
           }
         }
-
-        &:last-child {
-          &::before {
-            // Icon stuff
-            font-family: $icon-font-family;
-            color: #2579C6;
-            vertical-align: middle;
-            font-size: 1.8em;
-            margin-right: 4px;
-          }
-        }
       }
 
       .av-tabpanel {
@@ -413,11 +393,8 @@ a {
         border-radius: 0 0 5px 5px;
         margin-top: 1px;
         position: relative;
-        overflow: visible;
         padding: 1em;
-        top: -3px;
-        z-index: 2;
-        background: #fff;
+        top: -1px;
 
         h3 {
           margin: 0 0 1em 0;
@@ -1146,8 +1123,7 @@ a {
 }
 
 .av-tab__record-audio:last-child::before {
-  content: "\e85d";
-  // content: "\f130";
+  content: "\e85d"; // TODO: Change to microphone icon
 }
 
 
