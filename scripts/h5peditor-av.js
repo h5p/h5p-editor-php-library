@@ -26,7 +26,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     this.setValue = setValue;
     this.changes = [];
     this.avContentList;
-    // debugger;
 
     if (params !== undefined && params[0] !== undefined) {
       this.setCopyright(params[0].copyright);
@@ -45,7 +44,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     });
 
 
-    // When uploading starts
     self.on('upload', function () {
       // Insert throbber
       self.$uploading = $('<div class="h5peditor-uploading h5p-throbber">' + H5PEditor.t('core', 'uploading') + '</div>').insertAfter(self.$add.hide());
@@ -53,23 +51,17 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       // Clear old error messages
       self.$errors.html('');
 
-      // Close dialog
       self.closeDialog();
     });
 
-    // Monitor upload progress
     self.on('uploadProgress', function (e) {
-      // debugger;
       // New upload, i.e. not update existing box.
       if (typeof e.data.updateId === 'undefined') {
         self.handleUploadProgress(this.dndAddDialog);
       }
     });
 
-    // Handle upload complete
     self.on('uploadComplete', function (event) {
-      // debugger;
-
       const result = event.data;
       let index = self.params?.length ?? 0;
       const updateId = event.data?.updateId ?? undefined;
@@ -202,13 +194,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       this.$addDialog.addClass('h5p-open');
     });
 
-    console.log("wrappers:")
-    console.log(this.$dialogAnchor)
-    console.log(this.$addDialog)
-    console.log(this.$dialogTable)
-    console.log(this.$tabList) // Contains tablist and panels
-    console.log("-------------------------")
-
     // Prepare to add the extra tab instances
     const tabInstances = [null, null]; // Add nulls for hard-coded tabs
     self.tabInstances = tabInstances;
@@ -219,7 +204,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       INPUT: 1
     };
 
-    // The current active tab
     let activeTab = TABS.UPLOAD;
 
     /**
@@ -230,9 +214,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       return tab > TABS.INPUT; // Always last tab
     };
 
-    /**
-     * Toggle the currently active tab.
-     */
     const toggleTab = function () {
       // Pause the last active tab
       if (isExtension(activeTab)) {
@@ -258,9 +239,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       }
     }
 
-    /**
-     * Switch focus between the buttons in the tablist
-     */
     const moveFocus = function (el) {
       if (el) {
         this.setAttribute('tabindex', '-1');
@@ -277,7 +255,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       const createTabInstance = function (type, index) {
         const tabInstance = new H5PEditor.AV[type]();
         tabInstance.appendTo(self.$addDialog[0].children[0].children[index + 1]); // Compensate for .av-tablist in the same wrapper
-        tabInstance.on('hasMedia', function (e) {
+        tabInstance.on('hasMedia', function () {
           if (index === activeTab) {
             // something
           }
@@ -292,8 +270,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         }
       }
     }
-    
-    let audioRecorderTabPanel = this.$dialogTable.children('#audioRecorderFiles');
     
     this.$dndTabPanel = this.$dialogTable.children('.av-tabpanel:not([hidden])');
     this.$dndFiles = this.$dndTabPanel.children('.h5p-dnd__av-container');
@@ -311,7 +287,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     let inputContainer = urlInsertButton.parent().parent().parent();
     this.$videoUrlErrorContainer = inputContainer.find('#errorContainer');
 
-    urlInsertButton.on('click', (e) => {
+    urlInsertButton.on('click', () => {
       const inputContainer = urlInsertButton.parent().parent().parent();
       const url = inputContainer.find('.input-video').val().trim();
       const isAudio = this.field.type === 'audio';
@@ -330,7 +306,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         // Check if there is an existing media propery in params
         let existingMedia = this.params?.some(p => C.findProvider(p.path));
         
-        // debugger;
         if (existingMedia) {
           this.replaceUrl(url);
         } else {
@@ -397,14 +372,12 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     
     this.$errors = $container.children('.h5p-errors');
 
-    // CHECK OUT: Checks if params contains any videos
     if (this.params !== undefined) {
       this.avContentList = this.params;
-      // debugger;
       this.params = this.params.map((param) => ({
         ...param,
         id: `${C.getNextId()}`,
-        parentContainer: C.findProvider(param.url) ? C.FILE_CONTAINER.URL_INPUT : C.FILE_CONTAINER.DRAG_AND_DROP, // Add fix for audio upload
+        parentContainer: C.findProvider(param.url) ? C.FILE_CONTAINER.URL_INPUT : C.FILE_CONTAINER.DRAG_AND_DROP,
       }));
 
       for (var index = 0; index < this.params.length; index++) {
@@ -510,13 +483,11 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     const loaderEl = boxEl.querySelector('.h5p-dnd__loader');
     
     boxEl.classList.add('h5p-dnd__box--is-uploading');
-    // debugger;
     loaderEl?.removeAttribute('style');
     elementsToHide.forEach(e => e.style = 'display: none;');
   };
 
   C.prototype.handleUploadComplete = function (boxEl) {
-    // debugger;
     const elementsToShow = Array.from(boxEl.querySelectorAll(':scope > div:not(.h5p-dnd__loader)'));
     const loaderEl = boxEl.querySelector('.h5p-dnd__loader');
 
@@ -529,7 +500,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * Add drag and drop listeners to the appropriate DOM elements.
    */
   C.prototype.addDragAndDropListeners = function (boxEl, blockEl, shouldReplace = false) {
-    // debugger;
     boxEl.addEventListener('dragenter', (e) => this.handleDragAndDrop(e, boxEl, blockEl, shouldReplace));
     blockEl.addEventListener('dragover', (e) => this.handleDragAndDrop(e, boxEl, blockEl, shouldReplace));
     blockEl.addEventListener('dragend', (e) => this.handleDragAndDrop(e, boxEl, blockEl, shouldReplace));
@@ -543,10 +513,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    *
    * @param {Event} e 
    */
-  C.prototype.handleDragAndDrop = function (e, boxEl, blockEl, shouldReplace) {
+  C.prototype.handleDragAndDrop = function (e, boxEl, shouldReplace) {
     e.preventDefault();
     e.stopPropagation();
-    // debugger
     const boxBlock = boxEl.querySelector('.h5p-dnd__box__block');
     
     if (e.type === 'dragenter') {
@@ -602,9 +571,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     // Check if source is provider (Vimeo, YouTube, Panopto)
     const isProvider = file?.path && C.findProvider(file.path);
     const isAudio = this.field.type === 'audio';
-    // debugger;
-
-    // let filesContainer = isProvider ? this.$dialogTable.find('#urlFiles') : this.$dialogTable.find('#dndFiles');
 
     let filesContainer;
     switch (file.parentContainer) {
@@ -624,7 +590,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     const boxEl = updateFileId ? filesContainer.find(`#${updateFileId}`).get(0) : filesContainer.find('.h5p-dnd__box').get(0);
 
     const blockEl = filesContainer.find('.h5p-dnd__box__block').get(0);
-    // debugger;
     const mimeType = file.mime.split('/')[1];
     const videoText = C.providers.map(p => p.name).includes(mimeType) ? mimeType : `.${mimeType.toUpperCase()}`;
     let fileHtml;
@@ -709,8 +674,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     this.$add.parent().find('.h5p-copyright-button').removeClass('hidden');
 
-    // debugger;
-
     // Handle drag and drop
     this.addDragAndDropListeners(boxEl, blockEl, true);
 
@@ -722,7 +685,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
             onChangeCallback: () => {
               this.updateIndex = index;
               this.updateId = boxEl.attr('id');
-              debugger;
               this.handleUploadProgress(boxEl);
             },
             context: {
@@ -738,7 +700,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     $file
       .find('.h5p-delete-image-button')
       .on('click', (e) => {
-        debugger;
         e.preventDefault();
         confirmRemovalDialog.show($file.offset().top);
       });
@@ -746,14 +707,13 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     // Handle click on thumbnail
     $file
       .find('.h5p-dnd__video-container')
-      .click((e) => {
+      .click(() => {
         if (!isProvider) {
           this.openFileSelector({
             onChangeCallback: () => {
               this.updateIndex = index;
               this.updateId = $file.attr('id');
               let current = filesContainer.find(`#${this.updateId}`).get(0);
-              // debugger;
               this.handleUploadProgress(current);
             },
             context: {
@@ -790,7 +750,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     // Remove file on confirmation
     confirmRemovalDialog.on('confirmed', function () {
-      //debugger;
       that.removeFileWithElement($file);
       if (filesContainer.children().length === 0) {
         that.$add.parent().find('.h5p-copyright-button').addClass('hidden');
@@ -804,7 +763,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * @param {number} $file File element
    */
   C.prototype.removeFileWithElement = function ($file) {
-    // debugger;
     if (this.params && this.params.length === 1) {
       // Remove from params.
       delete this.params;
@@ -812,8 +770,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     }
     else if (this.params.length > 1) {
       var index = $file.index();
-      var fileId = $file.attr('id');
-      var fileIndex = this.params.findIndex(param => param.id === fileId);
       this.params.splice(index, 1);
     }
 
@@ -877,7 +833,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       parentContainer: C.FILE_CONTAINER.URL_INPUT,
     };
 
-    // debugger;
     this.params.push(file);
     index = this.params.findIndex(param => param.id === file.id);
     this.addFile(index);
@@ -946,30 +901,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     }
     return null;
   }
-
-  /**
-   * Update the content list of audio/video.
-   */
-  // C.prototype.updateAVContentList = function () {
-  //   for (var i = 0; i < this.avContentList.length; i++) {
-  //     // let avContentId = this.avContentList[i].id;
-  //     let paramFile = {
-  //       path: this.avContentList[i].path,
-  //       mime: this.avContentList[i].mime,
-  //       copyright: this.avContentList[i].copyright,
-  //       aspectRatio: this.avContentList[i].aspectRatio,
-  //     }
-
-  //     let foundParamIndex = this.params.findIndex(param => param.id === this.avContentList[i].id);
-
-  //     if (!foundParamIndex) {
-  //       this.params[foundParamIndex] = paramFile;
-  //     }
-  //     else {
-  //       this.params.push(paramFile);
-  //     }
-  //   }
-  // }
 
   /**
    * Validate the field/widget.
@@ -1043,7 +974,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * @param {boolean} hasDescription
    * @returns {string} HTML
    */
-  C.createInsertDialog = function (content, disableInsert, id, hasDescription) {
+  C.createInsertDialog = function (content) {
     return '<div class="h5p-dialog-anchor"><div class="h5p-add-dialog h5p-open">' +
       '<div id="dialogTable" class="h5p-add-dialog-table">' + content + '</div>' +
       '</div></div>';
@@ -1057,7 +988,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * @returns {string} HTML
    */
   C.createTabContent = function (tab, type) {
-    var self = this;
     const isAudio = (type === 'audio');
     const firstFile =  Array.isArray(this.params) ? this.params[0] : undefined;
     const isProvider = firstFile?.path && C.findProvider(firstFile.path);
@@ -1143,12 +1073,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
   // AudioRecorder
   C.createAudioRecorderTabContent = function () {
-    var self = this;
-    // const isAudio = (type === 'audio');
-    const firstFile =  Array.isArray(this.params) ? this.params[0] : undefined;
-    const isProvider = firstFile?.path && C.findProvider(firstFile.path);
-    const copyPasteString = `<span class="h5p-dnd-nowrap"><span class="h5p-dnd__badge">${ns.t('core', 'ctrlKey')}<span class="h5p-dnd__badge__separator"></span>${ns.t('core', 'commandKey')}</span> + <span class="h5p-dnd__badge">${ns.t('core', 'pasteKey')}</span></span>`;
-    const dragCopyPasteString = ns.t('core', isAudio ? 'dragAndDropAndPasteAudio' : 'dragAndDropAndPasteVideo', { ':keyCombination': copyPasteString });
     return `
       <div id="audioRecorderFiles" class="h5p-dnd__av-container">
         <div class="h5p-dnd__box__block"></div>
@@ -1170,8 +1094,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * @param {Array} extraTabs
    * @returns {string} HTML
    */
-  C.createTabbedAdd = function (type, extraTabs, id, hasDescription) {
-    // //debugger;
+  C.createTabbedAdd = function (type, extraTabs) {
     let i;
 
     const tabs = [
@@ -1206,7 +1129,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           tabsHTML +='<div class="av-tab av-tab__insert-url' + (i === 0 ? ' selected' : '') + '" tabindex="' + tabindex + '" role="tab" aria-selected="' + selected + '" aria-controls="av-tabpanel-' + tabId + '" id="av-tab-' + tabId + '">' + title + '</div>';
           break;
         case 'AudioRecorder':
-          //debugger;
           title = H5PEditor.t('core', 'recordAudioTitle');
           tabsHTML +='<div class="av-tab av-tab__record-audio' + (i === 0 ? ' selected' : '') + '" tabindex="' + tabindex + '" role="tab" aria-selected="' + selected + '" aria-controls="av-tabpanel-' + tabId + '" id="av-tab-' + tabId + '">' + title + '</div>';
           break;
@@ -1214,14 +1136,11 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           title = H5PEditor.t('H5PEditor.' + tab, 'title')
           break;
         }
-      // AudioRecorder
-      // tabpanelsHTML += '<div class="av-tabpanel" tabindex="-1" role="tabpanel" id="av-tabpanel-' + tabId + '" aria-labelledby="av-tab-' + tabId + '"' + (i === 0 ? '' : ' hidden=""') + '>' + (tab === 'RecordAudio' ? C.createAudioRecorderTabContent() : C.createTabContent(tab, type))  + '</div>';
       tabpanelsHTML += '<div class="av-tabpanel" tabindex="-1" role="tabpanel" id="av-tabpanel-' + tabId + '" aria-labelledby="av-tab-' + tabId + '"' + (i === 0 ? '' : ' hidden=""') + '>' + C.createTabContent(tab, type) + '</div>';
     }
 
     return C.createInsertDialog(
-      '<div class="av-tablist" role="tablist" aria-label="' + H5PEditor.t('core', 'avTablistLabel') + '">' + tabsHTML + '</div>' + tabpanelsHTML,
-      true, id, hasDescription
+      '<div class="av-tablist" role="tablist" aria-label="' + H5PEditor.t('core', 'avTablistLabel') + '">' + tabsHTML + '</div>' + tabpanelsHTML
     );
   };
 
