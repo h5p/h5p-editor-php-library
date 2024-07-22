@@ -255,10 +255,15 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       const createTabInstance = function (type, index) {
         const tabInstance = new H5PEditor.AV[type]();
         tabInstance.appendTo(self.$addDialog[0].children[0].children[index + 1]); // Compensate for .av-tablist in the same wrapper
+
+        let hasRecorded = false;
         tabInstance.on('hasMedia', function () {
-          if (index === activeTab) {
-            // something
-          }
+          if (hasRecorded === true) return;
+          const media = tabInstance.getMedia();
+          
+          hasRecorded = true;
+          self.upload(media.data, media.name);
+          activeTab = TABS.UPLOAD;
         });
         tabInstances.push(tabInstance);
       }
@@ -585,10 +590,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       
       case C.FILE_CONTAINER.URL_INPUT:
         filesContainer = this.$dialogTable.find('#urlFiles');
-        break;
-
-      case C.FILE_CONTAINER.AUDIO_RECORDER:
-        filesContainer = this.$dialogTable.find('#audioRecorderFiles');
         break;
     }
 
@@ -1212,7 +1213,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   C.FILE_CONTAINER = {
     DRAG_AND_DROP: 1,
     URL_INPUT: 2,
-    AUDIO_RECORDER: 3
   };
 
   return C;
