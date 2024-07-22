@@ -171,7 +171,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     var imageHtml =
       '<ul class="file list-unstyled"></ul>' +
-      C.createTabbedAdd(self.field.type, self.field.widgetExtensions, id, self.field.description !== undefined);
+      C.createTabbedAdd(self.field.type, self.field.widgetExtensions, !!this.params ? true : false);
 
     if (!this.field.disableCopyright) {
       imageHtml += '<a class="h5p-copyright-button" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>';
@@ -568,6 +568,11 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     var that = this;
     var file = this.params[index];
 
+    if (!!this.params) {
+      const avTabPanel = this.$dialogTable.find('.av-tabpanel:not([hidden])');
+      avTabPanel.addClass('has_content');
+    }
+
     // Check if source is provider (Vimeo, YouTube, Panopto)
     const isProvider = file?.path && C.findProvider(file.path);
     const isAudio = this.field.type === 'audio';
@@ -763,10 +768,12 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * @param {number} $file File element
    */
   C.prototype.removeFileWithElement = function ($file) {
+    const avTabPanel = this.$dialogTable.find('.av-tabpanel:not([hidden])');
     if (this.params && this.params.length === 1) {
       // Remove from params.
       delete this.params;
       this.setValue(this.field);
+      avTabPanel.removeClass('has_content');
     }
     else if (this.params.length > 1) {
       var index = $file.index();
@@ -1094,7 +1101,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * @param {Array} extraTabs
    * @returns {string} HTML
    */
-  C.createTabbedAdd = function (type, extraTabs) {
+  C.createTabbedAdd = function (type, extraTabs, hasParams) {
     let i;
 
     const tabs = [
@@ -1136,7 +1143,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           title = H5PEditor.t('H5PEditor.' + tab, 'title')
           break;
         }
-      tabpanelsHTML += '<div class="av-tabpanel" tabindex="-1" role="tabpanel" id="av-tabpanel-' + tabId + '" aria-labelledby="av-tab-' + tabId + '"' + (i === 0 ? '' : ' hidden=""') + '>' + C.createTabContent(tab, type) + '</div>';
+      tabpanelsHTML += '<div class="av-tabpanel' + (hasParams ? ' has_content' : '') + '" tabindex="-1" role="tabpanel" id="av-tabpanel-' + tabId + '" aria-labelledby="av-tab-' + tabId + '"' + (i === 0 ? '' : ' hidden=""') + '>' + C.createTabContent(tab, type) + '</div>';
     }
 
     return C.createInsertDialog(
