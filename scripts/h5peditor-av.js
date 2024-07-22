@@ -263,7 +263,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           
           hasRecorded = true;
           self.upload(media.data, media.name);
-          activeTab = TABS.UPLOAD;
+          self.$tabList.children('.av-tab').get(0).click();
+          const avTabPanel = self.$dialogTable.find('.av-tabpanel:not([hidden])');
+          avTabPanel.addClass('has_content');
         });
         tabInstances.push(tabInstance);
       }
