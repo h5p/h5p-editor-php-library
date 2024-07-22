@@ -26,6 +26,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     this.setValue = setValue;
     this.changes = [];
     this.avContentList;
+    this.hasRecorded = false;
 
     if (params !== undefined && params[0] !== undefined) {
       this.setCopyright(params[0].copyright);
@@ -256,15 +257,15 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         const tabInstance = new H5PEditor.AV[type]();
         tabInstance.appendTo(self.$addDialog[0].children[0].children[index + 1]); // Compensate for .av-tablist in the same wrapper
 
-        let hasRecorded = false;
         tabInstance.on('hasMedia', function () {
-          if (hasRecorded === true) return;
+          if (this.hasRecorded === true) return;
           const media = tabInstance.getMedia();
           
-          hasRecorded = true;
+          this.hasRecorded = true;
           self.upload(media.data, media.name);
           self.$tabList.children('.av-tab').get(0).click();
           const avTabPanel = self.$dialogTable.find('.av-tabpanel:not([hidden])');
+          this.hasRecorded = false;
           avTabPanel.addClass('has_content');
         });
         tabInstances.push(tabInstance);
@@ -1045,9 +1046,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
             </div>
           </div>
         `;
-
-      
-
 
       case 'InputLinkURL':
           return `
