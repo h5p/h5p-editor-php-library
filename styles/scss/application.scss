@@ -366,7 +366,7 @@ a {
         border-right: 1px solid #ccc;
         margin-bottom: 2px;
         position: relative;
-        font-weight: bold;
+        font-weight: 600;
         font-size: 15px;
         font-family: 'Open Sans', sans-serif;
         color: #000;
@@ -377,10 +377,8 @@ a {
           font-family: $icon-font-family;
           color: #2579C6;
           vertical-align: middle;
-          font-size: 1.5em;
-          line-height: 0.9;
-          font-weight: 400;
-          margin-right: 0.5em;
+          font-size: 1.8em;
+          margin-right: 4px;
         }
         &.selected {
           color: #333;
@@ -404,10 +402,8 @@ a {
             font-family: $icon-font-family;
             color: #2579C6;
             vertical-align: middle;
-            font-size: 1.5em;
-            line-height: 0.9;
-            font-weight: 400;
-            margin-right: 0.5em;
+            font-size: 1.8em;
+            margin-right: 4px;
           }
         }
       }
@@ -1150,7 +1146,8 @@ a {
 }
 
 .av-tab__record-audio:last-child::before {
-  content: "\f130";
+  content: "\e85d";
+  // content: "\f130";
 }
 
 
