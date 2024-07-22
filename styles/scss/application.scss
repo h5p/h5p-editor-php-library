@@ -352,7 +352,7 @@ a {
         display: inline-flex;
         border-left: 1px solid #ccc;
 
-        &:has(+ .av-tabpanel.has_content) {
+        &:has(~ .av-tabpanel.has_content) {
           .av-tab:not(.selected) {
             opacity: 0.5;
             cursor: not-allowed;
