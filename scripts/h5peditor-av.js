@@ -260,13 +260,14 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         tabInstance.on('hasMedia', function () {
           if (this.hasRecorded === true) return;
           const media = tabInstance.getMedia();
-          
-          this.hasRecorded = true;
-          self.upload(media.data, media.name);
-          self.$tabList.children('.av-tab').get(0).click();
-          const avTabPanel = self.$dialogTable.find('.av-tabpanel:not([hidden])');
+          if (!!media) {
+            this.hasRecorded = true;
+            self.upload(media.data, media.name);
+            self.$tabList.children('.av-tab').get(0).click();
+            const avTabPanel = self.$dialogTable.find('.av-tabpanel:not([hidden])');
+            avTabPanel.addClass('has_content');
+          }
           this.hasRecorded = false;
-          avTabPanel.addClass('has_content');
         });
         tabInstances.push(tabInstance);
       }
