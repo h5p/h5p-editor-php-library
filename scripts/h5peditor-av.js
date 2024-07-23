@@ -172,7 +172,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     var imageHtml =
       '<ul class="file list-unstyled"></ul>' +
-      C.createTabbedAdd(self.field.type, self.field.widgetExtensions, !!this.params ? true : false);
+      C.createTabbedAdd(self.field.type, self.field.widgetExtensions);
 
     if (!this.field.disableCopyright) {
       imageHtml += '<a class="h5p-copyright-button" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>';
@@ -185,7 +185,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     var html = H5PEditor.createFieldMarkup(this.field, imageHtml, id);
     var $container = $(html).appendTo($wrapper);
     
-    // Wrappers (hierarchyl)
+    // Wrappers (hierarchy)
     this.$dialogAnchor = $container.children('.h5p-dialog-anchor');
     this.$addDialog = this.$dialogAnchor.children('.h5p-add-dialog');
     this.$dialogTable = this.$addDialog.children('.h5p-add-dialog-table');
@@ -355,7 +355,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       }
     });
 
-    // May need to add listener on the specific dnd tab here
+    // Need to add listener on the specific dnd tab here
     document.addEventListener('paste', (e) => {
       const activeElement = document.activeElement.closest('.h5p-dnd__box');
       if (this.$dndFiles.get(0).contains(activeElement) && activeElement && e.clipboardData.files.length > 0) {
@@ -669,7 +669,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     this.$add.toggleClass('hidden', isProvider);
 
-    // Check if I can update the params here instead of every time before calling the addFile method 
     if (updateFileId) {
       this.updateId = undefined;
       this.updateIndex = undefined;
@@ -962,7 +961,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   /**
    * Close the add media dialog
    */
-  // Open dialog logic
   C.prototype.closeDialog = function () {
     this.$addDialog.removeClass('h5p-open');
 
@@ -1080,7 +1078,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     }
   };
 
-  // AudioRecorder
   C.createAudioRecorderTabContent = function () {
     return `
       <div id="audioRecorderFiles" class="h5p-dnd__av-container">
@@ -1103,7 +1100,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * @param {Array} extraTabs
    * @returns {string} HTML
    */
-  C.createTabbedAdd = function (type, extraTabs, hasParams) {
+  C.createTabbedAdd = function (type, extraTabs) {
     let i;
 
     const tabs = [
