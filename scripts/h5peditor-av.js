@@ -978,6 +978,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       case 'BasicFileUpload':
         return `
           <div id="dndFiles" class="h5p-dnd__av-container">
+            <div class="h5p-dnd__box__block"></div>
             <div class="h5p-dnd__box h5p-dnd__box__url h5p-dnd__box--is-dashed h5p-dnd__box--is-inline h5p-dnd__box__action" tabindex="0">
               <div class="h5p-dnd__box__block"></div>
               <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--is-fixed h5p-dnd__column--hide-when-focus h5p-dnd__column--is-padded h5p-dnd__column--when-wide">
@@ -986,13 +987,11 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
                   ${isAudio ? H5PEditor.t('core', 'uploadAudio') : H5PEditor.t('core', 'uploadVideo')}
                 </button>
               </div>
-              
               <div class="h5p-dnd__column h5p-dnd__column--hide-when-focus h5p-dnd__column--when-small">
                 <button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">
                   ${isAudio ? H5PEditor.t('core', 'uploadAudio') : H5PEditor.t('core', 'uploadVideo')}
                 </button>
               </div>
-          
               <div class="h5p-dnd__row h5p-dnd__column--hide-when-focus h5p-dnd__row--when-small">
                 <span class="divider"></span> ${H5PEditor.t('core', 'uploadOr')} <span class="divider"></span>
               </div>
@@ -1002,11 +1001,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
                 </div>
                 <div class="h5p-errors"></div>
               </div>
-          
               <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--show-when-focus h5p-dnd__column--is-full-width">
                 ${isAudio ? H5PEditor.t('core', 'dropAudio') : H5PEditor.t('core', 'dropVideo')}
               </div>
-
               <div class="h5p-dnd__loader h5p-dnd__column h5p-dnd__column--is-full-width" style="display: none;">
                 <div class="h5p-loader__wrapper">
                   <div class="h5p-loader__icon"></div>
@@ -1021,7 +1018,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
             <div id="urlFiles" class="h5p-dnd__av-container">
               <div class="h5p-dnd__box__block"></div>
               <div class="h5p-dnd__box h5p-dnd__box__url h5p-dnd__box__video-paste">
-                
                 <div class="h5p-dnd__row">
                   <div class="input-container">
                     <input class="input-video" size="1" type="text" placeholder="${isAudio ? H5PEditor.t('core', 'enterAudioLink') : H5PEditor.t('core', 'enterVideoLink')}" value="${isProvider ? firstFile.path : ''}"/>
