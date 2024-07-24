@@ -249,16 +249,27 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       const createTabInstance = function (type, index) {
         const tabInstance = new H5PEditor.AV[type]();
         tabInstance.appendTo(self.$addDialog[0].children[0].children[index + 1]); // Compensate for .av-tablist in the same wrapper
+        this.hasRecorded = false;
+        let hasUploaded = false;
+        let media = null;
+        let timeout = null;
 
         tabInstance.on('hasMedia', function () {
-          if (this.hasRecorded === true) return;
-          const media = tabInstance.getMedia();
-          if (!!media) {
-            this.hasRecorded = true;
-            self.upload(media.data, media.name);
-            self.$tabList.children('.av-tab').get(0).click();
-            const avTabPanel = self.$dialogTable.find('.av-tabpanel:not([hidden])');
-            avTabPanel.addClass('has_content');
+          this.hasRecorded = true;
+          media = tabInstance.getMedia();
+          if (timeout) {
+            clearTimeout(timeout);
+          }
+          if (this.hasRecorded && !hasUploaded && !!media) {
+            timeout = setTimeout(() => {
+              hasUploaded = true;
+              self.upload(media.data, media.name);
+              self.$tabList.children('.av-tab').get(0).click();
+              const avTabPanel = self.$dialogTable.find('.av-tabpanel:not([hidden])');
+              avTabPanel.addClass('has_content');
+              hasUploaded = false;
+              return;
+            }, 100);
           }
           this.hasRecorded = false;
         });
