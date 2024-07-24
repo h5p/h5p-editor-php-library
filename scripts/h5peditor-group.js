@@ -136,10 +136,6 @@ ns.Group.prototype.appendTo = function ($wrapper) {
   if (this.field.expanded === true) {
     this.expand();
   }
-  else {
-    // Implicitly be default, but others may want to know via event
-    this.collapse();
-  }
 };
 
 /**
