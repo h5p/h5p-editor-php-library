@@ -502,9 +502,18 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       boxEl.classList.remove('h5p-dnd__box--is-dragging');
     }
     else if (e.type === 'drop') {
+      let index;
+      let id;
       boxEl.classList.remove('h5p-dnd__box--is-dragging');
-      const index = shouldReplace ? $(boxEl.parentElement).index() : -1;
-      const id = shouldReplace ? $(boxEl.parentElement).attr(id) : null;
+      const boxElParent = $(boxEl.parentElement);
+      if (shouldReplace && boxElParent.attr('id') !== this.$dndFiles.attr('id')) {
+        index = boxElParent.index();
+        id = boxElParent.attr('id') ?? undefined;
+      }
+      else {
+        index = -1;
+        id = undefined;
+      }
       this.uploadOrReplaceImage(e.dataTransfer.files, index, id, boxEl);
     }
   };
@@ -565,9 +574,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         break;
     }
 
-    const boxEl = updateFileId ? filesContainer.find(`#${updateFileId}`).get(0) : filesContainer.find('.h5p-dnd__box').get(0);
-
-    const blockEl = filesContainer.find('.h5p-dnd__box__block').get(0);
     const mimeType = file.mime.split('/')[1];
     const videoText = C.providers.map(p => p.name).includes(mimeType) ? mimeType : `.${mimeType.toUpperCase()}`;
     let fileHtml;
@@ -650,6 +656,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     }
 
     this.$add.parent().find('.h5p-copyright-button').removeClass('hidden');
+
+    const boxEl = $file.find('.h5p-dnd__box').get(0);
+    const blockEl = $file.find('.h5p-dnd__box__block').get(0);
 
     // Handle drag and drop
     this.addDragAndDropListeners(boxEl, blockEl, true);
