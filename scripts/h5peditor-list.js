@@ -93,6 +93,10 @@ H5PEditor.List = (function ($) {
      * Used when children are groups to determine if all groups are collapsed.
      */
     const handleGroupCollapsedStateChanged = () => {
+      if (children.some(child => !(child instanceof H5PEditor.Group))) {
+        return; // Only groups have collapsed state
+      }
+
       const areAllGroupsCollapsed = !children.some(
         (child) => child.isExpanded()
       );
@@ -225,6 +229,9 @@ H5PEditor.List = (function ($) {
         }
       }
       self.trigger('removedItem', index);
+
+      // Ensure that collapsed state is set according to remaining items
+      handleGroupCollapsedStateChanged();
     };
 
     /**
