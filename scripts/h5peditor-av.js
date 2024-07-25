@@ -104,9 +104,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
             self.addFile(foundUpdateIndex, updateId);
           }
           else {
-            throw new Error(`Index: ${foundUpdateIndex} not found`);
+            throw new Error(`File not found`);
           }
-
         }
         else {
           file.id = H5P.createUUID();
