@@ -325,18 +325,14 @@ a {
     text-align: center;
   }
   .h5p-add-dialog {
-    position: absolute;
+    position: inherit;
     z-index: 1;
     visibility: hidden;
     opacity: 0;
     background: #fff;
-    left: 1em;
-    right: 1em;
-    top: 1em;
-    border: 1px solid #cdcdcd;
+    margin-bottom: 1rem;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
-    box-shadow: 0 0 8px #666;
     transition: visibility 0s 0.2s, opacity 0.2s;
 
     &.h5p-open {
@@ -347,37 +343,63 @@ a {
 
     .h5p-add-dialog-table {
       overflow: hidden;
+      position: relative;
 
       .av-tablist {
-        overflow: hidden;
-        margin: 1em 1em 0 1em;
+        display: inline-flex;
+        border-left: 1px solid $av-tab-container-border-color;
+
+        &:has(~ .av-tabpanel.has_content) {
+          .av-tab:not(.selected) {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+          }
+        }
       }
 
       .av-tab {
         cursor: pointer;
-        float: left;
         padding: 0.5em 0.75em;
-        border-top: 1px solid #ccc;
-        border-right: 1px solid #ccc;
-        font-weight: bold;
+        border-top: 1px solid $av-tab-container-border-color;
+        border-right: 1px solid $av-tab-container-border-color;
+        position: relative;
+        font-weight: 600;
         font-size: 15px;
-        color: #666;
-        background: #f5f5f5;
+        background: $av-tab-button-color;
+        z-index: 1;
 
-        &:first-child {
-          border-left: 1px solid #ccc;
+        &::before {
+          font-family: $icon-font-family;
+          color: $av-tab-button-font-color;
+          vertical-align: middle;
+          font-size: 1.8em;
+          margin-right: 4px;
         }
+
         &.selected {
-          color: #333;
-          background: #fff;
+          color: $av-tab-button-title-color;
+          background: $av-tab-button-selected-color;
+
+          &::after {
+            content: "";
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: $av-tab-button-selected-color;
+          }
         }
       }
 
       .av-tabpanel {
-        border: 1px solid #ccc;
-        margin: 0 1em 1em 1em;
-        overflow: hidden;
+        border: 1px solid $av-tab-container-border-color;
+        border-radius: 0 0 5px 5px;
+        margin-top: 1px;
+        position: relative;
         padding: 1em;
+        top: -1px;
 
         h3 {
           margin: 0 0 1em 0;
@@ -1096,6 +1118,19 @@ a {
     }
   }
 }
+
+.av-tab__file-upload::before {
+  content: "\e85d";
+}
+
+.av-tab__insert-url::before {
+  content: "\e85c";
+}
+
+.av-tab__record-audio:last-child::before {
+  content: "\e85d"; // TODO: Change to microphone icon
+}
+
 
 .h5peditor-form {
   position: relative;
