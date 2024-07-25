@@ -45,6 +45,8 @@ H5PEditor.language.core = {
   editImage: 'Uredi sliko',
   saveLabel: 'Shrani',
   cancelLabel: 'Prekliči',
+  deleteAudioLabel: 'Delete Audio',
+  deleteVideoLabel: 'Delete Video',
   resetToOriginalLabel: 'Ponastavi na privzeto',
   loadingImageEditor: 'Nalagam urejevalnik slik, počakajte prosim ...',
   selectFiletoUpload: 'Izberite datoteko za prenos',
@@ -55,6 +57,9 @@ H5PEditor.language.core = {
   enterVideoTitle: 'Dodaj spletni naslov (URL) do YouTube ali drugega videoposnetka',
   uploadAudioTitle: 'Naloži zvočni posnetek',
   uploadVideoTitle: 'Naloži videoposnetek',
+  fileUploadTitle: 'File Upload',
+  insertLinkTitle: 'Insert Link',
+  recordAudioTitle: 'Record Audio',
   addVideoDescription:
     'H5P podpira vse zunanje videoposnetke v formatu mp4, webm ali ogv. Tudi povezave do posnetkov na Vimeo Pro, YouTube in Panopto.',
   unsupportedVideoSource: "Unsupported video source",

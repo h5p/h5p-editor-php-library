@@ -45,6 +45,8 @@ H5PEditor.language.core = {
   editImage: 'Muokkaa kuvaa',
   saveLabel: 'Tallenna',
   cancelLabel: 'Peruuta',
+  deleteAudioLabel: 'Delete Audio',
+  deleteVideoLabel: 'Delete Video',
   resetToOriginalLabel: 'Palauta alkuperäiseksi',
   loadingImageEditor: 'Lataa kuvaeditoria, odota...',
   selectFiletoUpload: 'Valitse ladattava tiedosto',
@@ -55,6 +57,9 @@ H5PEditor.language.core = {
   enterVideoTitle: 'Liitä YouTube linkki tai muu videon osoite',
   uploadAudioTitle: 'Lataa äänitiedosto',
   uploadVideoTitle: 'Lataa videotiedosto',
+  fileUploadTitle: 'File Upload',
+  insertLinkTitle: 'Insert Link',
+  recordAudioTitle: 'Record Audio',
   addVideoDescription:
     'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube and Panopto links.',
   unsupportedVideoSource: "Unsupported video source",

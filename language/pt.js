@@ -45,6 +45,8 @@ H5PEditor.language.core = {
   editImage: 'Editar imagem',
   saveLabel: 'Guardar',
   cancelLabel: 'Cancelar',
+  deleteAudioLabel: 'Delete Audio',
+  deleteVideoLabel: 'Delete Video',
   resetToOriginalLabel: 'Restabelecer o original',
   loadingImageEditor: 'A carregar o editor de imagem. Por favor, aguarde...',
   selectFiletoUpload: 'Selecione o ficheiro para enviar',
@@ -55,6 +57,9 @@ H5PEditor.language.core = {
   enterVideoTitle: 'Cole aqui o URL do vídeo ou a hiperligação do YouTube',
   uploadAudioTitle: 'Enviar ficheiro de áudio',
   uploadVideoTitle: 'Enviar ficheiro de vídeo',
+  fileUploadTitle: 'File Upload',
+  insertLinkTitle: 'Insert Link',
+  recordAudioTitle: 'Record Audio',
   addVideoDescription:
     'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube and Panopto links.',
   unsupportedVideoSource: "Unsupported video source",

@@ -46,6 +46,8 @@ H5PEditor.language.core = {
   editImage: 'Επεξεργασία εικόνας',
   saveLabel: 'Αποθήκευση',
   cancelLabel: 'ακύρωση',
+  deleteAudioLabel: 'Delete Audio',
+  deleteVideoLabel: 'Delete Video',
   resetToOriginalLabel: 'Επαναφορά στο πρωτότυπο',
   loadingImageEditor: 'Φόρτωση επεξεργαστή εικόνας, παρακαλούμε περιμένετε...',
   selectFiletoUpload: 'Επιλέξτε αρχείο προς μεταφόρτωση',
@@ -56,6 +58,9 @@ H5PEditor.language.core = {
   enterVideoTitle: 'Επικολλήστε σύνδεσμο YouTube ή άλλη διεύθυνση URL βίντεο',
   uploadAudioTitle: 'Μεταφορτώστε αρχείο ήχου',
   uploadVideoTitle: 'Μεταφορτώστε αρχείο video',
+  fileUploadTitle: 'File Upload',
+  insertLinkTitle: 'Insert Link',
+  recordAudioTitle: 'Record Audio',
   addVideoDescription:
     'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube and Panopto links.',
   unsupportedVideoSource: "Unsupported video source",
