@@ -760,6 +760,10 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    */
   C.prototype.removeFileWithElement = function ($file) {
     const avTabPanel = this.$dialogTable.find('.av-tabpanel:not([hidden])');
+    const filesContainer = avTabPanel.children('.h5p-dnd__av-container');
+    const filesContainerId = filesContainer.attr('id') === 'urlFiles' ? true : false;
+    const urlInputHasValue = filesContainerId ? filesContainer.get(0).querySelector('.input-video').value : '';
+
     if (this.params.length === 1) {
       // Remove from params.
       delete this.params;
@@ -774,7 +778,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     $file.remove();
     this.$add.removeClass('hidden');
-    if (this.params === undefined) {
+    if (filesContainerId && urlInputHasValue !== '') {
       this.updatePasteBox(false);
       this.$videoUrlErrorContainer.addClass('hidden');
     }
@@ -786,10 +790,10 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   };
 
   C.prototype.updatePasteBox = function (isReplace) {
-    const filesContainer = $('.av-tabpanel:not([hidden])');
-    const pasteBoxEl = filesContainer.find('.h5p-dnd__box__video-paste');
-    const inputEl = pasteBoxEl.find('.input-video');
-    const btnEl = pasteBoxEl.find('.h5p-dnd__btn__insert-url');
+    const filesContainer = this.$dialogTable.find('.av-tabpanel:not([hidden])').children('.h5p-dnd__av-container');
+    const pasteBoxEl = filesContainer.get(0).querySelector('.h5p-dnd__box__video-paste');
+    const inputEl = pasteBoxEl.querySelector('.input-video');
+    const btnEl = pasteBoxEl.querySelector('.h5p-dnd__btn__insert-url');
     
     btnEl.innerText = isReplace ? H5PEditor.t('core', 'replaceUrl') : H5PEditor.t('core', 'insertUrl');
     inputEl.value = isReplace ? inputEl.value : "";
