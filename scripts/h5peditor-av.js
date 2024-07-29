@@ -394,16 +394,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       $container.find('.h5p-copyright-button').addClass('hidden');
     }
 
-    let dialog = $container.find('.h5p-editor-dialog');
-    $container.find('.h5p-copyright-button').add(dialog.find('.h5p-close')).click(function () {
-      dialog.toggleClass('h5p-open');
-      return false;
-    });
-
-    ns.File.addCopyright(self, $dialog, function (field, value) {
-      self.setCopyright(value);
-    });
-
     // Register event listeners to tab DOM elements
     $container.find('.av-tab').click(toggleTab).keydown(function (e) {
       if (e.which === 13 || e.which === 32) { // Enter or Space
