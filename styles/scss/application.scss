@@ -223,7 +223,7 @@ a {
     font-family: $font-family;
     font-size: 16px;
     border: 1px solid $form-border-color;
-    background: $form-input-color inline-image('down.png') no-repeat;
+    background: $form-input-color url('../../images/down.png') no-repeat;
     background-position: calc(100% - 10px);
     box-shadow: $form-input-box-shadow;
     -moz-appearance: none;
@@ -639,7 +639,7 @@ a {
       max-width: 100%;
       min-width: 1em;
       min-height: 1em;
-      background: $form-input-color inline-image('transparent-background.png') repeat;
+      background: $form-input-color url('../../images/transparent-background.png') repeat;
     }
     .thumbnail:focus {
       box-shadow: 0 0 10px 0 #222;
