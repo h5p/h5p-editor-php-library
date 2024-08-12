@@ -328,7 +328,6 @@ ns.Editor.prototype.getParams = function (notFormSubmit) {
  * @returns {Object} Library parameters
  */
 ns.Editor.prototype.sanitizeParams = function (params, library) {
-  console.log(params);
   library = typeof(library) === 'string' ? library.split(' ')[0] : null;
   if (!library) {
     return params;
