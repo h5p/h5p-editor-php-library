@@ -322,6 +322,32 @@ ns.Editor.prototype.getParams = function (notFormSubmit) {
 };
 
 /**
+ * Sanitize params for certain libraries.
+ *
+ * @alias H5PEditor.Editor#sanitizeParams
+ * @returns {Object} Library parameters
+ */
+ns.Editor.prototype.sanitizeParams = function (params, library) {
+  console.log(params);
+  library = typeof(library) === 'string' ? library.split(' ')[0] : null;
+  if (!library) {
+    return params;
+  }
+  if (library === 'H5P.Blanks') { // HFP-3674 - remove tags from solutions
+    if (!params.params?.questions.length) {
+      return params;
+    }
+    const list = params.params.questions[0].match(/\*(.*?)\*/ig);
+    for (let item of list) {
+      const chunk = item.split(':')[0];
+      const cleaned = item.replaceAll(chunk, chunk.replaceAll(/<\/?[a-z]*\d?>/ig, ''));
+      params.params.questions[0] = params.params.questions[0].replaceAll(item, cleaned);
+    }
+  }
+  return params;
+};
+
+/**
  * Validate editor data and submit content using callback.
  *
  * @alias H5PEditor.Editor#getContent
@@ -337,11 +363,12 @@ ns.Editor.prototype.getContent = function (submit, error) {
     }
     return;
   }
-
+  
+  const lib = this.getLibrary();
   const content = {
     title: this.isMainTitleSet(),
-    library: this.getLibrary(),
-    params: this.getParams()
+    library: lib,
+    params: this.sanitizeParams(this.getParams(), lib)
   };
 
   if (!content.title) {
