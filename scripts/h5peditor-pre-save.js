@@ -34,6 +34,9 @@ H5PEditor.Presave = (function (Editor) {
         if (serverSideData.hasOwnProperty('maxScore') && Presave.isInt(serverSideData.maxScore)) {
           self.maxScore += serverSideData.maxScore;
         }
+        if (serverSideData.hasOwnProperty('filteredParams')) {
+          self.filteredParams = serverSideData.filteredParams;
+        }
       });
     }
     return this;

@@ -338,10 +338,19 @@ ns.Editor.prototype.getContent = function (submit, error) {
     return;
   }
 
+  const params = this.getParams();
+  const lib = this.getLibrary();
+
+  // Run presave.js of content type to process params before saving
+  const presaveResults = this.selector.presave(params.params, lib);
+  if (presaveResults?.filteredParams) {
+    params.params = presaveResults.filteredParams;
+  }
+
   const content = {
     title: this.isMainTitleSet(),
-    library: this.getLibrary(),
-    params: this.getParams()
+    library: lib,
+    params: params
   };
 
   if (!content.title) {
