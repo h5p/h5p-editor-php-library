@@ -22,6 +22,7 @@ html, body {
   max-width: 960px;
   position: relative;
 }
+
 a {
   text-decoration: none;
 }
@@ -96,10 +97,103 @@ a {
     font-size: 16px;
     word-wrap: break-word;
 
+    a {
+      text-decoration: underline;
+    }
+
+    /* The figure around the table */
+    figure.table {
+      display: table;
+      table-layout: fixed;
+      margin: 0 auto;
+      padding: 0;
+      float: left;
+
+      /* The actual table */
+      table {
+        border-collapse: collapse;
+        height: 100%;
+        width: 100%;
+        border-spacing: 0;
+        border-width: 1px;
+        border-color:  #494949;
+
+        td, th {
+          padding: 1px;
+          border-color:  #494949;
+          border-bottom-style: solid;
+        }
+
+        td {
+          border-width: 0.083em;
+        }
+
+        th {
+          border-width: .167em;
+        }
+
+        tr:last-child > td {
+          border-bottom-style: none;
+        }
+      }
+
+      figcaption {
+        background-color: transparent;
+        caption-side: top;
+        color: #333;
+        display: table-caption;
+        font-size: .75em;
+        outline-offset: -1px;
+        padding: .6em;
+        text-align: center;
+        word-break: break-word;
+      }
+    }
+
+    .table-overflow-protection {
+      clear: both;
+    }
+
     &.error {
       border-color: red;
     }
   }
+
+  // Inside ckeditor, needed for changes to default
+  .ck-content figure.table {
+    float: left;
+
+    table {
+      border-width: 1px;
+      border-color:  #494949;
+      border-style: none;
+
+      td, th {
+        padding: 1px;
+        border-style: none;
+        border-color:  #494949;
+        border-bottom-style: solid;
+      }
+
+      td {
+        border-width: 0.083em;
+      }
+
+      th {
+        border-width: .167em;
+        background-color: transparent;
+      }
+
+      tr:last-child > td {
+        border-bottom-style: none;
+      }
+    }
+
+    figcaption {
+      background-color: transparent;
+    }
+  }
+
   .h5peditor-text, textarea {
     width: 100%;
     box-sizing: border-box;
@@ -108,6 +202,31 @@ a {
       border-color: red;
     }
   }
+
+  // The actual ck editor
+  .ck {
+    a {
+      text-decoration: underline;
+    }
+
+    .ck-font-size-dropdown .ck-dropdown__panel,
+    .ck-text-fragment-language-dropdown .ck-dropdown__panel {
+      max-height: 20em;
+      overflow-y: scroll;
+    }
+
+    .ck-fontsize-option .ck-button__label {
+      line-height: normal !important;
+    }
+
+    .ck-content pre {
+      background: initial;
+      border: initial;
+      border-radius: initial;
+      padding: 0;
+    }
+  }
+
   /* Placeholders - need to be on separate lines. If not,
      the browsers will invalidate them */
   textarea:focus::-webkit-input-placeholder,
@@ -153,7 +272,7 @@ a {
     padding: 10px 30px 10px 8px;
     font-family: $font-family;
     font-size: 16px;
-    border: 1px solid $form-border-color;;
+    border: 1px solid $form-border-color;
     background: $form-input-color inline-image('down.png') no-repeat;
     background-position: calc(100% - 10px);
     @include box-shadow($form-input-box-shadow);
@@ -358,13 +477,21 @@ a {
 
         &:before {
           font-family: 'H5P';
-          content: "\e904";
           position: absolute;
-          color: #dd0505;
           left: 0;
           top: 0.083em;
           font-size: 3.8em;
           line-height: 1;
+        }
+
+        &.video:before {
+          content: "\e904";
+          color: #dd0505;
+        }
+
+        &.audio:before {
+          content: "\e913";
+          color: #747275;
         }
 
         input {
@@ -386,7 +513,7 @@ a {
         border: 1px solid #bbb;
 
         .h5p-file-drop-upload-inner {
-          border: 2px dashed #bbb;;
+          border: 2px dashed #bbb;
           background-color: white;
           position: absolute;
           top: 3px;
@@ -396,10 +523,17 @@ a {
 
           &:after {
             font-family: "H5P";
-            content: "\e903";
             line-height: 1.4em;
             font-size: 3.5em;
             color: #bbb;
+          }
+
+          &.video:after {
+            content: "\e903";
+          }
+
+          &.audio:after {
+            content: "\e914";
           }
         }
 
@@ -816,6 +950,10 @@ a {
   }
 }
 
+.ck-powered-by-balloon {
+  display: none !important;
+}
+
 .h5p-editor-dialog.h5p-dialog-wide {
   width: 90%;
   border-radius: 0.208em;
@@ -1056,42 +1194,7 @@ a {
   overflow: hidden;
 }
 
-.h5p-tutorial-url,
-.h5p-example-url {
-  font-size: 1em;
-  color: #2270B9;
-  display: inline-block;
-  line-height: 1;
-  height: 2em;
-  margin-right: 10px;
-  padding-right: 10px;
-  padding-bottom: 2px;
-  margin-bottom: 8px;
-  border: 1px solid transparent;
-
-  &:focus {
-    border-color: #bbdae8;
-  }
-  &:active {
-    border-color: #1C70BA;
-  }
-}
-
-.h5p-tutorial-url:before,
-.h5p-example-url:before {
-  font-family: $icon-font-family;
-  font-size: 1.5em;
-  position: relative;
-  top: 0.15em;
-  left: 0.2em;
-  margin-right: 10px;
-}
-.h5p-tutorial-url:before {
-  content: "\e907";
-}
-.h5p-example-url:before {
-  content: "\e906";
-}
+@import "tutorial-and-example-links";
 
 .h5peditor-widget-select {
   overflow: hidden;
