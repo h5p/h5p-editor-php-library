@@ -20,6 +20,11 @@
     display: inline;
   }
 
+  .h5p-editor-image-buttons {
+    float: left;
+    clear: both;
+  }
+
   .library {
     border: 0;
   }
@@ -31,7 +36,7 @@
 
   .h5p-dialog-anchor {
     position: relative;
-    width: 100%;
+    margin: -16px;
   }
 }
 

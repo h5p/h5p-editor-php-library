@@ -59,9 +59,6 @@ ns.File = function (parent, field, params, setValue) {
 
   // Monitor upload progress
   self.on('uploadProgress', function (e) {
-    if (typeof self.handleUploadProgress === 'function') {
-      self.handleUploadProgress(Math.round(e.data.progress*100));
-    }
     self.$file.children().html(ns.t('core', 'uploading') + ' ' + Math.round(e.data * 100) + ' %');
   });
 
@@ -81,17 +78,18 @@ ns.File = function (parent, field, params, setValue) {
 
       // Make it possible for other widgets to process the result
       self.trigger('fileUploaded', result.data);
- 
+
       self.setValue(self.field, self.params);
 
       for (var i = 0; i < self.changes.length; i++) {
         self.changes[i](self.params);
       }
-      self.addFile();
     }
     catch (error) {
-      this.setErrorMessage(error);
+      self.$errors.append(ns.createError(error));
     }
+
+    self.addFile();
   });
 };
 
@@ -117,7 +115,6 @@ ns.File.prototype.appendTo = function ($wrapper) {
   var html = ns.createFieldMarkup(this.field, fileHtml, this.id);
 
   var $container = ns.$(html).appendTo($wrapper);
-  this.$container = $container;
   this.$copyrightButton = $container.find('.h5p-copyright-button');
   this.$file = $container.find('.file');
   this.$errors = $container.find('.h5p-errors');

@@ -17,6 +17,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    */
   function C(parent, field, params, setValue) {
     var self = this;
+
     // Initialize inheritance
     H5PEditor.FileUploader.call(self, field);
 
@@ -25,25 +26,12 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     this.params = params;
     this.setValue = setValue;
     this.changes = [];
-    this.hasRecorded = false;
 
     if (params !== undefined && params[0] !== undefined) {
       this.setCopyright(params[0].copyright);
     }
 
-    const isAudio = this.field.type === 'audio';
-
-    this.replaceCallback = () => {};
-    this.confirmReplaceDialog = new H5P.ConfirmationDialog({
-      headerText: H5PEditor.t('core', isAudio ? 'replaceAudio' : 'replaceVideo'),
-      dialogText: H5PEditor.t('core', isAudio ? 'confirmReplaceAudio' : 'confirmReplaceVideo')
-    }).appendTo(document.body);
-
-    this.confirmReplaceDialog.on('confirmed', function () {
-      self.replaceCallback();
-    });
-
-
+    // When uploading starts
     self.on('upload', function () {
       // Insert throbber
       self.$uploading = $('<div class="h5peditor-uploading h5p-throbber">' + H5PEditor.t('core', 'uploading') + '</div>').insertAfter(self.$add.hide());
@@ -51,31 +39,26 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       // Clear old error messages
       self.$errors.html('');
 
+      // Close dialog
       self.closeDialog();
     });
 
+    // Monitor upload progress
     self.on('uploadProgress', function (e) {
-      // New upload, i.e. not update existing box.
-      if (typeof e.data.updateId === 'undefined') {
-        self.handleUploadProgress(this.dndAddDialog);
-      }
+      self.$uploading.html(H5PEditor.t('core', 'uploading') + ' ' + Math.round(e.data * 100) + ' %');
     });
 
+    // Handle upload complete
     self.on('uploadComplete', function (event) {
-      const result = event.data;
-      let index = self.params?.length ?? 0;
-      const updateId = event.data?.updateId ?? undefined;
-      this.updateId = updateId;
-      const boxesEl = Array.from(self.$dndFiles.get(0).querySelectorAll('.h5p-dnd__videobox-wrapper:not(.h5p-dnd__videobox-wrapper--is-provider)'));
-      let boxEl;
-      
+      var result = event.data;
+
+      // Clear out add dialog
+      this.$addDialog.find('.h5p-file-url').val('');
+
       try {
         if (result.error) {
           throw result.error;
         }
-
-        // Clear out add dialog
-        this.$addDialog.find('.h5p-file-url').val('');
 
         // Set params if none is set
         if (self.params === undefined) {
@@ -84,47 +67,23 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         }
 
         // Add a new file/source
-        const file = {
+        var file = {
           path: result.data.path,
           mime: result.data.mime,
-          copyright: self.copyright,
-          tabIndex: C.TABS.UPLOAD,
+          copyright: self.copyright
         };
-        
-        if (updateId) {
-          let foundUpdateIndex = self.params.findIndex(param => param.id === updateId);
-          
-          if (foundUpdateIndex !== -1) {
-            file.id = updateId;
-
-            self.updateIndex = index = foundUpdateIndex;
-            self.params[index] = file;
-            boxEl = boxesEl.find(element => element.id === updateId);
-
-            self.addFile(foundUpdateIndex, updateId);
-          }
-          else {
-            throw new Error(`File not found`);
-          }
-        }
-        else {
-          file.id = H5P.createUUID();
-
-          boxEl = self.dndAddDialog;
-          self.params[index] = file;
-          self.addFile(index);
-        }
-        self.setValue(self.field, self.params);
+        var index = (self.updateIndex !== undefined ? self.updateIndex : self.params.length);
+        self.params[index] = file;
+        self.addFile(index);
 
         // Trigger change callbacks (old event system)
-        for (let i = 0; i < self.changes.length; i++) {
+        for (var i = 0; i < self.changes.length; i++) {
           self.changes[i](file);
         }
-        const errorEls = Array.from(self.$dndFiles.get(0).querySelectorAll('.has-error'));
-        errorEls.forEach(errorEl => errorEl.classList.remove('has-error'));
       }
       catch (error) {
-        self.setErrorMessage(result.error, boxEl);
+        // Display errors
+        self.$errors.append(H5PEditor.createError(error));
       }
 
       if (self.$uploading !== undefined && self.$uploading.length !== 0) {
@@ -132,32 +91,11 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         self.$uploading.remove();
         self.$add.show();
       }
-
-      self.handleUploadComplete(boxEl);
     });
   }
 
   C.prototype = Object.create(ns.FileUploader.prototype);
   C.prototype.constructor = C;
-
-  C.prototype.setErrorMessage = function (message, boxEl) {
-    const errorEl = boxEl.querySelector('.h5p-errors');
-    if (errorEl) {
-      errorEl.innerText = message;
-    }
-    if (boxEl) {
-      boxEl.classList.add('has-error');
-    }
-    this.setAriaLiveErrorMessage(message)
-  };
-  
-  C.prototype.setAriaLiveErrorMessage = function (message) {
-    this.ariaLiveEl.innerText = message;
-    // Note: Should last long enough for the screen reader to read the text above.
-    setTimeout(() => {
-      this.ariaLiveEl.innerText = "";
-    }, 5000);
-  };
 
   /**
    * Append widget to given wrapper.
@@ -170,43 +108,44 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     var imageHtml =
       '<ul class="file list-unstyled"></ul>' +
-      C.createTabbedAdd(self.field.type, self.field.widgetExtensions);
+      (self.field.widgetExtensions ? C.createTabbedAdd(self.field.type, self.field.widgetExtensions, id, self.field.description !== undefined) : C.createAdd(self.field.type, id, self.field.description !== undefined))
 
     if (!this.field.disableCopyright) {
       imageHtml += '<a class="h5p-copyright-button" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>';
     }
 
     imageHtml += '<div class="h5p-editor-dialog">' +
-    '<a href="#" class="h5p-close" title="' + H5PEditor.t('core', 'close') + '"></a>' +
-    '</div>';
-    
+      '<a href="#" class="h5p-close" title="' + H5PEditor.t('core', 'close') + '"></a>' +
+      '</div>';
+
     var html = H5PEditor.createFieldMarkup(this.field, imageHtml, id);
     var $container = $(html).appendTo($wrapper);
-    
-    // Wrappers
-    this.$dialogAnchor = $container.children('.h5p-dialog-anchor');
-    this.$addDialog = this.$dialogAnchor.children('.h5p-add-dialog');
-    this.$dialogTable = this.$addDialog.children('.h5p-add-dialog-table');
-    this.$tabList = this.$dialogTable.children('.av-tablist');
-    
+
+    this.$files = $container.children('.file');
     this.$add = $container.children('.h5p-add-file').click(function () {
-      this.$addDialog.addClass('h5p-open');
+      self.$addDialog.addClass('h5p-open');
     });
 
-    // Prepare to add the extra tab instances
-    const tabInstances = [null, null]; // Add nulls for hard-coded tabs
-    self.tabInstances = tabInstances;
+    // Tabs that are hard-coded into this widget. Any other tab must be an extension.
+    const TABS = {
+      UPLOAD: 0,
+      INPUT: 1
+    };
 
-    let activeTab = C.TABS.UPLOAD;
+    // The current active tab
+    let activeTab = TABS.UPLOAD;
 
     /**
      * @param {number} tab
      * @return {boolean}
      */
     const isExtension = function (tab) {
-      return tab > C.TABS.INPUT; // Always last tab
+      return tab > TABS.INPUT; // Always last tab
     };
 
+    /**
+     * Toggle the currently active tab.
+     */
     const toggleTab = function () {
       // Pause the last active tab
       if (isExtension(activeTab)) {
@@ -216,182 +155,41 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       // Update tab
       this.parentElement.querySelector('.selected').classList.remove('selected');
       this.classList.add('selected');
-      
+
       // Update tab panel
-      const inactiveTabPanel = document.getElementById(this.getAttribute('aria-controls'));
-      const activeTabPanel = inactiveTabPanel.parentElement.querySelector('.av-tabpanel:not([hidden])');
-      activeTabPanel.setAttribute('hidden', '');
-      inactiveTabPanel.removeAttribute('hidden');
+      const el = document.getElementById(this.getAttribute('aria-controls'));
+      el.parentElement.querySelector('.av-tabpanel:not([hidden])').setAttribute('hidden', '');
+      el.removeAttribute('hidden');
 
       // Set active tab index
-      for (let i = 0; i < inactiveTabPanel.parentElement.children.length; i++) {
-        if (inactiveTabPanel.parentElement.children[i] === inactiveTabPanel) {
+      for (let i = 0; i < el.parentElement.children.length; i++) {
+        if (el.parentElement.children[i] === el) {
           activeTab = i - 1; // Compensate for .av-tablist in the same wrapper
           break;
         }
       }
+
+      // Toggle insert button disabled
+      if (activeTab === TABS.UPLOAD) {
+        self.$insertButton[0].disabled = true;
+      }
+      else if (activeTab === TABS.INPUT) {
+        self.$insertButton[0].disabled = false;
+      }
+      else {
+        self.$insertButton[0].disabled = !tabInstances[activeTab].hasMedia();
+      }
     }
 
+    /**
+     * Switch focus between the buttons in the tablist
+     */
     const moveFocus = function (el) {
       if (el) {
         this.setAttribute('tabindex', '-1');
         el.setAttribute('tabindex', '0');
         el.focus();
       }
-    }
-
-    if (self.field.widgetExtensions) {
-      /**
-       * @param {string} type Constructor name scoped inside this widget
-       * @param {number} index
-       */
-      const createTabInstance = function (type, index) {
-        const tabInstance = new H5PEditor.AV[type]();
-        tabInstance.appendTo(self.$addDialog[0].children[0].children[index + 1]); // Compensate for .av-tablist in the same wrapper
-        this.hasRecorded = false;
-        let hasUploaded = false;
-        let media = null;
-        let timeout = null;
-
-        tabInstance.on('hasMedia', function () {
-          this.hasRecorded = true;
-          media = tabInstance.getMedia();
-          if (timeout) {
-            clearTimeout(timeout);
-          }
-          if (this.hasRecorded && !hasUploaded && !!media) {
-            timeout = setTimeout(() => {
-              hasUploaded = true;
-              self.upload(media.data, media.name);
-              self.$tabList.children('.av-tab').get(0).click();
-              const avTabPanel = self.$dialogTable.find('.av-tabpanel:not([hidden])');
-              avTabPanel.addClass('has_content');
-              hasUploaded = false;
-              return;
-            }, 100);
-          }
-          this.hasRecorded = false;
-        });
-        tabInstances.push(tabInstance);
-      }
-
-      // Append extra tabs
-      for (let i = 0; i < self.field.widgetExtensions.length; i++) {
-        if (H5PEditor.AV[self.field.widgetExtensions[i]]) {
-          createTabInstance(self.field.widgetExtensions[i], i + 2); // Compensate for the number of hard-coded tabs
-        }
-      }
-    }
-    
-    this.$dndTabPanel = this.$dialogTable.children('.av-tabpanel:not([hidden])');
-    this.$dndFiles = this.$dndTabPanel.children('.h5p-dnd__av-container');
-    
-    this.dndAddDialog = this.$dndFiles.children('.h5p-dnd__box__url.h5p-dnd__box--is-dashed').get(0);
-    this.ariaLiveEl = this.$dndFiles.find('.h5p-sr-only[aria-live]').get(0);
-
-    const blockEl = this.dndAddDialog.querySelector('.h5p-dnd__box__block');
-    this.addDragAndDropListeners(this.dndAddDialog, blockEl);
-
-    const urlInsertButton = this.$dialogTable.find('.h5p-dnd__btn__insert-url'); 
-    const inputContainer = urlInsertButton.parent().parent().parent();
-    this.$videoUrlErrorContainer = inputContainer.find('#errorContainer');
-
-    urlInsertButton.on('click', () => {
-      const url = inputContainer.find('.input-video').val().trim();
-      const isAudio = this.field.type === 'audio';
-      if (url.length === 0) {
-        return;
-      }
-
-      if (!C.findProvider(url)) {
-        this.$videoUrlErrorContainer.removeClass('hidden');
-        this.$videoUrlErrorContainer.addClass("has-error");
-        this.$videoUrlErrorContainer.find('.h5p-errors').text(isAudio ? ns.t('core', 'unsupportedAudioSource') : ns.t('core', 'unsupportedVideoSource'));
-      }
-      else {
-        this.$videoUrlErrorContainer.addClass('hidden');
-
-        // Check if there is an existing media propery in params
-        let existingMedia = this.params?.some(p => C.findProvider(p.path));
-        
-        if (existingMedia) {
-          this.replaceUrl(url);
-        } else {
-          this.useUrl(url);
-        }
-        this.updatePasteBox(true);
-      }
-    });
-
-    const urlInputField = this.$dialogTable.find('.input-video'); 
-    urlInputField.on('keydown', (e) => {
-      this.$videoUrlErrorContainer.addClass('hidden');
-      if (e.code === 'Enter') {
-        const url = this.$dialogTable.find('.input-video').val().trim();
-        const isAudio = this.field.type === 'audio';
-        if (url.length === 0) {
-          return;
-        }
-        
-        if (!C.findProvider(url)) {
-          this.$videoUrlErrorContainer.removeClass('hidden');
-          this.$videoUrlErrorContainer.addClass("has-error");
-          this.$videoUrlErrorContainer.find('.h5p-errors').text(isAudio ? ns.t('core', 'unsupportedAudioSource') : ns.t('core', 'unsupportedVideoSource'));
-        }
-        else {
-
-          // Check if there is an existing media propery in params
-          let existingMedia = this.params?.some(p => C.findProvider(p.path));
-
-          if (existingMedia) {
-            this.replaceUrl(url);
-          } else {
-            this.useUrl(url);
-          }
-          this.updatePasteBox(true);
-        }
-      }
-    });
-
-    // Need to add listener on the specific dnd tab here
-    document.addEventListener('paste', (e) => {
-      const activeElement = document.activeElement.closest('.h5p-dnd__box');
-      if (this.$dndFiles.get(0).contains(activeElement) && activeElement && e.clipboardData.files.length > 0) {
-        const children = Array.from(activeElement.parentElement.parentElement.querySelectorAll('.h5p-dnd__box--has-video'));
-        let index = -1;
-        let id;
-        children.forEach((child, i) => {
-          if (child === activeElement) {
-            index = i;
-            id = child.id ?? null;
-          }
-        })
-
-        this.uploadOrReplaceImage(e.clipboardData.files, index, id, activeElement);
-      }
-    });
-
-    const uploadButton = this.$dialogTable.find('.h5p-dnd__btn__upload');
-    uploadButton.on('click', (e) => {
-      e.preventDefault();
-      this.openFileSelector();
-    });
-    
-    this.$errors = $container.children('.h5p-errors');
-
-    if (this.params !== undefined) {
-      this.params = this.params.map((param) => ({
-        ...param,
-        id: H5P.createUUID(),
-        tabIndex: C.TABS.UPLOAD,
-      }));
-
-      for (let index = 0; index < this.params.length; index++) {
-        this.addFile(index);
-      }
-    }
-    else {
-      $container.find('.h5p-copyright-button').addClass('hidden');
     }
 
     // Register event listeners to tab DOM elements
@@ -410,11 +208,42 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       }
     });
 
-    self.$addDialog = this.$add.next().children().first();
-    
-    self.$addDialog.addClass('h5p-open');
+    this.$addDialog = this.$add.next().children().first();
 
-    this.$url = this.$addDialog.find('.input-video');
+    // Prepare to add the extra tab instances
+    const tabInstances = [null, null]; // Add nulls for hard-coded tabs
+    self.tabInstances = tabInstances;
+
+    if (self.field.widgetExtensions) {
+
+      /**
+       * @param {string} type Constructor name scoped inside this widget
+       * @param {number} index
+       */
+      const createTabInstance = function (type, index) {
+        const tabInstance = new H5PEditor.AV[type]();
+        tabInstance.appendTo(self.$addDialog[0].children[0].children[index + 1]); // Compensate for .av-tablist in the same wrapper
+        tabInstance.on('hasMedia', function (e) {
+          if (index === activeTab) {
+            self.$insertButton[0].disabled = !e.data;
+          }
+        });
+        tabInstances.push(tabInstance);
+      }
+
+      // Append extra tabs
+      for (let i = 0; i < self.field.widgetExtensions.length; i++) {
+        if (H5PEditor.AV[self.field.widgetExtensions[i]]) {
+          createTabInstance(self.field.widgetExtensions[i], i + 2); // Compensate for the number of hard-coded tabs
+        }
+      }
+    }
+
+    var $url = this.$url = this.$addDialog.find('.h5p-file-url');
+    this.$addDialog.find('.h5p-cancel').click(function () {
+      self.updateIndex = undefined;
+      self.closeDialog();
+    });
 
     this.$addDialog.find('.h5p-file-drop-upload')
       .addClass('has-advanced-upload')
@@ -434,9 +263,35 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       })
       .click(function () {
         self.openFileSelector();
+      });
+
+    this.$insertButton = this.$addDialog.find('.h5p-insert').click(function () {
+      if (isExtension(activeTab)) {
+        const media = tabInstances[activeTab].getMedia();
+        if (media) {
+          self.upload(media.data, media.name);
+        }
+      }
+      else {
+        const url = $url.val().trim();
+        if (url) {
+          self.useUrl(url);
+        }
+      }
+
+      self.closeDialog();
     });
 
     this.$errors = $container.children('.h5p-errors');
+
+    if (this.params !== undefined) {
+      for (var i = 0; i < this.params.length; i++) {
+        this.addFile(i);
+      }
+    }
+    else {
+      $container.find('.h5p-copyright-button').addClass('hidden');
+    }
 
     var $dialog = $container.find('.h5p-editor-dialog');
     $container.find('.h5p-copyright-button').add($dialog.find('.h5p-close')).click(function () {
@@ -451,263 +306,89 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   };
 
   /**
-   * 
-   * @param {number} progress 0-100 the progress of uploading the image
-   */
-  C.prototype.handleUploadProgress = function (boxEl) {
-    
-    const elementsToHide = Array.from(boxEl.querySelectorAll(':scope > div:not(.h5p-dnd__loader)'));
-    const loaderEl = boxEl.querySelector('.h5p-dnd__loader');
-    
-    boxEl.classList.add('h5p-dnd__box--is-uploading');
-    loaderEl?.removeAttribute('style');
-    elementsToHide.forEach(e => e.style = 'display: none;');
-  };
-
-  C.prototype.handleUploadComplete = function (boxEl) {
-    const elementsToShow = Array.from(boxEl.querySelectorAll(':scope > div:not(.h5p-dnd__loader)'));
-    const loaderEl = boxEl.querySelector('.h5p-dnd__loader');
-
-    boxEl.classList.remove('h5p-dnd__box--is-uploading');
-    loaderEl.style = 'display: none;';
-    elementsToShow.forEach(e => e.removeAttribute('style'));
-  }
-
-  /**
-   * Add drag and drop listeners to the appropriate DOM elements.
-   */
-  C.prototype.addDragAndDropListeners = function (boxEl, blockEl, shouldReplace = false) {
-    boxEl.addEventListener('dragenter', (e) => this.handleDragAndDrop(e, boxEl, blockEl, shouldReplace));
-    blockEl.addEventListener('dragover', (e) => this.handleDragAndDrop(e, boxEl, blockEl, shouldReplace));
-    blockEl.addEventListener('dragend', (e) => this.handleDragAndDrop(e, boxEl, blockEl, shouldReplace));
-    blockEl.addEventListener('dragleave', (e) => this.handleDragAndDrop(e, boxEl, blockEl, shouldReplace));
-    blockEl.addEventListener('drop', (e) => this.handleDragAndDrop(e, boxEl, blockEl, shouldReplace));
-  };
-
-  /**
-   * Handle drag and drop events. Will apply the correct css classes (styling)
-   * depending on event type and will handle uploading if the user drops the file.
-   *
-   * @param {Event} e 
-   */
-  C.prototype.handleDragAndDrop = function (e, boxEl, shouldReplace) {
-    e.preventDefault();
-    e.stopPropagation();
-    const boxBlock = boxEl.querySelector('.h5p-dnd__box__block');
-    
-    if (e.type === 'dragenter') {
-      boxEl.classList.add('h5p-dnd__box--is-dragging')
-    }
-    else if (e.type === 'dragend' || (e.type === 'dragleave' && boxBlock === e.target)) {
-      boxEl.classList.remove('h5p-dnd__box--is-dragging');
-    }
-    else if (e.type === 'drop') {
-      let index;
-      let id;
-      boxEl.classList.remove('h5p-dnd__box--is-dragging');
-      const boxElParent = $(boxEl.parentElement);
-      if (shouldReplace && boxElParent.attr('id') !== this.$dndFiles.attr('id')) {
-        index = boxElParent.index();
-        id = boxElParent.attr('id') ?? undefined;
-      }
-      else {
-        index = -1;
-        id = undefined;
-      }
-      this.uploadOrReplaceImage(e.dataTransfer.files, index, id, boxEl);
-    }
-  };
-
-
-  /**
-   * Will either upload or replace (and upload) an image.
-   * 
-   * @param {FileList} files 
-   */
-  C.prototype.uploadOrReplaceImage = function (files, indexToReplace = -1, idToReplace = undefined, boxEl) {
-    if (idToReplace) {
-      // Need to make a copy of the file since Firefox loses the reference to it during the confirm replace dialog.
-      const filesBackup = [new File([files[0]], files[0].name, { type: files[0].type })];
-      this.replaceCallback = () => {
-        this.handleUploadProgress(boxEl);
-        this.updateIndex = indexToReplace;
-        this.updateId = idToReplace;
-        this.uploadFiles(filesBackup, { updateId: idToReplace });
-      };
-      this.previousState = C.STATE.HAS_IMAGE;
-      this.previousParams = this.params;
-      this.confirmReplaceDialog.show(this.$dndFiles.offset().top);
-    } else {
-      this.handleUploadProgress(boxEl);
-      this.previousState = C.STATE.NO_IMAGE;
-      this.previousParams = null;
-      this.uploadFiles(files);
-    }
-  };
-
-  /**
    * Add file icon with actions.
    *
    * @param {Number} index
    */
-  C.prototype.addFile = function (index, updateFileId = undefined) {
-    let that = this;
-    const file = this.params[index];
-
-    if (!!this.params) {
-      const avTabPanel = this.$dialogTable.find('.av-tabpanel:not([hidden])');
-      avTabPanel.addClass('has_content');
-    }
+  C.prototype.addFile = function (index) {
+    var that = this;
+    var fileHtml;
+    var file = this.params[index];
+    var rowInputId = 'h5p-av-' + C.getNextId();
+    var defaultQualityName = H5PEditor.t('core', 'videoQualityDefaultLabel', { ':index': index + 1 });
+    var qualityName = (file.metadata && file.metadata.qualityName) ? file.metadata.qualityName : defaultQualityName;
 
     // Check if source is provider (Vimeo, YouTube, Panopto)
-    const isProvider = file?.path && C.findProvider(file.path);
-    const isAudio = this.field.type === 'audio';
+    const isProvider = file.path && C.findProvider(file.path);
 
-    let filesContainer;
-    switch (file.tabIndex) {
-      case C.TABS.UPLOAD:
-        filesContainer = this.$dialogTable.find('#dndFiles');
-        break;
-      
-      case C.TABS.INPUT:
-        filesContainer = this.$dialogTable.find('#urlFiles');
-        break;
+    // Only allow single source if YouTube
+    if (isProvider) {
+      // Remove all other files except this one
+      that.$files.children().each(function (i) {
+        if (i !== that.updateIndex) {
+          that.removeFileWithElement($(this));
+        }
+      });
+      // Remove old element if updating
+      that.$files.children().each(function () {
+        $(this).remove();
+      });
+      // This is now the first and only file
+      index = 0;
     }
-
-    const mimeType = file.mime.split('/')[1];
-    const videoText = C.providers.map(p => p.name).includes(mimeType) ? mimeType : `.${mimeType.toUpperCase()}`;
-    let fileHtml;
-    if (!isProvider) {
-      fileHtml = `
-        <div id="${this.params[index].id}" class="h5p-dnd__videobox-wrapper">
-          <div class="h5p-dnd__box h5p-dnd__box--has-video h5p-dnd__box--is-dashed h5p-dnd__box--is-inline" tabindex="0" role="button">
-            <div class="h5p-dnd__box__block"></div>
-            <div class="h5p-dnd__column">
-              <div class="h5p-dnd__video-container">
-                <div class="h5p-dnd__video-overlay">
-                  <div class="h5p-dnd__play-icon-svg"></div>
-                  ${videoText}
-                </div>
-                <div class="h5p-dnd__video-placeholder"></div>
-              </div>
-            </div>
-              <div class="h5p-dnd__column h5p-dnd__column--show-when-focus h5p-dnd__column__drag-text">
-                <div class="h5p-dnd__text">${isAudio ? H5PEditor.t('core', 'dragAndDropToReplaceAudio') : H5PEditor.t('core', 'dragAndDropToReplaceVideo')}</div>
-              </div>
-          </div>
-          <div class="h5p-dnd__loader h5p-dnd__box h5p-dnd__box--has-video h5p-dnd__box--is-dashed h5p-dnd__box--is-inline" tabindex="0" style="display: none;">
-            <div class="h5p-dnd__column">
-              <div class="h5p-loader__wrapper">
-                <div class="h5p-loader__icon"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="h5p-errors"></div>
-          <div class="h5p-editor-image-actions">
-            <button class="delete h5p-delete-image-button h5peditor-button-textual" type="button">${isAudio ? ns.t('core', 'deleteAudioLabel') : ns.t('core', 'deleteVideoLabel')}</button>
-          </div>
-        </div>
-      `;
-    } else {
-      fileHtml = `
-        <div id="${this.params[index].id}" class="h5p-dnd__videobox-wrapper h5p-dnd__videobox-wrapper--is-provider">
-          <div class="h5p-dnd__box h5p-dnd__box--has-video h5p-dnd__box--is-inline" tabindex="0" role="button">
-            <div class="h5p-dnd__box__block"></div>
-            <div class="h5p-dnd__column">
-              <div class="h5p-dnd__video-container">
-                <div class="h5p-dnd__video-overlay">
-                  <div class="h5p-dnd__play-icon-svg"></div>
-                  ${videoText}
-                </div>
-                <div class="h5p-dnd__video-placeholder"></div>
-              </div>
-            </div>
-            <div class="h5p-dnd__loader h5p-dnd__column h5p-dnd__column--is-full-width" style="display: none;">
-              <div class="h5p-loader__wrapper">
-                <div class="h5p-loader__icon"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="h5p-errors"></div>
-          <div class="h5p-editor-image-actions">
-            <button class="delete h5p-delete-image-button h5peditor-button-textual" type="button">${isAudio ? ns.t('core', 'deleteAudioLabel') : ns.t('core', 'deleteVideoLabel')}</button>
-          </div>
-        </div>
-      `;
-    }
-    
-    // Insert file element in appropriate order
-    const $file = $(fileHtml);
-
     this.$add.toggleClass('hidden', isProvider);
 
-    if (updateFileId) {
-      this.updateId = undefined;
+    // If updating remove and recreate element
+    if (that.updateIndex !== undefined) {
+      var $oldFile = this.$files.children(':eq(' + index + ')');
+      $oldFile.remove();
       this.updateIndex = undefined;
-      const oldFile = filesContainer.find(`#${updateFileId}`);
-      index = oldFile.index();
-      oldFile.remove();
-      $file.insertBefore(filesContainer.children().eq(index));
+    }
+
+    // Create file with customizable quality if enabled and not youtube
+    if (this.field.enableCustomQualityLabel === true && !isProvider) {
+      fileHtml = '<li class="h5p-av-row">' +
+        '<div class="h5p-thumbnail">' +
+          '<div class="h5p-type" title="' + file.mime + '">' + file.mime.split('/')[1] + '</div>' +
+            '<div role="button" tabindex="0" class="h5p-remove" title="' + H5PEditor.t('core', 'removeFile') + '">' +
+          '</div>' +
+        '</div>' +
+        '<div class="h5p-video-quality">' +
+          '<div class="h5p-video-quality-title">' + H5PEditor.t('core', 'videoQuality') + '</div>' +
+          '<label class="h5peditor-field-description" for="' + rowInputId + '">' + H5PEditor.t('core', 'videoQualityDescription') + '</label>' +
+          '<input id="' + rowInputId + '" class="h5peditor-text" type="text" maxlength="60" value="' + qualityName + '">' +
+        '</div>' +
+      '</li>';
     }
     else {
-      $file.prependTo(filesContainer);
+      fileHtml = '<li class="h5p-av-cell">' +
+        '<div class="h5p-thumbnail">' +
+          '<div class="h5p-type" title="' + file.mime + '">' + file.mime.split('/')[1] + '</div>' +
+          '<div role="button" tabindex="0" class="h5p-remove" title="' + H5PEditor.t('core', 'removeFile') + '">' +
+        '</div>' +
+      '</li>';
+    }
+
+    // Insert file element in appropriate order
+    var $file = $(fileHtml);
+    if (index >= that.$files.children().length) {
+      $file.appendTo(that.$files);
+    }
+    else {
+      $file.insertBefore(that.$files.children().eq(index));
     }
 
     this.$add.parent().find('.h5p-copyright-button').removeClass('hidden');
 
-    const boxEl = $file.find('.h5p-dnd__box').get(0);
-    const blockEl = $file.find('.h5p-dnd__box__block').get(0);
-
-    // Handle drag and drop
-    this.addDragAndDropListeners(boxEl, blockEl, true);
-
-    // Handle space/enter on frame/box
-    boxEl.addEventListener('keydown', (e) => {
-      if (!isProvider && e.target?.nodeName !== 'INPUT') {
-        if ((e.code === 'Space' || e.code === 'Enter')) {
-          this.openFileSelector({
-            onChangeCallback: () => {
-              this.updateIndex = index;
-              this.updateId = boxEl.attr('id');
-              this.handleUploadProgress(boxEl);
-            },
-            context: {
-              updateId: boxEl.attr('id'),
-              updateIndex: index
-            }
-          });
-        }
-      }
-    });
-
-    // Handle delete file
+    // Handle thumbnail click
     $file
-      .find('.h5p-delete-image-button')
-      .on('click', (e) => {
-        e.preventDefault();
-        confirmRemovalDialog.show($file.offset().top);
-      });
-
-    // Handle click on thumbnail
-    $file
-      .find('.h5p-dnd__video-container')
-      .click(() => {
-        if (!isProvider) {
-          this.openFileSelector({
-            onChangeCallback: () => {
-              this.updateIndex = index;
-              this.updateId = $file.attr('id');
-              let current = filesContainer.find(`#${this.updateId}`).get(0);
-              this.handleUploadProgress(current);
-            },
-            context: {
-              updateId: $file.attr('id'),
-              updateIndex: index
-            }
-          });
+      .children('.h5p-thumbnail')
+      .click(function () {
+        if (!that.$add.is(':visible')) {
+          return; // Do not allow editing of file while uploading
         }
+        that.$addDialog.addClass('h5p-open').find('.h5p-file-url').val(that.params[index].path);
+        that.updateIndex = index;
       });
 
     // Handle remove button click
@@ -729,7 +410,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       });
 
     // Create remove file dialog
-    const confirmRemovalDialog = new H5P.ConfirmationDialog({
+    var confirmRemovalDialog = new H5P.ConfirmationDialog({
       headerText: H5PEditor.t('core', 'removeFile'),
       dialogText: H5PEditor.t('core', 'confirmRemoval', {':type': 'file'})
     }).appendTo(document.body);
@@ -737,7 +418,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     // Remove file on confirmation
     confirmRemovalDialog.on('confirmed', function () {
       that.removeFileWithElement($file);
-      if (filesContainer.children().length === 0) {
+      if (that.$files.children().length === 0) {
         that.$add.parent().find('.h5p-copyright-button').addClass('hidden');
       }
     });
@@ -749,61 +430,36 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * @param {number} $file File element
    */
   C.prototype.removeFileWithElement = function ($file) {
-    const avTabPanel = this.$dialogTable.find('.av-tabpanel:not([hidden])');
-    const filesContainer = avTabPanel.children('.h5p-dnd__av-container');
-    const filesContainerId = filesContainer.attr('id') === 'urlFiles' ? true : false;
-    const urlInputHasValue = filesContainerId ? filesContainer.get(0).querySelector('.input-video').value : '';
+    var index = $file.index();
 
+    // Remove from params.
     if (this.params.length === 1) {
-      // Remove from params.
       delete this.params;
       this.setValue(this.field);
-      avTabPanel.removeClass('has_content');
     }
     else {
-      const index = $file.index();
       this.params.splice(index, 1);
-      this.setValue(this.field, this.params);
     }
 
     $file.remove();
     this.$add.removeClass('hidden');
-    if (filesContainerId && urlInputHasValue !== '') {
-      this.updatePasteBox(false);
-      this.$videoUrlErrorContainer.addClass('hidden');
-    }
 
     // Notify change listeners
-    for (let i = 0; i < this.changes.length; i++) {
+    for (var i = 0; i < this.changes.length; i++) {
       this.changes[i]();
     }
   };
 
-  C.prototype.updatePasteBox = function (isReplace) {
-    const filesContainer = this.$dialogTable.find('.av-tabpanel:not([hidden])').children('.h5p-dnd__av-container');
-    const pasteBoxEl = filesContainer.get(0).querySelector('.h5p-dnd__box__video-paste');
-    const inputEl = pasteBoxEl.querySelector('.input-video');
-    const btnEl = pasteBoxEl.querySelector('.h5p-dnd__btn__insert-url');
-    
-    btnEl.innerText = isReplace ? H5PEditor.t('core', 'replaceUrl') : H5PEditor.t('core', 'insertUrl');
-    inputEl.value = isReplace ? inputEl.value : "";
-  }
-
-  /**
-   * Add new url to Url container
-   *  
-   * @param {string} url new url
-   */
   C.prototype.useUrl = function (url) {
     if (this.params === undefined) {
       this.params = [];
       this.setValue(this.field, this.params);
     }
 
-    let mime;
-    let aspectRatio;
-    let i;
-    const matches = url.match(/\.(webm|mp4|ogv|m4a|mp3|ogg|oga|wav)/i);
+    var mime;
+    var aspectRatio;
+    var i;
+    var matches = url.match(/\.(webm|mp4|ogv|m4a|mp3|ogg|oga|wav)/i);
     if (matches !== null) {
       mime = matches[matches.length - 1];
     }
@@ -816,85 +472,20 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       }
     }
 
-    const file = {
-      id: H5P.createUUID(),
+    var file = {
       path: url,
       mime: this.field.type + '/' + (mime ? mime : 'unknown'),
       copyright: this.copyright,
       aspectRatio: aspectRatio ? aspectRatio : undefined,
-      tabIndex: C.TABS.INPUT,
     };
-
-    this.params.push(file);
-    this.setValue(this.field, this.params);
-    index = this.params.findIndex(param => param.id === file.id);
+    var index = (this.updateIndex !== undefined ? this.updateIndex : this.params.length);
+    this.params[index] = file;
     this.addFile(index);
 
     for (i = 0; i < this.changes.length; i++) {
       this.changes[i](file);
     }
   };
-
-  /**
-   * Replace the file in the Url container
-   *  
-   * @param {string} url New file url
-   */
-  C.prototype.replaceUrl = function (url) {
-    let mime;
-    let aspectRatio;
-    const matches = url.match(/\.(webm|mp4|ogv|m4a|mp3|ogg|oga|wav)/i);
-    if (matches !== null) {
-      mime = matches[matches.length - 1];
-    }
-    else {
-      // Try to find a provider
-      const provider = C.findProvider(url);
-      if (provider) {
-        mime = provider.name;
-        aspectRatio = provider.aspectRatio;
-      }
-    }
-    
-    const index = this.params.findIndex(param => C.findProvider(param.path));
-    
-    const file = {
-      id: this.params[index].id,
-      path: url,
-      mime: this.field.type + '/' + (mime ? mime : 'unknown'),
-      copyright: this.copyright,
-      aspectRatio: aspectRatio ? aspectRatio : undefined,
-      tabIndex: C.TABS.INPUT,
-    };
-
-    this.params[index] = file;
-    this.setValue(this.field, this.params);
-
-    const mimeType = file.mime.split('/')[1];
-    const videoText = C.providers.map(p => p.name).includes(mimeType) ? mimeType : `.${mimeType.toUpperCase()}`;
-
-    // Simulating loading to give some feedback to user since this is actually instant.
-    const urlFilesContainer = this.$dialogTable.find('#urlFiles');
-    const boxEl = urlFilesContainer.get(0).querySelector('.h5p-dnd__videobox-wrapper--is-provider .h5p-dnd__box');
-    const videoOverlayEl = boxEl.querySelector('.h5p-dnd__video-overlay');
-
-    videoOverlayEl.innerHTML = `
-      <div class="h5p-dnd__play-icon-svg"></div>
-      ${videoText}
-    `;
-
-    this.handleUploadProgress(boxEl);
-    setTimeout(() => {
-      this.handleUploadComplete(boxEl)
-    }, 500);
-  }
-
-  C.prototype.getInputUrlFile = function () {
-    if (this.params && this.params.length) {
-      return this.params.filter(param => C.isProvider(param.mimeType) !== 'undefined'); // Should only give one result
-    }
-    return null;
-  }
 
   /**
    * Validate the field/widget.
@@ -967,9 +558,14 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * @param {boolean} hasDescription
    * @returns {string} HTML
    */
-  C.createInsertDialog = function (content) {
-    return '<div class="h5p-dialog-anchor"><div class="h5p-add-dialog h5p-open">' +
-      '<div id="dialogTable" class="h5p-add-dialog-table">' + content + '</div>' +
+  C.createInsertDialog = function (content, disableInsert, id, hasDescription) {
+    return '<div role="button" tabindex="0" id="' + id + '"' + (hasDescription ? ' aria-describedby="' + ns.getDescriptionId(id) + '"' : '') + ' class="h5p-add-file" title="' + H5PEditor.t('core', 'addFile') + '"></div>' +
+      '<div class="h5p-dialog-anchor"><div class="h5p-add-dialog">' +
+        '<div class="h5p-add-dialog-table">' + content + '</div>' +
+        '<div class="h5p-buttons">' +
+          '<button class="h5peditor-button-textual h5p-insert"' + (disableInsert ? ' disabled' : '') + '>' + H5PEditor.t('core', 'insert') + '</button>' +
+          '<button class="h5peditor-button-textual h5p-cancel">' + H5PEditor.t('core', 'cancel') + '</button>' +
+        '</div>' +
       '</div></div>';
   };
 
@@ -982,76 +578,22 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    */
   C.createTabContent = function (tab, type) {
     const isAudio = (type === 'audio');
-    const firstFile =  Array.isArray(this.params) ? this.params[0] : undefined;
-    const isProvider = firstFile?.path && C.findProvider(firstFile.path);
-    const copyPasteString = `<span class="h5p-dnd-nowrap"><span class="h5p-dnd__badge">${ns.t('core', 'ctrlKey')}<span class="h5p-dnd__badge__separator"></span>${ns.t('core', 'commandKey')}</span> + <span class="h5p-dnd__badge">${ns.t('core', 'pasteKey')}</span></span>`;
-    const dragCopyPasteString = ns.t('core', isAudio ? 'dragAndDropAndPasteAudio' : 'dragAndDropAndPasteVideo', { ':keyCombination': copyPasteString });
-    
+
     switch (tab) {
       case 'BasicFileUpload':
-        return `
-          <div id="dndFiles" class="h5p-dnd__av-container">
-            <div class="h5p-dnd__box__block"></div>
-            <div class="h5p-dnd__box h5p-dnd__box__url h5p-dnd__box--is-dashed h5p-dnd__box--is-inline h5p-dnd__box__action" tabindex="0">
-              <div class="h5p-dnd__box__block"></div>
-              <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--is-fixed h5p-dnd__column--hide-when-focus h5p-dnd__column--is-padded h5p-dnd__column--when-wide">
-                <div class="h5p-dnd__upload-video-svg"></div>
-                <button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">
-                  ${isAudio ? H5PEditor.t('core', 'uploadAudio') : H5PEditor.t('core', 'uploadVideo')}
-                </button>
-              </div>
-              <div class="h5p-dnd__column h5p-dnd__column--hide-when-focus h5p-dnd__column--when-small">
-                <button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">
-                  ${isAudio ? H5PEditor.t('core', 'uploadAudio') : H5PEditor.t('core', 'uploadVideo')}
-                </button>
-              </div>
-              <div class="h5p-dnd__row h5p-dnd__column--hide-when-focus h5p-dnd__row--when-small">
-                <span class="divider"></span> ${H5PEditor.t('core', 'uploadOr')} <span class="divider"></span>
-              </div>
-              <div class="h5p-dnd__column h5p-dnd__column--hide-when-focus h5p-dnd__column--is-padded-small">
-                <div class="text-center">
-                  ${dragCopyPasteString}
-                </div>
-                <div class="h5p-errors"></div>
-              </div>
-              <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--show-when-focus h5p-dnd__column--is-full-width">
-                ${isAudio ? H5PEditor.t('core', 'dropAudio') : H5PEditor.t('core', 'dropVideo')}
-              </div>
-              <div class="h5p-dnd__loader h5p-dnd__column h5p-dnd__column--is-full-width" style="display: none;">
-                <div class="h5p-loader__wrapper">
-                  <div class="h5p-loader__icon"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
+        const id = 'av-upload-' + C.getNextId();
+        return '<h3 id="' + id + '">' + H5PEditor.t('core', isAudio ? 'uploadAudioTitle' : 'uploadVideoTitle') + '</h3>' +
+          '<div class="h5p-file-drop-upload" tabindex="0" role="button" aria-labelledby="' + id + '">' +
+            '<div class="h5p-file-drop-upload-inner ' + type + '"></div>' +
+          '</div>';
 
       case 'InputLinkURL':
-          return `
-            <div id="urlFiles" class="h5p-dnd__av-container">
-              <div class="h5p-dnd__box__block"></div>
-              <div class="h5p-dnd__box h5p-dnd__box__url h5p-dnd__box__video-paste">
-                <div class="h5p-dnd__row">
-                  <div class="input-container">
-                    <input class="input-video" size="1" type="text" placeholder="${isAudio ? H5PEditor.t('core', 'enterAudioLink') : H5PEditor.t('core', 'enterVideoLink')}" value="${isProvider ? firstFile.path : ''}"/>
-                    <button class="h5p-dnd__btn h5p-dnd__btn__primary h5p-dnd__btn__insert-url" type="button">${firstFile ? H5PEditor.t('core', 'replaceUrl') : H5PEditor.t('core', 'insertUrl')}</button>
-                  </div>
-                </div>
-                <div class="h5p-dnd__row">
-                  <div id="errorContainer" class="video-url-error-container hidden">
-                    <div class="h5p-errors"></div>
-                  </div>
-                </div>
-                ${!isAudio ? `
-                  <div class="h5p-dnd__row">
-                    <div class="text-muted">
-                      ${H5PEditor.t('core', 'supportedVideoFormats')}
-                    </div>
-                  </div>
-                `: ''}
-              </div>
-            </div>
-          `;
+        return '<h3>' + H5PEditor.t('core', isAudio ? 'enterAudioTitle' : 'enterVideoTitle') + '</h3>' +
+          '<div class="h5p-file-url-wrapper ' + type + '">' +
+            '<input type="text" placeholder="' + H5PEditor.t('core', isAudio ? 'enterAudioUrl' : 'enterVideoUrl') + '" class="h5p-file-url h5peditor-text"/>' +
+          '</div>' +
+          (isAudio ? '' : '<div class="h5p-errors"></div><div class="h5peditor-field-description">' + H5PEditor.t('core', 'addVideoDescription') + '</div>');
+
       default:
         return '';
     }
@@ -1065,53 +607,60 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * @param {Array} extraTabs
    * @returns {string} HTML
    */
-  C.createTabbedAdd = function (type, extraTabs) {
+  C.createTabbedAdd = function (type, extraTabs, id, hasDescription) {
     let i;
 
     const tabs = [
       'BasicFileUpload',
       'InputLinkURL'
     ];
-
-    // Add when adding record audio
-    if (extraTabs && extraTabs.length > 0) {
-      for (i = 0; i < extraTabs.length; i++) {
-        tabs.push(extraTabs[i]);
-      }
+    for (i = 0; i < extraTabs.length; i++) {
+      tabs.push(extraTabs[i]);
     }
 
     let tabsHTML = '';
     let tabpanelsHTML = '';
 
     for (i = 0; i < tabs.length; i++) {
-      let title = '';
       const tab = tabs[i];
       const tabId = C.getNextId();
       const tabindex = (i === 0 ? 0 : -1)
       const selected = (i === 0 ? 'true' : 'false');
+      const title = (i > 1 ? H5PEditor.t('H5PEditor.' + tab, 'title') : H5PEditor.t('core', 'tabTitle' + tab));
 
-      switch (tab) {
-        case 'BasicFileUpload':
-          title = H5PEditor.t('core', 'fileUploadTitle');
-          tabsHTML +='<div class="av-tab av-tab__file-upload' + (i === 0 ? ' selected' : '') + '" tabindex="' + tabindex + '" role="tab" aria-selected="' + selected + '" aria-controls="av-tabpanel-' + tabId + '" id="av-tab-' + tabId + '">' + title + '</div>';
-          break;
-        case 'InputLinkURL':
-          title = H5PEditor.t('core', 'insertLinkTitle');
-          tabsHTML +='<div class="av-tab av-tab__insert-url' + (i === 0 ? ' selected' : '') + '" tabindex="' + tabindex + '" role="tab" aria-selected="' + selected + '" aria-controls="av-tabpanel-' + tabId + '" id="av-tab-' + tabId + '">' + title + '</div>';
-          break;
-        case 'AudioRecorder':
-          title = H5PEditor.t('core', 'recordAudioTitle');
-          tabsHTML +='<div class="av-tab av-tab__record-audio' + (i === 0 ? ' selected' : '') + '" tabindex="' + tabindex + '" role="tab" aria-selected="' + selected + '" aria-controls="av-tabpanel-' + tabId + '" id="av-tab-' + tabId + '">' + title + '</div>';
-          break;
-        default:
-          title = H5PEditor.t('H5PEditor.' + tab, 'title')
-          break;
-        }
+      tabsHTML += '<div class="av-tab' + (i === 0 ? ' selected' : '') + '" tabindex="' + tabindex + '" role="tab" aria-selected="' + selected + '" aria-controls="av-tabpanel-' + tabId + '" id="av-tab-' + tabId + '">' + title + '</div>';
       tabpanelsHTML += '<div class="av-tabpanel" tabindex="-1" role="tabpanel" id="av-tabpanel-' + tabId + '" aria-labelledby="av-tab-' + tabId + '"' + (i === 0 ? '' : ' hidden=""') + '>' + C.createTabContent(tab, type) + '</div>';
     }
 
     return C.createInsertDialog(
-      '<div class="av-tablist" role="tablist" aria-label="' + H5PEditor.t('core', 'avTablistLabel') + '">' + tabsHTML + '</div>' + tabpanelsHTML
+      '<div class="av-tablist" role="tablist" aria-label="' + H5PEditor.t('core', 'avTablistLabel') + '">' + tabsHTML + '</div>' + tabpanelsHTML,
+      true, id, hasDescription
+    );
+  };
+
+  /**
+   * Creates the HTML for the basic 'Upload or URL' dialog.
+   *
+   * @param {string} type 'video' or 'audio'
+   * @param {string} id
+   * @param {boolean} hasDescription
+   * @returns {string} HTML
+   */
+  C.createAdd = function (type, id, hasDescription) {
+    return C.createInsertDialog(
+      '<div class="h5p-dialog-box">' +
+        C.createTabContent('BasicFileUpload', type) +
+      '</div>' +
+      '<div class="h5p-or-vertical">' +
+        '<div class="h5p-or-vertical-line"></div>' +
+        '<div class="h5p-or-vertical-word-wrapper">' +
+          '<div class="h5p-or-vertical-word">' + H5PEditor.t('core', 'or') + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="h5p-dialog-box">' +
+          C.createTabContent('InputLinkURL', type) +
+      '</div>',
+      false, id, hasDescription
     );
   };
 
@@ -1136,9 +685,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       aspectRatio: '16:9',
     },
     {
-      name: 'Echo360',
-      regexp: /^[^\/]+:\/\/(echo360[^\/]+)\/media\/([^\/]+)\/h5p.*$/i,
-      aspectRatio: '16:9',
+        name: 'Echo360',
+        regexp: /^[^\/]+:\/\/(echo360[^\/]+)\/media\/([^\/]+)\/h5p.*$/i,
+        aspectRatio: '16:9',
     },
   ];
 
@@ -1165,18 +714,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    */
   C.getNextId = function () {
     return idCounter++;
-  };
-
-  C.STATE = {
-    NO_IMAGE: 'NO_IMAGE',
-    UPLOADING: 'UPLOADING',
-    HAS_IMAGE: 'HAS_IMAGE'
-  };
-
-  // Tabs that are hard-coded into this widget. Any other tab must be an extension.
-  C.TABS = {
-    UPLOAD: 0,
-    INPUT: 1
   };
 
   return C;
