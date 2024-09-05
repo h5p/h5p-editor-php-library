@@ -384,7 +384,7 @@ class H5peditor {
     $libraryData->version = (object) array('major' => $library['majorVersion'], 'minor' => $library['minorVersion']);
     $libraryData->title = $library['title'];
 
-    $libraryData->upgradesScript = $this->h5p->fs->getUpgradeScript($libraryName);
+    $libraryData->upgradesScript = $this->h5p->fs->getUpgradeScript($libraryName, $library['majorVersion'], $library['minorVersion']);
     if ($libraryData->upgradesScript !== NULL) {
       // If valid add URL prefix
       $libraryData->upgradesScript = $this->h5p->url . $prefix . $libraryData->upgradesScript;
