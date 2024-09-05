@@ -8,6 +8,7 @@
   "main": "./build/ckeditor.js",
   "types": "./build/ckeditor.d.ts",
   "dependencies": {
+<<<<<<< HEAD
     "@ckeditor/ckeditor5-alignment": "41.1.0",
     "@ckeditor/ckeditor5-autoformat": "41.1.0",
     "@ckeditor/ckeditor5-basic-styles": "41.1.0",
@@ -39,17 +40,57 @@
     "@ckeditor/ckeditor5-theme-lark": "41.1.0",
     "css-loader": "^5.2.7",
     "postcss": "^8.4.29",
+=======
+    "@ckeditor/ckeditor5-alignment": "39.0.1",
+    "@ckeditor/ckeditor5-autoformat": "39.0.1",
+    "@ckeditor/ckeditor5-basic-styles": "39.0.1",
+    "@ckeditor/ckeditor5-block-quote": "39.0.1",
+    "@ckeditor/ckeditor5-cloud-services": "39.0.1",
+    "@ckeditor/ckeditor5-code-block": "39.0.1",
+    "@ckeditor/ckeditor5-editor-classic": "39.0.1",
+    "@ckeditor/ckeditor5-essentials": "39.0.1",
+    "@ckeditor/ckeditor5-font": "39.0.1",
+    "@ckeditor/ckeditor5-heading": "39.0.1",
+    "@ckeditor/ckeditor5-highlight": "39.0.1",
+    "@ckeditor/ckeditor5-horizontal-line": "39.0.1",
+    "@ckeditor/ckeditor5-image": "39.0.1",
+    "@ckeditor/ckeditor5-indent": "39.0.1",
+    "@ckeditor/ckeditor5-link": "39.0.1",
+    "@ckeditor/ckeditor5-list": "39.0.1",
+    "@ckeditor/ckeditor5-media-embed": "39.0.1",
+    "@ckeditor/ckeditor5-paragraph": "39.0.1",
+    "@ckeditor/ckeditor5-paste-from-office": "39.0.1",
+    "@ckeditor/ckeditor5-remove-format": "39.0.1",
+    "@ckeditor/ckeditor5-select-all": "39.0.1",
+    "@ckeditor/ckeditor5-table": "39.0.1",
+    "@ckeditor/ckeditor5-typing": "39.0.1"
+  },
+  "devDependencies": {
+    "@ckeditor/ckeditor5-dev-translations": "^32.1.2",
+    "@ckeditor/ckeditor5-dev-utils": "^32.1.2",
+    "@ckeditor/ckeditor5-theme-lark": "^39.0.1",
+    "css-loader": "^5.2.7",
+    "postcss": "^8.4.27",
+>>>>>>> JI-5157-CKEditor-in-wordpress
     "postcss-loader": "^4.3.0",
     "raw-loader": "^4.0.2",
     "style-loader": "^2.0.0",
     "terser-webpack-plugin": "^4.2.3",
     "ts-loader": "^9.4.4",
+<<<<<<< HEAD
     "typescript": "5.0.4",
+=======
+    "typescript": "^4.9.5",
+>>>>>>> JI-5157-CKEditor-in-wordpress
     "webpack": "^5.88.2",
     "webpack-cli": "^4.10.0"
   },
   "scripts": {
     "build": "webpack --mode production",
+<<<<<<< HEAD
     "postbuild": "tsc --declaration --declarationDir build --stripInternal --emitDeclarationOnly"
+=======
+    "postbuild": "tsc -p ./tsconfig.types.json"
+>>>>>>> JI-5157-CKEditor-in-wordpress
   }
 }

@@ -47,16 +47,24 @@ main .ck-editor[role='application'] .ck.ck-content,
 .editor-container {
 	display: flex;
 	flex-direction: row;
+<<<<<<< HEAD
 	flex-wrap: nowrap;
 	position: relative;
+=======
+    flex-wrap: nowrap;
+    position: relative;
+>>>>>>> JI-5157-CKEditor-in-wordpress
 	width: 100%;
 	justify-content: center;
 }
 
+<<<<<<< HEAD
 .editor-container--with-sidebar > .ck.ck-editor {
 	width: calc( 100% - var(--ck-sample-sidebar-width) );
 }
 
+=======
+>>>>>>> JI-5157-CKEditor-in-wordpress
 /* --------- DECOUPLED (DOCUMENT) BUILD. ---------------------------------------------*/
 body[data-editor='DecoupledEditor'] .document-editor__toolbar {
 	width: 100%;
@@ -328,8 +336,11 @@ body[data-editor='InlineEditor'] .collaboration-demo__row {
 
 .revision-viewer-container {
     display: none;
+<<<<<<< HEAD
     max-width: 100%;
     word-wrap: break-word;
+=======
+>>>>>>> JI-5157-CKEditor-in-wordpress
 }
 
 .revision-viewer-sidebar {
