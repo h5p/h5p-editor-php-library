@@ -1302,7 +1302,6 @@ a {
 }
 .h5peditor-widget-option {
   border: 1px solid #ccc;
-  border-bottom: 0;
   margin-left: 0.5em;
   padding: 0.6em 1em;
   color: #0E1A25;
@@ -1321,6 +1320,7 @@ a {
 .h5peditor-widget-active {
   background: #fff;
   line-height: 1.357142857em;
+  border-bottom: 0;
 }
 .h5peditor-widgets > .h5peditor-widget-wrapper {
   border: 1px solid #ccc;
