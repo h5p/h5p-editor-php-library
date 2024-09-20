@@ -43,7 +43,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       self.replaceCallback();
     });
 
-
     self.on('upload', function () {
       // Insert throbber
       self.$uploading = $('<div class="h5peditor-uploading h5p-throbber">' + H5PEditor.t('core', 'uploading') + '</div>').insertAfter(self.$add.hide());
@@ -67,7 +66,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       const updateId = event.data?.updateId ?? undefined;
       this.updateId = updateId;
       const boxesEl = Array.from(self.$dndFiles.get(0).querySelectorAll('.h5p-dnd__videobox-wrapper:not(.h5p-dnd__videobox-wrapper--is-provider)'));
-      let boxEl;
+      let boxEl = self.$dndFiles.get(0).querySelectorAll('.h5p-dnd__box')[0];
       
       try {
         if (result.error) {
@@ -124,7 +123,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         errorEls.forEach(errorEl => errorEl.classList.remove('has-error'));
       }
       catch (error) {
-        self.setErrorMessage(result.error, boxEl);
+        self.setErrorMessage(error.message, boxEl);
       }
 
       if (self.$uploading !== undefined && self.$uploading.length !== 0) {
@@ -1022,6 +1021,12 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
                   <div class="h5p-loader__icon"></div>
                 </div>
               </div>
+              <div class="h5p-dnd__row">
+                <div id="errorContainer" class="video-url-error-container hidden">
+                  <div class="h5p-errors"></div>
+                </div>
+              </div>
+              <div class="h5p-sr-only" aria-live="polite"></div>
             </div>
           </div>
         `;
@@ -1049,6 +1054,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
                     </div>
                   </div>
                 `: ''}
+                <div class="h5p-sr-only" aria-live="polite"></div>
               </div>
             </div>
           `;
