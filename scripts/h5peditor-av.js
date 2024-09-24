@@ -66,7 +66,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       const updateId = event.data?.updateId ?? undefined;
       this.updateId = updateId;
       const boxesEl = Array.from(self.$dndFiles.get(0).querySelectorAll('.h5p-dnd__videobox-wrapper:not(.h5p-dnd__videobox-wrapper--is-provider)'));
-      let boxEl = self.$dndFiles.get(0).querySelectorAll('.h5p-dnd__box')[0];
+      const boxEls = self.$dndFiles.get(0).querySelectorAll('.h5p-dnd__box');
+      let boxEl = boxEls[boxEls.length - 1];
       
       try {
         if (result.error) {
