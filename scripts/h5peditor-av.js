@@ -123,7 +123,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         errorEls.forEach(errorEl => errorEl.classList.remove('has-error'));
       }
       catch (error) {
-        self.setErrorMessage(error.message, boxEl);
+        self.setErrorMessage(error.message || error, boxEl);
       }
 
       if (self.$uploading !== undefined && self.$uploading.length !== 0) {
