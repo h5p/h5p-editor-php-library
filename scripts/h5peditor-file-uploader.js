@@ -27,6 +27,14 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
 
       // Submit the form
       var request = new XMLHttpRequest();
+      request.onerror = function () {
+        var uploadComplete = {
+          ...context,
+          error: H5PEditor.t('core', 'unknownFileUploadError'),
+          data: null
+        };
+        self.trigger('uploadComplete', uploadComplete);
+      }
       request.upload.onprogress = function (e) {
         if (e.lengthComputable) {
           self.trigger('uploadProgress', {
