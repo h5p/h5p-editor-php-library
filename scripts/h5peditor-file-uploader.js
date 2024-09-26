@@ -20,12 +20,7 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
      * @param {string} filename Required due to validation
      */
     self.upload = function (file, filename, context = {}) {
-      var formData = new FormData();
-      formData.append('file', file, filename);
-      formData.append('field', JSON.stringify(field));
-      formData.append('contentId', H5PEditor.contentId || 0);
-
-      if (file.size / 1073741824 > 2) { // file bigger than 2 GB
+      if (file.size > 2147483648) { // file bigger than 2 GB
         var uploadComplete = {
           ...context,
           error: H5PEditor.t('core', 'fileToLarge'),
@@ -34,6 +29,11 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
         self.trigger('uploadComplete', uploadComplete);
         return;
       }
+      
+      var formData = new FormData();
+      formData.append('file', file, filename);
+      formData.append('field', JSON.stringify(field));
+      formData.append('contentId', H5PEditor.contentId || 0);
 
       // Submit the form
       var request = new XMLHttpRequest();
