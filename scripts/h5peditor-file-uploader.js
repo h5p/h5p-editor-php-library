@@ -25,6 +25,16 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
       formData.append('field', JSON.stringify(field));
       formData.append('contentId', H5PEditor.contentId || 0);
 
+      if (file.size / 1073741824 > 2) { // file bigger than 2 GB
+        var uploadComplete = {
+          ...context,
+          error: H5PEditor.t('core', 'fileToLarge'),
+          data: null
+        };
+        self.trigger('uploadComplete', uploadComplete);
+        return;
+      }
+
       // Submit the form
       var request = new XMLHttpRequest();
       request.onerror = function () {
