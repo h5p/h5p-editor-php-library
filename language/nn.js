@@ -38,6 +38,9 @@ H5PEditor.language.core = {
   tutorial: 'Veiledning',
   editMode: 'Redigeringsmodus',
   listLabel: 'Liste',
+  dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
+  dragAndDropAndPasteAudioDescription: 'Max 20 mb, supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteVideoDescription: 'Max 2 gb, recommended formats: .webm, .mp4',
   uploadError: 'Filopplasting feilet',
   fileToLarge: 'Filen du prøver å laste opp kan være for stor.',
   unknownFileUploadError: 'Ukjent filopplastingsfeil',
@@ -58,7 +61,7 @@ H5PEditor.language.core = {
   uploadAudioTitle: 'Last opp lydfil',
   uploadVideoTitle: 'Last opp videofil',
   fileUploadTitle: 'File Upload',
-  insertLinkTitle: 'Insert Link',
+  insertLinkTitle: 'URL',
   recordAudioTitle: 'Record Audio',
   addVideoDescription:
     'H5P støtter alle eksterne videokilder på formatene mp4, webm eller ogv, slik som Vimeo Pro, og har støtte for YouTube-lenker og Panopto-lenker.',

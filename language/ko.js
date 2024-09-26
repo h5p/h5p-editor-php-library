@@ -38,6 +38,9 @@ H5PEditor.language.core = {
   tutorial: '튜토리얼',
   editMode: '편집모드',
   listLabel: '목록',
+  dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
+  dragAndDropAndPasteAudioDescription: 'Max 20 mb, supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteVideoDescription: 'Max 2 gb, recommended formats: .webm, .mp4',
   uploadError: '파일 업로드 오류',
   fileToLarge: '업로드하려는 파일이 너무 클 수 있음.',
   unknownFileUploadError: '알 수 없는 파일 업로드 오류',
@@ -58,7 +61,7 @@ H5PEditor.language.core = {
   uploadAudioTitle: '오디오 파일 업로드',
   uploadVideoTitle: '비디오 파일 업로드',
   fileUploadTitle: 'File Upload',
-  insertLinkTitle: 'Insert Link',
+  insertLinkTitle: 'URL',
   recordAudioTitle: 'Record Audio',
   addVideoDescription:
     'H5P는 비메오 프로처럼 mp4, webm 또는 ogv로 포맷된 모든 외부 비디오 소스를 지원하며, 유튜브 링크를 지원함.',

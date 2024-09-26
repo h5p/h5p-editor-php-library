@@ -576,19 +576,17 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     const mimeType = file.mime.split('/')[1];
     const videoText = C.providers.map(p => p.name).includes(mimeType) ? mimeType : `.${mimeType.toUpperCase()}`;
+    const fileName = file.path.split('/').pop();
     let fileHtml;
     if (!isProvider) {
       fileHtml = `
-        <div id="${this.params[index].id}" class="h5p-dnd__videobox-wrapper">
-          <div class="h5p-dnd__box h5p-dnd__box--has-video h5p-dnd__box--is-dashed h5p-dnd__box--is-inline" tabindex="0" role="button">
+        <div id="${this.params[index].id}" class="h5p-dnd__file-wrapper">
+          <div class="h5p-dnd__box--is-inline" tabindex="0" role="button">
             <div class="h5p-dnd__box__block"></div>
-            <div class="h5p-dnd__column">
-              <div class="h5p-dnd__video-container">
-                <div class="h5p-dnd__video-overlay">
-                  <div class="h5p-dnd__play-icon-svg"></div>
-                  ${videoText}
-                </div>
-                <div class="h5p-dnd__video-placeholder"></div>
+            <div class="h5p-dnd__row">
+              ${fileName}
+              <div class="h5p-editor-image-actions">
+                <button class="delete h5p-delete-image-button h5peditor-button-textual no-styling" type="button" tabindex="0"></button>
               </div>
             </div>
               <div class="h5p-dnd__column h5p-dnd__column--show-when-focus h5p-dnd__column__drag-text">
@@ -604,9 +602,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           </div>
 
           <div class="h5p-errors"></div>
-          <div class="h5p-editor-image-actions">
-            <button class="delete h5p-delete-image-button h5peditor-button-textual" type="button">${isAudio ? ns.t('core', 'deleteAudioLabel') : ns.t('core', 'deleteVideoLabel')}</button>
-          </div>
         </div>
       `;
     } else {
@@ -984,45 +979,37 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     const isAudio = (type === 'audio');
     const firstFile =  Array.isArray(this.params) ? this.params[0] : undefined;
     const isProvider = firstFile?.path && C.findProvider(firstFile.path);
-    const copyPasteString = `<span class="h5p-dnd-nowrap"><span class="h5p-dnd__badge">${ns.t('core', 'ctrlKey')}<span class="h5p-dnd__badge__separator"></span>${ns.t('core', 'commandKey')}</span> + <span class="h5p-dnd__badge">${ns.t('core', 'pasteKey')}</span></span>`;
-    const dragCopyPasteString = ns.t('core', isAudio ? 'dragAndDropAndPasteAudio' : 'dragAndDropAndPasteVideo', { ':keyCombination': copyPasteString });
+    const dragCopyPasteString = ns.t('core', 'dragAndDropAndPasteAudioVideoTitle');
+    const fileSizeLimitString = ns.t('core', isAudio ? 'dragAndDropAndPasteAudioDescription' : 'dragAndDropAndPasteVideoDescription');
     
     switch (tab) {
       case 'BasicFileUpload':
         return `
           <div id="dndFiles" class="h5p-dnd__av-container">
-            <div class="h5p-dnd__box__block"></div>
-            <div class="h5p-dnd__box h5p-dnd__box__url h5p-dnd__box--is-dashed h5p-dnd__box--is-inline h5p-dnd__box__action" tabindex="0">
               <div class="h5p-dnd__box__block"></div>
-              <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--is-fixed h5p-dnd__column--hide-when-focus h5p-dnd__column--is-padded h5p-dnd__column--when-wide">
-                <div class="h5p-dnd__upload-video-svg"></div>
-                <button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">
-                  ${isAudio ? H5PEditor.t('core', 'uploadAudio') : H5PEditor.t('core', 'uploadVideo')}
-                </button>
-              </div>
-              <div class="h5p-dnd__column h5p-dnd__column--hide-when-focus h5p-dnd__column--when-small">
-                <button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">
-                  ${isAudio ? H5PEditor.t('core', 'uploadAudio') : H5PEditor.t('core', 'uploadVideo')}
-                </button>
-              </div>
-              <div class="h5p-dnd__row h5p-dnd__column--hide-when-focus h5p-dnd__row--when-small">
-                <span class="divider"></span> ${H5PEditor.t('core', 'uploadOr')} <span class="divider"></span>
-              </div>
-              <div class="h5p-dnd__column h5p-dnd__column--hide-when-focus h5p-dnd__column--is-padded-small">
-                <div class="text-center">
-                  ${dragCopyPasteString}
+              <div class="h5p-dnd__box h5p-dnd__box__url h5p-dnd__box--is-dashed h5p-dnd__box--is-inline h5p-dnd__box__action small-allign-center" tabindex="0">
+                <div class="h5p-dnd__box__block"></div>
+                <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--is-fixed h5p-dnd__column--when-wide h5p-dnd__no-x-margin">
+                  <div class="${isAudio ? 'h5p-dnd__upload-audio-svg' : 'h5p-dnd__upload-video-svg' }"></div>
                 </div>
-                <div class="h5p-errors"></div>
-              </div>
-              <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--show-when-focus h5p-dnd__column--is-full-width">
-                ${isAudio ? H5PEditor.t('core', 'dropAudio') : H5PEditor.t('core', 'dropVideo')}
-              </div>
-              <div class="h5p-dnd__loader h5p-dnd__column h5p-dnd__column--is-full-width" style="display: none;">
-                <div class="h5p-loader__wrapper">
-                  <div class="h5p-loader__icon"></div>
+                <div class="h5p-dnd__column h5p-dnd__column--when-small">
+                  <div class="${isAudio ? 'h5p-dnd__upload-audio-svg' : 'h5p-dnd__upload-video-svg' }"></div>
+                </div>
+                <div class="h5p-dnd__column h5p-dnd_align_left">
+                  <div class="text-center h5p-dnd__title">
+                    ${dragCopyPasteString}
+                  </div>
+                  <div class="text-muted">
+                    ${fileSizeLimitString}
+                  </div>
+                  <div class="h5p-errors"></div>
+                </div>
+                <div class="h5p-dnd__loader h5p-dnd__column h5p-dnd__column--is-full-width" style="display: none;">
+                  <div class="h5p-loader__wrapper">
+                    <div class="h5p-loader__icon"></div>
+                  </div>
                 </div>
               </div>
-            </div>
           </div>
         `;
 
@@ -1093,15 +1080,15 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       switch (tab) {
         case 'BasicFileUpload':
           title = H5PEditor.t('core', 'fileUploadTitle');
-          tabsHTML +='<div class="av-tab av-tab__file-upload' + (i === 0 ? ' selected' : '') + '" tabindex="' + tabindex + '" role="tab" aria-selected="' + selected + '" aria-controls="av-tabpanel-' + tabId + '" id="av-tab-' + tabId + '">' + title + '</div>';
+          tabsHTML +='<div class="av-tab av-tab__file-upload' + (i === 0 ? ' selected' : '') + '" tabindex="' + tabindex + '" role="tab" aria-selected="' + selected + '" aria-controls="av-tabpanel-' + tabId + '" id="av-tab-' + tabId + '">' + `<span>${title}</span>` + '</div>';
           break;
         case 'InputLinkURL':
           title = H5PEditor.t('core', 'insertLinkTitle');
-          tabsHTML +='<div class="av-tab av-tab__insert-url' + (i === 0 ? ' selected' : '') + '" tabindex="' + tabindex + '" role="tab" aria-selected="' + selected + '" aria-controls="av-tabpanel-' + tabId + '" id="av-tab-' + tabId + '">' + title + '</div>';
+          tabsHTML +='<div class="av-tab av-tab__insert-url' + (i === 0 ? ' selected' : '') + '" tabindex="' + tabindex + '" role="tab" aria-selected="' + selected + '" aria-controls="av-tabpanel-' + tabId + '" id="av-tab-' + tabId + '">' + `<span>${title}</span>` + '</div>';
           break;
         case 'AudioRecorder':
           title = H5PEditor.t('core', 'recordAudioTitle');
-          tabsHTML +='<div class="av-tab av-tab__record-audio' + (i === 0 ? ' selected' : '') + '" tabindex="' + tabindex + '" role="tab" aria-selected="' + selected + '" aria-controls="av-tabpanel-' + tabId + '" id="av-tab-' + tabId + '">' + title + '</div>';
+          tabsHTML +='<div class="av-tab av-tab__record-audio' + (i === 0 ? ' selected' : '') + '" tabindex="' + tabindex + '" role="tab" aria-selected="' + selected + '" aria-controls="av-tabpanel-' + tabId + '" id="av-tab-' + tabId + '">' + `<span>${title}</span>` + '</div>';
           break;
         default:
           title = H5PEditor.t('H5PEditor.' + tab, 'title')

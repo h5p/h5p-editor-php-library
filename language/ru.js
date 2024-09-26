@@ -40,6 +40,9 @@ H5PEditor.language.core = {
   tutorial: 'Руководство',
   editMode: 'Режим редактирования',
   listLabel: 'Список',
+  dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
+  dragAndDropAndPasteAudioDescription: 'Max 20 mb, supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteVideoDescription: 'Max 2 gb, recommended formats: .webm, .mp4',
   uploadError: 'Ошибка загрузки файла',
   fileToLarge: 'Файл, который вы пытаетесь загрузить, может быть слишком большим.',
   unknownFileUploadError: 'Неизвестная ошибка загрузки файла',
@@ -60,7 +63,7 @@ H5PEditor.language.core = {
   uploadAudioTitle: 'Загрузить аудио файл',
   uploadVideoTitle: 'Загрузить видео файл',
   fileUploadTitle: 'File Upload',
-  insertLinkTitle: 'Insert Link',
+  insertLinkTitle: 'URL',
   recordAudioTitle: 'Record Audio',
   addVideoDescription:
     'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube and Panopto links.',

@@ -38,6 +38,9 @@ H5PEditor.language.core = {
   tutorial: 'Pomoč',
   editMode: 'Urejevalni način',
   listLabel: 'Seznam',
+  dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
+  dragAndDropAndPasteAudioDescription: 'Max 20 mb, supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteVideoDescription: 'Max 2 gb, recommended formats: .webm, .mp4',
   uploadError: 'Napaka pri nalaganju datoteke',
   fileToLarge: 'Datoteka, ki jo poskušate naložiti, je morda prevelika.',
   unknownFileUploadError: 'Neznana napaka pri nalaganju datoteke',
@@ -58,7 +61,7 @@ H5PEditor.language.core = {
   uploadAudioTitle: 'Naloži zvočni posnetek',
   uploadVideoTitle: 'Naloži videoposnetek',
   fileUploadTitle: 'File Upload',
-  insertLinkTitle: 'Insert Link',
+  insertLinkTitle: 'URL',
   recordAudioTitle: 'Record Audio',
   addVideoDescription:
     'H5P podpira vse zunanje videoposnetke v formatu mp4, webm ali ogv. Tudi povezave do posnetkov na Vimeo Pro, YouTube in Panopto.',

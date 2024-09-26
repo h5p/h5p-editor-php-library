@@ -29,6 +29,26 @@
     font-size: 1.5em;
     line-height: 0.9;
   }
+
+  .h5p-delete-image-button.no-styling {
+    all: unset;
+
+    &:before {
+      color: $av-tab-button-font-color;
+    }
+
+    &:hover:not([disabled]) {
+      background: none;
+      border-color: transparent;
+      cursor: pointer;
+    }
+
+    &:focus {
+      outline: 2px solid $av-tab-button-font-color;
+    }
+
+
+  }
   
   .h5p-delete-image-button:before {
     content: "\e85f";
