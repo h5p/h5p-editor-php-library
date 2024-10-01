@@ -64,6 +64,7 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
         if (uploadComplete.error === null) {
           // No problems, add response data to event object
           uploadComplete.data = result;
+          uploadComplete.data.title = filename;
         }
 
         // Allow the widget to process the result
