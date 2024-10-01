@@ -49,7 +49,7 @@ H5PEditor.language.core = {
   ctrlKey: 'ctrl',
   commandKey: '⌘',
   pasteKey: 'v',
-  supportedVideoFormats: 'H5P supports the following external video sources: <span class="h5p-bold">Youtube</span>, <span class="h5p-bold">Panopto</span> and <span class="h5p-bold">Vimeo</span>.',
+  supportedVideoFormats: 'H5P supports the following external video sources: <span class="h5p-bold">Youtube</span>, <span class="h5p-bold">Panopto</span>, <span class="h5p-bold">Vimeo</span> and <span class="h5p-bold">Echo360</span>.',
   dragAndDropToReplaceVideo: 'Drag and drop video file here to replace',
   dragAndDropToReplaceAudio: 'Drag and drop audio file here to replace',
   changeFile: 'Change file',

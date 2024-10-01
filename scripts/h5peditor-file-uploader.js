@@ -20,6 +20,16 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
      * @param {string} filename Required due to validation
      */
     self.upload = function (file, filename, context = {}) {
+      if (file.size > 2147483648) { // file bigger than 2 GB
+        var uploadComplete = {
+          ...context,
+          error: H5PEditor.t('core', 'fileToLarge'),
+          data: null
+        };
+        self.trigger('uploadComplete', uploadComplete);
+        return;
+      }
+      
       var formData = new FormData();
       formData.append('file', file, filename);
       formData.append('field', JSON.stringify(field));
@@ -27,6 +37,14 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
 
       // Submit the form
       var request = new XMLHttpRequest();
+      request.onerror = function () {
+        var uploadComplete = {
+          ...context,
+          error: H5PEditor.t('core', 'unknownFileUploadError'),
+          data: null
+        };
+        self.trigger('uploadComplete', uploadComplete);
+      }
       request.upload.onprogress = function (e) {
         if (e.lengthComputable) {
           self.trigger('uploadProgress', {
