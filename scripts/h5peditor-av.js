@@ -43,7 +43,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       self.replaceCallback();
     });
 
-
     self.on('upload', function () {
       // Insert throbber
       self.$uploading = $('<div class="h5peditor-uploading h5p-throbber">' + H5PEditor.t('core', 'uploading') + '</div>').insertAfter(self.$add.hide());
@@ -67,7 +66,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       const updateId = event.data?.updateId ?? undefined;
       this.updateId = updateId;
       const boxesEl = Array.from(self.$dndFiles.get(0).querySelectorAll('.h5p-dnd__videobox-wrapper:not(.h5p-dnd__videobox-wrapper--is-provider)'));
-      let boxEl;
+      const boxEls = self.$dndFiles.get(0).querySelectorAll('.h5p-dnd__box');
+      let boxEl = boxEls[boxEls.length - 1];
       
       try {
         if (result.error) {
@@ -124,7 +124,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         errorEls.forEach(errorEl => errorEl.classList.remove('has-error'));
       }
       catch (error) {
-        self.setErrorMessage(result.error, boxEl);
+        self.setErrorMessage(error.message || error, boxEl);
       }
 
       if (self.$uploading !== undefined && self.$uploading.length !== 0) {
@@ -172,16 +172,17 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       '<ul class="file list-unstyled"></ul>' +
       C.createTabbedAdd(self.field.type, self.field.widgetExtensions);
 
-    if (!this.field.disableCopyright) {
-      imageHtml += '<a class="h5p-copyright-button" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>';
-    }
-
     imageHtml += '<div class="h5p-editor-dialog">' +
     '<a href="#" class="h5p-close" title="' + H5PEditor.t('core', 'close') + '"></a>' +
     '</div>';
-    
+
     var html = H5PEditor.createFieldMarkup(this.field, imageHtml, id);
     var $container = $(html).appendTo($wrapper);
+
+    if (!this.field.disableCopyright) {
+      const copyrightHtml = '<a class="h5p-copyright-button h5peditor-button-textual" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>';
+      $(copyrightHtml).appendTo($container.find('.av-tabpanel'));
+    }
     
     // Wrappers
     this.$dialogAnchor = $container.children('.h5p-dialog-anchor');
@@ -471,6 +472,10 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     boxEl.classList.remove('h5p-dnd__box--is-uploading');
     loaderEl.style = 'display: none;';
     elementsToShow.forEach(e => e.removeAttribute('style'));
+    const $tabPanel = $(boxEl).parent().parent();
+    if ($tabPanel.find('.h5p-dnd__videobox-wrapper').length) {
+      $tabPanel.find('.h5p-copyright-button').removeClass('hidden');
+    }
   }
 
   /**
@@ -732,8 +737,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     // Remove file on confirmation
     confirmRemovalDialog.on('confirmed', function () {
       that.removeFileWithElement($file);
-      if (filesContainer.children().length === 0) {
-        that.$add.parent().find('.h5p-copyright-button').addClass('hidden');
+      if ($(filesContainer).find('.h5p-dnd__videobox-wrapper').length === 0) {
+        $(filesContainer).parent().find('.h5p-copyright-button').addClass('hidden');
       }
     });
   };
@@ -1010,6 +1015,13 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
                   </div>
                 </div>
               </div>
+              <div class="h5p-dnd__row">
+                <div id="errorContainer" class="video-url-error-container hidden">
+                  <div class="h5p-errors"></div>
+                </div>
+              </div>
+              <div class="h5p-sr-only" aria-live="polite"></div>
+            </div>
           </div>
         `;
 
@@ -1036,6 +1048,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
                     </div>
                   </div>
                 `: ''}
+                <div class="h5p-sr-only" aria-live="polite"></div>
               </div>
             </div>
           `;
