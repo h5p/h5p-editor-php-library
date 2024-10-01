@@ -1021,7 +1021,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
                 </div>
               </div>
               <div class="h5p-sr-only" aria-live="polite"></div>
-            </div>
           </div>
         `;
 
