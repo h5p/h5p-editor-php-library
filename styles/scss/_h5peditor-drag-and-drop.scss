@@ -177,7 +177,7 @@
   border: unset;
   text-decoration: underline;
   color: #2579C6;
-  font-weight: 300;
+  font-weight: bold;
   display: inline-flex;
   padding: 0;
 
@@ -573,7 +573,7 @@ div:has(> .h5p-dnd-nowrap),
   container: h5p-dnd__av-container / inline-size;
 }
 
-.h5p-dnd__box--image {
+.h5p-dnd__box--image:not(.h5p-dnd__box--has-image) {
   container: h5p-dnd__box--image / inline-size;
   padding: 10px;
   min-height: 75px;
