@@ -669,11 +669,14 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     else {
       $file.prependTo(filesContainer);
     }
-    const infoIcon = filesContainer.find('#info-tooltip').get(0);
-    const qualityDescription = H5PEditor.t('core', 'videoQualityDescription');
-    const top = 'top';
-    H5P.Tooltip(infoIcon, { position: top, text: qualityDescription });
 
+    if (shouldVideoHaveQualityLabels) {
+      const infoIcon = filesContainer.find('#info-tooltip').get(0);
+      const qualityDescription = H5PEditor.t('core', 'videoQualityDescription');
+      const top = 'top';
+      H5P.Tooltip(infoIcon, { position: top, text: qualityDescription });
+    }
+    
     this.$add.parent().find('.h5p-copyright-button').removeClass('hidden');
 
     const boxEl = $file.find('.h5p-dnd__box').get(0);
