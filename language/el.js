@@ -33,6 +33,9 @@ H5PEditor.language.core = {
   commonFieldsDescription:
     'Εδώ μπορείτε να επεξεργαστείτε ρυθμίσεις ή να μεταφράσετε κείμενα τα οποία χρησιμοποιούνται σε αυτό το περιεχόμενο.',
   uploading: 'Μεταφόρτωση, παρακαλούμε περιμένετε...',
+  dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
+  dragAndDropAndPasteAudioDescription: 'Max 20 mb, supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteVideoDescription: 'Max 2 gb, recommended formats: .webm, .mp4',
   noFollow: 'Δεν είναι δυνατή η παρακολούθηση του πεδίου ":path".',
   editCopyright: 'Επεξεργασία πνευματικών δικαιωμάτων',
   close: 'Κλείσιμο',
@@ -59,7 +62,7 @@ H5PEditor.language.core = {
   uploadAudioTitle: 'Μεταφορτώστε αρχείο ήχου',
   uploadVideoTitle: 'Μεταφορτώστε αρχείο video',
   fileUploadTitle: 'File Upload',
-  insertLinkTitle: 'Insert Link',
+  insertLinkTitle: 'URL',
   recordAudioTitle: 'Record Audio',
   addVideoDescription:
     'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube and Panopto links.',

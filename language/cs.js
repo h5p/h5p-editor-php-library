@@ -31,6 +31,9 @@ H5PEditor.language.core = {
   commonFields: 'Přepisy a překlady textu',
   commonFieldsDescription: 'Zde můžete upravovat nastavení nebo překládat texty použité v tomto obsahu.',
   uploading: 'Nahrávám, počkejte prosím...',
+  dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
+  dragAndDropAndPasteAudioDescription: 'Max 20 mb, supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteVideoDescription: 'Max 2 gb, recommended formats: .webm, .mp4',
   noFollow: 'Nelze sledovat pole ":path".',
   editCopyright: 'Upravit autorská práva',
   close: 'Zavřít',
@@ -57,7 +60,7 @@ H5PEditor.language.core = {
   uploadAudioTitle: 'Nahrajte zvukový soubor',
   uploadVideoTitle: 'Nahrajte soubor videa',
   fileUploadTitle: 'File Upload',
-  insertLinkTitle: 'Insert Link',
+  insertLinkTitle: 'URL',
   recordAudioTitle: 'Record Audio',
   addVideoDescription:
     'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube and Panopto links.',

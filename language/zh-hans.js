@@ -37,6 +37,9 @@ H5PEditor.language.core = {
   tutorial: '使用教程',
   editMode: '编辑模式',
   listLabel: '列表',
+  dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
+  dragAndDropAndPasteAudioDescription: 'Max 20 mb, supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteVideoDescription: 'Max 2 gb, recommended formats: .webm, .mp4',
   uploadError: '文件上传错误',
   fileToLarge: '您尝试上传的文件可能太大了。',
   unknownFileUploadError: '未知文件上传错误',
@@ -57,7 +60,7 @@ H5PEditor.language.core = {
   uploadAudioTitle: '上传音频文件',
   uploadVideoTitle: '上传视频文件',
   fileUploadTitle: 'File Upload',
-  insertLinkTitle: 'Insert Link',
+  insertLinkTitle: 'URL',
   recordAudioTitle: 'Record Audio',
   addVideoDescription:
     'H5P 支持格式为 mp4、webm 或 ogv 的所有外部视频源，如 Vimeo Pro，并支持 YouTube 和 Panopto 链接。',

@@ -342,6 +342,7 @@ a {
     }
 
     .h5p-add-dialog-table {
+      container: h5p-add-dialog-table / inline-size;
       overflow: hidden;
       position: relative;
 
@@ -392,10 +393,15 @@ a {
           }
         }
       }
+      @container (max-width: 372px) {
+        .av-tablist:has(.av-tab.av-tab__record-audio) .av-tab span {
+          display: none;
+        }
+      }
 
       .av-tabpanel {
         border: 1px solid $av-tab-container-border-color;
-        border-radius: 0 0 5px 5px;
+        border-radius: 0;
         margin-top: 1px;
         position: relative;
         padding: 1em;

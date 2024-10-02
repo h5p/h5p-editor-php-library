@@ -32,6 +32,9 @@ H5PEditor.language.core = {
   commonFields: 'تجاوزات النصوص والترجمة',
   commonFieldsDescription: 'يمكنك هنا تعديل الإعدادات أو ترجمة النصوص المستخدمة في هذا المحتوى.',
   uploading: 'جاري التحميل .. الرجاء الانتظار...',
+  dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
+  dragAndDropAndPasteAudioDescription: 'Max 20 mb, supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteVideoDescription: 'Max 2 gb, recommended formats: .webm, .mp4',
   noFollow: 'لا يمكن متابعة الحقل ":path".',
   editCopyright: 'تعديل حقوق الطبع والنشر',
   close: 'اغلاق',
@@ -58,7 +61,7 @@ H5PEditor.language.core = {
   uploadAudioTitle: 'رفع ملف الصوت',
   uploadVideoTitle: 'رفع ملف الفيديو',
   fileUploadTitle: 'File Upload',
-  insertLinkTitle: 'Insert Link',
+  insertLinkTitle: 'URL',
   recordAudioTitle: 'Record Audio',
   addVideoDescription:
     'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube and Panopto links.',
