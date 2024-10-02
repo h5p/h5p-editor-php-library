@@ -169,7 +169,7 @@ H5PEditor.language.core = {
   videoQuality: 'Navn på videokvalitet',
   videoQualityDescription:
     'Dette navnet hjelper brukeren med å identifisere den aktuelle videokvaliteten. F.eks. 1080p, 720p, HD eller for mobil',
-  videoQualityDefaultLabel: 'Kvalitet :index',
+    videoQualityPlaceholder: '1080p, 720p, HD, Mobil, etc',
   noContentTypesAvailable: 'Ingen innholdstyper er tilgjengelig',
   noContentTypesAvailableDesc:
     'Nettstedet ditt har problemer med å koble til H5P.org og kan ikke liste tilgjengelige innholdstyper.',

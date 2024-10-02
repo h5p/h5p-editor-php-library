@@ -173,7 +173,7 @@ H5PEditor.language.core = {
   videoQuality: 'Ετικέτα ποιότητας βίντεο',
   videoQualityDescription:
     'Αυτή η ετικέτα βοηθά τον χρήστη να αναγνωρίσει την τρέχουσα ποιότητα του βίντεο. Για παράδειγμα 1080p, 720p, HD ή Mobile',
-  videoQualityDefaultLabel: 'Ποιότητα :index',
+  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'No content types are available',
   noContentTypesAvailableDesc:
     'Your site is having difficulties connecting to H5P.org and listing the available content types.',

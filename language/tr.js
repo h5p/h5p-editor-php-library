@@ -170,7 +170,7 @@ H5PEditor.language.core = {
   videoQuality: 'Video kalite etiketi',
   videoQualityDescription:
     'Bu etiket kullanıcının mevcut videonun kalitesini tanımlamasına yardımcı olur. Örn: 1080p, 720p, HD veya Mobil',
-  videoQualityDefaultLabel: 'Kalite :index',
+  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Hiçbir içerik mevcut değil',
   noContentTypesAvailableDesc:
     'Web siteniz H5P.org sitesine bağlanmada ve mevcut içerik türlerini listelemede zorluk yaşıyor.',

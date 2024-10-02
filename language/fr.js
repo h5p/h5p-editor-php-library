@@ -199,7 +199,7 @@ H5PEditor.language.core = {
   videoQuality: 'Label pour la qualité vidéo',
   videoQualityDescription:
     "Ce label permet à l'utilisateur d'identifier la qualité de la vidéo, par exemple 1080p, 720p, HD ou Mobile",
-  videoQualityDefaultLabel: 'Qualité :index',
+  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Aucun type de contenu disponible',
   noContentTypesAvailableDesc:
     "Votre site rencontre des difficultés pour se connecter à H5P.org et afficher la liste des types d'activités disponibles.",

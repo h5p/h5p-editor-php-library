@@ -171,7 +171,7 @@ H5PEditor.language.core = {
   videoQuality: 'Kalitatezko bideoaren etiketa',
   videoQualityDescription:
     'Etiketa honek laguntzen dio erabiltzaileari bideoaren uneko kalitatea identifikatzen. Esate baterako 1080p, 720p, HD edo Mugikorra',
-  videoQualityDefaultLabel: 'Kalitatea :index',
+  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Ez dago ariketa mota erabilgarririk',
   noContentTypesAvailableDesc:
     'Zure guneak zailtasunak ditu H5P.org-ekin konektatzeko ariketa mota erabilgarriak zerrendatzeko.',

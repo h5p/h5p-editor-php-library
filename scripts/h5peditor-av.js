@@ -207,8 +207,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       return tab > C.TABS.INPUT; // Always last tab
     };
 
-    console.log('heeeey', self.field.widgetExtensions);
-
     const toggleTab = function () {
       // Pause the last active tab
       if (isExtension(activeTab)) {
@@ -579,19 +577,21 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     const mimeType = file.mime.split('/')[1];
     const videoText = C.providers.map(p => p.name).includes(mimeType) ? mimeType : `.${mimeType.toUpperCase()}`;
     const fileName = file.path.split('/').pop();
-    const rowInputId = 'h5p-av-' + C.getNextId();
-    const defaultQualityName = H5PEditor.t('core', 'videoQualityDefaultLabel', { ':index': index + 1 });
-    const qualityName = (file.metadata && file.metadata.qualityName) ? file.metadata.qualityName : defaultQualityName;
+    const rowInputId = `h5p-av-${C.getNextId()}`;
+    const qualityName = file.metadata?.qualityName ?? '';
     const shouldVideoHaveQualityLabels = !isProvider && !isAudio && this.field.enableCustomQualityLabel;
-    const videoQualityBlock = shouldVideoHaveQualityLabels ? `
+
+    const createVideoQualityBlock = (id, name) => `
       <div class="h5p-video-quality">
         <div class="h5p-video-quality-title">
           ${H5PEditor.t('core', 'videoQuality')}
           <span id="info-tooltip" class="h5p-dnd__info-icon-svg"></span>
         </div>
-        <input id="${rowInputId}" class="h5peditor-text quality-input" type="text" maxlength="60" value="${qualityName}">
+        <input placeholder="${H5PEditor.t('core', 'videoQualityPlaceholder')}" id="${id}" class="h5peditor-text quality-input" type="text" maxlength="60" value="${name}">
       </div>
-    ` : '';
+    `;
+
+    const videoQualityBlock = shouldVideoHaveQualityLabels ? createVideoQualityBlock(rowInputId, qualityName) : '';
     
     let fileHtml;
     if (!isProvider) {
@@ -664,11 +664,11 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     else {
       $file.prependTo(filesContainer);
     }
-    const element = filesContainer.find('#info-tooltip').get(0);
-    const text = H5PEditor.t('core', 'videoQualityDescription');
-    const pos = 'bottom';
-    console.log(text);
-    H5P.Tooltip(element, { text: text, position: pos });
+    const infoIcon = filesContainer.find('#info-tooltip').get(0);
+    const qualityDescription = H5PEditor.t('core', 'videoQualityDescription');
+    const top = 'top';
+    H5P.Tooltip(infoIcon, { position: top, text: qualityDescription });
+
     this.$add.parent().find('.h5p-copyright-button').removeClass('hidden');
 
     const boxEl = $file.find('.h5p-dnd__box').get(0);

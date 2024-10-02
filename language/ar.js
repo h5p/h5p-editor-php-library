@@ -167,7 +167,7 @@ H5PEditor.language.core = {
   reloadButtonLabel: 'اعادة تحميل',
   videoQuality: 'تصنيف جودة الفيديو',
   videoQualityDescription: 'يساعد هذا التصنيف المستخدم في تحديد الجودة الحالية للفيديو. مثلا 1080p، 720p، HD أو موبايل',
-  videoQualityDefaultLabel: 'الجودة :index',
+  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'No content types are available',
   noContentTypesAvailableDesc:
     'Your site is having difficulties connecting to H5P.org and listing the available content types.',
