@@ -88,6 +88,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           path: result.data.path,
           mime: result.data.mime,
           copyright: self.copyright,
+          title: result.data.title,
           tabIndex: C.TABS.UPLOAD,
         };
         
@@ -581,7 +582,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     const mimeType = file.mime.split('/')[1];
     const videoText = C.providers.map(p => p.name).includes(mimeType) ? mimeType : `.${mimeType.toUpperCase()}`;
-    const fileName = file.path.split('/').pop();
+    const fileName = file.title ? file.title : file.path.split('/').pop();
     let fileHtml;
     if (!isProvider) {
       fileHtml = `
