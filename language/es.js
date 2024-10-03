@@ -22,7 +22,7 @@ H5PEditor.language.core = {
   confirmImageRemoval: '¿Estás seguro que deseas eliminar esta imagen?',
   dragAndDropAndPasteImageTitle: ':button, drop or paste a file here',
   dragAndDropAndPasteImageTitleButtonLabel: 'Choose',
-  dragAndDropAndPasteImageDescription: 'Max 20 mb, supported formats: .jpg, .png',
+  dragAndDropAndPasteImageDescription: 'Max 20 MB, supported formats: .jpg, .png',
   dragAndDropAndPasteReplaceImage: 'Arrastra o pega la imagen aquí para reemplazar',
   dropImage: "Suelta la imagen aquí para subirla",
   uploadImage: 'Subir imagen',
