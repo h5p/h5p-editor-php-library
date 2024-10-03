@@ -165,6 +165,7 @@ H5PEditor.language.core = {
   reloadButtonLabel: '重新加载',
   videoQuality: '视频质量标签',
   videoQualityDescription: '此标签可帮助用户识别视频的当前视频质量。 例如。 1080p，720p，高清或手机端',
+  videoQualityDefaultLabel: '视频质量 :index',
   videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: '没有可用的内容类型',
   noContentTypesAvailableDesc: '您的网站在连接到H5P.org并列出可用的内容类型时遇到问题。',

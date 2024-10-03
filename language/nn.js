@@ -170,6 +170,7 @@ H5PEditor.language.core = {
   videoQuality: 'Navn på videokvalitet',
   videoQualityDescription:
     'Dette navnet hjelper brukeren med å identifisere den aktuelle videokvaliteten. F.eks. 1080p, 720p, HD or Mobile',
+  videoQualityDefaultLabel: 'Kvalitet :index',
   videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Ingen innhaldstyper er tilgjengeleg',
   noContentTypesAvailableDesc:

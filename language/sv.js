@@ -171,7 +171,9 @@ H5PEditor.language.core = {
   videoQuality: 'Etikett för videokvalitet',
   videoQualityDescription:
     'Denna etikett underlättar för användaren att identifiera nuvarande kvalitet på videon. T ex 1080p, 720p, HD eller mobil',
-  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',  noContentTypesAvailable: 'Inga innehållstyper är tillgängliga',
+  videoQualityDefaultLabel: 'Kvalitet :index',
+  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',  
+  noContentTypesAvailable: 'Inga innehållstyper är tillgängliga',
   noContentTypesAvailableDesc:
     'Din webbplats har problem med att ansluta till H5P.org och listan över tillgängliga innehållstyper.',
   contentTypeCacheOutdated: 'Lista över innehållstyper behöver uppdateras.',

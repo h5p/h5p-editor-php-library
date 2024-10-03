@@ -170,6 +170,7 @@ H5PEditor.language.core = {
   videoQuality: 'Oznaka kvalitete videa',
   videoQualityDescription:
     'Ova oznaka pomaže korisniku da zna trenutnu kvalitetu videa. Npr. 1080p, 720p, HD or Mobile',
+  videoQualityDefaultLabel: 'Kvalitet :index',
   videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'No content types are available',
   noContentTypesAvailableDesc:

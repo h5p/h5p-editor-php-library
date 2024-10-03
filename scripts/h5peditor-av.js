@@ -582,21 +582,29 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     const mimeType = file.mime.split('/')[1];
     const videoText = C.providers.map(p => p.name).includes(mimeType) ? mimeType : `.${mimeType.toUpperCase()}`;
     const fileName = file.path.split('/').pop();
-    const rowInputId = `h5p-av-${C.getNextId()}`;
-    const qualityName = file.metadata?.qualityName ?? '';
-    const shouldVideoHaveQualityLabels = !isProvider && !isAudio && this.field.enableCustomQualityLabel;
+    const rowInputId = 'h5p-av-' + C.getNextId();
+    const defaultQualityName = H5PEditor.t('core', 'videoQualityDefaultLabel', { ':index': index + 1 });
 
-    const createVideoQualityBlock = (id, name) => `
+    // Initialize qualityName in file.metadata if not already set
+    file.metadata ??= {};
+    file.metadata.qualityName ??= defaultQualityName;
+
+    const qualityName = file.metadata.qualityName;
+    const shouldVideoHaveQualityLabels = !isProvider && !isAudio && this.field.enableCustomQualityLabel === true;
+    const isDefaultQuality = qualityName === defaultQualityName;
+    const valueToDisplay = isDefaultQuality ? '' : qualityName;
+
+    const createVideoQualityBlock = () => `
       <div class="h5p-video-quality">
         <div class="h5p-video-quality-title">
           ${H5PEditor.t('core', 'videoQuality')}
           <span id="info-tooltip" class="h5p-dnd__info-icon-svg"></span>
         </div>
-        <input placeholder="${H5PEditor.t('core', 'videoQualityPlaceholder')}" id="${id}" class="h5peditor-text quality-input" type="text" maxlength="60" value="${name}">
+        <input placeholder="${H5PEditor.t('core', 'videoQualityPlaceholder')}" id="${rowInputId}" class="h5peditor-text quality-input" type="text" maxlength="60" value="${valueToDisplay}">
       </div>
     `;
 
-    const videoQualityBlock = shouldVideoHaveQualityLabels ? createVideoQualityBlock(rowInputId, qualityName) : '';
+    const videoQualityBlock = shouldVideoHaveQualityLabels ? createVideoQualityBlock() : '';
     
     let fileHtml;
     if (!isProvider) {
@@ -747,7 +755,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     $file
       .find('input')
       .change(function () {
-        file.metadata = { qualityName: $(this).val() };
+        const inputValue = $(this).val();
+        file.metadata.qualityName = inputValue || defaultQualityName;
       });
 
     // Create remove file dialog

@@ -170,6 +170,7 @@ H5PEditor.language.core = {
   videoQuality: 'Videokvaliteedi silt',
   videoQualityDescription:
     'See silt aitab kasutajal määratleda videomängimise kvaliteeti. Näiteks 1080p, 720p, HD või mobiilne',
+  videoQualityDefaultLabel: 'Kvaliteet :index',
   videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Saadaval ei ole sisutüüpe',
   noContentTypesAvailableDesc:

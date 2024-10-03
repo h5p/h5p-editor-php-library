@@ -169,6 +169,7 @@ H5PEditor.language.core = {
   videoQuality: '비디오 품질 라벨',
   videoQualityDescription:
     '이 라벨은 사용자가 동영상의 현재 품질을 식별하는 데 도움이 됨. 예를 들어 1080p, 720p, HD 또는 Mobile',
+  videoQualityDefaultLabel: '품질 :index',
   videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: '사용할 수 있는 콘텐츠 유형 없음',
   noContentTypesAvailableDesc:

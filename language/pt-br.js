@@ -172,6 +172,7 @@ H5PEditor.language.core = {
   videoQuality: 'Rótulo de qualidade de vídeo',
   videoQualityDescription:
     'Este rótulo ajuda o usuário a identificar a qualidade atual do vídeo. Ex.: 1080p, 720p, HD ou Mobile',
+  videoQualityDefaultLabel: 'Qualidade :index',
   videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Nenhum tipo de conteúdo está disponível',
   noContentTypesAvailableDesc:

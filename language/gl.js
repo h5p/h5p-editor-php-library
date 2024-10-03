@@ -165,6 +165,7 @@ H5PEditor.language.core = {
   reloadButtonLabel: 'Recargar',
   videoQuality: 'Etiqueta de calidade de vídeo',
   videoQualityDescription: 'Esta etiqueta axuda ao usuario a identificar a calidade de vídeo actual. P.e. 1080p, 720p, HD ou Móbil',
+  videoQualityDefaultLabel: 'Calidade :index',
   videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Non hai tipos de contido dispoñibles',
   noContentTypesAvailableDesc: 'O teu sitio está a ter dificultades para conectarse á H5P.org e listar os tipos de contido dispoñibles.',

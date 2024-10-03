@@ -785,9 +785,9 @@ div:has(> .h5p-dnd-nowrap),
   }
 
   #info-tooltip .h5p-tooltip-visible {
-      text-wrap: wrap;
-      width: 230px;
-    }
+    text-wrap: wrap;
+    width: 230px;
+  }
 }
 
 .h5p-dnd__av-container:has(.quality-label) {

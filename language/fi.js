@@ -170,6 +170,7 @@ H5PEditor.language.core = {
   videoQuality: 'Videon laadun nimike',
   videoQualityDescription:
     'Tämä nimike auttaa käyttäjää tunnistamaan videon nykyisen laadun. Esim. 1080p, 720p, HD tai Mobiili',
+  videoQualityDefaultLabel: 'Laatu :index',
   videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Sisältötyyppejä ei saatavilla.',
   noContentTypesAvailableDesc:

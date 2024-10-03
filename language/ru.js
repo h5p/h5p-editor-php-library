@@ -174,6 +174,7 @@ H5PEditor.language.core = {
   videoQuality: 'Надпись разрешения видео',
   videoQualityDescription:
     'Эта надпись помогает пользователю определить текущее качество видео. Например. 1080p, 720p, HD или мобильный',
+  videoQualityDefaultLabel: 'Разрешение видео :index',
   videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Нет доступных типов контента',
   noContentTypesAvailableDesc: 'У вашего сайта проблемы с подключением к H5P.org и списку доступных типов контента.',
