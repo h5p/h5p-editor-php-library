@@ -106,7 +106,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
 
   var htmlString = `
     <div class="h5p-dnd__container">
-      <div class="h5p-dnd__box h5p-dnd__box--is-dashed" tabindex="0">
+      <div class="h5p-dnd__box h5p-dnd__box--is-dashed h5p-dnd__box--image" tabindex="0">
         ${this.getBaseMarkup()}
       </div>
     </div>
@@ -360,22 +360,27 @@ ns.widgets.image.prototype.handleDragAndDrop = function (e) {
  * @returns string The HTML for the NO_IMAGE state
  */
 ns.widgets.image.prototype.getBaseMarkup = function () {
-  const copyPasteString = `<span class="h5p-dnd__badge">${ns.t('core', 'ctrlKey')}<span class="h5p-dnd__badge__separator"></span>${ns.t('core', 'commandKey')}</span> + <span class="h5p-dnd__badge">${ns.t('core', 'pasteKey')}</span>`;
-  const dragCopyPasteString = ns.t('core', 'dragAndDropAndPasteImage', { ':keyCombination': copyPasteString });
+  const buttonLabel = ns.t('core', 'dragAndDropAndPasteImageTitleButtonLabel');
+  const button = `<button class="h5p-dnd__btn h5p-dnd__btn__upload">${buttonLabel}</button>`;
+  const title = ns.t('core', 'dragAndDropAndPasteImageTitle', { ':button': button });
+  const description = ns.t('core', 'dragAndDropAndPasteImageDescription');
   return `
     <div class="h5p-dnd__box__block"></div>
-    <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--is-fixed h5p-dnd__column--hide-when-focus h5p-dnd__column--is-padded">
+    <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--is-fixed h5p-dnd__column--when-wide h5p-dnd__no-x-margin">
       <div class="h5p-dnd__upload-image-svg"></div>
-      <button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">${ns.t('core', 'uploadImage')}</button>
     </div>
-
-    <div class="h5p-dnd__column h5p-dnd__column--hide-when-focus h5p-dnd__column--is-padded">
-      <div>
-        ${dragCopyPasteString}
+    <div class="h5p-dnd__column h5p-dnd__column--when-small">
+      <div class="h5p-dnd__upload-image-svg"></div>
+    </div>
+    <div class="h5p-dnd__column h5p-dnd_align_left">
+      <div class="text-center h5p-dnd__title">
+        ${title}
+      </div>
+      <div class="text-muted">
+        ${description}
       </div>
       <div class="h5p-errors"></div>
     </div>
-
     <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--show-when-focus h5p-dnd__column--is-full-width">
       <div class="h5p-dnd__drop-text">
         ${ns.t('core', 'dropImage')}
