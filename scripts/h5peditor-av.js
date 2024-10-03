@@ -592,7 +592,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
             <div class="h5p-dnd__row">
               ${fileName}
               <div class="h5p-editor-image-actions">
-                <button class="delete h5p-delete-image-button h5peditor-button-textual no-styling" type="button" tabindex="0"></button>
+                <button class="delete h5p-delete-image-button h5peditor-button-textual no-styling" type="button" aria-label="Remove file" tabindex="0"></button>
               </div>
             </div>
               <div class="h5p-dnd__column h5p-dnd__column--show-when-focus h5p-dnd__column__drag-text">
