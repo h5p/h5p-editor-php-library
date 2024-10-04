@@ -473,7 +473,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     loaderEl.style = 'display: none;';
     elementsToShow.forEach(e => e.removeAttribute('style'));
     const $tabPanel = $(boxEl).parent().parent();
-    if ($tabPanel.find('.h5p-dnd__videobox-wrapper').length) {
+    if ($tabPanel.find('.h5p-dnd__file-wrapper').length) {
       $tabPanel.find('.h5p-copyright-button').removeClass('hidden');
     }
   }
@@ -737,7 +737,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     // Remove file on confirmation
     confirmRemovalDialog.on('confirmed', function () {
       that.removeFileWithElement($file);
-      if ($(filesContainer).find('.h5p-dnd__videobox-wrapper').length === 0) {
+      if ($(filesContainer).find('.h5p-dnd__file-wrapper').length === 0) {
         $(filesContainer).parent().find('.h5p-copyright-button').addClass('hidden');
       }
     });
