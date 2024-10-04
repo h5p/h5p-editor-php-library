@@ -739,12 +739,12 @@ div:has(> .h5p-dnd-nowrap),
   margin-left: 0;
 }
 
-.h5p-delete-image-button {
+.h5p-editor-image-actions .h5p-delete-image-button {
   position: relative;
   display: inline-block;
 }
 
-.h5p-delete-image-button .tooltip-text {
+.h5p-editor-image-actions .tooltip-text {
   visibility: hidden;
   background-color: black;
   color: #fff;
@@ -752,15 +752,15 @@ div:has(> .h5p-dnd-nowrap),
   border-radius: 3px;
   font-weight: 300;
   padding: .5em;
-  position: absolute;
+  position: relative;
   z-index: 3;
-  top: -22px;
-  left: 105px;
+  top: -2px;
+  right: 5px;
   text-wrap: wrap;
   opacity: 0;
 }
 
-.h5p-delete-image-button:hover .tooltip-text {
+.h5p-editor-image-actions .h5p-delete-image-button:hover ~ .tooltip-text {
   visibility: visible;
   opacity: 1;
 }
