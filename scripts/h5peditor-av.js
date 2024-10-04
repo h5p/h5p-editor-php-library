@@ -583,6 +583,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     const mimeType = file.mime.split('/')[1];
     const videoText = C.providers.map(p => p.name).includes(mimeType) ? mimeType : `.${mimeType.toUpperCase()}`;
     const fileName = file.title ? file.title : file.path.split('/').pop();
+    const removeBtnText = 'Remove file';
     let fileHtml;
     if (!isProvider) {
       fileHtml = `
@@ -592,7 +593,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
             <div class="h5p-dnd__row">
               ${fileName}
               <div class="h5p-editor-image-actions">
-                <button class="delete h5p-delete-image-button h5peditor-button-textual no-styling" type="button" aria-label="Remove file" tabindex="0"></button>
+                <button class="delete h5p-delete-image-button h5peditor-button-textual no-styling" type="button" aria-label="${removeBtnText}" id="delete-file-button" tabindex="0">
+                  <span role="tooltip" class="tooltip-text">${removeBtnText}</span>
+                </button>
               </div>
             </div>
               <div class="h5p-dnd__column h5p-dnd__column--show-when-focus h5p-dnd__column__drag-text">
@@ -638,7 +641,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         </div>
       `;
     }
-    
+
     // Insert file element in appropriate order
     const $file = $(fileHtml);
 
