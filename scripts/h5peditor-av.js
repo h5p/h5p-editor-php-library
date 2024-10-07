@@ -152,6 +152,10 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   };
   
   C.prototype.setAriaLiveErrorMessage = function (message) {
+    if (!this.ariaLiveEl) {
+      return; // Avoid crashing when the element doesn't exist!
+    }
+
     this.ariaLiveEl.innerText = message;
     // Note: Should last long enough for the screen reader to read the text above.
     setTimeout(() => {
@@ -248,7 +252,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
        */
       const createTabInstance = function (type, index) {
         const tabInstance = new H5PEditor.AV[type]();
-        tabInstance.appendTo(self.$addDialog[0].children[0].children[index + 1]); // Compensate for .av-tablist in the same wrapper
+        const container = self.$addDialog[0].children[0].children[index + 1]; // Compensate for .av-tablist in the same wrapper
+        tabInstance.appendTo(container);
         this.hasRecorded = false;
         let hasUploaded = false;
         let media = null;
@@ -264,7 +269,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
             timeout = setTimeout(() => {
               hasUploaded = true;
               self.upload(media.data, media.name);
-              self.$tabList.children('.av-tab').get(0).click();
               const avTabPanel = self.$dialogTable.find('.av-tabpanel:not([hidden])');
               avTabPanel.addClass('has_content');
               hasUploaded = false;
@@ -273,6 +277,12 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           }
           this.hasRecorded = false;
         });
+        tabInstance.setFile = $file => {
+          if (activeTab === index) {
+            // Let's borrow the file!
+            $file.prependTo(container);
+          }
+        }
         tabInstances.push(tabInstance);
       }
 
@@ -655,6 +665,13 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       $file.prependTo(filesContainer);
     }
 
+    // Let extensions know about our new file in case they want to use it
+    for (let i = 0; i < that.tabInstances.length; i++) {
+      if (that.tabInstances[i]) {
+        that.tabInstances[i].setFile($file);
+      }
+    }
+
     this.$add.parent().find('.h5p-copyright-button').removeClass('hidden');
 
     const boxEl = $file.find('.h5p-dnd__box').get(0);
@@ -949,13 +966,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     // Reset URL input
     this.$url.val('');
-
-    // Reset all of the tabs
-    for (let i = 0; i < this.tabInstances.length; i++) {
-      if (this.tabInstances[i]) {
-        this.tabInstances[i].reset();
-      }
-    }
   };
 
   /**
