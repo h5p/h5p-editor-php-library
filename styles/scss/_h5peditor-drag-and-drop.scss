@@ -766,29 +766,3 @@ div:has(> .h5p-dnd-nowrap),
   margin-right: 0;
   margin-left: 0;
 }
-
-.h5p-editor-image-actions .h5p-delete-image-button {
-  position: relative;
-  display: inline-block;
-}
-
-.h5p-editor-image-actions .tooltip-text {
-  visibility: hidden;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  border-radius: 3px;
-  font-weight: 300;
-  padding: .5em;
-  position: relative;
-  z-index: 3;
-  top: -2px;
-  right: 5px;
-  text-wrap: wrap;
-  opacity: 0;
-}
-
-.h5p-editor-image-actions .h5p-delete-image-button:hover ~ .tooltip-text {
-  visibility: visible;
-  opacity: 1;
-}
