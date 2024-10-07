@@ -738,6 +738,11 @@ div:has(> .h5p-dnd-nowrap),
   .h5p-dnd__box__url.h5p-dnd__box__video-paste {
     padding: 10px;
   }
+
+  .av-file-name {
+    width: 100%;
+    word-break: break-all;
+  }
 }
 
 .h5p-dnd__videobox-wrapper ~ .h5p-dnd__box__url {
