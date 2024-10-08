@@ -88,6 +88,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           path: result.data.path,
           mime: result.data.mime,
           copyright: self.copyright,
+          title: result.data.title,
           tabIndex: C.TABS.UPLOAD,
         };
         
@@ -468,7 +469,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     loaderEl.style = 'display: none;';
     elementsToShow.forEach(e => e.removeAttribute('style'));
     const $tabPanel = $(boxEl).parent().parent();
-    if ($tabPanel.find('.h5p-dnd__videobox-wrapper').length) {
+    if ($tabPanel.find('.h5p-dnd__file-wrapper').length) {
       $tabPanel.find('.h5p-copyright-button').removeClass('hidden');
     }
   }
@@ -576,7 +577,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     const mimeType = file.mime.split('/')[1];
     const videoText = C.providers.map(p => p.name).includes(mimeType) ? mimeType : `.${mimeType.toUpperCase()}`;
-    const fileName = file.path.split('/').pop();
+
     const rowInputId = 'h5p-av-' + C.getNextId();
     const defaultQualityName = H5PEditor.t('core', 'videoQualityDefaultLabel', { ':index': index + 1 });
 
@@ -601,6 +602,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     const videoQualityBlock = shouldVideoHaveQualityLabels ? createVideoQualityBlock() : '';
     
+    const fileName = file.title ? file.title : file.path.split('/').pop();
+    const removeBtnText = 'Remove file';
+
     let fileHtml;
     if (!isProvider) {
       fileHtml = `
@@ -608,10 +612,10 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           <div class="h5p-dnd__box--is-inline" tabindex="0" role="button">
             <div class="h5p-dnd__box__block"></div>
             <div class="h5p-dnd__row">
-              ${fileName}
-              <div class="h5p-editor-image-actions">
-                <button class="delete h5p-delete-image-button h5peditor-button-textual no-styling" type="button" tabindex="0"></button>
-              </div>
+              <span class="av-file-name">
+                ${fileName}
+                <button class="delete h5p-delete-image-button h5peditor-button-textual no-styling" type="button" aria-label="${removeBtnText}" id="delete-file-button" tabindex="0"></button>
+              </span>
             </div>
               <div class="h5p-dnd__column h5p-dnd__column--show-when-focus h5p-dnd__column__drag-text">
                 <div class="h5p-dnd__text">${isAudio ? H5PEditor.t('core', 'dragAndDropToReplaceAudio') : H5PEditor.t('core', 'dragAndDropToReplaceVideo')}</div>
@@ -655,7 +659,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         </div>
       `;
     }
-    
+
     // Insert file element in appropriate order
     const $file = $(fileHtml);
 
@@ -763,7 +767,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     // Remove file on confirmation
     confirmRemovalDialog.on('confirmed', function () {
       that.removeFileWithElement($file);
-      if ($(filesContainer).find('.h5p-dnd__videobox-wrapper').length === 0) {
+      if ($(filesContainer).find('.h5p-dnd__file-wrapper').length === 0) {
         $(filesContainer).parent().find('.h5p-copyright-button').addClass('hidden');
       }
     });
