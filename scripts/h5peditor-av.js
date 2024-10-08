@@ -566,13 +566,13 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     let filesContainer;
     switch (file.tabIndex) {
-      case C.TABS.UPLOAD:
-        filesContainer = this.$dialogTable.find('#dndFiles');
-        break;
-      
       case C.TABS.INPUT:
         filesContainer = this.$dialogTable.find('#urlFiles');
         break;
+      case C.TABS.UPLOAD:
+        default:
+          filesContainer = this.$dialogTable.find('#dndFiles');
+          break;     
     }
 
     const mimeType = file.mime.split('/')[1];
