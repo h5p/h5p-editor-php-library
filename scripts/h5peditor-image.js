@@ -105,7 +105,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
   var self = this;
 
   var htmlString = `
-    <div class="h5p-dnd__container">
+    <div class="h5p-dnd__container h5p-dnd__container-image">
       <div class="h5p-dnd__box h5p-dnd__box--is-dashed h5p-dnd__box--image" tabindex="0">
         ${this.getBaseMarkup()}
       </div>
@@ -366,13 +366,13 @@ ns.widgets.image.prototype.getBaseMarkup = function () {
   const description = ns.t('core', 'dragAndDropAndPasteImageDescription');
   return `
     <div class="h5p-dnd__box__block"></div>
-    <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--is-fixed h5p-dnd__column--when-wide h5p-dnd__no-x-margin">
+    <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--is-fixed h5p-dnd__column--when-wide h5p-dnd__no-x-margin h5p-dnd__box-image">
       <div class="h5p-dnd__upload-image-svg"></div>
     </div>
-    <div class="h5p-dnd__column h5p-dnd__column--when-small">
+    <div class="h5p-dnd__column h5p-dnd__column--when-small h5p-dnd__box-image">
       <div class="h5p-dnd__upload-image-svg"></div>
     </div>
-    <div class="h5p-dnd__column h5p-dnd_align_left">
+    <div class="h5p-dnd__column h5p-dnd_align_left h5p-dnd__box-text">
       <div class="text-center h5p-dnd__title">
         ${title}
       </div>
