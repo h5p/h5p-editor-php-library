@@ -172,6 +172,7 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'Dit label helpt de gebruiker bij het vaststelllen van de huidige kwaliteit van de video. Bijv. 1080p, 720p, HD of Mobile',
   videoQualityDefaultLabel: 'Kwaliteit :index',
+  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',  
   noContentTypesAvailable: 'Geen content types beschikbaar',
   noContentTypesAvailableDesc:
     'Je site heeft problemen bij het verbinden met H5P.org en het tonen van de beschikbare content types.',

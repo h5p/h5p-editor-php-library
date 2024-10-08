@@ -171,6 +171,7 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'Ta oznaka pomaga uporabniku prepoznati trenutno kakovost videoposnetka. Npr. 1080p, 720p, HD ali Mobilne naprave',
   videoQualityDefaultLabel: 'Kakovost :index',
+  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Na voljo ni nobenega tipa vsebine',
   noContentTypesAvailableDesc:
     'Vaše spletno mesto ima težave pri povezovanju s H5P.org in pripravo seznama razpoložljivih tipov vsebine.',

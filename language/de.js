@@ -174,6 +174,7 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'An dieser Beschreibung kann der Benutzer die Qualität des hochgeladenen Videos erkennen. Beispiele: 1080p, 720p, HD oder mobil',
   videoQualityDefaultLabel: 'Videoqualität :index',
+  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Keine Inhaltstypen verfügbar',
   noContentTypesAvailableDesc:
     'Es können keine Inhaltstypen aufgelistet werden, da Verbindungsprobleme zu H5P.org bestehen.',
