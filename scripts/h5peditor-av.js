@@ -380,14 +380,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     
     this.$errors = $container.children('.h5p-errors');
 
-    if (this.params !== undefined) {
-      this.params = this.params.map((param) => ({
-        ...param,
-        id: H5P.createUUID(),
-        tabIndex: C.TABS.UPLOAD,
-      }));
-
+    if (this.params !== undefined) {   
       for (let index = 0; index < this.params.length; index++) {
+        this.params[index].id = H5P.createUUID();
         this.addFile(index);
       }
     }
