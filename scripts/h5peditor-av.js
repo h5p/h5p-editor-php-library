@@ -994,13 +994,13 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
               <div class="h5p-dnd__box__block"></div>
               <div class="h5p-dnd__box h5p-dnd__box__url h5p-dnd__box--is-dashed h5p-dnd__box--is-inline h5p-dnd__box__action small-allign-center" tabindex="0">
                 <div class="h5p-dnd__box__block"></div>
-                <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--is-fixed h5p-dnd__column--when-wide h5p-dnd__no-x-margin">
+                <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--is-fixed h5p-dnd__column--when-wide h5p-dnd__column--no-margin h5p-dnd__box-image">
                   <div class="${isAudio ? 'h5p-dnd__upload-audio-svg' : 'h5p-dnd__upload-video-svg' }"></div>
                 </div>
-                <div class="h5p-dnd__column h5p-dnd__column--when-small">
+                <div class="h5p-dnd__column h5p-dnd__column--when-small h5p-dnd__box-image">
                   <div class="${isAudio ? 'h5p-dnd__upload-audio-svg' : 'h5p-dnd__upload-video-svg' }"></div>
                 </div>
-                <div class="h5p-dnd__column h5p-dnd_align_left">
+                <div class="h5p-dnd__column h5p-dnd_align_left h5p-dnd__box-text">
                   <div class="text-center h5p-dnd__title">
                     ${dragCopyPasteString}
                   </div>
