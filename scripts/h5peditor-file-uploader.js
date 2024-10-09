@@ -20,16 +20,17 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
      * @param {string} filename Required due to validation
      */
     self.upload = function (file, filename, context = {}) {
-      if (file.size > 2147483648) { // file bigger than 2 GB
-        var uploadComplete = {
+      // First check if file is too large
+      const { sizeLimit, sizeLimitText } = getSizeLimitAndText(file);
+
+      if (isFileTooLarge(file, sizeLimit)) {
+        const uploadComplete = {
           ...context,
-          error: H5PEditor.t('core', 'fileToLarge'),
-          data: null
+          error: H5PEditor.t('core', 'fileToLarge', { ':sizeLimit': sizeLimitText }),
         };
         self.trigger('uploadComplete', uploadComplete);
         return;
       }
-      
       var formData = new FormData();
       formData.append('file', file, filename);
       formData.append('field', JSON.stringify(field));
@@ -146,6 +147,52 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
         case 'video':
           return 'video/mp4,video/webm,video/ogg';
       }
+    }
+
+    /**
+     * Check if the file is a video.
+     *
+     * @param {string} mimeType - The MIME type of the file.
+     * @return {boolean} - Returns true if the file is a video, false otherwise.
+     */
+    const isVideoFile = function (mimeType) {
+      return mimeType.startsWith('video/');
+    }
+
+    /**
+     * Get the size limit and its text based on the file type.
+     *
+     * @param {Object} file - The file object.
+     * @param {string} file.type - The MIME type of the file.
+     * @return {Object} - An object containing the size limit and its text.
+     * @return {number} sizeLimit - The size limit in bytes.
+     * @return {string} sizeLimitText - The size limit text.
+     */
+    const getSizeLimitAndText = function (file) {
+      // Define size limits
+      const VIDEO_SIZE_LIMIT = 2147483648; // 2 GB
+      const AUDIO_IMAGE_SIZE_LIMIT = 20971520; // 20 MB
+      
+      const videoSizeLimitText = H5PEditor.t('core', 'videoSizeLimit');
+      const audioImageSizeLimitText = H5PEditor.t('core', 'audioImageSizeLimit');
+
+      if (isVideoFile(file.type)) {
+        return { sizeLimit: VIDEO_SIZE_LIMIT, sizeLimitText: videoSizeLimitText };
+      } else {
+        return { sizeLimit: AUDIO_IMAGE_SIZE_LIMIT, sizeLimitText: audioImageSizeLimitText };
+      }
+    }
+
+    /**
+     * Function to check if the file size exceeds the limit.
+     *
+     * @param {Object} file - The file object.
+     * @param {number} file.size - The size of the file in bytes.
+     * @param {number} sizeLimit - The size limit in bytes.
+     * @return {boolean} - Returns true if the file size exceeds the limit, false otherwise.
+     */
+    const isFileTooLarge = function (file, sizeLimit) {
+      return file.size > sizeLimit;
     }
   }
 
