@@ -259,13 +259,13 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         let media = null;
         let timeout = null;
 
-        tabInstance.on('hasMedia', function () {
+        tabInstance.on('hasMedia', function (canHas) {
           this.hasRecorded = true;
           media = tabInstance.getMedia();
           if (timeout) {
             clearTimeout(timeout);
           }
-          if (this.hasRecorded && !hasUploaded && !!media) {
+          if (this.hasRecorded && !hasUploaded && !!media && canHas.data) {
             timeout = setTimeout(() => {
               hasUploaded = true;
               self.upload(media.data, media.name);
@@ -281,6 +281,17 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           if (activeTab === index) {
             // Let's borrow the file!
             $file.prependTo(container);
+
+            // Handle file being removed
+            self.changes.push(file => {
+              if (!file) {
+                $file.remove();
+                self.$dialogTable.find('.av-tabpanel:not([hidden])').removeClass('has_content');
+                tabInstance.reset();
+                self.changes.splice(changeId, 1);
+              }
+            });
+            const changeId = self.changes.length;
           }
         }
         tabInstances.push(tabInstance);
