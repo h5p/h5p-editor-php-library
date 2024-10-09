@@ -587,12 +587,14 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     let filesContainer;
     switch (file.tabIndex) {
+      case C.TABS.INPUT:
+        filesContainer = this.$dialogTable.find('#urlFiles');
+        break;
       case C.TABS.UPLOAD:
         filesContainer = this.$dialogTable.find('#dndFiles');
         break;
-      
-      case C.TABS.INPUT:
-        filesContainer = this.$dialogTable.find('#urlFiles');
+      default:
+        filesContainer = this.$dialogTable.find('#dndFiles');
         break;
     }
 
@@ -629,7 +631,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     let fileHtml;
     if (!isProvider) {
       fileHtml = `
-        <div id="${this.params[index].id}" class="h5p-dnd__file-wrapper ${shouldVideoHaveQualityLabels && 'quality-label'}">
+        <div id="${this.params[index].id}" class="h5p-dnd__file-wrapper ${shouldVideoHaveQualityLabels ? 'quality-label' : ''}">
           <div class="h5p-dnd__box--is-inline" tabindex="0" role="button">
             <div class="h5p-dnd__box__block"></div>
             <div class="h5p-dnd__row">
@@ -710,6 +712,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       const qualityDescription = H5PEditor.t('core', 'videoQualityDescription');
       const top = 'top';
       H5P.Tooltip(infoIcon, { position: top, text: qualityDescription });
+
     }
     
     this.$add.parent().find('.h5p-copyright-button').removeClass('hidden');
