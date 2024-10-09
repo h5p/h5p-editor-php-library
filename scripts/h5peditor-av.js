@@ -577,11 +577,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         break;
     }
 
-    function sanitizeString(str){
-      str = str.replace(/[^a-z0-9áéíóúñü \.,_-]/gim,"");
-      return str.trim();
-  }
-
     const mimeType = file.mime.split('/')[1];
     const videoText = C.providers.map(p => p.name).includes(mimeType) ? mimeType : `.${mimeType.toUpperCase()}`;
 
@@ -597,16 +592,13 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     const isDefaultQuality = qualityName === defaultQualityName;
     const valueToDisplay = isDefaultQuality ? '' : qualityName;
 
-    // Sanitize the value to display
-    const sanitizedValue = sanitizeString(valueToDisplay);
-
     const createVideoQualityBlock = () => `
       <div class="h5p-video-quality">
         <div class="h5p-video-quality-title">
           ${H5PEditor.t('core', 'videoQuality')}
           <span id="info-tooltip" class="h5p-dnd__info-icon-svg"></span>
         </div>
-        <input placeholder="${H5PEditor.t('core', 'videoQualityPlaceholder')}" id="${rowInputId}" class="h5peditor-text quality-input" type="text" maxlength="60" value="${sanitizedValue}">
+        <input placeholder="${H5PEditor.t('core', 'videoQualityPlaceholder')}" id="${rowInputId}" class="h5peditor-text quality-input" type="text" maxlength="60" value="${valueToDisplay}">
       </div>
     `;
 
@@ -618,7 +610,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     let fileHtml;
     if (!isProvider) {
       fileHtml = `
-        <div id="${this.params[index].id}" class="h5p-dnd__file-wrapper ${shouldVideoHaveQualityLabels && 'quality-label'}">
+        <div id="${this.params[index].id}" class="h5p-dnd__file-wrapper ${shouldVideoHaveQualityLabels ? 'quality-label' : ''}">
           <div class="h5p-dnd__box--is-inline" tabindex="0" role="button">
             <div class="h5p-dnd__box__block"></div>
             <div class="h5p-dnd__row">
@@ -692,12 +684,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       const qualityDescription = H5PEditor.t('core', 'videoQualityDescription');
       const top = 'top';
       H5P.Tooltip(infoIcon, { position: top, text: qualityDescription });
-    }
 
-    const qualityLabelInput = document.getElementById(rowInputId);
-    qualityLabelInput.addEventListener('input', function () {
-      this.value = sanitizeString(this.value);
-    });
+    }
     
     this.$add.parent().find('.h5p-copyright-button').removeClass('hidden');
 
