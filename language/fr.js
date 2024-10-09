@@ -32,8 +32,8 @@ H5PEditor.language.core = {
   uploadAudio: 'Ajouter un fichier audio',
   uploadOr: 'ou',
   dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choisir</button>, déposer ou coller un fichier ici',
-  dragAndDropAndPasteAudioDescription: 'Max. 20 mb, formats supportés : .wav, .mp3, .ogg',
-  dragAndDropAndPasteVideoDescription: 'Max. 2 gb, formats recommandés : .webm, .mp4',
+  dragAndDropAndPasteAudioDescription: 'Max. 20 MB,formats supportés : .wav, .mp3, .ogg',
+  dragAndDropAndPasteVideoDescription: 'Max. 2 GB,formats recommandés : .webm, .mp4',
   pasteVideoLink: 'Coller un lien YouTube ou une autre source vidéo',
   pasteAudioLink: 'Coller un lien ou une autre source audio', 
   dropVideo: 'Déposer un fichier vidéo ici pour l\'ajouter',
@@ -202,6 +202,7 @@ H5PEditor.language.core = {
   videoQualityDescription:
     "Ce label permet à l'utilisateur d'identifier la qualité de la vidéo, par exemple 1080p, 720p, HD ou Mobile",
   videoQualityDefaultLabel: 'Qualité :index',
+  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Aucun type de contenu disponible',
   noContentTypesAvailableDesc:
     "Votre site rencontre des difficultés pour se connecter à H5P.org et afficher la liste des types d'activités disponibles.",

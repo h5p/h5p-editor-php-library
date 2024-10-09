@@ -34,8 +34,8 @@ H5PEditor.language.core = {
     'Εδώ μπορείτε να επεξεργαστείτε ρυθμίσεις ή να μεταφράσετε κείμενα τα οποία χρησιμοποιούνται σε αυτό το περιεχόμενο.',
   uploading: 'Μεταφόρτωση, παρακαλούμε περιμένετε...',
   dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
-  dragAndDropAndPasteAudioDescription: 'Max 20 mb, supported formats: .wav, .mp3, .ogg',
-  dragAndDropAndPasteVideoDescription: 'Max 2 gb, recommended formats: .webm, .mp4',
+  dragAndDropAndPasteAudioDescription: 'Max 20 MB,supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteVideoDescription: 'Max 2 GB,recommended formats: .webm, .mp4',
   noFollow: 'Δεν είναι δυνατή η παρακολούθηση του πεδίου ":path".',
   editCopyright: 'Επεξεργασία πνευματικών δικαιωμάτων',
   close: 'Κλείσιμο',
@@ -174,6 +174,7 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'Αυτή η ετικέτα βοηθά τον χρήστη να αναγνωρίσει την τρέχουσα ποιότητα του βίντεο. Για παράδειγμα 1080p, 720p, HD ή Mobile',
   videoQualityDefaultLabel: 'Ποιότητα :index',
+  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'No content types are available',
   noContentTypesAvailableDesc:
     'Your site is having difficulties connecting to H5P.org and listing the available content types.',

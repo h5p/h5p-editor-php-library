@@ -39,8 +39,8 @@ H5PEditor.language.core = {
   editMode: '편집모드',
   listLabel: '목록',
   dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
-  dragAndDropAndPasteAudioDescription: 'Max 20 mb, supported formats: .wav, .mp3, .ogg',
-  dragAndDropAndPasteVideoDescription: 'Max 2 gb, recommended formats: .webm, .mp4',
+  dragAndDropAndPasteAudioDescription: 'Max 20 MB,supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteVideoDescription: 'Max 2 GB,recommended formats: .webm, .mp4',
   uploadError: '파일 업로드 오류',
   fileToLarge: '업로드하려는 파일이 너무 클 수 있음.',
   unknownFileUploadError: '알 수 없는 파일 업로드 오류',
@@ -170,6 +170,7 @@ H5PEditor.language.core = {
   videoQualityDescription:
     '이 라벨은 사용자가 동영상의 현재 품질을 식별하는 데 도움이 됨. 예를 들어 1080p, 720p, HD 또는 Mobile',
   videoQualityDefaultLabel: '품질 :index',
+  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: '사용할 수 있는 콘텐츠 유형 없음',
   noContentTypesAvailableDesc:
     '당신의 사이트는 H5P.org에 접속하여 사용 가능한 콘텐츠 유형을 나열하는 데 어려움을 겪고 있음.',

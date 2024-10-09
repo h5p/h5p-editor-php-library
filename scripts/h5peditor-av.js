@@ -88,6 +88,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           path: result.data.path,
           mime: result.data.mime,
           copyright: self.copyright,
+          title: result.data.title,
           tabIndex: C.TABS.UPLOAD,
         };
         
@@ -401,14 +402,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     
     this.$errors = $container.children('.h5p-errors');
 
-    if (this.params !== undefined) {
-      this.params = this.params.map((param) => ({
-        ...param,
-        id: H5P.createUUID(),
-        tabIndex: C.TABS.UPLOAD,
-      }));
-
+    if (this.params !== undefined) {   
       for (let index = 0; index < this.params.length; index++) {
+        this.params[index].id = H5P.createUUID();
         this.addFile(index);
       }
     }
@@ -602,18 +598,45 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     const mimeType = file.mime.split('/')[1];
     const videoText = C.providers.map(p => p.name).includes(mimeType) ? mimeType : `.${mimeType.toUpperCase()}`;
-    const fileName = file.path.split('/').pop();
+
+    const rowInputId = 'h5p-av-' + C.getNextId();
+    const defaultQualityName = H5PEditor.t('core', 'videoQualityDefaultLabel', { ':index': index + 1 });
+
+    // Initialize qualityName in file.metadata if not already set
+    file.metadata ??= {};
+    file.metadata.qualityName ??= defaultQualityName;
+
+    const qualityName = file.metadata.qualityName;
+    const shouldVideoHaveQualityLabels = !isProvider && !isAudio && this.field.enableCustomQualityLabel === true;
+    const isDefaultQuality = qualityName === defaultQualityName;
+    const valueToDisplay = isDefaultQuality ? '' : qualityName;
+
+    const createVideoQualityBlock = () => `
+      <div class="h5p-video-quality">
+        <div class="h5p-video-quality-title">
+          ${H5PEditor.t('core', 'videoQuality')}
+          <span id="info-tooltip" class="h5p-dnd__info-icon-svg"></span>
+        </div>
+        <input placeholder="${H5PEditor.t('core', 'videoQualityPlaceholder')}" id="${rowInputId}" class="h5peditor-text quality-input" type="text" maxlength="60" value="${valueToDisplay}">
+      </div>
+    `;
+
+    const videoQualityBlock = shouldVideoHaveQualityLabels ? createVideoQualityBlock() : '';
+    
+    const fileName = file.title ? file.title : file.path.split('/').pop();
+    const removeBtnText = 'Remove file';
+
     let fileHtml;
     if (!isProvider) {
       fileHtml = `
-        <div id="${this.params[index].id}" class="h5p-dnd__file-wrapper">
+        <div id="${this.params[index].id}" class="h5p-dnd__file-wrapper ${shouldVideoHaveQualityLabels && 'quality-label'}">
           <div class="h5p-dnd__box--is-inline" tabindex="0" role="button">
             <div class="h5p-dnd__box__block"></div>
             <div class="h5p-dnd__row">
-              ${fileName}
-              <div class="h5p-editor-image-actions">
-                <button class="delete h5p-delete-image-button h5peditor-button-textual no-styling" type="button" tabindex="0"></button>
-              </div>
+              <span class="av-file-name">
+                ${fileName}
+                <button class="delete h5p-delete-image-button h5peditor-button-textual no-styling" type="button" aria-label="${removeBtnText}" id="delete-file-button" tabindex="0"></button>
+              </span>
             </div>
               <div class="h5p-dnd__column h5p-dnd__column--show-when-focus h5p-dnd__column__drag-text">
                 <div class="h5p-dnd__text">${isAudio ? H5PEditor.t('core', 'dragAndDropToReplaceAudio') : H5PEditor.t('core', 'dragAndDropToReplaceVideo')}</div>
@@ -626,7 +649,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
               </div>
             </div>
           </div>
-
+          ${videoQualityBlock}
           <div class="h5p-errors"></div>
         </div>
       `;
@@ -650,7 +673,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
               </div>
             </div>
           </div>
-
           <div class="h5p-errors"></div>
           <div class="h5p-editor-image-actions">
             <button class="delete h5p-delete-image-button h5peditor-button-textual" type="button">${isAudio ? ns.t('core', 'deleteAudioLabel') : ns.t('core', 'deleteVideoLabel')}</button>
@@ -658,7 +680,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         </div>
       `;
     }
-    
+
     // Insert file element in appropriate order
     const $file = $(fileHtml);
 
@@ -683,6 +705,13 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       }
     }
 
+    if (shouldVideoHaveQualityLabels) {
+      const infoIcon = filesContainer.find('#info-tooltip').get(0);
+      const qualityDescription = H5PEditor.t('core', 'videoQualityDescription');
+      const top = 'top';
+      H5P.Tooltip(infoIcon, { position: top, text: qualityDescription });
+    }
+    
     this.$add.parent().find('.h5p-copyright-button').removeClass('hidden');
 
     const boxEl = $file.find('.h5p-dnd__box').get(0);
@@ -753,7 +782,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     $file
       .find('input')
       .change(function () {
-        file.metadata = { qualityName: $(this).val() };
+        const inputValue = $(this).val();
+        file.metadata.qualityName = inputValue || defaultQualityName;
       });
 
     // Create remove file dialog
@@ -1015,13 +1045,13 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
               <div class="h5p-dnd__box__block"></div>
               <div class="h5p-dnd__box h5p-dnd__box__url h5p-dnd__box--is-dashed h5p-dnd__box--is-inline h5p-dnd__box__action small-allign-center" tabindex="0">
                 <div class="h5p-dnd__box__block"></div>
-                <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--is-fixed h5p-dnd__column--when-wide h5p-dnd__no-x-margin">
+                <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--is-fixed h5p-dnd__column--when-wide h5p-dnd__column--no-margin h5p-dnd__box-image">
                   <div class="${isAudio ? 'h5p-dnd__upload-audio-svg' : 'h5p-dnd__upload-video-svg' }"></div>
                 </div>
-                <div class="h5p-dnd__column h5p-dnd__column--when-small">
+                <div class="h5p-dnd__column h5p-dnd__column--when-small h5p-dnd__box-image">
                   <div class="${isAudio ? 'h5p-dnd__upload-audio-svg' : 'h5p-dnd__upload-video-svg' }"></div>
                 </div>
-                <div class="h5p-dnd__column h5p-dnd_align_left">
+                <div class="h5p-dnd__column h5p-dnd_align_left h5p-dnd__box-text">
                   <div class="text-center h5p-dnd__title">
                     ${dragCopyPasteString}
                   </div>

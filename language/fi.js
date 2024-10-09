@@ -39,8 +39,8 @@ H5PEditor.language.core = {
   editMode: 'Muokkaustila',
   listLabel: 'Lista',
   dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
-  dragAndDropAndPasteAudioDescription: 'Max 20 mb, supported formats: .wav, .mp3, .ogg',
-  dragAndDropAndPasteVideoDescription: 'Max 2 gb, recommended formats: .webm, .mp4',
+  dragAndDropAndPasteAudioDescription: 'Max 20 MB,supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteVideoDescription: 'Max 2 GB,recommended formats: .webm, .mp4',
   uploadError: 'Virhe tiedoston latauksessa',
   fileToLarge: 'Tiedosto jota yrität ladata saattaa olla liian suuri.',
   unknownFileUploadError: 'Tuntematon virhe latauksessa',
@@ -171,6 +171,7 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'Tämä nimike auttaa käyttäjää tunnistamaan videon nykyisen laadun. Esim. 1080p, 720p, HD tai Mobiili',
   videoQualityDefaultLabel: 'Laatu :index',
+  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Sisältötyyppejä ei saatavilla.',
   noContentTypesAvailableDesc:
     'Sivustollasi on ongelmia yhdistettäessä h5p.org-sivustoon ja sisältötyyppien listaus ei tästä syystä toimi.',

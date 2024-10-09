@@ -39,8 +39,8 @@ H5PEditor.language.core = {
   editMode: 'Urejevalni način',
   listLabel: 'Seznam',
   dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
-  dragAndDropAndPasteAudioDescription: 'Max 20 mb, supported formats: .wav, .mp3, .ogg',
-  dragAndDropAndPasteVideoDescription: 'Max 2 gb, recommended formats: .webm, .mp4',
+  dragAndDropAndPasteAudioDescription: 'Max 20 MB,supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteVideoDescription: 'Max 2 GB,recommended formats: .webm, .mp4',
   uploadError: 'Napaka pri nalaganju datoteke',
   fileToLarge: 'Datoteka, ki jo poskušate naložiti, je morda prevelika.',
   unknownFileUploadError: 'Neznana napaka pri nalaganju datoteke',
@@ -171,6 +171,7 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'Ta oznaka pomaga uporabniku prepoznati trenutno kakovost videoposnetka. Npr. 1080p, 720p, HD ali Mobilne naprave',
   videoQualityDefaultLabel: 'Kakovost :index',
+  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Na voljo ni nobenega tipa vsebine',
   noContentTypesAvailableDesc:
     'Vaše spletno mesto ima težave pri povezovanju s H5P.org in pripravo seznama razpoložljivih tipov vsebine.',

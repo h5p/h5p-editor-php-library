@@ -39,8 +39,8 @@ H5PEditor.language.core = {
   editMode: 'Edizio modua',
   listLabel: 'Zerrendatu',
   dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
-  dragAndDropAndPasteAudioDescription: 'Max 20 mb, supported formats: .wav, .mp3, .ogg',
-  dragAndDropAndPasteVideoDescription: 'Max 2 gb, recommended formats: .webm, .mp4',
+  dragAndDropAndPasteAudioDescription: 'Max 20 MB,supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteVideoDescription: 'Max 2 GB,recommended formats: .webm, .mp4',
   uploadError: 'Fitxategiaren karga errorea',
   fileToLarge: 'Kargatzen saiatzen ari zaren fitxategia handiegia izan daiteke.',
   unknownFileUploadError: 'Fitxategiaren karga errore ezezaguna',
@@ -172,6 +172,7 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'Etiketa honek laguntzen dio erabiltzaileari bideoaren uneko kalitatea identifikatzen. Esate baterako 1080p, 720p, HD edo Mugikorra',
   videoQualityDefaultLabel: 'Kalitatea :index',
+  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Ez dago ariketa mota erabilgarririk',
   noContentTypesAvailableDesc:
     'Zure guneak zailtasunak ditu H5P.org-ekin konektatzeko ariketa mota erabilgarriak zerrendatzeko.',

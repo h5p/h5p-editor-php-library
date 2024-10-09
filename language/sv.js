@@ -39,8 +39,8 @@ H5PEditor.language.core = {
   editMode: 'Redigeringsläge',
   listLabel: 'Lista',
   dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
-  dragAndDropAndPasteAudioDescription: 'Max 20 mb, supported formats: .wav, .mp3, .ogg',
-  dragAndDropAndPasteVideoDescription: 'Max 2 gb, recommended formats: .webm, .mp4',
+  dragAndDropAndPasteAudioDescription: 'Max 20 MB,supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteVideoDescription: 'Max 2 GB,recommended formats: .webm, .mp4',
   uploadError: 'Fel vid filuppladdning',
   fileToLarge: 'Filen som du försöker ladda upp kan vara för stor.',
   unknownFileUploadError: 'Okänt fel vid filuppladdning',
@@ -172,6 +172,7 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'Denna etikett underlättar för användaren att identifiera nuvarande kvalitet på videon. T ex 1080p, 720p, HD eller mobil',
   videoQualityDefaultLabel: 'Kvalitet :index',
+  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',  
   noContentTypesAvailable: 'Inga innehållstyper är tillgängliga',
   noContentTypesAvailableDesc:
     'Din webbplats har problem med att ansluta till H5P.org och listan över tillgängliga innehållstyper.',

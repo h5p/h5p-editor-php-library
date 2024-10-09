@@ -39,8 +39,8 @@ H5PEditor.language.core = {
   editMode: 'Redigeerimismood',
   listLabel: 'Loetelu',
   dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
-  dragAndDropAndPasteAudioDescription: 'Max 20 mb, supported formats: .wav, .mp3, .ogg',
-  dragAndDropAndPasteVideoDescription: 'Max 2 gb, recommended formats: .webm, .mp4',
+  dragAndDropAndPasteAudioDescription: 'Max 20 MB,supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteVideoDescription: 'Max 2 GB,recommended formats: .webm, .mp4',
   uploadError: 'Faili üleslaadimise viga',
   fileToLarge: 'Fail, mida püüad üles laadida, võib olla liiga suur.',
   unknownFileUploadError: 'Tundmatu faili üleslaadimise viga',
@@ -171,6 +171,7 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'See silt aitab kasutajal määratleda videomängimise kvaliteeti. Näiteks 1080p, 720p, HD või mobiilne',
   videoQualityDefaultLabel: 'Kvaliteet :index',
+  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Saadaval ei ole sisutüüpe',
   noContentTypesAvailableDesc:
     'Sinu lehekülg ei saa ühenduda H5P.org serveriga ja näidata võimalikke sisutüüpide loetlemisega.',

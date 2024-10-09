@@ -32,8 +32,8 @@ H5PEditor.language.core = {
   commonFieldsDescription: 'Zde můžete upravovat nastavení nebo překládat texty použité v tomto obsahu.',
   uploading: 'Nahrávám, počkejte prosím...',
   dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
-  dragAndDropAndPasteAudioDescription: 'Max 20 mb, supported formats: .wav, .mp3, .ogg',
-  dragAndDropAndPasteVideoDescription: 'Max 2 gb, recommended formats: .webm, .mp4',
+  dragAndDropAndPasteAudioDescription: 'Max 20 MB,supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteVideoDescription: 'Max 2 GB,recommended formats: .webm, .mp4',
   noFollow: 'Nelze sledovat pole ":path".',
   editCopyright: 'Upravit autorská práva',
   close: 'Zavřít',
@@ -171,6 +171,7 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'Tento popisek pomáhá uživateli zjistit aktuální kvalitu videa. Např. 1080p, 720p, HD nebo Mobile',
   videoQualityDefaultLabel: 'Kvalita :index',
+  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Nejsou k dispozici žádné typy obsahu',
   noContentTypesAvailableDesc: 'Váš web má potíže s připojením k H5P.org a se seznamem dostupných typů obsahu.',
   contentTypeCacheOutdated: 'Seznam typů obsahu je zastaralý',

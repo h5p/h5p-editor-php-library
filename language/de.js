@@ -34,8 +34,8 @@ H5PEditor.language.core = {
     'Hier können Bezeichnungen bearbeitet oder Texte übersetzt werden, die in diesem Inhalt verwendet werden.',
   uploading: 'Lade hoch, bitte warten...',
   dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
-  dragAndDropAndPasteAudioDescription: 'Max 20 mb, supported formats: .wav, .mp3, .ogg',
-  dragAndDropAndPasteVideoDescription: 'Max 2 gb, recommended formats: .webm, .mp4',
+  dragAndDropAndPasteAudioDescription: 'Max 20 MB,supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteVideoDescription: 'Max 2 GB,recommended formats: .webm, .mp4',
   noFollow: 'Dem Feld ":path" kann nicht gefolgt werden.',
   editCopyright: 'Rechteangaben bearbeiten',
   close: 'Schließen',
@@ -174,6 +174,7 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'An dieser Beschreibung kann der Benutzer die Qualität des hochgeladenen Videos erkennen. Beispiele: 1080p, 720p, HD oder mobil',
   videoQualityDefaultLabel: 'Videoqualität :index',
+  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Keine Inhaltstypen verfügbar',
   noContentTypesAvailableDesc:
     'Es können keine Inhaltstypen aufgelistet werden, da Verbindungsprobleme zu H5P.org bestehen.',
