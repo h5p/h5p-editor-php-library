@@ -623,7 +623,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       <div class="h5p-video-quality">
         <div class="h5p-video-quality-title">
           ${H5PEditor.t('core', 'videoQuality')}
-          <span id="info-tooltip" class="h5p-dnd__info-icon-svg"></span>
+          <span id="info-tooltip" class="h5p-dnd__info-icon-svg" tabindex="0"></span>
         </div>
         <input placeholder="${H5PEditor.t('core', 'videoQualityPlaceholder')}" id="${rowInputId}" class="h5peditor-text quality-input" type="text" maxlength="60" value="${valueToDisplay}">
       </div>
@@ -718,7 +718,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       const qualityDescription = H5PEditor.t('core', 'videoQualityDescription');
       const top = 'top';
       H5P.Tooltip(infoIcon, { position: top, text: qualityDescription });
-
     }
     
     const boxEl = $file.find('.h5p-dnd__box').get(0);
