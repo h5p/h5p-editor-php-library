@@ -183,11 +183,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     var html = H5PEditor.createFieldMarkup(this.field, imageHtml, id);
     var $container = $(html).appendTo($wrapper);
-
-    if (!this.field.disableCopyright) {
-      const copyrightHtml = '<a class="h5p-copyright-button h5peditor-button-textual" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>';
-      $(copyrightHtml).appendTo($container.find('.av-tabpanel'));
-    }
     
     // Wrappers
     this.$dialogAnchor = $container.children('.h5p-dialog-anchor');
@@ -304,6 +299,14 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           createTabInstance(self.field.widgetExtensions[i], i + 2); // Compensate for the number of hard-coded tabs
         }
       }
+    }
+
+    // Add copyright button at the bottom of the tab panel
+    if (!this.field.disableCopyright) {
+      const copyrightHtml = '<a class="h5p-copyright-button h5peditor-button-textual" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>';
+      const $button = $(copyrightHtml);
+      const $panel = $container.find('.av-tabpanel');
+      $button.appendTo($panel);
     }
     
     this.$dndTabPanel = this.$dialogTable.children('.av-tabpanel:not([hidden])');
@@ -579,6 +582,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     if (!!this.params) {
       const avTabPanel = this.$dialogTable.find('.av-tabpanel:not([hidden])');
       avTabPanel.addClass('has_content');
+
+      // Show copyright button
+      avTabPanel.find('.h5p-copyright-button').removeClass('hidden');
     }
 
     // Check if source is provider (Vimeo, YouTube, Panopto)
@@ -715,8 +721,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     }
     
-    this.$add.parent().find('.h5p-copyright-button').removeClass('hidden');
-
     const boxEl = $file.find('.h5p-dnd__box').get(0);
     const blockEl = $file.find('.h5p-dnd__box__block').get(0);
 
@@ -799,7 +803,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     confirmRemovalDialog.on('confirmed', function () {
       that.removeFileWithElement($file);
       if ($(filesContainer).find('.h5p-dnd__file-wrapper').length === 0) {
-        $(filesContainer).parent().find('.h5p-copyright-button').addClass('hidden');
+        that.$dialogTable.find('.h5p-copyright-button').addClass('hidden');
       }
     });
   };
