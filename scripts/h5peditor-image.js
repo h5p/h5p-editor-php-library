@@ -138,7 +138,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
 
   const $dialog = this.$container.find('.h5p-editor-dialog');
 
-  this.$container.parent().on('click', '.h5p-copyright-button, .h5p-editor-dialog .h5p-close', () => {
+  this.$container.on('click', '.h5p-copyright-button, .h5p-editor-dialog .h5p-close', () => {
     $dialog.toggleClass('h5p-open');
     return false;
   });
