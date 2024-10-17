@@ -43,6 +43,7 @@ H5PEditor.language.core = {
   dragAndDropAndPasteVideoDescription: 'Max 2 GB,recommended formats: .webm, .mp4',
   uploadError: '파일 업로드 오류',
   fileToLarge: '업로드하려는 파일이 너무 클 수 있음.',
+  fileSizeLimit: 'The file you are trying to upload is too big. The limit is :sizeLimit.',
   unknownFileUploadError: '알 수 없는 파일 업로드 오류',
   noSemantics: '오류, 콘텐츠 유형 양식을 로드할 수 없음.',
   editImage: '이미지 편집',

@@ -69,6 +69,7 @@ H5PEditor.language.core = {
   listLabel: 'Lista',
   uploadError: 'Error en la subida del archivo',
   fileToLarge: 'El archivo que intentas subir es demasiado grande.',
+  fileSizeLimit: 'The file you are trying to upload is too big. The limit is :sizeLimit.',
   unknownFileUploadError: 'Error de carga de archivo desconocido',
   noSemantics: 'Error, no se ha podido cargar el formulario del tipo de contenido.',
   editImage: 'Editar imagen',
