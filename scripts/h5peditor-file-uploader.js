@@ -177,7 +177,9 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
     
       const isVideo = isVideoFile(file.type);
       const sizeLimit = isVideo ? SIZE_LIMITS.video.limit : SIZE_LIMITS.audioImage.limit;
-      const sizeLimitText = H5PEditor.t('core', 'fileSizeLimit', { ':sizeLimit': isVideo ? SIZE_LIMITS.video.text : SIZE_LIMITS.audioImage.text });
+      const correctSizeText = isVideo ? SIZE_LIMITS.video.text : SIZE_LIMITS.audioImage.text;
+      
+      const sizeLimitText = H5PEditor.t('core', 'fileSizeLimit', { ':sizeLimit': correctSizeText });
     
       return { sizeLimit, sizeLimitText };
     }
