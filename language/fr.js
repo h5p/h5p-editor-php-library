@@ -71,6 +71,7 @@ H5PEditor.language.core = {
   uploadError: "Erreur pendant l'envoi du fichier",
   fileToLarge: 'Le fichier que vous envoyez est trop lourd.',
   unknownFileUploadError: 'Erreur inconnue lors du téléversement du fichier',
+  fileTooBig: 'The file you are trying to upload is too big. The limit is :sizeLimit.',
   noSemantics: 'Erreur, impossible de charger ce type de contenu.',
   editImage: "Editer l'image",
   saveLabel: 'Enregistrer',

@@ -170,17 +170,16 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
      */
     const getSizeLimitAndText = function (file) {
       // Define size limits
-      const VIDEO_SIZE_LIMIT = 2147483648; // 2 GB
-      const AUDIO_IMAGE_SIZE_LIMIT = 20971520; // 20 MB
-      
-      const videoSizeLimitText = H5PEditor.t('core', 'videoSizeLimit', { ':sizeLimit': '2 GB' });
-      const audioImageSizeLimitText = H5PEditor.t('core', 'audioImageSizeLimit', { ':sizeLimit': '20 MB' });
-
-      if (isVideoFile(file.type)) {
-        return { sizeLimit: VIDEO_SIZE_LIMIT, sizeLimitText: videoSizeLimitText };
-      } else {
-        return { sizeLimit: AUDIO_IMAGE_SIZE_LIMIT, sizeLimitText: audioImageSizeLimitText };
-      }
+      const SIZE_LIMITS = {
+        video: { limit: 2147483648, text: '2 GB' }, // 2 GB
+        audioImage: { limit: 20971520, text: '20 MB' } // 20 MB
+      };
+    
+      const isVideo = isVideoFile(file.type);
+      const sizeLimit = isVideo ? SIZE_LIMITS.video.limit : SIZE_LIMITS.audioImage.limit;
+      const sizeLimitText = H5PEditor.t('core', 'fileSizeLimit', { ':sizeLimit': isVideo ? SIZE_LIMITS.video.text : SIZE_LIMITS.audioImage.text });
+    
+      return { sizeLimit, sizeLimitText };
     }
 
     /**

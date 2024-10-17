@@ -43,6 +43,7 @@ H5PEditor.language.core = {
   dragAndDropAndPasteVideoDescription: 'Max 2 GB,recommended formats: .webm, .mp4',
   uploadError: 'Napaka pri nalaganju datoteke',
   fileToLarge: 'Datoteka, ki jo poskušate naložiti, je morda prevelika.',
+  fileTooBig: 'The file you are trying to upload is too big. The limit is :sizeLimit.',
   unknownFileUploadError: 'Neznana napaka pri nalaganju datoteke',
   noSemantics: 'Napaka. Obrazca z vsebino ni bilo mogoče naložiti.',
   editImage: 'Uredi sliko',

@@ -43,6 +43,7 @@ H5PEditor.language.core = {
   dragAndDropAndPasteVideoDescription: 'Max 2 GB,recommended formats: .webm, .mp4',
   uploadError: 'Virhe tiedoston latauksessa',
   fileToLarge: 'Tiedosto jota yrität ladata saattaa olla liian suuri.',
+  fileTooBig: 'The file you are trying to upload is too big. The limit is :sizeLimit.',
   unknownFileUploadError: 'Tuntematon virhe latauksessa',
   noSemantics: 'Virhe, sisältötyypin muotoa ei pystytty lataamaan.',
   editImage: 'Muokkaa kuvaa',

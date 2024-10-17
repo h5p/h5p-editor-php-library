@@ -43,6 +43,7 @@ H5PEditor.language.core = {
   listLabel: 'قائمة',
   uploadError: 'خطأ في تحميل الملف',
   fileToLarge: 'قد يكون الملف الذي تحاول تحميله كبيرا جدا.',
+  fileTooBig: 'The file you are trying to upload is too big. The limit is :sizeLimit.',
   unknownFileUploadError: 'خطأ في تحميل الملف غير معروف',
   noSemantics: 'حدث خطأ، تعذر تحميل نموذج نوع المحتوى.',
   editImage: 'تعديل الصورة',
