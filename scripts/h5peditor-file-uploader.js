@@ -26,7 +26,7 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
       if (isFileTooLarge(file, sizeLimit)) {
         const uploadComplete = {
           ...context,
-          error: H5PEditor.t('core', 'fileToLarge', { ':sizeLimit': sizeLimitText }),
+          error: sizeLimitText,
         };
         self.trigger('uploadComplete', uploadComplete);
         return;
@@ -173,8 +173,8 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
       const VIDEO_SIZE_LIMIT = 2147483648; // 2 GB
       const AUDIO_IMAGE_SIZE_LIMIT = 20971520; // 20 MB
       
-      const videoSizeLimitText = H5PEditor.t('core', 'videoSizeLimit');
-      const audioImageSizeLimitText = H5PEditor.t('core', 'audioImageSizeLimit');
+      const videoSizeLimitText = H5PEditor.t('core', 'videoSizeLimit', { ':sizeLimit': '2 GB' });
+      const audioImageSizeLimitText = H5PEditor.t('core', 'audioImageSizeLimit', { ':sizeLimit': '20 MB' });
 
       if (isVideoFile(file.type)) {
         return { sizeLimit: VIDEO_SIZE_LIMIT, sizeLimitText: videoSizeLimitText };
