@@ -43,7 +43,7 @@ H5PEditor.language.core = {
   listLabel: 'Lista',
   uploadError: 'Greška kod uploada fajla',
   fileToLarge: 'Fajl koji pokušavate uploadovati je možda prevelik.',
-  fileTooBig: 'The file you are trying to upload is too big. The limit is :sizeLimit.',
+  fileSizeLimit: 'The file you are trying to upload is too big. The limit is :sizeLimit.',
   unknownFileUploadError: 'Nepoznata greška kod uploada fajla',
   noSemantics: 'Greška, nije moguće učitati formu za ovu vrstu sadržaja.',
   editImage: 'Uredite sliku',

@@ -44,7 +44,7 @@ H5PEditor.language.core = {
   listLabel: 'Liste',
   uploadError: 'Fehler beim Hochladen der Datei',
   fileToLarge: 'Die Datei, die hochgeladen werden soll, könnte zu groß sein.',
-  fileTooBig: 'The file you are trying to upload is too big. The limit is :sizeLimit.',
+  fileSizeLimit: 'The file you are trying to upload is too big. The limit is :sizeLimit.',
   unknownFileUploadError: 'Unbekannter Fehler beim Hochladen der Datei',
   noSemantics: 'Der Editor zu diesem Inhaltstyp konnte nicht geladen werden.',
   editImage: 'Bild bearbeiten',

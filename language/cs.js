@@ -42,7 +42,7 @@ H5PEditor.language.core = {
   listLabel: 'Seznam',
   uploadError: 'Chyba nahrávání souboru',
   fileToLarge: 'Soubor, který se pokoušíte nahrát, může být příliš velký.',
-  fileTooBig: 'The file you are trying to upload is too big. The limit is :sizeLimit.',
+  fileSizeLimit: 'The file you are trying to upload is too big. The limit is :sizeLimit.',
   unknownFileUploadError: 'Chyba při nahrávání neznámého souboru',
   noSemantics: 'Chyba, nelze načíst formulář typu obsahu.',
   editImage: 'Upravit obrázek',
