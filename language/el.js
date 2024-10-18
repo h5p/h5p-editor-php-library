@@ -44,6 +44,7 @@ H5PEditor.language.core = {
   listLabel: 'Λίστα',
   uploadError: 'Σφάλμα Μεταφόρτωσης Αρχείου',
   fileToLarge: 'Το αρχείο το οποίο προσπαθείτε να μεταφορτώσετε, ενδέχεται να είναι πολύ μεγάλο.',
+  fileSizeLimit: 'The file you are trying to upload is too big. The limit is :sizeLimit.',
   unknownFileUploadError: 'Άγνωστο σφάλμα μεταφόρτωσης αρχείου',
   noSemantics: 'Σφάλμα, δεν ήταν δυνατή η φόρτωση της φόρμας τύπου περιεχομένου.',
   editImage: 'Επεξεργασία εικόνας',
