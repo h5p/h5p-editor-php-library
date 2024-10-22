@@ -329,7 +329,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         return;
       }
 
-      if (!C.findProvider(url)) {
+      const matches = url.match(C.fileTypes);
+      if (matches === null && !C.findProvider(url)) {
         this.$videoUrlErrorContainer.removeClass('hidden');
         this.$videoUrlErrorContainer.addClass("has-error");
         this.$videoUrlErrorContainer.find('.h5p-errors').text(isAudio ? ns.t('core', 'unsupportedAudioSource') : ns.t('core', 'unsupportedVideoSource'));
@@ -338,13 +339,12 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         this.$videoUrlErrorContainer.addClass('hidden');
 
         // Check if there is an existing media propery in params
-        let existingMedia = this.params?.some(p => C.findProvider(p.path));
-        
-        if (existingMedia) {
-          this.replaceUrl(url);
-        } else {
-          this.useUrl(url);
+        const fileIndex = this.params ? this.params.findIndex(p => p.path === url) : -1;
+
+        if (fileIndex > -1) {
+          this.removeFileWithElement($(`#${this.params[fileIndex].id}`), true);
         }
+        this.useUrl(url);
         this.updatePasteBox(true);
       }
     });
@@ -359,7 +359,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           return;
         }
         
-        if (!C.findProvider(url)) {
+        const matches = url.match(C.fileTypes);
+        if (matches === null && !C.findProvider(url)) {
           this.$videoUrlErrorContainer.removeClass('hidden');
           this.$videoUrlErrorContainer.addClass("has-error");
           this.$videoUrlErrorContainer.find('.h5p-errors').text(isAudio ? ns.t('core', 'unsupportedAudioSource') : ns.t('core', 'unsupportedVideoSource'));
@@ -367,7 +368,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         else {
 
           // Check if there is an existing media propery in params
-          let existingMedia = this.params?.some(p => C.findProvider(p.path));
+          let existingMedia = this.params?.some(p => p.path.match(C.fileTypes) || C.findProvider(p.path));
 
           if (existingMedia) {
             this.replaceUrl(url);
@@ -576,6 +577,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * @param {Number} index
    */
   C.prototype.addFile = function (index, updateFileId = undefined) {
+    console.log(this.params[index]);
     let that = this;
     const file = this.params[index];
 
@@ -812,7 +814,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    *
    * @param {number} $file File element
    */
-  C.prototype.removeFileWithElement = function ($file) {
+  C.prototype.removeFileWithElement = function ($file, keepPasteBox) {
     const avTabPanel = this.$dialogTable.find('.av-tabpanel:not([hidden])');
     const filesContainer = avTabPanel.children('.h5p-dnd__av-container');
     const filesContainerId = filesContainer.attr('id') === 'urlFiles' ? true : false;
@@ -833,7 +835,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     $file.remove();
     this.$add.removeClass('hidden');
     if (filesContainerId && urlInputHasValue !== '') {
-      this.updatePasteBox(false);
+      this.updatePasteBox(keepPasteBox);
       this.$videoUrlErrorContainer.addClass('hidden');
     }
 
@@ -867,7 +869,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     let mime;
     let aspectRatio;
     let i;
-    const matches = url.match(/\.(webm|mp4|ogv|m4a|mp3|ogg|oga|wav)/i);
+    const matches = url.match(C.fileTypes);
     if (matches !== null) {
       mime = matches[matches.length - 1];
     }
@@ -907,7 +909,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   C.prototype.replaceUrl = function (url) {
     let mime;
     let aspectRatio;
-    const matches = url.match(/\.(webm|mp4|ogv|m4a|mp3|ogg|oga|wav)/i);
+    const matches = url.match(C.fileTypes);
     if (matches !== null) {
       mime = matches[matches.length - 1];
     }
@@ -1138,7 +1140,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     let tabsHTML = '';
     let tabpanelsHTML = '';
-
+console.log(tabs);
     for (i = 0; i < tabs.length; i++) {
       let title = '';
       const tab = tabs[i];
@@ -1197,6 +1199,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       aspectRatio: '16:9',
     },
   ];
+  
+  // allowed file types
+  C.fileTypes = /\.(webm|mp4|ogv|m4a|mp3|ogg|oga|wav)/i;
 
   /**
    * Find & return an external provider based on the URL
