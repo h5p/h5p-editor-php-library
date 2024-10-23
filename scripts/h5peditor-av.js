@@ -406,10 +406,17 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     
     this.$errors = $container.children('.h5p-errors');
 
-    if (this.params !== undefined) {   
+    if (this.params !== undefined) {
       for (let index = 0; index < this.params.length; index++) {
         this.params[index].id = H5P.createUUID();
-        this.addFile(index);
+        switch (this.params[index].tabIndex) {
+          case 0:
+            this.addFile(index);
+            break;
+          case 1:
+            this.useUrl(this.params[index].path, true);
+            break;
+        }
       }
     }
     else {
@@ -577,7 +584,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * @param {Number} index
    */
   C.prototype.addFile = function (index, updateFileId = undefined) {
-    console.log(this.params[index]);
     let that = this;
     const file = this.params[index];
 
@@ -860,7 +866,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    *  
    * @param {string} url new url
    */
-  C.prototype.useUrl = function (url) {
+  C.prototype.useUrl = function (url, skipPush) {
     if (this.params === undefined) {
       this.params = [];
       this.setValue(this.field, this.params);
@@ -882,18 +888,19 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       }
     }
 
-    const file = {
-      id: H5P.createUUID(),
-      path: url,
-      mime: this.field.type + '/' + (mime ? mime : 'unknown'),
-      copyright: this.copyright,
-      aspectRatio: aspectRatio ? aspectRatio : undefined,
-      tabIndex: C.TABS.INPUT,
-    };
-
-    this.params.push(file);
-    this.setValue(this.field, this.params);
-    index = this.params.findIndex(param => param.id === file.id);
+    if (!skipPush) {
+      const file = {
+        id: H5P.createUUID(),
+        path: url,
+        mime: this.field.type + '/' + (mime ? mime : 'unknown'),
+        copyright: this.copyright,
+        aspectRatio: aspectRatio ? aspectRatio : undefined,
+        tabIndex: C.TABS.INPUT,
+      };
+      this.params.push(file);
+      this.setValue(this.field, this.params);
+    }
+    index = this.params.findIndex(param => param.path === url);
     this.addFile(index);
 
     for (i = 0; i < this.changes.length; i++) {
@@ -1140,7 +1147,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     let tabsHTML = '';
     let tabpanelsHTML = '';
-console.log(tabs);
+
     for (i = 0; i < tabs.length; i++) {
       let title = '';
       const tab = tabs[i];
