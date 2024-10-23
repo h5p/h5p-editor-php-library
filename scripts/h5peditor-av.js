@@ -217,16 +217,15 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       // Update tab
       this.parentElement.querySelector('.selected').classList.remove('selected');
       this.classList.add('selected');
-      
       // Update tab panel
-      const inactiveTabPanel = document.getElementById(this.getAttribute('aria-controls'));
+      const inactiveTabPanel = this.parentElement.parentElement.querySelector('.av-tabpanel[hidden]');
       const activeTabPanel = inactiveTabPanel.parentElement.querySelector('.av-tabpanel:not([hidden])');
       activeTabPanel.setAttribute('hidden', '');
       inactiveTabPanel.removeAttribute('hidden');
 
       // Set active tab index
-      for (let i = 0; i < inactiveTabPanel.parentElement.children.length; i++) {
-        if (inactiveTabPanel.parentElement.children[i] === inactiveTabPanel) {
+      for (let i = 0; i < this.parentElement.children.length; i++) {
+        if (this.parentElement.children[i] === inactiveTabPanel) {
           activeTab = i - 1; // Compensate for .av-tablist in the same wrapper
           break;
         }
@@ -414,6 +413,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
             this.addFile(index);
             break;
           case 1:
+            toggleTab.call($container.find('.av-tab__insert-url')[0]);
             this.useUrl(this.params[index].path, true);
             break;
         }
