@@ -16,6 +16,7 @@ html, body {
   max-width: 960px;
   position: relative;
 }
+
 a {
   text-decoration: none;
 }
@@ -166,10 +167,103 @@ a {
     font-size: 16px;
     word-wrap: break-word;
 
+    a {
+      text-decoration: underline;
+    }
+
+    /* The figure around the table */
+    figure.table {
+      display: table;
+      table-layout: fixed;
+      margin: 0 auto;
+      padding: 0;
+      float: left;
+
+      /* The actual table */
+      table {
+        border-collapse: collapse;
+        height: 100%;
+        width: 100%;
+        border-spacing: 0;
+        border-width: 1px;
+        border-color:  #494949;
+
+        td, th {
+          padding: 1px;
+          border-color:  #494949;
+          border-bottom-style: solid;
+        }
+
+        td {
+          border-width: 0.083em;
+        }
+
+        th {
+          border-width: .167em;
+        }
+
+        tr:last-child > td {
+          border-bottom-style: none;
+        }
+      }
+
+      figcaption {
+        background-color: transparent;
+        caption-side: top;
+        color: #333;
+        display: table-caption;
+        font-size: .75em;
+        outline-offset: -1px;
+        padding: .6em;
+        text-align: center;
+        word-break: break-word;
+      }
+    }
+
+    .table-overflow-protection {
+      clear: both;
+    }
+
     &.error {
       border-color: red;
     }
   }
+
+  // Inside ckeditor, needed for changes to default
+  .ck-content figure.table {
+    float: left;
+
+    table {
+      border-width: 1px;
+      border-color:  #494949;
+      border-style: none;
+
+      td, th {
+        padding: 1px;
+        border-style: none;
+        border-color:  #494949;
+        border-bottom-style: solid;
+      }
+
+      td {
+        border-width: 0.083em;
+      }
+
+      th {
+        border-width: .167em;
+        background-color: transparent;
+      }
+
+      tr:last-child > td {
+        border-bottom-style: none;
+      }
+    }
+
+    figcaption {
+      background-color: transparent;
+    }
+  }
+
   .h5peditor-text, textarea {
     width: 100%;
     box-sizing: border-box;
@@ -178,6 +272,31 @@ a {
       border-color: red;
     }
   }
+
+  // The actual ck editor
+  .ck {
+    a {
+      text-decoration: underline;
+    }
+
+    .ck-font-size-dropdown .ck-dropdown__panel,
+    .ck-text-fragment-language-dropdown .ck-dropdown__panel {
+      max-height: 20em;
+      overflow-y: scroll;
+    }
+
+    .ck-fontsize-option .ck-button__label {
+      line-height: normal !important;
+    }
+
+    .ck-content pre {
+      background: initial;
+      border: initial;
+      border-radius: initial;
+      padding: 0;
+    }
+  }
+
   /* Placeholders - need to be on separate lines. If not,
      the browsers will invalidate them */
   textarea:focus::-webkit-input-placeholder,
@@ -923,6 +1042,10 @@ a {
   }
 }
 
+.ck-powered-by-balloon {
+  display: none !important;
+}
+
 .h5p-editor-dialog.h5p-dialog-wide {
   width: 90%;
   border-radius: 0.208em;
@@ -1215,7 +1338,6 @@ a {
 }
 .h5peditor-widget-option {
   border: 1px solid #ccc;
-  border-bottom: 0;
   margin-left: 0.5em;
   padding: 0.6em 1em;
   color: #0E1A25;
@@ -1234,6 +1356,7 @@ a {
 .h5peditor-widget-active {
   background: #fff;
   line-height: 1.357142857em;
+  border-bottom: 0;
 }
 .h5peditor-widgets > .h5peditor-widget-wrapper {
   border: 1px solid #ccc;
