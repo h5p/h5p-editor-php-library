@@ -323,29 +323,20 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     urlInsertButton.on('click', () => {
       const url = inputContainer.find('.input-video').val().trim();
-      const isAudio = this.field.type === 'audio';
       if (url.length === 0) {
         return;
       }
 
-      const matches = url.match(C.fileTypes);
-      if (matches === null && !C.findProvider(url)) {
-        this.$videoUrlErrorContainer.removeClass('hidden');
-        this.$videoUrlErrorContainer.addClass("has-error");
-        this.$videoUrlErrorContainer.find('.h5p-errors').text(isAudio ? ns.t('core', 'unsupportedAudioSource') : ns.t('core', 'unsupportedVideoSource'));
-      }
-      else {
-        this.$videoUrlErrorContainer.addClass('hidden');
+      this.$videoUrlErrorContainer.addClass('hidden');
 
-        // Check if there is an existing media propery in params
-        const fileIndex = this.params ? this.params.findIndex(p => p.path === url) : -1;
+      // Check if there is an existing media propery in params
+      const fileIndex = this.params ? this.params.findIndex(p => p.path === url) : -1;
 
-        if (fileIndex > -1) {
-          this.removeFileWithElement($(`#${this.params[fileIndex].id}`), true);
-        }
-        this.useUrl(url);
-        this.updatePasteBox(true);
+      if (fileIndex > -1) {
+        this.removeFileWithElement($(`#${this.params[fileIndex].id}`), true);
       }
+      this.useUrl(url);
+      this.updatePasteBox(true);
     });
 
     const urlInputField = this.$dialogTable.find('.input-video'); 
@@ -353,29 +344,19 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       this.$videoUrlErrorContainer.addClass('hidden');
       if (e.code === 'Enter') {
         const url = this.$dialogTable.find('.input-video').val().trim();
-        const isAudio = this.field.type === 'audio';
         if (url.length === 0) {
           return;
         }
         
-        const matches = url.match(C.fileTypes);
-        if (matches === null && !C.findProvider(url)) {
-          this.$videoUrlErrorContainer.removeClass('hidden');
-          this.$videoUrlErrorContainer.addClass("has-error");
-          this.$videoUrlErrorContainer.find('.h5p-errors').text(isAudio ? ns.t('core', 'unsupportedAudioSource') : ns.t('core', 'unsupportedVideoSource'));
-        }
-        else {
+        // Check if there is an existing media propery in params
+        const fileIndex = this.params ? this.params.findIndex(p => p.path === url) : -1;
 
-          // Check if there is an existing media propery in params
-          let existingMedia = this.params?.some(p => p.path.match(C.fileTypes) || C.findProvider(p.path));
-
-          if (existingMedia) {
-            this.replaceUrl(url);
-          } else {
-            this.useUrl(url);
-          }
-          this.updatePasteBox(true);
+        if (fileIndex > -1) {
+          this.replaceUrl(url);
+        } else {
+          this.useUrl(url);
         }
+        this.updatePasteBox(true);
       }
     });
 
