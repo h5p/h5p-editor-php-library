@@ -209,6 +209,14 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     };
 
     const toggleTab = function () {
+      const inactiveTabPanel = this.parentElement.parentElement.querySelector('.av-tabpanel[hidden]');
+      const activeTabPanel = inactiveTabPanel.parentElement.querySelector('.av-tabpanel:not([hidden])');
+      activeTab = activeTabPanel.id.replace('av-tabpanel-', '');
+      const newTab = this.id.replace('av-tab-', '');
+      if (activeTab === newTab) {
+        console.log('return');
+        return;
+      }
       // Pause the last active tab
       if (isExtension(activeTab)) {
         tabInstances[activeTab].pause();
@@ -218,18 +226,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       this.parentElement.querySelector('.selected').classList.remove('selected');
       this.classList.add('selected');
       // Update tab panel
-      const inactiveTabPanel = this.parentElement.parentElement.querySelector('.av-tabpanel[hidden]');
-      const activeTabPanel = inactiveTabPanel.parentElement.querySelector('.av-tabpanel:not([hidden])');
       activeTabPanel.setAttribute('hidden', '');
       inactiveTabPanel.removeAttribute('hidden');
-
-      // Set active tab index
-      for (let i = 0; i < this.parentElement.children.length; i++) {
-        if (this.parentElement.children[i] === inactiveTabPanel) {
-          activeTab = i - 1; // Compensate for .av-tablist in the same wrapper
-          break;
-        }
-      }
     }
 
     const moveFocus = function (el) {
