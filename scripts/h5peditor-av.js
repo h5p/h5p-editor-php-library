@@ -209,12 +209,11 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     };
 
     const toggleTab = function () {
-      const inactiveTabPanel = this.parentElement.parentElement.querySelector('.av-tabpanel[hidden]');
-      const activeTabPanel = inactiveTabPanel.parentElement.querySelector('.av-tabpanel:not([hidden])');
+      const activeTabPanel = this.parentElement.parentElement.querySelector('.av-tabpanel:not([hidden])');
       activeTab = activeTabPanel.id.replace('av-tabpanel-', '');
       const newTab = this.id.replace('av-tab-', '');
+      const newTabPanel = this.parentElement.parentElement.querySelector(`#av-tabpanel-${newTab}`);
       if (activeTab === newTab) {
-        console.log('return');
         return;
       }
       // Pause the last active tab
@@ -227,7 +226,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       this.classList.add('selected');
       // Update tab panel
       activeTabPanel.setAttribute('hidden', '');
-      inactiveTabPanel.removeAttribute('hidden');
+      newTabPanel.removeAttribute('hidden');
     }
 
     const moveFocus = function (el) {
@@ -394,6 +393,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
           case 1:
             toggleTab.call($container.find('.av-tab__insert-url')[0]);
             this.useUrl(this.params[index].path, true);
+            break;
+          default:
+            this.addFile(index);
             break;
         }
       }
