@@ -227,6 +227,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       // Update tab panel
       activeTabPanel.setAttribute('hidden', '');
       newTabPanel.removeAttribute('hidden');
+      
+      // Update activeTab
+      activeTab = newTab;
     }
 
     const moveFocus = function (el) {
