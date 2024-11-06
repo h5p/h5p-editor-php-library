@@ -209,6 +209,13 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     };
 
     const toggleTab = function () {
+      const activeTabPanel = this.parentElement.parentElement.querySelector('.av-tabpanel:not([hidden])');
+      activeTab = $(this.parentElement.querySelector(`.av-tab.selected`)).index();
+      const newTab = $(this).index();
+      const newTabPanel = this.parentElement.parentElement.querySelector(`#av-tabpanel-${this.id.replace('av-tab-', '')}`);
+      if (activeTab === newTab) {
+        return;
+      }
       // Pause the last active tab
       if (isExtension(activeTab)) {
         tabInstances[activeTab].pause();
@@ -217,20 +224,12 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       // Update tab
       this.parentElement.querySelector('.selected').classList.remove('selected');
       this.classList.add('selected');
-      
       // Update tab panel
-      const inactiveTabPanel = document.getElementById(this.getAttribute('aria-controls'));
-      const activeTabPanel = inactiveTabPanel.parentElement.querySelector('.av-tabpanel:not([hidden])');
       activeTabPanel.setAttribute('hidden', '');
-      inactiveTabPanel.removeAttribute('hidden');
-
-      // Set active tab index
-      for (let i = 0; i < inactiveTabPanel.parentElement.children.length; i++) {
-        if (inactiveTabPanel.parentElement.children[i] === inactiveTabPanel) {
-          activeTab = i - 1; // Compensate for .av-tablist in the same wrapper
-          break;
-        }
-      }
+      newTabPanel.removeAttribute('hidden');
+      
+      // Update activeTab
+      activeTab = newTab;
     }
 
     const moveFocus = function (el) {
@@ -324,29 +323,22 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     urlInsertButton.on('click', () => {
       const url = inputContainer.find('.input-video').val().trim();
-      const isAudio = this.field.type === 'audio';
       if (url.length === 0) {
         return;
       }
 
-      if (!C.findProvider(url)) {
-        this.$videoUrlErrorContainer.removeClass('hidden');
-        this.$videoUrlErrorContainer.addClass("has-error");
-        this.$videoUrlErrorContainer.find('.h5p-errors').text(isAudio ? ns.t('core', 'unsupportedAudioSource') : ns.t('core', 'unsupportedVideoSource'));
-      }
-      else {
-        this.$videoUrlErrorContainer.addClass('hidden');
+      this.$videoUrlErrorContainer.addClass('hidden');
 
-        // Check if there is an existing media propery in params
-        let existingMedia = this.params?.some(p => C.findProvider(p.path));
-        
-        if (existingMedia) {
-          this.replaceUrl(url);
-        } else {
-          this.useUrl(url);
-        }
-        this.updatePasteBox(true);
+      // Check if there is an existing media propery in params
+      const urlFilesContainer = this.$dialogTable.find('#urlFiles');
+      const previousUrlId = urlFilesContainer.find('.h5p-dnd__file-wrapper, .h5p-dnd__videobox-wrapper')[0]?.id;
+      const previousUrlIndex = this.params?.findIndex(p => p.id === previousUrlId);
+
+      if (previousUrlIndex > -1) {
+        this.removeFileWithElement($(`#${this.params[previousUrlIndex].id}`), true);
       }
+      this.useUrl(url);
+      this.updatePasteBox(true);
     });
 
     const urlInputField = this.$dialogTable.find('.input-video'); 
@@ -354,28 +346,20 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       this.$videoUrlErrorContainer.addClass('hidden');
       if (e.code === 'Enter') {
         const url = this.$dialogTable.find('.input-video').val().trim();
-        const isAudio = this.field.type === 'audio';
         if (url.length === 0) {
           return;
         }
         
-        if (!C.findProvider(url)) {
-          this.$videoUrlErrorContainer.removeClass('hidden');
-          this.$videoUrlErrorContainer.addClass("has-error");
-          this.$videoUrlErrorContainer.find('.h5p-errors').text(isAudio ? ns.t('core', 'unsupportedAudioSource') : ns.t('core', 'unsupportedVideoSource'));
-        }
-        else {
+        // Check if there is an existing media propery in params
+        const urlFilesContainer = this.$dialogTable.find('#urlFiles');
+        const previousUrlId = urlFilesContainer.find('.h5p-dnd__file-wrapper, .h5p-dnd__videobox-wrapper')[0]?.id;
+        const previousUrlIndex = this.params?.findIndex(p => p.id === previousUrlId);
 
-          // Check if there is an existing media propery in params
-          let existingMedia = this.params?.some(p => C.findProvider(p.path));
-
-          if (existingMedia) {
-            this.replaceUrl(url);
-          } else {
-            this.useUrl(url);
-          }
-          this.updatePasteBox(true);
+        if (previousUrlIndex > -1) {
+          this.removeFileWithElement($(`#${this.params[previousUrlIndex].id}`), true);
         }
+        this.useUrl(url);
+        this.updatePasteBox(true);
       }
     });
 
@@ -405,10 +389,16 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     
     this.$errors = $container.children('.h5p-errors');
 
-    if (this.params !== undefined) {   
+    if (this.params !== undefined) {
       for (let index = 0; index < this.params.length; index++) {
         this.params[index].id = H5P.createUUID();
-        this.addFile(index);
+        if (this.params[index].tabIndex === 1) {
+          toggleTab.call($container.find('.av-tab__insert-url')[0]);
+          this.useUrl(this.params[index].path, true);
+        }
+        else {
+          this.addFile(index);
+        }
       }
     }
     else {
@@ -812,7 +802,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    *
    * @param {number} $file File element
    */
-  C.prototype.removeFileWithElement = function ($file) {
+  C.prototype.removeFileWithElement = function ($file, keepPasteBox) {
     const avTabPanel = this.$dialogTable.find('.av-tabpanel:not([hidden])');
     const filesContainer = avTabPanel.children('.h5p-dnd__av-container');
     const filesContainerId = filesContainer.attr('id') === 'urlFiles' ? true : false;
@@ -820,7 +810,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     if (this.params.length === 1) {
       // Remove from params.
-      delete this.params;
+      this.params = [];
       this.setValue(this.field);
       avTabPanel.removeClass('has_content');
     }
@@ -833,7 +823,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     $file.remove();
     this.$add.removeClass('hidden');
     if (filesContainerId && urlInputHasValue !== '') {
-      this.updatePasteBox(false);
+      this.updatePasteBox(keepPasteBox);
       this.$videoUrlErrorContainer.addClass('hidden');
     }
 
@@ -858,7 +848,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    *  
    * @param {string} url new url
    */
-  C.prototype.useUrl = function (url) {
+  C.prototype.useUrl = function (url, skipPush) {
     if (this.params === undefined) {
       this.params = [];
       this.setValue(this.field, this.params);
@@ -867,7 +857,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     let mime;
     let aspectRatio;
     let i;
-    const matches = url.match(/\.(webm|mp4|ogv|m4a|mp3|ogg|oga|wav)/i);
+    const matches = url.match(C.fileTypes);
     if (matches !== null) {
       mime = matches[matches.length - 1];
     }
@@ -880,18 +870,19 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       }
     }
 
-    const file = {
-      id: H5P.createUUID(),
-      path: url,
-      mime: this.field.type + '/' + (mime ? mime : 'unknown'),
-      copyright: this.copyright,
-      aspectRatio: aspectRatio ? aspectRatio : undefined,
-      tabIndex: C.TABS.INPUT,
-    };
-
-    this.params.push(file);
-    this.setValue(this.field, this.params);
-    index = this.params.findIndex(param => param.id === file.id);
+    if (!skipPush) {
+      const file = {
+        id: H5P.createUUID(),
+        path: url,
+        mime: this.field.type + '/' + (mime ? mime : 'unknown'),
+        copyright: this.copyright,
+        aspectRatio: aspectRatio ? aspectRatio : undefined,
+        tabIndex: C.TABS.INPUT,
+      };
+      this.params.push(file);
+      this.setValue(this.field, this.params);
+    }
+    index = this.params.findIndex(param => param.path === url);
     this.addFile(index);
 
     for (i = 0; i < this.changes.length; i++) {
@@ -907,7 +898,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   C.prototype.replaceUrl = function (url) {
     let mime;
     let aspectRatio;
-    const matches = url.match(/\.(webm|mp4|ogv|m4a|mp3|ogg|oga|wav)/i);
+    const matches = url.match(C.fileTypes);
     if (matches !== null) {
       mime = matches[matches.length - 1];
     }
@@ -1197,6 +1188,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       aspectRatio: '16:9',
     },
   ];
+  
+  // allowed file types
+  C.fileTypes = /\.(webm|mp4|ogv|m4a|mp3|ogg|oga|wav)/i;
 
   /**
    * Find & return an external provider based on the URL
