@@ -386,17 +386,12 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     if (this.params !== undefined) {
       for (let index = 0; index < this.params.length; index++) {
         this.params[index].id = H5P.createUUID();
-        switch (this.params[index].tabIndex) {
-          case 0:
-            this.addFile(index);
-            break;
-          case 1:
-            toggleTab.call($container.find('.av-tab__insert-url')[0]);
-            this.useUrl(this.params[index].path, true);
-            break;
-          default:
-            this.addFile(index);
-            break;
+        if (this.params[index].tabIndex === 1) {
+          toggleTab.call($container.find('.av-tab__insert-url')[0]);
+          this.useUrl(this.params[index].path, true);
+        }
+        else {
+          this.addFile(index);
         }
       }
     }
