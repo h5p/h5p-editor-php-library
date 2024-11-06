@@ -210,9 +210,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     const toggleTab = function () {
       const activeTabPanel = this.parentElement.parentElement.querySelector('.av-tabpanel:not([hidden])');
-      activeTab = activeTabPanel.id.replace('av-tabpanel-', '');
-      const newTab = this.id.replace('av-tab-', '');
-      const newTabPanel = this.parentElement.parentElement.querySelector(`#av-tabpanel-${newTab}`);
+      activeTab = $(this.parentElement.querySelector(`.av-tab.selected`)).index();
+      const newTab = $(this).index();
+      const newTabPanel = this.parentElement.parentElement.querySelector(`#av-tabpanel-${this.id.replace('av-tab-', '')}`);
       if (activeTab === newTab) {
         return;
       }
