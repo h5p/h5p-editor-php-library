@@ -880,7 +880,9 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       this.setValue(this.field, this.params);
     }
     index = this.params.findIndex(param => param.path === url);
-    this.addFile(index);
+    const urlFilesContainer = this.$dialogTable.find('#urlFiles');
+    const previousUrlId = urlFilesContainer.find('.h5p-dnd__file-wrapper, .h5p-dnd__videobox-wrapper')[0]?.id;
+    this.addFile(index, previousUrlId);
 
     for (i = 0; i < this.changes.length; i++) {
       this.changes[i](file);
