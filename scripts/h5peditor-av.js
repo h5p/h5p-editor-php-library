@@ -330,10 +330,12 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       this.$videoUrlErrorContainer.addClass('hidden');
 
       // Check if there is an existing media propery in params
-      const fileIndex = this.params ? this.params.findIndex(p => p.path === url) : -1;
+      const urlFilesContainer = this.$dialogTable.find('#urlFiles');
+      const previousUrlId = urlFilesContainer.find('.h5p-dnd__file-wrapper, .h5p-dnd__videobox-wrapper')[0]?.id;
+      const previousUrlIndex = this.params.findIndex(p => p.id === previousUrlId);
 
-      if (fileIndex > -1) {
-        this.removeFileWithElement($(`#${this.params[fileIndex].id}`), true);
+      if (previousUrlIndex > -1) {
+        this.removeFileWithElement($(`#${this.params[previousUrlIndex].id}`), true);
       }
       this.useUrl(url);
       this.updatePasteBox(true);
@@ -349,13 +351,14 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         }
         
         // Check if there is an existing media propery in params
-        const fileIndex = this.params ? this.params.findIndex(p => p.path === url) : -1;
+        const urlFilesContainer = this.$dialogTable.find('#urlFiles');
+        const previousUrlId = urlFilesContainer.find('.h5p-dnd__file-wrapper, .h5p-dnd__videobox-wrapper')[0]?.id;
+        const previousUrlIndex = this.params.findIndex(p => p.id === previousUrlId);
 
-        if (fileIndex > -1) {
-          this.replaceUrl(url);
-        } else {
-          this.useUrl(url);
+        if (previousUrlIndex > -1) {
+          this.removeFileWithElement($(`#${this.params[previousUrlIndex].id}`), true);
         }
+        this.useUrl(url);
         this.updatePasteBox(true);
       }
     });
@@ -807,7 +810,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     if (this.params.length === 1) {
       // Remove from params.
-      delete this.params;
+      this.params = [];
       this.setValue(this.field);
       avTabPanel.removeClass('has_content');
     }
@@ -880,9 +883,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       this.setValue(this.field, this.params);
     }
     index = this.params.findIndex(param => param.path === url);
-    const urlFilesContainer = this.$dialogTable.find('#urlFiles');
-    const previousUrlId = urlFilesContainer.find('.h5p-dnd__file-wrapper, .h5p-dnd__videobox-wrapper')[0]?.id;
-    this.addFile(index, previousUrlId);
+    this.addFile(index);
 
     for (i = 0; i < this.changes.length; i++) {
       this.changes[i](file);
@@ -1030,6 +1031,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   C.createTabContent = function (tab, type) {
     const isAudio = (type === 'audio');
     const firstFile =  Array.isArray(this.params) ? this.params[0] : undefined;
+    console.log(this.params);
     const isProvider = firstFile?.path && C.findProvider(firstFile.path);
     const dragCopyPasteString = ns.t('core', 'dragAndDropAndPasteAudioVideoTitle');
     const fileSizeLimitString = ns.t('core', isAudio ? 'dragAndDropAndPasteAudioDescription' : 'dragAndDropAndPasteVideoDescription');
