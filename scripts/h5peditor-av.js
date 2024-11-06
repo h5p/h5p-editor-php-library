@@ -1031,7 +1031,6 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
   C.createTabContent = function (tab, type) {
     const isAudio = (type === 'audio');
     const firstFile =  Array.isArray(this.params) ? this.params[0] : undefined;
-    console.log(this.params);
     const isProvider = firstFile?.path && C.findProvider(firstFile.path);
     const dragCopyPasteString = ns.t('core', 'dragAndDropAndPasteAudioVideoTitle');
     const fileSizeLimitString = ns.t('core', isAudio ? 'dragAndDropAndPasteAudioDescription' : 'dragAndDropAndPasteVideoDescription');
