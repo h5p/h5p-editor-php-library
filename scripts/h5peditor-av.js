@@ -332,7 +332,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       // Check if there is an existing media propery in params
       const urlFilesContainer = this.$dialogTable.find('#urlFiles');
       const previousUrlId = urlFilesContainer.find('.h5p-dnd__file-wrapper, .h5p-dnd__videobox-wrapper')[0]?.id;
-      const previousUrlIndex = this.params.findIndex(p => p.id === previousUrlId);
+      const previousUrlIndex = this.params?.findIndex(p => p.id === previousUrlId);
 
       if (previousUrlIndex > -1) {
         this.removeFileWithElement($(`#${this.params[previousUrlIndex].id}`), true);
@@ -353,7 +353,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         // Check if there is an existing media propery in params
         const urlFilesContainer = this.$dialogTable.find('#urlFiles');
         const previousUrlId = urlFilesContainer.find('.h5p-dnd__file-wrapper, .h5p-dnd__videobox-wrapper')[0]?.id;
-        const previousUrlIndex = this.params.findIndex(p => p.id === previousUrlId);
+        const previousUrlIndex = this.params?.findIndex(p => p.id === previousUrlId);
 
         if (previousUrlIndex > -1) {
           this.removeFileWithElement($(`#${this.params[previousUrlIndex].id}`), true);
