@@ -881,13 +881,12 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       };
       this.params.push(file);
       this.setValue(this.field, this.params);
+      for (i = 0; i < this.changes.length; i++) {
+        this.changes[i](file);
+      }
     }
     index = this.params.findIndex(param => param.path === url);
     this.addFile(index);
-
-    for (i = 0; i < this.changes.length; i++) {
-      this.changes[i](file);
-    }
   };
 
   /**
