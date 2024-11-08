@@ -152,7 +152,7 @@ class H5peditorFile {
           //'video/ogg' => 'ogg',
         );
         if (!$this->check($allowed)) {
-          $this->result->error = $this->interface->t('Invalid audio file format. Use mp3 or wav.');
+          $this->result->error = $this->interface->t('Invalid audio file format. Use mp3, wav or ogg.');
           return FALSE;
 
         }
@@ -168,7 +168,7 @@ class H5peditorFile {
           'video/ogg' => 'ogv',
         );
         if (!$this->check($allowed)) {
-          $this->result->error = $this->interface->t('Invalid video file format. Use mp4 or webm.');
+          $this->result->error = $this->interface->t('Invalid video file format. Use mp4, webm or ogv.');
           return FALSE;
         }
 
