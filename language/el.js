@@ -34,7 +34,7 @@ H5PEditor.language.core = {
     'Εδώ μπορείτε να επεξεργαστείτε ρυθμίσεις ή να μεταφράσετε κείμενα τα οποία χρησιμοποιούνται σε αυτό το περιεχόμενο.',
   uploading: 'Μεταφόρτωση, παρακαλούμε περιμένετε...',
   dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
-  dragAndDropAndPasteAudioDescription: 'Max 20 MB,supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteAudioDescription: 'Max 20 MB,supported formats: .wav, .mp3, m4a, .ogg',
   dragAndDropAndPasteVideoDescription: 'Max 2 GB,recommended formats: .webm, .mp4',
   noFollow: 'Δεν είναι δυνατή η παρακολούθηση του πεδίου ":path".',
   editCopyright: 'Επεξεργασία πνευματικών δικαιωμάτων',

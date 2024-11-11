@@ -33,7 +33,7 @@ H5PEditor.language.core = {
   commonFieldsDescription: 'يمكنك هنا تعديل الإعدادات أو ترجمة النصوص المستخدمة في هذا المحتوى.',
   uploading: 'جاري التحميل .. الرجاء الانتظار...',
   dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
-  dragAndDropAndPasteAudioDescription: 'Max 20 MB,supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteAudioDescription: 'Max 20 MB,supported formats: .wav, .mp3, m4a, .ogg',
   dragAndDropAndPasteVideoDescription: 'Max 2 GB,recommended formats: .webm, .mp4',
   noFollow: 'لا يمكن متابعة الحقل ":path".',
   editCopyright: 'تعديل حقوق الطبع والنشر',

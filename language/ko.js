@@ -39,7 +39,7 @@ H5PEditor.language.core = {
   editMode: '편집모드',
   listLabel: '목록',
   dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
-  dragAndDropAndPasteAudioDescription: 'Max 20 MB,supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteAudioDescription: 'Max 20 MB,supported formats: .wav, .mp3, m4a, .ogg',
   dragAndDropAndPasteVideoDescription: 'Max 2 GB,recommended formats: .webm, .mp4',
   uploadError: '파일 업로드 오류',
   fileToLarge: '업로드하려는 파일이 너무 클 수 있음.',
