@@ -39,7 +39,7 @@ H5PEditor.language.core = {
   uploadOr: 'or',
   dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
   dragAndDropAndPasteAudioDescription: 'Max 20 MB, supported formats: .wav, .mp3, m4a, .ogg',
-  dragAndDropAndPasteVideoDescription: 'Max 2 GB, recommended formats: .webm, .mp4',
+  dragAndDropAndPasteVideoDescription: 'Max 2 GB, supported formats: .webm, .mp4, .ogv',
   pasteVideoLink: 'Paste YouTube link or other video source',
   pasteAudioLink: 'Paste link or other audio source URL',
   dropVideo: 'Drop video file here to upload',

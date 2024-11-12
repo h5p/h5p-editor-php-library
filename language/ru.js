@@ -42,7 +42,7 @@ H5PEditor.language.core = {
   listLabel: 'Список',
   dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
   dragAndDropAndPasteAudioDescription: 'Max 20 MB, supported formats: .wav, .mp3, m4a, .ogg',
-  dragAndDropAndPasteVideoDescription: 'Max 2 GB, recommended formats: .webm, .mp4',
+  dragAndDropAndPasteVideoDescription: 'Max 2 GB, supported formats: .webm, .mp4, .ogv',
   uploadError: 'Ошибка загрузки файла',
   fileToLarge: 'Файл, который вы пытаетесь загрузить, может быть слишком большим.',
   fileSizeLimit: 'The file you are trying to upload is too big. The limit is :sizeLimit.',
