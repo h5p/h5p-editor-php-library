@@ -10,16 +10,6 @@
   padding: 35px;
   user-select: none;
 }
-.cropper-buttons div {
-  transition: opacity 1s;
-}
-.hidden {
-  opacity: 0;
-}
-.wait div:hover {
-  cursor: wait;
-}
-
 .cropper-button {
   position: relative;
   border: 3px solid #2f323a;

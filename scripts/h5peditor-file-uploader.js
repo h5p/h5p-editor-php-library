@@ -19,17 +19,7 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
      * @param {Blob|File} file
      * @param {string} filename Required due to validation
      */
-    self.upload = function (file, filename, context = {}) {
-      if (file.size > 2147483648) { // file bigger than 2 GB
-        var uploadComplete = {
-          ...context,
-          error: H5PEditor.t('core', 'fileToLarge'),
-          data: null
-        };
-        self.trigger('uploadComplete', uploadComplete);
-        return;
-      }
-      
+    self.upload = function (file, filename) {
       var formData = new FormData();
       formData.append('file', file, filename);
       formData.append('field', JSON.stringify(field));
@@ -37,26 +27,14 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
 
       // Submit the form
       var request = new XMLHttpRequest();
-      request.onerror = function () {
-        var uploadComplete = {
-          ...context,
-          error: H5PEditor.t('core', 'unknownFileUploadError'),
-          data: null
-        };
-        self.trigger('uploadComplete', uploadComplete);
-      }
       request.upload.onprogress = function (e) {
         if (e.lengthComputable) {
-          self.trigger('uploadProgress', {
-            ...context,
-            progress: (e.loaded / e.total)
-          });
+          self.trigger('uploadProgress', (e.loaded / e.total));
         }
       };
       request.onload = function () {
         var result;
         var uploadComplete = {
-          ...context,
           error: null,
           data: null
         };
@@ -99,25 +77,22 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
      *
      * @param {File[]} files
      */
-    self.uploadFiles = function (files, context = {}) {
-      self.upload(files[0], files[0].name, context);
+    self.uploadFiles = function (files) {
+      self.upload(files[0], files[0].name);
     };
 
     /**
      * Open the file selector and trigger upload upon selecting file.
      */
-    self.openFileSelector = function ({ onChangeCallback, context } = {}) {
+    self.openFileSelector = function () {
       // Create a file selector
       const input = document.createElement('input');
       input.type = 'file';
       input.setAttribute('accept', determineAllowedMimeTypes());
       input.style='display:none';
       input.addEventListener('change', function () {
-        if (typeof onChangeCallback === 'function') {
-          onChangeCallback();
-        }
         // When files are selected, upload them
-        self.uploadFiles(this.files, context);
+        self.uploadFiles(this.files);
         document.body.removeChild(input);
       });
 

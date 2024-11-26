@@ -5,7 +5,6 @@
 @import "form-groups";
 @import "h5peditor-image-edit";
 @import "h5peditor-image-edit-popup";
-@import "h5peditor-drag-and-drop";
 @import "deprecated";
 
 html, body {
@@ -16,7 +15,6 @@ html, body {
   max-width: 960px;
   position: relative;
 }
-
 a {
   text-decoration: none;
 }
@@ -167,103 +165,10 @@ a {
     font-size: 16px;
     word-wrap: break-word;
 
-    a {
-      text-decoration: underline;
-    }
-
-    /* The figure around the table */
-    figure.table {
-      display: table;
-      table-layout: fixed;
-      margin: 0 auto;
-      padding: 0;
-      float: left;
-
-      /* The actual table */
-      table {
-        border-collapse: collapse;
-        height: 100%;
-        width: 100%;
-        border-spacing: 0;
-        border-width: 1px;
-        border-color:  #494949;
-
-        td, th {
-          padding: 1px;
-          border-color:  #494949;
-          border-bottom-style: solid;
-        }
-
-        td {
-          border-width: 0.083em;
-        }
-
-        th {
-          border-width: .167em;
-        }
-
-        tr:last-child > td {
-          border-bottom-style: none;
-        }
-      }
-
-      figcaption {
-        background-color: transparent;
-        caption-side: top;
-        color: #333;
-        display: table-caption;
-        font-size: .75em;
-        outline-offset: -1px;
-        padding: .6em;
-        text-align: center;
-        word-break: break-word;
-      }
-    }
-
-    .table-overflow-protection {
-      clear: both;
-    }
-
     &.error {
       border-color: red;
     }
   }
-
-  // Inside ckeditor, needed for changes to default
-  .ck-content figure.table {
-    float: left;
-
-    table {
-      border-width: 1px;
-      border-color:  #494949;
-      border-style: none;
-
-      td, th {
-        padding: 1px;
-        border-style: none;
-        border-color:  #494949;
-        border-bottom-style: solid;
-      }
-
-      td {
-        border-width: 0.083em;
-      }
-
-      th {
-        border-width: .167em;
-        background-color: transparent;
-      }
-
-      tr:last-child > td {
-        border-bottom-style: none;
-      }
-    }
-
-    figcaption {
-      background-color: transparent;
-    }
-  }
-
   .h5peditor-text, textarea {
     width: 100%;
     box-sizing: border-box;
@@ -272,31 +177,6 @@ a {
       border-color: red;
     }
   }
-
-  // The actual ck editor
-  .ck {
-    a {
-      text-decoration: underline;
-    }
-
-    .ck-font-size-dropdown .ck-dropdown__panel,
-    .ck-text-fragment-language-dropdown .ck-dropdown__panel {
-      max-height: 20em;
-      overflow-y: scroll;
-    }
-
-    .ck-fontsize-option .ck-button__label {
-      line-height: normal !important;
-    }
-
-    .ck-content pre {
-      background: initial;
-      border: initial;
-      border-radius: initial;
-      padding: 0;
-    }
-  }
-
   /* Placeholders - need to be on separate lines. If not,
      the browsers will invalidate them */
   textarea:focus::-webkit-input-placeholder,
@@ -343,7 +223,7 @@ a {
     font-family: $font-family;
     font-size: 16px;
     border: 1px solid $form-border-color;
-    background: $form-input-color url('../../images/down.png') no-repeat;
+    background: $form-input-color inline-image('down.png') no-repeat;
     background-position: calc(100% - 10px);
     box-shadow: $form-input-box-shadow;
     -moz-appearance: none;
@@ -444,14 +324,18 @@ a {
     text-align: center;
   }
   .h5p-add-dialog {
-    position: inherit;
+    position: absolute;
     z-index: 1;
     visibility: hidden;
     opacity: 0;
     background: #fff;
-    margin-bottom: 1rem;
+    left: 1em;
+    right: 1em;
+    top: 1em;
+    border: 1px solid #cdcdcd;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
+    box-shadow: 0 0 8px #666;
     transition: visibility 0s 0.2s, opacity 0.2s;
 
     &.h5p-open {
@@ -462,63 +346,37 @@ a {
 
     .h5p-add-dialog-table {
       overflow: hidden;
-      position: relative;
 
       .av-tablist {
-        display: inline-flex;
-        border-left: 1px solid $av-tab-container-border-color;
-
-        &:has(~ .av-tabpanel.has_content) {
-          .av-tab:not(.selected) {
-            opacity: 0.5;
-            cursor: not-allowed;
-            pointer-events: none;
-          }
-        }
+        overflow: hidden;
+        margin: 1em 1em 0 1em;
       }
 
       .av-tab {
         cursor: pointer;
+        float: left;
         padding: 0.5em 0.75em;
-        border-top: 1px solid $av-tab-container-border-color;
-        border-right: 1px solid $av-tab-container-border-color;
-        position: relative;
-        font-weight: 600;
+        border-top: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        font-weight: bold;
         font-size: 15px;
-        background: $av-tab-button-color;
-        z-index: 1;
+        color: #666;
+        background: #f5f5f5;
 
-        &::before {
-          font-family: $icon-font-family;
-          color: $av-tab-button-font-color;
-          vertical-align: middle;
-          font-size: 1.8em;
-          margin-right: 4px;
+        &:first-child {
+          border-left: 1px solid #ccc;
         }
-
         &.selected {
-          color: $av-tab-button-title-color;
-          background: $av-tab-button-selected-color;
-
-          &::after {
-            content: "";
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: $av-tab-button-selected-color;
-          }
+          color: #333;
+          background: #fff;
         }
       }
 
       .av-tabpanel {
-        border: 1px solid $av-tab-container-border-color;
-        border-radius: 0 0 5px 5px;
-        margin-top: 1px;
-        position: relative;
+        border: 1px solid #ccc;
+        margin: 0 1em 1em 1em;
+        overflow: hidden;
         padding: 1em;
-        top: -1px;
 
         h3 {
           margin: 0 0 1em 0;
@@ -781,7 +639,7 @@ a {
       max-width: 100%;
       min-width: 1em;
       min-height: 1em;
-      background: $form-input-color url('../../images/transparent-background.png') repeat;
+      background: $form-input-color inline-image('transparent-background.png') repeat;
     }
     .thumbnail:focus {
       box-shadow: 0 0 10px 0 #222;
@@ -1042,10 +900,6 @@ a {
   }
 }
 
-.ck-powered-by-balloon {
-  display: none !important;
-}
-
 .h5p-editor-dialog.h5p-dialog-wide {
   width: 90%;
   border-radius: 0.208em;
@@ -1242,19 +1096,6 @@ a {
   }
 }
 
-.av-tab__file-upload::before {
-  content: "\e85d";
-}
-
-.av-tab__insert-url::before {
-  content: "\e85c";
-}
-
-.av-tab__record-audio:last-child::before {
-  content: "\e85d"; // TODO: Change to microphone icon
-}
-
-
 .h5peditor-form {
   position: relative;
   background: $form-background;
@@ -1338,6 +1179,7 @@ a {
 }
 .h5peditor-widget-option {
   border: 1px solid #ccc;
+  border-bottom: 0;
   margin-left: 0.5em;
   padding: 0.6em 1em;
   color: #0E1A25;
@@ -1356,7 +1198,6 @@ a {
 .h5peditor-widget-active {
   background: #fff;
   line-height: 1.357142857em;
-  border-bottom: 0;
 }
 .h5peditor-widgets > .h5peditor-widget-wrapper {
   border: 1px solid #ccc;
@@ -1519,45 +1360,4 @@ a {
   a {
     text-decoration: underline;
   }
-}
-
-.h5p-loader__wrapper {
-  width: 100%;
-  height: 100%;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  min-width: 180px;
-
-  .h5p-loader__icon {
-    border: 8px solid #d0cfd4;
-    border-bottom-color: #554e4a;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: rotation linear 1s infinite;
-    margin: 0 auto;
-  }
-}
-
-@keyframes rotation {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.h5p-sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
 }
