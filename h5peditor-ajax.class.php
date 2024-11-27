@@ -1,5 +1,7 @@
 <?php
 
+namespace Moodle;
+
 abstract class H5PEditorEndpoints {
 
   /**
