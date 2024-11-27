@@ -139,6 +139,8 @@ ns.Html.prototype.getCKEditorConfig = function () {
       addTargetToExternalLinks: true,
       // Automatically add protocol if not present
       defaultProtocol: 'http://',
+      // Allow protocols like phone numbers. Be mindful of security when changing this list
+      allowedProtocols: [ 'https?', 'tel', 'sms', 'sftp', 'smb', 'slack' ],
     }
   }
 
