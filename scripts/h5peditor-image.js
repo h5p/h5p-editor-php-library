@@ -381,11 +381,6 @@ ns.widgets.image.prototype.getBaseMarkup = function () {
       </div>
       <div class="h5p-errors"></div>
     </div>
-    <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--show-when-focus h5p-dnd__column--is-full-width">
-      <div class="h5p-dnd__drop-text">
-        ${ns.t('core', 'dropImage')}
-      </div>
-    </div>
   `
 };
 
@@ -415,13 +410,7 @@ ns.widgets.image.prototype.getUploadedMarkup = function () {
       <div class="h5p-dnd__box__block"></div>
       <div class="h5p-dnd__column">
         <div class="h5p-dnd__img__container">
-          <div class="h5p-dnd__img__overlay" aria-label="${ns.t('core', 'uploadImage')}"></div>
           <img class="h5p-dnd__img" src="${source}" alt="${altText}" />
-        </div>
-      </div>
-      <div class="h5p-dnd__column h5p-dnd__column--show-when-focus h5p-dnd__column__drag-text">
-        <div class="h5p-dnd__text">
-          ${ns.t('core', 'dragAndDropAndPasteReplaceImage')}
         </div>
       </div>
   `;
