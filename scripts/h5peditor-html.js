@@ -142,7 +142,7 @@ ns.Html.prototype.getCKEditorConfig = function () {
         openInNewTab: {
           mode: 'manual',
           label: ns.t('core', 'openInNewTab'),
-          defaultValue: true,			// This option will be selected by default.
+          defaultValue: true,  // This option will be selected by default.
           attributes: {
             target: '_blank',
             rel: 'noopener noreferrer'
