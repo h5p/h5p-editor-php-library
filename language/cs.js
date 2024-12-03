@@ -221,6 +221,7 @@ H5PEditor.language.core = {
   avTablistLabel: 'Vložit pomocí',
   tabTitleBasicFileUpload: 'Nahrát souboru',
   tabTitleInputLinkURL: 'Odkaz/URL',
+  openInNewTab: 'Open in a new tab',
   errorTooHighVersion: 'Parametry obsahují %used, zatímco podporovány jsou pouze %supported nebo starší.',
   errorNotSupported: 'Parametry obsahují %used, které není podporován.',
   errorParamsBroken: 'Parametry jsou poškozené.',

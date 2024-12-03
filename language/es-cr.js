@@ -225,6 +225,7 @@ H5PEditor.language.core = {
   avTablistLabel: 'Insertar usando',
   tabTitleBasicFileUpload: 'Subir fichero',
   tabTitleInputLinkURL: 'Link/URL',
+  openInNewTab: 'Open in a new tab',
   errorTooHighVersion:
     'Los parámetros contienen %used mientras que solamente %supported o anteriores están soportados.',
   errorNotSupported: 'Los parámetros contienen %used que no está soportado.',

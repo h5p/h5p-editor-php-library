@@ -222,6 +222,7 @@ H5PEditor.language.core = {
   avTablistLabel: 'Lisää käyttäen',
   tabTitleBasicFileUpload: 'Tiedoston lähetys',
   tabTitleInputLinkURL: 'Linkki/URL-osoite',
+  openInNewTab: 'Open in a new tab',
   errorTooHighVersion: 'Parametrit sisältävät %used mutta vain %supported tai aikaisempi versio on tuettu',
   errorNotSupported: 'Parametrit sisältävät %used joita ei ole tuettu',
   errorParamsBroken: 'Parametrit ovat rikki',

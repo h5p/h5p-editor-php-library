@@ -222,6 +222,7 @@ H5PEditor.language.core = {
   avTablistLabel: 'Aseta, kasutades',
   tabTitleBasicFileUpload: 'Faili üleslaadimine',
   tabTitleInputLinkURL: 'Link',
+  openInNewTab: 'Open in a new tab',
   errorTooHighVersion: 'Parameetrid sisaldavad %used, kuigi vaid %supported või varasem on toetatud.',
   errorNotSupported: 'Parameetrid sisaldavad %used, mis ei ole toetatud.',
   errorParamsBroken: 'Parameeetrid on sobimatud.',

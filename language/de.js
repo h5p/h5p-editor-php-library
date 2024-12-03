@@ -227,6 +227,7 @@ H5PEditor.language.core = {
   avTablistLabel: 'Einfügen über',
   tabTitleBasicFileUpload: 'Datei hochladen',
   tabTitleInputLinkURL: 'Link/URL',
+  openInNewTab: 'Open in a new tab',
   errorTooHighVersion: 'Inhalt enthält %used, die Seite unterstützt aber nur %supported oder älter.',
   errorNotSupported: 'Inhalt enthält %used, was von dieser Seite nicht unterstützt wird.',
   errorParamsBroken: 'Der Inhalt konnte nicht eingelesen werden (Parameter fehlerhaft).',

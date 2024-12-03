@@ -223,6 +223,7 @@ H5PEditor.language.core = {
   avTablistLabel: 'Infoga genom',
   tabTitleBasicFileUpload: 'Filuppladdning',
   tabTitleInputLinkURL: 'Länk/URL',
+  openInNewTab: 'Open in a new tab',
   errorTooHighVersion: 'Parametrar innehåller %used där endast %supported eller tidigare stöds.',
   errorNotSupported: 'Parametrar innehåller %used som inte stöds.',
   errorParamsBroken: 'Parametrar är trasiga .',

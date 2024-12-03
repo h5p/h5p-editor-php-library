@@ -221,6 +221,7 @@ H5PEditor.language.core = {
   avTablistLabel: '삽입하기',
   tabTitleBasicFileUpload: '파일업로드',
   tabTitleInputLinkURL: '링크/URL',
+  openInNewTab: 'Open in a new tab',
   errorTooHighVersion: '%Supported 혹은 이전 버전이 지원됨에도 매개 변수가 %used를 포함함.',
   errorNotSupported: '매개변수는 지원되지 않는 %used를 포함한다.',
   errorParamsBroken: '매개변수 오류',
