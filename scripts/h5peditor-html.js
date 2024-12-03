@@ -135,10 +135,20 @@ ns.Html.prototype.getCKEditorConfig = function () {
     config.plugins.push('Link', 'AutoLink');
     config.toolbar.push("|", ...items);
     config.link = {
-      // Automatically add target="_blank" and rel="noopener noreferrer" to all external links.
-      addTargetToExternalLinks: true,
       // Automatically add protocol if not present
       defaultProtocol: 'http://',
+      // Give the author the option to choose how to open
+      decorators: {
+        openInNewTab: {
+          mode: 'manual',
+          label: ns.t('core', 'openInNewTab'),
+          defaultValue: true,  // This option will be selected by default.
+          attributes: {
+            target: '_blank',
+            rel: 'noopener noreferrer'
+          }
+        }
+      }
     }
   }
 

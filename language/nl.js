@@ -216,6 +216,7 @@ H5PEditor.language.core = {
   avTablistLabel: 'Invoegen m.b.v.',
   tabTitleBasicFileUpload: 'Bestandsupload',
   tabTitleInputLinkURL: 'Link/URL',
+  openInNewTab: 'Open in a new tab',
   errorTooHighVersion: 'Parameters bevat %used terwijl alleen %supported of vroeger wordt ondersteund.',
   errorNotSupported: 'Parameters bevat %used wat niet wordt ondersteund.',
   errorParamsBroken: 'Parameters zijn corrupt.',

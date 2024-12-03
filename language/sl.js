@@ -216,6 +216,7 @@ H5PEditor.language.core = {
   avTablistLabel: 'Vstavljanje',
   tabTitleBasicFileUpload: 'Naloži datoteko',
   tabTitleInputLinkURL: 'Povezava/URL',
+  openInNewTab: 'Open in a new tab',
   errorTooHighVersion: 'Parametri vsebujejo %used, medtem ko so podprti samo %supported ali predhodni.',
   errorNotSupported: 'Parametri vsebujejo %used, ki niso podprti.',
   errorParamsBroken: 'Parametri ne delujejo.',

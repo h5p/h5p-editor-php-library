@@ -206,6 +206,7 @@ H5PEditor.language.core = {
   avTablistLabel: '插入使用',
   tabTitleBasicFileUpload: '上传文件',
   tabTitleInputLinkURL: '链接/URL',
+  openInNewTab: 'Open in a new tab',
   errorTooHighVersion: '参数中包含%used，而仅支持%supported或更早的版本。',
   errorNotSupported: '参数中包含不支持的%used。',
   errorParamsBroken: '参数已损坏。',

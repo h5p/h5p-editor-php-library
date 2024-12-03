@@ -217,6 +217,7 @@ H5PEditor.language.core = {
   avTablistLabel: 'Txertatu hau erabiltzen:',
   tabTitleBasicFileUpload: 'Igo fitxategia',
   tabTitleInputLinkURL: 'Esteka/URLa',
+  openInNewTab: 'Open in a new tab',
   errorTooHighVersion: 'Parametroek %used daukate baina soilik %supported edo lehenagokoak onartzen dira.',
   errorNotSupported: 'Parametroek %used daukate baina ez dira onartzen.',
   errorParamsBroken: 'Parametroak apurtuta daude.',
