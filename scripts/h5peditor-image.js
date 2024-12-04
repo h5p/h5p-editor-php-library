@@ -269,7 +269,7 @@ ns.widgets.image.prototype.setErrorMessage = function (message) {
 
   this.setAriaLiveErrorMessage(message);
   this.boxContainerEl.classList.add('has-error');
-  this.$container.find('.h5p-errors').text(message);
+  this.boxContainerEl.querySelector('.h5p-errors').innerText = message;
 };
 
 ns.widgets.image.prototype.setAriaLiveErrorMessage = function (message) {
