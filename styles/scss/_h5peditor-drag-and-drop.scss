@@ -336,23 +336,6 @@ div:has(> .h5p-dnd-nowrap),
   height: 29px;
 }
 
-.h5p-dnd__drop-text {
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9em;
-
-  &:before {
-    font-size: 3.9em;
-    font-family: $icon-font-family;
-    content: "\e85d";
-    color: #3B435A;
-    line-height: 0.9;
-    margin-bottom: 10px;
-  }
-}
-
 .input-container {
   display: flex;
   align-items: center;
