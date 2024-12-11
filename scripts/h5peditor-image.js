@@ -410,6 +410,7 @@ ns.widgets.image.prototype.getUploadedMarkup = function () {
       <div class="h5p-dnd__box__block"></div>
       <div class="h5p-dnd__column">
         <div class="h5p-dnd__img__container">
+          <div class="h5p-dnd__img__overlay"></div>
           <img class="h5p-dnd__img" src="${source}" alt="${altText}" />
         </div>
       </div>

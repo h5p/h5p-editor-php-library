@@ -22,7 +22,6 @@ H5PEditor.language.core = {
   dragAndDropAndPasteImageTitleButtonLabel: 'Choose',
   dragAndDropAndPasteImageDescription: 'Max 20 MB, supported formats: .jpg, .png',
   dragAndDropAndPasteReplaceImage: 'Glisser-déposer ou coller un fichier image ici pour remplacer',
-  uploadImage: 'Ajouter une image',
   uploadingImage: 'Ajout de l\'image, veuillez patienter.',
   replaceImage: 'Remplacer l\'image ?',
   confirmReplaceImage: 'Voulez-vous vraiment remplacer cette image ?',
