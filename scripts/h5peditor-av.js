@@ -1134,7 +1134,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     },
     {
       name: 'Panopto',
-      regexp: /^[^\/]+:\/\/([^\/]*panopto\.[^\/]+)\/Panopto\/.+\?id=(.+)$/i,
+      regexp: /^[^\/]+:\/\/([^\/]+)\/Panopto\/.+\?id=(.+)$/i,
       aspectRatio: '16:9',
     },
     {
