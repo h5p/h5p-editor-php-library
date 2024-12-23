@@ -465,6 +465,10 @@ ns.widgets.image.prototype.setCopyright = function (value) {
  */
 ns.widgets.image.prototype.addFile = function () {
   if (this.params === undefined) {
+    const error = this.$errors.text();
+    if (error) {
+      this.setErrorMessage(error);
+    }
     return false;
   }
 
