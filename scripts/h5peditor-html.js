@@ -485,8 +485,15 @@ ns.Html.prototype.appendTo = function ($wrapper) {
         // Remove overflow protection on startup
         let initialData = editor.getData();
         if (initialData.includes('table-overflow-protection')) {
-          initialData = initialData.replace(/<div class=\"table-overflow-protection\">.*<\/div>/, '');
-          editor.setData(initialData);
+          const match = initialData.match(/<div class="table-overflow-protection">(.*?)<\/div>/);
+          if (match && match[0]) {
+            // Set the editor data to just the content of the table-overflow-protection div
+            editor.setData(match[0]);
+          } else {
+            // If no match is found, remove the external div
+            initialData = initialData.replace(/<div class="table-overflow-protection">.*?<\/div>/, '');
+            editor.setData(initialData);
+          }
         }
 
         // Mimic old enter_mode behaviour if not specifically set to 'p'
