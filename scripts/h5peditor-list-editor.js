@@ -709,6 +709,10 @@ H5PEditor.ListEditor = (function ($) {
       ).appendTo($listActions);
 
       list.on('removedItem', (event) => {
+        if (event.data !== $item.index()) {
+          return;
+        }
+        
         $item.remove();
 
         if (!(list.getValue() ?? []).length) {
