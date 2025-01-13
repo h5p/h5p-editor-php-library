@@ -21,7 +21,7 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
      */
     self.upload = function (file, filename, context = {}) {
       self.trigger('upload');
-      
+
       // First check if file is too large
       const { sizeLimit, sizeLimitText } = getSizeLimitAndText(file);
 
@@ -33,7 +33,6 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
         self.trigger('uploadComplete', uploadComplete);
         return;
       }
-      
       var formData = new FormData();
       formData.append('file', file, filename);
       formData.append('field', JSON.stringify(field));
