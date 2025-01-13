@@ -20,6 +20,8 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
      * @param {string} filename Required due to validation
      */
     self.upload = function (file, filename, context = {}) {
+      self.trigger('upload');
+      
       // First check if file is too large
       const { sizeLimit, sizeLimitText } = getSizeLimitAndText(file);
 
@@ -31,6 +33,7 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
         self.trigger('uploadComplete', uploadComplete);
         return;
       }
+      
       var formData = new FormData();
       formData.append('file', file, filename);
       formData.append('field', JSON.stringify(field));
@@ -92,7 +95,6 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
 
       request.open('POST', H5PEditor.getAjaxUrl('files'), true);
       request.send(formData);
-      self.trigger('upload');
     };
 
     /**
