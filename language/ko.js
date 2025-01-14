@@ -65,7 +65,7 @@ H5PEditor.language.core = {
   insertLinkTitle: 'URL',
   recordAudioTitle: 'Record Audio',
   addVideoDescription:
-    'H5P는 비메오 프로처럼 mp4, webm 또는 ogv로 포맷된 모든 외부 비디오 소스를 지원하며, 유튜브 링크를 지원함.',
+    'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube, Panopto, and Echo360 links.',
   unsupportedVideoSource: "Unsupported video source",
   unsupportedAudioSource: "Unsupported audio source",
   insert: '삽입',

@@ -65,7 +65,7 @@ H5PEditor.language.core = {
   insertLinkTitle: 'URL',
   recordAudioTitle: 'Record Audio',
   addVideoDescription:
-    'H5P støtter alle eksterne videokilder på formatene mp4, webm eller ogv, slik som Vimeo Pro, og har støtte for YouTube-lenker og Panopto-lenker.',
+    'H5P støtter alle eksterne videokilder på formatene mp4, webm eller ogv, slik som Vimeo Pro, og har støtte for YouTube-lenker, Panopto-lenker og Echo360-lenker.',
   unsupportedVideoSource: "Videokilden er ikke støttet",
   unsupportedAudioSource: "Lydkilden er ikke støttet",
   insert: 'Sett inn',
