@@ -56,7 +56,7 @@ H5PEditor.language.core = {
   uploadAudioTitle: 'Laadi helifail üles',
   uploadVideoTitle: 'Laadi videofail üles',
   addVideoDescription:
-    'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube and Panopto links.',
+    'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube, Panopto, and Echo360 links.',
   insert: 'Aseta',
   cancel: 'Tühista',
   height: 'kõrgus',
