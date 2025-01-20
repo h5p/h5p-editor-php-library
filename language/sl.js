@@ -295,7 +295,7 @@ H5PEditor.language.core = {
   previousPage: 'Pojdi na prejšnjo stran',
   contentPreviewButtonLabel: 'Predogled',
   contentDownloadButtonLabel: 'Pridobi vsebino',
-  reuseContentTabLabel: 'Pridobite vsebino v skupni rabi',
+  reuseContentTabLabel: 'Create from OER Content',
   contentPublisherPanelHeader: 'Informacije o založniku',
   noContentFoundDesc: 'Ni vsebine, ki bi ustrezala iskalnim kriterijem.',
   h5pType: 'Tip H5P',

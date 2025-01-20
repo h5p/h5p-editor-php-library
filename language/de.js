@@ -301,7 +301,7 @@ H5PEditor.language.core = {
   previousPage: 'Zur vorherigen Seite gehen',
   contentPreviewButtonLabel: 'Vorschau',
   contentDownloadButtonLabel: 'Inhalt verwenden',
-  reuseContentTabLabel: 'Geteilten Inhalt verwenden',
+  reuseContentTabLabel: 'Create from OER Content',
   contentPublisherPanelHeader: 'Informationen zum Herausgeber',
   noContentFoundDesc: 'Kein Inhalt passt zu deinen Suchkriterien.',
   h5pType: 'Inhaltstyp',
