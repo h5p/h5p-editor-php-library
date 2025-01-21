@@ -414,9 +414,6 @@ ns.Html.prototype.appendTo = function ($wrapper) {
   this.ckEditorConfig = this.getCKEditorConfig();
 
   this.$input.focus(function () {
-    // Blur is not fired on destroy. Therefore we need to keep track of it!
-    var blurFired = false;
-
     // Remove placeholder
     that.$placeholder = that.$item.find('.h5peditor-ckeditor-placeholder').detach();
 
