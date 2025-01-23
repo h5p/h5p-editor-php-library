@@ -288,7 +288,7 @@ H5PEditor.language.core = {
   previousPage: '이전 페이지로 이동',
   contentPreviewButtonLabel: '미리보기',
   contentDownloadButtonLabel: '콘텐츠 가져오기',
-  reuseContentTabLabel: '공유 콘텐츠 가져오기',
+  reuseContentTabLabel: 'Create from OER Content',
   contentPublisherPanelHeader: '게시자 정보',
   noContentFoundDesc: '검색 기준에 맞는 콘텐츠가 없음.',
   h5pType: 'H5P 유형',

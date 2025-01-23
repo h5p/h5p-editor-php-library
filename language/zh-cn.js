@@ -279,7 +279,7 @@ H5PEditor.language.core = {
   previousPage: '转到上一页',
   contentPreviewButtonLabel: '预览',
   contentDownloadButtonLabel: '获取内容',
-  reuseContentTabLabel: '获取共享内容',
+  reuseContentTabLabel: 'Create from OER Content',
   contentPublisherPanelHeader: '出版商信息',
   noContentFoundDesc: '没有找到符合您的搜索条件的内容。',
   h5pType: 'H5P类型',

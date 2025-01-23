@@ -282,7 +282,7 @@ H5PEditor.language.core = {
   previousPage: 'Ir á páxina anterior',
   contentPreviewButtonLabel: 'Vista previa',
   contentDownloadButtonLabel: 'Obter contido',
-  reuseContentTabLabel: 'Obter contido compartido',
+  reuseContentTabLabel: 'Create from OER Content',
   contentPublisherPanelHeader: 'Información editorial',
   noContentFoundDesc: 'Non hai contido que coincida cos teus criterios de busca.',
   h5pType: 'Tipo H5P',
