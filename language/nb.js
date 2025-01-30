@@ -292,7 +292,7 @@ H5PEditor.language.core = {
   previousPage: 'Gå til forrige side',
   contentPreviewButtonLabel: 'Forhåndsvis',
   contentDownloadButtonLabel: 'Hent innhold',
-  reuseContentTabLabel: 'Finn delt innhold',
+  reuseContentTabLabel: 'Opprett fra OER innhold',
   contentPublisherPanelHeader: 'Informasjon om publiserer',
   noContentFoundDesc: 'Det finnes ikke noe innhold som samsvarer med ditt søk.',
   h5pType: 'H5P-type',
