@@ -57,7 +57,7 @@ H5PEditor.language.core = {
   uploadAudioTitle: 'Audio-Datei hochladen',
   uploadVideoTitle: 'Video-Datei hochladen',
   addVideoDescription:
-    'H5P unterstützt alle externen Videoquellen, die das mp4-, webm- or ogv-Format haben, wie Vimeo Pro, und unterstützt YouTube- und Panopto-Links.',
+    'H5P unterstützt alle externen Videoquellen, die das mp4-, webm- or ogv-Format haben, und unterstützt YouTube-, Vimeo-Pro- und Panopto-Links.',
   insert: 'Einfügen',
   cancel: 'Abbrechen',
   height: 'Höhe',
@@ -301,7 +301,7 @@ H5PEditor.language.core = {
   previousPage: 'Zur vorherigen Seite gehen',
   contentPreviewButtonLabel: 'Vorschau',
   contentDownloadButtonLabel: 'Inhalt verwenden',
-  reuseContentTabLabel: 'Create from OER Content',
+  reuseContentTabLabel: 'Aus OER-Inhalt erstellen',
   contentPublisherPanelHeader: 'Informationen zum Herausgeber',
   noContentFoundDesc: 'Kein Inhalt passt zu deinen Suchkriterien.',
   h5pType: 'Inhaltstyp',
