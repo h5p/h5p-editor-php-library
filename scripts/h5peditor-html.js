@@ -37,7 +37,6 @@ ns.Html.prototype.inButtons = function (button) {
 
 ns.Html.prototype.getCKEditorConfig = function () {
   const config = {
-    updateSourceElementOnDestroy: true,
     plugins: ['Essentials', 'Paragraph'],
     alignment: { options: ["left", "center", "right"] },
     toolbar: [],
@@ -415,9 +414,6 @@ ns.Html.prototype.appendTo = function ($wrapper) {
   this.ckEditorConfig = this.getCKEditorConfig();
 
   this.$input.focus(function () {
-    // Blur is not fired on destroy. Therefore we need to keep track of it!
-    var blurFired = false;
-
     // Remove placeholder
     that.$placeholder = that.$item.find('.h5peditor-ckeditor-placeholder').detach();
 
@@ -484,7 +480,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
 
         // Remove overflow protection on startup
         let initialData = editor.getData();
-        if (initialData.includes('table-overflow-protection')) {
+        if (initialData.includes('<div class="table-overflow-protection"')) {
           initialData = initialData.replace(/<div class=\"table-overflow-protection\">.*<\/div>/, '');
           editor.setData(initialData);
         }
@@ -506,45 +502,24 @@ ns.Html.prototype.appendTo = function ($wrapper) {
         editor.editing.view.focus();
 
         editor.on('focus', function () {
-          blurFired = false;
           editorElement.style.maxHeight = getEditorHeight();
         });
 
         editor.once('destroy', function () {
-          // In some cases, the blur event is not fired. Need to be sure it is, so that
-          // validation and saving is done
-          if (!blurFired) {
-            blur();
-          }
+
+          // We always need to run validate when removing CKE5 to have the .$input properly populated.
+          // CKE5 cannot do this as the data has to be massaged/filtered before updating the .$input.
+          const value = that.validate();
+          delete that.ckeditor; // Prevent usage of destroyed CK beyond this point
 
           // Display placeholder if:
           // -- The value held by the field is empty AND
           // -- The value shown in the UI is empty AND
           // -- A placeholder is defined
-          const value = editor.getData();
-          if (that.$placeholder.length !== 0 && (value === undefined || value.length === 0) && (that.value === undefined || that.value.length === 0)) {
+          if (that.$placeholder.length !== 0 && (value === undefined || value.length === 0)) {
             that.$placeholder.appendTo(that.$item.find('.ckeditor'));
           }
-
-          // Since validate() is not always run,
-          // make sure tabe overflow protection is added always when editor is destroyed
-          if (value.includes('table') && !value.includes('table-overflow-protection')) {
-            that.value = value + '<div class="table-overflow-protection"></div>';
-            that.setValue(that.field, that.value);
-            that.$input.html(that.value).change();
-          }
         });
-
-        var blur = function () {
-          blurFired = true;
-
-          // Do not validate if the field has been hidden.
-          if (that.$item.is(':visible')) {
-            that.validate();
-          }
-        };
-
-        editor.on('blur', blur);
       })
       .catch(error => {
         throw new Error('Error loading CKEditor: ' + error);
@@ -577,7 +552,7 @@ ns.Html.prototype.createHtml = function () {
     input += '<span class="h5peditor-ckeditor-placeholder">' + this.field.placeholder + '</span>';
   }
   // Add overflow protection if table
-  if (this.field.tags.includes('table') && !input.includes('table-overflow-protection')) {
+  if (this.field.tags.includes('table') && !input.includes('<div class="table-overflow-protection"')) {
     input += '<div class="table-overflow-protection"></div>';
   }
   input += '</div>';
@@ -596,11 +571,8 @@ ns.Html.prototype.validate = function () {
     this.$input.addClass('error');
   }
 
-  // Get contents from editor
-  // If there are more than one ckeditor, getData() might be undefined when ckeditor is not
-  let value = ((this.ckeditor !== undefined && this.ckeditor.getData() !== undefined)
-    ? this.ckeditor.getData()
-    : this.$input.html());
+  // Get contents from CKEditor5
+  let value = this.ckeditor ? this.ckeditor.getData() : this.$input.html();
 
   value = value
     // Remove placeholder text if any:
@@ -628,12 +600,6 @@ ns.Html.prototype.validate = function () {
     }
   });
 
-  // Add overflow protection if chance of aligned tables
-  if(that.inTags('table') && !value.includes('table-overflow-protection')) {
-    this.$input.append('<div class="table-overflow-protection"></div>');
-    $value.append('<div class="table-overflow-protection"></div>');
-  }
-
   value = $value.html();
 
   // Display errors and bail if set.
@@ -644,9 +610,13 @@ ns.Html.prototype.validate = function () {
     this.$input.removeClass('error');
   }
 
+  if (value.includes('<table') && !value.includes('<div class="table-overflow-protection"')) {
+    value = value + '<div class="table-overflow-protection"></div>';
+  }
+
   this.value = value;
   this.setValue(this.field, value);
-  this.$input.change(); // Trigger change event.
+  this.$input.html(value).change(); // Trigger change event.
 
   return value;
 };
