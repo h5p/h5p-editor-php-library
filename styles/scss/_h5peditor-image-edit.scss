@@ -1,16 +1,18 @@
 @import 'variables';
 
 .h5peditor {
-  .h5p-delete-image-button,
-  .h5p-editing-image-button {
+  .h5p-editor-image-actions .h5peditor-button-textual {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     background: linear-gradient(to bottom, #fff 0, #f2f2f2 100%);
     font-size: $font-size-small;
     color: $black;
     line-height: $form-item-height-small;
     padding-right: $padding;
+    padding-left: calc($padding - 5px);
     margin-right: 0.5em;
     height: 30px;
-    padding-left: 0;
     font-weight: normal;
 
     &:hover:not([disabled]) {
@@ -19,12 +21,9 @@
     }
   }
 
-  .h5p-delete-image-button:before,
-  .h5p-editing-image-button:before {
+  .h5p-editor-image-actions .h5peditor-button-textual:before {
     font-family: $icon-font-family;
     color: #666;
-    padding-right: 0.3em;
-    padding-left: 0.45em;
     vertical-align: middle;
     font-size: 1.5em;
     line-height: 0.9;
@@ -58,20 +57,15 @@
     content : "\e85e";
   }
   
-  .h5p-delete-image-button.loading:before,
-  .h5p-editing-image-button.loading:before {
+  .h5p-editor-image-actions .h5peditor-button-textual.loading:before {
     content: "\e901";
   }
 
-  .h5p-delete-image-button.hidden,
-  .h5p-editing-image-button.hidden,
-  .h5p-copyright-button.hidden {
+  .h5p-editor-image-actions .h5peditor-button-textual.hidden {
     display: none !important;
   }
 
-  .ui-dialog .h5p-delete-image-button,
-  .ui-dialog .h5p-editing-image-button,
-  .ui-dialog .h5p-copyright-button {
+  .ui-dialog .h5peditor-button-textual {
     padding-left: 0.5em;
   }
 }
