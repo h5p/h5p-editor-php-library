@@ -826,6 +826,9 @@ a {
   }
 
   .h5p-copyright-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     border-radius: 0.25em;
     height: 30px;
     background: linear-gradient(to bottom, #fff 0, #f2f2f2 100%);
@@ -834,7 +837,7 @@ a {
     font-size: $font-size-small;
     line-height: $form-item-height-small;
     padding-right: $padding;
-    padding-left: 0;
+    padding-left: calc($padding - 5px);
     clear: both;
     font-weight: normal;
 
@@ -842,8 +845,6 @@ a {
       font-family: $icon-font-family;
       content: "\e88f";
       color: #666;
-      padding: 0 0.3em 3px 0.45em;
-      vertical-align: middle;
       font-size: 1.5em;
       line-height: 0.9;
     }
