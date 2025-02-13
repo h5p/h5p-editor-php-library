@@ -704,14 +704,21 @@ H5PEditor.ListEditor = (function ($) {
         'remove', H5PEditor.t('core', 'removeItem'), function () {
           confirmHandler(item, $item.index(), $(this).offset(), function () {
             list.removeItem($item.index());
-            $item.remove();
-
-            if (!(list.getValue() ?? []).length) {
-              self.removeCollapseButtons();
-            }
           });
         }
       ).appendTo($listActions);
+
+      list.on('removedItem', (event) => {
+        if (event.data !== $item.index()) {
+          return;
+        }
+        
+        $item.remove();
+
+        if (!(list.getValue() ?? []).length) {
+          self.removeCollapseButtons();
+        }
+      });
 
       // Append new field item to content wrapper
       if (item instanceof H5PEditor.Group) {
