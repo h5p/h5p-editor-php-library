@@ -228,7 +228,7 @@ ns.Library.prototype.pasteContent = function () {
   }
 
   // Load library on confirmation
-  ns.confirmReplace(this.params.library, this.$select.offset().top, function () {
+  ns.confirmReplace(this.params.library, this.$pasteButton.offset().top, function () {
     // Update UI
     self.$select.val(clipboard.generic.library);
 
