@@ -271,4 +271,8 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
       async: true
     });
   }
+
+  return {
+    render: render
+  };
 };
