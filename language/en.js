@@ -220,6 +220,7 @@ H5PEditor.language.core = {
   newChangeHasBeenLogged: 'New change has been logged',
   loggedChanges: 'Logged changes',
   noChangesHaveBeenLogged: 'No changes have been logged',
+  confirmCloseMetadataModal: 'Are you would like to close this modal? Any unsaved changes will be lost.',
   errorHeader: 'An error occured',
   errorCalculatingMaxScore: 'Could not calculate the max score for this content. The max score is assumed to be 0. Contact your administrator if this isn’t correct.',
   maxScoreSemanticsMissing: 'Could not find the expected semantics in the content.',

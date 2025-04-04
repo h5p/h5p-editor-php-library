@@ -86,7 +86,13 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
      * @private
      */
     const handleClose = function () {
-      if (confirm(H5PEditor.t('core', 'confirmDeleteChangeLog'))) {
+      // if changes have been made to the params object, display a confirmation 
+      if (JSON.stringify(params) !== JSON.stringify(paramsOnModalOpen)) {
+        if (confirm(H5PEditor.t('core', 'confirmCloseMetadataModal'))) {
+          resetMetadataForm();
+          closePopup();
+        }
+      } else {
         resetMetadataForm();
         closePopup();
       }
