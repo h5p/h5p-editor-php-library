@@ -154,6 +154,7 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
 
   return {
     addAuthor: addAuthor,
-    addDefaultAuthor: addDefaultAuthor
+    addDefaultAuthor: addDefaultAuthor,
+    renderAuthorList: renderAuthorList
   };
 };

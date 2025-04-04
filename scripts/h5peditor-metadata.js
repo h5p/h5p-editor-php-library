@@ -12,6 +12,7 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
    */
   function MetadataForm(parent, params, $container, hasExtraTitleField, populateTitleField) {
     var self = this;
+    let paramsOnModalOpen;
 
     // Initialize event inheritance
     EventDispatcher.call(self);
@@ -39,6 +40,8 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
       $('.h5peditor').append($overlay);
       $wrapper.css('margin-top', (offset > 20 ? offset : 20) + 'px');
 
+      paramsOnModalOpen = structuredClone(params);
+
       // Focus title field
       titleField.$input.focus();
     };
@@ -50,6 +53,45 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
       $('html,body').css('height', '');
       $overlay.detach();
     };
+
+    /**
+     * @private
+     */
+    const resetMetadataForm = function () {
+      titleField.$input.val(paramsOnModalOpen.title).change();
+      H5PEditor.findField('a11yTitle', self).$input.val(paramsOnModalOpen.a11yTitle ?? '').change();
+      H5PEditor.findField('license', self).$select.val(paramsOnModalOpen.license).change();
+      H5PEditor.findField('licenseVersion', self).$select.val(paramsOnModalOpen.licenseVersion ?? '').change();
+      H5PEditor.findField('yearFrom', self).$input.val(paramsOnModalOpen.yearFrom ?? '').change();
+      H5PEditor.findField('yearTo', self).$input.val(paramsOnModalOpen.yearTo ?? '').change();
+      H5PEditor.findField('source', self).$input.val(paramsOnModalOpen.source ?? '').change();
+      H5PEditor.findField('licenseExtras', self).$input.val(paramsOnModalOpen.licenseExtras ?? '').change();
+      
+      params.authors = structuredClone(paramsOnModalOpen.authors);
+      metadataAuthorWidget.renderAuthorList();
+      
+      params.changes = structuredClone(paramsOnModalOpen.changes);
+      metadataChangelogWidget.render();
+
+      if (paramsOnModalOpen.authorComments) {
+        params.authorComments = paramsOnModalOpen.authorComments;
+        $('.field-name-authorComments').find('textarea').val(paramsOnModalOpen.authorComments);
+      } else {
+        delete params.authorComments;
+        $('.field-name-authorComments').find('textarea').val('');
+      }
+    }
+
+    /**
+     * @private
+     */
+    const handleClose = function () {
+      if (confirm(H5PEditor.t('core', 'confirmDeleteChangeLog'))) {
+        resetMetadataForm();
+        closePopup();
+      }
+    };
+
 
     /**
      * @private
@@ -213,12 +255,22 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
           '</div>' +
           '<div class="metadata-button-wrapper">' +
             '<button href="#" class="h5p-metadata-button h5p-save">' + t('saveMetadata') + '</button>' +
+            '<button href="#" class="h5p-metadata-button h5p-cancel">' + t('cancel') + '</button>' +
           '</div>' +
         '</div>' +
       '</div>');
 
     // Handle click on save button
     $wrapper.find('.h5p-save').click(handleSaveButtonClick);
+
+    // Handle click on cancel button
+    $wrapper.find('.h5p-cancel').click(handleClose);
+
+    $overlay.click(function (e) {
+      if (!$wrapper.is(e.target) && !$wrapper.find('*').is(e.target)) {
+        handleClose();
+      }
+    });
 
     const $fieldsWrapper = $('<div/>', {
       'class': 'h5p-metadata-fields-wrapper',
@@ -314,7 +366,7 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
     children = children.concat(self.children);
 
     // Append the metadata changelog widget (Not the same type of widgets as the rest of editor fields)
-    H5PEditor.metadataChangelogWidget([findField('changes').field], params, $fieldsWrapper, self);
+    const metadataChangelogWidget = H5PEditor.metadataChangelogWidget([findField('changes').field], params, $fieldsWrapper, self);
     children = children.concat(self.children);
 
     // Append the Additional information group
