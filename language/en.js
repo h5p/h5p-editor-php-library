@@ -63,6 +63,8 @@ H5PEditor.language.core = {
   numberField: 'number field',
   orderItemUp: 'Order item up',
   orderItemDown: 'Order item down',
+  expandAllContent: 'Expand all content',
+  collapseAllContent: 'Collapse all content',
   removeItem: 'Remove item',
   hubPanelLabel: 'Select content type',
   importantInstructions: 'Important instructions',
@@ -201,6 +203,7 @@ H5PEditor.language.core = {
   avTablistLabel: 'Insert using',
   tabTitleBasicFileUpload: 'File Upload',
   tabTitleInputLinkURL: 'Link/URL',
+  openInNewTab: 'Open in a new tab',
   errorTooHighVersion: 'Parameters contain %used while only %supported or earlier are supported.',
   errorNotSupported: 'Parameters contain %used which is not supported.',
   errorParamsBroken: 'Parameters are broken.',
@@ -236,7 +239,7 @@ H5PEditor.language.core = {
       dropdownLabel: 'Language',
       dialogHeader: 'Select language(s)',
       dialogButtonLabel: 'Filter languages',
-      searchPlaceholder: 'Select one or more languages'
+      searchPlaceholder: 'Type to search for languages'
     },
     reviewed: {
       dropdownLabel: 'Reviewed',
@@ -248,13 +251,13 @@ H5PEditor.language.core = {
       dropdownLabel: 'Content types',
       dialogHeader: 'Select Content type(s)',
       dialogButtonLabel: 'Filter Content Types',
-      searchPlaceholder: 'Select one or more content types'
+      searchPlaceholder: 'Type to search for content types'
     },
     disciplines: {
       dropdownLabel: 'Discipline',
       dialogHeader: 'Select Your Discipline',
       dialogButtonLabel: 'Filter Disciplines',
-      searchPlaceholder: 'Select one or more disciplines'
+      searchPlaceholder: 'Type to search for disciplines'
     },
     licenses: {
       dropdownLabel: 'License',
@@ -279,7 +282,7 @@ H5PEditor.language.core = {
   previousPage: 'Go to previous page',
   contentPreviewButtonLabel: 'Preview',
   contentDownloadButtonLabel: 'Get Content',
-  reuseContentTabLabel: 'Get Shared Content',
+  reuseContentTabLabel: 'Create from OER Content',
   contentPublisherPanelHeader: 'Publisher Info',
   noContentFoundDesc: 'There is no content that matches your search criteria.',
   h5pType: 'H5P Type',

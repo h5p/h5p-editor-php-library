@@ -6,6 +6,7 @@
 // Grab common resources set in parent window, but avoid sharing back resources set in iframe)
 window.ns = window.H5PEditor = H5P.jQuery.extend(false, {}, window.parent.H5PEditor);
 ns.$ = H5P.jQuery;
+window.jQuery = H5P.jQuery;
 
 // Load needed resources from parent.
 H5PIntegration = H5P.jQuery.extend(false, {}, window.parent.H5PIntegration);
@@ -56,34 +57,48 @@ ns.isIE = navigator.userAgent.match(/; MSIE \d+.\d+;/) !== null;
  */
 ns.renderableCommonFields = {};
 
-/**
- * Help load JavaScripts, prevents double loading.
- *
- * @param {string} src
- * @param {Function} done Callback
- */
-ns.loadJs = function (src, done) {
-  if (H5P.jsLoaded(src)) {
-    // Already loaded
-    done();
-  }
-  else {
-    // Loading using script tag
+(() => {
+  const loading = {}; // Map of callbacks for each src being loaded
+
+  /**
+   * Help load JavaScripts, prevents double loading.
+   *
+   * @param {string} src
+   * @param {Function} done Callback
+   */
+  ns.loadJs = (src, done) => {
+    if (H5P.jsLoaded(src)) {
+      // Already loaded
+      done(); 
+      return;
+    }
+
+    if (loading[src] !== undefined) {
+      // Loading in progress...
+      loading[src].push(done);
+      return;
+    }
+
+    loading[src] = [done];
+
+    // Load using script tag
     var script = document.createElement('script');
     script.type = 'text/javascript';
     script.charset = 'UTF-8';
     script.async = false;
     script.onload = function () {
       H5PIntegration.loadedJs.push(src);
-      done();
+      loading[src].forEach(cb => cb());
+      delete loading[src];
     };
     script.onerror = function (err) {
-      done(err);
+      loading[src].forEach(cb => cb(err));
+      delete loading[src];      
     };
     script.src = src;
     document.head.appendChild(script);
-  }
-}
+  };
+})();
 
 /**
  * Helper function invoked when a library is requested. Will add CSS and eval JS
@@ -283,6 +298,7 @@ ns.resetLoadedLibraries = function () {
   H5PIntegration.loadedJs = [];
   ns.loadedCallbacks = [];
   ns.libraryLoaded = {};
+  ns.libraryCache = {};
 };
 
 /**
@@ -1740,6 +1756,7 @@ ns.supportedLanguages = {
   'hi': 'Hindi (हिन्दी)',
   'ho': 'Hiri Motu',
   'hr': 'Croatian (Hrvatski)',
+  'hsb': 'Upper Sorbian (hornjoserbšćina)',
   'ht': 'Haitian Creole',
   'hu': 'Hungarian (Magyar)',
   'hy': 'Armenian (Հայերեն)',
@@ -1802,6 +1819,8 @@ ns.supportedLanguages = {
   'or': 'Oriya',
   'os': 'Ossetian',
   'pa': 'Punjabi',
+  'pap-cw': 'Papiamento (Curaçao and Bonaire)',
+  'pap-aw': 'Papiamento (Aruba)',
   'pi': 'Pali',
   'pl': 'Polish (Polski)',
   'ps': 'Pashto (پښتو)',
