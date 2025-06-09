@@ -377,13 +377,14 @@ class H5peditor {
     $libraryData = new stdClass();
 
     $library = $this->h5p->loadLibrary($machineName, $majorVersion, $minorVersion);
+    $libraryName = H5PCore::libraryToFolderName($library);
 
     // Include name and version in data object for convenience
     $libraryData->name = $library['machineName'];
     $libraryData->version = (object) array('major' => $library['majorVersion'], 'minor' => $library['minorVersion']);
     $libraryData->title = $library['title'];
 
-    $libraryData->upgradesScript = $this->h5p->fs->getUpgradeScript($library['machineName'], $library['majorVersion'], $library['minorVersion']);
+    $libraryData->upgradesScript = $this->h5p->fs->getUpgradeScript($libraryName, $library['majorVersion'], $library['minorVersion']);
     if ($libraryData->upgradesScript !== NULL) {
       // If valid add URL prefix
       $libraryData->upgradesScript = $this->h5p->url . $prefix . $libraryData->upgradesScript;
@@ -403,7 +404,6 @@ class H5peditor {
 
     // Get list of JS and CSS files that belongs to the dependencies
     $files = $this->h5p->getDependenciesFiles($libraries, $prefix);
-    $libraryName = H5PCore::libraryToFolderName($library);
     if ($this->hasPresave($libraryName) === true) {
       $this->addPresaveFile($files, $library, $prefix);
     }
