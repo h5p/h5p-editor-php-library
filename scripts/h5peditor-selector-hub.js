@@ -31,6 +31,7 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
     expanded: true,
     canPaste: false,
     enableContentHub: H5PEditor.enableContentHub || false,
+    enableContentHubSearch: H5PEditor.enableContentHubSearch || false,
   };
 
   if (selectedLibrary) {
