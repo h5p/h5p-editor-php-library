@@ -92,7 +92,7 @@ ns.Group.prototype.appendTo = function ($wrapper) {
         that.toggle();
       },
       keypress: function (event) {
-        if ((event.charCode || event.keyCode) === 32) {
+        if ((event.charCode || event.keyCode) === 32 || (event.charCode || event.keyCode) === 13) { // Space or Enter
           that.toggle();
           event.preventDefault();
         }
