@@ -100,6 +100,12 @@ ns.Html.prototype.getCKEditorConfig = function () {
   config.plugins.push('Alignment');
   config.toolbar.push('|', 'alignment');
 
+  // Directionality is added to all wysiwygs
+  toolbar.push({
+      name: "bidi",
+      items: ["BidiLtr", "BidiRtl"]
+  });
+  
   // Paragraph styles
   const paragraph = [];
   const paragraphPlugins = [];
