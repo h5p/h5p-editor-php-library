@@ -69,7 +69,7 @@ ns.renderableCommonFields = {};
   ns.loadJs = (src, done) => {
     if (H5P.jsLoaded(src)) {
       // Already loaded
-      done(); 
+      done();
       return;
     }
 
@@ -93,7 +93,7 @@ ns.renderableCommonFields = {};
     };
     script.onerror = function (err) {
       loading[src].forEach(cb => cb(err));
-      delete loading[src];      
+      delete loading[src];
     };
     script.src = src;
     document.head.appendChild(script);
@@ -269,20 +269,23 @@ ns.loadLibrary = function (libraryName, callback) {
  */
 ns.updateCommonFieldsDefault = function (semantics, translation, parentIsCommon) {
   for (let i = 0; i < semantics.length; i++) {
-    const isCommon = (semantics[i].common === true || parentIsCommon);
-    if (isCommon && semantics[i].default !== undefined &&
-        translation[i] !== undefined && translation[i].default !== undefined) {
-      // Update value
-      semantics[i].default = translation[i].default;
-    }
-    if (semantics[i].fields !== undefined && semantics[i].fields.length &&
-        translation[i].fields !== undefined && translation[i].fields.length) {
-      // Look into sub fields
-      ns.updateCommonFieldsDefault(semantics[i].fields, translation[i].fields, isCommon);
-    }
-    if (semantics[i].field !== undefined && translation[i].field !== undefined ) {
-      // Look into sub field
-      ns.updateCommonFieldsDefault([semantics[i].field], [translation[i].field], isCommon);
+    //Guard for missing translations
+    if(translation[i] !== undefined) {
+      const isCommon = (semantics[i].common === true || parentIsCommon);
+      if (isCommon && semantics[i].default !== undefined &&
+          translation[i] !== undefined && translation[i].default !== undefined) {
+        // Update value
+        semantics[i].default = translation[i].default;
+      }
+      if (semantics[i].fields !== undefined && semantics[i].fields.length &&
+          translation[i].fields !== undefined && translation[i].fields.length) {
+        // Look into sub fields
+        ns.updateCommonFieldsDefault(semantics[i].fields, translation[i].fields, isCommon);
+      }
+      if (semantics[i].field !== undefined && translation[i].field !== undefined) {
+        // Look into sub field
+        ns.updateCommonFieldsDefault([semantics[i].field], [translation[i].field], isCommon);
+      }
     }
   }
 };
