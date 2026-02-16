@@ -630,7 +630,7 @@ class H5peditor {
           'majorVersion' => $local_lib->major_version,
           'minorVersion' => $local_lib->minor_version,
           'patchVersion' => $local_lib->patch_version,
-          'patchVersionInFolderName' => $local_lib->patch_version_in_folder_name
+          'patchVersionInFolderName' => $local_lib->patch_version_in_folder_name ?? null
         ]);
         $icon_path = $this->h5p->h5pF->getLibraryFileUrl($library_folder, 'icon.svg');
       }
