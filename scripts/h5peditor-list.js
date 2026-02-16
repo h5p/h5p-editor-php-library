@@ -245,15 +245,9 @@ H5PEditor.List = (function ($) {
         return;
       }
 
-      // Remove child fields
-      for (var i = 0; i < children.length; i++) {
-        children[i].remove();
+      while (children.length) {
+        self.removeItem(0);
       }
-      children = [];
-
-      // Clean up parameters
-      parameters = undefined;
-      setValue(field);
     };
 
     /**
