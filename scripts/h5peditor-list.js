@@ -17,6 +17,7 @@ H5PEditor.List = (function ($) {
       label: H5PEditor.t('core', 'listLabel')
     });
 
+    self.field = field;
     // Make it possible to travel up tree.
     self.parent = parent; // (Could this be done a better way in the future?)
 
@@ -90,6 +91,24 @@ H5PEditor.List = (function ($) {
     };
 
     /**
+     * Handle group collapsed state change.
+     * Used when children are groups to determine if all groups are collapsed.
+     */
+    const handleGroupCollapsedStateChanged = () => {
+      if (children.some(child => !(child instanceof H5PEditor.Group))) {
+        return; // Only groups have collapsed state
+      }
+
+      const areAllGroupsCollapsed = !children.some(
+        (child) => child.isExpanded()
+      );
+
+      this.trigger('groupCollapsedStateChanged', {
+        allGroupsCollapsed: areAllGroupsCollapsed
+      });
+    };
+
+    /**
      * Add item to list.
      *
      * @private
@@ -100,7 +119,13 @@ H5PEditor.List = (function ($) {
       var childField = field.field;
       var widget = H5PEditor.getWidgetName(childField);
 
-      if ((parameters === undefined || parameters[index] === undefined) && childField['default'] !== undefined) {
+      if (
+        (
+          parameters === undefined ||
+          parameters[index] === undefined
+        ) &&
+        childField['default'] !== undefined
+      ) {
         // Use default value
         setParameters(index, childField['default']);
       }
@@ -109,10 +134,25 @@ H5PEditor.List = (function ($) {
         setParameters(index, paramsOverride);
       }
 
-      var child = children[index] = new H5PEditor.widgets[widget](self, childField, parameters === undefined ? undefined : parameters[index], function (myChildField, value) {
-        var i = findIndex(child);
-        setParameters(i === undefined ? index : i, value);
-      });
+      var child = children[index] = new H5PEditor.widgets[widget](
+        self,
+        childField,
+        parameters === undefined ? undefined : parameters[index],
+        function (myChildField, value) {
+          var i = findIndex(child);
+          setParameters(i === undefined ? index : i, value);
+        }
+      );
+
+      if (child instanceof H5PEditor.Group) {
+        child.on('collapsed', () => {
+          handleGroupCollapsedStateChanged();
+        });
+
+        child.on('expanded', () => {
+          handleGroupCollapsedStateChanged();
+        });
+      }
 
       updateListFillState();
 
@@ -208,6 +248,8 @@ H5PEditor.List = (function ($) {
       self.trigger('removedItem', index);
 
       updateListFillState();
+      // Ensure that collapsed state is set according to remaining items
+      handleGroupCollapsedStateChanged();
     };
 
     /**
@@ -221,15 +263,9 @@ H5PEditor.List = (function ($) {
         return;
       }
 
-      // Remove child fields
-      for (var i = 0; i < children.length; i++) {
-        children[i].remove();
+      while (children.length) {
+        self.removeItem(0);
       }
-      children = [];
-
-      // Clean up parameters
-      parameters = undefined;
-      setValue(field);
     };
 
     /**
@@ -250,6 +286,42 @@ H5PEditor.List = (function ($) {
         var params = parameters.splice(currentIndex, 1);
         parameters.splice(newIndex, 0, params[0]);
       }
+      self.trigger('movedItem', {from: currentIndex, to: newIndex});
+    };
+
+    /**
+     * Toggle the collapsed state of all group items in list.
+     * @param {boolean|undefined} [shouldBeCollapsed] If set explicitly, true to collapse all, false to expand.
+     * @returns {boolean} New state or undefined if unclear.
+     */
+    this.toggleItemCollapsed = (shouldBeCollapsed) => {
+      if (typeof shouldBeCollapsed !== 'boolean') {
+        shouldBeCollapsed = children.some((child) => child.isExpanded());
+      }
+
+      this.forEachChild((child) => {
+        if (!(child instanceof H5PEditor.Group)) {
+          return;
+        }
+
+        if (shouldBeCollapsed) {
+          const valid = child.collapse();
+
+          if (!valid) {
+            this.trigger('cannotCollapseAll');
+          }
+        }
+        else {
+          child.expand();
+        }
+      });
+
+      /*
+       * Return state could be omitted, because the success of collapsing or
+       * expanding is not checked for. It's good style for a toggle function
+       * though.
+       */
+      return shouldBeCollapsed;
     };
 
     /**
@@ -305,13 +377,17 @@ H5PEditor.List = (function ($) {
           children !== undefined && children.length > field.max) {
         // Invalid, more parameters than max allowed.
         valid = false;
-        self.setError(H5PEditor.t('core', 'listExceedsMax', {':max': field.max}));
+        self.setError(
+          H5PEditor.t('core', 'listExceedsMax', { ':max': field.max })
+        );
       }
       if (field.min !== undefined && field.min > 0 &&
           (children === undefined || children.length < field.min)) {
         // Invalid, less parameters than min allowed.
         valid = false;
-        self.setError(H5PEditor.t('core', 'listBelowMin', {':min': field.min}));
+        self.setError(
+          H5PEditor.t('core', 'listBelowMin', { ':min': field.min })
+        );
       }
 
       return valid;
@@ -338,7 +414,9 @@ H5PEditor.List = (function ($) {
      * @returns {Array}
      */
     self.getValue = function () {
-      return (parameters === undefined ? parameters : $.extend(true, [], parameters));
+      return (
+        parameters === undefined ? parameters : $.extend(true, [], parameters)
+      );
     };
 
     /**
