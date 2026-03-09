@@ -42,6 +42,8 @@ H5PEditor.List = (function ($) {
       for (var i = 0; i < children.length; i++) {
         self.widget.addItem(children[i], i);
       }
+
+      updateListFillState();
     });
 
     /**
@@ -112,6 +114,8 @@ H5PEditor.List = (function ($) {
         setParameters(i === undefined ? index : i, value);
       });
 
+      updateListFillState();
+
       return child;
     };
 
@@ -127,6 +131,19 @@ H5PEditor.List = (function ($) {
         if (children[i] === child) {
           return i;
         }
+      }
+    };
+
+    /**
+     * Inform listeners about updated fill state of the list.
+     */
+    var updateListFillState = function () {
+      if (typeof field.min === 'number' && field.min > 0) {
+        self.trigger('listIsAtMinimum', children.length <= field.min);
+      }
+
+      if (typeof field.max === 'number') {
+        self.trigger('listIsAtMaximum', children.length >= field.max);
       }
     };
 
@@ -189,6 +206,8 @@ H5PEditor.List = (function ($) {
         }
       }
       self.trigger('removedItem', index);
+
+      updateListFillState();
     };
 
     /**
@@ -328,15 +347,6 @@ H5PEditor.List = (function ($) {
      */
     self.getField = function () {
       return $.extend(true, {}, field.field);
-    };
-
-    /**
-     * Get copy of list's field semantics holding its configuration.
-     *
-     * @returns {Object}
-     */
-    self.getConfig = function () {
-      return $.extend(true, {}, field);
     };
 
     // Start the party!
