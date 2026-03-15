@@ -55,7 +55,7 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
         toggleCommonFields();
       },
       keypress: function (event) {
-        if ((event.charCode || event.keyCode) === 32) {
+        if ((event.charCode || event.keyCode) === 32 || (event.charCode || event.keyCode) === 13) { // Space or Enter
           toggleCommonFields();
           event.preventDefault();
         }
