@@ -128,6 +128,7 @@ a {
   .h5peditor-label-wrapper {
     display: flex;
     flex-direction: row;
+    margin-bottom: 6px;
   }
 
   .has-important-description {
@@ -1244,7 +1245,6 @@ a {
 
 .h5peditor-label {
   display: block;
-  margin-bottom: 6px;
   font-weight: 600;
   font-size: $font-size-normal;
   color: $form-label;
@@ -1273,6 +1273,30 @@ a {
     content: "\e565";
     font-family: $icon-font-family;
     margin-right: calc($min-padding / 2);
+  }
+}
+
+.h5peditor-field-description-icon {
+  all: unset;              
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  height: 1em;
+  margin-left: 0.5rem;
+
+  &::before {
+    content: "\e917";
+    font-family: 'h5p-theme';
+    color: #999999;
+    line-height: 1em
+  }
+  
+  &:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: 2px;
+  border-radius: 50%;
   }
 }
 

@@ -307,4 +307,5 @@ H5PEditor.language.core = {
   navigateToParent: 'Pomakni se do starša',
   a11yTitleShowLabel: 'Pokaži za bralnik zaslona',
   a11yTitleHideLabel: 'Skrij za bralnik zaslona',
+  descriptionIconAriaLabel: 'More information about this field',
 };

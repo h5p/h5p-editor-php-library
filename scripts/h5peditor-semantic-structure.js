@@ -49,21 +49,48 @@ H5PEditor.SemanticStructure = (function ($) {
       created for what is needed. */
 
       // Create field label
+      var $infoButton;
       if (field.label !== 0) {
-        // Add label
-        createLabel(self.label, field.optional, id).appendTo($wrapper);
+        var $label = createLabel(self.label, field.optional, id);
+
+        if (field.description !== undefined && field.showDescriptionAsTooltip !== false) {
+          var $labelWrapper = $('<div/>', {
+            'class': 'h5peditor-label-wrapper',
+            appendTo: $wrapper
+          });
+          $label.appendTo($labelWrapper);
+          $infoButton = $('<button/>', {
+            type: 'button',
+            'class': 'h5peditor-field-description-icon',
+            'aria-label': H5PEditor.t('core', 'descriptionIconAriaLabel')
+          }).appendTo($labelWrapper);
+        }
+        else {
+          // Add label directly when there is no tooltip
+          $label.appendTo($wrapper);
+        }
       }
 
       // Create description
       var $description;
       if (field.description !== undefined) {
-        $description = $('<div/>', {
-          'id': descriptionId,
-          'class': 'h5peditor-field-description',
-          text: field.description,
-          appendTo: $wrapper
-        });
-        $description.html($description.html().replace('\n', '<br/>'));
+        if (field.showDescriptionAsTooltip !== false) {
+          if ($infoButton && typeof H5P !== 'undefined' && H5P.Tooltip) {
+            H5P.Tooltip($infoButton[0], {
+              text: field.description,
+              position: 'right',
+            });
+          }
+        }
+        else {
+          $description = $('<div/>', {
+            'id': descriptionId,
+            'class': 'h5peditor-field-description',
+            text: field.description,
+            appendTo: $wrapper
+          });
+          $description.html($description.html().replace('\n', '<br/>'));
+        }
       }
 
       widgets = getValidWidgets();
