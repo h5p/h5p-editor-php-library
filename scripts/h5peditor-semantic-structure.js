@@ -74,7 +74,7 @@ H5PEditor.SemanticStructure = (function ($) {
       var $description;
       if (field.description !== undefined) {
         if (field.showDescriptionAsTooltip !== false) {
-          if ($infoButton && typeof H5P !== 'undefined' && H5P.Tooltip) {
+          if ($infoButton && H5P?.Tooltip) {
             H5P.Tooltip($infoButton[0], {
               text: field.description,
               position: 'right',
