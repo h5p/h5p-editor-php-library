@@ -66,7 +66,6 @@ H5PEditor.SemanticStructure = (function ($) {
           }).appendTo($labelWrapper);
         }
         else {
-          // Add label directly when there is no tooltip
           $label.appendTo($wrapper);
         }
       }

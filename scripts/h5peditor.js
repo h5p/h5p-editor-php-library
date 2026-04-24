@@ -1029,7 +1029,7 @@ ns.createDescription = function (description, inputId) {
  * The description text is stored in the data-description attribute; call
  * H5PEditor.initDescriptionTooltip() after inserting the button into the DOM.
  *
- * @param {String} description Raw description text (may contain HTML)
+ * @param {String} description Raw description text
  * @returns {string} HTML for the info icon button
  */
 ns.createDescriptionIcon = function (description) {
@@ -1048,7 +1048,6 @@ ns.initDescriptionTooltip = function (button) {
     return;
   }
   button.dataset.tooltipInitialized = 'true';
-  // Strip any HTML tags from the description for the plain-text tooltip.
   var div = document.createElement('div');
   div.innerHTML = button.dataset.description;
   var text = div.textContent;
