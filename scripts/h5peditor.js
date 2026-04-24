@@ -846,7 +846,7 @@ ns.createItem = function (type, label, description, content) {
  */
 ns.createFieldMarkup = function (field, content, inputId) {
   content = content || '';
-  var useTooltip = field.description !== undefined && field.showDescriptionAsTooltip !== false;
+  var useTooltip = ns.shouldShowDescriptionAsTooltip(field);
   var markup = this.createLabel(field, '', inputId) + (!useTooltip ? this.createDescription(field.description, inputId, useTooltip) : '') + content;
 
   return this.wrapFieldMarkup(field, markup);
@@ -973,6 +973,18 @@ ns.getDescriptionId = function (id) {
 };
 
 /**
+ * Determine whether a field description should be shown as a tooltip.
+ * Tooltip is the default when a description exists unless semantics
+ * disable it by setting `showDescriptionAsTooltip` to false.
+ *
+ * @param {SemanticField} field
+ * @returns {boolean}
+ */
+ns.shouldShowDescriptionAsTooltip = function (field) {
+  return field.description !== undefined && field.showDescriptionAsTooltip !== false;
+};
+
+/**
  * Create a label to wrap content in.
  *
  * @param {SemanticField} field
@@ -999,7 +1011,7 @@ ns.createLabel = function (field, content, inputId) {
   }
 
   // Add info icon button when description should be shown as tooltip
-  if (field.description !== undefined && field.showDescriptionAsTooltip !== false) {
+  if (ns.shouldShowDescriptionAsTooltip(field)) {
     html += ns.createDescriptionIcon(field.description);
   }
 

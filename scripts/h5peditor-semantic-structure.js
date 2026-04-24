@@ -53,7 +53,7 @@ H5PEditor.SemanticStructure = (function ($) {
       if (field.label !== 0) {
         var $label = createLabel(self.label, field.optional, id);
 
-        if (field.description !== undefined && field.showDescriptionAsTooltip !== false) {
+        if (H5PEditor.shouldShowDescriptionAsTooltip(field)) {
           var $labelWrapper = $('<div/>', {
             'class': 'h5peditor-label-wrapper',
             appendTo: $wrapper
@@ -73,7 +73,7 @@ H5PEditor.SemanticStructure = (function ($) {
       // Create description
       var $description;
       if (field.description !== undefined) {
-        if (field.showDescriptionAsTooltip !== false) {
+        if (H5PEditor.shouldShowDescriptionAsTooltip(field)) {
           if ($infoButton && H5P?.Tooltip) {
             H5P.Tooltip($infoButton[0], {
               text: field.description,
