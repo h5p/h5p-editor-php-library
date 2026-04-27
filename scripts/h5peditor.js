@@ -862,9 +862,9 @@ ns.createFieldMarkup = function (field, content, inputId) {
  * @return {string}
  */
 ns.createBooleanFieldMarkup = function (field, content, inputId) {
-  var markup = '<label class="h5peditor-label">' +
-    content + (field.label || field.name || '') + '</label>' +
-    this.createDescription(field.description, inputId);
+  content = content || '';
+  var useTooltip = ns.shouldShowDescriptionAsTooltip(field);
+  var markup = this.createLabel(field, content, inputId) + (!useTooltip ? this.createDescription(field.description, inputId, useTooltip) : '');
 
   return this.wrapFieldMarkup(field, markup);
 };
@@ -1007,7 +1007,7 @@ ns.createLabel = function (field, content, inputId) {
   }
 
   if (field.label !== 0) {
-    html += '<span class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' + (field.label === undefined ? field.name : field.label) + '</span>';
+    html += '<span class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' +  (content || '') + (field.label === undefined ? field.name : field.label) + '</span>';
   }
 
   // Add info icon button when description should be shown as tooltip
@@ -1015,7 +1015,7 @@ ns.createLabel = function (field, content, inputId) {
     html += ns.createDescriptionIcon(field.description);
   }
 
-  return html + (content || '') + '</label>';
+  return html + '</label>';
 };
 
 /**
