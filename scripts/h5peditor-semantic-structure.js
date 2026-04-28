@@ -49,7 +49,6 @@ H5PEditor.SemanticStructure = (function ($) {
       created for what is needed. */
 
       // Create field label
-      var $infoButton;
       if (field.label !== 0) {
         var $label = createLabel(self.label, field.optional, id);
 
@@ -59,37 +58,17 @@ H5PEditor.SemanticStructure = (function ($) {
             appendTo: $wrapper
           });
           $label.appendTo($labelWrapper);
-          $infoButton = $('<button/>', {
-            type: 'button',
-            'class': 'h5peditor-field-description-icon',
-            'aria-label': H5PEditor.t('core', 'descriptionIconAriaLabel')
-          }).appendTo($labelWrapper);
+          var $infoButton =  $(H5PEditor.createDescriptionIcon(field.description));
+          $infoButton.appendTo($labelWrapper);
         }
         else {
           $label.appendTo($wrapper);
+          if(field.description !== undefined) {
+            var $description = $(H5PEditor.createDescription(field.description, descriptionId));
+            $description.html($description.html().replace('\n', '<br/>'));
+            $description.appendTo($wrapper);
         }
       }
-
-      // Create description
-      var $description;
-      if (field.description !== undefined) {
-        if (H5PEditor.shouldShowDescriptionAsTooltip(field)) {
-          if ($infoButton && H5P?.Tooltip) {
-            H5P.Tooltip($infoButton[0], {
-              text: field.description,
-              position: 'right',
-            });
-          }
-        }
-        else {
-          $description = $('<div/>', {
-            'id': descriptionId,
-            'class': 'h5peditor-field-description',
-            text: field.description,
-            appendTo: $wrapper
-          });
-          $description.html($description.html().replace('\n', '<br/>'));
-        }
       }
 
       widgets = getValidWidgets();
