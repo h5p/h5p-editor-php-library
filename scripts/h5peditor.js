@@ -847,7 +847,7 @@ ns.createItem = function (type, label, description, content) {
 ns.createFieldMarkup = function (field, content, inputId) {
   content = content || '';
   var useTooltip = ns.shouldShowDescriptionAsTooltip(field);
-  var markup = this.createLabel(field, '', inputId) + (!useTooltip ? this.createDescription(field.description, inputId, useTooltip) : '') + content;
+  var markup = this.createLabel(field, '', inputId) + (!useTooltip ? this.createDescription(field.description, inputId) : '') + content;
 
   return this.wrapFieldMarkup(field, markup);
 };
