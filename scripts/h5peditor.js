@@ -864,7 +864,7 @@ ns.createFieldMarkup = function (field, content, inputId) {
 ns.createBooleanFieldMarkup = function (field, content, inputId) {
   content = content || '';
   var useTooltip = ns.shouldShowDescriptionAsTooltip(field);
-  var markup = this.createLabel(field, content, inputId) + (!useTooltip ? this.createDescription(field.description, inputId, useTooltip) : '');
+  var markup = this.createLabel(field, content, inputId) + (!useTooltip ? this.createDescription(field.description, inputId) : '');
 
   return this.wrapFieldMarkup(field, markup);
 };
