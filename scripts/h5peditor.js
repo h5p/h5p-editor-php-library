@@ -847,7 +847,7 @@ ns.createItem = function (type, label, description, content) {
 ns.createFieldMarkup = function (field, content, inputId) {
   content = content || '';
   var useTooltip = ns.shouldShowDescriptionAsTooltip(field);
-  var markup = this.createLabel(field, '', inputId) + (!useTooltip ? this.createDescription(field.description, inputId) : '') + content;
+  var markup = ns.createLabel(field, '', inputId) + (!useTooltip ? ns.createDescription(field.description, inputId) : '') + content;
 
   return this.wrapFieldMarkup(field, markup);
 };
@@ -864,7 +864,7 @@ ns.createFieldMarkup = function (field, content, inputId) {
 ns.createBooleanFieldMarkup = function (field, content, inputId) {
   content = content || '';
   var useTooltip = ns.shouldShowDescriptionAsTooltip(field);
-  var markup = this.createLabel(field, content, inputId) + (!useTooltip ? this.createDescription(field.description, inputId) : '');
+  var markup = ns.createLabel(field, content, inputId) + (!useTooltip ? ns.createDescription(field.description, inputId) : '');
 
   return this.wrapFieldMarkup(field, markup);
 };
@@ -1007,7 +1007,7 @@ ns.createLabel = function (field, content, inputId) {
   }
 
   if (field.label !== 0) {
-    html += '<span class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' +  (content || '') + (field.label === undefined ? field.name : field.label) + '</span>';
+    html += '<span class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' +  (content || '') + (field.label ?? field.name) + '</span>';
   }
 
   // Add info icon button when description should be shown as tooltip

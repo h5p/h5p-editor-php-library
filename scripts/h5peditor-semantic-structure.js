@@ -49,27 +49,13 @@ H5PEditor.SemanticStructure = (function ($) {
       created for what is needed. */
 
       // Create field label
-
       if (field.label !== 0) {
-        var $label = createLabel(self.label, field.optional, id);
+        var useTooltip = H5PEditor.shouldShowDescriptionAsTooltip(field);
+        var description = !useTooltip ? H5PEditor.createDescription(field.description, id) : '';
+        description.replace('\n', '<br/>');
 
-        if (H5PEditor.shouldShowDescriptionAsTooltip(field)) {
-          var $labelWrapper = $('<div/>', {
-            'class': 'h5peditor-label-wrapper',
-            appendTo: $wrapper
-          });
-          $label.appendTo($labelWrapper);
-          var $infoButton =  $(H5PEditor.createDescriptionIcon(field.description));
-          $infoButton.appendTo($labelWrapper);
-        }
-        else {
-          $label.appendTo($wrapper);
-          if(field.description !== undefined) {
-            var $description = $(H5PEditor.createDescription(field.description, descriptionId));
-            $description.html($description.html().replace('\n', '<br/>'));
-            $description.appendTo($wrapper);
-        }
-      }
+        var label = H5PEditor.createLabel(field, '', id) + description;
+        $(label).appendTo($wrapper);
       }
 
       widgets = getValidWidgets();
@@ -282,23 +268,6 @@ H5PEditor.SemanticStructure = (function ($) {
   // Extends the event dispatcher
   SemanticStructure.prototype = Object.create(H5P.EventDispatcher.prototype);
   SemanticStructure.prototype.constructor = SemanticStructure;
-
-  /**
-   * Create generic editor label.
-   *
-   * @private
-   * @param {String} text
-   * @returns {jQuery}
-   */
-  var createLabel = function (text, optional, id) {
-    return $('<label/>', {
-      'for': id,
-      'class': 'h5peditor-label' + (optional ? '' : ' h5peditor-required'),
-      text: text
-    });
-  };
-
-
 
   /**
    * @constant
