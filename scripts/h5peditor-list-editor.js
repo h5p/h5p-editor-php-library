@@ -330,7 +330,7 @@ H5PEditor.ListEditor = (function ($) {
        * readers and display list title collapse button instead.
        */
       this.originalLabel =
-        this.container.parentNode?.querySelector('.h5peditor-label');
+        this.container.parentNode?.querySelector('.h5peditor-label-wrapper') || this.container.parentNode?.querySelector('.h5peditor-label');
       this.originalLabel.classList.add('offsite');
 
       this.collapseButtonList = document.createElement('button');

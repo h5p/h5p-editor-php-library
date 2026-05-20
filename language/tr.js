@@ -306,4 +306,5 @@ H5PEditor.language.core = {
   filterErrorMessage: 'Something went wrong. Please reload the page.',
   in: 'in',
   navigateToParent: 'Navigate to parent',
+  descriptionIconAriaLabel: 'More information about this field',
 };

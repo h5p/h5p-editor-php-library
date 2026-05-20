@@ -516,6 +516,12 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
     }
     delete parent.readies;
   }
+
+  // Initialize description tooltips for any info-icon buttons that were just
+  // appended by the widgets processed in this chunk.
+  $wrapper.find('.h5peditor-field-description-icon[data-description]').each(function () {
+    ns.initDescriptionTooltip(this);
+  });
 };
 
 /**
@@ -840,7 +846,8 @@ ns.createItem = function (type, label, description, content) {
  */
 ns.createFieldMarkup = function (field, content, inputId) {
   content = content || '';
-  var markup = this.createLabel(field, '', inputId) + this.createDescription(field.description, inputId) + content;
+  var useTooltip = ns.shouldShowDescriptionAsTooltip(field);
+  var markup = ns.createLabel(field, '', inputId) + (!useTooltip ? ns.createDescription(field.description, inputId) : '') + content;
 
   return this.wrapFieldMarkup(field, markup);
 };
@@ -855,9 +862,9 @@ ns.createFieldMarkup = function (field, content, inputId) {
  * @return {string}
  */
 ns.createBooleanFieldMarkup = function (field, content, inputId) {
-  var markup = '<label class="h5peditor-label">' +
-    content + (field.label || field.name || '') + '</label>' +
-    this.createDescription(field.description, inputId);
+  content = content || '';
+  var useTooltip = ns.shouldShowDescriptionAsTooltip(field);
+  var markup = ns.createLabel(field, content, inputId) + (!useTooltip ? ns.createDescription(field.description, inputId) : '');
 
   return this.wrapFieldMarkup(field, markup);
 };
@@ -966,6 +973,18 @@ ns.getDescriptionId = function (id) {
 };
 
 /**
+ * Determine whether a field description should be shown as a tooltip.
+ * Tooltip is the default when a description exists unless semantics
+ * disable it by setting `showDescriptionAsTooltip` to false.
+ *
+ * @param {SemanticField} field
+ * @returns {boolean}
+ */
+ns.shouldShowDescriptionAsTooltip = function (field) {
+  return field.description !== undefined && field.showDescriptionAsTooltip !== false;
+};
+
+/**
  * Create a label to wrap content in.
  *
  * @param {SemanticField} field
@@ -988,10 +1007,15 @@ ns.createLabel = function (field, content, inputId) {
   }
 
   if (field.label !== 0) {
-    html += '<span class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' + (field.label === undefined ? field.name : field.label) + '</span>';
+    html += '<span class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' +  (content || '') + (field.label ?? field.name) + '</span>';
   }
 
-  return html + (content || '') + '</label>';
+  // Add info icon button when description should be shown as tooltip
+  if (ns.shouldShowDescriptionAsTooltip(field)) {
+    html += ns.createDescriptionIcon(field.description);
+  }
+
+  return html + '</label>';
 };
 
 /**
@@ -1010,6 +1034,39 @@ ns.createDescription = function (description, inputId) {
     html += '>' + description + '</div>';
   }
   return html;
+};
+
+/**
+ * Create HTML for a description info-icon button used to trigger a tooltip.
+ * The description text is stored in the data-description attribute; call
+ * H5PEditor.initDescriptionTooltip() after inserting the button into the DOM.
+ *
+ * @param {String} description Raw description text
+ * @returns {string} HTML for the info icon button
+ */
+ns.createDescriptionIcon = function (description) {
+  return '<button type="button" class="h5peditor-field-description-icon"' +
+    ' data-description="' + ns.htmlspecialchars(description) + '"' +
+    ' aria-label="' + ns.t('core', 'descriptionIconAriaLabel') + '"></button>';
+};
+
+/**
+ * Initialize an H5P.Tooltip on a description icon button if not already done.
+ *
+ * @param {HTMLElement} button A .h5peditor-field-description-icon element
+ */
+ns.initDescriptionTooltip = function (button) {
+  if (!H5P || !H5P.Tooltip || button.dataset.tooltipInitialized) {
+    return;
+  }
+  button.dataset.tooltipInitialized = 'true';
+  var div = document.createElement('div');
+  div.innerHTML = button.dataset.description;
+  var text = div.textContent;
+  H5P.Tooltip(button, {
+    text: text,
+    position: 'right',
+  });
 };
 
 /**
