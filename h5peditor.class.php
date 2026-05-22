@@ -174,8 +174,7 @@ class H5peditor {
 
       // Remove old files.
       for ($i = 0, $s = count($oldFiles); $i < $s; $i++) {
-        if (!in_array($oldFiles[$i], $newFiles) &&
-            preg_match('/^(\w+:\/\/|\.\.\/)/i', $oldFiles[$i]) === 0) {
+        if (!in_array($oldFiles[$i], $newFiles) && !str_contains($oldFiles[$i], './') && !str_contains($oldFiles[$i], '//')) {
           $this->h5p->fs->removeContentFile($oldFiles[$i], $content);
           // (optionally we could just have marked them as tmp files)
         }
