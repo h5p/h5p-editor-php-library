@@ -1063,10 +1063,7 @@ ns.initDescriptionTooltip = function (button) {
   var div = document.createElement('div');
   div.innerHTML = button.dataset.description;
   var text = div.textContent;
-  H5P.Tooltip(button, {
-    text: text,
-    position: 'right',
-  });
+  H5P.Tooltip(button, { text });
 };
 
 /**
