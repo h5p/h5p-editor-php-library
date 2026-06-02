@@ -145,6 +145,8 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
   this.$tutorialUrl.appendTo($element);
   this.$exampleUrl.appendTo($element);
 
+  ns.AccessibilityCheckerButton($element[0], self);
+
   if (window.localStorage) {
     var $buttons = ns.$(ns.createCopyPasteButtons()).appendTo($element);
 
