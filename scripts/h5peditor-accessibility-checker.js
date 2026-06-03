@@ -98,8 +98,6 @@ ns.EvaluateAccessibility = (params, metadata, libraries) => {
     });
   }
 
-  console.log('final results', results); // TODO: remove
-
   return results;
 };
 
@@ -110,9 +108,16 @@ ns.EvaluateAccessibility = (params, metadata, libraries) => {
  * @param {HTMLElement} sibling The element to append the list after
  */
 const showResultList = (results, sibling) => { // TODO: Implement designer-made UI
-  // TODO: is already shown, just update the info
-  const wrapper = document.createElement('div');
-  wrapper.classList.add('h5p-editor-accessibility-results');
+  let wrapper = sibling.nextElementSibling;
+
+  // Not visible yet
+  if (!wrapper.classList.contains('h5peditor-accessibility-results')) {
+    wrapper = document.createElement('div');
+    wrapper.classList.add('h5peditor-accessibility-results');
+  }
+
+  // Remove children to update results
+  wrapper.innerHTML = '';
   const title = document.createElement('span');
   title.classList.add('h5peditor-label');
   wrapper.append(title);
@@ -129,11 +134,9 @@ const showResultList = (results, sibling) => { // TODO: Implement designer-made 
       contentTitle.innerText = content.contentTitle;
       const contentList = document.createElement('ul');
       content.results.forEach((semanticProblem) => {
-        semanticProblem.forEach((paramProblem) => { // TODO: update text based on param problems of same semantic
+        semanticProblem.forEach((paramProblem) => { // TODO: group text based on param problems of same semantic
           const problemElement = document.createElement('li');
-          const problemText = document.createElement('span');
-          // TODO: Make human readable
-          problemText.innerHTML = `(${paramProblem.importance}) <b>${paramProblem.field}:</b> Should be ${paramProblem.accessibleWhen}`;
+          const problemText = readableProblem(paramProblem);
 
           problemElement.append(problemText);
           contentList.append(problemElement);
@@ -185,6 +188,7 @@ const evaluateField = (semantics, params) => {
             field: semantics.label,
             importance: accessibility.importance,
             accessibleWhen: accessibility.accessibleWhen,
+            relatedCriteria: accessibility.relatedCriteria
           });
         }
       }
@@ -238,3 +242,38 @@ const findAllOccurences = (searchArea, condition, callback) => {
     );
   }
 };
+
+/**
+ * Converts an indentified accessibility problem into a human readable format
+ * TODO: Don't hardcore strings
+ * TODO: Include info about dependent condition
+ * 
+ * @param {Object} problem The identified problem
+ */
+const readableProblem = (problem) => {
+  let condition = '';
+  switch (problem.accessibleWhen) {
+    case FIELD_CONDITION.CHECKED:
+      condition = 'Should be checked';
+      break;
+    case FIELD_CONDITION.NOT_CHECKED:
+      condition = 'Should not be checked';
+      break;
+    case FIELD_CONDITION.NOT_EMPTY: // TODO: Does not currently work. Params not updated/added if empty...
+      condition = 'Should not be empty';
+      break;
+  }
+  
+  const text = document.createElement('span');
+  text.innerHTML = `(${problem.importance}) <b>${problem.field}:</b> ${condition}`;
+
+  if (problem.relatedCriteria) {
+    // TODO: change to use initDescriptionTooltip, once VA-1728 passes testing
+    const tooltipButton = document.createElement('button');
+    tooltipButton.innerText = 'i';
+    H5P.Tooltip(tooltipButton, { text: problem.relatedCriteria });
+    text.append(tooltipButton);
+  }
+
+  return text;
+}
