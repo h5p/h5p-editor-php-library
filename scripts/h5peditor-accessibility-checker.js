@@ -16,6 +16,8 @@ const FIELD_CONDITION = Object.freeze({
  * @typedef {Object} accessibility
  * @property {'Compliance' | 'Recommended'} importance Whether the criteria is required
  *   by WCAG or just recommended
+ * @property {String} [relatedCriteria] Optional WCAG criteria that will be broken if accessibleWhen is not met
+ *    e.g. "SC 3.3.6 Error Prevention (All) (Level AAA)"
  * @property {FIELD_CONDITION} accessibleWhen The condition to meet for the field to be accessible
  * @property {Object} [dependsOn] Optional dependency on state of a neighboring field
  *   (only evaluates accessibleWhen if the dependent condition is met)
@@ -48,11 +50,11 @@ ns.AccessibilityCheckerButton = function (container, parent) {
   button.append(label);
 
   button.addEventListener('click', () => { // TODO: Update ui
-    ns.EvaluateAccessibility(
+    showResultList(ns.EvaluateAccessibility(
       parent.getParams(),
       parent.getMetadata(),
       ns.libraryCache,
-    );
+    ), button);
   });
 
   container.append(button);
@@ -82,17 +84,14 @@ ns.EvaluateAccessibility = (params, metadata, libraries) => {
         (match) => {
           const evaluation = evaluateField(match, params);
           if (!H5P.isEmpty(evaluation)) {
-            libraryResult.push({
-              field: match.label ?? match.name,
-              results: evaluation,
-            });
+            libraryResult.push(evaluation);
           }
         },
       );
 
       if (!H5P.isEmpty(libraryResult)) {
         results.push({
-          content: library.title ?? library.name,
+          contentTitle: library.title ?? library.name, // TODO: use the content title from the metadata (probably need to propogate it from evaluateField)
           results: libraryResult,
         });
       }
@@ -103,6 +102,53 @@ ns.EvaluateAccessibility = (params, metadata, libraries) => {
 
   return results;
 };
+
+/**
+ * Render the list of results
+ * 
+ * @param {Array} results A list of identified accessibility gaps
+ * @param {HTMLElement} sibling The element to append the list after
+ */
+const showResultList = (results, sibling) => { // TODO: Implement designer-made UI
+  // TODO: is already shown, just update the info
+  const wrapper = document.createElement('div');
+  wrapper.classList.add('h5p-editor-accessibility-results');
+  const title = document.createElement('span');
+  title.classList.add('h5peditor-label');
+  wrapper.append(title);
+  
+  if(H5P.isEmpty(results)) {
+    title.innerText = 'No accessibility problems detected'; // TODO: don't hardcode
+  }
+  else {
+    title.innerText = 'Accessibility concerns:'; // TODO: don't hardcode
+    
+    const list = document.createElement('ul');
+    results.forEach((content) => {
+      const contentTitle = document.createElement('li');
+      contentTitle.innerText = content.contentTitle;
+      const contentList = document.createElement('ul');
+      content.results.forEach((semanticProblem) => {
+        semanticProblem.forEach((paramProblem) => { // TODO: update text based on param problems of same semantic
+          const problemElement = document.createElement('li');
+          const problemText = document.createElement('span');
+          // TODO: Make human readable
+          problemText.innerHTML = `(${paramProblem.importance}) <b>${paramProblem.field}:</b> Should be ${paramProblem.accessibleWhen}`;
+
+          problemElement.append(problemText);
+          contentList.append(problemElement);
+        })
+      });
+
+      contentTitle.append(contentList);
+      list.append(contentTitle);
+    });
+
+    wrapper.append(list);
+  }
+
+  sibling.after(wrapper);
+}
 
 /**
  * Evaluate the accessibility of a given field
@@ -116,9 +162,8 @@ const evaluateField = (semantics, params) => {
 
   findAllOccurences(
     params,
-    (potentialMatch) => potentialMatch[semantics.name],
+    (potentialMatch) => Object.hasOwn(potentialMatch, semantics.name),
     (match) => {
-      console.log('match', match); // TODO: remove
       const accessibility = semantics.accessibility;
 
       if (accessibility) {
