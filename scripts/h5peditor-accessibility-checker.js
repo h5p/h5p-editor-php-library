@@ -8,6 +8,8 @@ const FIELD_CONDITION = Object.freeze({
   CHECKED: 'Checked', // The checkbox is checked
   NOT_CHECKED: 'NotChecked', // The checkbox is not checked
   NOT_EMPTY: 'NotEmpty', // Some input
+  MINIMUM_ONE: 'MinimumOne', // At least one in the list. Optional second part with which
+  // type of child to have at least one of. E.g. "MinimumOne, captions"
 });
 
 /**
@@ -212,6 +214,8 @@ const meetsCondition = (value, condition) => {
       return value === false;
     case FIELD_CONDITION.NOT_EMPTY: // TODO: Does not currently work. Params not updated/added if empty...
       return !H5P.isEmpty(value);
+    case FIELD_CONDITION.MINIMUM_ONE: // TODO: Does not currently work. Params not updated/added if empty...
+      return !H5P.isEmpty(value);
     default:
       return true;
   }
@@ -263,7 +267,7 @@ const readableProblem = (problem) => {
       condition = 'Should not be empty';
       break;
   }
-  
+
   const text = document.createElement('span');
   text.innerHTML = `(${problem.importance}) <b>${problem.field}:</b> ${condition}`;
 
