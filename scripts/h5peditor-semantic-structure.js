@@ -142,7 +142,7 @@ H5PEditor.SemanticStructure = (function ($) {
 
       if (!validWidgets.length) {
         // There are no valid widgets, add default
-        validWidgets.push(self.default);
+        validWidgets.push(defaultWidget);
       }
 
       return validWidgets;

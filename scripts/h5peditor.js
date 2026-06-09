@@ -451,7 +451,7 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
 
     // TODO: Remove later, this is here for debugging purposes.
     if (ns.widgets[widget] === undefined) {
-      $wrapper.append('<div>[field:' + field.type + ':' + widget + ':' + field.name + ']</div>');
+      $wrapper.append?.('<div>[field:' + field.type + ':' + widget + ':' + field.name + ']</div>');
       continue;
     }
 
@@ -519,7 +519,7 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
 
   // Initialize description tooltips for any info-icon buttons that were just
   // appended by the widgets processed in this chunk.
-  $wrapper.find('.h5peditor-field-description-icon[data-description]').each(function () {
+  $wrapper.find?.('.h5peditor-field-description-icon[data-description]').each(function () {
     ns.initDescriptionTooltip(this);
   });
 };
