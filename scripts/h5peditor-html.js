@@ -464,10 +464,17 @@ ns.Html.prototype.appendTo = function ($wrapper) {
         }
 
         that.ckeditor = editor;
-        const editable = editor.ui.view.editable;
-        editorElement = editable.element;
         editor.ui.view.element.style.maxWidth = that.inputWidth + 'px';
-        editorElement.style.maxHeight = getEditorHeight();
+
+        // Set height dynamically based on iframe height,
+        // needs to use the change function since CKE overrides style settings
+        editor.editing.view.change((writer) => {
+          writer.setStyle(
+              "max-height",
+              getEditorHeight(),
+              editor.editing.view.document.getRoot()
+          );
+        });
 
         // Readjust toolbar's grouped item dropdown panel,
         // since it can overflow the parent iframe element by using default positioning
@@ -494,10 +501,6 @@ ns.Html.prototype.appendTo = function ($wrapper) {
             converterPriority: 'high'
           });
         }
-
-        editor.ui.on('update', () => {
-          editorElement.style.maxHeight = getEditorHeight();
-        });
 
         editor.editing.view.focus();
 

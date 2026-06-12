@@ -30,22 +30,22 @@
     "@ckeditor/ckeditor5-remove-format": "43.3.0",
     "@ckeditor/ckeditor5-select-all": "43.3.0",
     "@ckeditor/ckeditor5-typing": "43.3.0",
-    "@h5p/ckeditor5-table": "github:h5p/h5p-ckeditor-table#0.0.13"
+    "@h5p/ckeditor5-table": "github:h5p/h5p-ckeditor-table#0.0.14"
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-core": "43.3.0",
     "@ckeditor/ckeditor5-dev-translations": "^32.1.2",
-    "@ckeditor/ckeditor5-dev-utils": "^32.1.2",
+    "@ckeditor/ckeditor5-dev-utils": "^55.6.1",
     "@ckeditor/ckeditor5-theme-lark": "43.3.0",
     "css-loader": "^5.2.7",
-    "postcss": "^8.4.29",
+    "postcss": "^8.5.15",
     "postcss-loader": "^4.3.0",
     "raw-loader": "^4.0.2",
     "style-loader": "^2.0.0",
-    "terser-webpack-plugin": "^4.2.3",
+    "terser-webpack-plugin": "^5.6.0",
     "ts-loader": "^9.4.4",
     "typescript": "5.0.4",
-    "webpack": "^5.95.0",
+    "webpack": "^5.105.2",
     "webpack-cli": "^4.10.0"
   },
   "scripts": {

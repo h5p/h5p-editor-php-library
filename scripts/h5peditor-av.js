@@ -319,7 +319,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     var qualityName = (file.metadata && file.metadata.qualityName) ? file.metadata.qualityName : defaultQualityName;
 
     // Check if source is provider (Vimeo, YouTube, Panopto)
-    const isProvider = file.path && C.findProvider(file.path);
+    const isProvider = (file.path && C.findProvider(file.path)) ?? false;
 
     // Only allow single source if YouTube
     if (isProvider) {
@@ -676,7 +676,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     },
     {
       name: 'Panopto',
-      regexp: /^[^\/]+:\/\/([^\/]*panopto\.[^\/]+)\/Panopto\/.+\?id=(.+)$/i,
+      regexp: /^[^\/]+:\/\/([^\/]+)\/Panopto\/.+\?id=(.+)$/i,
       aspectRatio: '16:9',
     },
     {
