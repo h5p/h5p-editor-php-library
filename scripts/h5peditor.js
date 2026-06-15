@@ -981,7 +981,7 @@ ns.getDescriptionId = function (id) {
  * @returns {boolean}
  */
 ns.shouldShowDescriptionAsTooltip = function (field) {
-  return field.description !== undefined && field.showDescriptionAsTooltip !== false;
+  return field.description && field.showDescriptionAsTooltip !== false;
 };
 
 /**
