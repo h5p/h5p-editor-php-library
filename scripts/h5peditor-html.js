@@ -1,4 +1,4 @@
-/* global ns CKEDITOR */
+/* global ns */
 /**
  * Adds a html text field to the form.
  *
@@ -417,11 +417,6 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     // Remove placeholder
     that.$placeholder = that.$item.find('.h5peditor-ckeditor-placeholder').detach();
 
-    if (ns.Html.first) {
-      ClassicEditor.basePath = ns.basePath + '/ckeditor/';
-      ns.Html.first = false;
-    }
-
     if (ns.Html.current === that) {
       return;
     }
@@ -431,7 +426,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     that.inputWidth = that.$input[0].getBoundingClientRect().width;
     ns.Html.current = that;
 
-    ClassicEditor
+    CKEditor
       .create(this, that.ckEditorConfig)
       .then(editor => {
         const getEditorHeight = () => {
@@ -527,15 +522,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
       .catch(error => {
         throw new Error('Error loading CKEditor: ' + error);
       });
-    });
-
-  // Always preload the first CKEditor field to avoid focus problems when the
-  // editor is opened inside an iframe and focus has to be set by a human made
-  // event (Safari).
-  // if (this.$item.is(':visible') && !ns.Html.firstLoad) {
-  //   handleFocus();
-  //   ns.Html.firstLoad = true;
-  // }
+  });
 };
 
 /**

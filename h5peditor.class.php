@@ -48,7 +48,7 @@ class H5peditor {
     'scripts/h5peditor-metadata-author-widget.js',
     'scripts/h5peditor-metadata-changelog-widget.js',
     'scripts/h5peditor-pre-save.js',
-    'ckeditor/ckeditor.js',
+    'libs/ckeditor.js',
   );
   private $h5p, $storage;
   public $ajax, $ajaxInterface, $content;

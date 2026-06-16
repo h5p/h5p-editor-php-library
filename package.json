@@ -9,6 +9,10 @@
   "keywords": [],
   "author": "",
   "license": "SEE LICENSE IN README.md",
+  "dependencies": {
+    "@h5p/ckeditor5-table": "github:h5p/h5p-ckeditor-table#0.0.14",
+    "ckeditor5": "48.1.0"
+  },
   "devDependencies": {
     "copy-webpack-plugin": "^14.0.0",
     "css-loader": "^6.10.0",
