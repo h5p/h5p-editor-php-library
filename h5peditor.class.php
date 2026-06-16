@@ -9,6 +9,7 @@ class H5peditor {
   );
 
   public static $styles = array(
+    'libs/ckeditor.css',  
     'libs/cropper.css',
     'styles/css/h5p-hub-client.css',
     'styles/css/fonts.css',
@@ -16,6 +17,7 @@ class H5peditor {
     'styles/css/libs/zebra_datepicker.min.css'
   );
   public static $scripts = array(
+    'libs/ckeditor.js',
     'scripts/h5p-hub-client.js',
     'scripts/h5peditor.js',
     'scripts/h5peditor-semantic-structure.js',
@@ -48,7 +50,6 @@ class H5peditor {
     'scripts/h5peditor-metadata-author-widget.js',
     'scripts/h5peditor-metadata-changelog-widget.js',
     'scripts/h5peditor-pre-save.js',
-    'libs/ckeditor.js',
   );
   private $h5p, $storage;
   public $ajax, $ajaxInterface, $content;

@@ -2,7 +2,7 @@ const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
-module.exports = {
+const config = {
   output: {
     path: path.resolve(__dirname, "styles/css")
   },
@@ -59,3 +59,36 @@ module.exports = {
     })
   ]
 };
+
+const ckeditorConfig = {
+  mode: "production",
+  entry: {
+    ckeditor: path.resolve(__dirname, "scripts/h5peditor-ckeditor-init.js")
+  },
+  output: {
+    path: path.resolve(__dirname, "libs"),
+    filename: "ckeditor.js"
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader']
+      },
+      {
+        test: /\.(woff(2)?|ttf|eot|svg)$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'ckeditor-assets/[name][ext]'
+        }
+      }
+    ]
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: "ckeditor.css"
+    })
+  ]
+};
+
+module.exports = [config, ckeditorConfig];

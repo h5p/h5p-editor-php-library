@@ -1,4 +1,4 @@
-/* global ns */
+/* global ns CKEditor*/
 /**
  * Adds a html text field to the form.
  *
