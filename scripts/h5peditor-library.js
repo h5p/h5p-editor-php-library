@@ -103,17 +103,10 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   const id = ns.getNextFieldId(this.field);
 
   if (this.field.label !== 0 && this.field.label !== undefined) {
-    html += '<div class="h5p-editor-flex-wrapper">' +
-        '<label class="h5peditor-label-wrapper" for="' + id + '">' +
-          '<span class="h5peditor-label' +
-            (this.field.optional ? '' : ' h5peditor-required') + '">' +
-              this.field.label +
-          '</span>' +
-        '</label>' +
-      '</div>';
+    html += '<div class="h5p-editor-flex-wrapper">' 
+         + ns.createFieldMarkup(this.field, '', id) +
+         '</div>';
   }
-
-  html += ns.createDescription(this.field.description, id);
 
   html += '<select id="' + id + '"';
   if (this.field.description !== undefined) {
