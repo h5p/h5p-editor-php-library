@@ -599,7 +599,7 @@ ns.hideAllButOne = function (element, win) {
  *
  * @member {Object} H5PEditor.language
  */
-ns.language = {};
+ns.language = ns.language || {};
 
 /**
  * Translate text strings.
