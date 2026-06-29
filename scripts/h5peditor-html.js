@@ -418,7 +418,7 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     that.$placeholder = that.$item.find('.h5peditor-ckeditor-placeholder').detach();
 
     if (ns.Html.first) {
-      ClassicEditor.basePath = ns.basePath + '/ckeditor/';
+      ClassicEditor.basePath = ns.basePath + 'ckeditor/';
       ns.Html.first = false;
     }
 
