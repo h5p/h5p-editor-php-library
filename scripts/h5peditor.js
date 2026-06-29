@@ -276,11 +276,13 @@ ns.updateCommonFieldsDefault = function (semantics, translation, parentIsCommon)
       semantics[i].default = translation[i].default;
     }
     if (semantics[i].fields !== undefined && semantics[i].fields.length &&
-        translation[i].fields !== undefined && translation[i].fields.length) {
+        translation[i] !== undefined && translation[i].fields !== undefined &&
+        translation[i].fields.length) {
       // Look into sub fields
       ns.updateCommonFieldsDefault(semantics[i].fields, translation[i].fields, isCommon);
     }
-    if (semantics[i].field !== undefined && translation[i].field !== undefined ) {
+    if (semantics[i].field !== undefined && translation[i] !== undefined &&
+        translation[i].field !== undefined ) {
       // Look into sub field
       ns.updateCommonFieldsDefault([semantics[i].field], [translation[i].field], isCommon);
     }
