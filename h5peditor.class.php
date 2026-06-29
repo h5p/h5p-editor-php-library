@@ -1,5 +1,7 @@
 <?php
 
+namespace Moodle;
+
 class H5peditor {
 
   private static $hasWYSIWYGEditor = array(
