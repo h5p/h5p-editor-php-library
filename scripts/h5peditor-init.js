@@ -2,7 +2,11 @@
   H5PEditor.init = function ($form, $type, $upload, $create, $editor, $library, $params, $maxScore, $title, cancelSubmitCallback) {
     H5PEditor.$ = H5P.jQuery;
     H5PEditor.basePath = H5PIntegration.editor.libraryUrl;
-    H5PEditor.fileIcon = H5PIntegration.editor.fileIcon;
+    H5PEditor.fileIcon = H5PIntegration.editor.fileIcon ?? {
+      path: `${H5PEditor.basePath}/images/binary-file.png`,
+      width: 50,
+      height:50
+    };
     H5PEditor.ajaxPath = H5PIntegration.editor.ajaxPath;
     H5PEditor.filesPath = H5PIntegration.editor.filesPath;
     H5PEditor.apiVersion = H5PIntegration.editor.apiVersion;
