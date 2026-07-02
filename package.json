@@ -2,15 +2,32 @@
   "name": "h5p-editor-php-library",
   "version": "1.0.0",
   "description": "A general library that is supposed to be used in most PHP implementations of H5P.",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./presave": "./src/presave.js"
+  },
+  "sideEffects": false,
+  "files": [
+    "src/",
+    "scripts/h5peditor-pre-save.js"
+  ],
   "scripts": {
     "build": "webpack && rm styles/css/index.js",
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "test": "npm run test:unit",
+    "test:unit": "mocha",
+    "test:unit:watch": "mocha --watch",
+    "test:coverage": "c8 mocha"
   },
   "keywords": [],
   "author": "",
   "license": "SEE LICENSE IN README.md",
   "devDependencies": {
+    "c8": "^10.1.2",
+    "chai": "^4.4.1",
     "copy-webpack-plugin": "^14.0.0",
+    "mocha": "^10.4.0",
     "css-loader": "^6.10.0",
     "h5p-image-cropper": "github:h5p/h5p-image-cropper",
     "mini-css-extract-plugin": "^2.8.1",
