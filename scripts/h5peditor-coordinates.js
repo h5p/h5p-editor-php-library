@@ -113,6 +113,7 @@ ns.Coordinates.prototype.appendTo = function ($wrapper) {
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$inputs = this.$item.find('input');
   this.$errors = this.$item.children('.h5p-errors');
+  ns.initDescriptionTooltips(this.$item);
 
   this.$inputs.change(function () {
     // Validate

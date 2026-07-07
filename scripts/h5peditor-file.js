@@ -115,6 +115,7 @@ ns.File.prototype.appendTo = function ($wrapper) {
   var html = ns.createFieldMarkup(this.field, fileHtml, this.id);
 
   var $container = ns.$(html).appendTo($wrapper);
+  ns.initDescriptionTooltips($container);
   this.$copyrightButton = $container.find('.h5p-copyright-button');
   this.$file = $container.find('.file');
   this.$errors = $container.find('.h5p-errors');

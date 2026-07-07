@@ -142,7 +142,7 @@ H5PEditor.SemanticStructure = (function ($) {
 
       if (!validWidgets.length) {
         // There are no valid widgets, add default
-        validWidgets.push(self.default);
+        validWidgets.push(defaultWidget);
       }
 
       return validWidgets;
@@ -202,6 +202,7 @@ H5PEditor.SemanticStructure = (function ($) {
       changeWidget(widgets[0].name);
 
       $wrapper.appendTo($container);
+      H5PEditor.initDescriptionTooltips($wrapper);
     };
 
     /**

@@ -100,6 +100,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
 
   var $container = ns.$(html).appendTo($wrapper);
   this.$item = $container;
+  ns.initDescriptionTooltips(this.$item);
   this.$editImage = $container.find('.h5p-editing-image-button');
   this.$copyrightButton = $container.find('.h5p-copyright-button');
   this.$file = $container.find('.file');

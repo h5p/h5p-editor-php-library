@@ -161,6 +161,7 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   html += '</div>';
 
   this.$myField = ns.$(html).appendTo($wrapper);
+  ns.initDescriptionTooltips(this.$myField);
   this.$select = this.$myField.children('select');
   this.$label = this.$myField.find('.h5peditor-label');
   this.$clearfix = this.$myField.children('.h5peditor-clearfix');
