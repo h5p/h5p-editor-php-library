@@ -31,7 +31,6 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
       width: '100%',
       height: '3em',
       border: 'none',
-      zIndex: 101,
       top: 0,
       left: 0
     },
