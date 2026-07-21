@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-core": "43.3.0",
-    "@ckeditor/ckeditor5-dev-translations": "^32.1.2",
+    "@ckeditor/ckeditor5-dev-translations": "^57.4.0",
     "@ckeditor/ckeditor5-dev-utils": "^55.6.1",
     "@ckeditor/ckeditor5-theme-lark": "43.3.0",
     "css-loader": "^5.2.7",
