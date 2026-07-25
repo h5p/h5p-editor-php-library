@@ -332,4 +332,5 @@ H5PEditor.language.core = {
   a11yTitleShowLabel: 'Show label for AT',
   a11yTitleHideLabel: 'Hide label for AT',
   reuseSuccess: ':title wurde Erfolgreich vom H5P Hub importiert.',
+  descriptionIconAriaLabel: 'More information about this field',
 };

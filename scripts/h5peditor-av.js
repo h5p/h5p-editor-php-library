@@ -120,6 +120,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     var html = H5PEditor.createFieldMarkup(this.field, imageHtml, id);
     var $container = $(html).appendTo($wrapper);
+    H5PEditor.initDescriptionTooltips($container);
 
     this.$files = $container.children('.file');
     this.$add = $container.children('.h5p-add-file').click(function () {

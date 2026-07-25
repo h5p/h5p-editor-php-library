@@ -27,6 +27,7 @@ ns.Text.prototype.appendTo = function ($wrapper) {
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$input = this.$item.find('input');
   this.$errors = this.$item.children('.h5p-errors');
+  ns.initDescriptionTooltips(this.$item);
 
   this.$input.change(function () {
     // Validate
