@@ -189,7 +189,7 @@ class H5peditorFile {
    * @return string
    */
   public function getType() {
-    return $this->field->type;
+    return in_array($this->field->type, ['image', 'audio', 'video']) ? $this->field->type : 'file';
   }
 
   /**
@@ -201,7 +201,7 @@ class H5peditorFile {
     static $name;
 
     if (empty($name)) {
-      $name = uniqid($this->field->name . '-');
+      $name = uniqid(strtolower(preg_replace('/[^a-z0-9]/i', '', $this->field->name)) . '-');
 
       $matches = array();
       preg_match('/([a-z0-9]{1,})$/i', $_FILES['file']['name'], $matches);
