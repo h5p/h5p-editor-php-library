@@ -155,12 +155,12 @@ a {
   textarea,
   .h5peditor-text,
   .ckeditor {
-    box-shadow: $form-input-box-shadow;
     box-sizing: border-box;
     margin: 0;
     padding: $min-padding;
     min-height: 40px;
     border: 1px solid $form-border-color;
+    border-radius: 6px;
     background: $form-input-color;
     outline: none;
     font-size: 16px;
@@ -341,7 +341,6 @@ a {
     border: 1px solid $form-border-color;
     background: $form-input-color url('../../images/down.png') no-repeat;
     background-position: calc(100% - 10px);
-    box-shadow: $form-input-box-shadow;
     -moz-appearance: none;
     -webkit-appearance: none;
 
