@@ -302,5 +302,4 @@ H5PEditor.language.core = {
   filterErrorMessage: 'Qualcosa è andato storto. Si prega di ricaricare la pagina.',
   in: 'in',
   navigateToParent: 'Vai al parent',
-  descriptionIconAriaLabel: 'More information about this field',
 };

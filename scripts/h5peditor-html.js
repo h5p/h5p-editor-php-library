@@ -408,7 +408,6 @@ ns.Html.prototype.appendTo = function ($wrapper) {
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$input = this.$item.children('.ckeditor');
   this.$errors = this.$item.children('.h5p-errors');
-  ns.initDescriptionTooltips(this.$item);
 
   ns.bindImportantDescriptionEvents(this, this.field.name, this.parent);
 

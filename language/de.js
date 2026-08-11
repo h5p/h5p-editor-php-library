@@ -311,5 +311,4 @@ H5PEditor.language.core = {
   filterErrorMessage: 'Etwas ist schiefgegangen. Biete lade die Seite neu.',
   in: 'in',
   navigateToParent: 'Zum übergeordneten Objekt navigieren',
-  descriptionIconAriaLabel: 'More information about this field',
 };
