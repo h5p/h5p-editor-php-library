@@ -307,5 +307,4 @@ H5PEditor.language.core = {
   navigateToParent: 'Navigate to parent',
   a11yTitleShowLabel: 'Show label for AT',
   a11yTitleHideLabel: 'Hide label for AT',
-  descriptionIconAriaLabel: 'More information about this field',
 };

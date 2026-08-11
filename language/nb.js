@@ -305,5 +305,4 @@ H5PEditor.language.core = {
   a11yTitleShowLabel: 'Vis etikett for tilgjengelighet',
   a11yTitleHideLabel: 'Skjul etikett for tilgjengelighet',
   reuseSuccess: ':title ble vellykket importert fra H5P Hub.',
-  descriptionIconAriaLabel: 'More information about this field',
 };

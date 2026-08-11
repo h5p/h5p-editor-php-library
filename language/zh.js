@@ -292,5 +292,4 @@ H5PEditor.language.core = {
   a11yTitleShowLabel: '显示 AT 的标签',
   a11yTitleHideLabel: '隐藏 AT 的标签',
   reuseSuccess: ':title 已成功从 H5P Hub 导入。',
-  descriptionIconAriaLabel: 'More information about this field',
 };

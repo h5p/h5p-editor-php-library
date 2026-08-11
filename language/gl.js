@@ -295,5 +295,4 @@ H5PEditor.language.core = {
   a11yTitleShowLabel: 'Amosar etiqueta para AT',
   a11yTitleHideLabel: 'Agochar etiqueta para AT',
   reuseSuccess: 'Importouse :title correctamente do hub H5P.',
-  descriptionIconAriaLabel: 'More information about this field',
 };

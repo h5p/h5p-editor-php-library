@@ -333,5 +333,4 @@ H5PEditor.language.core = {
     a11yTitleShowLabel: 'Prikaži oznaku za AT',
     a11yTitleHideLabel: 'Sakrij oznaku za AT',
     reuseSuccess: ':title je uspješno uvezeno s H5P Huba.',
-    descriptionIconAriaLabel: 'More information about this field',
 }
