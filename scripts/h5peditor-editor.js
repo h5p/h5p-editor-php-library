@@ -71,6 +71,7 @@ ns.Editor = function (library, defaultParams, replace, iframeLoaded) {
     iframe.contentDocument.write(
       '<!doctype html><html lang="' + language + '">' +
       '<head>' +
+      '<script>H5PIntegration = window.parent.H5PIntegration; var H5P = H5P || {}; H5P.externalEmbed = false;</script>' +
       ns.wrap('<link rel="stylesheet" href="', ns.assets.css, '">') +
       ns.wrap('<script src="', ns.assets.js, '"></script>') +
       '</head><body>' +
