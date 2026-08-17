@@ -99,7 +99,7 @@ ns.Library.prototype.updateCopyPasteButtons = function () {
  */
 ns.Library.prototype.appendTo = function ($wrapper) {
   var that = this;
-  var html = '<div class="field ' + this.field.type + '">';
+  var html = '<div class="field ' + this.field.type + ' field-name-' + this.field.name + '">';
   const id = ns.getNextFieldId(this.field);
 
   if (this.field.label !== 0 && this.field.label !== undefined) {
