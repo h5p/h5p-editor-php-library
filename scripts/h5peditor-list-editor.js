@@ -18,6 +18,18 @@ H5PEditor.ListEditor = (function ($) {
       'class': 'h5p-ul'
     });
 
+    list.on('listIsAtMinimum', (event) => {
+      // Button DOM may not have been added
+      window.requestAnimationFrame(() => {
+        const $removeButtons = $list.find('.h5p-li .list-item-title-bar .h5peditor-button.remove');
+        $removeButtons.toggle(!event.data);
+      });
+    });
+
+    list.on('listIsAtMaximum', (event) => {
+      $button.toggle(!event.data);
+    });
+
     /**
      * Add group collapse functionality to list editor if items are groups.
      */
@@ -712,7 +724,7 @@ H5PEditor.ListEditor = (function ($) {
         if (event.data !== $item.index()) {
           return;
         }
-        
+
         $item.remove();
 
         if (!(list.getValue() ?? []).length) {
