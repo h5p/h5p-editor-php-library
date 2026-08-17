@@ -118,7 +118,7 @@ H5PEditor.widgets.select = H5PEditor.Select = (function (E) {
       $errors.remove();
     }
 
-    return value;
+    return value ?? value === undefined;
   };
 
   /**
