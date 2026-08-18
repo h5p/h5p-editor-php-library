@@ -255,7 +255,7 @@ H5PEditor.language.core = {
   exitFullscreenButtonLabel: 'Vollbild beenden',
   a11yTitleShowLabel: 'Blende Titel für Screenreader ein',
   a11yTitleHideLabel: 'Blende Titel für Screenreader aus',
-  reuseSuccess: ':title wurde Erfolgreich vom H5P Hub importiert.',
+  reuseSuccess: ':title wurde erfolgreich vom H5P Hub importiert.',
   noContentHeader: 'Kein passender Inhalt?',
   noContentSuggestion: 'Erstelle ihn selber!',
   tutorials: 'Tutorials',
@@ -329,8 +329,5 @@ H5PEditor.language.core = {
   filterErrorMessage: 'Etwas ist schiefgegangen. Biete lade die Seite neu.',
   in: 'in',
   navigateToParent: 'Zum übergeordneten Objekt navigieren',
-  a11yTitleShowLabel: 'Show label for AT',
-  a11yTitleHideLabel: 'Hide label for AT',
-  reuseSuccess: ':title wurde Erfolgreich vom H5P Hub importiert.',
   descriptionIconAriaLabel: 'More information about this field',
 };
