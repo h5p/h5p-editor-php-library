@@ -228,8 +228,7 @@
   textarea {
     border: 1px solid #b8c0cd;
     font-size: 0.833em;
-    border-radius: 0.208em;
-    box-shadow: none;
+    border-radius: $form-border-radius;
     font-family: $font-family;
   }
 

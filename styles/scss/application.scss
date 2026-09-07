@@ -154,12 +154,12 @@ a {
   textarea,
   .h5peditor-text,
   .ckeditor {
-    box-shadow: $form-input-box-shadow;
     box-sizing: border-box;
     margin: 0;
     padding: $min-padding;
     min-height: 40px;
     border: 1px solid $form-border-color;
+    border-radius: $form-border-radius;
     background: $form-input-color;
     outline: none;
     font-size: 16px;
@@ -229,6 +229,8 @@ a {
 
   // Inside ckeditor, needed for changes to default
   .ck-content figure.table {
+    box-shadow: none !important;
+    border-radius: $form-border-radius !important;
     float: left;
 
     table {
@@ -273,6 +275,10 @@ a {
 
   // The actual ck editor
   .ck {
+    .ck-editor__editable {
+        border-radius: 0 0 $form-border-radius $form-border-radius !important;
+        box-shadow: none !important;
+      }
     a {
       text-decoration: underline;
     }
@@ -338,9 +344,9 @@ a {
     font-family: $font-family;
     font-size: 16px;
     border: 1px solid $form-border-color;
+    border-radius: $form-border-radius;
     background: $form-input-color url('../../images/down.png') no-repeat;
     background-position: calc(100% - 10px);
-    box-shadow: $form-input-box-shadow;
     -moz-appearance: none;
     -webkit-appearance: none;
 
