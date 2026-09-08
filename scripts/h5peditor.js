@@ -1153,7 +1153,6 @@ ns.createHelpMenuButton = (helpMenuId = 'h5peditor-help-menu') => `
  * @param {HTMLElement} button The help menu button.
  * @param {HTMLElement} menu The help menu.
  */
-
 ns.attachMenuBehavior = (button, menu) => {
   const getMenuItems = () => [...menu.querySelectorAll('[role="menuitem"]')];
 
@@ -1237,7 +1236,7 @@ ns.attachMenuBehavior = (button, menu) => {
       closeHelpMenu(false);
     }
   };
-  ns.$(document).on('click', closeOnDocumentClick);
+  document.addEventListener('click', closeOnDocumentClick);
 };
 
 /**

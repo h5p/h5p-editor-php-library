@@ -47,29 +47,29 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
    * @private
    * @param {object} library
    */
-  const librarySelectHandler = function (library) {
-    that.currentLibrary = library.uberName;
-    that.loadSemantics(library.uberName, that.selector.getParams(), that.selector.getMetadata());
+  const librarySelectHandler = (library) => {
+    this.currentLibrary = library.uberName;
+    this.loadSemantics(library.uberName, this.selector.getParams(), this.selector.getMetadata());
 
     if (library.tutorialUrl) {
-      that.helpMenu.querySelector('.h5p-tutorial-url').setAttribute('href', library.tutorialUrl);
+      this.helpMenu.querySelector('.h5p-tutorial-url').setAttribute('href', library.tutorialUrl);
     }
     else {
-      that.helpMenu.querySelector('.h5p-tutorial-item').remove();
+      this.helpMenu.querySelector('.h5p-tutorial-item').remove();
     }
 
     if (library.exampleUrl) {
-      that.helpMenu.querySelector('.h5p-example-url').setAttribute('href', library.exampleUrl);
+      this.helpMenu.querySelector('.h5p-example-url').setAttribute('href', library.exampleUrl);
     }
     else {
-      that.helpMenu.querySelector('.h5p-example-item').remove();
+      this.helpMenu.querySelector('.h5p-example-item').remove();
     }
 
     if (!library.tutorialUrl && !library.exampleUrl) {
-      that.helpContainer.remove();
+      this.helpContainer.remove();
     }
     else {
-      ns.attachMenuBehavior(that.helpButton, that.helpMenu);
+      ns.attachMenuBehavior(this.helpButton, this.helpMenu);
     }
   };
 
@@ -140,7 +140,6 @@ ns.LibrarySelector.prototype.setLibrary = function (library) {
  * @returns {undefined}
  */
 ns.LibrarySelector.prototype.appendTo = function ($element) {
-  const self = this;
   this.$parent = $element;
   this.$selector.appendTo($element);
   const wrapper = document.createElement('div');
@@ -159,9 +158,9 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
 
     this.copyButton.addEventListener('click', () => {
       H5P.clipboardify({
-        library: self.getCurrentLibrary(),
-        params: self.getParams(),
-        metadata: self.getMetadata()
+        library: this.getCurrentLibrary(),
+        params: this.getParams(),
+        metadata: this.getMetadata(),
       });
 
       ns.attachToastTo(
@@ -179,13 +178,13 @@ ns.LibrarySelector.prototype.appendTo = function ($element) {
 
     this.pasteButton.addEventListener(
       'click',
-      self.pasteContent.bind(this),
+      this.pasteContent.bind(this),
     );
 
-    self.updateCopyPasteButtons();
+    this.updateCopyPasteButtons();
   }
-  self.on('editorloaded', () => {
-    wrapper.removeAttribute('hidden');
+  this.on('editorloaded', () => {
+    wrapper.hidden = false;
   });
 };
 
@@ -219,12 +218,11 @@ ns.LibrarySelector.prototype.updateCopyPasteButtons = function () {
  * @param {string} library
  */
 ns.LibrarySelector.prototype.pasteContent = function () {
-  var self = this;
-  var clipboard = H5P.getClipboard();
+  const clipboard = H5P.getClipboard();
 
-  ns.confirmReplace(self.getCurrentLibrary(), self.$parent.offset().top, function () {
-    self.selector.resetSelection(clipboard.generic.library, clipboard.generic.params, clipboard.generic.metadata, false);
-    self.setLibrary();
+  ns.confirmReplace(this.getCurrentLibrary(), this.$parent.offset().top, () => {
+    this.selector.resetSelection(clipboard.generic.library, clipboard.generic.params, clipboard.generic.metadata, false);
+    this.setLibrary();
   });
 };
 
