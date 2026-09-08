@@ -1122,15 +1122,133 @@ ns.bindImportantDescriptionEvents = function (widget, fieldName, parent) {
 };
 
 /**
+ * Generate markup for the help menu button.
+ *
+ * @param {string} [helpMenuId] Unique menu id.
+ * @returns {string} HTML
+ */
+ns.createHelpMenuButton = (helpMenuId = 'h5peditor-help-menu') => `
+  <div class="h5peditor-help">
+    <button class="h5peditor-help-button" type="button" aria-expanded="false" aria-haspopup="menu" aria-controls="${helpMenuId}">
+      ${ns.t('core', 'getHelp')}
+    </button>
+    <ul class="h5peditor-help-menu" id="${helpMenuId}" role="menu" hidden>
+      <li class="h5p-tutorial-item" role="none">
+        <a class="h5p-tutorial-url" role="menuitem" target="_blank">
+          ${ns.t('core', 'tutorial')}
+        </a>
+      </li>
+      <li class="h5p-example-item" role="none">
+        <a class="h5p-example-url" role="menuitem" target="_blank">
+          ${ns.t('core', 'example')}
+        </a>
+      </li>
+    </ul>
+  </div>
+`;
+
+/**
+ * Attach behavior to the help menu button and its menu.
+ *
+ * @param {HTMLElement} button The help menu button.
+ * @param {HTMLElement} menu The help menu.
+ */
+ns.attachMenuBehavior = (button, menu) => {
+  const getMenuItems = () => [...menu.querySelectorAll('[role="menuitem"]')];
+
+  const closeHelpMenu = (restoreFocus) => {
+    button.setAttribute('aria-expanded', 'false');
+    menu.hidden = true;
+
+    if (restoreFocus) {
+      button.focus();
+    }
+  };
+  const openHelpMenu = (focusLastItem) => {
+    button.setAttribute('aria-expanded', 'true');
+    menu.hidden = false;
+    const items = getMenuItems();
+    if (!items.length) {
+      return;
+    }
+    (focusLastItem ? items[items.length - 1] : items[0]).focus();
+  };
+
+  button.addEventListener('click', () => {
+    if (button.ariaExpanded === 'true') {
+      closeHelpMenu(true);
+    }
+    else {
+      openHelpMenu(false);
+    }
+  });
+
+  button.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      openHelpMenu(event.key === 'ArrowUp');
+    }
+  });
+
+  menu.addEventListener('keydown', (event) => {
+    const item = event.target.closest('[role="menuitem"]');
+    const items = getMenuItems();
+    const currentIndex = items.indexOf(item);
+    let nextIndex;
+
+    switch (event.key) {
+      case 'ArrowDown':
+        nextIndex = (currentIndex + 1) % items.length;
+        break;
+
+      case 'ArrowUp':
+        nextIndex = (currentIndex - 1 + items.length) % items.length;
+        break;
+
+      case 'Home':
+        nextIndex = 0;
+        break;
+
+      case 'End':
+        nextIndex = items.length - 1;
+        break;
+
+      case 'Escape':
+        event.preventDefault();
+        closeHelpMenu(true);
+        return;
+
+      case 'Tab':
+        closeHelpMenu(false);
+        return;
+      default:
+        break;
+    }
+
+    if (nextIndex !== undefined) {
+      event.preventDefault();
+      items[nextIndex].focus();
+    }
+  });
+
+  const closeOnDocumentClick = (event) => {
+    if (!button.contains(event.target) && !menu.contains(event.target)) {
+      closeHelpMenu(false);
+    }
+  };
+  document.addEventListener('click', closeOnDocumentClick);
+};
+
+/**
  * Generate markup for the copy and paste buttons.
  *
  * @returns {string} HTML
  */
 ns.createCopyPasteButtons = function () {
-  return '<div class="h5peditor-copypaste-wrap">' +
-           '<button class="h5peditor-copy-button disabled" title="' + H5PEditor.t('core', 'copyToClipboard') + '" disabled>' + ns.t('core', 'copyButton') + '</button>' +
-           '<button class="h5peditor-paste-button disabled" title="' + H5PEditor.t('core', 'pasteFromClipboard') + '" disabled>' + ns.t('core', 'pasteButton') + '</button>' +
-         '</div><div class="h5peditor-clearfix"></div>';
+  return `<div class="h5peditor-copypaste-wrap">
+           <button class="h5peditor-copy-button disabled" title="${H5PEditor.t('core', 'copyToClipboard')}" disabled>${ns.t('core', 'copyButton')}</button>
+           <button class="h5peditor-paste-button disabled" title="${H5PEditor.t('core', 'pasteFromClipboard')}" disabled>${ns.t('core', 'pasteButton')}</button>
+         </div>`;
 };
 
 /**
