@@ -37,7 +37,7 @@ ns.Html.prototype.inButtons = function (button) {
 
 ns.Html.prototype.getCKEditorConfig = function () {
   const config = {
-    plugins: ['Essentials', 'Paragraph'],
+    plugins: ['Essentials', 'Paragraph', 'NonBreakingSpace'],
     alignment: { options: ["left", "center", "right"] },
     toolbar: [],
   };
