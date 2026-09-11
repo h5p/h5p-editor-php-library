@@ -1,4 +1,5 @@
 H5PEditor.language.core = {
+  additionalInformation: 'Ytterligare information',
   missingTranslation: '[Saknar översättning :key]',
   loading: 'Laddar, vänta ...',
   selectLibrary: 'Välj det bibliotek som du vill använda för ditt innehåll.',
