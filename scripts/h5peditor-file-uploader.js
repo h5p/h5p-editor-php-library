@@ -44,8 +44,8 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
         }
         catch (err) {
           H5P.error(err);
-          // Add error data to event object
-          uploadComplete.error = H5PEditor.t('core', 'fileToLarge');
+          // A non-JSON response does not necessarily mean that the file is too large.
+          uploadComplete.error = H5PEditor.t('core', request.status === 413 ? 'fileToLarge' : 'unknownFileUploadError');
         }
 
         if (result !== undefined) {
