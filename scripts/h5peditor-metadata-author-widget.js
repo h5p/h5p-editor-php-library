@@ -126,12 +126,15 @@ H5PEditor.metadataAuthorWidget = function (semantics, params, $wrapper, parent) 
 
     const authorList = $('<ul></ul>');
     params.authors.forEach(function (author) {
+      const role = roleField.field.options.find(function (option) {
+        return option.value === author.role;
+      });
       // Name and role
       var listItem = $('<li>', {
         html: H5PEditor.htmlspecialchars(author.name),
         append: $('<span>', {
           'class': 'h5p-metadata-role',
-          html: author.role
+          text: role ? role.label : author.role
         })
       });
 

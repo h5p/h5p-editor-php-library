@@ -1,4 +1,5 @@
 H5PEditor.language.core = {
+  additionalInformation: '추가 정보',
   missingTranslation: '[변환 누락 :key]',
   loading: '로드하는 중, 잠시 기다리십시오...',
   selectLibrary: '콘텐츠를 위해 사용할 라이브러리를 선택하십시오.',

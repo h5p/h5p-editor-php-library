@@ -1,4 +1,5 @@
 H5PEditor.language.core = {
+  additionalInformation: 'Lisateave',
   missingTranslation: '[Puudub tõlge :key]',
   loading: 'Laadib, palun oota...',
   selectLibrary: 'Vali teek, mida soovid oma sisu jaoks kasutada.',
