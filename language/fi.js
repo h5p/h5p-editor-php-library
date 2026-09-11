@@ -1,4 +1,5 @@
 H5PEditor.language.core = {
+  additionalInformation: 'Lisätietoja',
   missingTranslation: '[Missing translation :key]',
   loading: 'Lataa, odota...',
   selectLibrary: 'Valitse haluamasi kirjasto.',
