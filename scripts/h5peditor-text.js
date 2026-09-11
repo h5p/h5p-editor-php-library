@@ -10,9 +10,13 @@
  */
 ns.Text = function (parent, field, params, setValue) {
   this.field = field;
+  // Kept for widgets that access the text-specific value property directly.
   this.value = params;
+  this.params = params;
   this.setValue = setValue;
-  this.changeCallbacks = [];
+  this.changes = [];
+  // Deprecated alias kept for existing widgets using the text-specific API.
+  this.changeCallbacks = this.changes;
 };
 
 /**
@@ -37,15 +41,17 @@ ns.Text.prototype.appendTo = function ($wrapper) {
       if (H5P.trim(value) === '') {
         // Avoid storing empty strings. (will be valid if field is optional)
         delete that.value;
+        delete that.params;
         that.setValue(that.field);
       }
       else {
         that.value = value;
+        that.params = value;
         that.setValue(that.field, ns.htmlspecialchars(value));
       }
 
-      for (var i = 0; i < that.changeCallbacks.length; i++) {
-        that.changeCallbacks[i](value);
+      for (var i = 0; i < that.changes.length; i++) {
+        that.changes[i](value);
       }
     }
   });
@@ -55,13 +61,13 @@ ns.Text.prototype.appendTo = function ($wrapper) {
  * Run callback when value changes.
  *
  * @param {function} callback
- * @returns {Number|@pro;length@this.changeCallbacks}
+ * @returns {Number|@pro;length@this.changes}
  */
 ns.Text.prototype.change = function (callback) {
-  this.changeCallbacks.push(callback);
+  this.changes.push(callback);
   callback();
 
-  return this.changeCallbacks.length - 1;
+  return this.changes.length - 1;
 };
 
 /**
