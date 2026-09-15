@@ -75,6 +75,13 @@ interface H5peditorStorage {
   public static function saveFileTemporarily($data, $move_file);
 
   /**
+   * Marks a file for cleanup at a later point.
+   * 
+   * @param string $path
+   */
+  public static function markFileForCleanupRaw($path);
+
+  /**
    * Marks a file for later cleanup, useful when files are not instantly cleaned
    * up. E.g. for files that are uploaded through the editor.
    *

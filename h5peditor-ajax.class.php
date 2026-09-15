@@ -222,8 +222,6 @@ class H5PEditorAjax {
    * @param integer $contentId The Local Content ID / vid. TODO Remove when JI-366 is fixed
    */
   private function processContent($contentId) {
-    global $wpdb;
-
     // Check if the downloaded package is valid
     if (!$this->isValidPackage()) {
       return; // Validation errors
@@ -242,9 +240,7 @@ class H5PEditorAjax {
 
     // Mark all files as temporary
     foreach ($files as $file) {
-      $wpdb->insert($wpdb->prefix . 'h5p_tmpfiles',
-        array('path' => $file, 'created_at' => time()),
-        array('%s', '%d'));
+      $this->storage->markFileForCleanupRaw($file);
     }
 
     H5PCore::ajaxSuccess(array(
