@@ -222,6 +222,8 @@ class H5PEditorAjax {
    * @param integer $contentId The Local Content ID / vid. TODO Remove when JI-366 is fixed
    */
   private function processContent($contentId) {
+    global $wpdb;
+
     // Check if the downloaded package is valid
     if (!$this->isValidPackage()) {
       return; // Validation errors
@@ -239,10 +241,11 @@ class H5PEditorAjax {
     $this->storage->removeTemporarilySavedFiles($this->core->h5pF->getUploadedH5pFolderPath());
 
     // Mark all files as temporary
-    // TODO: Uncomment once moveContentDirectory() is fixed. JI-366
-    /*foreach ($files as $file) {
-      $this->storage->markFileForCleanup($file, 0);
-    }*/
+    foreach ($files as $file) {
+      $wpdb->insert($wpdb->prefix . 'h5p_tmpfiles',
+        array('path' => $file, 'created_at' => time()),
+        array('%s', '%d'));
+    }
 
     H5PCore::ajaxSuccess(array(
       'h5p' => $this->core->mainJsonData,
