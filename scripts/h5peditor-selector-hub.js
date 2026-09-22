@@ -127,7 +127,7 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
           self.currentLibrary = result.data.library;
           self.currentParams = result.data.params;
           self.currentMetadata = result.data.metadata;
-          selectLibrary();
+          markAllFilesAsTemporary(libraryString);
         }
         catch (err) {
           H5P.error(err);
@@ -136,6 +136,143 @@ ns.SelectorHub = function (libraries, selectedLibrary, changeLibraryDialog) {
       request.open('POST', H5PEditor.getAjaxUrl('filter'), true);
       request.send(formData);
     };
+
+    /**
+     * Tag all files as temporary (this is necessary for them to be marked as permanent upon save)
+     * @private
+     */
+    const markAllFilesAsTemporary = function (libraryString) {
+      ns.loadLibrary(libraryString, function () {
+        processSemantics(ns.libraryCache[libraryString].semantics, self.currentParams, function () {
+          // Run select libraries on next tick to avoid breaking the
+          // ns.loadedCallbacks callback queue we are inside(ns.loadLibrary)
+          setTimeout(selectLibrary, 0)
+        });
+      });
+    };
+
+    /**
+     * Process semantics
+     *
+     * @private
+     * @param {Array} semantics
+     * @param {Object} params
+     * @param {function} done
+     */
+    const processSemantics = function (semantics, params, done) {
+      if (!semantics || !semantics.length) {
+        return done();
+      }
+
+      let numFinished = 0;
+      for (let i = 0; i < semantics.length; i++) {
+        if (params[semantics[i].name] !== undefined) {
+          processField(semantics[i], params[semantics[i].name], function () {
+            numFinished++;
+            if (numFinished === semantics.length) {
+              done();
+            }
+          });
+        }
+        else {
+          numFinished++;
+          if (numFinished === semantics.length) {
+            done();
+          }
+        }
+      }
+    };
+
+    /**
+     * Process a single field.
+     *
+     * @param {Object} field
+     * @param {*} params
+     * @param {function} done
+     */
+    const processField = function (field, params, done) {
+      let isDone = true;
+      switch (field.type) {
+        case 'file':
+        case 'image':
+          if (params.path !== undefined) {
+            processFile(params);
+
+            // Process original image
+            if (params.originalImage !== undefined && params.originalImage.path !== undefined) {
+              processFile(params.originalImage);
+            }
+          }
+          break;
+
+        case 'video':
+        case 'audio':
+          if (params[0] !== undefined) {
+            for (let i = 0; i < params.length; i++) {
+              processFile(params[i]);
+            }
+          }
+          break;
+
+        case 'library':
+          if (params.library !== undefined && params.params !== undefined) {
+            isDone = false; // Async
+            ns.loadLibrary(params.library, function () {
+              processSemantics(ns.libraryCache[params.library].semantics, params.params, done);
+            });
+          }
+          break;
+
+        case 'group':
+          if (params !== undefined) {
+            const isSubContent = (field.isSubContent == true);
+            if (field.fields.length == 1 && !isSubContent) {
+              if (params !== undefined) {
+                isDone = false; // Async
+                processField(field.fields[0], params, done);
+              }
+            }
+            else {
+              isDone = false; // Async
+              processSemantics(field.fields, params, done);
+            }
+          }
+          break;
+
+        case 'list':
+          if (params[0] !== undefined) {
+            isDone = false; // Async
+            let numFinished = 0;
+            for (let j = 0; j < params.length; j++) {
+              processField(field.field, params[j], function () {
+                numFinished++;
+                if (numFinished === params.length) {
+                  done();
+                }
+              });
+            }
+          }
+          break;
+      }
+      if (isDone) {
+        done();
+      }
+    }
+
+    /**
+     * Add '#tmp' suffix to file path.
+     *
+     * @private
+     * @param {*} params
+     */
+    const processFile = function (params) {
+      if (params.path.match(/^https?:\/\//i)) {
+        return; // Skip external files
+      }
+
+      // Add temporary file suffix
+      params.path += '#tmp';
+    }
 
     // Check if we have any newer versions
     const upgradeLibrary = ns.ContentType.getPossibleUpgrade(uploadedVersion, libraries.libraries);

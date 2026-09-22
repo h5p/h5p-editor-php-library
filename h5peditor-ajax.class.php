@@ -239,10 +239,9 @@ class H5PEditorAjax {
     $this->storage->removeTemporarilySavedFiles($this->core->h5pF->getUploadedH5pFolderPath());
 
     // Mark all files as temporary
-    // TODO: Uncomment once moveContentDirectory() is fixed. JI-366
-    /*foreach ($files as $file) {
-      $this->storage->markFileForCleanup($file, 0);
-    }*/
+    foreach ($files as $file) {
+      $this->storage->markFileForCleanupRaw($file);
+    }
 
     H5PCore::ajaxSuccess(array(
       'h5p' => $this->core->mainJsonData,
