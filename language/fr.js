@@ -1,4 +1,5 @@
 H5PEditor.language.core = {
+  additionalInformation: 'Informations complémentaires',
   missingTranslation: '[Traduction manquante :key]',
   loading: 'Chargement en cours, merci de patienter...',
   selectLibrary: 'Sélectionnez une activité pour votre exercice.',
