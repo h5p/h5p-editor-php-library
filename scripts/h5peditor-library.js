@@ -37,6 +37,7 @@ ns.Library = function (parent, field, params, setValue) {
   this.changes = [];
   this.optionsLoaded = false;
   this.library = parent.library + '/' + field.name;
+  this.setValue = setValue;
 
   this.passReadies = true;
   parent.ready(function () {
@@ -321,7 +322,20 @@ ns.Library.prototype.librariesLoaded = function (libList) {
     self.change();
     self.runChangeCallback = false;
   }
+
   // Load default library.
+  if (typeof this.params === 'string') {
+    const library = this.params;
+
+    this.params = {
+      params: {}
+    };
+    this.setValue(this.field, this.params);
+
+    this.$select.val(library);
+    this.$select.change();
+  }
+
   if (this.params.library !== undefined) {
     self.loadLibrary(this.params.library, true);
   }
