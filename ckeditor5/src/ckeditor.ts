@@ -49,6 +49,7 @@ import {
 	TableToolbar
 } from '@h5p/ckeditor5-table';
 import { TextTransformation } from '@ckeditor/ckeditor5-typing';
+import NonBreakingSpace from './plugins/nonbreakingspace';
 
 // You can read more about extending the build with additional plugins in the "Installing plugins" guide.
 // See https://ckeditor.com/docs/ckeditor5/latest/installation/plugins/installing-plugins.html for details.
@@ -96,7 +97,8 @@ class Editor extends ClassicEditor {
 		TableProperties,
 		TableToolbar,
 		TextTransformation,
-		Underline
+		Underline,
+		NonBreakingSpace
 	];
 
 	public static override defaultConfig: EditorConfig = {
