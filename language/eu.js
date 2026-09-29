@@ -1,4 +1,5 @@
 H5PEditor.language.core = {
+  additionalInformation: 'Informazio gehigarria',
   missingTranslation: '[Itzulpen galdua :key]',
   loading: 'Kargatzen, itxaron...',
   selectLibrary: 'Hautatu edukia garatzeko erabili nahi duzun liburutegia.',
