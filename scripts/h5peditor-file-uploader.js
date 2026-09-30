@@ -1,5 +1,7 @@
 H5PEditor.FileUploader = (function ($, EventDispatcher) {
 
+  const HTTP_STATUS_CONTENT_TOO_LARGE = 413;
+
   /**
    * File Upload API for H5P
    *
@@ -44,8 +46,8 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
         }
         catch (err) {
           H5P.error(err);
-          // Add error data to event object
-          uploadComplete.error = H5PEditor.t('core', 'fileToLarge');
+          // A non-JSON response does not necessarily mean that the file is too large.
+          uploadComplete.error = H5PEditor.t('core', request.status === HTTP_STATUS_CONTENT_TOO_LARGE ? 'fileToLarge' : 'unknownFileUploadError');
         }
 
         if (result !== undefined) {
