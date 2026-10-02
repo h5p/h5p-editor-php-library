@@ -48,6 +48,9 @@
     "webpack": "^5.105.2",
     "webpack-cli": "^4.10.0"
   },
+  "overrides": {
+    "lodash-es": "4.18.1"
+  },
   "scripts": {
     "build": "webpack --mode production",
     "postbuild": "tsc --declaration --declarationDir build --stripInternal --emitDeclarationOnly"
