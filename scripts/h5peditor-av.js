@@ -689,6 +689,16 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
         regexp: /^[^\/]+:\/\/(echo360[^\/]+)\/media\/([^\/]+)\/h5p.*$/i,
         aspectRatio: '16:9',
     },
+    {
+      name: 'Bunny',
+      regexp: /(?:iframe\.mediadelivery\.net\/embed)\/(\d+)\/([a-f0-9-]+)/i,
+      aspectRatio: '16:9',
+    },
+    {
+      name: 'Gumlet',
+      regexp: /(?:play\.gumlet\.io\/embed|gumlet\.com\/watch)\/([a-f0-9]+)/i,
+      aspectRatio: '16:9',
+    },
   ];
 
   /**
