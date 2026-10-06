@@ -386,7 +386,10 @@ ns.Html.prototype.getCKEditorConfig = function () {
     config.htmlSupport = {
       allow: [{
         name: 'div',
-        attributes: true,
+        attributes: [
+          /^aria-/i,
+          'id'
+        ],
         classes: true,
         styles: true
       }]
