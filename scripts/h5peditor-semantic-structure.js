@@ -51,7 +51,8 @@ H5PEditor.SemanticStructure = (function ($) {
       // Create field label
       if (field.label !== 0) {
         // Add label
-        createLabel(self.label, field.optional, id).appendTo($wrapper);
+          const label = H5PEditor.createLabel(field, '', id) + H5PEditor.createDescription(field.description, id);
+          $wrapper.append(label);
       }
 
       // Create description
@@ -276,23 +277,6 @@ H5PEditor.SemanticStructure = (function ($) {
   // Extends the event dispatcher
   SemanticStructure.prototype = Object.create(H5P.EventDispatcher.prototype);
   SemanticStructure.prototype.constructor = SemanticStructure;
-
-  /**
-   * Create generic editor label.
-   *
-   * @private
-   * @param {String} text
-   * @returns {jQuery}
-   */
-  var createLabel = function (text, optional, id) {
-    return $('<label/>', {
-      'for': id,
-      'class': 'h5peditor-label' + (optional ? '' : ' h5peditor-required'),
-      text: text
-    });
-  };
-
-
 
   /**
    * @constant
