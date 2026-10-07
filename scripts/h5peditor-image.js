@@ -97,8 +97,9 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
     '</div>';
 
   var html = ns.createFieldMarkup(this.field, htmlString, this.id);
-
   var $container = ns.$(html).appendTo($wrapper);
+  ns.initDetailsTooltip($container, this.field.details);
+
   this.$item = $container;
   this.$editImage = $container.find('.h5p-editing-image-button');
   this.$copyrightButton = $container.find('.h5p-copyright-button');

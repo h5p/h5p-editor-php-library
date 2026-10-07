@@ -451,7 +451,7 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
 
     // TODO: Remove later, this is here for debugging purposes.
     if (ns.widgets[widget] === undefined) {
-      $wrapper.append('<div>[field:' + field.type + ':' + widget + ':' + field.name + ']</div>');
+      $wrapper.append?.('<div>[field:' + field.type + ':' + widget + ':' + field.name + ']</div>');
       continue;
     }
 
@@ -796,27 +796,6 @@ ns.createImportance = function (importance) {
 };
 
 /**
- * Create HTML wrapper for field items.
- * Makes sure the different elements are placed in an consistent order.
- *
- * @param {string} type
- * @param {string} [label]
- * @param {string} [description]
- * @param {string} [content]
- * @deprecated since version 1.12 (Jan. 2017, will be removed Jan. 2018). Use createFieldMarkup instead.
- * @see createFieldMarkup
- * @returns {string} HTML
- */
-ns.createItem = function (type, label, description, content) {
-  return '<div class="field ' + type + '">' +
-           (label ? label : '') +
-           (description ? '<div class="h5peditor-field-description">' + description + '</div>' : '') +
-           (content ? content : '') +
-           '<div class="h5p-errors"></div>' +
-         '</div>';
-};
-
-/**
  * An object describing the semantics of a field
  * @typedef {Object} SemanticField
  * @property {string} name
@@ -830,7 +809,6 @@ ns.createItem = function (type, label, description, content) {
 
 /**
  * Create HTML wrapper for a field item.
- * Replacement for createItem()
  *
  * @since 1.12
  * @param  {SemanticField} field
@@ -839,9 +817,7 @@ ns.createItem = function (type, label, description, content) {
  * @return {string}
  */
 ns.createFieldMarkup = function (field, content, inputId) {
-  content = content || '';
-  var markup = this.createLabel(field, '', inputId) + this.createDescription(field.description, inputId) + content;
-
+  const markup = this.createLabel(field, '', inputId) + this.createDescription(field.description, inputId) + (content || '');
   return this.wrapFieldMarkup(field, markup);
 };
 
@@ -855,10 +831,7 @@ ns.createFieldMarkup = function (field, content, inputId) {
  * @return {string}
  */
 ns.createBooleanFieldMarkup = function (field, content, inputId) {
-  var markup = '<label class="h5peditor-label">' +
-    content + (field.label || field.name || '') + '</label>' +
-    this.createDescription(field.description, inputId);
-
+  const markup = this.createLabel(field, content || '', inputId) + this.createDescription(field.description, inputId);
   return this.wrapFieldMarkup(field, markup);
 };
 
@@ -975,12 +948,12 @@ ns.getDescriptionId = function (id) {
  */
 ns.createLabel = function (field, content, inputId) {
   // New items can be added next to the label within the flex-wrapper
-  var html = '<label class="h5peditor-label-wrapper"';
+  let html = '<label class="h5peditor-label-wrapper"';
 
   if (inputId !== undefined) {
     html += ' for="' + inputId + '"';
   }
-  html+= '>'
+  html += '>';
 
   // Temporary fix for the old version of CoursePresentation's custom editor
   if (field.widget === 'coursepresentation' && field.name === 'presentation') {
@@ -988,20 +961,45 @@ ns.createLabel = function (field, content, inputId) {
   }
 
   if (field.label !== 0) {
-    html += '<span class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' + (field.label === undefined ? field.name : field.label) + '</span>';
+    html += '<span class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' +  (content || '') + (field.label ?? field.name) + '</span>';
   }
 
-  return html + (content || '') + '</label>';
+  if (field.details) {
+    html += ns.createDetails(field.details);
+  }
+  html += '</label>';
+  return html;
 };
 
 /**
- * Create a description
+ * Create a field details icon ⓘ
+ * @returns {string}
+ */
+ns.createDetails = function () {
+  return `<button class="h5peditor-field-details" aria-label="${ns.t('core', 'detailsIconAriaLabel')}"></button>`;
+};
+
+/**
+ * Initialize an H5P.Tooltip on a field's details icon button
+ *
+ * @param {HTMLElement} fieldMarkup The element containing the details icon button
+ * @param {String} text The text to display in the tooltip
+ */
+ns.initDetailsTooltip = (fieldMarkup, text) => {
+  const detailsButton = fieldMarkup.find('.h5peditor-field-details')[0];
+  if (detailsButton && text) {
+    H5P.Tooltip(detailsButton, { text });
+  }
+};
+
+/**
+ * Create a field description
  * @param {String} description
  * @param {number} [inputId] Used to reference description from input
  * @returns {string}
  */
 ns.createDescription = function (description, inputId) {
-  var html = '';
+  let html = '';
   if (description !== undefined) {
     html += '<div class="h5peditor-field-description"';
     if (inputId !== undefined) {
@@ -1018,7 +1016,7 @@ ns.createDescription = function (description, inputId) {
  * @returns {String}
  */
 ns.createImportantDescription = function (importantDescription) {
-  var html = '';
+  let html = '';
 
   if (importantDescription !== undefined) {
     html += '<div class="h5peditor-field-important-description">' +

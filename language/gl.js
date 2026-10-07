@@ -292,6 +292,7 @@ H5PEditor.language.core = {
   filterErrorMessage: 'Algo saleu mal. Por favor, volve a cargar a páxina.',
   in: 'en',
   navigateToParent: 'Navegar ao pai',
+  detailsIconAriaLabel: 'More information about this field',
   a11yTitleShowLabel: 'Amosar etiqueta para AT',
   a11yTitleHideLabel: 'Agochar etiqueta para AT',
   reuseSuccess: 'Importouse :title correctamente do hub H5P.',

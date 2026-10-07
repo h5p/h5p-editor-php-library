@@ -298,6 +298,7 @@ H5PEditor.language.core = {
   filterErrorMessage: '오류가 있습니다. 페이지를 다시 로드하십시오.',
   in: 'in',
   navigateToParent: '상위 탐색',
+  detailsIconAriaLabel: 'More information about this field',
   a11yTitleShowLabel: 'AT 에 대한 라벨 표시',
   a11yTitleHideLabel: 'AT 에 대한 레이블 숨기기',
   reuseSuccess: ':title 이 H5P 허브에서 성공적으로 가져오기 되었습니다.',
