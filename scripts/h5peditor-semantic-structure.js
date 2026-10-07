@@ -52,19 +52,7 @@ H5PEditor.SemanticStructure = (function ($) {
       if (field.label !== 0) {
         // Add label
           const label = H5PEditor.createLabel(field, '', id) + H5PEditor.createDescription(field.description, id);
-          $wrapper.append(label);
-      }
-
-      // Create description
-      var $description;
-      if (field.description !== undefined) {
-        $description = $('<div/>', {
-          'id': descriptionId,
-          'class': 'h5peditor-field-description',
-          text: field.description,
-          appendTo: $wrapper
-        });
-        $description.html($description.html().replace('\n', '<br/>'));
+          $(label).appendTo($wrapper);
       }
 
       widgets = getValidWidgets();
@@ -151,7 +139,7 @@ H5PEditor.SemanticStructure = (function ($) {
 
       if (!validWidgets.length) {
         // There are no valid widgets, add default
-        validWidgets.push(self.default);
+        validWidgets.push(defaultWidget);
       }
 
       return validWidgets;
