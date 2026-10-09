@@ -289,6 +289,7 @@ H5PEditor.language.core = {
   filterErrorMessage: '出问题了，请重新加载页面。',
   in: 'in',
   navigateToParent: '导航到父级',
+  detailsIconAriaLabel: 'More information about this field',
   a11yTitleShowLabel: '显示 AT 的标签',
   a11yTitleHideLabel: '隐藏 AT 的标签',
   reuseSuccess: ':title 已成功从 H5P Hub 导入。',

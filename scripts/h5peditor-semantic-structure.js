@@ -51,19 +51,8 @@ H5PEditor.SemanticStructure = (function ($) {
       // Create field label
       if (field.label !== 0) {
         // Add label
-        createLabel(self.label, field.optional, id).appendTo($wrapper);
-      }
-
-      // Create description
-      var $description;
-      if (field.description !== undefined) {
-        $description = $('<div/>', {
-          'id': descriptionId,
-          'class': 'h5peditor-field-description',
-          text: field.description,
-          appendTo: $wrapper
-        });
-        $description.html($description.html().replace('\n', '<br/>'));
+          const label = H5PEditor.createLabel(field, '', id) + H5PEditor.createDescription(field.description, id);
+          $(label).appendTo($wrapper);
       }
 
       widgets = getValidWidgets();
@@ -150,7 +139,7 @@ H5PEditor.SemanticStructure = (function ($) {
 
       if (!validWidgets.length) {
         // There are no valid widgets, add default
-        validWidgets.push(self.default);
+        validWidgets.push(defaultWidget);
       }
 
       return validWidgets;
@@ -276,23 +265,6 @@ H5PEditor.SemanticStructure = (function ($) {
   // Extends the event dispatcher
   SemanticStructure.prototype = Object.create(H5P.EventDispatcher.prototype);
   SemanticStructure.prototype.constructor = SemanticStructure;
-
-  /**
-   * Create generic editor label.
-   *
-   * @private
-   * @param {String} text
-   * @returns {jQuery}
-   */
-  var createLabel = function (text, optional, id) {
-    return $('<label/>', {
-      'for': id,
-      'class': 'h5peditor-label' + (optional ? '' : ' h5peditor-required'),
-      text: text
-    });
-  };
-
-
 
   /**
    * @constant
