@@ -21,7 +21,8 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
      */
     self.upload = function (file, filename) {
       var formData = new FormData();
-      formData.append('file', file, filename);
+      // This fix sends a Blob instead of File to avoid a WebKit error in iPadOS26, see https://bugs.webkit.org/show_bug.cgi?id=319985.
+      formData.append('file', file.slice(0, file.size, file.type), filename);
       formData.append('field', JSON.stringify(field));
       formData.append('contentId', H5PEditor.contentId || 0);
 
