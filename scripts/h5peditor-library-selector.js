@@ -28,22 +28,6 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
   this.defaultLibrary = this.currentLibrary = defaultLibrary;
   this.defaultLibraryParameterized = defaultLibrary ? defaultLibrary.replace('.', '-').toLowerCase() : undefined;
 
-  //Add tutorial and example link:
-  this.$tutorialUrl = ns.$(
-    '<a class="h5p-tutorial-url" target="_blank">' + 
-      '<span class="h5p-tutorial-url-label">' + 
-        ns.t('core', 'tutorial') + 
-      '</span>' +
-    '</a>'
-  ).hide();
-  this.$exampleUrl = ns.$(
-    '<a class="h5p-example-url" target="_blank">' + 
-      '<span class="h5p-example-url-label">' + 
-        ns.t('core', 'example') + 
-      '</span>' +
-    '</a>'
-  ).hide();
-
   // Create confirm dialog
   var changeLibraryDialog = new H5P.ConfirmationDialog({
     headerText: H5PEditor.t('core', 'changeLibrary'),
@@ -63,19 +47,37 @@ ns.LibrarySelector = function (libraries, defaultLibrary, defaultParams) {
    * @private
    * @param {object} library
    */
-  var librarySelectHandler = function (library) {
-    that.currentLibrary = library.uberName;
-    that.loadSemantics(library.uberName, that.selector.getParams(), that.selector.getMetadata());
+  const librarySelectHandler = (library) => {
+    this.currentLibrary = library.uberName;
+    this.loadSemantics(library.uberName, this.selector.getParams(), this.selector.getMetadata());
 
-    that.$tutorialUrl.attr('href', library.tutorialUrl ? library.tutorialUrl : '#').toggle(!!library.tutorialUrl);
-    that.$exampleUrl.attr('href', library.exampleUrl ? library.exampleUrl : '#').toggle(!!library.exampleUrl);
+    if (library.tutorialUrl) {
+      this.helpMenu.querySelector('.h5p-tutorial-url').setAttribute('href', library.tutorialUrl);
+    }
+    else {
+      this.helpMenu.querySelector('.h5p-tutorial-item').remove();
+    }
+
+    if (library.exampleUrl) {
+      this.helpMenu.querySelector('.h5p-example-url').setAttribute('href', library.exampleUrl);
+    }
+    else {
+      this.helpMenu.querySelector('.h5p-example-item').remove();
+    }
+
+    if (!library.tutorialUrl && !library.exampleUrl) {
+      this.helpContainer.remove();
+    }
+    else {
+      ns.attachMenuBehavior(this.helpButton, this.helpMenu);
+    }
   };
 
   /**
    * Event handler for loading a new library editor
    * @private
    */
-  var loadLibrary = function () {
+  const loadLibrary = function () {
     that.trigger('editorload', that.selector.currentLibrary);
     that.selector.getSelectedLibrary(librarySelectHandler);
   };
@@ -138,44 +140,52 @@ ns.LibrarySelector.prototype.setLibrary = function (library) {
  * @returns {undefined}
  */
 ns.LibrarySelector.prototype.appendTo = function ($element) {
-  var self = this;
   this.$parent = $element;
-
   this.$selector.appendTo($element);
-  this.$tutorialUrl.appendTo($element);
-  this.$exampleUrl.appendTo($element);
+  const wrapper = document.createElement('div');
+  wrapper.className = 'h5peditor-help-copypaste-wrap';
+  wrapper.hidden = true;
+  $element[0].append(wrapper);
+  wrapper.insertAdjacentHTML('beforeend', ns.createHelpMenuButton());
+  this.helpContainer = wrapper.querySelector('.h5peditor-help');
+  this.helpButton = this.helpContainer.querySelector('.h5peditor-help-button');
+  this.helpMenu = this.helpContainer.querySelector('.h5peditor-help-menu');
 
   if (window.localStorage) {
-    var $buttons = ns.$(ns.createCopyPasteButtons()).appendTo($element);
+    wrapper.insertAdjacentHTML('beforeend', ns.createCopyPasteButtons());
+    this.copyButton = wrapper.querySelector('.h5peditor-copy-button');
+    this.pasteButton = wrapper.querySelector('.h5peditor-paste-button');
 
-    // Hide copy paste until library is selected:
-    $buttons.addClass('hidden');
-    self.on('editorloaded', function () {
-      $buttons.removeClass('hidden');
-    });
-
-    this.$copyButton = $buttons.find('.h5peditor-copy-button').click(function () {
+    this.copyButton.addEventListener('click', () => {
       H5P.clipboardify({
-        library: self.getCurrentLibrary(),
-        params: self.getParams(),
-        metadata: self.getMetadata()
+        library: this.getCurrentLibrary(),
+        params: this.getParams(),
+        metadata: this.getMetadata(),
       });
+
       ns.attachToastTo(
-        self.$copyButton.get(0),
-        H5PEditor.t('core', 'copiedToClipboard'), {
+        this.copyButton,
+        H5PEditor.t('core', 'copiedToClipboard'),
+        {
           position: {
             horizontal: 'center',
             vertical: 'above',
-            noOverflowX: true
-          }
-        }
+            noOverflowX: true,
+          },
+        },
       );
     });
-    this.$pasteButton = $buttons.find('.h5peditor-paste-button')
-      .click(self.pasteContent.bind(this));
 
-    self.updateCopyPasteButtons();
+    this.pasteButton.addEventListener(
+      'click',
+      this.pasteContent.bind(this),
+    );
+
+    this.updateCopyPasteButtons();
   }
+  this.on('editorloaded', () => {
+    wrapper.hidden = false;
+  });
 };
 
 /**
@@ -191,15 +201,13 @@ ns.LibrarySelector.prototype.updateCopyPasteButtons = function () {
   const pasteCheck = ns.canPastePlus(H5P.getClipboard(), this.libraries);
   const canPaste = pasteCheck.canPaste;
 
-  this.$copyButton
-    .prop('disabled', false)
-    .toggleClass('disabled', false);
+  this.copyButton.disabled = false;
+  this.copyButton.classList.remove('disabled');
 
-  this.$pasteButton
-    .text(ns.t('core', 'pasteAndReplaceButton'))
-    .attr('title', canPaste ? ns.t('core', 'pasteAndReplaceFromClipboard') : pasteCheck.description)
-    .toggleClass('disabled', !canPaste)
-    .prop('disabled', !canPaste);
+  this.pasteButton.textContent = ns.t('core', 'pasteAndReplaceButton');
+  this.pasteButton.title = canPaste ? ns.t('core', 'pasteAndReplaceFromClipboard') : pasteCheck.description;
+  this.pasteButton.classList.toggle('disabled', !canPaste);
+  this.pasteButton.disabled = !canPaste;
 
   this.selector.setCanPaste && this.selector.setCanPaste(canPaste, !canPaste ? pasteCheck.description : undefined);
 };
@@ -210,12 +218,11 @@ ns.LibrarySelector.prototype.updateCopyPasteButtons = function () {
  * @param {string} library
  */
 ns.LibrarySelector.prototype.pasteContent = function () {
-  var self = this;
-  var clipboard = H5P.getClipboard();
+  const clipboard = H5P.getClipboard();
 
-  ns.confirmReplace(self.getCurrentLibrary(), self.$parent.offset().top, function () {
-    self.selector.resetSelection(clipboard.generic.library, clipboard.generic.params, clipboard.generic.metadata, false);
-    self.setLibrary();
+  ns.confirmReplace(this.getCurrentLibrary(), this.$parent.offset().top, () => {
+    this.selector.resetSelection(clipboard.generic.library, clipboard.generic.params, clipboard.generic.metadata, false);
+    this.setLibrary();
   });
 };
 

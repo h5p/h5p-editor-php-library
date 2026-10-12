@@ -1,0 +1,151 @@
+.h5peditor-help-copypaste-wrap { 
+  display: flex;
+  justify-content: flex-end; 
+  margin-bottom: 14px;
+  &[hidden] {
+    display: none;
+  }
+}
+.h5peditor-copypaste-wrap {
+  float: right;
+}
+.h5peditor-help {
+  float: right;
+  position: relative;
+}
+
+.h5peditor-help-menu {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 0.25em);
+  left: 0;
+  min-width: 13em;
+  margin: 0;
+  padding: 0.25em 0;
+  border: 1px solid #d0d0d1;
+  border-radius: 0.25em;
+  background: #fff;
+  list-style: none;
+
+  &[hidden] {
+    display: none;
+  }
+
+  li {
+    margin: 0;
+    padding: 0;
+  }
+}
+.h5peditor-help-button,
+.h5peditor-paste-button,
+.h5peditor-copy-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid #deeeec;
+  padding: 0.5em 0.75em 0.75em 0.5em;
+  margin-left: 0.5em;
+  border-radius: 0.25em;
+  cursor: pointer;
+  background: #f2faff;
+  line-height: 0.8em;
+
+  &:hover {
+    border-color: #bbdae8;
+  }
+  &:active {
+    background-color: #deeffb
+  }
+  &.disabled {
+    color: #707070;
+    background-color: #f5f5f5;
+    border-color: #ededed;
+    cursor: not-allowed;
+  }
+  &::before {
+  font-family: $icon-font-family;
+  font-size: 1.5em;
+  color: #2372b3;
+  }
+}
+.h5peditor-help-button {
+  &[aria-expanded="true"] {
+    background-color: #deeffb;
+  }
+  &::before {
+    content: "\e918";
+    font-size: 1.3em;
+  }
+
+  &::after{
+    font-family: $icon-font-family;
+    content: "\e565";
+  }
+}
+.h5peditor-copy-button::before {
+  content: "\e90e";
+}
+.h5peditor-paste-button::before {
+  content: "\e910";
+}
+.h5peditor-copy-button.disabled::before,
+.h5peditor-paste-button.disabled::before {
+  color: #707070;
+}
+.h5peditor-copy-button.disabled::before {
+  content: "\e90f";
+}
+.h5peditor-paste-button.disabled::before {
+  content: "\e911";
+}
+.h5p-hub .h5peditor-paste-button {
+  font-family: $font-family;
+  color: #fff;
+  border: solid 1px #9fc8f4;
+  padding: 0 0.75em 0.5em 0.75em;
+  background: transparent;
+  line-height: 1;
+  height: auto;
+  margin-top: 0.675em;
+  margin-right: 0.675em;
+
+  &:hover {
+    background: #4b5460;
+    border-color: #606a78;
+  }
+  &:active {
+    background: #434b55;
+  }
+  &.disabled {
+    border-color: #30353d;
+    background: #30353d;
+    color: #c2c2c2;
+  }
+}
+.h5p-hub .h5peditor-paste-button::before {
+  color: #9fc8f4;
+}
+.h5p-hub .h5peditor-paste-button.disabled::before {
+  color: #c3c3c3;
+}
+.h5p-tutorial-url,
+.h5p-example-url {
+  display: block;
+  padding: 0.65em 1em;
+  color: #0C0D0D;
+  text-decoration: none;
+
+  &:focus {
+    outline: none;
+    background: #f5f5f5;
+  }
+  &::after {
+    content: '';
+    float: right;
+    width: 1.3em;
+    height: 1.3em;
+    margin-left: 0.75em;
+    background: url('../../images/external-link.svg') center / contain no-repeat;
+  }
+
+}
