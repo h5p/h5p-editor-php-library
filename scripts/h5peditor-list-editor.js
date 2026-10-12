@@ -18,6 +18,14 @@ H5PEditor.ListEditor = (function ($) {
       'class': 'h5p-ul'
     });
 
+    list.on('removedItem', (event) => {
+      $list.children().eq(event.data).remove();
+
+      if (!(list.getValue() ?? []).length) {
+        self.removeCollapseButtons();
+      }
+    });
+
     /**
      * Add group collapse functionality to list editor if items are groups.
      */
@@ -707,18 +715,6 @@ H5PEditor.ListEditor = (function ($) {
           });
         }
       ).appendTo($listActions);
-
-      list.on('removedItem', (event) => {
-        if (event.data !== $item.index()) {
-          return;
-        }
-        
-        $item.remove();
-
-        if (!(list.getValue() ?? []).length) {
-          self.removeCollapseButtons();
-        }
-      });
 
       // Append new field item to content wrapper
       if (item instanceof H5PEditor.Group) {
