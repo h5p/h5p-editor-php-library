@@ -168,7 +168,7 @@ H5PEditor.language.core = {
   contentTypeCacheOutdatedDesc:
     'Sinu lehekülg ei saa ühenduda H5P.org serveriga, kontrollimaks sisutüüpide uuendusi. Sa ei saa sisutüüpe uuendada ega paigaldada.',
   tryAgain: 'Proovi uuesti',
-  getHelp: 'Vajan abi',
+  getHelp: 'Abi',
   untitled: 'Ilma pealkirjata :libraryTitle',
   title: 'Pealkiri',
   metadata: 'Meta-andmed',

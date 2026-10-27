@@ -161,7 +161,7 @@ H5PEditor.language.core = {
   contentTypeCacheOutdated: '内容类型列表已过时',
   contentTypeCacheOutdatedDesc: '您的网站无法连接到H5P.org以检查内容类型更新。 您可能无法更新或安装新的内容类型。',
   tryAgain: '再试一次',
-  getHelp: '获取帮助',
+  getHelp: '帮助',
   untitled: '未命名:libraryTitle',
   title: '标题',
   metadata: '元数据',

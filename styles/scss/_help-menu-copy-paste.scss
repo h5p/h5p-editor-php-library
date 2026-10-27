@@ -74,7 +74,7 @@
   }
   &::before {
     content: "\e918";
-    font-size: 1.3em;
+    font-size: 1.1em;
   }
 
   &::after{
@@ -136,7 +136,9 @@
   text-decoration: none;
 
   &:focus {
-    outline: none;
+    background: #f2faff;;
+  }
+  &:hover {
     background: #f5f5f5;
   }
   &::after {

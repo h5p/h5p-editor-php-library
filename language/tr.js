@@ -168,7 +168,7 @@ H5PEditor.language.core = {
   contentTypeCacheOutdatedDesc:
     'Web siteniz mevcut içerik türü güncellemelerini kontrol etmek için H5P.org sitesine bağlanmada zorluk yaşıyor. Yeni içerik türlerini yükleme ve güncellemek için yetkiniz olmayabilir.',
   tryAgain: 'Yeniden dene',
-  getHelp: 'Yardım al',
+  getHelp: 'Yardım',
   untitled: 'Başlıksız :libraryTitle',
   title: 'Başlık',
   metadata: 'Üstveri (Metadata)',

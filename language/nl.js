@@ -169,7 +169,7 @@ H5PEditor.language.core = {
   contentTypeCacheOutdatedDesc:
     'Je site heeft problemen bij het verbinden met H5P.org om te controleren op updates voor content types. Het kan zijn dat je geen content types kunt updaten of installeren.',
   tryAgain: 'Probeer nogmaals',
-  getHelp: 'Vraag hulp',
+  getHelp: 'Hulp',
   untitled: 'Zonder titel :libraryTitle',
   title: 'Titel',
   metadata: 'Metadata',

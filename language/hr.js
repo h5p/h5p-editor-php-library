@@ -200,7 +200,7 @@ H5PEditor.language.core = {
     contentTypeCacheOutdated: 'Popis vrsta sadržaja je zastario',
     contentTypeCacheOutdatedDesc: 'Vaša stranica ima poteškoća s povezivanjem na H5P.org radi provjere ažuriranja vrsta sadržaja. Možda nećete moći ažurirati ili instalirati nove vrste sadržaja.',
     tryAgain: 'Pokušaj ponovno',
-    getHelp: 'Dobiti pomoć',
+    getHelp: 'Pomoć',
     untitled: 'Neimenovano :libraryTitle',
     title: 'Naslov',
     metadata: 'Metapodaci',
