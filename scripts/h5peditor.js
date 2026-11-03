@@ -419,7 +419,7 @@ ns.getParentLibrary = function (parent) {
  * @returns {undefined}
  */
 ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, machineName) {
-  var ancestor;
+  let ancestor;
   parent.children = [];
 
   if (parent.passReadies === undefined) {
@@ -431,15 +431,15 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
     parent.readies = [];
   }
 
-  for (var i = 0; i < semanticsChunk.length; i++) {
-    var field = semanticsChunk[i];
+  for (let i = 0; i < semanticsChunk.length; i++) {
+    const field = semanticsChunk[i];
 
     // Check generic field properties.
     if (field.name === undefined) {
-      throw ns.t('core', 'missingProperty', {':index': i, ':property': 'name'});
+      throw ns.t('core', 'missingProperty', { ':index': i, ':property': 'name' });
     }
     if (field.type === undefined) {
-      throw ns.t('core', 'missingProperty', {':index': i, ':property': 'type'});
+      throw ns.t('core', 'missingProperty', { ':index': i, ':property': 'type' });
     }
 
     // Set default value.
@@ -447,11 +447,11 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
       params[field.name] = field['default'];
     }
 
-    var widget = ns.getWidgetName(field);
+    const widget = ns.getWidgetName(field);
 
     // TODO: Remove later, this is here for debugging purposes.
     if (ns.widgets[widget] === undefined) {
-      $wrapper.append?.('<div>[field:' + field.type + ':' + widget + ':' + field.name + ']</div>');
+      $wrapper.append?.(`<div>[field:${field.type}:${widget}:${field.name}]</div>`);
       continue;
     }
 
@@ -461,26 +461,23 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
         ancestor = ns.findAncestor(parent);
       }
 
-      var parentLibrary = ns.getParentLibrary(parent);
-      var library = machineName ? machineName
-        : (field.library ? field.library
-          : (parentLibrary ? parentLibrary
-            : ns.constants.otherLibraries));
+      const parentLibrary = ns.getParentLibrary(parent);
+      const library = machineName || field.library || parentLibrary || ns.constants.otherLibraries;
       ns.renderableCommonFields[library] = ns.renderableCommonFields[library] || {};
       ns.renderableCommonFields[library].fields = ns.renderableCommonFields[library].fields || [];
 
       // Add renderable if it doesn't exist
       ns.renderableCommonFields[library].fields.push({
-        field: field,
-        parent: parent,
-        params: params,
-        ancestor: ancestor,
-        rendered: false
+        field,
+        parent,
+        params,
+        ancestor,
+        rendered: false,
       });
       continue;
     }
 
-    var fieldInstance = new ns.widgets[widget](parent, field, params[field.name], function (field, value) {
+    const fieldInstance = new ns.widgets[widget](parent, field, params[field.name], function (field, value) {
       if (value === undefined) {
         delete params[field.name];
       }
@@ -494,7 +491,7 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
 
   // Render all gathered common field
   if (ns.renderableCommonFields) {
-    for (var commonFieldMachineName in ns.renderableCommonFields) {
+    for (const commonFieldMachineName in ns.renderableCommonFields) {
       if (commonFieldMachineName === ns.constants.otherLibraries) {
         // No need to grab library info
         ns.renderCommonField(commonFieldMachineName);
@@ -511,7 +508,7 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
 
   if (!parent.passReadies) {
     // Run ready callbacks.
-    for (i = 0; i < parent.readies.length; i++) {
+    for (let i = 0; i < parent.readies.length; i++) {
       parent.readies[i]();
     }
     delete parent.readies;
@@ -965,7 +962,7 @@ ns.createLabel = function (field, content, inputId) {
   }
 
   if (field.details) {
-    html += ns.createDetails(field.details);
+    html += ns.createDetails();
   }
   html += '</label>';
   return html;
@@ -976,7 +973,7 @@ ns.createLabel = function (field, content, inputId) {
  * @returns {string}
  */
 ns.createDetails = function () {
-  return `<button class="h5peditor-field-details" aria-label="${ns.t('core', 'detailsIconAriaLabel')}"></button>`;
+  return `<button type="button" class="h5peditor-field-details" aria-label="${ns.t('core', 'detailsIconAriaLabel')}"></button>`;
 };
 
 /**
@@ -988,7 +985,7 @@ ns.createDetails = function () {
 ns.initDetailsTooltip = (fieldMarkup, text) => {
   const detailsButton = fieldMarkup.find('.h5peditor-field-details')[0];
   if (detailsButton && text) {
-    H5P.Tooltip(detailsButton, { text });
+    H5P.Tooltip(detailsButton, { text, ariaHidden: false });
   }
 };
 

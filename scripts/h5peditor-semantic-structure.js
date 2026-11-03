@@ -52,7 +52,8 @@ H5PEditor.SemanticStructure = (function ($) {
       if (field.label !== 0) {
         // Add label
           const label = H5PEditor.createLabel(field, '', id) + H5PEditor.createDescription(field.description, id);
-          $(label).appendTo($wrapper);
+          const $label =$(label).appendTo($wrapper);
+          H5PEditor.initDetailsTooltip( $label, field.details);
       }
 
       widgets = getValidWidgets();
