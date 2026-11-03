@@ -25,7 +25,8 @@ ns.Number.prototype.appendTo = function ($wrapper) {
 
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$errors = this.$item.find('.h5p-errors');
-  ns.initDetailsTooltip(this.$item, this.field.details);
+  this.detailsTooltip?.remove();
+  this.detailsTooltip = ns.initDetailsTooltip(this.$item[0], this.field.details);
   var $inputs = this.$item.find('input');
   if ($inputs.length === 1) {
     this.$input = $inputs;
@@ -156,6 +157,7 @@ ns.Number.prototype.validate = function () {
  * Remove this item.
  */
 ns.Number.prototype.remove = function () {
+  this.detailsTooltip?.remove();
   this.$item.remove();
 };
 

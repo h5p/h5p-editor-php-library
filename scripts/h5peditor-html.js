@@ -408,7 +408,8 @@ ns.Html.prototype.appendTo = function ($wrapper) {
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$input = this.$item.children('.ckeditor');
   this.$errors = this.$item.children('.h5p-errors');
-  ns.initDetailsTooltip(this.$item, this.field.details);
+  this.detailsTooltip?.remove();
+  this.detailsTooltip = ns.initDetailsTooltip(this.$item[0], this.field.details);
 
   ns.bindImportantDescriptionEvents(this, this.field.name, this.parent);
 
@@ -645,6 +646,7 @@ ns.Html.removeWysiwyg = function () {
  * Remove this item.
  */
 ns.Html.prototype.remove = function () {
+  this.detailsTooltip?.remove();
   this.$item.remove();
 };
 

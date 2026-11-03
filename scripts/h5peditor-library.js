@@ -161,7 +161,8 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   html += '</div>';
 
   this.$myField = ns.$(html).appendTo($wrapper);
-  ns.initDetailsTooltip(this.$myField, this.field.details);
+  this.detailsTooltip?.remove();
+  this.detailsTooltip = ns.initDetailsTooltip(this.$myField[0], this.field.details);
   this.$select = this.$myField.children('select');
   this.$label = this.$myField.find('.h5peditor-label');
   this.$clearfix = this.$myField.children('.h5peditor-clearfix');
@@ -598,6 +599,7 @@ ns.Library.prototype.forEachChild = function (task) {
  * @alias H5PEditor.Library#remove
  */
 ns.Library.prototype.remove = function () {
+  this.detailsTooltip?.remove();
   this.removeChildren();
   if (this.$select !== undefined) {
     this.$select.parent().remove();

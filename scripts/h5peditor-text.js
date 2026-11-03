@@ -27,7 +27,9 @@ ns.Text.prototype.appendTo = function ($wrapper) {
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$input = this.$item.find('input');
   this.$errors = this.$item.children('.h5p-errors');
-  ns.initDetailsTooltip(this.$item, this.field.details);
+
+  this.detailsTooltip?.remove();
+  this.detailsTooltip = ns.initDetailsTooltip(this.$item[0], this.field.details);
 
   this.$input.change(function () {
     // Validate
@@ -109,6 +111,7 @@ ns.Text.prototype.validate = function () {
  * Remove this item.
  */
 ns.Text.prototype.remove = function () {
+  this.detailsTooltip?.remove();
   this.$item.remove();
 };
 

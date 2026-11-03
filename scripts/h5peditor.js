@@ -961,32 +961,30 @@ ns.createLabel = function (field, content, inputId) {
     html += '<span class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' +  (content || '') + (field.label ?? field.name) + '</span>';
   }
 
-  if (field.details) {
-    html += ns.createDetails();
-  }
   html += '</label>';
   return html;
 };
 
 /**
- * Create a field details icon ⓘ
- * @returns {string}
- */
-ns.createDetails = function () {
-  return `<button type="button" class="h5peditor-field-details" aria-label="${ns.t('core', 'detailsIconAriaLabel')}"></button>`;
-};
-
-/**
- * Initialize an H5P.Tooltip on a field's details icon button
- *
- * @param {HTMLElement} fieldMarkup The element containing the details icon button
+ * Create a field details icon ⓘ and initialize a H5P.Tooltip on it
+ * @param {HTMLElement} fieldMarkup The element that should contain the button
  * @param {String} text The text to display in the tooltip
+ * @returns {Object|null} Tooltip instance, if created
  */
-ns.initDetailsTooltip = (fieldMarkup, text) => {
-  const detailsButton = fieldMarkup.find('.h5peditor-field-details')[0];
-  if (detailsButton && text) {
-    H5P.Tooltip(detailsButton, { text, ariaHidden: false });
+ns.initDetailsTooltip = function (fieldMarkup, text) {
+  if (!fieldMarkup || !text) {
+    return null;
   }
+  const label = fieldMarkup.querySelector('.h5peditor-label');
+  if (!label) {
+    return null;
+  }
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'h5peditor-field-details';
+  button.setAttribute('aria-label', ns.t('core', 'detailsIconAriaLabel'));
+  label.insertAdjacentElement('afterend', button);
+  return H5P.Tooltip(button, { text, ariaHidden: false });
 };
 
 /**

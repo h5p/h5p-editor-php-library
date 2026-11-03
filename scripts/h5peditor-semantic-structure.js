@@ -53,7 +53,8 @@ H5PEditor.SemanticStructure = (function ($) {
         // Add label
           const label = H5PEditor.createLabel(field, '', id) + H5PEditor.createDescription(field.description, id);
           const $label =$(label).appendTo($wrapper);
-          H5PEditor.initDetailsTooltip( $label, field.details);
+          self.detailsTooltip?.remove();
+          self.detailsTooltip = H5PEditor.initDetailsTooltip( $label[0], field.details);
       }
 
       widgets = getValidWidgets();
@@ -208,6 +209,7 @@ H5PEditor.SemanticStructure = (function ($) {
      * @public
      */
     self.remove = function () {
+      self.detailsTooltip?.remove();
       self.widget.remove();
       $wrapper.remove();
     };

@@ -66,7 +66,8 @@ ns.Boolean.prototype.appendTo = function ($wrapper) {
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$input = this.$item.find('input');
   this.$errors = this.$item.find('.h5p-errors');
-  ns.initDetailsTooltip(this.$item, this.field.details);
+  this.detailsTooltip?.remove();
+  this.detailsTooltip = ns.initDetailsTooltip(this.$item[0], this.field.details);
 
   this.$input.change(function () {
     // Validate
@@ -80,6 +81,7 @@ ns.Boolean.prototype.appendTo = function ($wrapper) {
  * Remove this item.
  */
 ns.Boolean.prototype.remove = function () {
+  this.detailsTooltip?.remove();
   this.$item.remove();
 };
 

@@ -36,7 +36,8 @@ H5PEditor.widgets.select = H5PEditor.Select = (function (E) {
     this.$item = E.$(this.createHtml()).appendTo($wrapper);
     this.$select = this.$item.find('select');
     this.$errors = this.$item.children('.h5p-errors');
-    ns.initDetailsTooltip(this.$item, this.field.details);
+    this.detailsTooltip?.remove();
+    this.detailsTooltip = ns.initDetailsTooltip(this.$item[0], this.field.details);
 
     this.$select.change(function () {
       var val = that.validate();
@@ -128,6 +129,7 @@ H5PEditor.widgets.select = H5PEditor.Select = (function (E) {
    * @returns {undefined}
    */
   C.prototype.remove = function () {
+    this.detailsTooltip?.remove();
     this.$item.remove();
   };
 
