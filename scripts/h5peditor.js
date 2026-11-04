@@ -793,6 +793,27 @@ ns.createImportance = function (importance) {
 };
 
 /**
+ * Create HTML wrapper for field items.
+ * Makes sure the different elements are placed in an consistent order.
+ *
+ * @param {string} type
+ * @param {string} [label]
+ * @param {string} [description]
+ * @param {string} [content]
+ * @deprecated since version 1.12. Use createFieldMarkup instead.
+ *  This method is still used by `H5PEditor.InteractiveVideo`.
+ * @see createFieldMarkup
+ * @returns {string} HTML
+ */
+ns.createItem = function (type, label, description, content) {
+  return '<div class="field ' + type + '">' +
+           (label ? label : '') +
+           (description ? '<div class="h5peditor-field-description">' + description + '</div>' : '') +
+           (content ? content : '') +
+           '<div class="h5p-errors"></div>' +
+         '</div>';
+};
+/**
  * An object describing the semantics of a field
  * @typedef {Object} SemanticField
  * @property {string} name
