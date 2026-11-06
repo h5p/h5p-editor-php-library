@@ -35,6 +35,8 @@ H5PEditor.language.core = {
   editCopyright: 'Editar copyright',
   close: 'Pechar',
   tutorial: 'Tutorial',
+  viewTutorial: 'Ver o titorial',
+  viewExample: 'Ver o exemplo',
   editMode: 'Modo de edición',
   listLabel: 'Lista',
   uploadError: 'Erro na carga de ficheiros',

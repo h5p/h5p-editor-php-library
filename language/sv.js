@@ -36,6 +36,8 @@ H5PEditor.language.core = {
   editCopyright: 'Redigera copyright',
   close: 'Stäng',
   tutorial: 'Guide',
+  viewTutorial: 'Visa guide',
+  viewExample: 'Visa exempel',
   editMode: 'Redigeringsläge',
   listLabel: 'Lista',
   uploadError: 'Fel vid filuppladdning',

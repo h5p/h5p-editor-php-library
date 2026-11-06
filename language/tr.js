@@ -36,6 +36,8 @@ H5PEditor.language.core = {
   editCopyright: 'Telif hakkını düzenle',
   close: 'Kapat',
   tutorial: 'Kullanma yönergesi',
+  viewTutorial: 'Kılavuzu görüntüle',
+  viewExample: 'Örneği görüntüle',
   editMode: 'Düzenleme modu',
   listLabel: 'Liste',
   uploadError: 'Dosya Yükleme Hatası',

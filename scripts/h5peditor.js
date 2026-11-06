@@ -1135,12 +1135,12 @@ ns.createHelpMenuButton = (helpMenuId = 'h5peditor-help-menu') => `
     <ul class="h5peditor-help-menu" id="${helpMenuId}" role="menu" hidden>
       <li class="h5p-tutorial-item" role="none">
         <a class="h5p-tutorial-url" role="menuitem" target="_blank">
-          ${ns.t('core', 'tutorial')}
+          ${ns.t('core', 'viewTutorial')}
         </a>
       </li>
       <li class="h5p-example-item" role="none">
         <a class="h5p-example-url" role="menuitem" target="_blank">
-          ${ns.t('core', 'example')}
+          ${ns.t('core', 'viewExample')}
         </a>
       </li>
     </ul>

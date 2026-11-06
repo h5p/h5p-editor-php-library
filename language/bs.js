@@ -36,6 +36,8 @@ H5PEditor.language.core = {
   editCopyright: 'Urednite autorska prava',
   close: 'Zatvoriti',
   tutorial: 'Tutorijal',
+  viewTutorial: 'Pogledaj tutorijal',
+  viewExample: 'Pogledaj primjer',
   editMode: 'Mod za uređivanje',
   listLabel: 'Lista',
   uploadError: 'Greška kod uploada fajla',

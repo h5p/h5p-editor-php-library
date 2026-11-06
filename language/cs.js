@@ -35,6 +35,8 @@ H5PEditor.language.core = {
   editCopyright: 'Upravit autorská práva',
   close: 'Zavřít',
   tutorial: 'Tutoriál',
+  viewTutorial: 'Zobrazit tutoriál',
+  viewExample: 'Zobrazit příklad',
   editMode: 'Režim úprav',
   listLabel: 'Seznam',
   uploadError: 'Chyba nahrávání souboru',

@@ -38,6 +38,8 @@ H5PEditor.language.core = {
   editCopyright: 'Изменить авторское право',
   close: 'Закрыть',
   tutorial: 'Руководство',
+  viewTutorial: 'Посмотреть руководство',
+  viewExample: 'Посмотреть пример',
   editMode: 'Режим редактирования',
   listLabel: 'Список',
   uploadError: 'Ошибка загрузки файла',

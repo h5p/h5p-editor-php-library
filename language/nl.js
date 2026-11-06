@@ -36,6 +36,8 @@ H5PEditor.language.core = {
   editCopyright: 'Copyright bewerken',
   close: 'Sluiten',
   tutorial: 'Tutorial beschikbaar',
+  viewTutorial: 'Handleiding bekijken',
+  viewExample: 'Voorbeeld bekijken',
   editMode: 'Bewerkmodus',
   listLabel: 'Lijst',
   uploadError: 'Fout bij uploaden bestand',

@@ -36,6 +36,8 @@ H5PEditor.language.core = {
   editCopyright: 'Muuda autoriõiguse seadeid',
   close: 'Sulge',
   tutorial: 'Tutvustus',
+  viewTutorial: 'Vaata juhendit',
+  viewExample: 'Vaata näidet',
   editMode: 'Redigeerimismood',
   listLabel: 'Loetelu',
   uploadError: 'Faili üleslaadimise viga',

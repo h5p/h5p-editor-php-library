@@ -35,6 +35,8 @@ H5PEditor.language.core = {
   editCopyright: '编辑版权',
   close: '关闭',
   tutorial: '使用教程',
+  viewTutorial: '查看教程',
+  viewExample: '查看示例',
   editMode: '编辑模式',
   listLabel: '列表',
   uploadError: '文件上传错误',

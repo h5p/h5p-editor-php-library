@@ -35,6 +35,8 @@ H5PEditor.language.core = {
   editCopyright: 'Edit copyright',
   close: 'Close',
   tutorial: 'Tutorial',
+  viewTutorial: 'View Tutorial',
+  viewExample: 'View Example',
   editMode: 'Editing mode',
   listLabel: 'List',
   uploadError: 'File Upload Error',

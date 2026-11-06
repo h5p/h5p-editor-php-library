@@ -36,6 +36,8 @@ H5PEditor.language.core = {
   editCopyright: 'Uredi avtorske pravice',
   close: 'Zapri',
   tutorial: 'Pomoč',
+  viewTutorial: 'Ogled navodil',
+  viewExample: 'Ogled primera',
   editMode: 'Urejevalni način',
   listLabel: 'Seznam',
   uploadError: 'Napaka pri nalaganju datoteke',

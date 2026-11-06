@@ -37,6 +37,8 @@ H5PEditor.language.core = {
   editCopyright: 'Επεξεργασία πνευματικών δικαιωμάτων',
   close: 'Κλείσιμο',
   tutorial: 'Μάθημα',
+  viewTutorial: 'Προβολή οδηγού',
+  viewExample: 'Προβολή παραδείγματος',
   editMode: 'Λειτουργία επεξεργασίας',
   listLabel: 'Λίστα',
   uploadError: 'Σφάλμα Μεταφόρτωσης Αρχείου',

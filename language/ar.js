@@ -36,6 +36,8 @@ H5PEditor.language.core = {
   editCopyright: 'تعديل حقوق الطبع والنشر',
   close: 'اغلاق',
   tutorial: 'تعليم',
+  viewTutorial: 'عرض البرنامج التعليمي',
+  viewExample: 'عرض المثال',
   editMode: 'نمط التحرير',
   listLabel: 'قائمة',
   uploadError: 'خطأ في تحميل الملف',

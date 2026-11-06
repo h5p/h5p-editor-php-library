@@ -36,6 +36,8 @@ H5PEditor.language.core = {
   editCopyright: 'Editatu copyrighta',
   close: 'Itxi',
   tutorial: 'Tutoriala',
+  viewTutorial: 'Ikusi tutoriala',
+  viewExample: 'Ikusi adibidea',
   editMode: 'Edizio modua',
   listLabel: 'Zerrendatu',
   uploadError: 'Fitxategiaren karga errorea',

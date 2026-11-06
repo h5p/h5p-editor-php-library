@@ -67,6 +67,8 @@ H5PEditor.language.core = {
     editCopyright: 'Uredi autorska prava',
     close: 'Zatvori',
     tutorial: 'Vodič',
+    viewTutorial: 'Pogledaj vodič',
+    viewExample: 'Pogledaj primjer',
     editMode: 'Način uređivanja',
     listLabel: 'Popis',
     uploadError: 'Pogreška pri učitavanju datoteke',
