@@ -1148,76 +1148,99 @@ ns.createHelpMenuButton = (helpMenuId = 'h5peditor-help-menu') => `
 `;
 
 /**
- * Attach behavior to the help menu button and its menu.
+ * Attach behavior to the button and its menu.
  *
- * @param {HTMLElement} button The help menu button.
- * @param {HTMLElement} menu The help menu.
+ * @param {HTMLElement} button The menu button.
+ * @param {HTMLElement} menu The menu associated with the button.
  */
 ns.attachMenuBehavior = (button, menu) => {
-  const getMenuItems = () => [...menu.querySelectorAll('[role="menuitem"]')];
-
+  if (!button || !menu) {
+    return;
+  }
+  const menuItems = [...menu.querySelectorAll('[role="menuitem"]')];
+  const itemCount = menuItems.length;
+  if (itemCount === 0) {
+    return;
+  }
+  const getCurrentIndex = (event) => {
+    const item = event.target.closest('[role="menuitem"]');
+    return menuItems.indexOf(item);
+  };
+  const closeOnDocumentClick = (event) => {
+    if (!menu.contains(event.target) && !button.contains(event.target)) {
+      closeHelpMenu(false);
+    }
+  };
   const closeHelpMenu = (restoreFocus) => {
-    button.setAttribute('aria-expanded', 'false');
+    document.removeEventListener('click', closeOnDocumentClick);
+    button.ariaExpanded = 'false';
     menu.hidden = true;
 
     if (restoreFocus) {
       button.focus();
     }
   };
-  const openHelpMenu = (focusLastItem) => {
-    button.setAttribute('aria-expanded', 'true');
+  const openHelpMenu = () => {
+    button.ariaExpanded = 'true';
     menu.hidden = false;
-    const items = getMenuItems();
-    if (!items.length) {
-      return;
-    }
-    (focusLastItem ? items[items.length - 1] : items[0]).focus();
+    document.addEventListener('click', closeOnDocumentClick);
   };
 
-  button.addEventListener('click', () => {
+  button.addEventListener('click', (event) => {
+    event.preventDefault();
     if (button.ariaExpanded === 'true') {
       closeHelpMenu(true);
     }
     else {
-      openHelpMenu(false);
+      openHelpMenu();
     }
   });
 
   button.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+    let focusIndex;
+    switch (event.key) {
+      case 'Enter':
+      case ' ':
+        focusIndex = 0;
+        break;
+      case 'ArrowUp':
+        focusIndex = itemCount - 1;
+        break;
+      case 'ArrowDown':
+        focusIndex = 0;
+        break;
+      default:
+        break;
+    }
+
+    if (focusIndex !== undefined) {
       event.preventDefault();
-      openHelpMenu(event.key === 'ArrowUp');
+      openHelpMenu();
+      menuItems[focusIndex].focus();
     }
   });
 
   menu.addEventListener('keydown', (event) => {
-    const item = event.target.closest('[role="menuitem"]');
-    const items = getMenuItems();
-    const currentIndex = items.indexOf(item);
+    const currentIndex = getCurrentIndex(event);
     let nextIndex;
 
     switch (event.key) {
       case 'ArrowDown':
-        nextIndex = (currentIndex + 1) % items.length;
+        nextIndex = (currentIndex + 1) % itemCount;
         break;
-
       case 'ArrowUp':
-        nextIndex = (currentIndex - 1 + items.length) % items.length;
+        nextIndex = (currentIndex - 1 + itemCount) % itemCount;
         break;
-
       case 'Home':
         nextIndex = 0;
         break;
-
       case 'End':
-        nextIndex = items.length - 1;
+        nextIndex = itemCount - 1;
         break;
-
       case 'Escape':
         event.preventDefault();
         closeHelpMenu(true);
         return;
-
       case 'Tab':
         closeHelpMenu(false);
         return;
@@ -1227,16 +1250,16 @@ ns.attachMenuBehavior = (button, menu) => {
 
     if (nextIndex !== undefined) {
       event.preventDefault();
-      items[nextIndex].focus();
+      menuItems[nextIndex].focus();
     }
   });
 
-  const closeOnDocumentClick = (event) => {
-    if (!button.contains(event.target) && !menu.contains(event.target)) {
-      closeHelpMenu(false);
+  menu.addEventListener('pointerover', (event) => {
+    const currentIndex = getCurrentIndex(event);
+    if (currentIndex !== -1) {
+      menuItems[currentIndex].focus();
     }
-  };
-  document.addEventListener('click', closeOnDocumentClick);
+  });
 };
 
 /**

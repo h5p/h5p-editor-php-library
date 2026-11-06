@@ -136,11 +136,9 @@
   text-decoration: none;
 
   &:focus {
-    background: #f2faff;;
+    background: #f5faff
   }
-  &:hover {
-    background: #f5f5f5;
-  }
+
   &::after {
     content: '';
     float: right;
