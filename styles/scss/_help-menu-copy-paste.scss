@@ -12,6 +12,8 @@
 .h5peditor-help {
   float: right;
   position: relative;
+  font-size: $font-size-small;
+
 }
 
 .h5peditor-help-menu {
@@ -43,7 +45,7 @@
   align-items: center;
   gap: 5px;
   border: 1px solid #deeeec;
-  padding: 0.5em 0.75em 0.75em 0.5em;
+  padding: 0.5em 0.75em;
   margin-left: 0.5em;
   border-radius: 0.25em;
   cursor: pointer;
@@ -69,12 +71,14 @@
   }
 }
 .h5peditor-help-button {
+  margin-left: unset;
   &[aria-expanded="true"] {
     background-color: #deeffb;
   }
   &::before {
     content: "\e918";
     font-size: 1.1em;
+    margin-right: 0.2em;
   }
 
   &::after{
@@ -131,7 +135,7 @@
 .h5p-tutorial-url,
 .h5p-example-url {
   display: block;
-  padding: 0.65em 1em;
+  padding: 0.6em 0.8em;
   color: #0C0D0D;
   text-decoration: none;
 
@@ -142,8 +146,8 @@
   &::after {
     content: '';
     float: right;
-    width: 1.3em;
-    height: 1.3em;
+    width: 1.1em;
+    height: 1.1em;
     margin-left: 0.75em;
     background: url('../../images/external-link.svg') center / contain no-repeat;
   }
