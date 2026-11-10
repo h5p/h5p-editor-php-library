@@ -1197,6 +1197,7 @@ ns.attachMenuBehavior = (button, menu) => {
   });
 
   button.addEventListener('keydown', (event) => {
+    menu.classList.remove('is-pointer-focus');
     let focusIndex;
     switch (event.key) {
       case 'Enter':
@@ -1221,6 +1222,7 @@ ns.attachMenuBehavior = (button, menu) => {
   });
 
   menu.addEventListener('keydown', (event) => {
+    menu.classList.remove('is-pointer-focus');
     const currentIndex = getCurrentIndex(event);
     let nextIndex;
 
@@ -1255,6 +1257,7 @@ ns.attachMenuBehavior = (button, menu) => {
   });
 
   menu.addEventListener('pointerover', (event) => {
+    menu.classList.add('is-pointer-focus');
     const currentIndex = getCurrentIndex(event);
     if (currentIndex !== -1) {
       menuItems[currentIndex].focus();

@@ -37,6 +37,32 @@
     margin: 0;
     padding: 0;
   }
+
+  [role="menuitem"] {
+    display: block;
+    padding: 0.6em 0.8em;
+    color: #0C0D0D;
+    text-decoration: none;
+
+    &:focus {
+      background: #f5faff;
+      outline: 1px solid #53a0ff;
+      outline-offset: -2px;
+    }
+
+    &::after {
+      content: '';
+      float: right;
+      width: 1.1em;
+      height: 1.1em;
+      margin-left: 0.75em;
+      background: url('../../images/external-link.svg') center / contain no-repeat;
+    }
+  }
+
+  &.is-pointer-focus [role="menuitem"]:focus {
+    outline: none;
+  }
 }
 .h5peditor-help-button,
 .h5peditor-paste-button,
@@ -131,25 +157,4 @@
 }
 .h5p-hub .h5peditor-paste-button.disabled::before {
   color: #c3c3c3;
-}
-.h5p-tutorial-url,
-.h5p-example-url {
-  display: block;
-  padding: 0.6em 0.8em;
-  color: #0C0D0D;
-  text-decoration: none;
-
-  &:focus {
-    background: #f5faff
-  }
-
-  &::after {
-    content: '';
-    float: right;
-    width: 1.1em;
-    height: 1.1em;
-    margin-left: 0.75em;
-    background: url('../../images/external-link.svg') center / contain no-repeat;
-  }
-
 }
