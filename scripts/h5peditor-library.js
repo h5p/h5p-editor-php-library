@@ -102,11 +102,9 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   var html = '<div class="field ' + this.field.type + '">';
   const id = ns.getNextFieldId(this.field);
 
-  if (this.field.label !== 0 && this.field.label !== undefined) {
-    html += `<div class="h5p-editor-flex-wrapper">${
-      ns.createFieldMarkup(this.field, '', id)
-    }</div>`;
-  }
+  html += `<div class="h5p-editor-flex-wrapper">${
+    ns.createFieldMarkup(this.field, '', id)
+  }</div>`;
 
   html += '<select id="' + id + '"';
   if (this.field.description !== undefined) {

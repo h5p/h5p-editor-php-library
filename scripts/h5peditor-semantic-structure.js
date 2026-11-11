@@ -48,14 +48,11 @@ H5PEditor.SemanticStructure = (function ($) {
       non-semantic properties and options. Getters and setters will be
       created for what is needed. */
 
-      // Create field label
-      if (field.label !== 0) {
-        // Add label
-          const label = H5PEditor.createLabel(field, '', id) + H5PEditor.createDescription(field.description, id);
-          const $label =$(label).appendTo($wrapper);
-          self.detailsTooltip?.remove();
-          self.detailsTooltip = H5PEditor.initDetailsTooltip( $label[0], field.details);
-      }
+    // Create field label
+     const label = H5PEditor.createLabel(field, '', id) + H5PEditor.createDescription(field.description, id);
+     const $label =$(label).appendTo($wrapper);
+     self.detailsTooltip?.remove();
+     self.detailsTooltip = H5PEditor.initDetailsTooltip( $label[0], field.details);
 
       widgets = getValidWidgets();
       if (widgets.length > 1) {

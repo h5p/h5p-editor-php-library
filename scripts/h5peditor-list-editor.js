@@ -347,7 +347,7 @@ H5PEditor.ListEditor = (function ($) {
       this.collapseButtonList.append(icon);
 
       const label = document.createElement('div');
-      label.classList.add('.h5peditor-label', 'h5peditor-required');
+      label.classList.add('h5peditor-label', 'h5peditor-required');
       label.innerText = this.originalLabelWrapper.innerText;
       this.collapseButtonList.append(label);
 
@@ -758,7 +758,7 @@ H5PEditor.ListEditor = (function ($) {
         // Append field
         item.appendTo($content);
 
-        if (item.field.label !== 0) {
+        if (item.field.label !== undefined) {
           // Try to find and move the label to the title bar
           const $label =
             $content.children('.field').find('.h5peditor-label:first');
