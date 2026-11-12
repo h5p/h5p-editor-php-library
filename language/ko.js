@@ -36,6 +36,8 @@ H5PEditor.language.core = {
   editCopyright: '저작권 편집',
   close: '닫기',
   tutorial: '튜토리얼',
+  viewTutorial: '튜토리얼 보기',
+  viewExample: '예시 보기',
   editMode: '편집모드',
   listLabel: '목록',
   uploadError: '파일 업로드 오류',

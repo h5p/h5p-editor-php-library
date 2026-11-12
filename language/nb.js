@@ -36,6 +36,8 @@ H5PEditor.language.core = {
   editCopyright: 'Rediger opphavsrett',
   close: 'Lukk',
   tutorial: 'Veiledning',
+  viewTutorial: 'Se veiledning',
+  viewExample: 'Se eksempel',
   editMode: 'Redigeringsmodus',
   listLabel: 'Liste',
   uploadError: 'Filopplasting feilet',
@@ -167,7 +169,7 @@ H5PEditor.language.core = {
   contentTypeCacheOutdatedDesc:
     'Nettstedet ditt har problemer med å koble til H5P.org for å se etter innholdstype-oppdateringer. Det kan hende at du ikke får oppdatert eller installert nye innholdstyper.',
   tryAgain: 'Prøv på nytt',
-  getHelp: 'Få hjelp',
+  getHelp: 'Hjelp',
   untitled: 'Uten tittel :libraryTitle',
   title: 'Tittel',
   metadata: 'Metadata',

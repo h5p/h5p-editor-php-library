@@ -36,6 +36,8 @@ H5PEditor.language.core = {
   editCopyright: 'Urednite autorska prava',
   close: 'Zatvoriti',
   tutorial: 'Tutorijal',
+  viewTutorial: 'Pogledaj tutorijal',
+  viewExample: 'Pogledaj primjer',
   editMode: 'Mod za uređivanje',
   listLabel: 'Lista',
   uploadError: 'Greška kod uploada fajla',
@@ -168,7 +170,7 @@ H5PEditor.language.core = {
   contentTypeCacheOutdatedDesc:
     'Your site is having difficulties connecting to H5P.org to check for content type updates. You may not be able to update or install new content types.',
   tryAgain: 'Try again',
-  getHelp: 'Get help',
+  getHelp: 'Help',
   untitled: 'Untitled :libraryTitle',
   title: 'Title',
   metadata: 'Metadata',

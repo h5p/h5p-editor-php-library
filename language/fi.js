@@ -36,6 +36,8 @@ H5PEditor.language.core = {
   editCopyright: 'Muuta tekijänoikeustietoa',
   close: 'Sulje',
   tutorial: 'Opas',
+  viewTutorial: 'Näytä opas',
+  viewExample: 'Näytä esimerkki',
   editMode: 'Muokkaustila',
   listLabel: 'Lista',
   uploadError: 'Virhe tiedoston latauksessa',

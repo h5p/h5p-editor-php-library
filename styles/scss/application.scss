@@ -1291,8 +1291,6 @@ a {
   overflow: hidden;
 }
 
-@import "tutorial-and-example-links";
-
 .h5peditor-widget-select {
   display: flex;
   flex-direction: row-reverse;
@@ -1441,7 +1439,7 @@ a {
 @import "metadata-popup";
 @import "metadata-changelog-widget";
 @import "metadata-author-widget";
-@import "copy-paste";
+@import "help-menu-copy-paste";
 @import "fullscreen-bar";
 
 .h5peditor .h5peditor-language-switcher {

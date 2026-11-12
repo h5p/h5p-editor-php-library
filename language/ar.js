@@ -36,6 +36,8 @@ H5PEditor.language.core = {
   editCopyright: 'تعديل حقوق الطبع والنشر',
   close: 'اغلاق',
   tutorial: 'تعليم',
+  viewTutorial: 'عرض البرنامج التعليمي',
+  viewExample: 'عرض المثال',
   editMode: 'نمط التحرير',
   listLabel: 'قائمة',
   uploadError: 'خطأ في تحميل الملف',
@@ -165,7 +167,7 @@ H5PEditor.language.core = {
   contentTypeCacheOutdatedDesc:
     'Your site is having difficulties connecting to H5P.org to check for content type updates. You may not be able to update or install new content types.',
   tryAgain: 'Try again',
-  getHelp: 'Get help',
+  getHelp: 'Help',
   untitled: 'Untitled :libraryTitle',
   title: 'Title',
   metadata: 'Metadata',

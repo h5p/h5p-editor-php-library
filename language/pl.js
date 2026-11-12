@@ -35,6 +35,8 @@ H5PEditor.language.core = {
   editCopyright: 'Edytuj prawa autorskie',
   close: 'Zamknij',
   tutorial: 'Instrukcja',
+  viewTutorial: 'Wyświetl instrukcję',
+  viewExample: 'Wyświetl przykład',
   editMode: 'Tryb edycji',
   listLabel: 'Lista',
   uploadError: 'Błąd podczas dodawnia',

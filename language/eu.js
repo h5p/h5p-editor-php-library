@@ -36,6 +36,8 @@ H5PEditor.language.core = {
   editCopyright: 'Editatu copyrighta',
   close: 'Itxi',
   tutorial: 'Tutoriala',
+  viewTutorial: 'Ikusi tutoriala',
+  viewExample: 'Ikusi adibidea',
   editMode: 'Edizio modua',
   listLabel: 'Zerrendatu',
   uploadError: 'Fitxategiaren karga errorea',
@@ -169,7 +171,7 @@ H5PEditor.language.core = {
   contentTypeCacheOutdatedDesc:
     'Zure guneak zailtasunak ditu H5P.org-ekin konektatzeko ariketa mota erabilgarriak zerrendatzeko. Ezingo duzu ariketa mota berriak instalatu edo eguneratu.',
   tryAgain: 'Saiatu berriro',
-  getHelp: 'Lortu laguntza',
+  getHelp: 'Laguntza',
   untitled: ':libraryTitle izengabea',
   title: 'Titulua',
   metadata: 'Metadatuak',

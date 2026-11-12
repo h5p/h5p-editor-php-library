@@ -35,6 +35,8 @@ H5PEditor.language.core = {
   editCopyright: 'Editer le copyright',
   close: 'Fermer',
   tutorial: 'Tutoriel',
+  viewTutorial: 'Voir le tutoriel',
+  viewExample: 'Voir l’exemple',
   editMode: 'Mode de rédaction',
   listLabel: 'Liste',
   uploadError: "Erreur pendant l'envoi du fichier",
@@ -167,7 +169,7 @@ H5PEditor.language.core = {
   contentTypeCacheOutdatedDesc:
     "Votre site rencontre des difficultés pour se connecter à H5P.org pour vérifier les mises à jour des types d'activités. Vous pourriez être incapable de mettre à jour ou d'installer de nouveaux types d'activités.",
   tryAgain: 'Recommencer',
-  getHelp: "Obtenir de l'aide",
+  getHelp: 'Aide',
   untitled: 'Sans titre :libraryTitle',
   title: 'Title',
   metadata: 'Métadonnées',

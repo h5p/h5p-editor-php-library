@@ -35,6 +35,8 @@ H5PEditor.language.core = {
   editCopyright: 'Upravit autorská práva',
   close: 'Zavřít',
   tutorial: 'Tutoriál',
+  viewTutorial: 'Zobrazit tutoriál',
+  viewExample: 'Zobrazit příklad',
   editMode: 'Režim úprav',
   listLabel: 'Seznam',
   uploadError: 'Chyba nahrávání souboru',
@@ -167,7 +169,7 @@ H5PEditor.language.core = {
   contentTypeCacheOutdatedDesc:
     'Váš web má potíže s připojením k serveru H5P.org, aby mohl zkontrolovat aktualizace typu obsahu. Možná nebudete moci aktualizovat nebo instalovat nové typy obsahu.',
   tryAgain: 'Zkusit znovu',
-  getHelp: 'Získat pomoc',
+  getHelp: 'Pomoc',
   untitled: 'Nepojmenovaná :libraryTitle',
   title: 'Název',
   metadata: 'Metadata',

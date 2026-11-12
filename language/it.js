@@ -35,6 +35,8 @@ H5PEditor.language.core = {
   editCopyright: 'Modifica copyright',
   close: 'Chiudi',
   tutorial: 'Tutorial',
+  viewTutorial: 'Visualizza tutorial',
+  viewExample: 'Visualizza esempio',
   editMode: 'Modalità modifica',
   listLabel: 'Lista',
   uploadError: 'Errore nel caricamento del File',
@@ -165,7 +167,7 @@ H5PEditor.language.core = {
   contentTypeCacheOutdatedDesc:
     'Il tuo sito ha difficoltà a connettersi a H5P.org per controllare gli aggiornamenti del tipo di contenuto. Potrebbe non essere possibile aggiornare o installare nuovi tipi di contenuto.',
   tryAgain: 'Prova di nuovo',
-  getHelp: 'Chiedi aiuto',
+  getHelp: 'Aiuto',
   untitled: 'Senza titolo :libraryTitle',
   title: 'Titolo',
   metadata: 'Metadata',

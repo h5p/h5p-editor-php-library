@@ -36,6 +36,8 @@ H5PEditor.language.core = {
   editCopyright: 'Muuda autoriõiguse seadeid',
   close: 'Sulge',
   tutorial: 'Tutvustus',
+  viewTutorial: 'Vaata juhendit',
+  viewExample: 'Vaata näidet',
   editMode: 'Redigeerimismood',
   listLabel: 'Loetelu',
   uploadError: 'Faili üleslaadimise viga',
@@ -168,7 +170,7 @@ H5PEditor.language.core = {
   contentTypeCacheOutdatedDesc:
     'Sinu lehekülg ei saa ühenduda H5P.org serveriga, kontrollimaks sisutüüpide uuendusi. Sa ei saa sisutüüpe uuendada ega paigaldada.',
   tryAgain: 'Proovi uuesti',
-  getHelp: 'Vajan abi',
+  getHelp: 'Abi',
   untitled: 'Ilma pealkirjata :libraryTitle',
   title: 'Pealkiri',
   metadata: 'Meta-andmed',
