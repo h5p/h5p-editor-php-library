@@ -207,6 +207,7 @@ H5PEditor.SemanticStructure = (function ($) {
      */
     self.remove = function () {
       self.detailsTooltip?.remove();
+      self.removeAllItems();
       self.widget.remove();
       $wrapper.remove();
     };
