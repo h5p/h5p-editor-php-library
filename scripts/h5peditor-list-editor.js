@@ -760,17 +760,13 @@ H5PEditor.ListEditor = (function ($) {
 
         if (item.field.label !== undefined) {
           // Try to find and move the label to the title bar
-          const $label =
-            $content.children('.field').find('.h5peditor-label:first');
+          const $labelWrapper =
+            $content.children('.field').find('.h5peditor-label-wrapper:first');
+          const $label = $labelWrapper.find('.h5peditor-label:first');
 
-          if ($label.length !== 0) {
-            $titleBar.append($('<label/>', {
-              'class': 'h5peditor-label',
-              'for': $label.parent().attr('for'),
-              html: $label.html()
-            }));
-
-            $label.hide();
+          if ($labelWrapper.length !== 0) {
+            $label.removeClass('h5peditor-required');
+            $titleBar.append($labelWrapper);
           }
         }
       }
