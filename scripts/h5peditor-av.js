@@ -120,6 +120,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     var html = H5PEditor.createFieldMarkup(this.field, imageHtml, id);
     var $container = $(html).appendTo($wrapper);
+    this.detailsTooltip?.remove();
+    this.detailsTooltip = ns.initDetailsTooltip($container[0], this.field.details);
 
     this.$files = $container.children('.file');
     this.$add = $container.children('.h5p-add-file').click(function () {
@@ -500,6 +502,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * Remove this field/widget.
    */
   C.prototype.remove = function () {
+    this.detailsTooltip?.remove();
     this.$errors.parent().remove();
   };
 

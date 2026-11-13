@@ -28,6 +28,9 @@ ns.Text.prototype.appendTo = function ($wrapper) {
   this.$input = this.$item.find('input');
   this.$errors = this.$item.children('.h5p-errors');
 
+  this.detailsTooltip?.remove();
+  this.detailsTooltip = ns.initDetailsTooltip(this.$item[0], this.field.details);
+
   this.$input.change(function () {
     // Validate
     var value = that.validate();
@@ -108,6 +111,7 @@ ns.Text.prototype.validate = function () {
  * Remove this item.
  */
 ns.Text.prototype.remove = function () {
+  this.detailsTooltip?.remove();
   this.$item.remove();
 };
 

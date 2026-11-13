@@ -302,6 +302,7 @@ H5PEditor.language.core = {
   filterErrorMessage: 'Noe gikk galt. Vennligst last siden på nytt.',
   in: 'i',
   navigateToParent: 'Naviger til overordnet nivå',
+  detailsIconAriaLabel: 'More information about this field',
   a11yTitleShowLabel: 'Vis etikett for tilgjengelighet',
   a11yTitleHideLabel: 'Skjul etikett for tilgjengelighet',
   reuseSuccess: ':title ble vellykket importert fra H5P Hub.',

@@ -113,8 +113,9 @@ ns.File.prototype.appendTo = function ($wrapper) {
     '</div>';
 
   var html = ns.createFieldMarkup(this.field, fileHtml, this.id);
-
   var $container = ns.$(html).appendTo($wrapper);
+  this.detailsTooltip?.remove();
+  this.detailsTooltip = ns.initDetailsTooltip($container[0], this.field.details);
   this.$copyrightButton = $container.find('.h5p-copyright-button');
   this.$file = $container.find('.file');
   this.$errors = $container.find('.h5p-errors');
@@ -287,6 +288,7 @@ ns.File.prototype.validate = function () {
  * Remove this item.
  */
 ns.File.prototype.remove = function () {
+  this.detailsTooltip?.remove();
   // TODO: Check what happens when removed during upload.
   this.$file.parent().remove();
 };

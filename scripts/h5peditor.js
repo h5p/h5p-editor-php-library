@@ -419,7 +419,7 @@ ns.getParentLibrary = function (parent) {
  * @returns {undefined}
  */
 ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, machineName) {
-  var ancestor;
+  let ancestor;
   parent.children = [];
 
   if (parent.passReadies === undefined) {
@@ -431,15 +431,15 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
     parent.readies = [];
   }
 
-  for (var i = 0; i < semanticsChunk.length; i++) {
-    var field = semanticsChunk[i];
+  for (let i = 0; i < semanticsChunk.length; i++) {
+    const field = semanticsChunk[i];
 
     // Check generic field properties.
     if (field.name === undefined) {
-      throw ns.t('core', 'missingProperty', {':index': i, ':property': 'name'});
+      throw ns.t('core', 'missingProperty', { ':index': i, ':property': 'name' });
     }
     if (field.type === undefined) {
-      throw ns.t('core', 'missingProperty', {':index': i, ':property': 'type'});
+      throw ns.t('core', 'missingProperty', { ':index': i, ':property': 'type' });
     }
 
     // Set default value.
@@ -447,11 +447,11 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
       params[field.name] = field['default'];
     }
 
-    var widget = ns.getWidgetName(field);
+    const widget = ns.getWidgetName(field);
 
     // TODO: Remove later, this is here for debugging purposes.
     if (ns.widgets[widget] === undefined) {
-      $wrapper.append('<div>[field:' + field.type + ':' + widget + ':' + field.name + ']</div>');
+      $wrapper.append?.(`<div>[field:${field.type}:${widget}:${field.name}]</div>`);
       continue;
     }
 
@@ -461,26 +461,23 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
         ancestor = ns.findAncestor(parent);
       }
 
-      var parentLibrary = ns.getParentLibrary(parent);
-      var library = machineName ? machineName
-        : (field.library ? field.library
-          : (parentLibrary ? parentLibrary
-            : ns.constants.otherLibraries));
+      const parentLibrary = ns.getParentLibrary(parent);
+      const library = machineName || field.library || parentLibrary || ns.constants.otherLibraries;
       ns.renderableCommonFields[library] = ns.renderableCommonFields[library] || {};
       ns.renderableCommonFields[library].fields = ns.renderableCommonFields[library].fields || [];
 
       // Add renderable if it doesn't exist
       ns.renderableCommonFields[library].fields.push({
-        field: field,
-        parent: parent,
-        params: params,
-        ancestor: ancestor,
-        rendered: false
+        field,
+        parent,
+        params,
+        ancestor,
+        rendered: false,
       });
       continue;
     }
 
-    var fieldInstance = new ns.widgets[widget](parent, field, params[field.name], function (field, value) {
+    const fieldInstance = new ns.widgets[widget](parent, field, params[field.name], function (field, value) {
       if (value === undefined) {
         delete params[field.name];
       }
@@ -494,7 +491,7 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
 
   // Render all gathered common field
   if (ns.renderableCommonFields) {
-    for (var commonFieldMachineName in ns.renderableCommonFields) {
+    for (const commonFieldMachineName in ns.renderableCommonFields) {
       if (commonFieldMachineName === ns.constants.otherLibraries) {
         // No need to grab library info
         ns.renderCommonField(commonFieldMachineName);
@@ -511,7 +508,7 @@ ns.processSemanticsChunk = function (semanticsChunk, params, $wrapper, parent, m
 
   if (!parent.passReadies) {
     // Run ready callbacks.
-    for (i = 0; i < parent.readies.length; i++) {
+    for (let i = 0; i < parent.readies.length; i++) {
       parent.readies[i]();
     }
     delete parent.readies;
@@ -803,7 +800,8 @@ ns.createImportance = function (importance) {
  * @param {string} [label]
  * @param {string} [description]
  * @param {string} [content]
- * @deprecated since version 1.12 (Jan. 2017, will be removed Jan. 2018). Use createFieldMarkup instead.
+ * @deprecated since version 1.12. Use createFieldMarkup instead.
+ *  This method is still used by `H5PEditor.InteractiveVideo`.
  * @see createFieldMarkup
  * @returns {string} HTML
  */
@@ -815,7 +813,6 @@ ns.createItem = function (type, label, description, content) {
            '<div class="h5p-errors"></div>' +
          '</div>';
 };
-
 /**
  * An object describing the semantics of a field
  * @typedef {Object} SemanticField
@@ -830,7 +827,6 @@ ns.createItem = function (type, label, description, content) {
 
 /**
  * Create HTML wrapper for a field item.
- * Replacement for createItem()
  *
  * @since 1.12
  * @param  {SemanticField} field
@@ -839,9 +835,7 @@ ns.createItem = function (type, label, description, content) {
  * @return {string}
  */
 ns.createFieldMarkup = function (field, content, inputId) {
-  content = content || '';
-  var markup = this.createLabel(field, '', inputId) + this.createDescription(field.description, inputId) + content;
-
+  const markup = this.createLabel(field, '', inputId) + this.createDescription(field.description, inputId) + (content || '');
   return this.wrapFieldMarkup(field, markup);
 };
 
@@ -855,10 +849,7 @@ ns.createFieldMarkup = function (field, content, inputId) {
  * @return {string}
  */
 ns.createBooleanFieldMarkup = function (field, content, inputId) {
-  var markup = '<label class="h5peditor-label">' +
-    content + (field.label || field.name || '') + '</label>' +
-    this.createDescription(field.description, inputId);
-
+  const markup = this.createLabel(field, content || '', inputId) + this.createDescription(field.description, inputId);
   return this.wrapFieldMarkup(field, markup);
 };
 
@@ -975,12 +966,12 @@ ns.getDescriptionId = function (id) {
  */
 ns.createLabel = function (field, content, inputId) {
   // New items can be added next to the label within the flex-wrapper
-  var html = '<label class="h5peditor-label-wrapper"';
+  let html = '<label class="h5peditor-label-wrapper"';
 
   if (inputId !== undefined) {
     html += ' for="' + inputId + '"';
   }
-  html+= '>'
+  html += '>';
 
   // Temporary fix for the old version of CoursePresentation's custom editor
   if (field.widget === 'coursepresentation' && field.name === 'presentation') {
@@ -988,20 +979,43 @@ ns.createLabel = function (field, content, inputId) {
   }
 
   if (field.label !== 0) {
-    html += '<span class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' + (field.label === undefined ? field.name : field.label) + '</span>';
+    html += '<span class="h5peditor-label' + (field.optional ? '' : ' h5peditor-required') + '">' +  (content || '') + (field.label ?? field.name) + '</span>';
   }
 
-  return html + (content || '') + '</label>';
+  html += '</label>';
+  return html;
 };
 
 /**
- * Create a description
+ * Create a field details icon ⓘ and initialize a H5P.Tooltip on it
+ * @param {HTMLElement} fieldMarkup The element that should contain the button
+ * @param {String} text The text to display in the tooltip
+ * @returns {Object|null} Tooltip instance, if created
+ */
+ns.initDetailsTooltip = function (fieldMarkup, text) {
+  if (!fieldMarkup || !text) {
+    return null;
+  }
+  const label = fieldMarkup.querySelector('.h5peditor-label');
+  if (!label) {
+    return null;
+  }
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'h5peditor-field-details';
+  button.setAttribute('aria-label', ns.t('core', 'detailsIconAriaLabel'));
+  label.insertAdjacentElement('afterend', button);
+  return H5P.Tooltip(button, { text, ariaHidden: false });
+};
+
+/**
+ * Create a field description
  * @param {String} description
  * @param {number} [inputId] Used to reference description from input
  * @returns {string}
  */
 ns.createDescription = function (description, inputId) {
-  var html = '';
+  let html = '';
   if (description !== undefined) {
     html += '<div class="h5peditor-field-description"';
     if (inputId !== undefined) {
@@ -1018,7 +1032,7 @@ ns.createDescription = function (description, inputId) {
  * @returns {String}
  */
 ns.createImportantDescription = function (importantDescription) {
-  var html = '';
+  let html = '';
 
   if (importantDescription !== undefined) {
     html += '<div class="h5peditor-field-important-description">' +

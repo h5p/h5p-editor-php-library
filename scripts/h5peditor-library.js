@@ -102,18 +102,9 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   var html = '<div class="field ' + this.field.type + '">';
   const id = ns.getNextFieldId(this.field);
 
-  if (this.field.label !== 0 && this.field.label !== undefined) {
-    html += '<div class="h5p-editor-flex-wrapper">' +
-        '<label class="h5peditor-label-wrapper" for="' + id + '">' +
-          '<span class="h5peditor-label' +
-            (this.field.optional ? '' : ' h5peditor-required') + '">' +
-              this.field.label +
-          '</span>' +
-        '</label>' +
-      '</div>';
-  }
-
-  html += ns.createDescription(this.field.description, id);
+  html += `<div class="h5p-editor-flex-wrapper">${
+    ns.createFieldMarkup(this.field, '', id)
+  }</div>`;
 
   html += '<select id="' + id + '"';
   if (this.field.description !== undefined) {
@@ -168,6 +159,8 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   html += '</div>';
 
   this.$myField = ns.$(html).appendTo($wrapper);
+  this.detailsTooltip?.remove();
+  this.detailsTooltip = ns.initDetailsTooltip(this.$myField[0], this.field.details);
   this.$select = this.$myField.children('select');
   this.$label = this.$myField.find('.h5peditor-label');
   this.$clearfix = this.$myField.children('.h5peditor-clearfix');
@@ -604,6 +597,7 @@ ns.Library.prototype.forEachChild = function (task) {
  * @alias H5PEditor.Library#remove
  */
 ns.Library.prototype.remove = function () {
+  this.detailsTooltip?.remove();
   this.removeChildren();
   if (this.$select !== undefined) {
     this.$select.parent().remove();

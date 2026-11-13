@@ -211,7 +211,7 @@ H5PEditor.ListEditor = (function ($) {
         window.getComputedStyle(this.collapseButtonsWrapper).gap ?? 0
       );
 
-      const listButtonRect = this.collapseButtonList.getBoundingClientRect();
+      const listButtonRect = this.collapseLabelWrapper.getBoundingClientRect();
 
       const hasSpaceForBothButtons =
         wrapperRect.width - listButtonRect.width - this.collapseButtonsGap >=
@@ -329,20 +329,26 @@ H5PEditor.ListEditor = (function ($) {
        * Move original label offsite, because it is used as a <label> for screen
        * readers and display list title collapse button instead.
        */
-      this.originalLabel =
-        this.container.parentNode?.querySelector('.h5peditor-label');
-      this.originalLabel.classList.add('offsite');
+      this.originalLabelWrapper = this.container.parentNode?.querySelector('.h5peditor-label-wrapper');
+      this.collapseDetailsButton = this.originalLabelWrapper.querySelector('.h5peditor-field-details');
+      this.originalLabelWrapper.classList.add('offsite');
 
+      this.collapseLabelWrapper = document.createElement('div');
+      this.collapseLabelWrapper.classList.add('h5peditor-label-wrapper');
       this.collapseButtonList = document.createElement('button');
       this.collapseButtonList.classList.add('h5peditor-label-button');
+      this.collapseLabelWrapper.append(this.collapseButtonList);
+      if (this.collapseDetailsButton) {
+        this.collapseLabelWrapper.append(this.collapseDetailsButton);
+      }
 
       const icon = document.createElement('div');
       icon.classList.add('icon');
       this.collapseButtonList.append(icon);
 
       const label = document.createElement('div');
-      label.classList.add('label', 'h5peditor-required');
-      label.innerText = this.originalLabel.innerText;
+      label.classList.add('h5peditor-label', 'h5peditor-required');
+      label.innerText = this.originalLabelWrapper.innerText;
       this.collapseButtonList.append(label);
 
       this.collapseButtonList.setAttribute(
@@ -360,15 +366,15 @@ H5PEditor.ListEditor = (function ($) {
        * alone on top of those and leave the "label" where it was.
        */
       const bothsButtonsInSameContainer =
-        self.container.previousSibling === this.originalLabel;
+        self.container.previousSibling === this.originalLabelWrapper;
 
       if (bothsButtonsInSameContainer) {
         this.collapseButtonsWrapper.classList.add('has-label');
-        this.collapseButtonsWrapper.append(this.collapseButtonList);
+        this.collapseButtonsWrapper.append(this.collapseLabelWrapper);
       }
       else {
         self.container.previousSibling.parentNode?.insertBefore(
-          this.collapseButtonList, self.container.previousSibling
+          this.collapseLabelWrapper, self.container.previousSibling
         );
       }
 
@@ -752,19 +758,15 @@ H5PEditor.ListEditor = (function ($) {
         // Append field
         item.appendTo($content);
 
-        if (item.field.label !== 0) {
+        if (item.field.label !== undefined) {
           // Try to find and move the label to the title bar
-          const $label =
-            $content.children('.field').find('.h5peditor-label:first');
+          const $labelWrapper =
+            $content.children('.field').find('.h5peditor-label-wrapper:first');
+          const $label = $labelWrapper.find('.h5peditor-label:first');
 
-          if ($label.length !== 0) {
-            $titleBar.append($('<label/>', {
-              'class': 'h5peditor-label',
-              'for': $label.parent().attr('for'),
-              html: $label.html()
-            }));
-
-            $label.hide();
+          if ($labelWrapper.length !== 0) {
+            $label.removeClass('h5peditor-required');
+            $titleBar.append($labelWrapper);
           }
         }
       }
@@ -780,7 +782,7 @@ H5PEditor.ListEditor = (function ($) {
         item.expand();
       }
 
-      $titleBar.children('.h5peditor-label').mousedown(down);
+      $titleBar.find('.h5peditor-label-wrapper').mousedown(down);
     };
 
     /**
@@ -824,8 +826,12 @@ H5PEditor.ListEditor = (function ($) {
      * Remove collapse buttons from container.
      */
     self.removeCollapseButtons = () => {
-      this.originalLabel?.classList.remove('offsite');
-      this.collapseButtonList?.remove();
+      if (this.collapseDetailsButton) {
+        this.originalLabelWrapper.append(this.collapseDetailsButton);
+        this.collapseDetailsButton = null;
+      }
+      this.originalLabelWrapper?.classList.remove('offsite');
+      this.collapseLabelWrapper?.remove();
       this.collapseButtonMain?.remove();
       this.collapseButtonsWrapper?.remove();
       H5P.$window.get(0).removeEventListener('resize', self.handleResize);

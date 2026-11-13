@@ -27,6 +27,8 @@ ns.Textarea.prototype.appendTo = function ($wrapper) {
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$input = this.$item.find('textarea');
   this.$errors = this.$item.find('.h5p-errors');
+  this.detailsTooltip?.remove();
+  this.detailsTooltip = ns.initDetailsTooltip(this.$item[0], this.field.details);
 
   ns.bindImportantDescriptionEvents(this, this.field.name, this.parent);
 
@@ -95,6 +97,7 @@ ns.Textarea.prototype.validate = function () {
  * Remove this item.
  */
 ns.Textarea.prototype.remove = function () {
+  this.detailsTooltip?.remove();
   this.$item.remove();
 };
 

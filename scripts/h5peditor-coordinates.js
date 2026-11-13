@@ -113,6 +113,8 @@ ns.Coordinates.prototype.appendTo = function ($wrapper) {
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$inputs = this.$item.find('input');
   this.$errors = this.$item.children('.h5p-errors');
+  this.detailsTooltip?.remove();
+  this.detailsTooltip = ns.initDetailsTooltip(this.$item[0], this.field.details);
 
   this.$inputs.change(function () {
     // Validate
@@ -187,6 +189,7 @@ ns.Coordinates.prototype.validate = function () {
  * Remove this item.
  */
 ns.Coordinates.prototype.remove = function () {
+  this.detailsTooltip?.remove();
   this.$item.remove();
 };
 
