@@ -782,7 +782,7 @@ H5PEditor.ListEditor = (function ($) {
         item.expand();
       }
 
-      $titleBar.find('.h5peditor-label-wrapper').mousedown(down);
+      $titleBar.find('.h5peditor-label, .h5peditor-label-wrapper').mousedown(down);
     };
 
     /**
