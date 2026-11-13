@@ -228,8 +228,7 @@ H5PEditor.List = (function ($) {
           setValue(field);
         }
       }
-      self.trigger('removedItem', index);
-
+      
       // Ensure that collapsed state is set according to remaining items
       handleGroupCollapsedStateChanged();
     };
