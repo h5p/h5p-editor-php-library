@@ -708,18 +708,6 @@ H5PEditor.ListEditor = (function ($) {
         }
       ).appendTo($listActions);
 
-      list.on('removedItem', (event) => {
-        if (event.data !== $item.index()) {
-          return;
-        }
-        
-        $item.remove();
-
-        if (!(list.getValue() ?? []).length) {
-          self.removeCollapseButtons();
-        }
-      });
-
       // Append new field item to content wrapper
       if (item instanceof H5PEditor.Group) {
         // Append to item
@@ -830,6 +818,14 @@ H5PEditor.ListEditor = (function ($) {
       this.collapseButtonsWrapper?.remove();
       H5P.$window.get(0).removeEventListener('resize', self.handleResize);
     };
+
+    list.on('removedItem', (event) => {
+      $list.children().eq(event.data).remove();
+
+      if (!(list.getValue() ?? []).length) {
+        self.removeCollapseButtons();
+      }
+    });
   }
 
   return ListEditor;
