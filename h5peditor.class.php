@@ -18,6 +18,7 @@ class H5peditor {
   public static $scripts = array(
     'scripts/h5p-hub-client.js',
     'scripts/h5peditor.js',
+    'scripts/h5peditor-help-menu.js',
     'scripts/h5peditor-semantic-structure.js',
     'scripts/h5peditor-editor.js',
     'scripts/h5peditor-library-selector.js',

@@ -35,6 +35,8 @@ H5PEditor.language.core = {
   editCopyright: 'Edytuj prawa autorskie',
   close: 'Zamknij',
   tutorial: 'Instrukcja',
+  viewTutorial: 'View Tutorial',
+  viewExample: 'View Example',
   editMode: 'Tryb edycji',
   listLabel: 'Lista',
   uploadError: 'Błąd podczas dodawnia',
@@ -167,7 +169,7 @@ H5PEditor.language.core = {
   contentTypeCacheOutdatedDesc:
     'Twoja strona nie może połączyć się z H5P.org, aby wyświetlić dostępne aktualizacje typów zasobu. Aktualizowanie ani instalowanie typów zasobu nie jest teraz możliwe.',
   tryAgain: 'Spróbuj ponownie',
-  getHelp: 'Pomoc',
+  getHelp: 'Help',
   untitled: 'Bez tytułu :libraryTitle',
   title: 'Tytuł',
   metadata: 'Metadane',

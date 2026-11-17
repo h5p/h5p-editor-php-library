@@ -170,7 +170,6 @@ ns.Library.prototype.appendTo = function ($wrapper) {
   this.$myField = ns.$(html).appendTo($wrapper);
   this.$select = this.$myField.children('select');
   this.$label = this.$myField.find('.h5peditor-label');
-  this.$clearfix = this.$myField.children('.h5peditor-clearfix');
   this.$libraryWrapper = this.$myField.children('.libwrap');
   if (window.localStorage) {
     this.$copyButton = this.$myField.find('.h5peditor-copy-button').click(function () {
@@ -310,7 +309,6 @@ ns.Library.prototype.librariesLoaded = function (libList) {
   if (self.libraries.length === 1) {
     self.$select.hide();
     self.$myField.children('.h5p-editor-flex-wrapper').hide();
-    self.$clearfix.hide();
     self.loadLibrary(self.$select.children(':last').val(), true);
   }
 

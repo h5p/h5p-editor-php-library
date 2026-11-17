@@ -38,6 +38,8 @@ H5PEditor.language.core = {
   editCopyright: 'Изменить авторское право',
   close: 'Закрыть',
   tutorial: 'Руководство',
+  viewTutorial: 'View Tutorial',
+  viewExample: 'View Example',
   editMode: 'Режим редактирования',
   listLabel: 'Список',
   uploadError: 'Ошибка загрузки файла',
@@ -171,7 +173,7 @@ H5PEditor.language.core = {
   contentTypeCacheOutdatedDesc:
     'Ваш сайт испытывает трудности при подключении к H5P.org для проверки наличия обновлений типа контента. Возможно, вы не сможете обновить или установить новые типы контента.',
   tryAgain: 'Попробуйте снова',
-  getHelp: 'Получить помощь',
+  getHelp: 'Help',
   untitled: 'Без названия :libraryTitle',
   title: 'Название',
   metadata: 'Метаданные',

@@ -36,6 +36,8 @@ H5PEditor.language.core = {
   editCopyright: 'Uredi avtorske pravice',
   close: 'Zapri',
   tutorial: 'Pomoč',
+  viewTutorial: 'View Tutorial',
+  viewExample: 'View Example',
   editMode: 'Urejevalni način',
   listLabel: 'Seznam',
   uploadError: 'Napaka pri nalaganju datoteke',
@@ -168,7 +170,7 @@ H5PEditor.language.core = {
   contentTypeCacheOutdatedDesc:
     'Vaše spletno mesto ima težave pri povezovanju s H5P.org in preverjanju posodobitev za tipe vsebine. Morda ne boste mogli posodobiti ali namestiti novih tipov vsebine.',
   tryAgain: 'Poskusite znova',
-  getHelp: 'Pridobi pomoč',
+  getHelp: 'Help',
   untitled: 'Brez naslova :libraryTitle',
   title: 'Naslov',
   metadata: 'Metapodatki',
