@@ -83,9 +83,17 @@ ns.widgets.image.prototype.constructor = ns.widgets.image;
 ns.widgets.image.prototype.appendTo = function ($wrapper) {
   var self = this;
 
-  var htmlString = '<div class="file"></div>' +
-    '<div class="h5p-editor-image-buttons">' +
-      '<button class="h5peditor-button-textual h5p-editing-image-button">' + ns.t('core', 'editImage') + '</button>';
+  var htmlString = `
+    <div class="h5p-dnd__container h5p-dnd__container-image">
+      <div class="h5p-dnd__box h5p-dnd__box--is-dashed h5p-dnd__box--image" tabindex="0">
+        ${this.getBaseMarkup()}
+      </div>
+    </div>
+    <div class="h5p-editor-dialog">
+      <a href="#" class="h5p-close" title="${ns.t('core', 'close')}"></a>
+    </div>
+    <div class="h5p-sr-only" aria-live="polite"></div>
+  `
 
   if (!this.field.disableCopyright) {
     htmlString += '<button class="h5peditor-button-textual h5p-copyright-button">' + ns.t('core', 'editCopyright') + '</button>';
@@ -106,8 +114,9 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
   this.$errors = $container.find('.h5p-errors');
   this.addFile();
 
-  var $dialog = $container.find('.h5p-editor-dialog');
-  $container.find('.h5p-copyright-button').add($dialog.find('.h5p-close')).click(function () {
+  const $dialog = this.$container.find('.h5p-editor-dialog');
+
+  this.$container.on('click', '.h5p-copyright-button, .h5p-editor-dialog .h5p-close', () => {
     $dialog.toggleClass('h5p-open');
     return false;
   });
@@ -173,6 +182,202 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
 
 };
 
+/**
+ * Displays the error message to the user.
+ *
+ * @param {string} message
+ */
+ns.widgets.image.prototype.setErrorMessage = function (message) {
+  if (this.previousState === this.STATE.HAS_IMAGE) {
+    this.params = this.previousParams;
+    this.addFile();
+  } else {
+    this.removeImage();
+  }
+
+  this.setAriaLiveErrorMessage(message);
+  this.boxContainerEl.classList.add('has-error');
+  this.boxContainerEl.querySelector('.h5p-errors').innerText = message;
+};
+
+ns.widgets.image.prototype.setAriaLiveErrorMessage = function (message) {
+  this.ariaLiveEl.innerText = message;
+  // Note: Should last long enough for the screen reader to read the text above.
+  setTimeout(() => {
+    this.ariaLiveEl.innerText = "";
+  }, 5000);
+};
+
+/**
+ * Will either upload or replace (and upload) an image.
+ *
+ * @param {FileList} files
+ */
+ns.widgets.image.prototype.uploadOrReplaceImage = function (files) {
+  if (typeof this.params !== 'undefined') {
+    // Need to make a copy of the file since Firefox loses the reference to it during the confirm replace dialog.
+    const filesBackup = [new File([files[0]], files[0].name, { type: files[0].type })];
+    this.replaceCallback = () => {
+      this.removeImage();
+      this.uploadFile(filesBackup);
+    };
+    this.previousState = this.STATE.HAS_IMAGE;
+    this.previousParams = this.params;
+    this.confirmReplaceDialog.show(this.$imageDropContainer.offset().top);
+  } else {
+    this.previousState = this.STATE.NO_IMAGE;
+    this.previousParams = null;
+    this.uploadFile(files);
+  }
+};
+
+/**
+ * Add drag and drop listeners to the appropriate DOM elements.
+ */
+ns.widgets.image.prototype.addDragAndDropListeners = function () {
+  const boundedHandleDnD = this.handleDragAndDrop.bind(this);
+
+  this.dropBlockEl = this.boxEl.querySelector('.h5p-dnd__box__block');
+  this.boxEl.addEventListener('dragenter', boundedHandleDnD);
+  this.dropBlockEl.addEventListener('dragover', boundedHandleDnD);
+  this.dropBlockEl.addEventListener('dragend', boundedHandleDnD);
+  this.dropBlockEl.addEventListener('dragleave', boundedHandleDnD);
+  this.dropBlockEl.addEventListener('drop', boundedHandleDnD);
+};
+
+/**
+ * Upload the first file in the FileList.
+ * @todo: handle multiple files?
+ *
+ * @param {FileList} files
+ */
+ns.widgets.image.prototype.uploadFile = function (files) {
+  if (files.length > 0) {
+    this.upload(files[0], files[0].name);
+  }
+};
+
+/**
+ * Handle drag and drop events. Will apply the correct css classes (styling)
+ * depending on event type and will handle uploading if the user drops the file.
+ *
+ * @param {Event} e
+ */
+ns.widgets.image.prototype.handleDragAndDrop = function (e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  const container = e.target.closest('.h5p-dnd__container');
+  const boxBlock = container.querySelector('.h5p-dnd__box__block');
+
+  if (e.type === 'dragenter') {
+    this.boxEl.classList.add('h5p-dnd__box--is-dragging')
+  }
+  else if (e.type === 'dragend' || (e.type === 'dragleave' && boxBlock === e.target)) {
+	  this.boxEl.classList.remove('h5p-dnd__box--is-dragging');
+  }
+  else if (e.type === 'drop') {
+    this.boxEl.classList.remove('h5p-dnd__box--is-dragging');
+    this.uploadOrReplaceImage(e.dataTransfer.files);
+  }
+};
+
+/**
+ * Generates the HTML for the NO_IMAGE state.
+ *
+ * @returns string The HTML for the NO_IMAGE state
+ */
+ns.widgets.image.prototype.getBaseMarkup = function () {
+  const buttonLabel = ns.t('core', 'dragAndDropAndPasteImageTitleButtonLabel');
+  const button = `<button class="h5p-dnd__btn h5p-dnd__btn__upload">${buttonLabel}</button>`;
+  const title = ns.t('core', 'dragAndDropAndPasteImageTitle', { ':button': button });
+  const description = ns.t('core', 'dragAndDropAndPasteImageDescription');
+  return `
+    <div class="h5p-dnd__box__block"></div>
+    <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--is-fixed h5p-dnd__column--when-wide h5p-dnd__no-x-margin h5p-dnd__box-image">
+      <div class="h5p-dnd__upload-image-svg"></div>
+    </div>
+    <div class="h5p-dnd__column h5p-dnd__column--when-small h5p-dnd__box-image">
+      <div class="h5p-dnd__upload-image-svg"></div>
+    </div>
+    <div class="h5p-dnd__column h5p-dnd_align_left h5p-dnd__box-text">
+      <div class="text-center h5p-dnd__title">
+        ${title}
+      </div>
+      <div class="text-muted">
+        ${description}
+      </div>
+      <div class="h5p-errors"></div>
+    </div>
+  `
+};
+
+/**
+ * Generates the HTML for the UPLOADING state.
+ * @returns string The HTML for the UPLOADING state
+ */
+ns.widgets.image.prototype.getUploadingMarkup = function () {
+  return `
+    <div class="h5p-dnd__column h5p-dnd__column--is-full-width">
+      <div class="h5p-loader__wrapper">
+        <div class="h5p-loader__icon"></div>
+      </div>
+    </div>
+  `;
+};
+
+/**
+ * Generates the HTML for the HAS_IMAGE state.
+ * @returns string The HTML for the HAS_IMAGE state
+ */
+ns.widgets.image.prototype.getUploadedMarkup = function () {
+  const source = H5P.getPath(this.params.path, H5PEditor.contentId);
+  const altText = (this.field.label === undefined ? '' : this.field.label);
+
+  return `
+      <div class="h5p-dnd__box__block"></div>
+      <div class="h5p-dnd__column">
+        <div class="h5p-dnd__img__container">
+          <div class="h5p-dnd__img__overlay"></div>
+          <img class="h5p-dnd__img" src="${source}" alt="${altText}" />
+        </div>
+      </div>
+  `;
+};
+
+/**
+ * Generates the HTML for the HAS_IMAGE state. This is an extra function needed
+ * as this HTML will be placed in a different place than the HTML from getUploadedMarkup().
+ * @returns string The HTML for the HAS_IMAGE state
+ */
+ns.widgets.image.prototype.getImageActionMarkup = function () {
+  return `
+    <div class="h5p-errors"></div>
+    <div class="h5p-editor-image-actions">
+      <button class="edit h5p-editing-image-button h5peditor-button-textual" type="button">${ns.t('core', 'editImage')}</button>
+      <button class="delete h5p-delete-image-button h5peditor-button-textual" type="button">${ns.t('core', 'deleteLabel')}</button>
+      <button class="h5peditor-button-textual h5p-copyright-button">${ns.t('core', 'editCopyright')}</button>
+    </div>
+  `;
+};
+
+/**
+ *
+ * @param {number} progress 0-100 the progress of uploading the image
+ */
+ns.widgets.image.prototype.handleUploadProgress = function (progress) {
+  // @todo: want to use progress for something?
+
+  // Since this function is called multiple times during upload we only want to trigger
+  // the render of the uploading markup once.
+  if (this.boxContainerEl.querySelector('.h5p-loader__wrapper') === null) {
+    this.setAriaLiveErrorMessage(ns.t('core', 'uploadingImage'));
+
+    this.boxEl.innerHTML = this.getUploadingMarkup();
+    this.boxEl.classList.add('h5p-dnd__box--is-uploading');
+    this.boxEl.classList.remove('h5p-dnd__box--is-dragging')
+  }
+};
 
 /**
  * Sync copyright.
@@ -191,30 +396,10 @@ ns.widgets.image.prototype.addFile = function () {
   var that = this;
 
   if (this.params === undefined) {
-
-    // No image look
-    let html = '<a href="#" id="' + this.id + '" class="add"';
-    if (this.field.description !== undefined) {
-      html += ' aria-describedby="' + ns.getDescriptionId(this.id) + '"';
+    const error = this.$errors.text();
+    if (error) {
+      this.setErrorMessage(error);
     }
-    html += ' title="' + ns.t('core', 'addFile') + '">' +
-      '<div class="h5peditor-field-file-upload-text">' + ns.t('core', 'add') + '</div>' +
-    '</a>'
-
-    this.$file
-      .html(html)
-      .children('.add')
-      .click(function () {
-        that.isOriginalImage = true;
-        that.openFileSelector();
-        return false;
-      });
-
-    // Remove edit image button
-    this.$editImage.addClass('hidden');
-    this.$copyrightButton.addClass('hidden');
-    this.isEditing = false;
-
     return false;
   }
 

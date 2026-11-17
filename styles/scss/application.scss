@@ -466,6 +466,7 @@ a {
     }
 
     .h5p-add-dialog-table {
+      container: h5p-add-dialog-table / inline-size;
       overflow: hidden;
 
       .av-tablist {
@@ -492,11 +493,17 @@ a {
           background: #fff;
         }
       }
+      @container (max-width: 372px) {
+        .av-tablist:has(.av-tab.av-tab__record-audio) .av-tab span {
+          display: none;
+        }
+      }
 
       .av-tabpanel {
-        border: 1px solid #ccc;
-        margin: 0 1em 1em 1em;
-        overflow: hidden;
+        border: 1px solid $av-tab-container-border-color;
+        border-radius: 0;
+        margin-top: 1px;
+        position: relative;
         padding: 1em;
 
         h3 {
@@ -918,6 +925,9 @@ a {
   }
 
   .h5p-copyright-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     border-radius: 0.25em;
     height: 30px;
     background: linear-gradient(to bottom, #fff 0, #f2f2f2 100%);
@@ -926,7 +936,7 @@ a {
     font-size: $font-size-small;
     line-height: $form-item-height-small;
     padding-right: $padding;
-    padding-left: 0;
+    padding-left: calc($padding - 5px);
     clear: both;
     font-weight: normal;
 
@@ -934,8 +944,6 @@ a {
       font-family: $icon-font-family;
       content: "\e88f";
       color: #666;
-      padding: 0 0.25em 0 0.25em;
-      vertical-align: middle;
       font-size: 1.5em;
       line-height: 0.9;
     }

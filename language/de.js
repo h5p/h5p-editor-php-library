@@ -33,6 +33,9 @@ H5PEditor.language.core = {
   commonFieldsDescription:
     'Hier können Bezeichnungen bearbeitet oder Texte übersetzt werden, die in diesem Inhalt verwendet werden.',
   uploading: 'Lade hoch, bitte warten...',
+  dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
+  dragAndDropAndPasteAudioDescription: 'Max 20 MB,supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteVideoDescription: 'Max 2 GB,recommended formats: .webm, .mp4',
   noFollow: 'Dem Feld ":path" kann nicht gefolgt werden.',
   editCopyright: 'Rechteangaben bearbeiten',
   close: 'Schließen',
@@ -41,6 +44,7 @@ H5PEditor.language.core = {
   listLabel: 'Liste',
   uploadError: 'Fehler beim Hochladen der Datei',
   fileToLarge: 'Die Datei, die hochgeladen werden soll, könnte zu groß sein.',
+  fileSizeLimit: 'The file you are trying to upload is too big. The limit is :sizeLimit.',
   unknownFileUploadError: 'Unbekannter Fehler beim Hochladen der Datei',
   noSemantics: 'Der Editor zu diesem Inhaltstyp konnte nicht geladen werden.',
   editImage: 'Bild bearbeiten',
@@ -56,8 +60,13 @@ H5PEditor.language.core = {
   enterVideoTitle: 'YouTube-Link oder andere Video-URL einfügen',
   uploadAudioTitle: 'Audio-Datei hochladen',
   uploadVideoTitle: 'Video-Datei hochladen',
+  fileUploadTitle: 'File Upload',
+  insertLinkTitle: 'URL',
+  recordAudioTitle: 'Record Audio',
   addVideoDescription:
-    'H5P unterstützt alle externen Videoquellen, die das mp4-, webm- or ogv-Format haben, und unterstützt YouTube-, Vimeo-Pro- und Panopto-Links.',
+    'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube, Panopto, and Echo360 links.',
+  unsupportedVideoSource: "Unsupported video source",
+  unsupportedAudioSource: "Unsupported audio source",
   insert: 'Einfügen',
   cancel: 'Abbrechen',
   height: 'Höhe',
@@ -164,6 +173,7 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'An dieser Beschreibung kann der Benutzer die Qualität des hochgeladenen Videos erkennen. Beispiele: 1080p, 720p, HD oder mobil',
   videoQualityDefaultLabel: 'Videoqualität :index',
+  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Keine Inhaltstypen verfügbar',
   noContentTypesAvailableDesc:
     'Es können keine Inhaltstypen aufgelistet werden, da Verbindungsprobleme zu H5P.org bestehen.',

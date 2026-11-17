@@ -33,6 +33,9 @@ H5PEditor.language.core = {
   commonFieldsDescription:
     'Εδώ μπορείτε να επεξεργαστείτε ρυθμίσεις ή να μεταφράσετε κείμενα τα οποία χρησιμοποιούνται σε αυτό το περιεχόμενο.',
   uploading: 'Μεταφόρτωση, παρακαλούμε περιμένετε...',
+  dragAndDropAndPasteAudioVideoTitle: '<button class="h5p-dnd__btn h5p-dnd__btn__upload" type="button">Choose</button>, drop or paste a file here',
+  dragAndDropAndPasteAudioDescription: 'Max 20 MB,supported formats: .wav, .mp3, .ogg',
+  dragAndDropAndPasteVideoDescription: 'Max 2 GB,recommended formats: .webm, .mp4',
   noFollow: 'Δεν είναι δυνατή η παρακολούθηση του πεδίου ":path".',
   editCopyright: 'Επεξεργασία πνευματικών δικαιωμάτων',
   close: 'Κλείσιμο',
@@ -41,6 +44,7 @@ H5PEditor.language.core = {
   listLabel: 'Λίστα',
   uploadError: 'Σφάλμα Μεταφόρτωσης Αρχείου',
   fileToLarge: 'Το αρχείο το οποίο προσπαθείτε να μεταφορτώσετε, ενδέχεται να είναι πολύ μεγάλο.',
+  fileSizeLimit: 'The file you are trying to upload is too big. The limit is :sizeLimit.',
   unknownFileUploadError: 'Άγνωστο σφάλμα μεταφόρτωσης αρχείου',
   noSemantics: 'Σφάλμα, δεν ήταν δυνατή η φόρτωση της φόρμας τύπου περιεχομένου.',
   editImage: 'Επεξεργασία εικόνας',
@@ -56,8 +60,13 @@ H5PEditor.language.core = {
   enterVideoTitle: 'Επικολλήστε σύνδεσμο YouTube ή άλλη διεύθυνση URL βίντεο',
   uploadAudioTitle: 'Μεταφορτώστε αρχείο ήχου',
   uploadVideoTitle: 'Μεταφορτώστε αρχείο video',
+  fileUploadTitle: 'File Upload',
+  insertLinkTitle: 'URL',
+  recordAudioTitle: 'Record Audio',
   addVideoDescription:
-    'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube and Panopto links.',
+    'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube, Panopto, and Echo360 links.',
+  unsupportedVideoSource: "Unsupported video source",
+  unsupportedAudioSource: "Unsupported audio source",
   insert: 'Εισαγωγή',
   cancel: 'Ακύρωση',
   height: 'ύψος',
@@ -164,6 +173,7 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'Αυτή η ετικέτα βοηθά τον χρήστη να αναγνωρίσει την τρέχουσα ποιότητα του βίντεο. Για παράδειγμα 1080p, 720p, HD ή Mobile',
   videoQualityDefaultLabel: 'Ποιότητα :index',
+  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'No content types are available',
   noContentTypesAvailableDesc:
     'Your site is having difficulties connecting to H5P.org and listing the available content types.',

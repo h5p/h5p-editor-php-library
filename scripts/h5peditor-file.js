@@ -87,6 +87,7 @@ ns.File = function (parent, field, params, setValue) {
     }
     catch (error) {
       self.$errors.append(ns.createError(error));
+      self.addFile();
     }
 
     self.addFile();
