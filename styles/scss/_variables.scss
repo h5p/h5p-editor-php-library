@@ -25,6 +25,8 @@ $form-content-background: $white;
 $form-input-color: $white;
 $form-input-placeholder-color: #858585;
 $form-input-focus-placeholder-color: #fff;
+$form-input-box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.12);
+
 $form-item-importance-high-background: #2579C6;
 $form-item-importance-high-background-highlight: #3080c9;
 $form-item-importance-high-border-color: #1f67a8;
@@ -55,6 +57,24 @@ $form-item-buttons-width-small: 54px;
 $form-label: #454347;
 $form-label-importance-high: #356593;
 
+// Audio and Video (av) tab widget
+$av-tab-container-border-color: #D0CFD4;
+$av-tab-container-background-color: #FFFFFF;
+$av-tab-button-color: #E7E9EE;
+$av-tab-button-selected-color: #FFFFFF;
+$av-tab-button-title-color: #000000;
+$av-tab-button-font-color: #297BC7;
+
+// Drag and drop
+$dnd-blue: #1670DF;
+$dnd-blue-faded: #f6faff;
+$dnd-text-color: #454347;
+$dnd-gray-light: #D0CFD4;
+$dnd-gray-dark: #ACACAC;
+
 // Group collapse button
 $group-collapse-button-color: #228380;
 $group-collapse-button-color-light: #4dc2bf;
+
+// New video quality label colors
+$video-quality-label-background: #F9F9F9;
