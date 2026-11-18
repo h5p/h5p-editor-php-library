@@ -1,4 +1,5 @@
 H5PEditor.language.core = {
+  additionalInformation: 'Ek bilgiler',
   missingTranslation: '[Eksik çeviri :key]',
   loading: ':type yükleniyor, bekleyin ...',
   selectLibrary: 'İçeriğiniz için kullanmak istediğiniz kitaplığı seçin.',

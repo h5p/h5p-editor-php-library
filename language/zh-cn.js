@@ -1,4 +1,5 @@
 H5PEditor.language.core = {
+  additionalInformation: '其他信息',
   missingTranslation: '[缺少翻译 :key]',
   loading: '加载中，请稍候...',
   selectLibrary: '请选择用于创建内容的库。',

@@ -320,7 +320,7 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
     // Append the Additional information group
     var additionals = new H5PEditor.widgets.group(self, {
       name: 'additionals',
-      label: 'Additional information', // TODO: l10n ?
+      label: H5PEditor.t('core', 'additionalInformation'),
       fields: [
         findField('authorComments')
       ]

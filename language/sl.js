@@ -1,4 +1,5 @@
 H5PEditor.language.core = {
+  additionalInformation: 'Dodatne informacije',
   missingTranslation: '[Manjka prevod :key]',
   loading: 'Nalagam, počakajte prosim ...',
   selectLibrary: 'Izberite knjižnico, ki jo želite uporabiti za svojo vsebino.',
