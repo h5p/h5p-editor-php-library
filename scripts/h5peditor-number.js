@@ -92,6 +92,23 @@ ns.Number.prototype.createHtml = function () {
 ns.Number.prototype.validate = function () {
   var that = this;
 
+  /**
+   * Safely compute a remainder to avoid precision problems.
+   * @param {number} dividend Dividend.
+   * @param {number} divisor Divisor.
+   * @return {number} Remainder.
+   */
+  const remainder = function (dividend, divisor) {
+    const decimalCount = Math.max(
+      (dividend.toString().split('.')[1] || '').length,
+      (divisor.toString().split('.')[1] || '').length
+    );
+    return (
+      parseInt(dividend.toFixed(decimalCount).replace('.','')) %
+      parseInt(divisor.toFixed(decimalCount).replace('.',''))
+    ) / Math.pow(10, decimalCount);
+  }
+
   var value = H5P.trim(this.$input.val());
   var decimals = this.field.decimals !== undefined && this.field.decimals;
 
@@ -140,7 +157,7 @@ ns.Number.prototype.validate = function () {
       else if (this.field.min !== undefined && value < this.field.min) {
         this.$errors.append(ns.createError(ns.t('core', 'belowMin', {':property': propertyName, ':min': this.field.min})));
       }
-      else if (this.field.step !== undefined && value % this.field.step)  {
+      else if (this.field.step !== undefined && remainder(value, this.field.step))  {
         this.$errors.append(ns.createError(ns.t('core', 'outOfStep', {':property': propertyName, ':step': this.field.step})));
       }
     }
