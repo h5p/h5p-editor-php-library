@@ -9,7 +9,7 @@
  * @param {string} [helpMenuId] Unique menu id.
  * @returns {string} HTML
  */
-ns.createHelpMenuButton = (helpMenuId = 'h5peditor-help-menu') => `
+ns.createHelpMenuButton = (helpMenuId = `h5peditor-help-menu-${H5P.createUUID()}`) => `
   <div class="h5peditor-help">
     <button class="h5peditor-help-button" type="button" aria-expanded="false" aria-haspopup="menu" aria-controls="${helpMenuId}">
       ${ns.t('core', 'getHelp')}
