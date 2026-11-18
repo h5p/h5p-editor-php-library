@@ -126,6 +126,10 @@
     text-overflow: ellipsis;
   }
 
+  .h5peditor-field-details::before {
+    color: $white;
+  }
+
   &.importance-high .h5peditor-label {
     @extend %title-bar-text-importance-high;
   }
@@ -134,13 +138,15 @@
     @extend %title-bar-text-importance-medium;
   }
 
-  &.importance-low .h5peditor-label {
-    @extend %title-bar-text-importance-low;
+   &.importance-low {
+    .h5peditor-label {
+      @extend %title-bar-text-importance-low;
+    }
+    .h5peditor-field-details::before {
+      color: $text-color;
+    }
   }
 
-  .h5peditor-field-details::before {
-    color: $white;
-  }
 
   & > .list-actions {
     height: 100%;
