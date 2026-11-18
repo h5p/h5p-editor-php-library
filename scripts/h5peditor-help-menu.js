@@ -55,12 +55,11 @@ ns.attachMenuBehavior = (button, menu) => {
   };
   const closeHelpMenu = (restoreFocus) => {
     document.removeEventListener('click', closeOnDocumentClick);
-    button.ariaExpanded = 'false';
-    menu.hidden = true;
-
     if (restoreFocus) {
       button.focus();
     }
+    button.ariaExpanded = 'false';
+    menu.hidden = true;
   };
   const openHelpMenu = () => {
     button.ariaExpanded = 'true';
