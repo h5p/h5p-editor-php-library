@@ -108,6 +108,11 @@ ns.attachMenuBehavior = (button, menu) => {
     let nextIndex;
 
     switch (event.key) {
+      case 'Enter':
+      case ' ':
+        event.preventDefault();
+        menuItems[currentIndex].click();
+        return;
       case 'ArrowDown':
         nextIndex = (currentIndex + 1) % itemCount;
         break;
