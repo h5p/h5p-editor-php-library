@@ -6,15 +6,16 @@
 /**
  * Generate markup for the help menu button.
  *
+ * @param {string} [helpButtonId] Unique button id.
  * @param {string} [helpMenuId] Unique menu id.
  * @returns {string} HTML
  */
-ns.createHelpMenuButton = (helpMenuId = `h5peditor-help-menu-${H5P.createUUID()}`) => `
+ns.createHelpMenuButton = (helpButtonId = `h5peditor-help-button-${H5P.createUUID()}`, helpMenuId = `h5peditor-help-menu-${H5P.createUUID()}`) => `
   <div class="h5peditor-help">
-    <button class="h5peditor-help-button" type="button" aria-expanded="false" aria-haspopup="menu" aria-controls="${helpMenuId}">
+    <button id="${helpButtonId}" class="h5peditor-help-button" type="button" aria-expanded="false" aria-haspopup="menu" aria-controls="${helpMenuId}">
       ${ns.t('core', 'getHelp')}
     </button>
-    <ul class="h5peditor-help-menu" id="${helpMenuId}" role="menu" hidden>
+    <ul class="h5peditor-help-menu" id="${helpMenuId}" role="menu" aria-labelledby="${helpButtonId}" hidden>
       <li class="h5p-tutorial-item" role="none">
         <a class="h5p-tutorial-url" role="menuitem" target="_blank">
           ${ns.t('core', 'viewTutorial')}
