@@ -305,6 +305,7 @@ H5PEditor.language.core = {
   filterErrorMessage: 'Nekaj je šlo narobe. Ponovno naložite stran.',
   in: 'v',
   navigateToParent: 'Pomakni se do starša',
+  detailsIconAriaLabel: 'More information about this field',
   a11yTitleShowLabel: 'Pokaži za bralnik zaslona',
   a11yTitleHideLabel: 'Skrij za bralnik zaslona',
 };

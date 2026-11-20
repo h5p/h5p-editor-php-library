@@ -330,6 +330,7 @@ H5PEditor.language.core = {
     filterErrorMessage: 'Nešto je pošlo po zlu. Molimo ponovno učitajte stranicu.',
     in: 'u',
     navigateToParent: 'Navigiraj do roditelja',
+    detailsIconAriaLabel: 'More information about this field',
     a11yTitleShowLabel: 'Prikaži oznaku za AT',
     a11yTitleHideLabel: 'Sakrij oznaku za AT',
     reuseSuccess: ':title je uspješno uvezeno s H5P Huba.',

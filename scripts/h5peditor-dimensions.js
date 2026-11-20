@@ -93,6 +93,8 @@ ns.Dimensions.prototype.appendTo = function ($wrapper) {
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$inputs = this.$item.find('input');
   this.$errors = this.$item.children('.h5p-errors');
+  this.detailsTooltip?.remove();
+  this.detailsTooltip = ns.initDetailsTooltip(this.$item[0], this.field.details);
 
   this.$inputs.change(function () {
     // Validate
@@ -167,6 +169,7 @@ ns.Dimensions.prototype.validate = function () {
  * Remove this item.
  */
 ns.Dimensions.prototype.remove = function () {
+  this.detailsTooltip?.remove();
   this.$item.remove();
 };
 

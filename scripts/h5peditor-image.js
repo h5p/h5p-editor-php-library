@@ -97,8 +97,10 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
     '</div>';
 
   var html = ns.createFieldMarkup(this.field, htmlString, this.id);
-
   var $container = ns.$(html).appendTo($wrapper);
+  this.detailsTooltip?.remove();
+  this.detailsTooltip = ns.initDetailsTooltip($container[0], this.field.details);
+
   this.$item = $container;
   this.$editImage = $container.find('.h5p-editing-image-button');
   this.$copyrightButton = $container.find('.h5p-copyright-button');
@@ -287,6 +289,7 @@ ns.widgets.image.prototype.validate = function () {
  * Remove this item.
  */
 ns.widgets.image.prototype.remove = function () {
+  this.detailsTooltip?.remove();
   // TODO: Check what happens when removed during upload.
   this.$file.parent().remove();
 };
