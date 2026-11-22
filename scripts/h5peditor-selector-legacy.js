@@ -11,7 +11,7 @@ ns.SelectorLegacy = function (libraries, selectedLibrary, changeLibraryDialog) {
   var defaultLibraryParameterized = selectedLibrary ? selectedLibrary.replace('.', '-').toLowerCase() : undefined;
   this.currentLibrary = selectedLibrary;
 
-  var options = '<option value="-">-</option>';
+  var options = libraries.length ? '' : '<option value="-">-</option>';
   for (var i = 0; i < libraries.length; i++) {
     var library = libraries[i];
     var libraryName = ns.libraryToString(library);
