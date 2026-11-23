@@ -1157,7 +1157,8 @@ a {
     content: "\e917";
     font-family: 'h5p-theme';
     color: $text-color;
-    line-height: 1em
+    line-height: 1em;
+    opacity: 0.6;
   }
   
   &:focus-visible {
