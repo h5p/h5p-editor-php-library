@@ -59,13 +59,8 @@ H5PEditor.language.core = {
   enterVideoTitle: '유튜브 게시 링크 또는 기타 비디오 소스 URL 붙여넣기',
   uploadAudioTitle: '오디오 파일 업로드',
   uploadVideoTitle: '비디오 파일 업로드',
-  fileUploadTitle: 'File Upload',
-  insertLinkTitle: 'URL',
-  recordAudioTitle: 'Record Audio',
   addVideoDescription:
     'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube, Panopto, and Echo360 links.',
-  unsupportedVideoSource: "Unsupported video source",
-  unsupportedAudioSource: "Unsupported audio source",
   insert: '삽입',
   cancel: '취소',
   height: '높이',
@@ -169,7 +164,6 @@ H5PEditor.language.core = {
   videoQualityDescription:
     '이 라벨은 사용자가 동영상의 현재 품질을 식별하는 데 도움이 됨. 예를 들어 1080p, 720p, HD 또는 Mobile',
   videoQualityDefaultLabel: '품질 :index',
-  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: '사용할 수 있는 콘텐츠 유형 없음',
   noContentTypesAvailableDesc:
     '당신의 사이트는 H5P.org에 접속하여 사용 가능한 콘텐츠 유형을 나열하는 데 어려움을 겪고 있음.',
@@ -311,5 +305,8 @@ H5PEditor.language.core = {
   detailsIconAriaLabel: 'More information about this field',
   a11yTitleShowLabel: 'AT 에 대한 라벨 표시',
   a11yTitleHideLabel: 'AT 에 대한 레이블 숨기기',
+  deleteAuthorTitle: 'Deleting author',
+  deleteAuthorChangeLogTitle: 'Deleting changelog',
+  confirm: 'Confirm',
   reuseSuccess: ':title 이 H5P 허브에서 성공적으로 가져오기 되었습니다.',
 };

@@ -221,7 +221,7 @@ ns.Library.prototype.pasteContent = function () {
   }
 
   // Load library on confirmation
-  ns.confirmReplace(this.params.library, this.$select.offset().top, function () {
+  ns.confirmReplace(this.params.library, this.$pasteButton.offset().top, function () {
     // Update UI
     self.$select.val(clipboard.generic.library);
 
@@ -272,6 +272,8 @@ ns.Library.prototype.confirmReplace = function (next) {
  * @param {Array} libList
  */
 ns.Library.prototype.librariesLoaded = function (libList) {
+  libList.sort((a, b) => a.title.localeCompare(b.title)); // Sort libraries alphabetically by title
+
   var self = this;
   this.libraries = libList;
 

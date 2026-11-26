@@ -97,13 +97,16 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
     /**
      * Open the file selector and trigger upload upon selecting file.
      */
-    self.openFileSelector = function () {
+    self.openFileSelector = function ({ onChangeCallback } = {}) {
       // Create a file selector
       const input = document.createElement('input');
       input.type = 'file';
       input.setAttribute('accept', determineAllowedMimeTypes());
       input.style='display:none';
       input.addEventListener('change', function () {
+        if (typeof onChangeCallback === 'function') {
+          onChangeCallback();
+        }
         // When files are selected, upload them
         self.uploadFiles(this.files);
         document.body.removeChild(input);
@@ -160,13 +163,13 @@ H5PEditor.FileUploader = (function ($, EventDispatcher) {
         video: { limit: 2147483648, text: '2 GB' }, // 2 GB
         audioImage: { limit: 20971520, text: '20 MB' } // 20 MB
       };
-    
+
       const isVideo = isVideoFile(file.type);
       const sizeLimit = isVideo ? SIZE_LIMITS.video.limit : SIZE_LIMITS.audioImage.limit;
       const correctSizeText = isVideo ? SIZE_LIMITS.video.text : SIZE_LIMITS.audioImage.text;
-      
+
       const sizeLimitText = H5PEditor.t('core', 'fileSizeLimit', { ':sizeLimit': correctSizeText });
-    
+
       return { sizeLimit, sizeLimitText };
     }
 

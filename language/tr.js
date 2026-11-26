@@ -59,13 +59,8 @@ H5PEditor.language.core = {
   enterVideoTitle: 'Youtube linkini ya da diğer video kaynağının URLsini yapıştırın',
   uploadAudioTitle: 'Ses dosyası yükle',
   uploadVideoTitle: 'Video dosyası yükle',
-  fileUploadTitle: 'File Upload',
-  insertLinkTitle: 'URL',
-  recordAudioTitle: 'Record Audio',
   addVideoDescription:
     'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube, Panopto, and Echo360 links.',
-  unsupportedVideoSource: "Unsupported video source",
-  unsupportedAudioSource: "Unsupported audio source",
   insert: 'Ekle',
   cancel: 'Vazgeç',
   height: 'yükseklik',
@@ -170,7 +165,6 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'Bu etiket kullanıcının mevcut videonun kalitesini tanımlamasına yardımcı olur. Örn: 1080p, 720p, HD veya Mobil',
   videoQualityDefaultLabel: 'Kalite :index',
-  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Hiçbir içerik mevcut değil',
   noContentTypesAvailableDesc:
     'Web siteniz H5P.org sitesine bağlanmada ve mevcut içerik türlerini listelemede zorluk yaşıyor.',
@@ -246,6 +240,9 @@ H5PEditor.language.core = {
   a11yTitleShowLabel: 'Show label for AT',
   a11yTitleHideLabel: 'Hide label for AT',
   reuseSuccess: ':title was successfully imported from the H5P Hub.',
+  deleteAuthorTitle: 'Deleting author',
+  deleteAuthorChangeLogTitle: 'Deleting changelog',
+  confirm: 'Confirm',
   noContentHeader: 'No Fitting Content?',
   noContentSuggestion: 'Create one yourself!',
   tutorials: 'Tutorials',

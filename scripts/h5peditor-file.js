@@ -59,6 +59,9 @@ ns.File = function (parent, field, params, setValue) {
 
   // Monitor upload progress
   self.on('uploadProgress', function (e) {
+    if (typeof self.handleUploadProgress === 'function') {
+      self.handleUploadProgress(Math.round(e.data*100));
+    }
     self.$file.children().html(ns.t('core', 'uploading') + ' ' + Math.round(e.data * 100) + ' %');
   });
 
@@ -84,13 +87,12 @@ ns.File = function (parent, field, params, setValue) {
       for (var i = 0; i < self.changes.length; i++) {
         self.changes[i](self.params);
       }
+      self.addFile();
     }
     catch (error) {
       self.$errors.append(ns.createError(error));
       self.addFile();
     }
-
-    self.addFile();
   });
 };
 
@@ -114,9 +116,9 @@ ns.File.prototype.appendTo = function ($wrapper) {
     '</div>';
 
   var html = ns.createFieldMarkup(this.field, fileHtml, this.id);
+
   var $container = ns.$(html).appendTo($wrapper);
-  this.detailsTooltip?.remove();
-  this.detailsTooltip = ns.initDetailsTooltip($container[0], this.field.details);
+  this.$container = $container;
   this.$copyrightButton = $container.find('.h5p-copyright-button');
   this.$file = $container.find('.file');
   this.$errors = $container.find('.h5p-errors');
@@ -289,7 +291,6 @@ ns.File.prototype.validate = function () {
  * Remove this item.
  */
 ns.File.prototype.remove = function () {
-  this.detailsTooltip?.remove();
   // TODO: Check what happens when removed during upload.
   this.$file.parent().remove();
 };

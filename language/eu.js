@@ -59,13 +59,8 @@ H5PEditor.language.core = {
   enterVideoTitle: 'Itsatsi YouTubeko esteka edo bestelako bideo iturriaren URLa',
   uploadAudioTitle: 'Kargatu audio fitxategia',
   uploadVideoTitle: 'Kargatu bideo fitxategia',
-  fileUploadTitle: 'File Upload',
-  insertLinkTitle: 'URL',
-  recordAudioTitle: 'Record Audio',
   addVideoDescription:
     'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube, Panopto, and Echo360 links.',
-  unsupportedVideoSource: "Unsupported video source",
-  unsupportedAudioSource: "Unsupported audio source",
   insert: 'Txertatu',
   cancel: 'Utzi',
   height: 'altuera',
@@ -171,7 +166,6 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'Etiketa honek laguntzen dio erabiltzaileari bideoaren uneko kalitatea identifikatzen. Esate baterako 1080p, 720p, HD edo Mugikorra',
   videoQualityDefaultLabel: 'Kalitatea :index',
-  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Ez dago ariketa mota erabilgarririk',
   noContentTypesAvailableDesc:
     'Zure guneak zailtasunak ditu H5P.org-ekin konektatzeko ariketa mota erabilgarriak zerrendatzeko.',
@@ -248,6 +242,9 @@ H5PEditor.language.core = {
   a11yTitleShowLabel: 'Show label for AT',
   a11yTitleHideLabel: 'Hide label for AT',
   reuseSuccess: ':title was successfully imported from the H5P Hub.',
+  deleteAuthorTitle: 'Deleting author',
+  deleteAuthorChangeLogTitle: 'Deleting changelog',
+  confirm: 'Confirm',
   noContentHeader: 'No Fitting Content?',
   noContentSuggestion: 'Create one yourself!',
   tutorials: 'Tutorials',

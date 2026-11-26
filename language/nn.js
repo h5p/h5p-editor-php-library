@@ -59,13 +59,8 @@ H5PEditor.language.core = {
   enterVideoTitle: 'Lim inn YouTube lenke eller annen videokjelde URL',
   uploadAudioTitle: 'Last opp lydfil',
   uploadVideoTitle: 'Last opp videofil',
-  fileUploadTitle: 'File Upload',
-  insertLinkTitle: 'URL',
-  recordAudioTitle: 'Record Audio',
   addVideoDescription:
     'H5P støtter alle eksterne videokilder på formatene mp4, webm eller ogv, slik som Vimeo Pro, og har støtte for YouTube-lenker, Panopto-lenker og Echo360-lenker.',
-  unsupportedVideoSource: "Videokjelda er ikkje støtta",
-  unsupportedAudioSource: "Lydkjelda er ikkje støtta",
   insert: 'Sett inn',
   cancel: 'Avbryt',
   height: 'Høyde',
@@ -170,7 +165,6 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'Dette navnet hjelper brukeren med å identifisere den aktuelle videokvaliteten. F.eks. 1080p, 720p, HD or Mobile',
   videoQualityDefaultLabel: 'Kvalitet :index',
-  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Ingen innhaldstyper er tilgjengeleg',
   noContentTypesAvailableDesc:
     'Nettstedet ditt har problemer med å koble til H5P.org og liste tilgjengelege innhaldstyper.',
@@ -246,6 +240,9 @@ H5PEditor.language.core = {
   a11yTitleShowLabel: 'Show label for AT',
   a11yTitleHideLabel: 'Hide label for AT',
   reuseSuccess: ':title was successfully imported from the H5P Hub.',
+  deleteAuthorTitle: 'Deleting author',
+  deleteAuthorChangeLogTitle: 'Deleting changelog',
+  confirm: 'Confirm',
   noContentHeader: 'No Fitting Content?',
   noContentSuggestion: 'Create one yourself!',
   tutorials: 'Tutorials',

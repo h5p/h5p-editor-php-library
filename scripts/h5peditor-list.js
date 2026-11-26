@@ -245,9 +245,15 @@ H5PEditor.List = (function ($) {
         return;
       }
 
-      while (children.length) {
-        self.removeItem(0);
+      // Remove child fields
+      for (var i = 0; i < children.length; i++) {
+        children[i].remove();
       }
+      children = [];
+
+      // Clean up parameters
+      parameters = undefined;
+      setValue(field);
     };
 
     /**
@@ -268,7 +274,6 @@ H5PEditor.List = (function ($) {
         var params = parameters.splice(currentIndex, 1);
         parameters.splice(newIndex, 0, params[0]);
       }
-      self.trigger('movedItem', {from: currentIndex, to: newIndex});
     };
 
     /**

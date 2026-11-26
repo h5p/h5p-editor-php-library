@@ -55,6 +55,11 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
       }
 
       if (state.currentLog !== undefined) {
+        // Keep the machine-readable event type when editing the visible fields.
+        var previousEntry = params.changes[state.currentLog];
+        if (previousEntry.type !== undefined) {
+          entry.type = previousEntry.type;
+        }
         params.changes[state.currentLog] = entry;
       }
       else {
@@ -169,11 +174,12 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
 
         logButtons.find('.h5p-metadata-delete').click(function () {
           // Ask for confirmation
-          if (confirm(H5PEditor.t('core', 'confirmDeleteChangeLog'))) {
-            var wrapper = $(this).closest('.h5p-metadata-log');
-            var index = $(wrapper).data('index');
-            deleteLog(index);
-          }
+          showConfirmationDialog({
+            headerText: H5PEditor.t('core', 'deleteAuthorChangeLogTitle'),
+            dialogText: H5PEditor.t('core', 'confirmDeleteChangeLog'),
+            cancelText: H5PEditor.t('core', 'cancel'),
+            confirmText: H5PEditor.t('core', 'confirm'),
+          }, handleRemoveActionForMetadataChangelog, $(this).closest('.h5p-metadata-log'));
         });
 
         logButtons.find('.h5p-metadata-edit').click(function () {
@@ -193,6 +199,18 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
 
         logList.prepend(logContent);
       }
+    }
+  }
+
+  /**
+   * Callback confirm/cancel action
+   * @param {boolean} [confirmFlag] Which button is clicked
+   * @param {Element} [wrapper] DOM element.
+   */
+  function handleRemoveActionForMetadataChangelog(confirmFlag, wrapper) {
+    if (confirmFlag) {
+      var index = $(wrapper).data('index');
+      deleteLog(index);
     }
   }
 
@@ -270,5 +288,30 @@ H5PEditor.metadataChangelogWidget = function (semantics, params, $wrapper, paren
       },
       async: true
     });
+  }
+
+  /**
+   * Add confirmation dialog to button.
+   * @param {object} dialogOptions Dialog options.
+   * @param {function} handleActions Handle both actions Confirmed and Canceled.
+   * @param {Element} wrapper DOM element.
+   */
+   function showConfirmationDialog(dialogOptions, handleActions, wrapper) {
+    const confirmationDialog = new H5P.ConfirmationDialog(dialogOptions)
+    .appendTo(document.body);
+
+    confirmationDialog.on('confirmed', () => {
+      if (handleActions) {
+        handleActions(true, wrapper);
+      }
+    });
+
+    confirmationDialog.on('canceled', () => {
+      if (handleActions) {
+        handleActions(false);
+      }
+    });
+
+    confirmationDialog.show(widget.offset().top);
   }
 };

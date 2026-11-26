@@ -234,7 +234,8 @@ ns.Form = function (library, startLanguages, defaultLanguage) {
             ns.libraryCache[lib].translation[lang] = JSON.parse(res.data[lib]).semantics;
           }
           done();
-        }
+        },
+        'json'
       );
     }
     else {

@@ -23,9 +23,16 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
     // Set current author as default in semantics
     const currentUserName = (H5PIntegration.user && H5PIntegration.user.name) ? H5PIntegration.user.name : undefined;
     if (currentUserName) {
+      // Find escaped username for use in attributes
+      const input = document.createElement('input');
+      input.setAttribute('value', currentUserName);
+      escaper.innerHTML = '';
+      escaper.append(input);
+      const escapedAttribute = escaper.innerHTML.match(/value=['"](.+)['"]/)[1];
+
       // Set current user as default for "changed by":
-      findField('changes').field.fields[1].default = currentUserName;
-      findField('authors').field.fields[0].default = currentUserName;
+      findField('changes').field.fields[1].default = escapedAttribute;
+      findField('authors').field.fields[0].default = escapedAttribute;
     }
 
     /**
@@ -467,11 +474,13 @@ H5PEditor.MetadataForm = (function (EventDispatcher, $, metadataSemantics) {
 
     // Use initial value from first field
     if (fields[0].value !== undefined) {
-      const escaper = document.createElement('div');
       escaper.innerHTML = fields[0].value;
       updateAllFields(escaper.innerText);
     }
   };
+
+  // Helps us escape
+  const escaper = document.createElement('div');
 
   return MetadataForm;
 })(H5P.EventDispatcher, H5P.jQuery, H5PEditor.metadataSemantics);

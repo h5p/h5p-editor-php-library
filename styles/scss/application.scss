@@ -5,6 +5,7 @@
 @import "form-groups";
 @import "h5peditor-image-edit";
 @import "h5peditor-image-edit-popup";
+@import "h5peditor-drag-and-drop";
 @import "deprecated";
 
 html, body {
@@ -283,14 +284,17 @@ a {
     a {
       text-decoration: underline;
     }
+
     .ck-font-size-dropdown .ck-dropdown__panel,
     .ck-text-fragment-language-dropdown .ck-dropdown__panel {
       max-height: 20em;
       overflow-y: scroll;
     }
+
     .ck-fontsize-option .ck-button__label {
       line-height: normal !important;
     }
+
     .ck-content pre {
       background: initial;
       border: initial;
@@ -467,7 +471,6 @@ a {
     }
 
     .h5p-add-dialog-table {
-      container: h5p-add-dialog-table / inline-size;
       overflow: hidden;
 
       .av-tablist {
@@ -494,17 +497,11 @@ a {
           background: #fff;
         }
       }
-      @container (max-width: 372px) {
-        .av-tablist:has(.av-tab.av-tab__record-audio) .av-tab span {
-          display: none;
-        }
-      }
 
       .av-tabpanel {
-        border: 1px solid $av-tab-container-border-color;
-        border-radius: 0;
-        margin-top: 1px;
-        position: relative;
+        border: 1px solid #ccc;
+        margin: 0 1em 1em 1em;
+        overflow: hidden;
         padding: 1em;
 
         h3 {

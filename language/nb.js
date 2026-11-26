@@ -59,13 +59,8 @@ H5PEditor.language.core = {
   enterVideoTitle: 'Lim inn YouTube lenke eller annen videokilde URL',
   uploadAudioTitle: 'Last opp lydfil',
   uploadVideoTitle: 'Last opp videofil',
-  fileUploadTitle: 'File Upload',
-  insertLinkTitle: 'URL',
-  recordAudioTitle: 'Record Audio',
   addVideoDescription:
     'H5P støtter alle eksterne videokilder på formatene mp4, webm eller ogv, slik som Vimeo Pro, og har støtte for YouTube-lenker, Panopto-lenker og Echo360-lenker.',
-  unsupportedVideoSource: "Videokilden er ikke støttet",
-  unsupportedAudioSource: "Lydkilden er ikke støttet",
   insert: 'Sett inn',
   cancel: 'Avbryt',
   height: 'Høyde',
@@ -169,7 +164,6 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'Dette navnet hjelper brukeren med å identifisere den aktuelle videokvaliteten. F.eks. 1080p, 720p, HD eller for mobil',
   videoQualityDefaultLabel: 'Kvalitet :index',
-  videoQualityPlaceholder: '1080p, 720p, HD, Mobil, etc',
   noContentTypesAvailable: 'Ingen innholdstyper er tilgjengelig',
   noContentTypesAvailableDesc:
     'Nettstedet ditt har problemer med å koble til H5P.org og kan ikke liste tilgjengelige innholdstyper.',
@@ -289,6 +283,9 @@ H5PEditor.language.core = {
       options: { modified: 'Kan endres', commercial: 'Tillater kommersiell bruk' },
     },
   },
+  deleteAuthorTitle: 'Deleting author',
+  deleteAuthorChangeLogTitle: 'Deleting changelog',
+  confirm: 'Confirm',
   clearFilters: 'Nullstill alle filtre',
   contentSearchFieldPlaceholder: 'Søk etter innhold',
   loadingContentTitle: 'Vi laster innhold for deg...',

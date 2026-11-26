@@ -22,6 +22,8 @@ ns.widgets.image = function (parent, field, params, setValue) {
   this.setValue = setValue;
   this.library = parent.library + '/' + field.name;
   this.id = ns.getNextFieldId(field);
+  this.previousState = typeof params === 'undefined' ? this.STATE.NO_IMAGE : this.STATE.HAS_IMAGE;
+  this.previousParams = params;
 
   if (params !== undefined) {
     this.copyright = params.copyright;
@@ -41,11 +43,23 @@ ns.widgets.image = function (parent, field, params, setValue) {
 
   this.confirmationDialog = new H5P.ConfirmationDialog({
     headerText: H5PEditor.t('core', 'removeImage'),
-    bodyText: H5PEditor.t('core', 'confirmImageRemoval')
-  });
+    dialogText: H5PEditor.t('core', 'confirmImageRemoval')
+  }).appendTo(document.body);
 
   this.confirmationDialog.on('confirmed', function () {
+    self.boxEl.classList.remove('h5p-dnd__box--has-image', 'h5p-dnd__box--is-inline');
+    self.previousState = self.STATE.NO_IMAGE;
     self.removeImage();
+  });
+
+  this.replaceCallback = () => {};
+  this.confirmReplaceDialog = new H5P.ConfirmationDialog({
+    headerText: H5PEditor.t('core', 'replaceImage'),
+    dialogText: H5PEditor.t('core', 'confirmReplaceImage')
+  }).appendTo(document.body);
+
+  this.confirmReplaceDialog.on('confirmed', function () {
+    self.replaceCallback();
   });
 
   // When uploading starts
@@ -56,10 +70,11 @@ ns.widgets.image = function (parent, field, params, setValue) {
 
   // When a new file has been uploaded
   self.on('fileUploaded', function (event) {
+    self.boxContainerEl.classList.remove('has-error');
     // Uploaded new original image
     if (self.isOriginalImage) {
       delete self.params.originalImage;
-      self.editImagePopup.mime = self.params.mime
+      self.editImagePopup.mime = self.params.mime;
     }
 
     // Store width and height
@@ -69,6 +84,12 @@ ns.widgets.image = function (parent, field, params, setValue) {
     // Show edit image button
     self.$editImage.removeClass('hidden');
     self.isEditing = false;
+
+    window.requestAnimationFrame(() => {
+      this.$container.get(0)
+        .querySelector('.h5p-editing-image-button')
+        .focus({focusVisible: true});
+    });
   });
 };
 
@@ -95,25 +116,24 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
     <div class="h5p-sr-only" aria-live="polite"></div>
   `
 
-  if (!this.field.disableCopyright) {
-    htmlString += '<button class="h5peditor-button-textual h5p-copyright-button">' + ns.t('core', 'editCopyright') + '</button>';
-  }
+  const markup = ns.createLabel(this.field, '', this.id) + ns.createDescription(this.field.description, this.id) + htmlString;
+  const wrapperClasses = ns.joinNonEmptyStrings(['field', `field-name-${this.field.name}`, this.field.type, ns.createImportance(this.field.importance), this.field.widget]);
+  const html = `<div class="${wrapperClasses}">${markup}</div>`;
 
-  htmlString += '</div>' +
-    '<div class="h5p-editor-dialog">' +
-      '<a href="#" class="h5p-close" title="' + ns.t('core', 'close') + '"></a>' +
-    '</div>';
+  this.$container = ns.$(html).appendTo($wrapper);
+  this.$imageDropContainer = this.$container.find('.h5p-dnd__container');
+  this.boxEl = this.$container.find(".h5p-dnd__box").get(0);
+  this.boxContainerEl = this.$container.find('.h5p-dnd__container').get(0);
 
-  var html = ns.createFieldMarkup(this.field, htmlString, this.id);
-  var $container = ns.$(html).appendTo($wrapper);
-  this.detailsTooltip?.remove();
-  this.detailsTooltip = ns.initDetailsTooltip($container[0], this.field.details);
+  this.ariaLiveEl = this.$container.find('.h5p-sr-only').get(0);
 
-  this.$item = $container;
-  this.$editImage = $container.find('.h5p-editing-image-button');
-  this.$copyrightButton = $container.find('.h5p-copyright-button');
-  this.$file = $container.find('.file');
-  this.$errors = $container.find('.h5p-errors');
+  this.addDragAndDropListeners();
+
+  this.$editImage = this.$container.find('.h5p-editing-image-button');
+  this.$copyrightButton = this.$container.find('.h5p-copyright-button');
+  this.$file = this.$container.find('.file');
+
+  this.$errors = this.$container.find('.h5p-errors');
   this.addFile();
 
   const $dialog = this.$container.find('.h5p-editor-dialog');
@@ -144,6 +164,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
 
     const filenameparts = self.params.path.match(/([^\/]+)\.([^#]+)/);
 
+    self.removeImage();
     // Upload new image
     self.upload(e.data, filenameparts[1] + '-edit.' + filenameparts[2]);
   });
@@ -161,7 +182,7 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
     self.$editImage.removeClass('loading');
   });
 
-  $container.find('.h5p-editing-image-button').click(function (event) {
+  this.$container.on('click', '.edit', function (event) {
     if (self.params && self.params.path) {
       var imageSrc;
       if (!self.isEditing) {
@@ -172,6 +193,55 @@ ns.widgets.image.prototype.appendTo = function ($wrapper) {
 
       // Add throbber to image
       editImagePopup.show(ns.$(this).offset(), imageSrc, event);
+    }
+  });
+
+  this.$container.on('click', '.h5p-dnd__btn__upload', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isOriginalImage = true;
+    this.openFileSelector();
+  });
+
+  document.addEventListener('paste', (e) => {
+    if (document.activeElement.closest('.h5p-dnd__box') === this.boxEl) {
+      if (e.clipboardData.files.length === 0) {
+        this.boxContainerEl.classList.add("has-error");
+        this.$container.find('.h5p-errors').text(ns.t('core', 'onlyPasteImageFiles'));
+        this.setAriaLiveErrorMessage(ns.t('core', 'onlyPasteImageFiles'));
+      } else {
+        this.uploadOrReplaceImage(e.clipboardData.files);
+      }
+    }
+  });
+
+  this.boxEl.addEventListener('keydown', (e) => {
+    if (this.boxEl.classList.contains('h5p-dnd__box--has-image')) {
+      if ((e.code === 'Space' || e.code === 'Enter')) {
+        this.isOriginalImage = true;
+        this.openFileSelector({
+          onChangeCallback: () => {
+            this.removeImage();
+          }
+        });
+      }
+    }
+  });
+
+  this.boxEl.addEventListener('click', (e) => {
+    e.preventDefault();
+    const imageContainerEl = this.boxEl.querySelector('.h5p-dnd__img__container');
+
+    // Only trigger file selector when we have an image and the user is actually clicking on the
+    // image (not the frame around).
+    if (this.boxEl.classList.contains('h5p-dnd__box--has-image')
+      && e.target.closest('.h5p-dnd__img__container') === imageContainerEl) {
+      this.isOriginalImage = true;
+      this.openFileSelector({
+        onChangeCallback: () => {
+          this.removeImage();
+        }
+      });
     }
   });
 
@@ -299,9 +369,6 @@ ns.widgets.image.prototype.getBaseMarkup = function () {
     <div class="h5p-dnd__column h5p-dnd__column--is-highlighted h5p-dnd__column--is-fixed h5p-dnd__column--when-wide h5p-dnd__no-x-margin h5p-dnd__box-image">
       <div class="h5p-dnd__upload-image-svg"></div>
     </div>
-    <div class="h5p-dnd__column h5p-dnd__column--when-small h5p-dnd__box-image">
-      <div class="h5p-dnd__upload-image-svg"></div>
-    </div>
     <div class="h5p-dnd__column h5p-dnd_align_left h5p-dnd__box-text">
       <div class="text-center h5p-dnd__title">
         ${title}
@@ -388,15 +455,12 @@ ns.widgets.image.prototype.setCopyright = function (value) {
   this.copyright = this.params.copyright = value;
 };
 
-
 /**
  * Creates thumbnail HTML and actions.
  *
- * @returns {boolean} True if file was added, false if file was removed
+ * @returns {boolean} True if file was added
  */
 ns.widgets.image.prototype.addFile = function () {
-  var that = this;
-
   if (this.params === undefined) {
     const error = this.$errors.text();
     if (error) {
@@ -405,43 +469,30 @@ ns.widgets.image.prototype.addFile = function () {
     return false;
   }
 
-  var source = H5P.getPath(this.params.path, H5PEditor.contentId);
-  var altText = (this.field.label === undefined ? '' : this.field.label);
-  var fileHtmlString = '<a href="#" id="' + this.id + '" title="' + ns.t('core', 'changeFile') + '" class="thumbnail"';
-  if (this.field.description !== undefined) {
-    fileHtmlString += ' aria-describedby="' + ns.getDescriptionId(this.id) + '"';
-  }
-  fileHtmlString += '><img alt="' + altText + '"/></a>' +
-    '<a href="#" class="remove" title="' + ns.t('core', 'removeFile') + '"></a>';
+  this.boxEl.classList.add('h5p-dnd__box--is-inline','h5p-dnd__box--has-image')
+  this.boxEl.classList.remove('h5p-dnd__box--is-uploading');
+  this.boxEl.innerHTML = this.getUploadedMarkup();
+  this.boxEl.setAttribute('role', 'button');
+  // Only aria-label is supported by NVDA (not aria-describedby which could be an alternative).
+  const altText = (this.field.label === undefined ? '' : this.field.label);
+  const ariaLabel = `${altText ?? ns.t('core', 'image')}. ${ns.t('core', 'dragAndDropAndPasteReplaceImage')}`;
+  this.boxEl.setAttribute('aria-label', ariaLabel);
+  const actionsContainerEl = document.createElement('div');
+  actionsContainerEl.classList.add('h5p-image-action-container');
+  actionsContainerEl.innerHTML = this.getImageActionMarkup();
 
-  this.$file.html(fileHtmlString)
-    .children(':eq(0)')
-    .click(function () {
-      that.isOriginalImage = true;
-      that.openFileSelector();
-      return false;
-    })
-    .children('img')
-    .attr('src', source)
-    .end()
-    .next()
-    .click(function () {
-      that.confirmRemovalDialog.show(that.$file.offset().top);
-      return false;
-    });
+  this.boxContainerEl.insertBefore(actionsContainerEl, this.boxEl.nextElementSibling);
 
-  var $img = this.$file.find('img');
-  $img.one('load', function () {
-    // Make editor resize
-    $img.addClass('loaded');
+  this.boxContainerEl.querySelector('.delete').addEventListener('click', (e) => {
+    e.stopPropagation();
+    this.confirmationDialog.show(this.$imageDropContainer.offset().top);
   });
 
-  // Uploading original image
-  that.$editImage.removeClass('hidden');
-  that.$copyrightButton.removeClass('hidden');
+  this.cleanUp();
+  this.addDragAndDropListeners();
 
   // Notify listeners that image was changed to params
-  that.trigger('changedImage', this.params);
+  this.trigger('changedImage', this.params);
 
   return true;
 };
@@ -450,13 +501,24 @@ ns.widgets.image.prototype.addFile = function () {
  * Remove image
  */
 ns.widgets.image.prototype.removeImage = function () {
-
+  this.boxEl.classList.remove('h5p-dnd__box--is-uploading');
+  this.boxContainerEl.classList.remove('has-error');
+  this.cleanUp();
   // Notify listeners that we removed image with params
   this.trigger('removedImage', this.params);
 
+  const actionsContainerEl = this.$container.find('.h5p-image-action-container').get(0);
+  if (actionsContainerEl) {
+    actionsContainerEl.remove();
+  }
+
   delete this.params;
   this.setValue(this.field);
-  this.addFile();
+
+  this.boxEl.removeAttribute('role');
+  this.boxEl.innerHTML = this.getBaseMarkup();
+
+  this.addDragAndDropListeners();
 
   for (var i = 0; i < this.changes.length; i++) {
     this.changes[i]();
@@ -474,10 +536,19 @@ ns.widgets.image.prototype.validate = function () {
  * Remove this item.
  */
 ns.widgets.image.prototype.remove = function () {
-  this.detailsTooltip?.remove();
   // TODO: Check what happens when removed during upload.
   this.$file.parent().remove();
 };
+
+ns.widgets.image.prototype.cleanUp = function () {
+  const boundedHandleDnD = this.handleDragAndDrop.bind(this);
+
+  this.boxEl.removeEventListener('dragenter', boundedHandleDnD);
+  this.dropBlockEl?.removeEventListener('dragover', boundedHandleDnD);
+  this.dropBlockEl?.removeEventListener('dragend', boundedHandleDnD);
+  this.dropBlockEl?.removeEventListener('dragleave', boundedHandleDnD);
+  this.dropBlockEl?.removeEventListener('drop', boundedHandleDnD);
+}
 
 /**
  * Collect functions to execute once the tree is complete.
@@ -491,4 +562,22 @@ ns.widgets.image.prototype.ready = function (ready) {
   else {
     ready();
   }
+};
+
+/**
+ * Lazy load images
+ */
+ns.widgets.imageObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.src = entry.target.dataset.src;
+      ns.widgets.imageObserver.unobserve(entry.target);
+    }
+  });
+});
+
+ns.widgets.image.prototype.STATE = {
+  NO_IMAGE: 'NO_IMAGE',
+  UPLOADING: 'UPLOADING',
+  HAS_IMAGE: 'HAS_IMAGE'
 };

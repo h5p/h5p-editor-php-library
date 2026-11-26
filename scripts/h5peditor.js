@@ -23,6 +23,15 @@ ns.constants = {
 };
 
 /**
+ * Constants used within editor
+ *
+ * @type {{otherLibraries: string}}
+ */
+ns.constants = {
+  otherLibraries: 'Other Libraries',
+};
+
+/**
  * Keep track of our widgets.
  */
 ns.widgets = {};
@@ -417,6 +426,30 @@ ns.getParentLibrary = function (parent) {
 
   return ns.getParentLibrary(parent.parent);
 };
+
+/**
+ * Fetches semantics of a content type with the given name from cache.
+ * @param {string} name of library, e.g. "H5P.Column 1.18"
+ * @returns {array|undefined}
+ */
+ns.getSemanticsOfContentTypeFromCache = function (name) {
+  return ns.libraryCache[name]?.semantics;
+}
+
+/**
+ * Fetches common fields of a content type with the given name.
+ * @param {string} name of library, e.g. "H5P.Column 1.18"
+ * @returns {array|null} an array of common fields or null if the cache is not populated
+ */
+ns.getCommonFieldsOfContentTypeFromCache = function (name) {
+  const semantics = ns.getSemanticsOfContentTypeFromCache(name);
+  if (!semantics) {
+    // @todo throw error
+    return null;
+  }
+
+  return semantics.filter(item => item.common);
+}
 
 /**
  * Recursive processing of the semantics chunks.
@@ -1496,8 +1529,27 @@ ns.canPastePlus = function (clipboard, libs) {
 
 // Factory for creating storage instance
 ns.storage = (function () {
+
+  /**
+   * Array of cacheable storage objects
+   *
+   * @typedef {Object[]} cache
+   * @property {boolean} value
+   * @property {Promise} promise
+   */
+  const cache = [];
+
   var instance = {
     get: function (key, next) {
+      if (cache[key] === undefined) {
+        cache[key] = {};
+      }
+
+      if (cache[key].value !== undefined) {
+        next(cache[key]);
+        return;
+      }
+
       var value;
 
       // Get value from browser storage
@@ -1506,19 +1558,30 @@ ns.storage = (function () {
       }
 
       // Try to get a better value from user data storage
-      try {
-        H5P.getUserData(0, key, function (err, result) {
-          if (!err) {
-            value = result;
-          }
+      if (cache[key].promise === undefined) {
+        try {
+          cache[key].promise = new Promise(function (resolve) {
+            H5P.getUserData(0, key, function (err, result) {
+              if (!err) {
+                value = result;
+              }
+              cache[key].value = value;
+              resolve(value);
+            });
+          });
+        } catch (err) {
+          delete cache[key].promise;
           next(value);
-        });
+          return;
+        }
       }
-      catch (err) {
-        next(value);
-      }
+      cache[key].promise.then(next);
     },
     set: function (key, value) {
+      if (cache[key] === undefined) {
+        cache[key] = {}
+      }
+      cache[key].value = value;
 
       // Store in browser
       if (window.localStorage !== undefined) {
@@ -1714,7 +1777,10 @@ ns.upgradeContent = (function () {
   };
 })();
 
+ns.rtlLanguages = ['ar', 'dv', 'he', 'ku', 'fa', 'ur'];
+
 // List of language code mappings used by the editor
+// NOTE: If you change this you need to update the one in h5p.classes.php as well.
 ns.supportedLanguages = {
   'aa': 'Afar',
   'ab': 'Abkhazian (аҧсуа бызшәа)',

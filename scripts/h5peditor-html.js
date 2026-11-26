@@ -55,7 +55,7 @@ ns.Html.prototype.getCKEditorConfig = function () {
   if (this.inTags("em") || this.inTags("i")) {
     // Use <em> elements for italic text instead of CKE's default <i>
     // Has to be a plugin to work
-    const ItalicAsEmPlugin = function (editor) {
+    const ItalicAsEmPlugin = ( editor ) => {
       editor.conversion.for('downcast').attributeToElement({
         model: 'italic',
         view: 'em',
@@ -411,12 +411,34 @@ ns.Html.prototype.appendTo = function ($wrapper) {
   this.$item = ns.$(this.createHtml()).appendTo($wrapper);
   this.$input = this.$item.children('.ckeditor');
   this.$errors = this.$item.children('.h5p-errors');
-  this.detailsTooltip?.remove();
-  this.detailsTooltip = ns.initDetailsTooltip(this.$item[0], this.field.details);
+  this.ckeditor = undefined;
 
   ns.bindImportantDescriptionEvents(this, this.field.name, this.parent);
 
   this.ckEditorConfig = this.getCKEditorConfig();
+
+  const supportedLanguages = [];
+  for (const langCode in ns.supportedLanguages) {
+    if (ns.supportedLanguages.hasOwnProperty(langCode)) {
+      supportedLanguages.push({title: ns.supportedLanguages[langCode], languageCode: langCode});
+    }
+  }
+  this.ckEditorConfig.language = {
+    textPartLanguage: supportedLanguages,
+    ui: ns.contentLanguage,
+    content: ns.contentLanguage,
+  };
+
+  // Look for additions in HtmlAddons
+  if (ns.HtmlAddons) {
+    for (const tag in ns.HtmlAddons) {
+      if (that.inTags(tag)) {
+        for (const provider in ns.HtmlAddons[tag]) {
+          ns.HtmlAddons[tag][provider](this.ckEditorConfig, that.tags);
+        }
+      }
+    }
+  }
 
   this.$input.focus(function () {
     // Remove placeholder
@@ -436,8 +458,17 @@ ns.Html.prototype.appendTo = function ($wrapper) {
     that.inputWidth = that.$input[0].getBoundingClientRect().width;
     ns.Html.current = that;
 
+    const config = that.ckEditorConfig;
+    delete config.initialData;
+
+    // Convert Latex to MathML if MathtType plugin is used!
+    if (that.$input.html() && config.plugins.indexOf('MathType') !== -1) {
+      let moreMassage = ns.Html.mathMassage('\\(', '\\)', 'service=latex2mathml&latex=', that.$input.html(), 2);
+      config.initialData = ns.Html.mathMassage('\\[', '\\]', 'service=latex2mathml&latex=', moreMassage, 2);
+    }
+
     ClassicEditor
-      .create(this, that.ckEditorConfig)
+      .create(this, config)
       .then(editor => {
         const getEditorHeight = () => {
           // Use the dimensions of the H5P iframe, not the editor iframe
@@ -509,11 +540,11 @@ ns.Html.prototype.appendTo = function ($wrapper) {
 
         editor.editing.view.focus();
 
-        editor.on('focus', function () {
-          editorElement.style.maxHeight = getEditorHeight();
-        });
-
         editor.once('destroy', function () {
+           // Close WIRIS
+          if (window.WirisPlugin && WirisPlugin.currentInstance && WirisPlugin.currentInstance.core && WirisPlugin.currentInstance.core.modalDialog) {
+            WirisPlugin.currentInstance.core.modalDialog.close(); // All changes are lost!
+          }
 
           // We always need to run validate when removing CKE5 to have the .$input properly populated.
           // CKE5 cannot do this as the data has to be massaged/filtered before updating the .$input.
@@ -528,6 +559,29 @@ ns.Html.prototype.appendTo = function ($wrapper) {
             that.$placeholder.appendTo(that.$item.find('.ckeditor'));
           }
         });
+
+        function massageWirisDialog() {
+          // Move modal dialog into attack pattern delta
+          const modalDialog = WirisPlugin.currentInstance.core.modalDialog;
+          const fieldRect = editor.ui.view.element.getBoundingClientRect();
+
+          const y = (window.innerHeight - fieldRect.top) - modalDialog.properties.size.height - 40;
+          modalDialog.setPosition(
+            Math.max(y, 5),
+            (window.innerWidth / 2) - (modalDialog.properties.size.width / 2)
+          );
+
+          // Prevent minimize
+          modalDialog.minimizeDiv.style.visibility = 'hidden';
+        }
+        const mathTypeCommand = editor.commands.get('MathType');
+        if (mathTypeCommand) {
+          mathTypeCommand.on('execute', massageWirisDialog);
+        }
+        const chemTypeCommand = editor.commands.get('ChemType');
+        if (chemTypeCommand) {
+          chemTypeCommand.on('execute', massageWirisDialog);
+        }
       })
       .catch(error => {
         throw new Error('Error loading CKEditor: ' + error);
@@ -581,6 +635,11 @@ ns.Html.prototype.validate = function () {
 
   // Get contents from CKEditor5
   let value = this.ckeditor ? this.ckeditor.getData() : this.$input.html();
+
+  if (this.ckEditorConfig.plugins.indexOf('MathType') !== -1) {
+    // Convert mathml to latex
+    value = ns.Html.mathMassage('<math', '</math>', 'service=mathml2latex&mml=', value, 0, '\\(', '\\)');
+  }
 
   value = value
     // Remove placeholder text if any:
@@ -649,7 +708,6 @@ ns.Html.removeWysiwyg = function () {
  * Remove this item.
  */
 ns.Html.prototype.remove = function () {
-  this.detailsTooltip?.remove();
   this.$item.remove();
 };
 
@@ -667,5 +725,185 @@ ns.Html.prototype.forceValue = function (value) {
   }
   this.validate();
 };
+
+(Html => {
+  const cache = {};
+
+  const wirisService = data => {
+    if (cache[data] === undefined) {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://www.wiris.net/demo/plugins/app/service', false);
+      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=UTF-8');
+      xhr.send(data);
+
+      cache[data] = JSON.parse(xhr.responseText).result.text;
+    }
+
+    return cache[data];
+  };
+
+  // Modern async version (can be used when editor support async getParams)
+  //const wirisService = async data => {
+  //  const response = await fetch('https://www.wiris.net/demo/plugins/app/service', {
+  //    method: 'POST',
+  //    headers: {
+  //      'Content-Type': 'application/x-www-form-urlencoded'
+  //    },
+  //    body: data
+  //  });
+  //  return (await response.json()).result.text;
+  //};
+
+  // We need a converter to massage our html entities
+  const leConverter = document.createElement('div');
+
+  /**
+   * Prepares value for conversion.
+   *
+   * @param {string} value
+   * @param {number} chop How many characters to cut off at both ends.
+   * @param {boolean} htmlToText Convert HTML entities to text
+   * @returns {string} value
+   */
+  const preMassage = (value, chop, htmlToText) => {
+    if (chop) { // Both ends are chopped off
+      value = value.substring(chop, value.length - chop);
+    }
+    if (htmlToText) {
+      leConverter.innerHTML = value;
+      value = leConverter.innerText;
+    }
+    else {
+      if (value.includes('<mstyle')) {
+        // Hack: Adjust mstyle tags to be copatible with WIRIS converter as their CKEditor plugins strips most attributes (happens to xmlns etc. also)
+        value = value.replace(/<mstyle((?![\s\S]*displaystyle)[\s\S]*?)>/g, '<mstyle displaystyle="true"$1>');
+      }
+      // Hack: Remove all block fillers from CKEditor (the WIRIS service don't like 'em)
+      value = value.replace(/>&(nbsp|#160);<\//g, '></');
+    }
+    return encodeURIComponent(value);
+  }
+
+  /**
+   * Massages the value after the conversion.
+   *
+   * @param {string} value
+   * @param {string} prefix
+   * @param {string} suffix
+   * @returns {string} value
+   */
+  const postMassage = (value, prefix, suffix) => {
+    if (prefix && suffix) {
+      leConverter.innerText = value;
+      value = prefix + leConverter.innerHTML + suffix;
+    }
+    return value;
+  }
+
+  const domParser = new DOMParser();
+
+  Html.mathMassage = (prefix, suffix, service, value, chop = 0, wrapPrefix = '', wrapSuffix = '') => {
+    // input could have several <math> elements - iterate over all
+    let start = value.indexOf(prefix);
+    while (start !== -1) {
+      let end = value.indexOf(suffix, start + prefix.length);
+
+      if (end !== -1) {
+        let midfix = value.substring(start, end + suffix.length);
+        let midfixDoc = domParser.parseFromString(midfix, 'text/html'); // TODO: Only run if wrapPrefix is true?
+        let latexAnnotation = midfixDoc.querySelector('annotation[encoding=LaTeX]');
+
+        if (latexAnnotation) {
+          // Wiris MathType plugin produces a MathML element with an <annotation encoding="LaTeX">
+          // child element containing the original LaTeX, when users are inputting using double $$.
+          midfix = `$$${latexAnnotation.innerHTML}$$`;
+          value = value.substring(0, start) + midfix + value.substring(end + suffix.length);
+        }
+        else if (wrapPrefix || (!wrapPrefix && Html.hasOnlySupportedLatexCommands(midfix))) {
+          // Only send to Wiris if it should be translated back or is a supported command
+          try {
+            midfix = postMassage(wirisService(service + preMassage(midfix, chop, !wrapPrefix)), wrapPrefix, wrapSuffix);
+          }
+          catch (err) {
+            console.error(err); // midfix will remain the same
+          }
+          value = value.substring(0, start) + midfix + value.substring(end + suffix.length);
+        }
+
+        start = value.indexOf(prefix, start + midfix.length - chop);
+      }
+      else {
+        break; // if no matching suffix found, exit the loop
+      }
+    }
+
+    return value;
+  };
+
+  Html.hasOnlySupportedLatexCommands = (value) => {
+    let hasMatch = false;
+    for (const match of value.matchAll(Html.wirisLatexCommandsRegex)) {
+      hasMatch = true;
+      if (!Html.wirisSupportedLatexCommands.has(match[0])) {
+        return false;
+      }
+    }
+
+    return hasMatch;
+  };
+
+  Html.wirisLatexCommandsRegex = /\\begin{[a-z]+}|\\[a-zA-Z]+|\\[!,:;~\\]|~/g;
+  Html.wirisSupportedLatexCommands = new Set([
+    '\\Alpha','\\And','\\Arrowvert','\\Bbb','\\Beta','\\Box','\\Bumpeq','\\Cap','\\Chi','\\Cup','\\Delta','\\Diamond','\\Doteq','\\Downarrow','\\Epsilon',
+    '\\Eta','\\Finv','\\Game','\\Gamma','\\Huge','\\Im','\\Iota','\\Kappa','\\LARGE','\\Lambda','\\Large','\\Leftarrow','\\Leftrightarrow','\\Lleftarrow',
+    '\\Longleftarrow','\\Longleftrightarrow','\\Longrightarrow','\\Lsh','\\Omega','\\Phi','\\Pi','\\Psi','\\Re','\\Rho','\\Rightarrow','\\Rrightarrow',
+    '\\Rsh','\\S','\\Sigma','\\Subset','\\Supset','\\Tau','\\Theta','\\uparrow','\\updownarrow','\\upsilon','\\Vdash','\\Vert','\\Vvdash','\\xi','\\Zeta',
+    '\\aleph','\\alpha','\\amalg','\\angle','\\approx','\\approxeq','\\arrowvert','\\ast','\\asymp','\\atop','\\backepsilon','\\backsim','\\backsimeq',
+    '\\backslash','\\bar','\\barwedge','\\because','\\begin{array}','\\begin{bmatrix}','\\begin{displaymath}','\\begin{math}','\\begin{pmatrix}',
+    '\\begin{vmatrix}','\\beta','\\beth','\\between','\\bf','\\bigcirc','\\bigstar','\\bigtriangledown','\\bigtriangleup','\\binom','\\blacklozenge',
+    '\\blacksquare','\\blacktriangle','\\blacktriangledown','\\blacktriangleleft','\\blacktriangleright','\\bmod','\\boldsymbol','\\bot','\\bowtie',
+    '\\boxdot','\\boxed','\\boxminus','\\boxplus','\\boxtimes','\\brace','\\bracevert','\\brack','\\buildrel','\\bullet','\\bumpeq','\\cal','\\cap','\\cdot',
+    '\\cdotp','\\cdots','\\centerdot','\\cfrac','\\checkmark','\\chi','\\choose','\\circ','\\circeq','\\circlearrowleft','\\circlearrowright','\\circledR',
+    '\\circledS','\\circledast','\\circledcirc','\\circleddash','\\clubsuit','\\colon','\\color','\\complement','\\cong','\\cos','\\cup','\\curlyeqprec',
+    '\\curlyeqsucc','\\curlyvee','\\curlywedge','\\curvearrowleft','\\curvearrowright','\\dagger','\\daleth','\\dashleftarrow','\\dashrightarrow','\\dashv',
+    '\\dbinom','\\ddagger','\\ddots','\\delta','\\dfrac','\\diagdown','\\diagup','\\diamond','\\diamondsuit','\\digamma','\\displaystyle','\\div',
+    '\\divideontimes','\\dlsh','\\doteq','\\doteqdot','\\dotplus','\\dots','\\dotsb','\\dotsc','\\dotsi','\\dotsm','\\dotso','\\doublebarwedge','\\doublecap',
+    '\\doublecup','\\downarrow','\\downdownarrows','\\downharpoonleft','\\downharpoonright','\\ell','\\emptyset','\\epsilon','\\eqcirc','\\eqsim',
+    '\\eqslantgtr','\\eqslantless','\\equiv','\\eta','\\eth','\\exists','\\fallingdotseq','\\flat','\\forall','\\frac','\\frak','\\frown','\\gamma','\\ge',
+    '\\geq','\\geqq','\\geqslant','\\gets','\\gg','\\ggg','\\gggtr','\\gimel','\\gnapprox','\\gneq','\\gneqq','\\gnsim','\\gt','\\gtrapprox','\\gtrdot',
+    '\\gtreqless','\\gtreqqless','\\gtrless','\\gtrsim','\\gvertneqq','\\hat','\\hbar','\\hdashline','\\heartsuit','\\hline','\\hookleftarrow',
+    '\\hookrightarrow','\\hslash','\\hspace','\\huge','\\iff','\\imath','\\impliedby','\\implies','\\in','\\infty','\\int','\\intercal','\\intop','\\iota',
+    '\\it','\\jmath','\\kappa','\\lVert','\\lambda','\\land','\\langle','\\large','\\lbrace','\\lbrack','\\lceil','\\ldotp','\\ldots','\\le','\\left','\\leftarrow',
+    '\\leftarrowtail','\\leftbarharpoon','\\leftharpoondown','\\leftharpoonup','\\leftleftarrows','\\leftrightarrow','\\leftrightarrows','\\leftrightharpoons',
+    '\\leftrightsquigarrow','\\leftthreetimes','\\leq','\\leqq','\\leqslant','\\lessapprox','\\lessdot','\\lesseqgtr','\\lesseqqgtr','\\lessgtr','\\lesssim',
+    '\\lfloor','\\lgroup','\\lhd','\\limits','\\ll','\\llcorner','\\lll','\\llless','\\lmoustache','\\lnapprox','\\lneq','\\lneqq','\\lnot','\\lnsim',
+    '\\longleftarrow','\\longleftrightarrow','\\longmapsto','\\longrightarrow','\\looparrowleft','\\looparrowright','\\lor','\\lozenge','\\lrcorner',
+    '\\ltimes','\\ltr','\\lvert','\\lvertneqq','\\maltese','\\mapsto','\\mathbb','\\mathbf','\\mathcal','\\mathfrak','\\mathit','\\mathrm','\\mathsf',
+    '\\mathtt','\\mbox','\\measuredangle','\\mho','\\mid','\\mod','\\models','\\mp','\\mu','\\multimap','\\nLeftarrow','\\nLeftrightarrow','\\nRightarrow',
+    '\\nVDash','\\nVdash','\\nabla','\\natural','\\ncong','\\ne','\\nearrow','\\neg','\\neq','\\neswarrow','\\newline','\\nexists','\\ni','\\nicefrac',
+    '\\nleftarrow','\\nleftrightarrow','\\nmid','\\nolimits','\\normalsize','\\not','\\notin','\\nparallel','\\nprec','\\npreceq','\\nrightarrow',
+    '\\nshortmid','\\nshortparallel','\\nsim','\\nsubseteq','\\nsucc','\\nsupseteq','\\ntriangleleft','\\ntrianglelefteq','\\ntriangleright',
+    '\\ntrianglerighteq','\\nu','\\nvDash','\\nvdash','\\nwarrow','\\nwsearrow','\\odot','\\of','\\omega','\\omicron','\\ominus','\\operatorname',
+    '\\oplus','\\oslash','\\otimes','\\over','\\overbrace','\\overbracket','\\overleftarrow','\\overleftrightarrow','\\overline','\\overrightarrow',
+    '\\overset','\\owns','\\parallel','\\partial','\\perp','\\phi','\\pi','\\pitchfork','\\pm','\\pmod','\\prec','\\precapprox','\\preccurlyeq','\\preceq',
+    '\\precnapprox','\\precneqq','\\precnsim','\\precsim','\\prime','\\prod','\\propto','\\psi','\\rVert','\\rangle','\\rbrace','\\rbrack','\\rceil',
+    '\\restriction','\\rfloor','\\rgroup','\\rhd','\\rho','\\right','\\rightarrow','\\rightarrowtail','\\rightbarharpoon','\\rightharpoondown','\\rightharpoonup',
+    '\\rightleftarrows','\\rightleftharpoons','\\rightrightarrows','\\rightsquigarrow','\\rightthreetimes','\\risingdotseq','\\rm','\\rmoustache',
+    '\\root','\\rtimes','\\rtl','\\rvert','\\scriptscriptstyle','\\scriptsize','\\scriptstyle','\\searrow','\\setminus','\\sf','\\sharp','\\shortmid',
+    '\\shortparallel','\\sideset','\\sigma','\\sim','\\simeq','\\sin','\\small','\\smile','\\spadesuit','\\sphericalangle','\\sqcap','\\sqcup','\\sqrt',
+    '\\sqsubset','\\sqsubseteq','\\sqsupset','\\sqsupseteq','\\square','\\stackrel','\\star','\\style','\\subset','\\subseteq','\\subseteqq','\\subsetneq',
+    '\\subsetneqq','\\succ','\\succapprox','\\succcurlyeq','\\succeq','\\succnapprox','\\succneqq','\\succnsim','\\succsim','\\sum','\\supset','\\supseteq',
+    '\\supseteqq','\\supsetneq','\\supsetneqq','\\surd','\\swarrow','\\tau','\\tbinom','\\text','\\textbf','\\textit','\\textrm','\\textsterling','\\textstyle',
+    '\\tfrac','\\therefore','\\theta','\\times','\\tiny','\\to','\\top','\\triangle','\\triangledown','\\triangleleft','\\trianglelefteq','\\triangleq',
+    '\\triangleright','\\tt','\\twoheadleftarrow','\\twoheadrightarrow','\\ulcorner','\\underbrace','\\underbracket','\\underleftarrow',
+    '\\underleftrightarrow','\\underrightarrow','\\underset','\\unlhd','\\uparrow','\\updownarrow','\\upharpoonleft','\\upharpoonright','\\uplus',
+    '\\upsilon','\\upslopeellipsis','\\upuparrows','\\urcorner','\\vDash','\\varepsilon','\\varkappa','\\varnothing','\\varphi','\\varpi','\\varrho',
+    '\\varsigma','\\vartheta','\\vartriangle','\\vartriangleleft','\\vartriangleright','\\vdash','\\vdots','\\vee','\\veebar','\\vert','\\wedge','\\wp',
+    '\\wr','\\xLeftrightarrow','\\xLongleftarrow','\\xLongleftrightarrow','\\xLongrightarrow','\\xcancel','\\xi','\\xleftarrow','\\xleftrightarrow',
+    '\\xlongequal','\\xlongleftarrow','\\xlongleftrightarrow','\\xlongrightarrow','\\xrightarrow','\\yen','\\zeta', '\\quad', '\\qquad', '\\;', '\\\\',
+    '\\!', '\\,', '\\:', '~', '\\~'
+  ]);
+
+})(ns.Html);
 
 ns.widgets.html = ns.Html;

@@ -239,7 +239,7 @@ ns.LibrarySelector.prototype.loadSemantics = function (library, params, metadata
     this.$parent.attr('class', 'h5peditor');
     return;
   }
-  this.$parent.attr('class', 'h5peditor ' + library.split(' ')[0].toLowerCase().replace('.', '-') + '-editor');
+  this.$parent.attr('class', 'h5peditor ' + library.split(' ')[0].toLowerCase().replace('.', '-') + '-editor h5p-' + H5PIntegration.theme.density);
 
   // Display loading message
   var $loading = ns.$('<div class="h5peditor-loading h5p-throbber">' + ns.t('core', 'loading') + '</div>').appendTo(this.$parent);

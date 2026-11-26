@@ -60,13 +60,8 @@ H5PEditor.language.core = {
   enterVideoTitle: 'Επικολλήστε σύνδεσμο YouTube ή άλλη διεύθυνση URL βίντεο',
   uploadAudioTitle: 'Μεταφορτώστε αρχείο ήχου',
   uploadVideoTitle: 'Μεταφορτώστε αρχείο video',
-  fileUploadTitle: 'File Upload',
-  insertLinkTitle: 'URL',
-  recordAudioTitle: 'Record Audio',
   addVideoDescription:
     'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube, Panopto, and Echo360 links.',
-  unsupportedVideoSource: "Unsupported video source",
-  unsupportedAudioSource: "Unsupported audio source",
   insert: 'Εισαγωγή',
   cancel: 'Ακύρωση',
   height: 'ύψος',
@@ -173,7 +168,6 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'Αυτή η ετικέτα βοηθά τον χρήστη να αναγνωρίσει την τρέχουσα ποιότητα του βίντεο. Για παράδειγμα 1080p, 720p, HD ή Mobile',
   videoQualityDefaultLabel: 'Ποιότητα :index',
-  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'No content types are available',
   noContentTypesAvailableDesc:
     'Your site is having difficulties connecting to H5P.org and listing the available content types.',
@@ -249,6 +243,9 @@ H5PEditor.language.core = {
   a11yTitleShowLabel: 'Show label for AT',
   a11yTitleHideLabel: 'Hide label for AT',
   reuseSuccess: ':title was successfully imported from the H5P Hub.',
+  deleteAuthorTitle: 'Deleting author',
+  deleteAuthorChangeLogTitle: 'Deleting changelog',
+  confirm: 'Confirm',
   noContentHeader: 'No Fitting Content?',
   noContentSuggestion: 'Create one yourself!',
   tutorials: 'Tutorials',

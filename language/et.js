@@ -59,13 +59,8 @@ H5PEditor.language.core = {
   enterVideoTitle: 'Kleebi lähtevideo link',
   uploadAudioTitle: 'Laadi helifail üles',
   uploadVideoTitle: 'Laadi videofail üles',
-  fileUploadTitle: 'File Upload',
-  insertLinkTitle: 'URL',
-  recordAudioTitle: 'Record Audio',
   addVideoDescription:
     'H5P supports all external video sources formatted as mp4, webm or ogv, like Vimeo Pro, and has support for YouTube, Panopto, and Echo360 links.',
-  unsupportedVideoSource: "Unsupported video source",
-  unsupportedAudioSource: "Unsupported audio source",
   insert: 'Aseta',
   cancel: 'Tühista',
   height: 'kõrgus',
@@ -170,7 +165,6 @@ H5PEditor.language.core = {
   videoQualityDescription:
     'See silt aitab kasutajal määratleda videomängimise kvaliteeti. Näiteks 1080p, 720p, HD või mobiilne',
   videoQualityDefaultLabel: 'Kvaliteet :index',
-  videoQualityPlaceholder: '1080p, 720p, HD, Mobile, etc',
   noContentTypesAvailable: 'Saadaval ei ole sisutüüpe',
   noContentTypesAvailableDesc:
     'Sinu lehekülg ei saa ühenduda H5P.org serveriga ja näidata võimalikke sisutüüpide loetlemisega.',
@@ -246,6 +240,9 @@ H5PEditor.language.core = {
   a11yTitleShowLabel: 'Show label for AT',
   a11yTitleHideLabel: 'Hide label for AT',
   reuseSuccess: ':title was successfully imported from the H5P Hub.',
+  deleteAuthorTitle: 'Deleting author',
+  deleteAuthorChangeLogTitle: 'Deleting changelog',
+  confirm: 'Confirm',
   noContentHeader: 'No Fitting Content?',
   noContentSuggestion: 'Create one yourself!',
   tutorials: 'Tutorials',
